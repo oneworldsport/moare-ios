@@ -1,0 +1,1308 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DADA39592D3A1AC9000D15E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DADA39582D3A1AC9000D15E0 /* Assets.xcassets */; };
+		DADA395D2D3A1AC9000D15E0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DADA395C2D3A1AC9000D15E0 /* Preview Assets.xcassets */; };
+		DADA39672D3A1AC9000D15E0 /* moareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39662D3A1AC9000D15E0 /* moareTests.swift */; };
+		DADA39712D3A1AC9000D15E0 /* moareUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39702D3A1AC9000D15E0 /* moareUITests.swift */; };
+		DADA39732D3A1AC9000D15E0 /* moareUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39722D3A1AC9000D15E0 /* moareUITestsLaunchTests.swift */; };
+		DADA39812D3A1CEC000D15E0 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = DADA39802D3A1CEC000D15E0 /* ComposableArchitecture */; };
+		DADA39842D3A2006000D15E0 /* AWSCore in Frameworks */ = {isa = PBXBuildFile; productRef = DADA39832D3A2006000D15E0 /* AWSCore */; };
+		DADA39862D3A2006000D15E0 /* AWSS3 in Frameworks */ = {isa = PBXBuildFile; productRef = DADA39852D3A2006000D15E0 /* AWSS3 */; };
+		DADA39882D3A2006000D15E0 /* AWSTranslate in Frameworks */ = {isa = PBXBuildFile; productRef = DADA39872D3A2006000D15E0 /* AWSTranslate */; };
+		DADA398C2D3A214D000D15E0 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39892D3A214D000D15E0 /* SplashView.swift */; };
+		DADA398D2D3A214D000D15E0 /* moareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA398A2D3A214D000D15E0 /* moareApp.swift */; };
+		DADA39A52D3A21A1000D15E0 /* AnimationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA398E2D3A21A1000D15E0 /* AnimationConstants.swift */; };
+		DADA39A62D3A21A1000D15E0 /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA398F2D3A21A1000D15E0 /* StringConstants.swift */; };
+		DADA39A72D3A21A1000D15E0 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39902D3A21A1000D15E0 /* UIConstants.swift */; };
+		DADA39A82D3A21A1000D15E0 /* BaseDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39922D3A21A1000D15E0 /* BaseDisplayModel.swift */; };
+		DADA39A92D3A21A1000D15E0 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39942D3A21A1000D15E0 /* APIClient.swift */; };
+		DADA39AA2D3A21A1000D15E0 /* APIConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39952D3A21A1000D15E0 /* APIConfiguration.swift */; };
+		DADA39AB2D3A21A1000D15E0 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39962D3A21A1000D15E0 /* APIEndpoint.swift */; };
+		DADA39AC2D3A21A1000D15E0 /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39972D3A21A1000D15E0 /* RequestBuilder.swift */; };
+		DADA39AD2D3A21A1000D15E0 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39992D3A21A1000D15E0 /* StoreManager.swift */; };
+		DADA39AE2D3A21A1000D15E0 /* AutoCompleteTrie.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA399B2D3A21A1000D15E0 /* AutoCompleteTrie.swift */; };
+		DADA39AF2D3A21A1000D15E0 /* CalendarUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA399C2D3A21A1000D15E0 /* CalendarUtil.swift */; };
+		DADA39B02D3A21A1000D15E0 /* EnNameTranslationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA399D2D3A21A1000D15E0 /* EnNameTranslationUtility.swift */; };
+		DADA39B12D3A21A1000D15E0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA399E2D3A21A1000D15E0 /* Extensions.swift */; };
+		DADA39B22D3A21A1000D15E0 /* KoreanUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA399F2D3A21A1000D15E0 /* KoreanUtilities.swift */; };
+		DADA39B32D3A21A1000D15E0 /* MatchDescriptionConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39A02D3A21A1000D15E0 /* MatchDescriptionConverter.swift */; };
+		DADA39B42D3A21A1000D15E0 /* TaskCompletionTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39A12D3A21A1000D15E0 /* TaskCompletionTracker.swift */; };
+		DADA39B52D3A21A1000D15E0 /* ApiRouteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39A32D3A21A1000D15E0 /* ApiRouteService.swift */; };
+		DADA3A152D3A21A7000D15E0 /* FBStatDataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39BF2D3A21A7000D15E0 /* FBStatDataItem.swift */; };
+		DADA3A162D3A21A7000D15E0 /* LeagueTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C02D3A21A7000D15E0 /* LeagueTitle.swift */; };
+		DADA3A172D3A21A7000D15E0 /* FBGameStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C22D3A21A7000D15E0 /* FBGameStatsStore.swift */; };
+		DADA3A182D3A21A7000D15E0 /* FBLeagueScheduleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C32D3A21A7000D15E0 /* FBLeagueScheduleStore.swift */; };
+		DADA3A192D3A21A7000D15E0 /* FBPlayerInfoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C42D3A21A7000D15E0 /* FBPlayerInfoStore.swift */; };
+		DADA3A1A2D3A21A7000D15E0 /* FBPlayerStandingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C52D3A21A7000D15E0 /* FBPlayerStandingsStore.swift */; };
+		DADA3A1B2D3A21A7000D15E0 /* FBPlayerStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C62D3A21A7000D15E0 /* FBPlayerStatsStore.swift */; };
+		DADA3A1C2D3A21A7000D15E0 /* FBTeamInfoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C72D3A21A7000D15E0 /* FBTeamInfoStore.swift */; };
+		DADA3A1D2D3A21A7000D15E0 /* FBTeamScheduleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C82D3A21A7000D15E0 /* FBTeamScheduleStore.swift */; };
+		DADA3A1E2D3A21A7000D15E0 /* FBTeamStandingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C92D3A21A7000D15E0 /* FBTeamStandingsStore.swift */; };
+		DADA3A1F2D3A21A7000D15E0 /* FBTeamStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39CA2D3A21A7000D15E0 /* FBTeamStatsStore.swift */; };
+		DADA3A202D3A21A7000D15E0 /* FBGameStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39CC2D3A21A7000D15E0 /* FBGameStatsView.swift */; };
+		DADA3A212D3A21A7000D15E0 /* FBLeagueScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39CD2D3A21A7000D15E0 /* FBLeagueScheduleView.swift */; };
+		DADA3A222D3A21A7000D15E0 /* FBPlayerInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39CE2D3A21A7000D15E0 /* FBPlayerInfoView.swift */; };
+		DADA3A232D3A21A7000D15E0 /* FBPlayerStandingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39CF2D3A21A7000D15E0 /* FBPlayerStandingsView.swift */; };
+		DADA3A242D3A21A7000D15E0 /* FBPlayerStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39D02D3A21A7000D15E0 /* FBPlayerStatsView.swift */; };
+		DADA3A252D3A21A7000D15E0 /* FBTeamInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39D12D3A21A7000D15E0 /* FBTeamInfoView.swift */; };
+		DADA3A262D3A21A7000D15E0 /* FBTeamScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39D22D3A21A7000D15E0 /* FBTeamScheduleView.swift */; };
+		DADA3A272D3A21A7000D15E0 /* FBTeamStandingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39D32D3A21A7000D15E0 /* FBTeamStandingsView.swift */; };
+		DADA3A282D3A21A7000D15E0 /* FBTeamStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39D42D3A21A7000D15E0 /* FBTeamStatsView.swift */; };
+		DADA3A292D3A21A7000D15E0 /* SearchStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39DA2D3A21A7000D15E0 /* SearchStore.swift */; };
+		DADA3A2A2D3A21A7000D15E0 /* AnimatingSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39DC2D3A21A7000D15E0 /* AnimatingSearchBar.swift */; };
+		DADA3A2B2D3A21A7000D15E0 /* AutoCompleteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39DD2D3A21A7000D15E0 /* AutoCompleteList.swift */; };
+		DADA3A2C2D3A21A7000D15E0 /* KeywordList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39DE2D3A21A7000D15E0 /* KeywordList.swift */; };
+		DADA3A2D2D3A21A7000D15E0 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39DF2D3A21A7000D15E0 /* SearchView.swift */; };
+		DADA3A2E2D3A21A7000D15E0 /* FBGameStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E22D3A21A7000D15E0 /* FBGameStatsDisplayModel.swift */; };
+		DADA3A2F2D3A21A7000D15E0 /* FBLeagueScheduleDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E32D3A21A7000D15E0 /* FBLeagueScheduleDisplayModel.swift */; };
+		DADA3A302D3A21A7000D15E0 /* FBPlayerInfoDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E42D3A21A7000D15E0 /* FBPlayerInfoDisplayModel.swift */; };
+		DADA3A312D3A21A7000D15E0 /* FBPlayerStandingsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E52D3A21A7000D15E0 /* FBPlayerStandingsDisplayModel.swift */; };
+		DADA3A322D3A21A7000D15E0 /* FBTeamInfoDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E62D3A21A7000D15E0 /* FBTeamInfoDisplayModel.swift */; };
+		DADA3A332D3A21A7000D15E0 /* FBTeamScheduleDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E72D3A21A7000D15E0 /* FBTeamScheduleDisplayModel.swift */; };
+		DADA3A342D3A21A7000D15E0 /* FBTeamStandingsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E82D3A21A7000D15E0 /* FBTeamStandingsDisplayModel.swift */; };
+		DADA3A352D3A21A7000D15E0 /* FBTeamStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E92D3A21A7000D15E0 /* FBTeamStatsDisplayModel.swift */; };
+		DADA3A362D3A21A7000D15E0 /* FBCommonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39ED2D3A21A7000D15E0 /* FBCommonModel.swift */; };
+		DADA3A372D3A21A7000D15E0 /* FBGameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39EE2D3A21A7000D15E0 /* FBGameModels.swift */; };
+		DADA3A382D3A21A7000D15E0 /* FBPlayerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39EF2D3A21A7000D15E0 /* FBPlayerModels.swift */; };
+		DADA3A392D3A21A7000D15E0 /* FBTeamModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39F02D3A21A7000D15E0 /* FBTeamModels.swift */; };
+		DADA3A3A2D3A21A7000D15E0 /* FBGameScheduleResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39F32D3A21A7000D15E0 /* FBGameScheduleResponseModel.swift */; };
+		DADA3A3B2D3A21A7000D15E0 /* FBGameStatsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39F42D3A21A7000D15E0 /* FBGameStatsResponseModel.swift */; };
+		DADA3A3C2D3A21A7000D15E0 /* FBPlayerInfoResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39F52D3A21A7000D15E0 /* FBPlayerInfoResponseModel.swift */; };
+		DADA3A3D2D3A21A7000D15E0 /* FBPlayerStandingsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39F62D3A21A7000D15E0 /* FBPlayerStandingsResponseModel.swift */; };
+		DADA3A3E2D3A21A7000D15E0 /* FBTeamInfoResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39F72D3A21A7000D15E0 /* FBTeamInfoResponseModel.swift */; };
+		DADA3A3F2D3A21A7000D15E0 /* FBTeamStandingsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39F82D3A21A7000D15E0 /* FBTeamStandingsResponseModel.swift */; };
+		DADA3A402D3A21A7000D15E0 /* NbaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39FA2D3A21A7000D15E0 /* NbaModel.swift */; };
+		DADA3A412D3A21A7000D15E0 /* AutoComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39FD2D3A21A7000D15E0 /* AutoComplete.swift */; };
+		DADA3A422D3A21A7000D15E0 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39FE2D3A21A7000D15E0 /* DataModel.swift */; };
+		DADA3A432D3A21A7000D15E0 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39FF2D3A21A7000D15E0 /* Error.swift */; };
+		DADA3A442D3A21A7000D15E0 /* FootballTeamGameStatsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A002D3A21A7000D15E0 /* FootballTeamGameStatsResponseModel.swift */; };
+		DADA3A452D3A21A7000D15E0 /* ModelConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A012D3A21A7000D15E0 /* ModelConverter.swift */; };
+		DADA3A462D3A21A7000D15E0 /* SearchDataState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A022D3A21A7000D15E0 /* SearchDataState.swift */; };
+		DADA3A472D3A21A7000D15E0 /* SearchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A042D3A21A7000D15E0 /* SearchClient.swift */; };
+		DADA3A5F2D3A21AF000D15E0 /* BaseUIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A4C2D3A21AF000D15E0 /* BaseUIState.swift */; };
+		DADA3A602D3A21AF000D15E0 /* HSequentialListAni.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A4D2D3A21AF000D15E0 /* HSequentialListAni.swift */; };
+		DADA3A612D3A21AF000D15E0 /* VSequentialListAni.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A4E2D3A21AF000D15E0 /* VSequentialListAni.swift */; };
+		DADA3A622D3A21AF000D15E0 /* RoundedRectWithPathAni.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A502D3A21AF000D15E0 /* RoundedRectWithPathAni.swift */; };
+		DADA3A632D3A21AF000D15E0 /* CalendarList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A542D3A21AF000D15E0 /* CalendarList.swift */; };
+		DADA3A642D3A21AF000D15E0 /* CapsuleBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A552D3A21AF000D15E0 /* CapsuleBar.swift */; };
+		DADA3A652D3A21AF000D15E0 /* CapsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A562D3A21AF000D15E0 /* CapsuleButton.swift */; };
+		DADA3A662D3A21AF000D15E0 /* URLImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A572D3A21AF000D15E0 /* URLImage.swift */; };
+		DADA3A672D3A21AF000D15E0 /* FlowStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A5B2D3A21AF000D15E0 /* FlowStack.swift */; };
+		DADA3A682D3A21AF000D15E0 /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A5C2D3A21AF000D15E0 /* UIExtensions.swift */; };
+		DADA3A6A2D3A27AD000D15E0 /* FBPlayerStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A692D3A27AD000D15E0 /* FBPlayerStatsDisplayModel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DADA39632D3A1AC9000D15E0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DADA39492D3A1AC8000D15E0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DADA39502D3A1AC8000D15E0;
+			remoteInfo = moare;
+		};
+		DADA396D2D3A1AC9000D15E0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DADA39492D3A1AC8000D15E0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DADA39502D3A1AC8000D15E0;
+			remoteInfo = moare;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		DADA39512D3A1AC8000D15E0 /* moare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = moare.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DADA39582D3A1AC9000D15E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DADA395A2D3A1AC9000D15E0 /* moare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = moare.entitlements; sourceTree = "<group>"; };
+		DADA395C2D3A1AC9000D15E0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		DADA39622D3A1AC9000D15E0 /* moareTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = moareTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DADA39662D3A1AC9000D15E0 /* moareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = moareTests.swift; sourceTree = "<group>"; };
+		DADA396C2D3A1AC9000D15E0 /* moareUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = moareUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DADA39702D3A1AC9000D15E0 /* moareUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = moareUITests.swift; sourceTree = "<group>"; };
+		DADA39722D3A1AC9000D15E0 /* moareUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = moareUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		DADA39892D3A214D000D15E0 /* SplashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		DADA398A2D3A214D000D15E0 /* moareApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = moareApp.swift; sourceTree = "<group>"; };
+		DADA398E2D3A21A1000D15E0 /* AnimationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationConstants.swift; sourceTree = "<group>"; };
+		DADA398F2D3A21A1000D15E0 /* StringConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringConstants.swift; sourceTree = "<group>"; };
+		DADA39902D3A21A1000D15E0 /* UIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
+		DADA39922D3A21A1000D15E0 /* BaseDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseDisplayModel.swift; sourceTree = "<group>"; };
+		DADA39942D3A21A1000D15E0 /* APIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		DADA39952D3A21A1000D15E0 /* APIConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConfiguration.swift; sourceTree = "<group>"; };
+		DADA39962D3A21A1000D15E0 /* APIEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
+		DADA39972D3A21A1000D15E0 /* RequestBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestBuilder.swift; sourceTree = "<group>"; };
+		DADA39992D3A21A1000D15E0 /* StoreManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
+		DADA399B2D3A21A1000D15E0 /* AutoCompleteTrie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoCompleteTrie.swift; sourceTree = "<group>"; };
+		DADA399C2D3A21A1000D15E0 /* CalendarUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarUtil.swift; sourceTree = "<group>"; };
+		DADA399D2D3A21A1000D15E0 /* EnNameTranslationUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnNameTranslationUtility.swift; sourceTree = "<group>"; };
+		DADA399E2D3A21A1000D15E0 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		DADA399F2D3A21A1000D15E0 /* KoreanUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KoreanUtilities.swift; sourceTree = "<group>"; };
+		DADA39A02D3A21A1000D15E0 /* MatchDescriptionConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchDescriptionConverter.swift; sourceTree = "<group>"; };
+		DADA39A12D3A21A1000D15E0 /* TaskCompletionTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskCompletionTracker.swift; sourceTree = "<group>"; };
+		DADA39A32D3A21A1000D15E0 /* ApiRouteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiRouteService.swift; sourceTree = "<group>"; };
+		DADA39BF2D3A21A7000D15E0 /* FBStatDataItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBStatDataItem.swift; sourceTree = "<group>"; };
+		DADA39C02D3A21A7000D15E0 /* LeagueTitle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeagueTitle.swift; sourceTree = "<group>"; };
+		DADA39C22D3A21A7000D15E0 /* FBGameStatsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameStatsStore.swift; sourceTree = "<group>"; };
+		DADA39C32D3A21A7000D15E0 /* FBLeagueScheduleStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLeagueScheduleStore.swift; sourceTree = "<group>"; };
+		DADA39C42D3A21A7000D15E0 /* FBPlayerInfoStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerInfoStore.swift; sourceTree = "<group>"; };
+		DADA39C52D3A21A7000D15E0 /* FBPlayerStandingsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStandingsStore.swift; sourceTree = "<group>"; };
+		DADA39C62D3A21A7000D15E0 /* FBPlayerStatsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStatsStore.swift; sourceTree = "<group>"; };
+		DADA39C72D3A21A7000D15E0 /* FBTeamInfoStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamInfoStore.swift; sourceTree = "<group>"; };
+		DADA39C82D3A21A7000D15E0 /* FBTeamScheduleStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamScheduleStore.swift; sourceTree = "<group>"; };
+		DADA39C92D3A21A7000D15E0 /* FBTeamStandingsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStandingsStore.swift; sourceTree = "<group>"; };
+		DADA39CA2D3A21A7000D15E0 /* FBTeamStatsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStatsStore.swift; sourceTree = "<group>"; };
+		DADA39CC2D3A21A7000D15E0 /* FBGameStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameStatsView.swift; sourceTree = "<group>"; };
+		DADA39CD2D3A21A7000D15E0 /* FBLeagueScheduleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLeagueScheduleView.swift; sourceTree = "<group>"; };
+		DADA39CE2D3A21A7000D15E0 /* FBPlayerInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerInfoView.swift; sourceTree = "<group>"; };
+		DADA39CF2D3A21A7000D15E0 /* FBPlayerStandingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStandingsView.swift; sourceTree = "<group>"; };
+		DADA39D02D3A21A7000D15E0 /* FBPlayerStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStatsView.swift; sourceTree = "<group>"; };
+		DADA39D12D3A21A7000D15E0 /* FBTeamInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamInfoView.swift; sourceTree = "<group>"; };
+		DADA39D22D3A21A7000D15E0 /* FBTeamScheduleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamScheduleView.swift; sourceTree = "<group>"; };
+		DADA39D32D3A21A7000D15E0 /* FBTeamStandingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStandingsView.swift; sourceTree = "<group>"; };
+		DADA39D42D3A21A7000D15E0 /* FBTeamStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStatsView.swift; sourceTree = "<group>"; };
+		DADA39DA2D3A21A7000D15E0 /* SearchStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchStore.swift; sourceTree = "<group>"; };
+		DADA39DC2D3A21A7000D15E0 /* AnimatingSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatingSearchBar.swift; sourceTree = "<group>"; };
+		DADA39DD2D3A21A7000D15E0 /* AutoCompleteList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoCompleteList.swift; sourceTree = "<group>"; };
+		DADA39DE2D3A21A7000D15E0 /* KeywordList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeywordList.swift; sourceTree = "<group>"; };
+		DADA39DF2D3A21A7000D15E0 /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		DADA39E22D3A21A7000D15E0 /* FBGameStatsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameStatsDisplayModel.swift; sourceTree = "<group>"; };
+		DADA39E32D3A21A7000D15E0 /* FBLeagueScheduleDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLeagueScheduleDisplayModel.swift; sourceTree = "<group>"; };
+		DADA39E42D3A21A7000D15E0 /* FBPlayerInfoDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerInfoDisplayModel.swift; sourceTree = "<group>"; };
+		DADA39E52D3A21A7000D15E0 /* FBPlayerStandingsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStandingsDisplayModel.swift; sourceTree = "<group>"; };
+		DADA39E62D3A21A7000D15E0 /* FBTeamInfoDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamInfoDisplayModel.swift; sourceTree = "<group>"; };
+		DADA39E72D3A21A7000D15E0 /* FBTeamScheduleDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamScheduleDisplayModel.swift; sourceTree = "<group>"; };
+		DADA39E82D3A21A7000D15E0 /* FBTeamStandingsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStandingsDisplayModel.swift; sourceTree = "<group>"; };
+		DADA39E92D3A21A7000D15E0 /* FBTeamStatsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStatsDisplayModel.swift; sourceTree = "<group>"; };
+		DADA39ED2D3A21A7000D15E0 /* FBCommonModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBCommonModel.swift; sourceTree = "<group>"; };
+		DADA39EE2D3A21A7000D15E0 /* FBGameModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameModels.swift; sourceTree = "<group>"; };
+		DADA39EF2D3A21A7000D15E0 /* FBPlayerModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerModels.swift; sourceTree = "<group>"; };
+		DADA39F02D3A21A7000D15E0 /* FBTeamModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamModels.swift; sourceTree = "<group>"; };
+		DADA39F32D3A21A7000D15E0 /* FBGameScheduleResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameScheduleResponseModel.swift; sourceTree = "<group>"; };
+		DADA39F42D3A21A7000D15E0 /* FBGameStatsResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameStatsResponseModel.swift; sourceTree = "<group>"; };
+		DADA39F52D3A21A7000D15E0 /* FBPlayerInfoResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerInfoResponseModel.swift; sourceTree = "<group>"; };
+		DADA39F62D3A21A7000D15E0 /* FBPlayerStandingsResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStandingsResponseModel.swift; sourceTree = "<group>"; };
+		DADA39F72D3A21A7000D15E0 /* FBTeamInfoResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamInfoResponseModel.swift; sourceTree = "<group>"; };
+		DADA39F82D3A21A7000D15E0 /* FBTeamStandingsResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStandingsResponseModel.swift; sourceTree = "<group>"; };
+		DADA39FA2D3A21A7000D15E0 /* NbaModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NbaModel.swift; sourceTree = "<group>"; };
+		DADA39FD2D3A21A7000D15E0 /* AutoComplete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoComplete.swift; sourceTree = "<group>"; };
+		DADA39FE2D3A21A7000D15E0 /* DataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		DADA39FF2D3A21A7000D15E0 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		DADA3A002D3A21A7000D15E0 /* FootballTeamGameStatsResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FootballTeamGameStatsResponseModel.swift; sourceTree = "<group>"; };
+		DADA3A012D3A21A7000D15E0 /* ModelConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelConverter.swift; sourceTree = "<group>"; };
+		DADA3A022D3A21A7000D15E0 /* SearchDataState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchDataState.swift; sourceTree = "<group>"; };
+		DADA3A042D3A21A7000D15E0 /* SearchClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchClient.swift; sourceTree = "<group>"; };
+		DADA3A4C2D3A21AF000D15E0 /* BaseUIState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseUIState.swift; sourceTree = "<group>"; };
+		DADA3A4D2D3A21AF000D15E0 /* HSequentialListAni.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HSequentialListAni.swift; sourceTree = "<group>"; };
+		DADA3A4E2D3A21AF000D15E0 /* VSequentialListAni.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSequentialListAni.swift; sourceTree = "<group>"; };
+		DADA3A502D3A21AF000D15E0 /* RoundedRectWithPathAni.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedRectWithPathAni.swift; sourceTree = "<group>"; };
+		DADA3A542D3A21AF000D15E0 /* CalendarList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarList.swift; sourceTree = "<group>"; };
+		DADA3A552D3A21AF000D15E0 /* CapsuleBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CapsuleBar.swift; sourceTree = "<group>"; };
+		DADA3A562D3A21AF000D15E0 /* CapsuleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CapsuleButton.swift; sourceTree = "<group>"; };
+		DADA3A572D3A21AF000D15E0 /* URLImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLImage.swift; sourceTree = "<group>"; };
+		DADA3A5B2D3A21AF000D15E0 /* FlowStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowStack.swift; sourceTree = "<group>"; };
+		DADA3A5C2D3A21AF000D15E0 /* UIExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
+		DADA3A692D3A27AD000D15E0 /* FBPlayerStatsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBPlayerStatsDisplayModel.swift; path = ../../../../../../../../../../.Trash/FBPlayerStatsDisplayModel.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DADA394E2D3A1AC8000D15E0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DADA39862D3A2006000D15E0 /* AWSS3 in Frameworks */,
+				DADA39882D3A2006000D15E0 /* AWSTranslate in Frameworks */,
+				DADA39812D3A1CEC000D15E0 /* ComposableArchitecture in Frameworks */,
+				DADA39842D3A2006000D15E0 /* AWSCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DADA395F2D3A1AC9000D15E0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DADA39692D3A1AC9000D15E0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DADA39482D3A1AC8000D15E0 = {
+			isa = PBXGroup;
+			children = (
+				DADA39532D3A1AC8000D15E0 /* moare */,
+				DADA39652D3A1AC9000D15E0 /* moareTests */,
+				DADA396F2D3A1AC9000D15E0 /* moareUITests */,
+				DADA39522D3A1AC8000D15E0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DADA39522D3A1AC8000D15E0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39512D3A1AC8000D15E0 /* moare.app */,
+				DADA39622D3A1AC9000D15E0 /* moareTests.xctest */,
+				DADA396C2D3A1AC9000D15E0 /* moareUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DADA39532D3A1AC8000D15E0 /* moare */ = {
+			isa = PBXGroup;
+			children = (
+				DADA398B2D3A214D000D15E0 /* App */,
+				DADA3A0F2D3A21A7000D15E0 /* Features */,
+				DADA39A42D3A21A1000D15E0 /* Core */,
+				DADA3A5E2D3A21AF000D15E0 /* UI */,
+				DADA39582D3A1AC9000D15E0 /* Assets.xcassets */,
+				DADA395A2D3A1AC9000D15E0 /* moare.entitlements */,
+				DADA395B2D3A1AC9000D15E0 /* Preview Content */,
+			);
+			path = moare;
+			sourceTree = "<group>";
+		};
+		DADA395B2D3A1AC9000D15E0 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				DADA395C2D3A1AC9000D15E0 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		DADA39652D3A1AC9000D15E0 /* moareTests */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39662D3A1AC9000D15E0 /* moareTests.swift */,
+			);
+			path = moareTests;
+			sourceTree = "<group>";
+		};
+		DADA396F2D3A1AC9000D15E0 /* moareUITests */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39702D3A1AC9000D15E0 /* moareUITests.swift */,
+				DADA39722D3A1AC9000D15E0 /* moareUITestsLaunchTests.swift */,
+			);
+			path = moareUITests;
+			sourceTree = "<group>";
+		};
+		DADA398B2D3A214D000D15E0 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39892D3A214D000D15E0 /* SplashView.swift */,
+				DADA398A2D3A214D000D15E0 /* moareApp.swift */,
+			);
+			name = App;
+			path = ../../moare_legacy/moare/App;
+			sourceTree = "<group>";
+		};
+		DADA39912D3A21A1000D15E0 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				DADA398E2D3A21A1000D15E0 /* AnimationConstants.swift */,
+				DADA398F2D3A21A1000D15E0 /* StringConstants.swift */,
+				DADA39902D3A21A1000D15E0 /* UIConstants.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		DADA39932D3A21A1000D15E0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39922D3A21A1000D15E0 /* BaseDisplayModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DADA39982D3A21A1000D15E0 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39942D3A21A1000D15E0 /* APIClient.swift */,
+				DADA39952D3A21A1000D15E0 /* APIConfiguration.swift */,
+				DADA39962D3A21A1000D15E0 /* APIEndpoint.swift */,
+				DADA39972D3A21A1000D15E0 /* RequestBuilder.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		DADA399A2D3A21A1000D15E0 /* TCA */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39992D3A21A1000D15E0 /* StoreManager.swift */,
+			);
+			path = TCA;
+			sourceTree = "<group>";
+		};
+		DADA39A22D3A21A1000D15E0 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				DADA399B2D3A21A1000D15E0 /* AutoCompleteTrie.swift */,
+				DADA399C2D3A21A1000D15E0 /* CalendarUtil.swift */,
+				DADA399D2D3A21A1000D15E0 /* EnNameTranslationUtility.swift */,
+				DADA399E2D3A21A1000D15E0 /* Extensions.swift */,
+				DADA399F2D3A21A1000D15E0 /* KoreanUtilities.swift */,
+				DADA39A02D3A21A1000D15E0 /* MatchDescriptionConverter.swift */,
+				DADA39A12D3A21A1000D15E0 /* TaskCompletionTracker.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		DADA39A42D3A21A1000D15E0 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39912D3A21A1000D15E0 /* Constants */,
+				DADA39932D3A21A1000D15E0 /* Models */,
+				DADA39982D3A21A1000D15E0 /* Networking */,
+				DADA399A2D3A21A1000D15E0 /* TCA */,
+				DADA39A22D3A21A1000D15E0 /* Utilities */,
+				DADA39A32D3A21A1000D15E0 /* ApiRouteService.swift */,
+			);
+			name = Core;
+			path = ../../moare_legacy/moare/Core;
+			sourceTree = "<group>";
+		};
+		DADA39C12D3A21A7000D15E0 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39BF2D3A21A7000D15E0 /* FBStatDataItem.swift */,
+				DADA39C02D3A21A7000D15E0 /* LeagueTitle.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		DADA39CB2D3A21A7000D15E0 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39C22D3A21A7000D15E0 /* FBGameStatsStore.swift */,
+				DADA39C32D3A21A7000D15E0 /* FBLeagueScheduleStore.swift */,
+				DADA39C42D3A21A7000D15E0 /* FBPlayerInfoStore.swift */,
+				DADA39C52D3A21A7000D15E0 /* FBPlayerStandingsStore.swift */,
+				DADA39C62D3A21A7000D15E0 /* FBPlayerStatsStore.swift */,
+				DADA39C72D3A21A7000D15E0 /* FBTeamInfoStore.swift */,
+				DADA39C82D3A21A7000D15E0 /* FBTeamScheduleStore.swift */,
+				DADA39C92D3A21A7000D15E0 /* FBTeamStandingsStore.swift */,
+				DADA39CA2D3A21A7000D15E0 /* FBTeamStatsStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		DADA39D52D3A21A7000D15E0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39CC2D3A21A7000D15E0 /* FBGameStatsView.swift */,
+				DADA39CD2D3A21A7000D15E0 /* FBLeagueScheduleView.swift */,
+				DADA39CE2D3A21A7000D15E0 /* FBPlayerInfoView.swift */,
+				DADA39CF2D3A21A7000D15E0 /* FBPlayerStandingsView.swift */,
+				DADA39D02D3A21A7000D15E0 /* FBPlayerStatsView.swift */,
+				DADA39D12D3A21A7000D15E0 /* FBTeamInfoView.swift */,
+				DADA39D22D3A21A7000D15E0 /* FBTeamScheduleView.swift */,
+				DADA39D32D3A21A7000D15E0 /* FBTeamStandingsView.swift */,
+				DADA39D42D3A21A7000D15E0 /* FBTeamStatsView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DADA39D62D3A21A7000D15E0 /* Football */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39CB2D3A21A7000D15E0 /* Store */,
+				DADA39D52D3A21A7000D15E0 /* View */,
+			);
+			path = Football;
+			sourceTree = "<group>";
+		};
+		DADA39D72D3A21A7000D15E0 /* PlayerInfo */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = PlayerInfo;
+			sourceTree = "<group>";
+		};
+		DADA39D82D3A21A7000D15E0 /* Standings */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Standings;
+			sourceTree = "<group>";
+		};
+		DADA39D92D3A21A7000D15E0 /* NBA */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39D72D3A21A7000D15E0 /* PlayerInfo */,
+				DADA39D82D3A21A7000D15E0 /* Standings */,
+			);
+			path = NBA;
+			sourceTree = "<group>";
+		};
+		DADA39DB2D3A21A7000D15E0 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39DA2D3A21A7000D15E0 /* SearchStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		DADA39E02D3A21A7000D15E0 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39DB2D3A21A7000D15E0 /* Store */,
+				DADA39DC2D3A21A7000D15E0 /* AnimatingSearchBar.swift */,
+				DADA39DD2D3A21A7000D15E0 /* AutoCompleteList.swift */,
+				DADA39DE2D3A21A7000D15E0 /* KeywordList.swift */,
+				DADA39DF2D3A21A7000D15E0 /* SearchView.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		DADA39E12D3A21A7000D15E0 /* Display */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39C12D3A21A7000D15E0 /* Components */,
+				DADA39D62D3A21A7000D15E0 /* Football */,
+				DADA39D92D3A21A7000D15E0 /* NBA */,
+				DADA39E02D3A21A7000D15E0 /* Search */,
+			);
+			path = Display;
+			sourceTree = "<group>";
+		};
+		DADA39EA2D3A21A7000D15E0 /* Football */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39E42D3A21A7000D15E0 /* FBPlayerInfoDisplayModel.swift */,
+				DADA3A692D3A27AD000D15E0 /* FBPlayerStatsDisplayModel.swift */,
+				DADA39E52D3A21A7000D15E0 /* FBPlayerStandingsDisplayModel.swift */,
+				DADA39E62D3A21A7000D15E0 /* FBTeamInfoDisplayModel.swift */,
+				DADA39E92D3A21A7000D15E0 /* FBTeamStatsDisplayModel.swift */,
+				DADA39E82D3A21A7000D15E0 /* FBTeamStandingsDisplayModel.swift */,
+				DADA39E72D3A21A7000D15E0 /* FBTeamScheduleDisplayModel.swift */,
+				DADA39E32D3A21A7000D15E0 /* FBLeagueScheduleDisplayModel.swift */,
+				DADA39E22D3A21A7000D15E0 /* FBGameStatsDisplayModel.swift */,
+			);
+			path = Football;
+			sourceTree = "<group>";
+		};
+		DADA39EB2D3A21A7000D15E0 /* NBA */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = NBA;
+			sourceTree = "<group>";
+		};
+		DADA39EC2D3A21A7000D15E0 /* DisplayModels */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39EA2D3A21A7000D15E0 /* Football */,
+				DADA39EB2D3A21A7000D15E0 /* NBA */,
+			);
+			path = DisplayModels;
+			sourceTree = "<group>";
+		};
+		DADA39F12D3A21A7000D15E0 /* Football */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39ED2D3A21A7000D15E0 /* FBCommonModel.swift */,
+				DADA39EE2D3A21A7000D15E0 /* FBGameModels.swift */,
+				DADA39EF2D3A21A7000D15E0 /* FBPlayerModels.swift */,
+				DADA39F02D3A21A7000D15E0 /* FBTeamModels.swift */,
+			);
+			path = Football;
+			sourceTree = "<group>";
+		};
+		DADA39F22D3A21A7000D15E0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39F12D3A21A7000D15E0 /* Football */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DADA39F92D3A21A7000D15E0 /* Football */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39F32D3A21A7000D15E0 /* FBGameScheduleResponseModel.swift */,
+				DADA39F42D3A21A7000D15E0 /* FBGameStatsResponseModel.swift */,
+				DADA39F52D3A21A7000D15E0 /* FBPlayerInfoResponseModel.swift */,
+				DADA39F62D3A21A7000D15E0 /* FBPlayerStandingsResponseModel.swift */,
+				DADA39F72D3A21A7000D15E0 /* FBTeamInfoResponseModel.swift */,
+				DADA39F82D3A21A7000D15E0 /* FBTeamStandingsResponseModel.swift */,
+			);
+			path = Football;
+			sourceTree = "<group>";
+		};
+		DADA39FB2D3A21A7000D15E0 /* NBA */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39FA2D3A21A7000D15E0 /* NbaModel.swift */,
+			);
+			path = NBA;
+			sourceTree = "<group>";
+		};
+		DADA39FC2D3A21A7000D15E0 /* ReponseModels */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39F92D3A21A7000D15E0 /* Football */,
+				DADA39FB2D3A21A7000D15E0 /* NBA */,
+			);
+			path = ReponseModels;
+			sourceTree = "<group>";
+		};
+		DADA3A032D3A21A7000D15E0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39EC2D3A21A7000D15E0 /* DisplayModels */,
+				DADA39F22D3A21A7000D15E0 /* Models */,
+				DADA39FC2D3A21A7000D15E0 /* ReponseModels */,
+				DADA39FD2D3A21A7000D15E0 /* AutoComplete.swift */,
+				DADA39FE2D3A21A7000D15E0 /* DataModel.swift */,
+				DADA39FF2D3A21A7000D15E0 /* Error.swift */,
+				DADA3A002D3A21A7000D15E0 /* FootballTeamGameStatsResponseModel.swift */,
+				DADA3A012D3A21A7000D15E0 /* ModelConverter.swift */,
+				DADA3A022D3A21A7000D15E0 /* SearchDataState.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DADA3A052D3A21A7000D15E0 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				DADA3A042D3A21A7000D15E0 /* SearchClient.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		DADA3A062D3A21A7000D15E0 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				DADA39E12D3A21A7000D15E0 /* Display */,
+				DADA3A032D3A21A7000D15E0 /* Models */,
+				DADA3A052D3A21A7000D15E0 /* Networking */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		DADA3A0F2D3A21A7000D15E0 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				DADA3A062D3A21A7000D15E0 /* Search */,
+			);
+			name = Features;
+			path = ../../moare_legacy/moare/Features;
+			sourceTree = "<group>";
+		};
+		DADA3A4F2D3A21AF000D15E0 /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				DADA3A4C2D3A21AF000D15E0 /* BaseUIState.swift */,
+				DADA3A4D2D3A21AF000D15E0 /* HSequentialListAni.swift */,
+				DADA3A4E2D3A21AF000D15E0 /* VSequentialListAni.swift */,
+			);
+			path = Animations;
+			sourceTree = "<group>";
+		};
+		DADA3A512D3A21AF000D15E0 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				DADA3A502D3A21AF000D15E0 /* RoundedRectWithPathAni.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		DADA3A522D3A21AF000D15E0 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		DADA3A532D3A21AF000D15E0 /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				DADA3A4F2D3A21AF000D15E0 /* Animations */,
+				DADA3A512D3A21AF000D15E0 /* Components */,
+				DADA3A522D3A21AF000D15E0 /* Extensions */,
+			);
+			path = Animation;
+			sourceTree = "<group>";
+		};
+		DADA3A582D3A21AF000D15E0 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				DADA3A542D3A21AF000D15E0 /* CalendarList.swift */,
+				DADA3A552D3A21AF000D15E0 /* CapsuleBar.swift */,
+				DADA3A562D3A21AF000D15E0 /* CapsuleButton.swift */,
+				DADA3A572D3A21AF000D15E0 /* URLImage.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		DADA3A592D3A21AF000D15E0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DADA3A5A2D3A21AF000D15E0 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				DADA3A582D3A21AF000D15E0 /* Components */,
+				DADA3A592D3A21AF000D15E0 /* View */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		DADA3A5D2D3A21AF000D15E0 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				DADA3A5B2D3A21AF000D15E0 /* FlowStack.swift */,
+				DADA3A5C2D3A21AF000D15E0 /* UIExtensions.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		DADA3A5E2D3A21AF000D15E0 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				DADA3A532D3A21AF000D15E0 /* Animation */,
+				DADA3A5A2D3A21AF000D15E0 /* Common */,
+				DADA3A5D2D3A21AF000D15E0 /* Utilities */,
+			);
+			name = UI;
+			path = ../../moare_legacy/moare/UI;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DADA39502D3A1AC8000D15E0 /* moare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DADA39762D3A1AC9000D15E0 /* Build configuration list for PBXNativeTarget "moare" */;
+			buildPhases = (
+				DADA394D2D3A1AC8000D15E0 /* Sources */,
+				DADA394E2D3A1AC8000D15E0 /* Frameworks */,
+				DADA394F2D3A1AC8000D15E0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = moare;
+			packageProductDependencies = (
+				DADA39802D3A1CEC000D15E0 /* ComposableArchitecture */,
+				DADA39832D3A2006000D15E0 /* AWSCore */,
+				DADA39852D3A2006000D15E0 /* AWSS3 */,
+				DADA39872D3A2006000D15E0 /* AWSTranslate */,
+			);
+			productName = moare;
+			productReference = DADA39512D3A1AC8000D15E0 /* moare.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DADA39612D3A1AC9000D15E0 /* moareTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DADA39792D3A1AC9000D15E0 /* Build configuration list for PBXNativeTarget "moareTests" */;
+			buildPhases = (
+				DADA395E2D3A1AC9000D15E0 /* Sources */,
+				DADA395F2D3A1AC9000D15E0 /* Frameworks */,
+				DADA39602D3A1AC9000D15E0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DADA39642D3A1AC9000D15E0 /* PBXTargetDependency */,
+			);
+			name = moareTests;
+			productName = moareTests;
+			productReference = DADA39622D3A1AC9000D15E0 /* moareTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		DADA396B2D3A1AC9000D15E0 /* moareUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DADA397C2D3A1AC9000D15E0 /* Build configuration list for PBXNativeTarget "moareUITests" */;
+			buildPhases = (
+				DADA39682D3A1AC9000D15E0 /* Sources */,
+				DADA39692D3A1AC9000D15E0 /* Frameworks */,
+				DADA396A2D3A1AC9000D15E0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DADA396E2D3A1AC9000D15E0 /* PBXTargetDependency */,
+			);
+			name = moareUITests;
+			productName = moareUITests;
+			productReference = DADA396C2D3A1AC9000D15E0 /* moareUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DADA39492D3A1AC8000D15E0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					DADA39502D3A1AC8000D15E0 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					DADA39612D3A1AC9000D15E0 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = DADA39502D3A1AC8000D15E0;
+					};
+					DADA396B2D3A1AC9000D15E0 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = DADA39502D3A1AC8000D15E0;
+					};
+				};
+			};
+			buildConfigurationList = DADA394C2D3A1AC8000D15E0 /* Build configuration list for PBXProject "moare" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DADA39482D3A1AC8000D15E0;
+			packageReferences = (
+				DADA397F2D3A1CEC000D15E0 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				DADA39822D3A2006000D15E0 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */,
+			);
+			productRefGroup = DADA39522D3A1AC8000D15E0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DADA39502D3A1AC8000D15E0 /* moare */,
+				DADA39612D3A1AC9000D15E0 /* moareTests */,
+				DADA396B2D3A1AC9000D15E0 /* moareUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DADA394F2D3A1AC8000D15E0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DADA395D2D3A1AC9000D15E0 /* Preview Assets.xcassets in Resources */,
+				DADA39592D3A1AC9000D15E0 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DADA39602D3A1AC9000D15E0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DADA396A2D3A1AC9000D15E0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DADA394D2D3A1AC8000D15E0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DADA3A3A2D3A21A7000D15E0 /* FBGameScheduleResponseModel.swift in Sources */,
+				DADA3A1F2D3A21A7000D15E0 /* FBTeamStatsStore.swift in Sources */,
+				DADA39A52D3A21A1000D15E0 /* AnimationConstants.swift in Sources */,
+				DADA3A682D3A21AF000D15E0 /* UIExtensions.swift in Sources */,
+				DADA39B42D3A21A1000D15E0 /* TaskCompletionTracker.swift in Sources */,
+				DADA3A252D3A21A7000D15E0 /* FBTeamInfoView.swift in Sources */,
+				DADA3A402D3A21A7000D15E0 /* NbaModel.swift in Sources */,
+				DADA3A422D3A21A7000D15E0 /* DataModel.swift in Sources */,
+				DADA3A5F2D3A21AF000D15E0 /* BaseUIState.swift in Sources */,
+				DADA3A632D3A21AF000D15E0 /* CalendarList.swift in Sources */,
+				DADA398D2D3A214D000D15E0 /* moareApp.swift in Sources */,
+				DADA3A312D3A21A7000D15E0 /* FBPlayerStandingsDisplayModel.swift in Sources */,
+				DADA3A1B2D3A21A7000D15E0 /* FBPlayerStatsStore.swift in Sources */,
+				DADA39B22D3A21A1000D15E0 /* KoreanUtilities.swift in Sources */,
+				DADA3A3E2D3A21A7000D15E0 /* FBTeamInfoResponseModel.swift in Sources */,
+				DADA3A642D3A21AF000D15E0 /* CapsuleBar.swift in Sources */,
+				DADA3A3F2D3A21A7000D15E0 /* FBTeamStandingsResponseModel.swift in Sources */,
+				DADA3A3B2D3A21A7000D15E0 /* FBGameStatsResponseModel.swift in Sources */,
+				DADA3A652D3A21AF000D15E0 /* CapsuleButton.swift in Sources */,
+				DADA3A432D3A21A7000D15E0 /* Error.swift in Sources */,
+				DADA3A372D3A21A7000D15E0 /* FBGameModels.swift in Sources */,
+				DADA3A172D3A21A7000D15E0 /* FBGameStatsStore.swift in Sources */,
+				DADA3A292D3A21A7000D15E0 /* SearchStore.swift in Sources */,
+				DADA3A3C2D3A21A7000D15E0 /* FBPlayerInfoResponseModel.swift in Sources */,
+				DADA3A202D3A21A7000D15E0 /* FBGameStatsView.swift in Sources */,
+				DADA39AF2D3A21A1000D15E0 /* CalendarUtil.swift in Sources */,
+				DADA39B02D3A21A1000D15E0 /* EnNameTranslationUtility.swift in Sources */,
+				DADA3A6A2D3A27AD000D15E0 /* FBPlayerStatsDisplayModel.swift in Sources */,
+				DADA3A2B2D3A21A7000D15E0 /* AutoCompleteList.swift in Sources */,
+				DADA39A92D3A21A1000D15E0 /* APIClient.swift in Sources */,
+				DADA3A412D3A21A7000D15E0 /* AutoComplete.swift in Sources */,
+				DADA3A2E2D3A21A7000D15E0 /* FBGameStatsDisplayModel.swift in Sources */,
+				DADA3A332D3A21A7000D15E0 /* FBTeamScheduleDisplayModel.swift in Sources */,
+				DADA39AA2D3A21A1000D15E0 /* APIConfiguration.swift in Sources */,
+				DADA3A272D3A21A7000D15E0 /* FBTeamStandingsView.swift in Sources */,
+				DADA3A322D3A21A7000D15E0 /* FBTeamInfoDisplayModel.swift in Sources */,
+				DADA3A242D3A21A7000D15E0 /* FBPlayerStatsView.swift in Sources */,
+				DADA39A62D3A21A1000D15E0 /* StringConstants.swift in Sources */,
+				DADA3A232D3A21A7000D15E0 /* FBPlayerStandingsView.swift in Sources */,
+				DADA39B52D3A21A1000D15E0 /* ApiRouteService.swift in Sources */,
+				DADA3A222D3A21A7000D15E0 /* FBPlayerInfoView.swift in Sources */,
+				DADA3A1A2D3A21A7000D15E0 /* FBPlayerStandingsStore.swift in Sources */,
+				DADA3A2F2D3A21A7000D15E0 /* FBLeagueScheduleDisplayModel.swift in Sources */,
+				DADA3A262D3A21A7000D15E0 /* FBTeamScheduleView.swift in Sources */,
+				DADA398C2D3A214D000D15E0 /* SplashView.swift in Sources */,
+				DADA39AE2D3A21A1000D15E0 /* AutoCompleteTrie.swift in Sources */,
+				DADA3A1C2D3A21A7000D15E0 /* FBTeamInfoStore.swift in Sources */,
+				DADA3A472D3A21A7000D15E0 /* SearchClient.swift in Sources */,
+				DADA3A1E2D3A21A7000D15E0 /* FBTeamStandingsStore.swift in Sources */,
+				DADA39AC2D3A21A1000D15E0 /* RequestBuilder.swift in Sources */,
+				DADA3A162D3A21A7000D15E0 /* LeagueTitle.swift in Sources */,
+				DADA3A152D3A21A7000D15E0 /* FBStatDataItem.swift in Sources */,
+				DADA3A452D3A21A7000D15E0 /* ModelConverter.swift in Sources */,
+				DADA3A2C2D3A21A7000D15E0 /* KeywordList.swift in Sources */,
+				DADA39B12D3A21A1000D15E0 /* Extensions.swift in Sources */,
+				DADA3A442D3A21A7000D15E0 /* FootballTeamGameStatsResponseModel.swift in Sources */,
+				DADA3A212D3A21A7000D15E0 /* FBLeagueScheduleView.swift in Sources */,
+				DADA3A462D3A21A7000D15E0 /* SearchDataState.swift in Sources */,
+				DADA39B32D3A21A1000D15E0 /* MatchDescriptionConverter.swift in Sources */,
+				DADA39A82D3A21A1000D15E0 /* BaseDisplayModel.swift in Sources */,
+				DADA3A2D2D3A21A7000D15E0 /* SearchView.swift in Sources */,
+				DADA3A192D3A21A7000D15E0 /* FBPlayerInfoStore.swift in Sources */,
+				DADA3A392D3A21A7000D15E0 /* FBTeamModels.swift in Sources */,
+				DADA39AD2D3A21A1000D15E0 /* StoreManager.swift in Sources */,
+				DADA3A622D3A21AF000D15E0 /* RoundedRectWithPathAni.swift in Sources */,
+				DADA3A382D3A21A7000D15E0 /* FBPlayerModels.swift in Sources */,
+				DADA39A72D3A21A1000D15E0 /* UIConstants.swift in Sources */,
+				DADA3A282D3A21A7000D15E0 /* FBTeamStatsView.swift in Sources */,
+				DADA3A342D3A21A7000D15E0 /* FBTeamStandingsDisplayModel.swift in Sources */,
+				DADA3A3D2D3A21A7000D15E0 /* FBPlayerStandingsResponseModel.swift in Sources */,
+				DADA3A2A2D3A21A7000D15E0 /* AnimatingSearchBar.swift in Sources */,
+				DADA3A1D2D3A21A7000D15E0 /* FBTeamScheduleStore.swift in Sources */,
+				DADA3A612D3A21AF000D15E0 /* VSequentialListAni.swift in Sources */,
+				DADA3A602D3A21AF000D15E0 /* HSequentialListAni.swift in Sources */,
+				DADA3A362D3A21A7000D15E0 /* FBCommonModel.swift in Sources */,
+				DADA3A182D3A21A7000D15E0 /* FBLeagueScheduleStore.swift in Sources */,
+				DADA3A302D3A21A7000D15E0 /* FBPlayerInfoDisplayModel.swift in Sources */,
+				DADA39AB2D3A21A1000D15E0 /* APIEndpoint.swift in Sources */,
+				DADA3A352D3A21A7000D15E0 /* FBTeamStatsDisplayModel.swift in Sources */,
+				DADA3A662D3A21AF000D15E0 /* URLImage.swift in Sources */,
+				DADA3A672D3A21AF000D15E0 /* FlowStack.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DADA395E2D3A1AC9000D15E0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DADA39672D3A1AC9000D15E0 /* moareTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DADA39682D3A1AC9000D15E0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DADA39712D3A1AC9000D15E0 /* moareUITests.swift in Sources */,
+				DADA39732D3A1AC9000D15E0 /* moareUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DADA39642D3A1AC9000D15E0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DADA39502D3A1AC8000D15E0 /* moare */;
+			targetProxy = DADA39632D3A1AC9000D15E0 /* PBXContainerItemProxy */;
+		};
+		DADA396E2D3A1AC9000D15E0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DADA39502D3A1AC8000D15E0 /* moare */;
+			targetProxy = DADA396D2D3A1AC9000D15E0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		DADA39742D3A1AC9000D15E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		DADA39752D3A1AC9000D15E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		DADA39772D3A1AC9000D15E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = moare/moare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"moare/Preview Content\"";
+				DEVELOPMENT_TEAM = W3QMDDLKW5;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moare.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DADA39782D3A1AC9000D15E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = moare/moare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"moare/Preview Content\"";
+				DEVELOPMENT_TEAM = W3QMDDLKW5;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moare.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		DADA397A2D3A1AC9000D15E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W3QMDDLKW5;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MACOSX_DEPLOYMENT_TARGET = 14.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moare.moareTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/moare.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/moare";
+			};
+			name = Debug;
+		};
+		DADA397B2D3A1AC9000D15E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W3QMDDLKW5;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MACOSX_DEPLOYMENT_TARGET = 14.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moare.moareTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/moare.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/moare";
+			};
+			name = Release;
+		};
+		DADA397D2D3A1AC9000D15E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W3QMDDLKW5;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MACOSX_DEPLOYMENT_TARGET = 14.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moare.moareUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = moare;
+			};
+			name = Debug;
+		};
+		DADA397E2D3A1AC9000D15E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W3QMDDLKW5;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MACOSX_DEPLOYMENT_TARGET = 14.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moare.moareUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = moare;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DADA394C2D3A1AC8000D15E0 /* Build configuration list for PBXProject "moare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DADA39742D3A1AC9000D15E0 /* Debug */,
+				DADA39752D3A1AC9000D15E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DADA39762D3A1AC9000D15E0 /* Build configuration list for PBXNativeTarget "moare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DADA39772D3A1AC9000D15E0 /* Debug */,
+				DADA39782D3A1AC9000D15E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DADA39792D3A1AC9000D15E0 /* Build configuration list for PBXNativeTarget "moareTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DADA397A2D3A1AC9000D15E0 /* Debug */,
+				DADA397B2D3A1AC9000D15E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DADA397C2D3A1AC9000D15E0 /* Build configuration list for PBXNativeTarget "moareUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DADA397D2D3A1AC9000D15E0 /* Debug */,
+				DADA397E2D3A1AC9000D15E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DADA397F2D3A1CEC000D15E0 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.17.1;
+			};
+		};
+		DADA39822D3A2006000D15E0 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aws-amplify/aws-sdk-ios-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.40.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DADA39802D3A1CEC000D15E0 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DADA397F2D3A1CEC000D15E0 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+		DADA39832D3A2006000D15E0 /* AWSCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DADA39822D3A2006000D15E0 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSCore;
+		};
+		DADA39852D3A2006000D15E0 /* AWSS3 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DADA39822D3A2006000D15E0 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSS3;
+		};
+		DADA39872D3A2006000D15E0 /* AWSTranslate */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DADA39822D3A2006000D15E0 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSTranslate;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = DADA39492D3A1AC8000D15E0 /* Project object */;
+}
