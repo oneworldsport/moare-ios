@@ -15,7 +15,7 @@ struct DataModel: Decodable {
     let data: SportDecodableModel
 }
 
-struct EntityInfo: Decodable {
+struct EntityInfo: Codable {
     let entityName: String
     let category: String
     let entityType: String
@@ -24,7 +24,7 @@ struct EntityInfo: Decodable {
     let playerId: Int?
 }
 
-struct Keyword: Decodable, Equatable {
+struct Keyword: Codable, Equatable {
     let keyword: String
     let id: String
     let priority: Int

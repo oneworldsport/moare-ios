@@ -86,7 +86,7 @@ struct FBLeagueScheduleStore {
                 return .none
                 
             case .setDays:
-                // set days
+                // set filtered games to each day
                 if let month = Int(state.selectedYearMonth.split(separator: "/").last ?? "") {
                     var days = CalendarUtil.getDaysInMonth(year: 2024, month: month)
                     

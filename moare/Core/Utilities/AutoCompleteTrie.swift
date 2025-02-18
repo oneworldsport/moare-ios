@@ -125,6 +125,7 @@ class Trie {
         
         if node.isEndOfWord {
             for (word, weight) in node.originalWords {
+                // TODO: result[word] == nil { 이 코드는 필요 없는 것 같은데..?
                 if result[word] == nil {
                     result[word] = weight
                 }
