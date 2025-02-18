@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA531B332D645D3D00DB87CB /* TrendingKeyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B322D645D3D00DB87CB /* TrendingKeyword.swift */; };
+		DA531B352D6463B500DB87CB /* KeywordsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B342D6463B500DB87CB /* KeywordsClient.swift */; };
 		DADA39592D3A1AC9000D15E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DADA39582D3A1AC9000D15E0 /* Assets.xcassets */; };
 		DADA395D2D3A1AC9000D15E0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DADA395C2D3A1AC9000D15E0 /* Preview Assets.xcassets */; };
 		DADA39672D3A1AC9000D15E0 /* moareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39662D3A1AC9000D15E0 /* moareTests.swift */; };
@@ -58,7 +60,7 @@
 		DADA3A292D3A21A7000D15E0 /* SearchStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39DA2D3A21A7000D15E0 /* SearchStore.swift */; };
 		DADA3A2A2D3A21A7000D15E0 /* AnimatingSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39DC2D3A21A7000D15E0 /* AnimatingSearchBar.swift */; };
 		DADA3A2B2D3A21A7000D15E0 /* AutoCompleteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39DD2D3A21A7000D15E0 /* AutoCompleteList.swift */; };
-		DADA3A2C2D3A21A7000D15E0 /* KeywordList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39DE2D3A21A7000D15E0 /* KeywordList.swift */; };
+		DADA3A2C2D3A21A7000D15E0 /* TrendingKeywords.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39DE2D3A21A7000D15E0 /* TrendingKeywords.swift */; };
 		DADA3A2D2D3A21A7000D15E0 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39DF2D3A21A7000D15E0 /* SearchView.swift */; };
 		DADA3A2E2D3A21A7000D15E0 /* FBGameStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E22D3A21A7000D15E0 /* FBGameStatsDisplayModel.swift */; };
 		DADA3A2F2D3A21A7000D15E0 /* FBLeagueScheduleDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E32D3A21A7000D15E0 /* FBLeagueScheduleDisplayModel.swift */; };
@@ -68,7 +70,7 @@
 		DADA3A332D3A21A7000D15E0 /* FBTeamScheduleDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E72D3A21A7000D15E0 /* FBTeamScheduleDisplayModel.swift */; };
 		DADA3A342D3A21A7000D15E0 /* FBTeamStandingsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E82D3A21A7000D15E0 /* FBTeamStandingsDisplayModel.swift */; };
 		DADA3A352D3A21A7000D15E0 /* FBTeamStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E92D3A21A7000D15E0 /* FBTeamStatsDisplayModel.swift */; };
-		DADA3A362D3A21A7000D15E0 /* FBCommonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39ED2D3A21A7000D15E0 /* FBCommonModel.swift */; };
+		DADA3A362D3A21A7000D15E0 /* FBCommonModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39ED2D3A21A7000D15E0 /* FBCommonModels.swift */; };
 		DADA3A372D3A21A7000D15E0 /* FBGameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39EE2D3A21A7000D15E0 /* FBGameModels.swift */; };
 		DADA3A382D3A21A7000D15E0 /* FBPlayerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39EF2D3A21A7000D15E0 /* FBPlayerModels.swift */; };
 		DADA3A392D3A21A7000D15E0 /* FBTeamModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39F02D3A21A7000D15E0 /* FBTeamModels.swift */; };
@@ -117,6 +119,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DA531B322D645D3D00DB87CB /* TrendingKeyword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingKeyword.swift; sourceTree = "<group>"; };
+		DA531B342D6463B500DB87CB /* KeywordsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordsClient.swift; sourceTree = "<group>"; };
 		DADA39512D3A1AC8000D15E0 /* moare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = moare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DADA39582D3A1AC9000D15E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DADA395A2D3A1AC9000D15E0 /* moare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = moare.entitlements; sourceTree = "<group>"; };
@@ -168,7 +172,7 @@
 		DADA39DA2D3A21A7000D15E0 /* SearchStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchStore.swift; sourceTree = "<group>"; };
 		DADA39DC2D3A21A7000D15E0 /* AnimatingSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatingSearchBar.swift; sourceTree = "<group>"; };
 		DADA39DD2D3A21A7000D15E0 /* AutoCompleteList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoCompleteList.swift; sourceTree = "<group>"; };
-		DADA39DE2D3A21A7000D15E0 /* KeywordList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeywordList.swift; sourceTree = "<group>"; };
+		DADA39DE2D3A21A7000D15E0 /* TrendingKeywords.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrendingKeywords.swift; sourceTree = "<group>"; };
 		DADA39DF2D3A21A7000D15E0 /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		DADA39E22D3A21A7000D15E0 /* FBGameStatsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameStatsDisplayModel.swift; sourceTree = "<group>"; };
 		DADA39E32D3A21A7000D15E0 /* FBLeagueScheduleDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLeagueScheduleDisplayModel.swift; sourceTree = "<group>"; };
@@ -178,7 +182,7 @@
 		DADA39E72D3A21A7000D15E0 /* FBTeamScheduleDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamScheduleDisplayModel.swift; sourceTree = "<group>"; };
 		DADA39E82D3A21A7000D15E0 /* FBTeamStandingsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStandingsDisplayModel.swift; sourceTree = "<group>"; };
 		DADA39E92D3A21A7000D15E0 /* FBTeamStatsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStatsDisplayModel.swift; sourceTree = "<group>"; };
-		DADA39ED2D3A21A7000D15E0 /* FBCommonModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBCommonModel.swift; sourceTree = "<group>"; };
+		DADA39ED2D3A21A7000D15E0 /* FBCommonModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBCommonModels.swift; sourceTree = "<group>"; };
 		DADA39EE2D3A21A7000D15E0 /* FBGameModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameModels.swift; sourceTree = "<group>"; };
 		DADA39EF2D3A21A7000D15E0 /* FBPlayerModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerModels.swift; sourceTree = "<group>"; };
 		DADA39F02D3A21A7000D15E0 /* FBTeamModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamModels.swift; sourceTree = "<group>"; };
@@ -384,15 +388,15 @@
 		DADA39CB2D3A21A7000D15E0 /* Store */ = {
 			isa = PBXGroup;
 			children = (
-				DADA39C22D3A21A7000D15E0 /* FBGameStatsStore.swift */,
-				DADA39C32D3A21A7000D15E0 /* FBLeagueScheduleStore.swift */,
 				DADA39C42D3A21A7000D15E0 /* FBPlayerInfoStore.swift */,
-				DADA39C52D3A21A7000D15E0 /* FBPlayerStandingsStore.swift */,
 				DADA39C62D3A21A7000D15E0 /* FBPlayerStatsStore.swift */,
+				DADA39C52D3A21A7000D15E0 /* FBPlayerStandingsStore.swift */,
 				DADA39C72D3A21A7000D15E0 /* FBTeamInfoStore.swift */,
-				DADA39C82D3A21A7000D15E0 /* FBTeamScheduleStore.swift */,
-				DADA39C92D3A21A7000D15E0 /* FBTeamStandingsStore.swift */,
 				DADA39CA2D3A21A7000D15E0 /* FBTeamStatsStore.swift */,
+				DADA39C92D3A21A7000D15E0 /* FBTeamStandingsStore.swift */,
+				DADA39C82D3A21A7000D15E0 /* FBTeamScheduleStore.swift */,
+				DADA39C32D3A21A7000D15E0 /* FBLeagueScheduleStore.swift */,
+				DADA39C22D3A21A7000D15E0 /* FBGameStatsStore.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -400,15 +404,15 @@
 		DADA39D52D3A21A7000D15E0 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				DADA39CC2D3A21A7000D15E0 /* FBGameStatsView.swift */,
-				DADA39CD2D3A21A7000D15E0 /* FBLeagueScheduleView.swift */,
 				DADA39CE2D3A21A7000D15E0 /* FBPlayerInfoView.swift */,
-				DADA39CF2D3A21A7000D15E0 /* FBPlayerStandingsView.swift */,
 				DADA39D02D3A21A7000D15E0 /* FBPlayerStatsView.swift */,
+				DADA39CF2D3A21A7000D15E0 /* FBPlayerStandingsView.swift */,
 				DADA39D12D3A21A7000D15E0 /* FBTeamInfoView.swift */,
-				DADA39D22D3A21A7000D15E0 /* FBTeamScheduleView.swift */,
-				DADA39D32D3A21A7000D15E0 /* FBTeamStandingsView.swift */,
 				DADA39D42D3A21A7000D15E0 /* FBTeamStatsView.swift */,
+				DADA39D32D3A21A7000D15E0 /* FBTeamStandingsView.swift */,
+				DADA39D22D3A21A7000D15E0 /* FBTeamScheduleView.swift */,
+				DADA39CD2D3A21A7000D15E0 /* FBLeagueScheduleView.swift */,
+				DADA39CC2D3A21A7000D15E0 /* FBGameStatsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -459,7 +463,7 @@
 				DADA39DB2D3A21A7000D15E0 /* Store */,
 				DADA39DC2D3A21A7000D15E0 /* AnimatingSearchBar.swift */,
 				DADA39DD2D3A21A7000D15E0 /* AutoCompleteList.swift */,
-				DADA39DE2D3A21A7000D15E0 /* KeywordList.swift */,
+				DADA39DE2D3A21A7000D15E0 /* TrendingKeywords.swift */,
 				DADA39DF2D3A21A7000D15E0 /* SearchView.swift */,
 			);
 			path = Search;
@@ -511,7 +515,7 @@
 		DADA39F12D3A21A7000D15E0 /* Football */ = {
 			isa = PBXGroup;
 			children = (
-				DADA39ED2D3A21A7000D15E0 /* FBCommonModel.swift */,
+				DADA39ED2D3A21A7000D15E0 /* FBCommonModels.swift */,
 				DADA39EE2D3A21A7000D15E0 /* FBGameModels.swift */,
 				DADA39EF2D3A21A7000D15E0 /* FBPlayerModels.swift */,
 				DADA39F02D3A21A7000D15E0 /* FBTeamModels.swift */,
@@ -569,6 +573,7 @@
 				DADA3A002D3A21A7000D15E0 /* FootballTeamGameStatsResponseModel.swift */,
 				DADA3A012D3A21A7000D15E0 /* ModelConverter.swift */,
 				DADA3A022D3A21A7000D15E0 /* SearchDataState.swift */,
+				DA531B322D645D3D00DB87CB /* TrendingKeyword.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -577,6 +582,7 @@
 			isa = PBXGroup;
 			children = (
 				DADA3A042D3A21A7000D15E0 /* SearchClient.swift */,
+				DA531B342D6463B500DB87CB /* KeywordsClient.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -827,6 +833,7 @@
 				DADA39A52D3A21A1000D15E0 /* AnimationConstants.swift in Sources */,
 				DADA3A682D3A21AF000D15E0 /* UIExtensions.swift in Sources */,
 				DADA39B42D3A21A1000D15E0 /* TaskCompletionTracker.swift in Sources */,
+				DA531B352D6463B500DB87CB /* KeywordsClient.swift in Sources */,
 				DADA3A252D3A21A7000D15E0 /* FBTeamInfoView.swift in Sources */,
 				DADA3A402D3A21A7000D15E0 /* NbaModel.swift in Sources */,
 				DADA3A422D3A21A7000D15E0 /* DataModel.swift in Sources */,
@@ -850,6 +857,7 @@
 				DADA39AF2D3A21A1000D15E0 /* CalendarUtil.swift in Sources */,
 				DADA39B02D3A21A1000D15E0 /* EnNameTranslationUtility.swift in Sources */,
 				DADA3A6A2D3A27AD000D15E0 /* FBPlayerStatsDisplayModel.swift in Sources */,
+				DA531B332D645D3D00DB87CB /* TrendingKeyword.swift in Sources */,
 				DADA3A2B2D3A21A7000D15E0 /* AutoCompleteList.swift in Sources */,
 				DADA39A92D3A21A1000D15E0 /* APIClient.swift in Sources */,
 				DADA3A412D3A21A7000D15E0 /* AutoComplete.swift in Sources */,
@@ -875,7 +883,7 @@
 				DADA3A162D3A21A7000D15E0 /* LeagueTitle.swift in Sources */,
 				DADA3A152D3A21A7000D15E0 /* FBStatDataItem.swift in Sources */,
 				DADA3A452D3A21A7000D15E0 /* ModelConverter.swift in Sources */,
-				DADA3A2C2D3A21A7000D15E0 /* KeywordList.swift in Sources */,
+				DADA3A2C2D3A21A7000D15E0 /* TrendingKeywords.swift in Sources */,
 				DADA39B12D3A21A1000D15E0 /* Extensions.swift in Sources */,
 				DADA3A442D3A21A7000D15E0 /* FootballTeamGameStatsResponseModel.swift in Sources */,
 				DADA3A212D3A21A7000D15E0 /* FBLeagueScheduleView.swift in Sources */,
@@ -896,7 +904,7 @@
 				DADA3A1D2D3A21A7000D15E0 /* FBTeamScheduleStore.swift in Sources */,
 				DADA3A612D3A21AF000D15E0 /* VSequentialListAni.swift in Sources */,
 				DADA3A602D3A21AF000D15E0 /* HSequentialListAni.swift in Sources */,
-				DADA3A362D3A21A7000D15E0 /* FBCommonModel.swift in Sources */,
+				DADA3A362D3A21A7000D15E0 /* FBCommonModels.swift in Sources */,
 				DADA3A182D3A21A7000D15E0 /* FBLeagueScheduleStore.swift in Sources */,
 				DADA3A302D3A21A7000D15E0 /* FBPlayerInfoDisplayModel.swift in Sources */,
 				DADA39AB2D3A21A1000D15E0 /* APIEndpoint.swift in Sources */,
