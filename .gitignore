@@ -1,1 +1,3 @@
-*/xcuserdata/
+# Xcode 사용자 데이터 무시
+moare.xcodeproj/project.xcworkspace/xcuserdata/
+moare.xcodeproj/xcuserdata/
