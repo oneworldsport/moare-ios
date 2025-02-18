@@ -88,6 +88,8 @@
 		DA531C0A2D64A91900DB87CB /* URLImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BFA2D64A91900DB87CB /* URLImage.swift */; };
 		DA531C0B2D64A91900DB87CB /* FlowStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BFF2D64A91900DB87CB /* FlowStack.swift */; };
 		DA531C0C2D64A91900DB87CB /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531C002D64A91900DB87CB /* UIExtensions.swift */; };
+		DA531C0E2D64AA4300DB87CB /* AnimationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531C0D2D64AA4300DB87CB /* AnimationConstants.swift */; };
+		DA531C102D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531C0F2D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift */; };
 		DADA39592D3A1AC9000D15E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DADA39582D3A1AC9000D15E0 /* Assets.xcassets */; };
 		DADA395D2D3A1AC9000D15E0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DADA395C2D3A1AC9000D15E0 /* Preview Assets.xcassets */; };
 		DADA39672D3A1AC9000D15E0 /* moareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39662D3A1AC9000D15E0 /* moareTests.swift */; };
@@ -198,6 +200,8 @@
 		DA531BFA2D64A91900DB87CB /* URLImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLImage.swift; sourceTree = "<group>"; };
 		DA531BFF2D64A91900DB87CB /* FlowStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowStack.swift; sourceTree = "<group>"; };
 		DA531C002D64A91900DB87CB /* UIExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
+		DA531C0D2D64AA4300DB87CB /* AnimationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationConstants.swift; sourceTree = "<group>"; };
+		DA531C0F2D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBPlayerStatsDisplayModel.swift; sourceTree = "<group>"; };
 		DADA39512D3A1AC8000D15E0 /* moare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = moare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DADA39582D3A1AC9000D15E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DADA395A2D3A1AC9000D15E0 /* moare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = moare.entitlements; sourceTree = "<group>"; };
@@ -442,6 +446,7 @@
 				DA531B7C2D64A8CA00DB87CB /* FBPlayerStandingsResponseModel.swift */,
 				DA531B7D2D64A8CA00DB87CB /* FBTeamInfoResponseModel.swift */,
 				DA531B7E2D64A8CA00DB87CB /* FBTeamStandingsResponseModel.swift */,
+				DA531C0F2D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift */,
 			);
 			path = Football;
 			sourceTree = "<group>";
@@ -546,6 +551,7 @@
 			children = (
 				DA531BC92D64A8F200DB87CB /* StringConstants.swift */,
 				DA531BCA2D64A8F200DB87CB /* UIConstants.swift */,
+				DA531C0D2D64AA4300DB87CB /* AnimationConstants.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -906,6 +912,7 @@
 				DA531BA32D64A8CA00DB87CB /* FBPlayerStatsView.swift in Sources */,
 				DA531C0C2D64A91900DB87CB /* UIExtensions.swift in Sources */,
 				DA531B9E2D64A8CA00DB87CB /* FBTeamStatsStore.swift in Sources */,
+				DA531C102D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift in Sources */,
 				DA531BA52D64A8CA00DB87CB /* FBTeamScheduleView.swift in Sources */,
 				DA531BC72D64A8CA00DB87CB /* KeywordsClient.swift in Sources */,
 				DA531BA22D64A8CA00DB87CB /* FBPlayerStandingsView.swift in Sources */,
@@ -970,6 +977,7 @@
 				DA531BE12D64A8F200DB87CB /* BaseDisplayModel.swift in Sources */,
 				DA531BA82D64A8CA00DB87CB /* SearchStore.swift in Sources */,
 				DA531B9C2D64A8CA00DB87CB /* FBTeamScheduleStore.swift in Sources */,
+				DA531C0E2D64AA4300DB87CB /* AnimationConstants.swift in Sources */,
 				DA531BBB2D64A8CA00DB87CB /* FBPlayerInfoResponseModel.swift in Sources */,
 				DA531BE72D64A8F200DB87CB /* AutoCompleteTrie.swift in Sources */,
 				DA531BE62D64A8F200DB87CB /* StoreManager.swift in Sources */,
