@@ -155,7 +155,7 @@ struct FBTeamStatsTeamInfoItem: View {
             HCapsuleBar()
             
             HStack(spacing: 8) {
-                URLImage(url: team.logo, size: .medium)
+                URLImage(url: team.logo)
                 
                 VStack(alignment: .leading) {
                     Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.krname))
@@ -312,7 +312,7 @@ struct FBTeamStatsItem: View {
     let stats: FBTeamStats
     let showContents: Bool
     
-    @State var teamName = ""
+    @State var teamKrName = ""
     
     init(stats: FBTeamStats, showContents: Bool = true) {
         self.stats = stats
@@ -336,7 +336,7 @@ struct FBTeamStatsItem: View {
                 
                 URLImage(url: stats.team.logo, customSize: CGSize(width: 24, height: 24))
                 
-                Text(EnNameTranslationUtility.translateByDic(type: .team, input: teamName))
+                Text(EnNameTranslationUtility.translateByDic(type: .team, input: teamKrName))
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }
@@ -436,8 +436,8 @@ struct FBTeamStatsItem: View {
     
     private func translate() {
         Task {
-            let teamName = await EnNameTranslationUtility.translateByAWS(input: stats.team.name)
-            self.teamName = teamName
+            let teamKrName = await EnNameTranslationUtility.translateByAWS(input: stats.team.name)
+            self.teamKrName = teamKrName
         }
     }
 }

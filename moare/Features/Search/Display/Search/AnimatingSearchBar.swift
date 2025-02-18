@@ -26,7 +26,6 @@ struct AnimatingSearchBar: View {
     
     @State private var query = ""
     
-    @State private var firstOpened = false
     @State private var startPathAni = false
     @State private var barVisibleState = false
     @State private var textFieldVisibleState = false
@@ -42,7 +41,7 @@ struct AnimatingSearchBar: View {
                             // first show: yes ani, no delay
                             // gone: no ani, no delay
                             // show: no ani, yes delay
-                            TextField("프리미어리그 일정", text: $query)
+                            TextField(" \(searchStore.trendingKeywordList.first ?? "")", text: $query)
                                 .focused($focusState)
                                 .accentColor(.primary)
                                 .uiState(visibleState: searchStore.textFieldVisibleState)
@@ -54,11 +53,11 @@ struct AnimatingSearchBar: View {
                         }
                         
                         Button(action: {
-                            if !firstOpened {
+                            if !searchStore.firstOpened {
                                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                                     startPathAni = true
                                     searchStore.send(.updateTextFieldVisibleState(true))
-                                    firstOpened = true
+                                    searchStore.send(.firstOpen)
                                 }
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.medium) {
@@ -76,10 +75,24 @@ struct AnimatingSearchBar: View {
                                 } else {
                                     let isBlank = searchStore.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                                     
-                                    if !isBlank {
+                                    if isBlank {
+                                        if let firstTrendingKeyword = searchStore.trendingKeywordList.first {
+                                            focusState.toggle()
+                                            
+                                            // update bar's text
+                                            searchStore.send(.updateTextField(firstTrendingKeyword, false))
+                                            
+                                            // remove textfield for bar animation
+                                            searchStore.send(.updateTextFieldVisibleState(false))
+                                            
+                                            // search
+                                            searchStore.send(.performSearch(searchType: .keyword, aniDuration: AnimationConstants.Duration.medium))
+                                            searchStore.send(.removeAutoCompleteWithAni)
+                                        }
+                                    } else {
                                         searchStore.send(.updateTextFieldVisibleState(false))
                                         
-                                        searchStore.send(.performSearch(AnimationConstants.Duration.medium))
+                                        searchStore.send(.performSearch(aniDuration: AnimationConstants.Duration.medium))
                                         searchStore.send(.removeAutoCompleteWithAni)
                                         
                                         focusState.toggle()
@@ -90,11 +103,11 @@ struct AnimatingSearchBar: View {
                             Image(systemName: "magnifyingglass")
                                 .imageScale(.large)
                                 .tint(Color.primary)
-                                .padding(.leading, firstOpened ? 10 : 0)
+                                .padding(.leading, searchStore.firstOpened ? 10 : 0)
                         }
                     }
                     .frame(height: barHeight)
-                    .padding(EdgeInsets(top: 0, leading: firstOpened ? 20 : 0, bottom: 0, trailing: firstOpened ? 10 : 0))
+                    .padding(EdgeInsets(top: 0, leading: searchStore.firstOpened ? 20 : 0, bottom: 0, trailing: searchStore.firstOpened ? 10 : 0))
                     .overlay(
                         RoundedRectangle(cornerRadius: UIConstants.CornerRadius.medium)
                             .stroke(searchStore.searchState ? .gray : .moare, lineWidth: UIConstants.StrokeWidth.defaultWidth)

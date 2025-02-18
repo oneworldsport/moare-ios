@@ -433,7 +433,7 @@ struct FBPlayerInfoFourthItem: View {
     
     let showContents: Bool
     
-    @State var teamName = ""
+    @State var teamKrName = ""
     
     init(fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>, showContents: Bool = true) {
         self.fbPlayerInfoStore = fbPlayerInfoStore
@@ -462,7 +462,7 @@ struct FBPlayerInfoFourthItem: View {
                         HStack {
                             URLImage(url: team.logo, size: .small)
                             
-                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: teamName))
+                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: teamKrName))
                                 .font(.system(size: 16))
                                 .fontWeight(.medium)
                         }
@@ -488,8 +488,8 @@ struct FBPlayerInfoFourthItem: View {
         guard let team = fbPlayerInfoStore.team else { return }
         
         Task {
-            let teamName = await EnNameTranslationUtility.translateByAWS(input: team.name)
-            self.teamName = teamName
+            let teamKrName = await EnNameTranslationUtility.translateByAWS(input: team.name)
+            self.teamKrName = teamKrName
         }
     }
 }
@@ -554,7 +554,7 @@ struct FBPlayerInfoFifthItem: View {
                 if let lastGamePlayerStats = fbPlayerInfoStore.lastGamePlayerStats {
                     FBStatDataItem(
                         category: "출전시간",
-                        data: (lastGamePlayerStats.games.substitute == true ? "후보" : "선발") + " / \(lastGamePlayerStats.games.minutes)분",
+                        data: (lastGamePlayerStats.games.substitute ? "후보" : "선발") + " / \(lastGamePlayerStats.games.minutes)분",
                         customWidth: 80
                     )
                     

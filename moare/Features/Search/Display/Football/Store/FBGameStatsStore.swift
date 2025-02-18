@@ -77,7 +77,6 @@ struct FBGameStatsStore {
                 state.lineups = lineups
                 state.coach = lineups?.coach
                 
-                
                 return .send(.sortPlayers)
                 
             case .selectFirstCategory(let index):
@@ -123,9 +122,10 @@ struct FBGameStatsStore {
                 let playersStats = state.displayModel.game.players.first { teamId != nil && $0.team.id == teamId }?.players
                 state.playerStats = playersStats ?? []
                 
-                // set selected team's coach
-                let coach = state.displayModel.game.lineups.first { teamId != nil && $0.team.id == teamId }?.coach
-                state.coach = coach
+                // set selected team's coach, lineups
+                let lineups = state.displayModel.game.lineups.first { teamId != nil && $0.team.id == teamId }
+                state.lineups = lineups
+                state.coach = lineups?.coach
                 
                 return .send(.sortPlayers)
                 

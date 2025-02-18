@@ -13,6 +13,7 @@ import AWSTranslate
 @Reducer
 struct SearchStore {
     let searchClient = SearchClient()
+    let keywordsClient = KeywordsClient()
     let modelConverter = ModelConverter()
     
     @ObservableState
@@ -36,10 +37,12 @@ struct SearchStore {
         var fbTeamInfoResponseModel: FBTeamInfoResponseModel? = nil
         
         var autoCompleteList: [String] = []
+        var trendingKeywordList: [String] = []
         
         /* ---------------------
            ui state
            --------------------- */
+        var firstOpened = false
         var query = ""
         var searchState = false
         var isFocused = false
@@ -47,26 +50,35 @@ struct SearchStore {
         // visible state
         var textFieldVisibleState = false
         var resultVisibleState = false
+        var trendingKeyowrdsVisibleState = false
         
         /* ---------------------
            etc
            --------------------- */
         let trie = Trie()
         var viewStack: [SportDecodableModel] = []
+        var trendingKeywords: [TrendingKeyword] = []
+    }
+    
+    enum SearchType {
+        case query
+        case keyword
     }
     
     enum Action {
         /* ---------------------
            ui action
            --------------------- */
+        case firstOpen
         case toggleSearchBar
         case updateTextField(String, Bool = true)
         case updateTextFieldVisibleState(Bool)
-        case performSearch(CGFloat = 0)
+        case performSearch(searchType: SearchType = .query, aniDuration: CGFloat = 0)
         case selectFBGame(FBGame)
         case showPlayerStats(Int)
         case showTeamStats(Int)
         case showGameStats(Bool)
+        case updateTrendingKeywordsVisibleState(Bool)
         
         /* ---------------------
            api request action
@@ -88,6 +100,8 @@ struct SearchStore {
         case goBack
         case updateAutoCompleteList
         case updateResultVisibleState
+        case fetchTrendingKeywords
+        case setTrendingKeywords([TrendingKeyword])
         
         /* ---------------------
            test
@@ -126,6 +140,35 @@ struct SearchStore {
                     let data = try await searchClient.fetchDataByQuery(query: "프리미어리그 일정")
                     await send(.searchResultsReceived(data))
                 }
+                
+            case .firstOpen:
+                state.firstOpened = true
+                return .none
+                
+            case .fetchTrendingKeywords:
+                return .run { send in
+                    
+                    do {
+                        let data = try await keywordsClient.fetchTrendingKeywords()
+                        
+                        await send(.setTrendingKeywords(data))
+                    } catch {
+                        print("\(error)")
+                    }
+                }
+                
+            case .setTrendingKeywords(let keywords):
+                state.trendingKeywords = keywords
+                state.trendingKeywordList = state.trendingKeywords.map { $0.keyword }
+                
+                return .none
+                
+            case .updateTrendingKeywordsVisibleState(let bool):
+                withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                    state.trendingKeyowrdsVisibleState = bool
+                }
+                
+                return .none
                 
             case .toggleSearchBar:
                 if state.searchState {
@@ -176,9 +219,9 @@ struct SearchStore {
                 var result: [String] = []
                 result.append(contentsOf: state.trie.search(prefix: getChosung(from: state.query)))
                 
-                let searchResult = state.trie.search(prefix: state.query)
+                let additionalResult = state.trie.search(prefix: state.query)
                 
-                for word in searchResult {
+                for word in additionalResult {
                     if !result.contains(word) {
                         result.append(word)
                     }
@@ -211,19 +254,29 @@ struct SearchStore {
                 
                 return .none
                 
-            case .performSearch(let aniDuration):
+            case .performSearch(let searchType, let aniDuration):
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     state.searchState = true 
                     
                 }
                 
-                return .run { [query = state.query] send in
+                return .run { [query = state.query, keywords = state.trendingKeywords] send in
                     let tracker = TaskCompletionTracker()
                     
                     do {
                         let dataFetchTask = Task {
                             //                        try await Task.sleep(for: .seconds(5)) // delay for test
-                            let result = try await searchClient.fetchDataByQuery(query: query)
+                            let result = switch searchType {
+                            case .query:
+                                try await searchClient.fetchDataByQuery(query: query)
+                            case .keyword:
+                                if let keyword = keywords.first { $0.keyword == query } {
+                                    try await searchClient.fetchDataByKeyword(keyword: keyword)
+                                } else {
+                                    throw NSError(domain: "SearchError", code: 1)
+                                }
+                            }
+                            
                             await tracker.markCompleted()
                             return result
                         }

@@ -216,7 +216,6 @@ struct FBTeamScheduleListItem: View {
                 } else {
                     Text(formatDate())
                         .font(.system(size: 12))
-                        .font(.system(size: 12))
                         .padding(.top, 2)
                     
                     Text(CalendarUtil.formatDate(date: data.fixture.date, formatType: .ampm))

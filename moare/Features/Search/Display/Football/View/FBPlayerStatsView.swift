@@ -138,7 +138,7 @@ struct FBPlayerStatsPlayerInfoItem: View {
     
     let showContents: Bool
     
-    @State var teamName = ""
+    @State var teamKrName = ""
 
     init(fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>, showContents: Bool = true) {
         self.fbPlayerStatsStore = fbPlayerStatsStore
@@ -152,7 +152,7 @@ struct FBPlayerStatsPlayerInfoItem: View {
             HCapsuleBar()
             
             HStack {
-                URLImage(url: player.photo, size: .medium)
+                URLImage(url: player.photo)
                 
                 VStack(alignment: .leading) {
                     Text("\(player.krname)")
@@ -183,7 +183,7 @@ struct FBPlayerStatsPlayerInfoItem: View {
                             URLImage(url: team.logo, customSize: CGSize(width: 24, height: 24))
                                 .padding(.trailing, 6)
                             
-                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: teamName))
+                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: teamKrName))
                                 .font(.system(size: 16))
                                 .fontWeight(.medium)
                         }
@@ -202,8 +202,8 @@ struct FBPlayerStatsPlayerInfoItem: View {
         guard let team = fbPlayerStatsStore.team else { return }
         
         Task {
-            let teamName = await EnNameTranslationUtility.translateByAWS(input: team.name)
-            self.teamName = teamName
+            let teamKrName = await EnNameTranslationUtility.translateByAWS(input: team.name)
+            self.teamKrName = teamKrName
         }
     }
 }

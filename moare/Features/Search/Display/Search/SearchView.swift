@@ -28,7 +28,7 @@ struct SearchView: View {
     @State private var dragOffset: CGFloat = 0
     @State private var opacity: Double = 1.0
     
-    @State private var isInfoIconVisible = true
+    @State private var isInfoIconVisible = false
     @State private var isInfoOpened = false
     
     var body: some View {
@@ -67,7 +67,7 @@ struct SearchView: View {
                             )
                         }
                         .padding(.trailing, 12)
-                        .padding(.bottom, 210)
+                        .padding(.bottom, 250)
                     }
                     
                     HStack {
@@ -81,18 +81,34 @@ struct SearchView: View {
                         }
                     }
                     .padding(.trailing, 12)
-                    .padding(.bottom, 80)
+                    .padding(.bottom, 120)
                 }
             
                 VStack(spacing: 0) {
                     Spacer()
                     
                     /* ---------------------
-                     search bar
-                     --------------------- */
+                       search bar
+                       --------------------- */
                     AnimatingSearchBar(
                         focusState: $focusState
                     )
+                    
+                    /* ---------------------
+                       trending keywords
+                       --------------------- */
+                    if searchStore.trendingKeyowrdsVisibleState {
+                        TrendingKeywords(keywords: searchStore.trendingKeywordList) { keyword in
+                            // update bar's text
+                            searchStore.send(.updateTextField(keyword, false))
+                            
+                            // remove textfield for bar animation
+                            searchStore.send(.updateTextFieldVisibleState(false))
+                            
+                            searchStore.send(.performSearch(searchType: .keyword, aniDuration: AnimationConstants.Duration.medium))
+                        }
+                        .padding(.top, 10)
+                    }
                     
                     ZStack {
                         /* ---------------------
@@ -114,7 +130,7 @@ struct SearchView: View {
                                 }
                                 
                                 // search
-                                searchStore.send(.performSearch(AnimationConstants.Duration.medium * 2))
+                                searchStore.send(.performSearch(aniDuration: AnimationConstants.Duration.medium * 2))
                             })
                         }
                         
@@ -200,10 +216,12 @@ struct SearchView: View {
                             isInfoOpened = false
                             isInfoIconVisible = false
                         }
+                        searchStore.send(.updateTrendingKeywordsVisibleState(false))
                     } else {
                         withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                             isInfoIconVisible = true
                         }
+                        searchStore.send(.updateTrendingKeywordsVisibleState(true))
                     }
                 }
                 // TODO: has to think about better structure
@@ -212,10 +230,22 @@ struct SearchView: View {
                         withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                             isInfoIconVisible = true
                         }
+                        searchStore.send(.updateTrendingKeywordsVisibleState(true))
                     } else {
                         withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                             isInfoOpened = false
                             isInfoIconVisible = false
+                        }
+                        searchStore.send(.updateTrendingKeywordsVisibleState(false))
+                    }
+                }
+                .onChange(of: searchStore.firstOpened) { newValue in
+                    if newValue {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.medium) {
+                            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                                isInfoIconVisible = true
+                            }
+                            searchStore.send(.updateTrendingKeywordsVisibleState(true))
                         }
                     }
                 }
@@ -259,6 +289,8 @@ struct SearchView: View {
                 // init Trie
                 searchStore?.send(.initTrie)
             }
+            
+            searchStore?.send(.fetchTrendingKeywords)
             
             // test
 //            searchStore?.send(.initForTest)

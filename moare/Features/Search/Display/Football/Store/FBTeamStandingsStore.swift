@@ -44,7 +44,7 @@ struct FBTeamStandingsStore {
     enum Action {
         case initData
         case selectCategory(Int)
-        case filterStandings
+        case sortStandings
     }
     
     var body: some Reducer<State, Action> {
@@ -68,14 +68,14 @@ struct FBTeamStandingsStore {
                     }
                 }
                 
-                return .send(.filterStandings)
+                return .send(.sortStandings)
                 
             case .selectCategory(let index):
                 state.selectedIndex = index
                 
-                return .send(.filterStandings)
+                return .send(.sortStandings)
                 
-            case .filterStandings:
+            case .sortStandings:
                 // TODO: 값이 같은경우 다른 카테고리 활용해서 우선순위 정하는 로직 개발
                 switch state.selectedIndex {
                 case 0:

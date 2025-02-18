@@ -310,7 +310,6 @@ struct FBTeamStandingsCategoryListItem: View {
             fbTeamStandingsStore.send(.selectCategory(index))
         }) {
             Text(category)
-                .fontWeight(.medium)
                 .font(.system(size: fbTeamStandingsStore.categoryFontSize, weight: .medium))
                 .frame(width: isInt ? fbTeamStandingsStore.intDataItemWidth : fbTeamStandingsStore.stringDataItemWidth)
         }

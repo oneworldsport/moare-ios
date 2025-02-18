@@ -7,6 +7,89 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA531B3F2D64A8A400DB87CB /* moareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B3C2D64A8A400DB87CB /* moareApp.swift */; };
+		DA531B402D64A8A400DB87CB /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B3D2D64A8A400DB87CB /* SplashView.swift */; };
+		DA531B942D64A8CA00DB87CB /* FBStatDataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B452D64A8CA00DB87CB /* FBStatDataItem.swift */; };
+		DA531B952D64A8CA00DB87CB /* LeagueTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B462D64A8CA00DB87CB /* LeagueTitle.swift */; };
+		DA531B962D64A8CA00DB87CB /* FBGameStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B482D64A8CA00DB87CB /* FBGameStatsStore.swift */; };
+		DA531B972D64A8CA00DB87CB /* FBLeagueScheduleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B492D64A8CA00DB87CB /* FBLeagueScheduleStore.swift */; };
+		DA531B982D64A8CA00DB87CB /* FBPlayerInfoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B4A2D64A8CA00DB87CB /* FBPlayerInfoStore.swift */; };
+		DA531B992D64A8CA00DB87CB /* FBPlayerStandingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B4B2D64A8CA00DB87CB /* FBPlayerStandingsStore.swift */; };
+		DA531B9A2D64A8CA00DB87CB /* FBPlayerStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B4C2D64A8CA00DB87CB /* FBPlayerStatsStore.swift */; };
+		DA531B9B2D64A8CA00DB87CB /* FBTeamInfoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B4D2D64A8CA00DB87CB /* FBTeamInfoStore.swift */; };
+		DA531B9C2D64A8CA00DB87CB /* FBTeamScheduleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B4E2D64A8CA00DB87CB /* FBTeamScheduleStore.swift */; };
+		DA531B9D2D64A8CA00DB87CB /* FBTeamStandingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B4F2D64A8CA00DB87CB /* FBTeamStandingsStore.swift */; };
+		DA531B9E2D64A8CA00DB87CB /* FBTeamStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B502D64A8CA00DB87CB /* FBTeamStatsStore.swift */; };
+		DA531B9F2D64A8CA00DB87CB /* FBGameStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B522D64A8CA00DB87CB /* FBGameStatsView.swift */; };
+		DA531BA02D64A8CA00DB87CB /* FBLeagueScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B532D64A8CA00DB87CB /* FBLeagueScheduleView.swift */; };
+		DA531BA12D64A8CA00DB87CB /* FBPlayerInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B542D64A8CA00DB87CB /* FBPlayerInfoView.swift */; };
+		DA531BA22D64A8CA00DB87CB /* FBPlayerStandingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B552D64A8CA00DB87CB /* FBPlayerStandingsView.swift */; };
+		DA531BA32D64A8CA00DB87CB /* FBPlayerStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B562D64A8CA00DB87CB /* FBPlayerStatsView.swift */; };
+		DA531BA42D64A8CA00DB87CB /* FBTeamInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B572D64A8CA00DB87CB /* FBTeamInfoView.swift */; };
+		DA531BA52D64A8CA00DB87CB /* FBTeamScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B582D64A8CA00DB87CB /* FBTeamScheduleView.swift */; };
+		DA531BA62D64A8CA00DB87CB /* FBTeamStandingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B592D64A8CA00DB87CB /* FBTeamStandingsView.swift */; };
+		DA531BA72D64A8CA00DB87CB /* FBTeamStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B5A2D64A8CA00DB87CB /* FBTeamStatsView.swift */; };
+		DA531BA82D64A8CA00DB87CB /* SearchStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B602D64A8CA00DB87CB /* SearchStore.swift */; };
+		DA531BA92D64A8CA00DB87CB /* AnimatingSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B622D64A8CA00DB87CB /* AnimatingSearchBar.swift */; };
+		DA531BAA2D64A8CA00DB87CB /* AutoCompleteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B632D64A8CA00DB87CB /* AutoCompleteList.swift */; };
+		DA531BAB2D64A8CA00DB87CB /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B642D64A8CA00DB87CB /* SearchView.swift */; };
+		DA531BAC2D64A8CA00DB87CB /* TrendingKeywords.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B652D64A8CA00DB87CB /* TrendingKeywords.swift */; };
+		DA531BAD2D64A8CA00DB87CB /* FBGameStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B682D64A8CA00DB87CB /* FBGameStatsDisplayModel.swift */; };
+		DA531BAE2D64A8CA00DB87CB /* FBLeagueScheduleDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B692D64A8CA00DB87CB /* FBLeagueScheduleDisplayModel.swift */; };
+		DA531BAF2D64A8CA00DB87CB /* FBPlayerInfoDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B6A2D64A8CA00DB87CB /* FBPlayerInfoDisplayModel.swift */; };
+		DA531BB02D64A8CA00DB87CB /* FBPlayerStandingsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B6B2D64A8CA00DB87CB /* FBPlayerStandingsDisplayModel.swift */; };
+		DA531BB12D64A8CA00DB87CB /* FBTeamInfoDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B6C2D64A8CA00DB87CB /* FBTeamInfoDisplayModel.swift */; };
+		DA531BB22D64A8CA00DB87CB /* FBTeamScheduleDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B6D2D64A8CA00DB87CB /* FBTeamScheduleDisplayModel.swift */; };
+		DA531BB32D64A8CA00DB87CB /* FBTeamStandingsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B6E2D64A8CA00DB87CB /* FBTeamStandingsDisplayModel.swift */; };
+		DA531BB42D64A8CA00DB87CB /* FBTeamStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B6F2D64A8CA00DB87CB /* FBTeamStatsDisplayModel.swift */; };
+		DA531BB52D64A8CA00DB87CB /* FBCommonModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B732D64A8CA00DB87CB /* FBCommonModels.swift */; };
+		DA531BB62D64A8CA00DB87CB /* FBGameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B742D64A8CA00DB87CB /* FBGameModels.swift */; };
+		DA531BB72D64A8CA00DB87CB /* FBPlayerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B752D64A8CA00DB87CB /* FBPlayerModels.swift */; };
+		DA531BB82D64A8CA00DB87CB /* FBTeamModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B762D64A8CA00DB87CB /* FBTeamModels.swift */; };
+		DA531BB92D64A8CA00DB87CB /* FBGameScheduleResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B792D64A8CA00DB87CB /* FBGameScheduleResponseModel.swift */; };
+		DA531BBA2D64A8CA00DB87CB /* FBGameStatsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B7A2D64A8CA00DB87CB /* FBGameStatsResponseModel.swift */; };
+		DA531BBB2D64A8CA00DB87CB /* FBPlayerInfoResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B7B2D64A8CA00DB87CB /* FBPlayerInfoResponseModel.swift */; };
+		DA531BBC2D64A8CA00DB87CB /* FBPlayerStandingsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B7C2D64A8CA00DB87CB /* FBPlayerStandingsResponseModel.swift */; };
+		DA531BBD2D64A8CA00DB87CB /* FBTeamInfoResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B7D2D64A8CA00DB87CB /* FBTeamInfoResponseModel.swift */; };
+		DA531BBE2D64A8CA00DB87CB /* FBTeamStandingsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B7E2D64A8CA00DB87CB /* FBTeamStandingsResponseModel.swift */; };
+		DA531BBF2D64A8CA00DB87CB /* NbaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B802D64A8CA00DB87CB /* NbaModel.swift */; };
+		DA531BC02D64A8CA00DB87CB /* AutoComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B832D64A8CA00DB87CB /* AutoComplete.swift */; };
+		DA531BC12D64A8CA00DB87CB /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B842D64A8CA00DB87CB /* DataModel.swift */; };
+		DA531BC22D64A8CA00DB87CB /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B852D64A8CA00DB87CB /* Error.swift */; };
+		DA531BC32D64A8CA00DB87CB /* FootballTeamGameStatsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B862D64A8CA00DB87CB /* FootballTeamGameStatsResponseModel.swift */; };
+		DA531BC42D64A8CA00DB87CB /* ModelConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B872D64A8CA00DB87CB /* ModelConverter.swift */; };
+		DA531BC52D64A8CA00DB87CB /* SearchDataState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B882D64A8CA00DB87CB /* SearchDataState.swift */; };
+		DA531BC62D64A8CA00DB87CB /* TrendingKeyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B892D64A8CA00DB87CB /* TrendingKeyword.swift */; };
+		DA531BC72D64A8CA00DB87CB /* KeywordsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B8B2D64A8CA00DB87CB /* KeywordsClient.swift */; };
+		DA531BC82D64A8CA00DB87CB /* SearchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B8C2D64A8CA00DB87CB /* SearchClient.swift */; };
+		DA531BDF2D64A8F200DB87CB /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BC92D64A8F200DB87CB /* StringConstants.swift */; };
+		DA531BE02D64A8F200DB87CB /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BCA2D64A8F200DB87CB /* UIConstants.swift */; };
+		DA531BE12D64A8F200DB87CB /* BaseDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BCC2D64A8F200DB87CB /* BaseDisplayModel.swift */; };
+		DA531BE22D64A8F200DB87CB /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BCE2D64A8F200DB87CB /* APIClient.swift */; };
+		DA531BE32D64A8F200DB87CB /* APIConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BCF2D64A8F200DB87CB /* APIConfiguration.swift */; };
+		DA531BE42D64A8F200DB87CB /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BD02D64A8F200DB87CB /* APIEndpoint.swift */; };
+		DA531BE52D64A8F200DB87CB /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BD12D64A8F200DB87CB /* RequestBuilder.swift */; };
+		DA531BE62D64A8F200DB87CB /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BD32D64A8F200DB87CB /* StoreManager.swift */; };
+		DA531BE72D64A8F200DB87CB /* AutoCompleteTrie.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BD52D64A8F200DB87CB /* AutoCompleteTrie.swift */; };
+		DA531BE82D64A8F200DB87CB /* CalendarUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BD62D64A8F200DB87CB /* CalendarUtil.swift */; };
+		DA531BE92D64A8F200DB87CB /* EnNameTranslationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BD72D64A8F200DB87CB /* EnNameTranslationUtility.swift */; };
+		DA531BEA2D64A8F200DB87CB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BD82D64A8F200DB87CB /* Extensions.swift */; };
+		DA531BEB2D64A8F200DB87CB /* KoreanUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BD92D64A8F200DB87CB /* KoreanUtilities.swift */; };
+		DA531BEC2D64A8F200DB87CB /* MatchDescriptionConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BDA2D64A8F200DB87CB /* MatchDescriptionConverter.swift */; };
+		DA531BED2D64A8F200DB87CB /* TaskCompletionTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BDB2D64A8F200DB87CB /* TaskCompletionTracker.swift */; };
+		DA531BEE2D64A8F200DB87CB /* ApiRouteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BDD2D64A8F200DB87CB /* ApiRouteService.swift */; };
+		DA531C032D64A91900DB87CB /* BaseUIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BEF2D64A91900DB87CB /* BaseUIState.swift */; };
+		DA531C042D64A91900DB87CB /* HSequentialListAni.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BF02D64A91900DB87CB /* HSequentialListAni.swift */; };
+		DA531C052D64A91900DB87CB /* VSequentialListAni.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BF12D64A91900DB87CB /* VSequentialListAni.swift */; };
+		DA531C062D64A91900DB87CB /* RoundedRectWithPathAni.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BF32D64A91900DB87CB /* RoundedRectWithPathAni.swift */; };
+		DA531C072D64A91900DB87CB /* CalendarList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BF72D64A91900DB87CB /* CalendarList.swift */; };
+		DA531C082D64A91900DB87CB /* CapsuleBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BF82D64A91900DB87CB /* CapsuleBar.swift */; };
+		DA531C092D64A91900DB87CB /* CapsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BF92D64A91900DB87CB /* CapsuleButton.swift */; };
+		DA531C0A2D64A91900DB87CB /* URLImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BFA2D64A91900DB87CB /* URLImage.swift */; };
+		DA531C0B2D64A91900DB87CB /* FlowStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BFF2D64A91900DB87CB /* FlowStack.swift */; };
+		DA531C0C2D64A91900DB87CB /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531C002D64A91900DB87CB /* UIExtensions.swift */; };
+		DA531C0E2D64AA4300DB87CB /* AnimationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531C0D2D64AA4300DB87CB /* AnimationConstants.swift */; };
+		DA531C102D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531C0F2D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift */; };
 		DADA39592D3A1AC9000D15E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DADA39582D3A1AC9000D15E0 /* Assets.xcassets */; };
 		DADA395D2D3A1AC9000D15E0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DADA395C2D3A1AC9000D15E0 /* Preview Assets.xcassets */; };
 		DADA39672D3A1AC9000D15E0 /* moareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39662D3A1AC9000D15E0 /* moareTests.swift */; };
@@ -16,87 +99,6 @@
 		DADA39842D3A2006000D15E0 /* AWSCore in Frameworks */ = {isa = PBXBuildFile; productRef = DADA39832D3A2006000D15E0 /* AWSCore */; };
 		DADA39862D3A2006000D15E0 /* AWSS3 in Frameworks */ = {isa = PBXBuildFile; productRef = DADA39852D3A2006000D15E0 /* AWSS3 */; };
 		DADA39882D3A2006000D15E0 /* AWSTranslate in Frameworks */ = {isa = PBXBuildFile; productRef = DADA39872D3A2006000D15E0 /* AWSTranslate */; };
-		DADA398C2D3A214D000D15E0 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39892D3A214D000D15E0 /* SplashView.swift */; };
-		DADA398D2D3A214D000D15E0 /* moareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA398A2D3A214D000D15E0 /* moareApp.swift */; };
-		DADA39A52D3A21A1000D15E0 /* AnimationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA398E2D3A21A1000D15E0 /* AnimationConstants.swift */; };
-		DADA39A62D3A21A1000D15E0 /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA398F2D3A21A1000D15E0 /* StringConstants.swift */; };
-		DADA39A72D3A21A1000D15E0 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39902D3A21A1000D15E0 /* UIConstants.swift */; };
-		DADA39A82D3A21A1000D15E0 /* BaseDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39922D3A21A1000D15E0 /* BaseDisplayModel.swift */; };
-		DADA39A92D3A21A1000D15E0 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39942D3A21A1000D15E0 /* APIClient.swift */; };
-		DADA39AA2D3A21A1000D15E0 /* APIConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39952D3A21A1000D15E0 /* APIConfiguration.swift */; };
-		DADA39AB2D3A21A1000D15E0 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39962D3A21A1000D15E0 /* APIEndpoint.swift */; };
-		DADA39AC2D3A21A1000D15E0 /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39972D3A21A1000D15E0 /* RequestBuilder.swift */; };
-		DADA39AD2D3A21A1000D15E0 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39992D3A21A1000D15E0 /* StoreManager.swift */; };
-		DADA39AE2D3A21A1000D15E0 /* AutoCompleteTrie.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA399B2D3A21A1000D15E0 /* AutoCompleteTrie.swift */; };
-		DADA39AF2D3A21A1000D15E0 /* CalendarUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA399C2D3A21A1000D15E0 /* CalendarUtil.swift */; };
-		DADA39B02D3A21A1000D15E0 /* EnNameTranslationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA399D2D3A21A1000D15E0 /* EnNameTranslationUtility.swift */; };
-		DADA39B12D3A21A1000D15E0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA399E2D3A21A1000D15E0 /* Extensions.swift */; };
-		DADA39B22D3A21A1000D15E0 /* KoreanUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA399F2D3A21A1000D15E0 /* KoreanUtilities.swift */; };
-		DADA39B32D3A21A1000D15E0 /* MatchDescriptionConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39A02D3A21A1000D15E0 /* MatchDescriptionConverter.swift */; };
-		DADA39B42D3A21A1000D15E0 /* TaskCompletionTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39A12D3A21A1000D15E0 /* TaskCompletionTracker.swift */; };
-		DADA39B52D3A21A1000D15E0 /* ApiRouteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39A32D3A21A1000D15E0 /* ApiRouteService.swift */; };
-		DADA3A152D3A21A7000D15E0 /* FBStatDataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39BF2D3A21A7000D15E0 /* FBStatDataItem.swift */; };
-		DADA3A162D3A21A7000D15E0 /* LeagueTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C02D3A21A7000D15E0 /* LeagueTitle.swift */; };
-		DADA3A172D3A21A7000D15E0 /* FBGameStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C22D3A21A7000D15E0 /* FBGameStatsStore.swift */; };
-		DADA3A182D3A21A7000D15E0 /* FBLeagueScheduleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C32D3A21A7000D15E0 /* FBLeagueScheduleStore.swift */; };
-		DADA3A192D3A21A7000D15E0 /* FBPlayerInfoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C42D3A21A7000D15E0 /* FBPlayerInfoStore.swift */; };
-		DADA3A1A2D3A21A7000D15E0 /* FBPlayerStandingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C52D3A21A7000D15E0 /* FBPlayerStandingsStore.swift */; };
-		DADA3A1B2D3A21A7000D15E0 /* FBPlayerStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C62D3A21A7000D15E0 /* FBPlayerStatsStore.swift */; };
-		DADA3A1C2D3A21A7000D15E0 /* FBTeamInfoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C72D3A21A7000D15E0 /* FBTeamInfoStore.swift */; };
-		DADA3A1D2D3A21A7000D15E0 /* FBTeamScheduleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C82D3A21A7000D15E0 /* FBTeamScheduleStore.swift */; };
-		DADA3A1E2D3A21A7000D15E0 /* FBTeamStandingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39C92D3A21A7000D15E0 /* FBTeamStandingsStore.swift */; };
-		DADA3A1F2D3A21A7000D15E0 /* FBTeamStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39CA2D3A21A7000D15E0 /* FBTeamStatsStore.swift */; };
-		DADA3A202D3A21A7000D15E0 /* FBGameStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39CC2D3A21A7000D15E0 /* FBGameStatsView.swift */; };
-		DADA3A212D3A21A7000D15E0 /* FBLeagueScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39CD2D3A21A7000D15E0 /* FBLeagueScheduleView.swift */; };
-		DADA3A222D3A21A7000D15E0 /* FBPlayerInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39CE2D3A21A7000D15E0 /* FBPlayerInfoView.swift */; };
-		DADA3A232D3A21A7000D15E0 /* FBPlayerStandingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39CF2D3A21A7000D15E0 /* FBPlayerStandingsView.swift */; };
-		DADA3A242D3A21A7000D15E0 /* FBPlayerStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39D02D3A21A7000D15E0 /* FBPlayerStatsView.swift */; };
-		DADA3A252D3A21A7000D15E0 /* FBTeamInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39D12D3A21A7000D15E0 /* FBTeamInfoView.swift */; };
-		DADA3A262D3A21A7000D15E0 /* FBTeamScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39D22D3A21A7000D15E0 /* FBTeamScheduleView.swift */; };
-		DADA3A272D3A21A7000D15E0 /* FBTeamStandingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39D32D3A21A7000D15E0 /* FBTeamStandingsView.swift */; };
-		DADA3A282D3A21A7000D15E0 /* FBTeamStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39D42D3A21A7000D15E0 /* FBTeamStatsView.swift */; };
-		DADA3A292D3A21A7000D15E0 /* SearchStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39DA2D3A21A7000D15E0 /* SearchStore.swift */; };
-		DADA3A2A2D3A21A7000D15E0 /* AnimatingSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39DC2D3A21A7000D15E0 /* AnimatingSearchBar.swift */; };
-		DADA3A2B2D3A21A7000D15E0 /* AutoCompleteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39DD2D3A21A7000D15E0 /* AutoCompleteList.swift */; };
-		DADA3A2C2D3A21A7000D15E0 /* KeywordList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39DE2D3A21A7000D15E0 /* KeywordList.swift */; };
-		DADA3A2D2D3A21A7000D15E0 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39DF2D3A21A7000D15E0 /* SearchView.swift */; };
-		DADA3A2E2D3A21A7000D15E0 /* FBGameStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E22D3A21A7000D15E0 /* FBGameStatsDisplayModel.swift */; };
-		DADA3A2F2D3A21A7000D15E0 /* FBLeagueScheduleDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E32D3A21A7000D15E0 /* FBLeagueScheduleDisplayModel.swift */; };
-		DADA3A302D3A21A7000D15E0 /* FBPlayerInfoDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E42D3A21A7000D15E0 /* FBPlayerInfoDisplayModel.swift */; };
-		DADA3A312D3A21A7000D15E0 /* FBPlayerStandingsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E52D3A21A7000D15E0 /* FBPlayerStandingsDisplayModel.swift */; };
-		DADA3A322D3A21A7000D15E0 /* FBTeamInfoDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E62D3A21A7000D15E0 /* FBTeamInfoDisplayModel.swift */; };
-		DADA3A332D3A21A7000D15E0 /* FBTeamScheduleDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E72D3A21A7000D15E0 /* FBTeamScheduleDisplayModel.swift */; };
-		DADA3A342D3A21A7000D15E0 /* FBTeamStandingsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E82D3A21A7000D15E0 /* FBTeamStandingsDisplayModel.swift */; };
-		DADA3A352D3A21A7000D15E0 /* FBTeamStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39E92D3A21A7000D15E0 /* FBTeamStatsDisplayModel.swift */; };
-		DADA3A362D3A21A7000D15E0 /* FBCommonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39ED2D3A21A7000D15E0 /* FBCommonModel.swift */; };
-		DADA3A372D3A21A7000D15E0 /* FBGameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39EE2D3A21A7000D15E0 /* FBGameModels.swift */; };
-		DADA3A382D3A21A7000D15E0 /* FBPlayerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39EF2D3A21A7000D15E0 /* FBPlayerModels.swift */; };
-		DADA3A392D3A21A7000D15E0 /* FBTeamModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39F02D3A21A7000D15E0 /* FBTeamModels.swift */; };
-		DADA3A3A2D3A21A7000D15E0 /* FBGameScheduleResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39F32D3A21A7000D15E0 /* FBGameScheduleResponseModel.swift */; };
-		DADA3A3B2D3A21A7000D15E0 /* FBGameStatsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39F42D3A21A7000D15E0 /* FBGameStatsResponseModel.swift */; };
-		DADA3A3C2D3A21A7000D15E0 /* FBPlayerInfoResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39F52D3A21A7000D15E0 /* FBPlayerInfoResponseModel.swift */; };
-		DADA3A3D2D3A21A7000D15E0 /* FBPlayerStandingsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39F62D3A21A7000D15E0 /* FBPlayerStandingsResponseModel.swift */; };
-		DADA3A3E2D3A21A7000D15E0 /* FBTeamInfoResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39F72D3A21A7000D15E0 /* FBTeamInfoResponseModel.swift */; };
-		DADA3A3F2D3A21A7000D15E0 /* FBTeamStandingsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39F82D3A21A7000D15E0 /* FBTeamStandingsResponseModel.swift */; };
-		DADA3A402D3A21A7000D15E0 /* NbaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39FA2D3A21A7000D15E0 /* NbaModel.swift */; };
-		DADA3A412D3A21A7000D15E0 /* AutoComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39FD2D3A21A7000D15E0 /* AutoComplete.swift */; };
-		DADA3A422D3A21A7000D15E0 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39FE2D3A21A7000D15E0 /* DataModel.swift */; };
-		DADA3A432D3A21A7000D15E0 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39FF2D3A21A7000D15E0 /* Error.swift */; };
-		DADA3A442D3A21A7000D15E0 /* FootballTeamGameStatsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A002D3A21A7000D15E0 /* FootballTeamGameStatsResponseModel.swift */; };
-		DADA3A452D3A21A7000D15E0 /* ModelConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A012D3A21A7000D15E0 /* ModelConverter.swift */; };
-		DADA3A462D3A21A7000D15E0 /* SearchDataState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A022D3A21A7000D15E0 /* SearchDataState.swift */; };
-		DADA3A472D3A21A7000D15E0 /* SearchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A042D3A21A7000D15E0 /* SearchClient.swift */; };
-		DADA3A5F2D3A21AF000D15E0 /* BaseUIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A4C2D3A21AF000D15E0 /* BaseUIState.swift */; };
-		DADA3A602D3A21AF000D15E0 /* HSequentialListAni.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A4D2D3A21AF000D15E0 /* HSequentialListAni.swift */; };
-		DADA3A612D3A21AF000D15E0 /* VSequentialListAni.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A4E2D3A21AF000D15E0 /* VSequentialListAni.swift */; };
-		DADA3A622D3A21AF000D15E0 /* RoundedRectWithPathAni.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A502D3A21AF000D15E0 /* RoundedRectWithPathAni.swift */; };
-		DADA3A632D3A21AF000D15E0 /* CalendarList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A542D3A21AF000D15E0 /* CalendarList.swift */; };
-		DADA3A642D3A21AF000D15E0 /* CapsuleBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A552D3A21AF000D15E0 /* CapsuleBar.swift */; };
-		DADA3A652D3A21AF000D15E0 /* CapsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A562D3A21AF000D15E0 /* CapsuleButton.swift */; };
-		DADA3A662D3A21AF000D15E0 /* URLImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A572D3A21AF000D15E0 /* URLImage.swift */; };
-		DADA3A672D3A21AF000D15E0 /* FlowStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A5B2D3A21AF000D15E0 /* FlowStack.swift */; };
-		DADA3A682D3A21AF000D15E0 /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A5C2D3A21AF000D15E0 /* UIExtensions.swift */; };
-		DADA3A6A2D3A27AD000D15E0 /* FBPlayerStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA3A692D3A27AD000D15E0 /* FBPlayerStatsDisplayModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,6 +119,89 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DA531B3C2D64A8A400DB87CB /* moareApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = moareApp.swift; sourceTree = "<group>"; };
+		DA531B3D2D64A8A400DB87CB /* SplashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		DA531B452D64A8CA00DB87CB /* FBStatDataItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBStatDataItem.swift; sourceTree = "<group>"; };
+		DA531B462D64A8CA00DB87CB /* LeagueTitle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeagueTitle.swift; sourceTree = "<group>"; };
+		DA531B482D64A8CA00DB87CB /* FBGameStatsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameStatsStore.swift; sourceTree = "<group>"; };
+		DA531B492D64A8CA00DB87CB /* FBLeagueScheduleStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLeagueScheduleStore.swift; sourceTree = "<group>"; };
+		DA531B4A2D64A8CA00DB87CB /* FBPlayerInfoStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerInfoStore.swift; sourceTree = "<group>"; };
+		DA531B4B2D64A8CA00DB87CB /* FBPlayerStandingsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStandingsStore.swift; sourceTree = "<group>"; };
+		DA531B4C2D64A8CA00DB87CB /* FBPlayerStatsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStatsStore.swift; sourceTree = "<group>"; };
+		DA531B4D2D64A8CA00DB87CB /* FBTeamInfoStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamInfoStore.swift; sourceTree = "<group>"; };
+		DA531B4E2D64A8CA00DB87CB /* FBTeamScheduleStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamScheduleStore.swift; sourceTree = "<group>"; };
+		DA531B4F2D64A8CA00DB87CB /* FBTeamStandingsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStandingsStore.swift; sourceTree = "<group>"; };
+		DA531B502D64A8CA00DB87CB /* FBTeamStatsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStatsStore.swift; sourceTree = "<group>"; };
+		DA531B522D64A8CA00DB87CB /* FBGameStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameStatsView.swift; sourceTree = "<group>"; };
+		DA531B532D64A8CA00DB87CB /* FBLeagueScheduleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLeagueScheduleView.swift; sourceTree = "<group>"; };
+		DA531B542D64A8CA00DB87CB /* FBPlayerInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerInfoView.swift; sourceTree = "<group>"; };
+		DA531B552D64A8CA00DB87CB /* FBPlayerStandingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStandingsView.swift; sourceTree = "<group>"; };
+		DA531B562D64A8CA00DB87CB /* FBPlayerStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStatsView.swift; sourceTree = "<group>"; };
+		DA531B572D64A8CA00DB87CB /* FBTeamInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamInfoView.swift; sourceTree = "<group>"; };
+		DA531B582D64A8CA00DB87CB /* FBTeamScheduleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamScheduleView.swift; sourceTree = "<group>"; };
+		DA531B592D64A8CA00DB87CB /* FBTeamStandingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStandingsView.swift; sourceTree = "<group>"; };
+		DA531B5A2D64A8CA00DB87CB /* FBTeamStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStatsView.swift; sourceTree = "<group>"; };
+		DA531B602D64A8CA00DB87CB /* SearchStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchStore.swift; sourceTree = "<group>"; };
+		DA531B622D64A8CA00DB87CB /* AnimatingSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatingSearchBar.swift; sourceTree = "<group>"; };
+		DA531B632D64A8CA00DB87CB /* AutoCompleteList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoCompleteList.swift; sourceTree = "<group>"; };
+		DA531B642D64A8CA00DB87CB /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		DA531B652D64A8CA00DB87CB /* TrendingKeywords.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrendingKeywords.swift; sourceTree = "<group>"; };
+		DA531B682D64A8CA00DB87CB /* FBGameStatsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameStatsDisplayModel.swift; sourceTree = "<group>"; };
+		DA531B692D64A8CA00DB87CB /* FBLeagueScheduleDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLeagueScheduleDisplayModel.swift; sourceTree = "<group>"; };
+		DA531B6A2D64A8CA00DB87CB /* FBPlayerInfoDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerInfoDisplayModel.swift; sourceTree = "<group>"; };
+		DA531B6B2D64A8CA00DB87CB /* FBPlayerStandingsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStandingsDisplayModel.swift; sourceTree = "<group>"; };
+		DA531B6C2D64A8CA00DB87CB /* FBTeamInfoDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamInfoDisplayModel.swift; sourceTree = "<group>"; };
+		DA531B6D2D64A8CA00DB87CB /* FBTeamScheduleDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamScheduleDisplayModel.swift; sourceTree = "<group>"; };
+		DA531B6E2D64A8CA00DB87CB /* FBTeamStandingsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStandingsDisplayModel.swift; sourceTree = "<group>"; };
+		DA531B6F2D64A8CA00DB87CB /* FBTeamStatsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStatsDisplayModel.swift; sourceTree = "<group>"; };
+		DA531B732D64A8CA00DB87CB /* FBCommonModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBCommonModels.swift; sourceTree = "<group>"; };
+		DA531B742D64A8CA00DB87CB /* FBGameModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameModels.swift; sourceTree = "<group>"; };
+		DA531B752D64A8CA00DB87CB /* FBPlayerModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerModels.swift; sourceTree = "<group>"; };
+		DA531B762D64A8CA00DB87CB /* FBTeamModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamModels.swift; sourceTree = "<group>"; };
+		DA531B792D64A8CA00DB87CB /* FBGameScheduleResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameScheduleResponseModel.swift; sourceTree = "<group>"; };
+		DA531B7A2D64A8CA00DB87CB /* FBGameStatsResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameStatsResponseModel.swift; sourceTree = "<group>"; };
+		DA531B7B2D64A8CA00DB87CB /* FBPlayerInfoResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerInfoResponseModel.swift; sourceTree = "<group>"; };
+		DA531B7C2D64A8CA00DB87CB /* FBPlayerStandingsResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStandingsResponseModel.swift; sourceTree = "<group>"; };
+		DA531B7D2D64A8CA00DB87CB /* FBTeamInfoResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamInfoResponseModel.swift; sourceTree = "<group>"; };
+		DA531B7E2D64A8CA00DB87CB /* FBTeamStandingsResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStandingsResponseModel.swift; sourceTree = "<group>"; };
+		DA531B802D64A8CA00DB87CB /* NbaModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NbaModel.swift; sourceTree = "<group>"; };
+		DA531B832D64A8CA00DB87CB /* AutoComplete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoComplete.swift; sourceTree = "<group>"; };
+		DA531B842D64A8CA00DB87CB /* DataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		DA531B852D64A8CA00DB87CB /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		DA531B862D64A8CA00DB87CB /* FootballTeamGameStatsResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FootballTeamGameStatsResponseModel.swift; sourceTree = "<group>"; };
+		DA531B872D64A8CA00DB87CB /* ModelConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelConverter.swift; sourceTree = "<group>"; };
+		DA531B882D64A8CA00DB87CB /* SearchDataState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchDataState.swift; sourceTree = "<group>"; };
+		DA531B892D64A8CA00DB87CB /* TrendingKeyword.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrendingKeyword.swift; sourceTree = "<group>"; };
+		DA531B8B2D64A8CA00DB87CB /* KeywordsClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeywordsClient.swift; sourceTree = "<group>"; };
+		DA531B8C2D64A8CA00DB87CB /* SearchClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchClient.swift; sourceTree = "<group>"; };
+		DA531BC92D64A8F200DB87CB /* StringConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringConstants.swift; sourceTree = "<group>"; };
+		DA531BCA2D64A8F200DB87CB /* UIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
+		DA531BCC2D64A8F200DB87CB /* BaseDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseDisplayModel.swift; sourceTree = "<group>"; };
+		DA531BCE2D64A8F200DB87CB /* APIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		DA531BCF2D64A8F200DB87CB /* APIConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConfiguration.swift; sourceTree = "<group>"; };
+		DA531BD02D64A8F200DB87CB /* APIEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
+		DA531BD12D64A8F200DB87CB /* RequestBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestBuilder.swift; sourceTree = "<group>"; };
+		DA531BD32D64A8F200DB87CB /* StoreManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
+		DA531BD52D64A8F200DB87CB /* AutoCompleteTrie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoCompleteTrie.swift; sourceTree = "<group>"; };
+		DA531BD62D64A8F200DB87CB /* CalendarUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarUtil.swift; sourceTree = "<group>"; };
+		DA531BD72D64A8F200DB87CB /* EnNameTranslationUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnNameTranslationUtility.swift; sourceTree = "<group>"; };
+		DA531BD82D64A8F200DB87CB /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		DA531BD92D64A8F200DB87CB /* KoreanUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KoreanUtilities.swift; sourceTree = "<group>"; };
+		DA531BDA2D64A8F200DB87CB /* MatchDescriptionConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchDescriptionConverter.swift; sourceTree = "<group>"; };
+		DA531BDB2D64A8F200DB87CB /* TaskCompletionTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskCompletionTracker.swift; sourceTree = "<group>"; };
+		DA531BDD2D64A8F200DB87CB /* ApiRouteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiRouteService.swift; sourceTree = "<group>"; };
+		DA531BEF2D64A91900DB87CB /* BaseUIState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseUIState.swift; sourceTree = "<group>"; };
+		DA531BF02D64A91900DB87CB /* HSequentialListAni.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HSequentialListAni.swift; sourceTree = "<group>"; };
+		DA531BF12D64A91900DB87CB /* VSequentialListAni.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSequentialListAni.swift; sourceTree = "<group>"; };
+		DA531BF32D64A91900DB87CB /* RoundedRectWithPathAni.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedRectWithPathAni.swift; sourceTree = "<group>"; };
+		DA531BF72D64A91900DB87CB /* CalendarList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarList.swift; sourceTree = "<group>"; };
+		DA531BF82D64A91900DB87CB /* CapsuleBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CapsuleBar.swift; sourceTree = "<group>"; };
+		DA531BF92D64A91900DB87CB /* CapsuleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CapsuleButton.swift; sourceTree = "<group>"; };
+		DA531BFA2D64A91900DB87CB /* URLImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLImage.swift; sourceTree = "<group>"; };
+		DA531BFF2D64A91900DB87CB /* FlowStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowStack.swift; sourceTree = "<group>"; };
+		DA531C002D64A91900DB87CB /* UIExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
+		DA531C0D2D64AA4300DB87CB /* AnimationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationConstants.swift; sourceTree = "<group>"; };
+		DA531C0F2D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBPlayerStatsDisplayModel.swift; sourceTree = "<group>"; };
 		DADA39512D3A1AC8000D15E0 /* moare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = moare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DADA39582D3A1AC9000D15E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DADA395A2D3A1AC9000D15E0 /* moare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = moare.entitlements; sourceTree = "<group>"; };
@@ -126,87 +211,6 @@
 		DADA396C2D3A1AC9000D15E0 /* moareUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = moareUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DADA39702D3A1AC9000D15E0 /* moareUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = moareUITests.swift; sourceTree = "<group>"; };
 		DADA39722D3A1AC9000D15E0 /* moareUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = moareUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		DADA39892D3A214D000D15E0 /* SplashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
-		DADA398A2D3A214D000D15E0 /* moareApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = moareApp.swift; sourceTree = "<group>"; };
-		DADA398E2D3A21A1000D15E0 /* AnimationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationConstants.swift; sourceTree = "<group>"; };
-		DADA398F2D3A21A1000D15E0 /* StringConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringConstants.swift; sourceTree = "<group>"; };
-		DADA39902D3A21A1000D15E0 /* UIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
-		DADA39922D3A21A1000D15E0 /* BaseDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseDisplayModel.swift; sourceTree = "<group>"; };
-		DADA39942D3A21A1000D15E0 /* APIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
-		DADA39952D3A21A1000D15E0 /* APIConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConfiguration.swift; sourceTree = "<group>"; };
-		DADA39962D3A21A1000D15E0 /* APIEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
-		DADA39972D3A21A1000D15E0 /* RequestBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestBuilder.swift; sourceTree = "<group>"; };
-		DADA39992D3A21A1000D15E0 /* StoreManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
-		DADA399B2D3A21A1000D15E0 /* AutoCompleteTrie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoCompleteTrie.swift; sourceTree = "<group>"; };
-		DADA399C2D3A21A1000D15E0 /* CalendarUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarUtil.swift; sourceTree = "<group>"; };
-		DADA399D2D3A21A1000D15E0 /* EnNameTranslationUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnNameTranslationUtility.swift; sourceTree = "<group>"; };
-		DADA399E2D3A21A1000D15E0 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		DADA399F2D3A21A1000D15E0 /* KoreanUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KoreanUtilities.swift; sourceTree = "<group>"; };
-		DADA39A02D3A21A1000D15E0 /* MatchDescriptionConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchDescriptionConverter.swift; sourceTree = "<group>"; };
-		DADA39A12D3A21A1000D15E0 /* TaskCompletionTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskCompletionTracker.swift; sourceTree = "<group>"; };
-		DADA39A32D3A21A1000D15E0 /* ApiRouteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiRouteService.swift; sourceTree = "<group>"; };
-		DADA39BF2D3A21A7000D15E0 /* FBStatDataItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBStatDataItem.swift; sourceTree = "<group>"; };
-		DADA39C02D3A21A7000D15E0 /* LeagueTitle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeagueTitle.swift; sourceTree = "<group>"; };
-		DADA39C22D3A21A7000D15E0 /* FBGameStatsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameStatsStore.swift; sourceTree = "<group>"; };
-		DADA39C32D3A21A7000D15E0 /* FBLeagueScheduleStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLeagueScheduleStore.swift; sourceTree = "<group>"; };
-		DADA39C42D3A21A7000D15E0 /* FBPlayerInfoStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerInfoStore.swift; sourceTree = "<group>"; };
-		DADA39C52D3A21A7000D15E0 /* FBPlayerStandingsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStandingsStore.swift; sourceTree = "<group>"; };
-		DADA39C62D3A21A7000D15E0 /* FBPlayerStatsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStatsStore.swift; sourceTree = "<group>"; };
-		DADA39C72D3A21A7000D15E0 /* FBTeamInfoStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamInfoStore.swift; sourceTree = "<group>"; };
-		DADA39C82D3A21A7000D15E0 /* FBTeamScheduleStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamScheduleStore.swift; sourceTree = "<group>"; };
-		DADA39C92D3A21A7000D15E0 /* FBTeamStandingsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStandingsStore.swift; sourceTree = "<group>"; };
-		DADA39CA2D3A21A7000D15E0 /* FBTeamStatsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStatsStore.swift; sourceTree = "<group>"; };
-		DADA39CC2D3A21A7000D15E0 /* FBGameStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameStatsView.swift; sourceTree = "<group>"; };
-		DADA39CD2D3A21A7000D15E0 /* FBLeagueScheduleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLeagueScheduleView.swift; sourceTree = "<group>"; };
-		DADA39CE2D3A21A7000D15E0 /* FBPlayerInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerInfoView.swift; sourceTree = "<group>"; };
-		DADA39CF2D3A21A7000D15E0 /* FBPlayerStandingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStandingsView.swift; sourceTree = "<group>"; };
-		DADA39D02D3A21A7000D15E0 /* FBPlayerStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStatsView.swift; sourceTree = "<group>"; };
-		DADA39D12D3A21A7000D15E0 /* FBTeamInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamInfoView.swift; sourceTree = "<group>"; };
-		DADA39D22D3A21A7000D15E0 /* FBTeamScheduleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamScheduleView.swift; sourceTree = "<group>"; };
-		DADA39D32D3A21A7000D15E0 /* FBTeamStandingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStandingsView.swift; sourceTree = "<group>"; };
-		DADA39D42D3A21A7000D15E0 /* FBTeamStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStatsView.swift; sourceTree = "<group>"; };
-		DADA39DA2D3A21A7000D15E0 /* SearchStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchStore.swift; sourceTree = "<group>"; };
-		DADA39DC2D3A21A7000D15E0 /* AnimatingSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatingSearchBar.swift; sourceTree = "<group>"; };
-		DADA39DD2D3A21A7000D15E0 /* AutoCompleteList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoCompleteList.swift; sourceTree = "<group>"; };
-		DADA39DE2D3A21A7000D15E0 /* KeywordList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeywordList.swift; sourceTree = "<group>"; };
-		DADA39DF2D3A21A7000D15E0 /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
-		DADA39E22D3A21A7000D15E0 /* FBGameStatsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameStatsDisplayModel.swift; sourceTree = "<group>"; };
-		DADA39E32D3A21A7000D15E0 /* FBLeagueScheduleDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLeagueScheduleDisplayModel.swift; sourceTree = "<group>"; };
-		DADA39E42D3A21A7000D15E0 /* FBPlayerInfoDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerInfoDisplayModel.swift; sourceTree = "<group>"; };
-		DADA39E52D3A21A7000D15E0 /* FBPlayerStandingsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStandingsDisplayModel.swift; sourceTree = "<group>"; };
-		DADA39E62D3A21A7000D15E0 /* FBTeamInfoDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamInfoDisplayModel.swift; sourceTree = "<group>"; };
-		DADA39E72D3A21A7000D15E0 /* FBTeamScheduleDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamScheduleDisplayModel.swift; sourceTree = "<group>"; };
-		DADA39E82D3A21A7000D15E0 /* FBTeamStandingsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStandingsDisplayModel.swift; sourceTree = "<group>"; };
-		DADA39E92D3A21A7000D15E0 /* FBTeamStatsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStatsDisplayModel.swift; sourceTree = "<group>"; };
-		DADA39ED2D3A21A7000D15E0 /* FBCommonModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBCommonModel.swift; sourceTree = "<group>"; };
-		DADA39EE2D3A21A7000D15E0 /* FBGameModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameModels.swift; sourceTree = "<group>"; };
-		DADA39EF2D3A21A7000D15E0 /* FBPlayerModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerModels.swift; sourceTree = "<group>"; };
-		DADA39F02D3A21A7000D15E0 /* FBTeamModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamModels.swift; sourceTree = "<group>"; };
-		DADA39F32D3A21A7000D15E0 /* FBGameScheduleResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameScheduleResponseModel.swift; sourceTree = "<group>"; };
-		DADA39F42D3A21A7000D15E0 /* FBGameStatsResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGameStatsResponseModel.swift; sourceTree = "<group>"; };
-		DADA39F52D3A21A7000D15E0 /* FBPlayerInfoResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerInfoResponseModel.swift; sourceTree = "<group>"; };
-		DADA39F62D3A21A7000D15E0 /* FBPlayerStandingsResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPlayerStandingsResponseModel.swift; sourceTree = "<group>"; };
-		DADA39F72D3A21A7000D15E0 /* FBTeamInfoResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamInfoResponseModel.swift; sourceTree = "<group>"; };
-		DADA39F82D3A21A7000D15E0 /* FBTeamStandingsResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStandingsResponseModel.swift; sourceTree = "<group>"; };
-		DADA39FA2D3A21A7000D15E0 /* NbaModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NbaModel.swift; sourceTree = "<group>"; };
-		DADA39FD2D3A21A7000D15E0 /* AutoComplete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoComplete.swift; sourceTree = "<group>"; };
-		DADA39FE2D3A21A7000D15E0 /* DataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
-		DADA39FF2D3A21A7000D15E0 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
-		DADA3A002D3A21A7000D15E0 /* FootballTeamGameStatsResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FootballTeamGameStatsResponseModel.swift; sourceTree = "<group>"; };
-		DADA3A012D3A21A7000D15E0 /* ModelConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelConverter.swift; sourceTree = "<group>"; };
-		DADA3A022D3A21A7000D15E0 /* SearchDataState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchDataState.swift; sourceTree = "<group>"; };
-		DADA3A042D3A21A7000D15E0 /* SearchClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchClient.swift; sourceTree = "<group>"; };
-		DADA3A4C2D3A21AF000D15E0 /* BaseUIState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseUIState.swift; sourceTree = "<group>"; };
-		DADA3A4D2D3A21AF000D15E0 /* HSequentialListAni.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HSequentialListAni.swift; sourceTree = "<group>"; };
-		DADA3A4E2D3A21AF000D15E0 /* VSequentialListAni.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSequentialListAni.swift; sourceTree = "<group>"; };
-		DADA3A502D3A21AF000D15E0 /* RoundedRectWithPathAni.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedRectWithPathAni.swift; sourceTree = "<group>"; };
-		DADA3A542D3A21AF000D15E0 /* CalendarList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarList.swift; sourceTree = "<group>"; };
-		DADA3A552D3A21AF000D15E0 /* CapsuleBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CapsuleBar.swift; sourceTree = "<group>"; };
-		DADA3A562D3A21AF000D15E0 /* CapsuleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CapsuleButton.swift; sourceTree = "<group>"; };
-		DADA3A572D3A21AF000D15E0 /* URLImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLImage.swift; sourceTree = "<group>"; };
-		DADA3A5B2D3A21AF000D15E0 /* FlowStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowStack.swift; sourceTree = "<group>"; };
-		DADA3A5C2D3A21AF000D15E0 /* UIExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
-		DADA3A692D3A27AD000D15E0 /* FBPlayerStatsDisplayModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBPlayerStatsDisplayModel.swift; path = ../../../../../../../../../../.Trash/FBPlayerStatsDisplayModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,6 +242,465 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DA531B3E2D64A8A400DB87CB /* App */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B3C2D64A8A400DB87CB /* moareApp.swift */,
+				DA531B3D2D64A8A400DB87CB /* SplashView.swift */,
+			);
+			name = App;
+			path = moare/App;
+			sourceTree = SOURCE_ROOT;
+		};
+		DA531B412D64A8CA00DB87CB /* Display */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Display;
+			sourceTree = "<group>";
+		};
+		DA531B422D64A8CA00DB87CB /* DisplayModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = DisplayModels;
+			sourceTree = "<group>";
+		};
+		DA531B432D64A8CA00DB87CB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B422D64A8CA00DB87CB /* DisplayModels */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DA531B442D64A8CA00DB87CB /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B412D64A8CA00DB87CB /* Display */,
+				DA531B432D64A8CA00DB87CB /* Models */,
+			);
+			path = Feed;
+			sourceTree = "<group>";
+		};
+		DA531B472D64A8CA00DB87CB /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B452D64A8CA00DB87CB /* FBStatDataItem.swift */,
+				DA531B462D64A8CA00DB87CB /* LeagueTitle.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		DA531B512D64A8CA00DB87CB /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B482D64A8CA00DB87CB /* FBGameStatsStore.swift */,
+				DA531B492D64A8CA00DB87CB /* FBLeagueScheduleStore.swift */,
+				DA531B4A2D64A8CA00DB87CB /* FBPlayerInfoStore.swift */,
+				DA531B4B2D64A8CA00DB87CB /* FBPlayerStandingsStore.swift */,
+				DA531B4C2D64A8CA00DB87CB /* FBPlayerStatsStore.swift */,
+				DA531B4D2D64A8CA00DB87CB /* FBTeamInfoStore.swift */,
+				DA531B4E2D64A8CA00DB87CB /* FBTeamScheduleStore.swift */,
+				DA531B4F2D64A8CA00DB87CB /* FBTeamStandingsStore.swift */,
+				DA531B502D64A8CA00DB87CB /* FBTeamStatsStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		DA531B5B2D64A8CA00DB87CB /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B522D64A8CA00DB87CB /* FBGameStatsView.swift */,
+				DA531B532D64A8CA00DB87CB /* FBLeagueScheduleView.swift */,
+				DA531B542D64A8CA00DB87CB /* FBPlayerInfoView.swift */,
+				DA531B552D64A8CA00DB87CB /* FBPlayerStandingsView.swift */,
+				DA531B562D64A8CA00DB87CB /* FBPlayerStatsView.swift */,
+				DA531B572D64A8CA00DB87CB /* FBTeamInfoView.swift */,
+				DA531B582D64A8CA00DB87CB /* FBTeamScheduleView.swift */,
+				DA531B592D64A8CA00DB87CB /* FBTeamStandingsView.swift */,
+				DA531B5A2D64A8CA00DB87CB /* FBTeamStatsView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DA531B5C2D64A8CA00DB87CB /* Football */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B512D64A8CA00DB87CB /* Store */,
+				DA531B5B2D64A8CA00DB87CB /* View */,
+			);
+			path = Football;
+			sourceTree = "<group>";
+		};
+		DA531B5D2D64A8CA00DB87CB /* PlayerInfo */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = PlayerInfo;
+			sourceTree = "<group>";
+		};
+		DA531B5E2D64A8CA00DB87CB /* Standings */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Standings;
+			sourceTree = "<group>";
+		};
+		DA531B5F2D64A8CA00DB87CB /* NBA */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B5D2D64A8CA00DB87CB /* PlayerInfo */,
+				DA531B5E2D64A8CA00DB87CB /* Standings */,
+			);
+			path = NBA;
+			sourceTree = "<group>";
+		};
+		DA531B612D64A8CA00DB87CB /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B602D64A8CA00DB87CB /* SearchStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		DA531B662D64A8CA00DB87CB /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B612D64A8CA00DB87CB /* Store */,
+				DA531B622D64A8CA00DB87CB /* AnimatingSearchBar.swift */,
+				DA531B632D64A8CA00DB87CB /* AutoCompleteList.swift */,
+				DA531B642D64A8CA00DB87CB /* SearchView.swift */,
+				DA531B652D64A8CA00DB87CB /* TrendingKeywords.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		DA531B672D64A8CA00DB87CB /* Display */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B472D64A8CA00DB87CB /* Components */,
+				DA531B5C2D64A8CA00DB87CB /* Football */,
+				DA531B5F2D64A8CA00DB87CB /* NBA */,
+				DA531B662D64A8CA00DB87CB /* Search */,
+			);
+			path = Display;
+			sourceTree = "<group>";
+		};
+		DA531B702D64A8CA00DB87CB /* Football */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B682D64A8CA00DB87CB /* FBGameStatsDisplayModel.swift */,
+				DA531B692D64A8CA00DB87CB /* FBLeagueScheduleDisplayModel.swift */,
+				DA531B6A2D64A8CA00DB87CB /* FBPlayerInfoDisplayModel.swift */,
+				DA531B6B2D64A8CA00DB87CB /* FBPlayerStandingsDisplayModel.swift */,
+				DA531B6C2D64A8CA00DB87CB /* FBTeamInfoDisplayModel.swift */,
+				DA531B6D2D64A8CA00DB87CB /* FBTeamScheduleDisplayModel.swift */,
+				DA531B6E2D64A8CA00DB87CB /* FBTeamStandingsDisplayModel.swift */,
+				DA531B6F2D64A8CA00DB87CB /* FBTeamStatsDisplayModel.swift */,
+			);
+			path = Football;
+			sourceTree = "<group>";
+		};
+		DA531B712D64A8CA00DB87CB /* NBA */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = NBA;
+			sourceTree = "<group>";
+		};
+		DA531B722D64A8CA00DB87CB /* DisplayModels */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B702D64A8CA00DB87CB /* Football */,
+				DA531B712D64A8CA00DB87CB /* NBA */,
+			);
+			path = DisplayModels;
+			sourceTree = "<group>";
+		};
+		DA531B772D64A8CA00DB87CB /* Football */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B732D64A8CA00DB87CB /* FBCommonModels.swift */,
+				DA531B742D64A8CA00DB87CB /* FBGameModels.swift */,
+				DA531B752D64A8CA00DB87CB /* FBPlayerModels.swift */,
+				DA531B762D64A8CA00DB87CB /* FBTeamModels.swift */,
+			);
+			path = Football;
+			sourceTree = "<group>";
+		};
+		DA531B782D64A8CA00DB87CB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B772D64A8CA00DB87CB /* Football */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DA531B7F2D64A8CA00DB87CB /* Football */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B792D64A8CA00DB87CB /* FBGameScheduleResponseModel.swift */,
+				DA531B7A2D64A8CA00DB87CB /* FBGameStatsResponseModel.swift */,
+				DA531B7B2D64A8CA00DB87CB /* FBPlayerInfoResponseModel.swift */,
+				DA531B7C2D64A8CA00DB87CB /* FBPlayerStandingsResponseModel.swift */,
+				DA531B7D2D64A8CA00DB87CB /* FBTeamInfoResponseModel.swift */,
+				DA531B7E2D64A8CA00DB87CB /* FBTeamStandingsResponseModel.swift */,
+				DA531C0F2D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift */,
+			);
+			path = Football;
+			sourceTree = "<group>";
+		};
+		DA531B812D64A8CA00DB87CB /* NBA */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B802D64A8CA00DB87CB /* NbaModel.swift */,
+			);
+			path = NBA;
+			sourceTree = "<group>";
+		};
+		DA531B822D64A8CA00DB87CB /* ReponseModels */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B7F2D64A8CA00DB87CB /* Football */,
+				DA531B812D64A8CA00DB87CB /* NBA */,
+			);
+			path = ReponseModels;
+			sourceTree = "<group>";
+		};
+		DA531B8A2D64A8CA00DB87CB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B722D64A8CA00DB87CB /* DisplayModels */,
+				DA531B782D64A8CA00DB87CB /* Models */,
+				DA531B822D64A8CA00DB87CB /* ReponseModels */,
+				DA531B832D64A8CA00DB87CB /* AutoComplete.swift */,
+				DA531B842D64A8CA00DB87CB /* DataModel.swift */,
+				DA531B852D64A8CA00DB87CB /* Error.swift */,
+				DA531B862D64A8CA00DB87CB /* FootballTeamGameStatsResponseModel.swift */,
+				DA531B872D64A8CA00DB87CB /* ModelConverter.swift */,
+				DA531B882D64A8CA00DB87CB /* SearchDataState.swift */,
+				DA531B892D64A8CA00DB87CB /* TrendingKeyword.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DA531B8D2D64A8CA00DB87CB /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B8B2D64A8CA00DB87CB /* KeywordsClient.swift */,
+				DA531B8C2D64A8CA00DB87CB /* SearchClient.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		DA531B8E2D64A8CA00DB87CB /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B672D64A8CA00DB87CB /* Display */,
+				DA531B8A2D64A8CA00DB87CB /* Models */,
+				DA531B8D2D64A8CA00DB87CB /* Networking */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		DA531B8F2D64A8CA00DB87CB /* Store */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		DA531B902D64A8CA00DB87CB /* Display */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B8F2D64A8CA00DB87CB /* Store */,
+			);
+			path = Display;
+			sourceTree = "<group>";
+		};
+		DA531B912D64A8CA00DB87CB /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		DA531B922D64A8CA00DB87CB /* Sign */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B902D64A8CA00DB87CB /* Display */,
+				DA531B912D64A8CA00DB87CB /* Networking */,
+			);
+			path = Sign;
+			sourceTree = "<group>";
+		};
+		DA531B932D64A8CA00DB87CB /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				DA531B442D64A8CA00DB87CB /* Feed */,
+				DA531B8E2D64A8CA00DB87CB /* Search */,
+				DA531B922D64A8CA00DB87CB /* Sign */,
+			);
+			name = Features;
+			path = moare/Features;
+			sourceTree = SOURCE_ROOT;
+		};
+		DA531BCB2D64A8F200DB87CB /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				DA531BC92D64A8F200DB87CB /* StringConstants.swift */,
+				DA531BCA2D64A8F200DB87CB /* UIConstants.swift */,
+				DA531C0D2D64AA4300DB87CB /* AnimationConstants.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		DA531BCD2D64A8F200DB87CB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DA531BCC2D64A8F200DB87CB /* BaseDisplayModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DA531BD22D64A8F200DB87CB /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				DA531BCE2D64A8F200DB87CB /* APIClient.swift */,
+				DA531BCF2D64A8F200DB87CB /* APIConfiguration.swift */,
+				DA531BD02D64A8F200DB87CB /* APIEndpoint.swift */,
+				DA531BD12D64A8F200DB87CB /* RequestBuilder.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		DA531BD42D64A8F200DB87CB /* TCA */ = {
+			isa = PBXGroup;
+			children = (
+				DA531BD32D64A8F200DB87CB /* StoreManager.swift */,
+			);
+			path = TCA;
+			sourceTree = "<group>";
+		};
+		DA531BDC2D64A8F200DB87CB /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				DA531BD52D64A8F200DB87CB /* AutoCompleteTrie.swift */,
+				DA531BD62D64A8F200DB87CB /* CalendarUtil.swift */,
+				DA531BD72D64A8F200DB87CB /* EnNameTranslationUtility.swift */,
+				DA531BD82D64A8F200DB87CB /* Extensions.swift */,
+				DA531BD92D64A8F200DB87CB /* KoreanUtilities.swift */,
+				DA531BDA2D64A8F200DB87CB /* MatchDescriptionConverter.swift */,
+				DA531BDB2D64A8F200DB87CB /* TaskCompletionTracker.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		DA531BDE2D64A8F200DB87CB /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				DA531BCB2D64A8F200DB87CB /* Constants */,
+				DA531BCD2D64A8F200DB87CB /* Models */,
+				DA531BD22D64A8F200DB87CB /* Networking */,
+				DA531BD42D64A8F200DB87CB /* TCA */,
+				DA531BDC2D64A8F200DB87CB /* Utilities */,
+				DA531BDD2D64A8F200DB87CB /* ApiRouteService.swift */,
+			);
+			name = Core;
+			path = moare/Core;
+			sourceTree = SOURCE_ROOT;
+		};
+		DA531BF22D64A91900DB87CB /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				DA531BEF2D64A91900DB87CB /* BaseUIState.swift */,
+				DA531BF02D64A91900DB87CB /* HSequentialListAni.swift */,
+				DA531BF12D64A91900DB87CB /* VSequentialListAni.swift */,
+			);
+			path = Animations;
+			sourceTree = "<group>";
+		};
+		DA531BF42D64A91900DB87CB /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				DA531BF32D64A91900DB87CB /* RoundedRectWithPathAni.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		DA531BF52D64A91900DB87CB /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		DA531BF62D64A91900DB87CB /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				DA531BF22D64A91900DB87CB /* Animations */,
+				DA531BF42D64A91900DB87CB /* Components */,
+				DA531BF52D64A91900DB87CB /* Extensions */,
+			);
+			path = Animation;
+			sourceTree = "<group>";
+		};
+		DA531BFB2D64A91900DB87CB /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				DA531BF72D64A91900DB87CB /* CalendarList.swift */,
+				DA531BF82D64A91900DB87CB /* CapsuleBar.swift */,
+				DA531BF92D64A91900DB87CB /* CapsuleButton.swift */,
+				DA531BFA2D64A91900DB87CB /* URLImage.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		DA531BFC2D64A91900DB87CB /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DA531BFD2D64A91900DB87CB /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				DA531BFB2D64A91900DB87CB /* Components */,
+				DA531BFC2D64A91900DB87CB /* View */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		DA531BFE2D64A91900DB87CB /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		DA531C012D64A91900DB87CB /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				DA531BFF2D64A91900DB87CB /* FlowStack.swift */,
+				DA531C002D64A91900DB87CB /* UIExtensions.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		DA531C022D64A91900DB87CB /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				DA531BF62D64A91900DB87CB /* Animation */,
+				DA531BFD2D64A91900DB87CB /* Common */,
+				DA531BFE2D64A91900DB87CB /* New Group */,
+				DA531C012D64A91900DB87CB /* Utilities */,
+			);
+			name = UI;
+			path = moare/UI;
+			sourceTree = SOURCE_ROOT;
+		};
 		DADA39482D3A1AC8000D15E0 = {
 			isa = PBXGroup;
 			children = (
@@ -261,10 +724,10 @@
 		DADA39532D3A1AC8000D15E0 /* moare */ = {
 			isa = PBXGroup;
 			children = (
-				DADA398B2D3A214D000D15E0 /* App */,
-				DADA3A0F2D3A21A7000D15E0 /* Features */,
-				DADA39A42D3A21A1000D15E0 /* Core */,
-				DADA3A5E2D3A21AF000D15E0 /* UI */,
+				DA531B3E2D64A8A400DB87CB /* App */,
+				DA531BDE2D64A8F200DB87CB /* Core */,
+				DA531B932D64A8CA00DB87CB /* Features */,
+				DA531C022D64A91900DB87CB /* UI */,
 				DADA39582D3A1AC9000D15E0 /* Assets.xcassets */,
 				DADA395A2D3A1AC9000D15E0 /* moare.entitlements */,
 				DADA395B2D3A1AC9000D15E0 /* Preview Content */,
@@ -295,391 +758,6 @@
 				DADA39722D3A1AC9000D15E0 /* moareUITestsLaunchTests.swift */,
 			);
 			path = moareUITests;
-			sourceTree = "<group>";
-		};
-		DADA398B2D3A214D000D15E0 /* App */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39892D3A214D000D15E0 /* SplashView.swift */,
-				DADA398A2D3A214D000D15E0 /* moareApp.swift */,
-			);
-			name = App;
-			path = ../../moare_legacy/moare/App;
-			sourceTree = "<group>";
-		};
-		DADA39912D3A21A1000D15E0 /* Constants */ = {
-			isa = PBXGroup;
-			children = (
-				DADA398E2D3A21A1000D15E0 /* AnimationConstants.swift */,
-				DADA398F2D3A21A1000D15E0 /* StringConstants.swift */,
-				DADA39902D3A21A1000D15E0 /* UIConstants.swift */,
-			);
-			path = Constants;
-			sourceTree = "<group>";
-		};
-		DADA39932D3A21A1000D15E0 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39922D3A21A1000D15E0 /* BaseDisplayModel.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		DADA39982D3A21A1000D15E0 /* Networking */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39942D3A21A1000D15E0 /* APIClient.swift */,
-				DADA39952D3A21A1000D15E0 /* APIConfiguration.swift */,
-				DADA39962D3A21A1000D15E0 /* APIEndpoint.swift */,
-				DADA39972D3A21A1000D15E0 /* RequestBuilder.swift */,
-			);
-			path = Networking;
-			sourceTree = "<group>";
-		};
-		DADA399A2D3A21A1000D15E0 /* TCA */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39992D3A21A1000D15E0 /* StoreManager.swift */,
-			);
-			path = TCA;
-			sourceTree = "<group>";
-		};
-		DADA39A22D3A21A1000D15E0 /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				DADA399B2D3A21A1000D15E0 /* AutoCompleteTrie.swift */,
-				DADA399C2D3A21A1000D15E0 /* CalendarUtil.swift */,
-				DADA399D2D3A21A1000D15E0 /* EnNameTranslationUtility.swift */,
-				DADA399E2D3A21A1000D15E0 /* Extensions.swift */,
-				DADA399F2D3A21A1000D15E0 /* KoreanUtilities.swift */,
-				DADA39A02D3A21A1000D15E0 /* MatchDescriptionConverter.swift */,
-				DADA39A12D3A21A1000D15E0 /* TaskCompletionTracker.swift */,
-			);
-			path = Utilities;
-			sourceTree = "<group>";
-		};
-		DADA39A42D3A21A1000D15E0 /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39912D3A21A1000D15E0 /* Constants */,
-				DADA39932D3A21A1000D15E0 /* Models */,
-				DADA39982D3A21A1000D15E0 /* Networking */,
-				DADA399A2D3A21A1000D15E0 /* TCA */,
-				DADA39A22D3A21A1000D15E0 /* Utilities */,
-				DADA39A32D3A21A1000D15E0 /* ApiRouteService.swift */,
-			);
-			name = Core;
-			path = ../../moare_legacy/moare/Core;
-			sourceTree = "<group>";
-		};
-		DADA39C12D3A21A7000D15E0 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39BF2D3A21A7000D15E0 /* FBStatDataItem.swift */,
-				DADA39C02D3A21A7000D15E0 /* LeagueTitle.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		DADA39CB2D3A21A7000D15E0 /* Store */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39C22D3A21A7000D15E0 /* FBGameStatsStore.swift */,
-				DADA39C32D3A21A7000D15E0 /* FBLeagueScheduleStore.swift */,
-				DADA39C42D3A21A7000D15E0 /* FBPlayerInfoStore.swift */,
-				DADA39C52D3A21A7000D15E0 /* FBPlayerStandingsStore.swift */,
-				DADA39C62D3A21A7000D15E0 /* FBPlayerStatsStore.swift */,
-				DADA39C72D3A21A7000D15E0 /* FBTeamInfoStore.swift */,
-				DADA39C82D3A21A7000D15E0 /* FBTeamScheduleStore.swift */,
-				DADA39C92D3A21A7000D15E0 /* FBTeamStandingsStore.swift */,
-				DADA39CA2D3A21A7000D15E0 /* FBTeamStatsStore.swift */,
-			);
-			path = Store;
-			sourceTree = "<group>";
-		};
-		DADA39D52D3A21A7000D15E0 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39CC2D3A21A7000D15E0 /* FBGameStatsView.swift */,
-				DADA39CD2D3A21A7000D15E0 /* FBLeagueScheduleView.swift */,
-				DADA39CE2D3A21A7000D15E0 /* FBPlayerInfoView.swift */,
-				DADA39CF2D3A21A7000D15E0 /* FBPlayerStandingsView.swift */,
-				DADA39D02D3A21A7000D15E0 /* FBPlayerStatsView.swift */,
-				DADA39D12D3A21A7000D15E0 /* FBTeamInfoView.swift */,
-				DADA39D22D3A21A7000D15E0 /* FBTeamScheduleView.swift */,
-				DADA39D32D3A21A7000D15E0 /* FBTeamStandingsView.swift */,
-				DADA39D42D3A21A7000D15E0 /* FBTeamStatsView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		DADA39D62D3A21A7000D15E0 /* Football */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39CB2D3A21A7000D15E0 /* Store */,
-				DADA39D52D3A21A7000D15E0 /* View */,
-			);
-			path = Football;
-			sourceTree = "<group>";
-		};
-		DADA39D72D3A21A7000D15E0 /* PlayerInfo */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = PlayerInfo;
-			sourceTree = "<group>";
-		};
-		DADA39D82D3A21A7000D15E0 /* Standings */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Standings;
-			sourceTree = "<group>";
-		};
-		DADA39D92D3A21A7000D15E0 /* NBA */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39D72D3A21A7000D15E0 /* PlayerInfo */,
-				DADA39D82D3A21A7000D15E0 /* Standings */,
-			);
-			path = NBA;
-			sourceTree = "<group>";
-		};
-		DADA39DB2D3A21A7000D15E0 /* Store */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39DA2D3A21A7000D15E0 /* SearchStore.swift */,
-			);
-			path = Store;
-			sourceTree = "<group>";
-		};
-		DADA39E02D3A21A7000D15E0 /* Search */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39DB2D3A21A7000D15E0 /* Store */,
-				DADA39DC2D3A21A7000D15E0 /* AnimatingSearchBar.swift */,
-				DADA39DD2D3A21A7000D15E0 /* AutoCompleteList.swift */,
-				DADA39DE2D3A21A7000D15E0 /* KeywordList.swift */,
-				DADA39DF2D3A21A7000D15E0 /* SearchView.swift */,
-			);
-			path = Search;
-			sourceTree = "<group>";
-		};
-		DADA39E12D3A21A7000D15E0 /* Display */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39C12D3A21A7000D15E0 /* Components */,
-				DADA39D62D3A21A7000D15E0 /* Football */,
-				DADA39D92D3A21A7000D15E0 /* NBA */,
-				DADA39E02D3A21A7000D15E0 /* Search */,
-			);
-			path = Display;
-			sourceTree = "<group>";
-		};
-		DADA39EA2D3A21A7000D15E0 /* Football */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39E42D3A21A7000D15E0 /* FBPlayerInfoDisplayModel.swift */,
-				DADA3A692D3A27AD000D15E0 /* FBPlayerStatsDisplayModel.swift */,
-				DADA39E52D3A21A7000D15E0 /* FBPlayerStandingsDisplayModel.swift */,
-				DADA39E62D3A21A7000D15E0 /* FBTeamInfoDisplayModel.swift */,
-				DADA39E92D3A21A7000D15E0 /* FBTeamStatsDisplayModel.swift */,
-				DADA39E82D3A21A7000D15E0 /* FBTeamStandingsDisplayModel.swift */,
-				DADA39E72D3A21A7000D15E0 /* FBTeamScheduleDisplayModel.swift */,
-				DADA39E32D3A21A7000D15E0 /* FBLeagueScheduleDisplayModel.swift */,
-				DADA39E22D3A21A7000D15E0 /* FBGameStatsDisplayModel.swift */,
-			);
-			path = Football;
-			sourceTree = "<group>";
-		};
-		DADA39EB2D3A21A7000D15E0 /* NBA */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = NBA;
-			sourceTree = "<group>";
-		};
-		DADA39EC2D3A21A7000D15E0 /* DisplayModels */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39EA2D3A21A7000D15E0 /* Football */,
-				DADA39EB2D3A21A7000D15E0 /* NBA */,
-			);
-			path = DisplayModels;
-			sourceTree = "<group>";
-		};
-		DADA39F12D3A21A7000D15E0 /* Football */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39ED2D3A21A7000D15E0 /* FBCommonModel.swift */,
-				DADA39EE2D3A21A7000D15E0 /* FBGameModels.swift */,
-				DADA39EF2D3A21A7000D15E0 /* FBPlayerModels.swift */,
-				DADA39F02D3A21A7000D15E0 /* FBTeamModels.swift */,
-			);
-			path = Football;
-			sourceTree = "<group>";
-		};
-		DADA39F22D3A21A7000D15E0 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39F12D3A21A7000D15E0 /* Football */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		DADA39F92D3A21A7000D15E0 /* Football */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39F32D3A21A7000D15E0 /* FBGameScheduleResponseModel.swift */,
-				DADA39F42D3A21A7000D15E0 /* FBGameStatsResponseModel.swift */,
-				DADA39F52D3A21A7000D15E0 /* FBPlayerInfoResponseModel.swift */,
-				DADA39F62D3A21A7000D15E0 /* FBPlayerStandingsResponseModel.swift */,
-				DADA39F72D3A21A7000D15E0 /* FBTeamInfoResponseModel.swift */,
-				DADA39F82D3A21A7000D15E0 /* FBTeamStandingsResponseModel.swift */,
-			);
-			path = Football;
-			sourceTree = "<group>";
-		};
-		DADA39FB2D3A21A7000D15E0 /* NBA */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39FA2D3A21A7000D15E0 /* NbaModel.swift */,
-			);
-			path = NBA;
-			sourceTree = "<group>";
-		};
-		DADA39FC2D3A21A7000D15E0 /* ReponseModels */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39F92D3A21A7000D15E0 /* Football */,
-				DADA39FB2D3A21A7000D15E0 /* NBA */,
-			);
-			path = ReponseModels;
-			sourceTree = "<group>";
-		};
-		DADA3A032D3A21A7000D15E0 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39EC2D3A21A7000D15E0 /* DisplayModels */,
-				DADA39F22D3A21A7000D15E0 /* Models */,
-				DADA39FC2D3A21A7000D15E0 /* ReponseModels */,
-				DADA39FD2D3A21A7000D15E0 /* AutoComplete.swift */,
-				DADA39FE2D3A21A7000D15E0 /* DataModel.swift */,
-				DADA39FF2D3A21A7000D15E0 /* Error.swift */,
-				DADA3A002D3A21A7000D15E0 /* FootballTeamGameStatsResponseModel.swift */,
-				DADA3A012D3A21A7000D15E0 /* ModelConverter.swift */,
-				DADA3A022D3A21A7000D15E0 /* SearchDataState.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		DADA3A052D3A21A7000D15E0 /* Networking */ = {
-			isa = PBXGroup;
-			children = (
-				DADA3A042D3A21A7000D15E0 /* SearchClient.swift */,
-			);
-			path = Networking;
-			sourceTree = "<group>";
-		};
-		DADA3A062D3A21A7000D15E0 /* Search */ = {
-			isa = PBXGroup;
-			children = (
-				DADA39E12D3A21A7000D15E0 /* Display */,
-				DADA3A032D3A21A7000D15E0 /* Models */,
-				DADA3A052D3A21A7000D15E0 /* Networking */,
-			);
-			path = Search;
-			sourceTree = "<group>";
-		};
-		DADA3A0F2D3A21A7000D15E0 /* Features */ = {
-			isa = PBXGroup;
-			children = (
-				DADA3A062D3A21A7000D15E0 /* Search */,
-			);
-			name = Features;
-			path = ../../moare_legacy/moare/Features;
-			sourceTree = "<group>";
-		};
-		DADA3A4F2D3A21AF000D15E0 /* Animations */ = {
-			isa = PBXGroup;
-			children = (
-				DADA3A4C2D3A21AF000D15E0 /* BaseUIState.swift */,
-				DADA3A4D2D3A21AF000D15E0 /* HSequentialListAni.swift */,
-				DADA3A4E2D3A21AF000D15E0 /* VSequentialListAni.swift */,
-			);
-			path = Animations;
-			sourceTree = "<group>";
-		};
-		DADA3A512D3A21AF000D15E0 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				DADA3A502D3A21AF000D15E0 /* RoundedRectWithPathAni.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		DADA3A522D3A21AF000D15E0 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
-		DADA3A532D3A21AF000D15E0 /* Animation */ = {
-			isa = PBXGroup;
-			children = (
-				DADA3A4F2D3A21AF000D15E0 /* Animations */,
-				DADA3A512D3A21AF000D15E0 /* Components */,
-				DADA3A522D3A21AF000D15E0 /* Extensions */,
-			);
-			path = Animation;
-			sourceTree = "<group>";
-		};
-		DADA3A582D3A21AF000D15E0 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				DADA3A542D3A21AF000D15E0 /* CalendarList.swift */,
-				DADA3A552D3A21AF000D15E0 /* CapsuleBar.swift */,
-				DADA3A562D3A21AF000D15E0 /* CapsuleButton.swift */,
-				DADA3A572D3A21AF000D15E0 /* URLImage.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		DADA3A592D3A21AF000D15E0 /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		DADA3A5A2D3A21AF000D15E0 /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				DADA3A582D3A21AF000D15E0 /* Components */,
-				DADA3A592D3A21AF000D15E0 /* View */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
-		DADA3A5D2D3A21AF000D15E0 /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				DADA3A5B2D3A21AF000D15E0 /* FlowStack.swift */,
-				DADA3A5C2D3A21AF000D15E0 /* UIExtensions.swift */,
-			);
-			path = Utilities;
-			sourceTree = "<group>";
-		};
-		DADA3A5E2D3A21AF000D15E0 /* UI */ = {
-			isa = PBXGroup;
-			children = (
-				DADA3A532D3A21AF000D15E0 /* Animation */,
-				DADA3A5A2D3A21AF000D15E0 /* Common */,
-				DADA3A5D2D3A21AF000D15E0 /* Utilities */,
-			);
-			name = UI;
-			path = ../../moare_legacy/moare/UI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -822,87 +900,89 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DADA3A3A2D3A21A7000D15E0 /* FBGameScheduleResponseModel.swift in Sources */,
-				DADA3A1F2D3A21A7000D15E0 /* FBTeamStatsStore.swift in Sources */,
-				DADA39A52D3A21A1000D15E0 /* AnimationConstants.swift in Sources */,
-				DADA3A682D3A21AF000D15E0 /* UIExtensions.swift in Sources */,
-				DADA39B42D3A21A1000D15E0 /* TaskCompletionTracker.swift in Sources */,
-				DADA3A252D3A21A7000D15E0 /* FBTeamInfoView.swift in Sources */,
-				DADA3A402D3A21A7000D15E0 /* NbaModel.swift in Sources */,
-				DADA3A422D3A21A7000D15E0 /* DataModel.swift in Sources */,
-				DADA3A5F2D3A21AF000D15E0 /* BaseUIState.swift in Sources */,
-				DADA3A632D3A21AF000D15E0 /* CalendarList.swift in Sources */,
-				DADA398D2D3A214D000D15E0 /* moareApp.swift in Sources */,
-				DADA3A312D3A21A7000D15E0 /* FBPlayerStandingsDisplayModel.swift in Sources */,
-				DADA3A1B2D3A21A7000D15E0 /* FBPlayerStatsStore.swift in Sources */,
-				DADA39B22D3A21A1000D15E0 /* KoreanUtilities.swift in Sources */,
-				DADA3A3E2D3A21A7000D15E0 /* FBTeamInfoResponseModel.swift in Sources */,
-				DADA3A642D3A21AF000D15E0 /* CapsuleBar.swift in Sources */,
-				DADA3A3F2D3A21A7000D15E0 /* FBTeamStandingsResponseModel.swift in Sources */,
-				DADA3A3B2D3A21A7000D15E0 /* FBGameStatsResponseModel.swift in Sources */,
-				DADA3A652D3A21AF000D15E0 /* CapsuleButton.swift in Sources */,
-				DADA3A432D3A21A7000D15E0 /* Error.swift in Sources */,
-				DADA3A372D3A21A7000D15E0 /* FBGameModels.swift in Sources */,
-				DADA3A172D3A21A7000D15E0 /* FBGameStatsStore.swift in Sources */,
-				DADA3A292D3A21A7000D15E0 /* SearchStore.swift in Sources */,
-				DADA3A3C2D3A21A7000D15E0 /* FBPlayerInfoResponseModel.swift in Sources */,
-				DADA3A202D3A21A7000D15E0 /* FBGameStatsView.swift in Sources */,
-				DADA39AF2D3A21A1000D15E0 /* CalendarUtil.swift in Sources */,
-				DADA39B02D3A21A1000D15E0 /* EnNameTranslationUtility.swift in Sources */,
-				DADA3A6A2D3A27AD000D15E0 /* FBPlayerStatsDisplayModel.swift in Sources */,
-				DADA3A2B2D3A21A7000D15E0 /* AutoCompleteList.swift in Sources */,
-				DADA39A92D3A21A1000D15E0 /* APIClient.swift in Sources */,
-				DADA3A412D3A21A7000D15E0 /* AutoComplete.swift in Sources */,
-				DADA3A2E2D3A21A7000D15E0 /* FBGameStatsDisplayModel.swift in Sources */,
-				DADA3A332D3A21A7000D15E0 /* FBTeamScheduleDisplayModel.swift in Sources */,
-				DADA39AA2D3A21A1000D15E0 /* APIConfiguration.swift in Sources */,
-				DADA3A272D3A21A7000D15E0 /* FBTeamStandingsView.swift in Sources */,
-				DADA3A322D3A21A7000D15E0 /* FBTeamInfoDisplayModel.swift in Sources */,
-				DADA3A242D3A21A7000D15E0 /* FBPlayerStatsView.swift in Sources */,
-				DADA39A62D3A21A1000D15E0 /* StringConstants.swift in Sources */,
-				DADA3A232D3A21A7000D15E0 /* FBPlayerStandingsView.swift in Sources */,
-				DADA39B52D3A21A1000D15E0 /* ApiRouteService.swift in Sources */,
-				DADA3A222D3A21A7000D15E0 /* FBPlayerInfoView.swift in Sources */,
-				DADA3A1A2D3A21A7000D15E0 /* FBPlayerStandingsStore.swift in Sources */,
-				DADA3A2F2D3A21A7000D15E0 /* FBLeagueScheduleDisplayModel.swift in Sources */,
-				DADA3A262D3A21A7000D15E0 /* FBTeamScheduleView.swift in Sources */,
-				DADA398C2D3A214D000D15E0 /* SplashView.swift in Sources */,
-				DADA39AE2D3A21A1000D15E0 /* AutoCompleteTrie.swift in Sources */,
-				DADA3A1C2D3A21A7000D15E0 /* FBTeamInfoStore.swift in Sources */,
-				DADA3A472D3A21A7000D15E0 /* SearchClient.swift in Sources */,
-				DADA3A1E2D3A21A7000D15E0 /* FBTeamStandingsStore.swift in Sources */,
-				DADA39AC2D3A21A1000D15E0 /* RequestBuilder.swift in Sources */,
-				DADA3A162D3A21A7000D15E0 /* LeagueTitle.swift in Sources */,
-				DADA3A152D3A21A7000D15E0 /* FBStatDataItem.swift in Sources */,
-				DADA3A452D3A21A7000D15E0 /* ModelConverter.swift in Sources */,
-				DADA3A2C2D3A21A7000D15E0 /* KeywordList.swift in Sources */,
-				DADA39B12D3A21A1000D15E0 /* Extensions.swift in Sources */,
-				DADA3A442D3A21A7000D15E0 /* FootballTeamGameStatsResponseModel.swift in Sources */,
-				DADA3A212D3A21A7000D15E0 /* FBLeagueScheduleView.swift in Sources */,
-				DADA3A462D3A21A7000D15E0 /* SearchDataState.swift in Sources */,
-				DADA39B32D3A21A1000D15E0 /* MatchDescriptionConverter.swift in Sources */,
-				DADA39A82D3A21A1000D15E0 /* BaseDisplayModel.swift in Sources */,
-				DADA3A2D2D3A21A7000D15E0 /* SearchView.swift in Sources */,
-				DADA3A192D3A21A7000D15E0 /* FBPlayerInfoStore.swift in Sources */,
-				DADA3A392D3A21A7000D15E0 /* FBTeamModels.swift in Sources */,
-				DADA39AD2D3A21A1000D15E0 /* StoreManager.swift in Sources */,
-				DADA3A622D3A21AF000D15E0 /* RoundedRectWithPathAni.swift in Sources */,
-				DADA3A382D3A21A7000D15E0 /* FBPlayerModels.swift in Sources */,
-				DADA39A72D3A21A1000D15E0 /* UIConstants.swift in Sources */,
-				DADA3A282D3A21A7000D15E0 /* FBTeamStatsView.swift in Sources */,
-				DADA3A342D3A21A7000D15E0 /* FBTeamStandingsDisplayModel.swift in Sources */,
-				DADA3A3D2D3A21A7000D15E0 /* FBPlayerStandingsResponseModel.swift in Sources */,
-				DADA3A2A2D3A21A7000D15E0 /* AnimatingSearchBar.swift in Sources */,
-				DADA3A1D2D3A21A7000D15E0 /* FBTeamScheduleStore.swift in Sources */,
-				DADA3A612D3A21AF000D15E0 /* VSequentialListAni.swift in Sources */,
-				DADA3A602D3A21AF000D15E0 /* HSequentialListAni.swift in Sources */,
-				DADA3A362D3A21A7000D15E0 /* FBCommonModel.swift in Sources */,
-				DADA3A182D3A21A7000D15E0 /* FBLeagueScheduleStore.swift in Sources */,
-				DADA3A302D3A21A7000D15E0 /* FBPlayerInfoDisplayModel.swift in Sources */,
-				DADA39AB2D3A21A1000D15E0 /* APIEndpoint.swift in Sources */,
-				DADA3A352D3A21A7000D15E0 /* FBTeamStatsDisplayModel.swift in Sources */,
-				DADA3A662D3A21AF000D15E0 /* URLImage.swift in Sources */,
-				DADA3A672D3A21AF000D15E0 /* FlowStack.swift in Sources */,
+				DA531BAA2D64A8CA00DB87CB /* AutoCompleteList.swift in Sources */,
+				DA531BB32D64A8CA00DB87CB /* FBTeamStandingsDisplayModel.swift in Sources */,
+				DA531B402D64A8A400DB87CB /* SplashView.swift in Sources */,
+				DA531BE82D64A8F200DB87CB /* CalendarUtil.swift in Sources */,
+				DA531C0B2D64A91900DB87CB /* FlowStack.swift in Sources */,
+				DA531BB12D64A8CA00DB87CB /* FBTeamInfoDisplayModel.swift in Sources */,
+				DA531BC62D64A8CA00DB87CB /* TrendingKeyword.swift in Sources */,
+				DA531B9D2D64A8CA00DB87CB /* FBTeamStandingsStore.swift in Sources */,
+				DA531B942D64A8CA00DB87CB /* FBStatDataItem.swift in Sources */,
+				DA531BA32D64A8CA00DB87CB /* FBPlayerStatsView.swift in Sources */,
+				DA531C0C2D64A91900DB87CB /* UIExtensions.swift in Sources */,
+				DA531B9E2D64A8CA00DB87CB /* FBTeamStatsStore.swift in Sources */,
+				DA531C102D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift in Sources */,
+				DA531BA52D64A8CA00DB87CB /* FBTeamScheduleView.swift in Sources */,
+				DA531BC72D64A8CA00DB87CB /* KeywordsClient.swift in Sources */,
+				DA531BA22D64A8CA00DB87CB /* FBPlayerStandingsView.swift in Sources */,
+				DA531B972D64A8CA00DB87CB /* FBLeagueScheduleStore.swift in Sources */,
+				DA531BB22D64A8CA00DB87CB /* FBTeamScheduleDisplayModel.swift in Sources */,
+				DA531BE42D64A8F200DB87CB /* APIEndpoint.swift in Sources */,
+				DA531BE92D64A8F200DB87CB /* EnNameTranslationUtility.swift in Sources */,
+				DA531BE52D64A8F200DB87CB /* RequestBuilder.swift in Sources */,
+				DA531C072D64A91900DB87CB /* CalendarList.swift in Sources */,
+				DA531BC82D64A8CA00DB87CB /* SearchClient.swift in Sources */,
+				DA531B3F2D64A8A400DB87CB /* moareApp.swift in Sources */,
+				DA531B992D64A8CA00DB87CB /* FBPlayerStandingsStore.swift in Sources */,
+				DA531BB02D64A8CA00DB87CB /* FBPlayerStandingsDisplayModel.swift in Sources */,
+				DA531BBD2D64A8CA00DB87CB /* FBTeamInfoResponseModel.swift in Sources */,
+				DA531BC42D64A8CA00DB87CB /* ModelConverter.swift in Sources */,
+				DA531BB42D64A8CA00DB87CB /* FBTeamStatsDisplayModel.swift in Sources */,
+				DA531BAE2D64A8CA00DB87CB /* FBLeagueScheduleDisplayModel.swift in Sources */,
+				DA531BC02D64A8CA00DB87CB /* AutoComplete.swift in Sources */,
+				DA531BDF2D64A8F200DB87CB /* StringConstants.swift in Sources */,
+				DA531BEA2D64A8F200DB87CB /* Extensions.swift in Sources */,
+				DA531B962D64A8CA00DB87CB /* FBGameStatsStore.swift in Sources */,
+				DA531B9F2D64A8CA00DB87CB /* FBGameStatsView.swift in Sources */,
+				DA531BBF2D64A8CA00DB87CB /* NbaModel.swift in Sources */,
+				DA531BC22D64A8CA00DB87CB /* Error.swift in Sources */,
+				DA531C042D64A91900DB87CB /* HSequentialListAni.swift in Sources */,
+				DA531BA02D64A8CA00DB87CB /* FBLeagueScheduleView.swift in Sources */,
+				DA531BAF2D64A8CA00DB87CB /* FBPlayerInfoDisplayModel.swift in Sources */,
+				DA531BED2D64A8F200DB87CB /* TaskCompletionTracker.swift in Sources */,
+				DA531B9A2D64A8CA00DB87CB /* FBPlayerStatsStore.swift in Sources */,
+				DA531BE22D64A8F200DB87CB /* APIClient.swift in Sources */,
+				DA531B9B2D64A8CA00DB87CB /* FBTeamInfoStore.swift in Sources */,
+				DA531C032D64A91900DB87CB /* BaseUIState.swift in Sources */,
+				DA531BA42D64A8CA00DB87CB /* FBTeamInfoView.swift in Sources */,
+				DA531BC32D64A8CA00DB87CB /* FootballTeamGameStatsResponseModel.swift in Sources */,
+				DA531BA72D64A8CA00DB87CB /* FBTeamStatsView.swift in Sources */,
+				DA531C082D64A91900DB87CB /* CapsuleBar.swift in Sources */,
+				DA531BBA2D64A8CA00DB87CB /* FBGameStatsResponseModel.swift in Sources */,
+				DA531BB82D64A8CA00DB87CB /* FBTeamModels.swift in Sources */,
+				DA531BC12D64A8CA00DB87CB /* DataModel.swift in Sources */,
+				DA531C052D64A91900DB87CB /* VSequentialListAni.swift in Sources */,
+				DA531BB72D64A8CA00DB87CB /* FBPlayerModels.swift in Sources */,
+				DA531BEB2D64A8F200DB87CB /* KoreanUtilities.swift in Sources */,
+				DA531BA92D64A8CA00DB87CB /* AnimatingSearchBar.swift in Sources */,
+				DA531BE02D64A8F200DB87CB /* UIConstants.swift in Sources */,
+				DA531BEE2D64A8F200DB87CB /* ApiRouteService.swift in Sources */,
+				DA531BEC2D64A8F200DB87CB /* MatchDescriptionConverter.swift in Sources */,
+				DA531BAB2D64A8CA00DB87CB /* SearchView.swift in Sources */,
+				DA531BAC2D64A8CA00DB87CB /* TrendingKeywords.swift in Sources */,
+				DA531C092D64A91900DB87CB /* CapsuleButton.swift in Sources */,
+				DA531BA12D64A8CA00DB87CB /* FBPlayerInfoView.swift in Sources */,
+				DA531C062D64A91900DB87CB /* RoundedRectWithPathAni.swift in Sources */,
+				DA531BC52D64A8CA00DB87CB /* SearchDataState.swift in Sources */,
+				DA531B952D64A8CA00DB87CB /* LeagueTitle.swift in Sources */,
+				DA531BAD2D64A8CA00DB87CB /* FBGameStatsDisplayModel.swift in Sources */,
+				DA531BB62D64A8CA00DB87CB /* FBGameModels.swift in Sources */,
+				DA531BB92D64A8CA00DB87CB /* FBGameScheduleResponseModel.swift in Sources */,
+				DA531BB52D64A8CA00DB87CB /* FBCommonModels.swift in Sources */,
+				DA531C0A2D64A91900DB87CB /* URLImage.swift in Sources */,
+				DA531BE32D64A8F200DB87CB /* APIConfiguration.swift in Sources */,
+				DA531BA62D64A8CA00DB87CB /* FBTeamStandingsView.swift in Sources */,
+				DA531B982D64A8CA00DB87CB /* FBPlayerInfoStore.swift in Sources */,
+				DA531BE12D64A8F200DB87CB /* BaseDisplayModel.swift in Sources */,
+				DA531BA82D64A8CA00DB87CB /* SearchStore.swift in Sources */,
+				DA531B9C2D64A8CA00DB87CB /* FBTeamScheduleStore.swift in Sources */,
+				DA531C0E2D64AA4300DB87CB /* AnimationConstants.swift in Sources */,
+				DA531BBB2D64A8CA00DB87CB /* FBPlayerInfoResponseModel.swift in Sources */,
+				DA531BE72D64A8F200DB87CB /* AutoCompleteTrie.swift in Sources */,
+				DA531BE62D64A8F200DB87CB /* StoreManager.swift in Sources */,
+				DA531BBC2D64A8CA00DB87CB /* FBPlayerStandingsResponseModel.swift in Sources */,
+				DA531BBE2D64A8CA00DB87CB /* FBTeamStandingsResponseModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
