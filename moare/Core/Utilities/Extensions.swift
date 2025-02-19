@@ -22,3 +22,12 @@ extension Double {
         return (self * multiplier).rounded() / multiplier
     }
 }
+
+extension Int {
+    func percentage(of total: Int, to decimalPlaces: Int) -> Double {
+        guard total != 0 else { return 0 }
+        let percentage = (Double(self) / Double(total)) * 100
+        let roundedPercentage = percentage.rounded(to: decimalPlaces)
+        return roundedPercentage
+    }
+}

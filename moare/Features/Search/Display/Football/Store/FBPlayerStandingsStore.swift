@@ -62,7 +62,7 @@ struct FBPlayerStandingsStore {
                 
                 // select category that matches with the keyword
                 if !keywords.isEmpty {
-                    let index = StringConstants.Football.playerStatsSecondCategories.firstIndex { category in
+                    let index = StringConstants.Football.playerStandingsSecondCategories.firstIndex { category in
                         let keyword = keywords.first { $0.keyword == category }
                         return keyword != nil
                     }
@@ -80,8 +80,8 @@ struct FBPlayerStandingsStore {
                 // should change secondSelectedIndex first as bar moves based on secondSelectedIndex when firstSelectedIndex changes
                 switch index {
                 case 0: state.secondSelectedIndex = 0
-                case 1: state.secondSelectedIndex = StringConstants.Football.attackCategories.count
-                case 2: state.secondSelectedIndex = StringConstants.Football.attackCategories.count + StringConstants.Football.defendCategories.count
+                case 1: state.secondSelectedIndex = StringConstants.Football.playerStandingsAttackCategories.count
+                case 2: state.secondSelectedIndex = StringConstants.Football.playerStandingsAttackCategories.count + StringConstants.Football.playerStandingsDefendCategories.count
                 default: break
                 }
                 
@@ -94,9 +94,9 @@ struct FBPlayerStandingsStore {
                 state.secondSelectedIndex = index
                 
                 switch index {
-                case StringConstants.Football.attackCategories.indices:
+                case StringConstants.Football.playerStandingsAttackCategories.indices:
                     state.firstSelectedIndex = 0
-                case StringConstants.Football.attackCategories.count..<(StringConstants.Football.attackCategories.count + StringConstants.Football.defendCategories.count):
+                case StringConstants.Football.playerStandingsAttackCategories.count..<(StringConstants.Football.playerStandingsAttackCategories.count + StringConstants.Football.playerStandingsDefendCategories.count):
                     state.firstSelectedIndex = 1
                 default:
                     state.firstSelectedIndex = 2
@@ -121,13 +121,13 @@ struct FBPlayerStandingsStore {
                 case 5:
                     standings.sort { $0.stats.passes.key > $1.stats.passes.key }
                 case 6:
-                    standings.sort { $0.stats.dribbles.attempts > $1.stats.dribbles.attempts }
+                    standings.sort { $0.stats.dribbles.success > $1.stats.dribbles.success }
                 case 7:
                     standings.sort { $0.stats.penalty.scored > $1.stats.penalty.scored }
                 case 8:
                     standings.sort { $0.stats.tackles.total > $1.stats.tackles.total }
                 case 9:
-                    standings.sort { $0.stats.duels.total > $1.stats.duels.total }
+                    standings.sort { $0.stats.duels.won > $1.stats.duels.won }
                 case 10:
                     standings.sort { $0.stats.passes.total > $1.stats.passes.total }
                 case 11:
@@ -145,7 +145,7 @@ struct FBPlayerStandingsStore {
                 case 17:
                     standings.sort { $0.stats.games.minutes > $1.stats.games.minutes }
                 case 18:
-                    standings.sort { $0.stats.games.rating > $1.stats.games.rating }
+                    standings.sort { Double($0.stats.games.rating) ?? 0 > Double($1.stats.games.rating) ?? 0 }
                 default:
                     break
                 }

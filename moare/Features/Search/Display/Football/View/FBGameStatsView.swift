@@ -289,7 +289,7 @@ struct FBGameStatsFirstDataList: View {
     
     var body: some View {
         ZStack(alignment: .top) {
-            FBGameStatsFirstCategoryItem(category: fbGameStatsStore.firstCategory)
+            FBGameStatsFirstCategoryItem(category: StringConstants.Football.gameStatsFirstCategory)
                 .frame(height: fbGameStatsStore.categoryItemHeight * 2)
                 .background(.white)
                 .offset(y: categoryOffset < 0 ? 0 : categoryOffset)
@@ -366,7 +366,7 @@ struct FBGameStatsFirstDataListItem: View {
                 .lineLimit(2)
                 .frame(maxWidth: 80, alignment: .leading)
             
-            // TODO: goals, cards
+            // TODO: goals, cards, number, captain
             VStack(spacing: 0) {
                 Text(isStarter ? "선발" : "후보")
                     .font(.system(size: 11))
@@ -450,7 +450,7 @@ struct FBGameStatsDataList: View {
                     let data = fbGameStatsStore.playerStats[index]
                     
                     HStack(spacing: 0) {
-                        ForEach(0..<fbGameStatsStore.secondCategoryList.count) { index in
+                        ForEach(0..<StringConstants.Football.gameStatsSecondCategories.count) { index in
                             if let stats = data.statistics.first {
                                 FBGameStatsDataListItem(
                                     fbGameStatsStore: fbGameStatsStore,
@@ -460,7 +460,7 @@ struct FBGameStatsDataList: View {
                                 .frame(height: fbGameStatsStore.dataItemHeight)
                             }
                             
-                            if index == fbGameStatsStore.attackCategoryList.count - 1 || index == fbGameStatsStore.attackCategoryList.count + fbGameStatsStore.defendCategoryList.count - 1 {
+                            if index == StringConstants.Football.gameStatsAttackCategories.count - 1 || index == StringConstants.Football.gameStatsAttackCategories.count + StringConstants.Football.gameStatsDefendCategories.count - 1 {
                                 VCapsuleBar()
                                     .opacity(0)
                             }
@@ -481,14 +481,14 @@ struct FBGameStatsFirstCategoryList: View {
     init(fbGameStatsStore: StoreOf<FBGameStatsStore>) {
         self.fbGameStatsStore = fbGameStatsStore
         
-        self._barOffset = State(initialValue: getOffsetOfAniCapsuleBar(itemWidth: fbGameStatsStore.itemWidth * 5, barWidth: 80))
+        self._barOffset = State(initialValue: getOffsetOfAniCapsuleBar(itemWidth: fbGameStatsStore.itemWidth * CGFloat(StringConstants.Football.gameStatsAttackCategories.count), barWidth: 80))
     }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
-                    ForEach(fbGameStatsStore.firstCategoryList.indices, id: \.self) { index in
-                        let category = fbGameStatsStore.firstCategoryList[index]
+                    ForEach(StringConstants.Football.statsFirstCategories.indices, id: \.self) { index in
+                        let category = StringConstants.Football.statsFirstCategories[index]
                         
                         FBGameStatsFirstCategoryListItem(
                             fbGameStatsStore: fbGameStatsStore,
@@ -497,7 +497,7 @@ struct FBGameStatsFirstCategoryList: View {
                         )
                         .id(index)
                         
-                        if index != fbGameStatsStore.firstCategoryList.count - 1 {
+                        if index != StringConstants.Football.statsFirstCategories.count - 1 {
                             VCapsuleBar()
                                 .opacity(0.5)
                         }
@@ -517,14 +517,18 @@ struct FBGameStatsFirstCategoryList: View {
         let itemWidth = fbGameStatsStore.itemWidth
         let barWidth = fbGameStatsStore.barWidth
         
+        let attackCategoriesCount = CGFloat(StringConstants.Football.gameStatsAttackCategories.count)
+        let defendCategoriesCount = CGFloat(StringConstants.Football.gameStatsDefendCategories.count)
+        let etcCategoriesCount = CGFloat(StringConstants.Football.gameStatsEtcCategories.count)
+        
         withAnimation(.spring(duration: 0.5)) {
             switch index {
             case 0:
-                barOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth * 5, barWidth: 80)
+                barOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth * attackCategoriesCount, barWidth: 80)
             case 1:
-                barOffset = CGSize(width: (itemWidth * 5) + barWidth + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * 2, barWidth: 80).width, height: 0)
+                barOffset = CGSize(width: (itemWidth * attackCategoriesCount) + barWidth + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * defendCategoriesCount, barWidth: 80).width, height: 0)
             default:
-                barOffset = CGSize(width: (itemWidth * 5) + (barWidth * 2) + (itemWidth * 2) + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * 3, barWidth: 80).width, height: 0)
+                barOffset = CGSize(width: (itemWidth * attackCategoriesCount) + (barWidth * 2) + (itemWidth * defendCategoriesCount) + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * etcCategoriesCount, barWidth: 80).width, height: 0)
             }
         }
     }
@@ -550,9 +554,9 @@ struct FBGameStatsFirstCategoryListItem: View {
     
     private var width: CGFloat {
         switch index {
-        case 0: fbGameStatsStore.itemWidth * 5
-        case 1: fbGameStatsStore.itemWidth * 2
-        default: fbGameStatsStore.itemWidth * 3
+        case 0: fbGameStatsStore.itemWidth * CGFloat(StringConstants.Football.gameStatsAttackCategories.count)
+        case 1: fbGameStatsStore.itemWidth * CGFloat(StringConstants.Football.gameStatsDefendCategories.count)
+        default: fbGameStatsStore.itemWidth * CGFloat(StringConstants.Football.gameStatsEtcCategories.count)
         }
     }
 }
@@ -561,6 +565,9 @@ struct FBGameStatsSecondCategoryList: View {
     @ComposableArchitecture.Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
     
     @State var barOffset: CGSize
+    
+    let attackCategoriesCount = StringConstants.Football.gameStatsAttackCategories.count
+    let defendCategoriesCount = StringConstants.Football.gameStatsDefendCategories.count
     
     init(fbGameStatsStore: StoreOf<FBGameStatsStore>) {
         self.fbGameStatsStore = fbGameStatsStore
@@ -572,8 +579,8 @@ struct FBGameStatsSecondCategoryList: View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollViewReader { proxy in
                 HStack(spacing: 0) {
-                    ForEach(fbGameStatsStore.secondCategoryList.indices, id: \.self) { index in
-                        let category = fbGameStatsStore.secondCategoryList[index]
+                    ForEach(StringConstants.Football.gameStatsSecondCategories.indices, id: \.self) { index in
+                        let category = StringConstants.Football.gameStatsSecondCategories[index]
                         
                         FBGameStatsSecondCategoryListItem(
                             fbGameStatsStore: fbGameStatsStore,
@@ -582,7 +589,7 @@ struct FBGameStatsSecondCategoryList: View {
                         )
                         .id(index)
                         
-                        if index == fbGameStatsStore.attackCategoryList.count - 1 || index == fbGameStatsStore.attackCategoryList.count + fbGameStatsStore.defendCategoryList.count - 1 {
+                        if index == attackCategoriesCount - 1 || index == attackCategoriesCount + defendCategoriesCount - 1 {
                             VCapsuleBar()
                                 .opacity(0.5)
                         }
@@ -621,9 +628,9 @@ struct FBGameStatsSecondCategoryList: View {
         
         withAnimation(.spring(duration: 0.5)) {
             switch index {
-            case 0..<fbGameStatsStore.attackCategoryList.count:
+            case 0..<attackCategoriesCount:
                 barOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index)
-            case fbGameStatsStore.attackCategoryList.count..<fbGameStatsStore.attackCategoryList.count + fbGameStatsStore.debugDescription.count:
+            case attackCategoriesCount..<attackCategoriesCount + defendCategoriesCount:
                 barOffset = CGSize(width: barWidth + getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index).width, height: 0)
             default:
                 barOffset = CGSize(width: (barWidth * 2) + getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index).width, height: 0)
@@ -644,11 +651,27 @@ struct FBGameStatsSecondCategoryListItem: View {
         }) {
             Text(category)
                 .fontWeight(.medium)
-                .font(.system(size: index == 2 ? 13: 15))
+                .font(.system(size: fontSize))
+                .lineLimit(2)
                 .frame(width: fbGameStatsStore.itemWidth)
         }
         .foregroundStyle(.primary)
     }
+    
+    private var fontSize: CGFloat {
+        switch index {
+        case 6, 9: 11
+        case 16: 13
+        default: 15
+        }
+    }
+    
+//    private var itemWidth: CGFloat {
+//        switch index {
+//        case 6, 9: fbGameStatsStore.percentageItemWidth
+//        default: fbGameStatsStore.itemWidth
+//        }
+//    }
 }
 
 struct FBGameStatsDataListItem: View {
@@ -659,23 +682,45 @@ struct FBGameStatsDataListItem: View {
     
     var body: some View {
         Text(intDataText)
-            .font(.system(size: 15))
+            .font(.system(size: fontSize))
             .frame(width: fbGameStatsStore.itemWidth)
     }
     
     private var intDataText: String {
         switch index {
         case 0: "\(data.goals.total)"
-        case 1: "\(data.goals.assists)"
-        case 2: "\(data.goals.total + data.goals.assists)"
+        case 1: "\(data.penalty.scored)"
+        case 2: "\(data.goals.assists)"
         case 3: "\(data.shots.total)"
         case 4: "\(data.shots.on)"
-        case 5: "\(data.passes.total)"
-        case 6: "\(data.tackles.total)"
-        case 7: "\(data.fouls.committed)"
-        case 8: "\(data.cards.yellow)"
-        case 9: "\(data.cards.red)"
+        case 5: "\(data.passes.key)"
+        case 6: "\(data.dribbles.success)/\(data.dribbles.attempts)(\(data.dribbles.success.percentage(of: data.dribbles.attempts, to: 1))%)"
+        case 7: "\(data.offsides)"
+        case 8: "\(data.tackles.total)"
+        case 9: "\(data.duels.won)/\(data.duels.total)(\(data.duels.won.percentage(of: data.duels.total, to: 1))%)"
+        case 10: "\(data.tackles.interceptions)"
+        case 11: "\(data.passes.total)"
+        case 12: "\(data.fouls.drawn)"
+        case 13: "\(data.fouls.committed)"
+        case 14: "\(data.cards.yellow)"
+        case 15: "\(data.cards.red)"
+        case 16: "\(data.games.minutes)"
+        case 17: "\(data.games.rating)"
         default: ""
         }
     }
+    
+    private var fontSize: CGFloat {
+        switch index {
+        case 6, 9: 11
+        default: 15
+        }
+    }
+    
+//    private var itemWidth: CGFloat {
+//        switch index {
+//        case 6, 9: fbGameStatsStore.percentageItemWidth
+//        default: fbGameStatsStore.itemWidth
+//        }
+//    }
 }

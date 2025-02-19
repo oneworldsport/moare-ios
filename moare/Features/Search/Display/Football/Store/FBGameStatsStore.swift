@@ -22,15 +22,10 @@ struct FBGameStatsStore {
         let teamButtonWidth: CGFloat = 120
         let firstItemWidth: CGFloat = 100
         let itemWidth: CGFloat = 70
+        let percentageItemWidth: CGFloat = 100
         let barWidth: CGFloat = 2
         let categoryFontSize: CGFloat = 14
         let dataFontSize: CGFloat = 14
-        let firstCategory = "선수 이름"
-        let firstCategoryList = ["공격지표", "수비지표", "공통지표"]
-        let secondCategoryList = ["득점", "어시스트", "공격포인트", "슈팅", "유효슈팅", "태클", "패스", "파울", "경고", "퇴장"]
-        let attackCategoryList = ["득점", "어시스트", "공격포인트", "슈팅", "유효슈팅"]
-        let defendCategoryList = ["태클", "패스"]
-        let commonCategoryList = ["파울", "경고", "퇴장"]
         
         /* ---------------------
            data state
@@ -85,8 +80,8 @@ struct FBGameStatsStore {
                 // should change secondSelectedIndex first as bar moves based on secondSelectedIndex when firstSelectedIndex changes
                 switch index {
                 case 0: state.secondSelectedIndex = 0
-                case 1: state.secondSelectedIndex = state.attackCategoryList.count
-                case 2: state.secondSelectedIndex = state.attackCategoryList.count + state.defendCategoryList.count
+                case 1: state.secondSelectedIndex = StringConstants.Football.gameStatsAttackCategories.count
+                case 2: state.secondSelectedIndex = StringConstants.Football.gameStatsAttackCategories.count + StringConstants.Football.gameStatsDefendCategories.count
                 default: break
                 }
                 
@@ -99,9 +94,9 @@ struct FBGameStatsStore {
                 state.secondSelectedIndex = index
                 
                 switch index {
-                case state.attackCategoryList.indices:
+                case StringConstants.Football.gameStatsAttackCategories.indices:
                     state.firstSelectedIndex = 0
-                case state.attackCategoryList.count..<(state.attackCategoryList.count + state.defendCategoryList.count):
+                case StringConstants.Football.gameStatsAttackCategories.count..<(StringConstants.Football.gameStatsAttackCategories.count + StringConstants.Football.gameStatsDefendCategories.count):
                     state.firstSelectedIndex = 1
                 default:
                     state.firstSelectedIndex = 2
@@ -134,23 +129,47 @@ struct FBGameStatsStore {
                 case 0:
                     state.playerStats.sort { $0.statistics.first?.goals.total ?? 0 > $1.statistics.first?.goals.total ?? 0 }
                 case 1:
-                    state.playerStats.sort { $0.statistics.first?.goals.assists ?? 0 > $1.statistics.first?.goals.assists ?? 0 }
+                    state.playerStats.sort { $0.statistics.first?.penalty.scored ?? 0 > $1.statistics.first?.penalty.scored ?? 0 }
                 case 2:
-                    state.playerStats.sort { ($0.statistics.first?.goals.total ?? 0) + ($0.statistics.first?.goals.assists ?? 0) > ($1.statistics.first?.goals.total ?? 0) + ($1.statistics.first?.goals.assists ?? 0) }
+                    state.playerStats.sort { $0.statistics.first?.goals.assists ?? 0 > $1.statistics.first?.goals.assists ?? 0 }
                 case 3:
                     state.playerStats.sort { $0.statistics.first?.shots.total ?? 0 > $1.statistics.first?.shots.total ?? 0 }
                 case 4:
                     state.playerStats.sort { $0.statistics.first?.shots.on ?? 0 > $1.statistics.first?.shots.on ?? 0 }
                 case 5:
-                    state.playerStats.sort { $0.statistics.first?.passes.total ?? 0 > $1.statistics.first?.passes.total ?? 0 }
+                    state.playerStats.sort { $0.statistics.first?.passes.key ?? 0 > $1.statistics.first?.passes.key ?? 0 }
                 case 6:
-                    state.playerStats.sort { $0.statistics.first?.tackles.total ?? 0 > $1.statistics.first?.tackles.total ?? 0 }
+                    if state.playerStats.allSatisfy({ $0.statistics.first != nil }) {
+                        state.playerStats.sort {
+                            $0.statistics.first!.dribbles.success.percentage(of: $0.statistics.first!.dribbles.attempts, to: 1) > $1.statistics.first!.dribbles.success.percentage(of: $1.statistics.first!.dribbles.attempts, to: 1)
+                        }
+                    }
                 case 7:
-                    state.playerStats.sort { $0.statistics.first?.fouls.committed ?? 0 > $1.statistics.first?.fouls.committed ?? 0 }
+                    state.playerStats.sort { $0.statistics.first?.offsides ?? 0 > $1.statistics.first?.offsides ?? 0 }
                 case 8:
-                    state.playerStats.sort { $0.statistics.first?.cards.yellow ?? 0 > $1.statistics.first?.cards.yellow ?? 0 }
+                    state.playerStats.sort { $0.statistics.first?.tackles.total ?? 0 > $1.statistics.first?.tackles.total ?? 0 }
                 case 9:
+                    if state.playerStats.allSatisfy({ $0.statistics.first != nil }) {
+                        state.playerStats.sort {
+                            $0.statistics.first!.duels.won.percentage(of: $0.statistics.first!.duels.total, to: 1) > $1.statistics.first!.duels.won.percentage(of: $1.statistics.first!.duels.total, to: 1)
+                        }
+                    }
+                case 10:
+                    state.playerStats.sort { $0.statistics.first?.tackles.interceptions ?? 0 > $1.statistics.first?.tackles.interceptions ?? 0 }
+                case 11:
+                    state.playerStats.sort { $0.statistics.first?.passes.total ?? 0 > $1.statistics.first?.passes.total ?? 0 }
+                case 12:
+                    state.playerStats.sort { $0.statistics.first?.fouls.drawn ?? 0 > $1.statistics.first?.fouls.drawn ?? 0 }
+                case 13:
+                    state.playerStats.sort { $0.statistics.first?.fouls.committed ?? 0 > $1.statistics.first?.fouls.committed ?? 0 }
+                case 14:
+                    state.playerStats.sort { $0.statistics.first?.cards.yellow ?? 0 > $1.statistics.first?.cards.yellow ?? 0 }
+                case 15:
                     state.playerStats.sort { $0.statistics.first?.cards.red ?? 0 > $1.statistics.first?.cards.red ?? 0 }
+                case 16:
+                    state.playerStats.sort { $0.statistics.first?.games.minutes ?? 0 > $1.statistics.first?.games.minutes ?? 0 }
+                case 17:
+                    state.playerStats.sort { Double($0.statistics.first?.games.rating ?? "0") ?? 0 > Double($1.statistics.first?.games.rating ?? "0") ?? 0 }
                 default:
                     break
                 }
