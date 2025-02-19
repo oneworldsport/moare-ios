@@ -24,12 +24,6 @@ struct FBPlayerStandingsStore {
         let barWidth: CGFloat = 2
         let categoryFontSize: CGFloat = 15
         let dataFontSize: CGFloat = 15
-        let firstCategory = "선수순위"
-        let firstCategoryList = ["공격지표", "수비지표", "공통지표"]
-        let secondCategoryList = ["득점", "어시스트", "공격포인트", "슈팅", "유효슈팅", "태클", "패스", "파울", "경고", "퇴장", "경기수"]
-        let attackCategoryList = ["득점", "어시스트", "공격포인트", "슈팅", "유효슈팅"]
-        let defendCategoryList = ["태클", "패스"]
-        let commonCategoryList = ["파울", "경고", "퇴장", "경기수"]
         
         /* ---------------------
            data state
@@ -68,7 +62,7 @@ struct FBPlayerStandingsStore {
                 
                 // select category that matches with the keyword
                 if !keywords.isEmpty {
-                    let index = state.secondCategoryList.firstIndex { category in
+                    let index = StringConstants.Football.playerStandingsSecondCategories.firstIndex { category in
                         let keyword = keywords.first { $0.keyword == category }
                         return keyword != nil
                     }
@@ -86,8 +80,8 @@ struct FBPlayerStandingsStore {
                 // should change secondSelectedIndex first as bar moves based on secondSelectedIndex when firstSelectedIndex changes
                 switch index {
                 case 0: state.secondSelectedIndex = 0
-                case 1: state.secondSelectedIndex = state.attackCategoryList.count
-                case 2: state.secondSelectedIndex = state.attackCategoryList.count + state.defendCategoryList.count
+                case 1: state.secondSelectedIndex = StringConstants.Football.playerStandingsAttackCategories.count
+                case 2: state.secondSelectedIndex = StringConstants.Football.playerStandingsAttackCategories.count + StringConstants.Football.playerStandingsDefendCategories.count
                 default: break
                 }
                 
@@ -100,9 +94,9 @@ struct FBPlayerStandingsStore {
                 state.secondSelectedIndex = index
                 
                 switch index {
-                case state.attackCategoryList.indices: 
+                case StringConstants.Football.playerStandingsAttackCategories.indices:
                     state.firstSelectedIndex = 0
-                case state.attackCategoryList.count..<(state.attackCategoryList.count + state.defendCategoryList.count):
+                case StringConstants.Football.playerStandingsAttackCategories.count..<(StringConstants.Football.playerStandingsAttackCategories.count + StringConstants.Football.playerStandingsDefendCategories.count):
                     state.firstSelectedIndex = 1
                 default:
                     state.firstSelectedIndex = 2
@@ -125,17 +119,33 @@ struct FBPlayerStandingsStore {
                 case 4:
                     standings.sort { $0.stats.shots.on > $1.stats.shots.on }
                 case 5:
-                    standings.sort { $0.stats.tackles.total > $1.stats.tackles.total }
+                    standings.sort { $0.stats.passes.key > $1.stats.passes.key }
                 case 6:
-                    standings.sort { $0.stats.passes.total > $1.stats.passes.total }
+                    standings.sort { $0.stats.dribbles.success > $1.stats.dribbles.success }
                 case 7:
-                    standings.sort { $0.stats.fouls.committed > $1.stats.fouls.committed }
+                    standings.sort { $0.stats.penalty.scored > $1.stats.penalty.scored }
                 case 8:
-                    standings.sort { $0.stats.cards.yellow > $1.stats.cards.yellow }
+                    standings.sort { $0.stats.tackles.total > $1.stats.tackles.total }
                 case 9:
-                    standings.sort { $0.stats.cards.red > $1.stats.cards.red }
+                    standings.sort { $0.stats.duels.won > $1.stats.duels.won }
                 case 10:
+                    standings.sort { $0.stats.passes.total > $1.stats.passes.total }
+                case 11:
+                    standings.sort { $0.stats.fouls.committed > $1.stats.fouls.committed }
+                case 12:
+                    standings.sort { $0.stats.cards.yellow > $1.stats.cards.yellow }
+                case 13:
+                    standings.sort { $0.stats.cards.red > $1.stats.cards.red }
+                case 14:
                     standings.sort { $0.stats.games.appearences > $1.stats.games.appearences }
+                case 15:
+                    standings.sort { $0.stats.games.lineups > $1.stats.games.lineups }
+                case 16:
+                    standings.sort { $0.stats.substitutes.substituteIn > $1.stats.substitutes.substituteIn }
+                case 17:
+                    standings.sort { $0.stats.games.minutes > $1.stats.games.minutes }
+                case 18:
+                    standings.sort { Double($0.stats.games.rating) ?? 0 > Double($1.stats.games.rating) ?? 0 }
                 default:
                     break
                 }

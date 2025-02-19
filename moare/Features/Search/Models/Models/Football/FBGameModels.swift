@@ -309,7 +309,7 @@ struct FBGamePlayerStatsGames: Decodable, Equatable {
         return _position ?? ""
     }
     var rating: String {
-        return _rating ?? ""
+        return _rating ?? "0"
     }
     var captain: Bool {
         return _captain ?? false

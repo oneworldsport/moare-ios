@@ -109,7 +109,7 @@ struct FBPlayerStandingsFirstDataList: View {
     
     var body: some View {
         ZStack(alignment: .top) {
-            FBPlayerStandingsFirstCategoryItem(category: fbPlayerStandingsStore.firstCategory)
+            FBPlayerStandingsFirstCategoryItem(category: StringConstants.Football.standingsFirstCategory)
                 .frame(height: fbPlayerStandingsStore.categoryItemHeight * 2)
                 .background(.white)
                 .offset(y: categoryOffset < 0 ? 0 : categoryOffset)
@@ -156,6 +156,8 @@ struct FBPlayerStandingsFirstDataListItem: View {
     let rank: Int
     let data: FBPlayerStandingsDisplay
     
+    @State private var teamKrName = ""
+    
     var body: some View {
         HStack(spacing: 0) {
             Text("\(rank)")
@@ -166,9 +168,24 @@ struct FBPlayerStandingsFirstDataListItem: View {
                 .padding(.leading, 4)
                 .padding(.trailing, 6)
 
-            Text(data.player.krname)
-                .font(.system(size: 12))
-                .lineLimit(2)
+            VStack(spacing: 2) {
+                HStack {
+                    Text(data.player.krname)
+                        .font(.system(size: 12))
+                        .lineLimit(1)
+                    
+                    Spacer()
+                }
+                
+                HStack {
+                    Text(teamKrName)
+                        .font(.system(size: 11, weight: .light))
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+
+                    Spacer()
+                }
+            }
 
             Spacer()
 
@@ -178,6 +195,16 @@ struct FBPlayerStandingsFirstDataListItem: View {
                 .opacity(0.5)
         }
         .padding(.leading, 10)
+        .onAppear {
+            translate()
+        }
+    }
+    
+    private func translate() {
+        Task {
+            let teamKrName = await EnNameTranslationUtility.translateByAWS(input: data.stats.team.name)
+            self.teamKrName = EnNameTranslationUtility.translateByDic(type: .team, input: teamKrName)
+        }
     }
 }
 
@@ -202,7 +229,7 @@ struct FBPlayerStandingsDataList: View {
                     let data = fbPlayerStandingsStore.standings[index]
                     
                     HStack(spacing: 0) {
-                        ForEach(0..<11) { index in
+                        ForEach(0..<StringConstants.Football.playerStandingsSecondCategories.count) { index in
                             FBPlayerStandingsDataListItem(
                                 fbPlayerStandingsStore: fbPlayerStandingsStore,
                                 data: data,
@@ -210,7 +237,7 @@ struct FBPlayerStandingsDataList: View {
                             )
                             .frame(height: fbPlayerStandingsStore.dataItemHeight)
                             
-                            if index == fbPlayerStandingsStore.attackCategoryList.count - 1 || index == fbPlayerStandingsStore.attackCategoryList.count + fbPlayerStandingsStore.defendCategoryList.count - 1 {
+                            if index == StringConstants.Football.playerStandingsAttackCategories.count - 1 || index == StringConstants.Football.playerStandingsAttackCategories.count + StringConstants.Football.playerStandingsDefendCategories.count - 1 {
                                 Rectangle()
                                     .frame(width: 2)
                                     .foregroundStyle(.secondary)
@@ -233,14 +260,14 @@ struct FBPlayerStandingsFirstCategoryList: View {
     init(fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>) {
         self.fbPlayerStandingsStore = fbPlayerStandingsStore
         
-        self._barOffset = State(initialValue: getOffsetOfAniCapsuleBar(itemWidth: fbPlayerStandingsStore.itemWidth * 5, barWidth: 80))
+        self._barOffset = State(initialValue: getOffsetOfAniCapsuleBar(itemWidth: fbPlayerStandingsStore.itemWidth * CGFloat(StringConstants.Football.playerStandingsAttackCategories.count), barWidth: 80))
     }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
-                    ForEach(fbPlayerStandingsStore.firstCategoryList.indices, id: \.self) { index in
-                        let category = fbPlayerStandingsStore.firstCategoryList[index]
+                    ForEach(StringConstants.Football.statsFirstCategories.indices, id: \.self) { index in
+                        let category = StringConstants.Football.statsFirstCategories[index]
                         
                         FBPlayerStandingsFirstCategoryListItem(
                             fbPlayerStandingsStore: fbPlayerStandingsStore,
@@ -249,7 +276,7 @@ struct FBPlayerStandingsFirstCategoryList: View {
                         )
                         .id(index)
                         
-                        if index != fbPlayerStandingsStore.firstCategoryList.count - 1 {
+                        if index != StringConstants.Football.statsFirstCategories.count - 1 {
                             Rectangle()
                                 .frame(width: 2)
                                 .foregroundStyle(.secondary)
@@ -271,14 +298,18 @@ struct FBPlayerStandingsFirstCategoryList: View {
         let itemWidth = fbPlayerStandingsStore.itemWidth
         let barWidth = fbPlayerStandingsStore.barWidth
         
+        let attackCategoriesCount = CGFloat(StringConstants.Football.playerStandingsAttackCategories.count)
+        let defendCategoriesCount = CGFloat(StringConstants.Football.playerStandingsDefendCategories.count)
+        let etcCategoriesCount = CGFloat(StringConstants.Football.playerStandingsEtcCategories.count)
+        
         withAnimation(.spring(duration: 0.5)) {
             switch index {
             case 0:
-                barOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth * 5, barWidth: 80)
+                barOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth * attackCategoriesCount, barWidth: 80)
             case 1:
-                barOffset = CGSize(width: (itemWidth * 5) + barWidth + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * 2, barWidth: 80).width, height: 0)
+                barOffset = CGSize(width: (itemWidth * attackCategoriesCount) + barWidth + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * defendCategoriesCount, barWidth: 80).width, height: 0)
             default:
-                barOffset = CGSize(width: (itemWidth * 5) + (barWidth * 2) + (itemWidth * 2) + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * 4, barWidth: 80).width, height: 0)
+                barOffset = CGSize(width: (itemWidth * attackCategoriesCount) + (barWidth * 2) + (itemWidth * defendCategoriesCount) + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * etcCategoriesCount, barWidth: 80).width, height: 0)
             }
         }
     }
@@ -304,9 +335,9 @@ struct FBPlayerStandingsFirstCategoryListItem: View {
     
     private var width: CGFloat {
         switch index {
-        case 0: fbPlayerStandingsStore.itemWidth * 5
-        case 1: fbPlayerStandingsStore.itemWidth * 2
-        default: fbPlayerStandingsStore.itemWidth * 4
+        case 0: fbPlayerStandingsStore.itemWidth * CGFloat(StringConstants.Football.playerStandingsAttackCategories.count)
+        case 1: fbPlayerStandingsStore.itemWidth * CGFloat(StringConstants.Football.playerStandingsDefendCategories.count)
+        default: fbPlayerStandingsStore.itemWidth * CGFloat(StringConstants.Football.playerStandingsEtcCategories.count)
         }
     }
 }
@@ -315,6 +346,9 @@ struct FBPlayerStandingsSecondCategoryList: View {
     @ComposableArchitecture.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     @State var barOffset: CGSize
+    
+    let attackCategoriesCount = StringConstants.Football.playerStandingsAttackCategories.count
+    let defendCategoriesCount = StringConstants.Football.playerStandingsDefendCategories.count
     
     init(fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>) {
         self.fbPlayerStandingsStore = fbPlayerStandingsStore
@@ -326,8 +360,8 @@ struct FBPlayerStandingsSecondCategoryList: View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollViewReader { proxy in
                 HStack(spacing: 0) {
-                    ForEach(fbPlayerStandingsStore.secondCategoryList.indices, id: \.self) { index in
-                        let category = fbPlayerStandingsStore.secondCategoryList[index]
+                    ForEach(StringConstants.Football.playerStandingsSecondCategories.indices, id: \.self) { index in
+                        let category = StringConstants.Football.playerStandingsSecondCategories[index]
                         
                         FBPlayerStandingsSecondCategoryListItem(
                             fbPlayerStandingsStore: fbPlayerStandingsStore,
@@ -336,7 +370,7 @@ struct FBPlayerStandingsSecondCategoryList: View {
                         )
                         .id(index)
                         
-                        if index == fbPlayerStandingsStore.attackCategoryList.count - 1 || index == fbPlayerStandingsStore.attackCategoryList.count + fbPlayerStandingsStore.defendCategoryList.count - 1 {
+                        if index == attackCategoriesCount - 1 || index == attackCategoriesCount + defendCategoriesCount - 1 {
                             Rectangle()
                                 .frame(width: 2)
                                 .foregroundStyle(.secondary)
@@ -377,9 +411,9 @@ struct FBPlayerStandingsSecondCategoryList: View {
         
         withAnimation(.spring(duration: 0.5)) {
             switch index {
-            case 0..<fbPlayerStandingsStore.attackCategoryList.count:
+            case 0..<attackCategoriesCount:
                 barOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index)
-            case fbPlayerStandingsStore.attackCategoryList.count..<fbPlayerStandingsStore.attackCategoryList.count + fbPlayerStandingsStore.debugDescription.count:
+            case attackCategoriesCount..<attackCategoriesCount + defendCategoriesCount:
                 barOffset = CGSize(width: barWidth + getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index).width, height: 0)
             default:
                 barOffset = CGSize(width: (barWidth * 2) + getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index).width, height: 0)
@@ -432,12 +466,20 @@ struct FBPlayerStandingsDataListItem: View {
         case 2: "\(data.stats.goals.total + data.stats.goals.assists)"
         case 3: "\(data.stats.shots.total)"
         case 4: "\(data.stats.shots.on)"
-        case 5: "\(data.stats.tackles.total)"
-        case 6: "\(data.stats.passes.total)"
-        case 7: "\(data.stats.fouls.committed)"
-        case 8: "\(data.stats.cards.yellow)"
-        case 9: "\(data.stats.cards.red)"
-        case 10: "\(data.stats.games.appearences)"
+        case 5: "\(data.stats.passes.key)"
+        case 6: "\(data.stats.dribbles.success)"
+        case 7: "\(data.stats.penalty.scored)"
+        case 8: "\(data.stats.tackles.total)"
+        case 9: "\(data.stats.duels.won)"
+        case 10: "\(data.stats.passes.total)"
+        case 11: "\(data.stats.fouls.committed)"
+        case 12: "\(data.stats.cards.yellow)"
+        case 13: "\(data.stats.cards.red)"
+        case 14: "\(data.stats.games.appearences)"
+        case 15: "\(data.stats.games.lineups)"
+        case 16: "\(data.stats.substitutes.substituteIn)"
+        case 17: "\(data.stats.games.minutes)"
+        case 18: "\(Double(data.stats.games.rating)?.rounded(to: 2) ?? 0)"
         default: ""
         }
     }
