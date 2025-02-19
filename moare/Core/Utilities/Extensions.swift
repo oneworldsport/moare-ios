@@ -15,3 +15,10 @@ extension Binding where Value == Bool {
         )
     }
 }
+
+extension Double {
+    func rounded(to decimalPlaces: Int) -> Double {
+        let multiplier = pow(10.0, Double(decimalPlaces))
+        return (self * multiplier).rounded() / multiplier
+    }
+}
