@@ -136,36 +136,37 @@ struct FBGameStatsView: View {
             } // VStack
             .onAppear {
                 // init FBGameStatsStore
-                storeManager.setStore(
-                    Store(initialState: FBGameStatsStore.State(
+                let fbGameStatsStore: StoreOf<FBGameStatsStore> = storeManager.getStore(forKey: StoreKeys.fbGameStatsStore) ?? {
+                    let newStore = Store(initialState: FBGameStatsStore.State(
                         displayModel: displayModel
-                    )) { FBGameStatsStore() },
-                    forKey: StoreKeys.fbGameStatsStore
-                )
+                    )) { FBGameStatsStore() }
+                    
+                    storeManager.setStore(newStore, forKey: StoreKeys.fbGameStatsStore)
+                    
+                    newStore.send(.initData)
+                    
+                    return newStore
+                }()
                 
 //                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    fbGameStatsStore = storeManager.getStore(forKey: StoreKeys.fbGameStatsStore)
+                    self.fbGameStatsStore = fbGameStatsStore
 //                }
                 
-                fbGameStatsStore?.send(.initData)
                 
                 // TODO: has to figure out better structure
-                // when game_stats show at first
-                if let scheduleStore: StoreOf<FBLeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.fbLeagueScheduleStore) {
-                    withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                        fbLeagueScheduleStore = scheduleStore
-                    }
-                } else {
-                    storeManager.setStore(
-                        Store(initialState: FBLeagueScheduleStore.State(
-                            displayModel: nil, yearMonthList: []
-                        )) { FBLeagueScheduleStore() },
-                        forKey: StoreKeys.fbLeagueScheduleStore
-                    )
+                // when game_stats show at first(meaning ScheduleView never showed)
+                let scheduleStore: StoreOf<FBLeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.fbLeagueScheduleStore) ?? {
+                    let newStore = Store(initialState: FBLeagueScheduleStore.State(
+                        displayModel: nil, yearMonthList: []
+                    )) { FBLeagueScheduleStore() }
                     
-                    withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                        fbLeagueScheduleStore = storeManager.getStore(forKey: StoreKeys.fbLeagueScheduleStore)
-                    }
+                    storeManager.setStore(newStore, forKey: StoreKeys.fbLeagueScheduleStore)
+                    
+                    return newStore
+                }()
+                
+                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                    self.fbLeagueScheduleStore = scheduleStore
                 }
                 
                 translate()

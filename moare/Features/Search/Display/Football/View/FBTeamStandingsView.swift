@@ -82,18 +82,21 @@ struct FBTeamStandingsView: View {
             }
             .onAppear {
                 // init FBTeamStandingsStore
-                storeManager.setStore(
-                    Store(initialState: FBTeamStandingsStore.State(
+                let fbTeamStandingsStore: StoreOf<FBTeamStandingsStore> = storeManager.getStore(forKey: StoreKeys.fbTeamStandingsStore) ?? {
+                    let newStore = Store(initialState: FBTeamStandingsStore.State(
                         displayModel: displayModel, standings: displayModel.standings
-                    )) { FBTeamStandingsStore() },
-                    forKey: StoreKeys.fbTeamStandingsStore
-                )
+                    )) { FBTeamStandingsStore() }
+                    
+                    storeManager.setStore(newStore, forKey: StoreKeys.fbTeamStandingsStore)
+                    
+                    newStore.send(.initData)
+                    
+                    return newStore
+                }()
                 
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    fbTeamStandingsStore = storeManager.getStore(forKey: StoreKeys.fbTeamStandingsStore)                    
+                    self.fbTeamStandingsStore = fbTeamStandingsStore
                 }
-                
-                fbTeamStandingsStore?.send(.initData)
             }
         }
     }

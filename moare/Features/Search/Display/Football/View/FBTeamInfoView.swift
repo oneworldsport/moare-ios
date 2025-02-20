@@ -272,20 +272,23 @@ struct FBTeamInfoView: View {
             }
             .onAppear {
                 // init FBTeamInfoStore
-                storeManager.setStore(
-                    Store(initialState: FBTeamInfoStore.State(
+                let fbTeamInfoStore: StoreOf<FBTeamInfoStore> = storeManager.getStore(forKey: StoreKeys.fbTeamInfoStore) ?? {
+                    let newStore = Store(initialState: FBTeamInfoStore.State(
                         displayModel: displayModel,
                         team: displayModel.team,
                         venue: displayModel.venue
-                    )) { FBTeamInfoStore() },
-                    forKey: StoreKeys.fbTeamInfoStore
-                )
+                    )) { FBTeamInfoStore() }
+                    
+                    storeManager.setStore(newStore, forKey: StoreKeys.fbTeamInfoStore)
+                    
+                    newStore.send(.initData)
+                    
+                    return newStore
+                }()
                 
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    fbTeamInfoStore = storeManager.getStore(forKey: StoreKeys.fbTeamInfoStore)
+                    self.fbTeamInfoStore = fbTeamInfoStore
                 }
-                
-                fbTeamInfoStore?.send(.initData)
             }
         }
     }
