@@ -29,11 +29,13 @@ struct FBTeamScheduleStore {
            ui state
            --------------------- */
         var isAllResultOpened = false
+        var gameResultOpenedStateList: [Int: Bool] = [:]
     }
     
     enum Action {
         case initData
         case toggleAllResult
+        case updateResultOpenedState(fixtureId: Int, isOpened: Bool)
     }
     
     var body: some Reducer<State, Action> {
@@ -42,13 +44,23 @@ struct FBTeamScheduleStore {
             case .initData:
                 let displayModel = state.displayModel
                 
+                state.games.forEach { value in
+                    state.gameResultOpenedStateList[value.fixture.id] = false
+                }
+                
                 return .none
                 
             case .toggleAllResult:
-                state.isAllResultOpened.toggle()
+                let newState = !state.isAllResultOpened
+                state.isAllResultOpened = newState
+                state.gameResultOpenedStateList = state.gameResultOpenedStateList.mapValues { _ in newState }
                 
                 return .none
                 
+            case .updateResultOpenedState(let fixtureId, let isOpened):
+                state.gameResultOpenedStateList[fixtureId] = isOpened
+                
+                return .none
             }
         }
     }
