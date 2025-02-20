@@ -206,9 +206,7 @@ struct FBTeamScheduleListItem: View {
                     text: gameStatusText,
                     color: gameStatusColor
                 ) {
-                    withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                        isResultOpened.toggle()
-                    }
+                    fbTeamScheduleStore.send(.updateResultOpenedState(fixtureId: data.fixture.id, isOpened: !isResultOpened))
                 }
                 .disabled(searchStore.fbGameStatsData != nil || !StringConstants.Football.gameFinishedList.contains(data.fixture.status.short))
                 
@@ -283,20 +281,23 @@ struct FBTeamScheduleListItem: View {
         .background(Color.clear) // added for tapGesture on Spacer()
         .onTapGesture {
             searchStore.send(.selectFBGame(data))
+            
+            // set selected game's isOpened true
+            fbTeamScheduleStore.send(.updateResultOpenedState(fixtureId: data.fixture.id, isOpened: true))
         }
         .onAppear {
             if StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) {
-                isResultOpened = fbTeamScheduleStore.isAllResultOpened
+                isResultOpened = fbTeamScheduleStore.gameResultOpenedStateList[data.fixture.id] ?? false
             } else {
                 isResultOpened = true
             }
             
             translate()
         }
-        .onChange(of: fbTeamScheduleStore.isAllResultOpened) { newValue in
+        .onChange(of: fbTeamScheduleStore.gameResultOpenedStateList) { newValue in
             if StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    isResultOpened = fbTeamScheduleStore.isAllResultOpened
+                    isResultOpened = fbTeamScheduleStore.gameResultOpenedStateList[data.fixture.id] ?? false
                 }
             }
         }
