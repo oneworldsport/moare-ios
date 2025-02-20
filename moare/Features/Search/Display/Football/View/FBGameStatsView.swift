@@ -297,8 +297,8 @@ struct FBGameStatsFirstDataList: View {
                 .zIndex(1)
 
             LazyVStack(spacing: 0) {
-                ForEach(fbGameStatsStore.playerStats.indices, id: \.self) { index in
-                    let data = fbGameStatsStore.playerStats[index].player
+                ForEach(fbGameStatsStore.playerStats, id: \.player.id) { value in
+                    let data = value.player
                     
                     FBGameStatsFirstDataListItem(
                         fbGameStatsStore: fbGameStatsStore,
