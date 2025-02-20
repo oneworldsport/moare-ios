@@ -44,9 +44,8 @@ struct FBTeamScheduleStore {
             case .initData:
                 let displayModel = state.displayModel
                 
-                state.games.forEach { value in
-                    state.gameResultOpenedStateList[value.fixture.id] = false
-                }
+                let gameResultOpenedStateList = (state.games).reduce(into: [:]) { $0[$1.fixture.id] = false }
+                state.gameResultOpenedStateList = gameResultOpenedStateList
                 
                 return .none
                 
