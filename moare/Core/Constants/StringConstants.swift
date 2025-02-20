@@ -11,11 +11,26 @@ struct StringConstants {
     struct Football {
         static let resultOpen = "결과 보기"
         static let resultHide = "결과 숨기기"
-        static let gameNotStarted = "경기 전"
-        static let gameFirstHalf = "전반전"
-        static let gameHalftime = "전반 종료"
-        static let gameSecondHalf = "후반전"
-        static let gameFinished = "경기 종료"
+        static let gameNotStartedStr = "경기 전"
+        static let gameFirstHalfStr = "전반전"
+        static let gameHalftimeStr = "전반 종료"
+        static let gameSecondHalfStr = "후반전"
+        static let gameFinishedStr = "경기 종료"
+        
+        static let gameNotStarted = "NS"
+        static let gameFirstHalf = "1H"
+        static let gameHalftime = "HT"
+        static let gameSecondHalf = "2H"
+        static let gameExtraTime = "ET" // 연장전
+        static let gameBreakTime = "BT" // 연장전 전반 후 휴식시간
+        static let gamePenaltyShootout = "P" // 승부차기
+        static let gameFinished = "FT"
+        static let gameFinishedAfterExtraTime = "AET" // 승부차기 없이 연장전 후 경기 종료
+        static let gameFinishedAfterPenaltyShootout = "PET" // 승부차기 후 경기 종료
+        static let gamePostponed = "PST"
+        static let gameCancelled = "CANC"
+        static let gameLiveList = [gameFirstHalf, gameHalftime, gameSecondHalf, gameExtraTime, gameBreakTime, gamePenaltyShootout]
+        static let gameFinishedList = [gameFinished, gameFinishedAfterExtraTime, gameFinishedAfterPenaltyShootout]
         
         static let standingsFirstCategory = "순위"
         static let statsFirstCategories = ["공격 지표", "수비 지표", "공통 지표"]

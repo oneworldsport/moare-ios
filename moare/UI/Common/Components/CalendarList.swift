@@ -51,9 +51,9 @@ struct CalendarList<T>: View {
     }
     
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView(.horizontal) {
-                VStack(alignment: .leading, spacing: 8) {
+        ScrollView(.horizontal) {
+            VStack(alignment: .leading, spacing: 8) {
+                ScrollViewReader { proxy in
                     HStack(spacing: itemSpacing) {
                         ForEach(dateList.indices, id: \.self) { index in
                             let date = dateList[index]
@@ -63,29 +63,37 @@ struct CalendarList<T>: View {
                                 calendarType: calendarType,
                                 width: itemWidth
                             ) {
-                                shouldScroll = false
                                 onItemSelected(date, index)
                             }
                         }
                     }
-                    
-                    HCapsuleBar(customWidth: itemWidth)
-                        .offset(barOffset)
-                }
-                .onChange(of: selectedIndex) { newValue in
-                    if shouldScroll {
+                    .onAppear {
                         withAnimation {
                             proxy.scrollTo(selectedIndex, anchor: .leading)
                         }
+                        
+                        withAnimation(.spring(duration: 0.5)) {
+                            barOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth, barWidth: itemWidth, spacing: itemSpacing, index: selectedIndex)
+                        }
                     }
-                    
-                    withAnimation(.spring(duration: 0.5)) {
-                        barOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth, barWidth: itemWidth, spacing: itemSpacing, index: newValue)
+                    .onChange(of: selectedIndex) { newValue in
+                        if shouldScroll {
+                            withAnimation {
+                                proxy.scrollTo(newValue, anchor: .leading)
+                            }
+                        }
+                        
+                        withAnimation(.spring(duration: 0.5)) {
+                            barOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth, barWidth: itemWidth, spacing: itemSpacing, index: newValue)
+                        }
                     }
-                }
-            } // ScrollView
-            .padding(.horizontal, 5)
-        } // ScrollViewReader
+                } // ScrollViewReader
+                
+                HCapsuleBar(customWidth: itemWidth)
+                    .offset(barOffset)
+            }
+        } // ScrollView
+        .padding(.horizontal, 5)
     }
 }
 

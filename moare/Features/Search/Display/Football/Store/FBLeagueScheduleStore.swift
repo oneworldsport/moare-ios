@@ -37,6 +37,7 @@ struct FBLeagueScheduleStore {
         var selectedDayIndex = 0
         var isAllResultOpened = false
         var scrollCalendar = true
+        var gameResultOpenedStateList: [Int: Bool] = [:]
     }
     
     enum Action {
@@ -44,6 +45,7 @@ struct FBLeagueScheduleStore {
         case selectYearMonth(String, Int)
         case selectDay(DayInfo, Int)
         case toggleAllResult
+        case updateResultOpenedState(fixtureId: Int, isOpened: Bool)
         
         /* ---------------------
            private
@@ -81,7 +83,14 @@ struct FBLeagueScheduleStore {
                 return .none
                 
             case .toggleAllResult:
-                state.isAllResultOpened.toggle()
+                let newState = !state.isAllResultOpened
+                state.isAllResultOpened = newState
+                state.gameResultOpenedStateList = state.gameResultOpenedStateList.mapValues { _ in newState }
+                
+                return .none
+                
+            case .updateResultOpenedState(let fixtureId, let isOpened):
+                state.gameResultOpenedStateList[fixtureId] = isOpened
                 
                 return .none
                 
@@ -89,6 +98,7 @@ struct FBLeagueScheduleStore {
                 // set filtered games to each day
                 if let month = Int(state.selectedYearMonth.split(separator: "/").last ?? "") {
                     var days = CalendarUtil.getDaysInMonth(year: 2024, month: month)
+                    var gameResultOpenedStateList: [Int: Bool] = [:]
                     
                     days = days.enumerated().compactMap { index, day in
                         var newDay = day
@@ -96,6 +106,8 @@ struct FBLeagueScheduleStore {
                         let games = state.displayModel?.games.filter { game in
                             CalendarUtil.isSameDate(stringDate: game.fixture.date, selectedYearMonth: state.selectedYearMonth, selectedDay: day.day)
                         }
+                        
+                        gameResultOpenedStateList.merge((games ?? []).reduce(into: [:]) { $0[$1.fixture.id] = false }) { _, new in new }
                         
                         state.filteredGames[index] = games
                         
@@ -107,6 +119,8 @@ struct FBLeagueScheduleStore {
                     }
                     
                     state.days = days
+                    
+                    state.gameResultOpenedStateList = gameResultOpenedStateList
                 }
                 
                 // set first day that has games as selected

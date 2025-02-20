@@ -91,6 +91,7 @@
 		DA531C0E2D64AA4300DB87CB /* AnimationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531C0D2D64AA4300DB87CB /* AnimationConstants.swift */; };
 		DA531C102D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531C0F2D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift */; };
 		DA531C122D64B88F00DB87CB /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = DA531C112D64B88F00DB87CB /* .gitignore */; };
+		DA546B182D66E007008CBB31 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA546B172D66E007008CBB31 /* TestView.swift */; };
 		DADA39592D3A1AC9000D15E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DADA39582D3A1AC9000D15E0 /* Assets.xcassets */; };
 		DADA395D2D3A1AC9000D15E0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DADA395C2D3A1AC9000D15E0 /* Preview Assets.xcassets */; };
 		DADA39672D3A1AC9000D15E0 /* moareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39662D3A1AC9000D15E0 /* moareTests.swift */; };
@@ -204,6 +205,7 @@
 		DA531C0D2D64AA4300DB87CB /* AnimationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationConstants.swift; sourceTree = "<group>"; };
 		DA531C0F2D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBPlayerStatsDisplayModel.swift; sourceTree = "<group>"; };
 		DA531C112D64B88F00DB87CB /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		DA546B172D66E007008CBB31 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		DADA39512D3A1AC8000D15E0 /* moare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = moare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DADA39582D3A1AC9000D15E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DADA395A2D3A1AC9000D15E0 /* moare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = moare.entitlements; sourceTree = "<group>"; };
@@ -734,6 +736,7 @@
 				DADA39582D3A1AC9000D15E0 /* Assets.xcassets */,
 				DADA395A2D3A1AC9000D15E0 /* moare.entitlements */,
 				DADA395B2D3A1AC9000D15E0 /* Preview Content */,
+				DA546B172D66E007008CBB31 /* TestView.swift */,
 			);
 			path = moare;
 			sourceTree = "<group>";
@@ -904,6 +907,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA546B182D66E007008CBB31 /* TestView.swift in Sources */,
 				DA531BAA2D64A8CA00DB87CB /* AutoCompleteList.swift in Sources */,
 				DA531BB32D64A8CA00DB87CB /* FBTeamStandingsDisplayModel.swift in Sources */,
 				DA531B402D64A8A400DB87CB /* SplashView.swift in Sources */,
