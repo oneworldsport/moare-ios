@@ -73,6 +73,7 @@ struct FBLeaugScheduleView: View {
                             selectedIndex: fbLeagueScheduleStore.selectedDayIndex,
                             shouldScroll: $shouldScrollCalendar
                         ) { day, index in
+                            shouldScrollCalendar = false
                             fbLeagueScheduleStore.send(.selectDay(day, index))
                         }
                         .padding(.bottom, 6)
@@ -137,11 +138,11 @@ struct FBLeagueScheduleList: View {
 //            }
             
             LazyVStack(spacing: 8) {
-                ForEach(gameListToDisplay.indices, id: \.self) { index in
+                ForEach(gameListToDisplay, id: \.fixture.id) { value in
                     FBLeagueScheduleListItem(
                         searchStore: searchStore,
                         fbLeagueScheduleStore: fbLeagueScheduleStore,
-                        data: gameListToDisplay[index]
+                        data: value
                     )
                     .padding(.vertical, 8)
 //                    .vSequentialListAni(
@@ -197,8 +198,8 @@ struct FBLeagueScheduleListItem: View {
     var body: some View {
         HStack {
             /* ---------------------
-             home
-             --------------------- */
+               home
+               --------------------- */
             Button(action: {
 //                searchStore.send(.updateTextField("토트넘"))
 //                searchStore.send(.performSearch())
@@ -221,7 +222,8 @@ struct FBLeagueScheduleListItem: View {
                 .contentShape(Rectangle())
             
             // score
-            if isResultOpened && data.fixture.status.short == "FT" {
+            if StringConstants.Football.gameLiveList.contains(data.fixture.status.short) ||
+                StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) && isResultOpened {
                 Text("\(data.goals.home)")
                     .frame(maxWidth: 20)
             }
@@ -239,11 +241,9 @@ struct FBLeagueScheduleListItem: View {
                     text: gameStatusText,
                     color: gameStatusColor
                 ) {
-                    withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                        isResultOpened.toggle()
-                    }
+                    fbLeagueScheduleStore.send(.updateResultOpenedState(fixtureId: data.fixture.id, isOpened: !isResultOpened))
                 }
-                .disabled(searchStore.fbGameStatsData != nil || data.fixture.status.short != "FT")
+                .disabled(searchStore.fbGameStatsData != nil || !StringConstants.Football.gameFinishedList.contains(data.fixture.status.short))
                 
                 // game date
                 Text(CalendarUtil.formatDate(date: data.fixture.date, formatType: .ampm))
@@ -276,7 +276,8 @@ struct FBLeagueScheduleListItem: View {
              away
              --------------------- */
             // socre
-            if isResultOpened && data.fixture.status.short == "FT" {
+            if StringConstants.Football.gameLiveList.contains(data.fixture.status.short) ||
+                StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) && isResultOpened {
                 Text("\(data.goals.away)")
                     .frame(maxWidth: 20)
             }
@@ -305,20 +306,23 @@ struct FBLeagueScheduleListItem: View {
         .background(Color.clear) // added for tapGesture on Spacer()
         .onTapGesture {
             searchStore.send(.selectFBGame(data))
+            
+            // set selected game's isOpened true
+            fbLeagueScheduleStore.send(.updateResultOpenedState(fixtureId: data.fixture.id, isOpened: true))
         }
         .onAppear {
-            if data.fixture.status.short == "FT" {
-                isResultOpened = fbLeagueScheduleStore.isAllResultOpened
+            if StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) {
+                isResultOpened = fbLeagueScheduleStore.gameResultOpenedStateList[data.fixture.id] ?? false
             } else {
                 isResultOpened = true
             }
             
             translate()
         }
-        .onChange(of: fbLeagueScheduleStore.isAllResultOpened) { newValue in
-            if data.fixture.status.short == "FT" {
+        .onChange(of: fbLeagueScheduleStore.gameResultOpenedStateList) { newValue in
+            if StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    isResultOpened = fbLeagueScheduleStore.isAllResultOpened
+                    isResultOpened = fbLeagueScheduleStore.gameResultOpenedStateList[data.fixture.id] ?? false
                 }
             }
         }
@@ -335,11 +339,12 @@ struct FBLeagueScheduleListItem: View {
     private var gameStatusText: String {
         if isResultOpened {
             switch data.fixture.status.short {
-            case "NS": StringConstants.Football.gameNotStarted
-            case "1H": StringConstants.Football.gameFirstHalf
-            case "HT": StringConstants.Football.gameHalftime
-            case "2H": StringConstants.Football.gameSecondHalf
-            case "FT", "AET", "PEN": StringConstants.Football.gameFinished
+            case StringConstants.Football.gameNotStarted: StringConstants.Football.gameNotStartedStr
+            case StringConstants.Football.gameFirstHalf: StringConstants.Football.gameFirstHalfStr
+            case StringConstants.Football.gameHalftime: StringConstants.Football.gameHalftimeStr
+            case StringConstants.Football.gameSecondHalf: StringConstants.Football.gameSecondHalfStr
+            case let status where StringConstants.Football.gameFinishedList.contains(status):
+                StringConstants.Football.gameFinishedStr
             default: ""
             }
         } else {
@@ -350,7 +355,7 @@ struct FBLeagueScheduleListItem: View {
     private var gameStatusColor: Color {
         if isResultOpened {
             switch data.fixture.status.short {
-            case "1H", "HT", "2H": .moare
+            case let status where StringConstants.Football.gameLiveList.contains(status): .moare
             default: .secondary
             }
         } else {

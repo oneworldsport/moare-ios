@@ -184,7 +184,8 @@ struct FBTeamScheduleListItem: View {
                 .contentShape(Rectangle())
             
             // score
-            if isResultOpened && data.fixture.status.short == "FT" {
+            if StringConstants.Football.gameLiveList.contains(data.fixture.status.short) ||
+                StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) && isResultOpened {
                 Text("\(data.goals.home)")
                     .frame(maxWidth: 20)
             }
@@ -206,7 +207,7 @@ struct FBTeamScheduleListItem: View {
                         isResultOpened.toggle()
                     }
                 }
-                .disabled(searchStore.fbGameStatsData != nil || data.fixture.status.short != "FT")
+                .disabled(searchStore.fbGameStatsData != nil || !StringConstants.Football.gameFinishedList.contains(data.fixture.status.short))
                 
                 // game date
                 if let fbGameStatsData = searchStore.fbGameStatsData {
@@ -249,7 +250,8 @@ struct FBTeamScheduleListItem: View {
              away
              --------------------- */
             // socre
-            if isResultOpened && data.fixture.status.short == "FT" {
+            if StringConstants.Football.gameLiveList.contains(data.fixture.status.short) ||
+                StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) && isResultOpened {
                 Text("\(data.goals.away)")
                     .frame(maxWidth: 20)
             }
@@ -280,7 +282,7 @@ struct FBTeamScheduleListItem: View {
             searchStore.send(.selectFBGame(data))
         }
         .onAppear {
-            if data.fixture.status.short == "FT" {
+            if StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) {
                 isResultOpened = fbTeamScheduleStore.isAllResultOpened
             } else {
                 isResultOpened = true
@@ -289,7 +291,7 @@ struct FBTeamScheduleListItem: View {
             translate()
         }
         .onChange(of: fbTeamScheduleStore.isAllResultOpened) { newValue in
-            if data.fixture.status.short == "FT" {
+            if StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                     isResultOpened = fbTeamScheduleStore.isAllResultOpened
                 }
@@ -308,11 +310,12 @@ struct FBTeamScheduleListItem: View {
     private var gameStatusText: String {
         if isResultOpened {
             switch data.fixture.status.short {
-            case "NS": StringConstants.Football.gameNotStarted
-            case "1H": StringConstants.Football.gameFirstHalf
-            case "HT": StringConstants.Football.gameHalftime
-            case "2H": StringConstants.Football.gameSecondHalf
-            case "FT", "AET", "PEN": StringConstants.Football.gameFinished
+            case StringConstants.Football.gameNotStarted: StringConstants.Football.gameNotStartedStr
+            case StringConstants.Football.gameFirstHalf: StringConstants.Football.gameFirstHalfStr
+            case StringConstants.Football.gameHalftime: StringConstants.Football.gameHalftimeStr
+            case StringConstants.Football.gameSecondHalf: StringConstants.Football.gameSecondHalfStr
+            case let status where StringConstants.Football.gameFinishedList.contains(status):
+                StringConstants.Football.gameFinishedStr
             default: ""
             }
         } else {
@@ -323,7 +326,7 @@ struct FBTeamScheduleListItem: View {
     private var gameStatusColor: Color {
         if isResultOpened {
             switch data.fixture.status.short {
-            case "1H", "HT", "2H": .moare
+            case let status where StringConstants.Football.gameLiveList.contains(status): .moare
             default: .secondary
             }
         } else {
