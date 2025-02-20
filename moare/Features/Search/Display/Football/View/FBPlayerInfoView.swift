@@ -243,18 +243,21 @@ struct FBPlayerInfoView: View {
             }
             .onAppear {
                 // init FBPlayerInfoStore
-                storeManager.setStore(
-                    Store(initialState: FBPlayerInfoStore.State(
+                let fbPlayerInfoStore: StoreOf<FBPlayerInfoStore> = storeManager.getStore(forKey: StoreKeys.fbPlayerInfoStore) ?? {
+                    let newStore = Store(initialState: FBPlayerInfoStore.State(
                         displayModel: displayModel, player: displayModel.info
-                    )) { FBPlayerInfoStore() },
-                    forKey: StoreKeys.fbPlayerInfoStore
-                )
+                    )) { FBPlayerInfoStore() }
+                    
+                    storeManager.setStore(newStore, forKey: StoreKeys.fbPlayerInfoStore)
+                    
+                    newStore.send(.initData)
+                    
+                    return newStore
+                }()
                 
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    fbPlayerInfoStore = storeManager.getStore(forKey: StoreKeys.fbPlayerInfoStore)
+                    self.fbPlayerInfoStore = fbPlayerInfoStore
                 }
-                
-                fbPlayerInfoStore?.send(.initData)
             }
         } // if let searchStore
     }

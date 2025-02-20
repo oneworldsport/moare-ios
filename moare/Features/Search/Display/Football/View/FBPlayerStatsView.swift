@@ -114,20 +114,23 @@ struct FBPlayerStatsView: View {
             }
             .onAppear {
                 // init FBPlayerStatsStore
-                storeManager.setStore(
-                    Store(initialState: FBPlayerStatsStore.State(
+                let fbPlayerStatsStore: StoreOf<FBPlayerStatsStore> = storeManager.getStore(forKey: StoreKeys.fbPlayerStatsStore) ?? {
+                    let newStore = Store(initialState: FBPlayerStatsStore.State(
                         displayModel: displayModel,
                         statsList: statsList,
                         player: displayModel.player
-                    )) { FBPlayerStatsStore() },
-                    forKey: StoreKeys.fbPlayerStatsStore
-                )
+                    )) { FBPlayerStatsStore() }
+                    
+                    storeManager.setStore(newStore, forKey: StoreKeys.fbPlayerStatsStore)
+                    
+                    newStore.send(.initData)
+                    
+                    return newStore
+                }()
                 
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    fbPlayerStatsStore = storeManager.getStore(forKey: StoreKeys.fbPlayerStatsStore)
+                    self.fbPlayerStatsStore = fbPlayerStatsStore
                 }
-                
-                fbPlayerStatsStore?.send(.initData)
             }
         }
     }

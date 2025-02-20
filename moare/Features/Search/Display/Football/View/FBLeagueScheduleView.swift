@@ -108,18 +108,21 @@ struct FBLeaugScheduleView: View {
             } // VStack
             .onAppear {
                 // init FBLeagueScheduleStore
-                storeManager.setStore(
-                    Store(initialState: FBLeagueScheduleStore.State(
+                let fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.fbLeagueScheduleStore) ?? {
+                    let newStore = Store(initialState: FBLeagueScheduleStore.State(
                         displayModel: displayModel, yearMonthList: displayModel.yearMonthList
-                    )) { FBLeagueScheduleStore() },
-                    forKey: StoreKeys.fbLeagueScheduleStore
-                )
+                    )) { FBLeagueScheduleStore() }
+                    
+                    storeManager.setStore(newStore, forKey: StoreKeys.fbLeagueScheduleStore)
+                    
+                    newStore.send(.initData)
+                    
+                    return newStore
+                }()
                 
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    fbLeagueScheduleStore = storeManager.getStore(forKey: StoreKeys.fbLeagueScheduleStore)
+                    self.fbLeagueScheduleStore = fbLeagueScheduleStore
                 }
-                
-                fbLeagueScheduleStore?.send(.initData)
             }
         } // if let searchStore
     }
