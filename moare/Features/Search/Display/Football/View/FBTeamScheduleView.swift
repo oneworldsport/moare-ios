@@ -159,6 +159,8 @@ struct FBTeamScheduleListItem: View {
     @State private var isResultOpened = false
     @State private var homeTeamKrName = ""
     @State private var awayTeamKrname = ""
+    @State private var venueKrName = ""
+    @State private var refereeKrName = ""
     
     var body: some View {
         HStack {
@@ -227,7 +229,7 @@ struct FBTeamScheduleListItem: View {
                 
                 // venue
                 if let fbGameStatsData = searchStore.fbGameStatsData {
-                    Text("장소: \(fbGameStatsData.game.fixture.venue.name)")
+                    Text("장소: \(venueKrName)")
                         .font(.system(size: 12, weight: .light))
                         .lineLimit(1)
                     .padding(.bottom, 2)
@@ -236,7 +238,7 @@ struct FBTeamScheduleListItem: View {
                 // game type or referee
                 Text(
                     searchStore.fbGameStatsData != nil ?
-                    "심판: \(searchStore.fbGameStatsData!.game.fixture.referee)"
+                    "심판: \(refereeKrName)"
                     : MatchDescriptionConverter.convert(input: data.league.round)
                 )
                 .font(.system(size: 12, weight: .light))
@@ -302,8 +304,18 @@ struct FBTeamScheduleListItem: View {
             }
         }
         .onChange(of: searchStore.fbGameStatsData) { newValue in
-            if let _ = newValue {
+            if let fbGameStatsData = newValue {
                 isResultOpened = true
+                
+                Task {
+                    let venueKrName = await EnNameTranslationUtility.translateByAWS(input: fbGameStatsData.game.fixture.venue.name)
+                    self.venueKrName = venueKrName
+                }
+                
+                Task {
+                    let refereeKrName = await EnNameTranslationUtility.translateByAWS(input: fbGameStatsData.game.fixture.referee)
+                    self.refereeKrName = refereeKrName
+                }
             }
         }
         .onChange(of: data) { newValue in
