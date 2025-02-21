@@ -39,7 +39,7 @@ struct FBTeamScheduleView: View {
                                     .font(.system(size: 14))
                             }
                             
-                            Text(" - \(MatchDescriptionConverter.convert(input: gameStatsData.game.league.round))")
+                            Text(" - \(MatchDescriptionConverter.convert(descriptionType: .roundWithoutDash, input: gameStatsData.game.league.round))")
                                 .font(.system(size: 14))
                             
                             Spacer()
