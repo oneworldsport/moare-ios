@@ -55,12 +55,11 @@ struct SearchView: View {
                         }
                     }
                     .offset(x: -12, y: -113)
+                    .zIndex(1)
                     // y: 전체 박스 높이(100 + 20 + 4) / 2 + (검색창 높이(50) + 트렌딩 키워드 높이(40)) / 2 + 추가 패딩 6
                 }
                 
                 VStack(spacing: 0) {
-                    Spacer()
-                    
                     /* ---------------------
                        search bar
                        --------------------- */
@@ -179,9 +178,9 @@ struct SearchView: View {
                     .onChange(of: searchStore.isFocused) { newValue in
                         //                        focusState = newValue
                     }
-                    
-                    Spacer()
                 } // VStack
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .contentShape(Rectangle()) // for .onTapGesture{}
                 // TODO: has to think about better structure
                 .onChange(of: searchStore.searchState) { newVaue in
                     if newVaue {
@@ -220,6 +219,13 @@ struct SearchView: View {
                             }
                             searchStore.send(.updateTrendingKeywordsVisibleState(true))
                         }
+                    }
+                }
+                .onTapGesture {
+                    if isNoticeOpened {
+                        isNoticeOpened = false
+                    } else {
+                        focusState = false
                     }
                 }
                 .gesture(
