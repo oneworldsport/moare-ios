@@ -231,6 +231,7 @@ struct FBLeagueScheduleListItem: View {
                 StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) && isResultOpened {
                 Text("\(data.goals.home)")
                     .frame(maxWidth: 20)
+                    .foregroundStyle(data.goals.home >= data.goals.away ? .moare : .primary)
             }
             
             Spacer()
@@ -286,6 +287,7 @@ struct FBLeagueScheduleListItem: View {
                 StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) && isResultOpened {
                 Text("\(data.goals.away)")
                     .frame(maxWidth: 20)
+                    .foregroundStyle(data.goals.away >= data.goals.home ? .moare : .primary)
             }
             
             Spacer()
