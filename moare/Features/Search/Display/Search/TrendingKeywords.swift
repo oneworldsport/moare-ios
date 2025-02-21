@@ -14,19 +14,24 @@ struct TrendingKeywords: View {
     
     var body: some View {
         ScrollView(.horizontal) {
-            HStack(spacing: 10) {
-                ForEach(keywords.indices, id: \.self) { index in
-                    let keyword = keywords[index]
-                    
-                    if index != 0 {
-                        KeywordItem(keyword: keyword) {
-                            onItemSelected(keyword)
+            VStack {
+                Spacer()
+                
+                HStack(spacing: 10) {
+                    ForEach(keywords.indices, id: \.self) { index in
+                        let keyword = keywords[index]
+                        
+                        if index != 0 {
+                            KeywordItem(keyword: keyword) {
+                                onItemSelected(keyword)
+                            }
                         }
                     }
                 }
             }
             .padding(.horizontal)
         }
+        .frame(maxHeight: 40)
     }
 }
 
