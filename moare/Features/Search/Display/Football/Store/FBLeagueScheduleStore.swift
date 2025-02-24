@@ -50,7 +50,7 @@ struct FBLeagueScheduleStore {
         /* ---------------------
            private
            --------------------- */
-        case setDays
+        case setDays(isInit: Bool = false)
         case fetchGames
         case setDisplayModel(FBLeagueScheduleDisplayModel)
     }
@@ -61,11 +61,19 @@ struct FBLeagueScheduleStore {
             case .initData:
                 let displayModel = state.displayModel
                 
-                // set first yearMonth as selected
-                state.selectedYearMonth = state.yearMonthList.first ?? ""
+                if let date = displayModel?.games.first?.fixture.date {
+                    let defaultYearMonth = CalendarUtil.formatDate(date: date, formatType: .yearMonth)
+                    let defaultYearMonthIndex = state.yearMonthList.enumerated().first { $0.element == defaultYearMonth }
+                    
+                    state.selectedYearMonth = defaultYearMonth
+                    
+                    if let index = defaultYearMonthIndex {
+                        state.selectedYearMonthIndex = index.offset
+                    }
+                }
                 
                 return .run { send in
-                    await send(.setDays)
+                    await send(.setDays(isInit: true))
                 }
                 
             case .selectYearMonth(let yearMonth, let index):
@@ -94,10 +102,14 @@ struct FBLeagueScheduleStore {
                 
                 return .none
                 
-            case .setDays:
+            case .setDays(let isInit):
                 // set filtered games to each day
-                if let month = Int(state.selectedYearMonth.split(separator: "/").last ?? "") {
-                    var days = CalendarUtil.getDaysInMonth(year: 2024, month: month)
+                let components = state.selectedYearMonth.split(separator: "/")
+                
+                if components.count == 2,
+                   let year = Int(components[0]),
+                   let month = Int(components[1]) {
+                    var days = CalendarUtil.getDaysInMonth(year: Int("20\(year)") ?? 2025, month: month)
                     var gameResultOpenedStateList: [Int: Bool] = [:]
                     
                     days = days.enumerated().compactMap { index, day in
@@ -123,12 +135,21 @@ struct FBLeagueScheduleStore {
                     state.gameResultOpenedStateList = gameResultOpenedStateList
                 }
                 
-                // set first day that has games as selected
-                for (index, day) in state.days.enumerated() {
-                    if !day.isDataEmpty {
-                        state.selectedDay = day
-                        state.selectedDayIndex = index
-                        break
+                if isInit {
+                    let defaultDay = CalendarUtil.getDefaultDay(yearMonth: state.selectedYearMonth, dayList: state.days)
+                    
+                    if let defaultDay = defaultDay {
+                        state.selectedDay = defaultDay.1
+                        state.selectedDayIndex = defaultDay.0
+                    }
+                } else {
+                    // set first day that has games as selected
+                    for (index, day) in state.days.enumerated() {
+                        if !day.isDataEmpty {
+                            state.selectedDay = day
+                            state.selectedDayIndex = index
+                            break
+                        }
                     }
                 }
                 
@@ -154,7 +175,7 @@ struct FBLeagueScheduleStore {
             case .setDisplayModel(let displayModel):
                 state.displayModel = displayModel
                 
-                return .send(.setDays)
+                return .send(.setDays())
             }
         }
     }
