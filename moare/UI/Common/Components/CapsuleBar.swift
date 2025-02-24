@@ -8,9 +8,7 @@
 import SwiftUI
 
 enum HCapsuleBarSize {
-    case small
-    case medium
-    case large
+    case small, medium, large
 }
 
 struct HCapsuleBar: View {

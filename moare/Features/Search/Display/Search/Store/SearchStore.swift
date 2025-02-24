@@ -61,8 +61,7 @@ struct SearchStore {
     }
     
     enum SearchType {
-        case query
-        case keyword
+        case query, keyword
     }
     
     enum Action {

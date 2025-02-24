@@ -44,8 +44,6 @@ struct URLImage: View {
         }
     
     enum URLImageSize {
-        case small
-        case medium
-        case big
+        case small, medium, big
     }
 }

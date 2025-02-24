@@ -8,9 +8,7 @@
 import Foundation
 
 enum SearchDataState: Equatable {
-    case idle
-    case fetching
-    case success
+    case idle, fetching, success
     case failure(String)
 //    case failure(Error)
     

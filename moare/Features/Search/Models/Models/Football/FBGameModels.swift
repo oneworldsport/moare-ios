@@ -50,9 +50,7 @@ struct FBGameFixture: Decodable, Equatable {
         case _timezone = "timezone"
         case _date = "date"
         case _timestamp = "timestamp"
-        case periods
-        case venue
-        case status
+        case periods, venue, status
     }
 }
 
@@ -124,11 +122,8 @@ struct FBGameLineups: Decodable, Equatable {
     }
     
     private enum CodingKeys: String, CodingKey {
-        case team
-        case coach
+        case team, coach, startXI, substitutes
         case _formation = "formation"
-        case startXI
-        case substitutes
     }
 }
 
@@ -255,17 +250,8 @@ struct FBGamePlayerStatsDetail: Decodable, Equatable {
     }
     
     private enum CodingKeys: String, CodingKey {
-        case games
+        case games, shots, goals, passes, tackles, duels, dribbles, fouls, cards, penalty
         case _offsides = "offsides"
-        case shots
-        case goals
-        case passes
-        case tackles
-        case duels
-        case dribbles
-        case fouls
-        case cards
-        case penalty
     }
 }
 
