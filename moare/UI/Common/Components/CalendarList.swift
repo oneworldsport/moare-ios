@@ -8,10 +8,7 @@
 import SwiftUI
 
 enum CalendarType {
-    case season
-    case yearmonth
-    case month
-    case day
+    case season, yearmonth, month, day
 }
 
 struct CalendarList<T>: View {

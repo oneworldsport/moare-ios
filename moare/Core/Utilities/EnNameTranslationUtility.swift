@@ -9,9 +9,7 @@ import Foundation
 import AWSTranslate
 
 enum TranslationType {
-    case country
-    case player
-    case team
+    case country, player, team
 }
 
 struct EnNameTranslationUtility {
