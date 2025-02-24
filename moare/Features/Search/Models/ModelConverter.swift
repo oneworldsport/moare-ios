@@ -126,9 +126,13 @@ struct ModelConverter {
 //        yearMonthList = Array(Set(yearMonthList))
 //        
 //        yearMonthList.sort()
-        
-        // TODO: temporary yearMonth list. Has to develop servie
-        let yearMonthList = ["24/08", "24/09", "24/10", "24/11", "24/12", "25/01", "25/02", "25/03", "25/04", "25/05"]
+
+        let yearMonthList = response.scheduledMonths.map {
+            let components = $0.split(separator: "-")
+            guard components.count == 2 else { return "" }
+            
+            return "\(components[0].suffix(2))/\(components[1])"
+        }
         
         return FBLeagueScheduleDisplayModel(yearMonthList: yearMonthList, games: response.schedule)
     }
