@@ -162,7 +162,7 @@ struct FBLeagueScheduleStore {
                         let yearMonth = selectedYearMonth[0] + selectedYearMonth[1]
                         
                         // TODO: temporary leagueId
-                        let result = try await searchClient.fetchLeagueSchedule(leagueId: "39", yearMonth: String(yearMonth))
+                        let result = try await searchClient.fetchLeagueSchedule(leagueId: 39, yearMonth: String(yearMonth))
                         
                         if case .fbLeagueSchedule(_, let displayModel) = result.data {
                             await send(.setDisplayModel(displayModel))

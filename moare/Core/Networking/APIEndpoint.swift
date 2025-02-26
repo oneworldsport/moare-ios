@@ -9,15 +9,16 @@ import Foundation
 
 enum APIEndpoint {
     case searchByQuery(query: String)
-    case getLeagueSchedule(leagueId: String, yearMonth: String)
+    case getLeagueSchedule(leagueId: Int, yearMonth: String)
     case searchByKeyword(keyword: TrendingKeyword)
     case searchByEndpoint(endpoint: String)
+    case fetchGameInfo(category: String, date: String, leagueId: Int, fixtureId: Int)
     
     case fetchTrendingKeywords
     
     var defaultHTTPMethod: String {
         switch self {
-        case .searchByQuery, .getLeagueSchedule, .searchByEndpoint, .fetchTrendingKeywords:
+        case .searchByQuery, .getLeagueSchedule, .searchByEndpoint, .fetchTrendingKeywords, .fetchGameInfo:
             return "GET"
         case .searchByKeyword:
             return "POST"
@@ -42,7 +43,7 @@ enum APIEndpoint {
         case .getLeagueSchedule(let leagueId, let yearMonth):
             components.path = "/search/schedule"
             components.queryItems = [
-                URLQueryItem(name: "leagueId", value: leagueId),
+                URLQueryItem(name: "leagueId", value: String(leagueId)),
                 URLQueryItem(name: "yearMonth", value: yearMonth)
             ]
             
@@ -55,6 +56,15 @@ enum APIEndpoint {
                 URLQueryItem(name: "endpoint", value: endpoint)
             ]
             
+        case .fetchGameInfo(let category, let date, let leagueId, let fixtureId):
+            components.path = "/search/game"
+            components.queryItems = [
+                URLQueryItem(name: "category", value: category),
+                URLQueryItem(name: "date", value: date),
+                URLQueryItem(name: "leagueId", value: String(leagueId)),
+                URLQueryItem(name: "fixtureId", value: String(fixtureId))
+            ]
+            
         case .fetchTrendingKeywords:
             components.path = "/keywords/trending"
         }
@@ -64,7 +74,7 @@ enum APIEndpoint {
     
     var httpBody: Data? {
         switch self {
-        case .searchByQuery, .getLeagueSchedule, .searchByEndpoint, .fetchTrendingKeywords:
+        case .searchByQuery, .getLeagueSchedule, .searchByEndpoint, .fetchTrendingKeywords, .fetchGameInfo:
             return nil
         case .searchByKeyword(let keyword):
             return try? JSONEncoder().encode(keyword)

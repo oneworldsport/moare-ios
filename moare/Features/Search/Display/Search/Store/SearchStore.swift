@@ -78,6 +78,7 @@ struct SearchStore {
         case showTeamStats(Int)
         case showGameStats(Bool)
         case updateTrendingKeywordsVisibleState(Bool)
+        case refreshGame
         
         /* ---------------------
            api request action
@@ -101,6 +102,7 @@ struct SearchStore {
         case updateResultVisibleState
         case fetchTrendingKeywords
         case setTrendingKeywords([TrendingKeyword])
+        case updateMainDisplayModel(data: SportDecodableModel)
         
         /* ---------------------
            test
@@ -580,7 +582,44 @@ struct SearchStore {
                     
                     await send(.updateResultVisibleState)
                 }
-
+                
+            case .refreshGame:
+                return .run { [fbGameStatsData = state.fbGameStatsData] send in
+                    if let game = fbGameStatsData?.game {
+                        let result = try await searchClient.fetchGameInfo(category: "football", date: game.fixture.date, leagueId: game.league.id, fixtureId: game.fixture.id)
+                        
+                        await send(.updateMainDisplayModel(data: result.data))
+                    }
+                }
+                
+            case .updateMainDisplayModel(let data):
+                switch data {
+                case .fbPlayerInfo(let responseModel, let displayModel):
+                    state.fbPlayerInfoData = displayModel
+                    state.fbPlayerInfoResponseModel = responseModel
+                case .fbPlayerStats(_, let displayModel):
+                    state.fbPlayerStatsData = displayModel
+                case .fbPlayerStandings(_, let displayModel):
+                    state.fbPlayerStandingsData = displayModel
+                case .fbTeamInfo(let responseModel, let displayModel):
+                    state.fbTeamInfoData = displayModel
+                    state.fbTeamInfoResponseModel = responseModel
+                case .fbTeamStats(_, let displayModel):
+                    state.fbTeamStatsData = displayModel
+                case .fbTeamStandings(_, let displayModel):
+                    state.fbTeamStandingsData = displayModel
+                case .fbTeamSchedule(_, let displayModel):
+                    state.fbTeamScheduleData = displayModel
+                case .fbLeagueSchedule(_, let displayModel):
+                    state.fbLeagueScheduleData = displayModel
+                case .fbGameStats(_, let displayModel):
+                    state.fbGameStatsData = displayModel
+                default:
+                    break
+                }
+                
+                return .none
+                
             }
         }
     }
