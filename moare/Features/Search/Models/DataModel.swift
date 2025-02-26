@@ -131,7 +131,7 @@ extension DataModel {
         case let dataType where dataType == "football_game_stats":
             let responseModel = try container.decode(FBGameStatsReponseModel.self, forKey: .data)
             
-            if responseModel.stats == nil {
+            if responseModel.game == nil {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.fbGameStatsConverter(response: responseModel)

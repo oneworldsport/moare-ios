@@ -50,24 +50,27 @@ struct EnNameTranslationUtility {
     
     static func translateByAWS(input: String) async -> String {
         do {
-            let translateClient = AWSTranslate(forKey: "TranslateClient")
-            let request = AWSTranslateTranslateTextRequest()!
-            request.text = input
-            request.sourceLanguageCode = "en"
-            request.targetLanguageCode = "ko"
-            
-            return try await withCheckedThrowingContinuation { continuation in
-                translateClient.translateText(request) { response, error in
-                    if let error = error {
-                        continuation.resume(throwing: error)
-                    } else if let translatedText = response?.translatedText {
-                        continuation.resume(returning: translatedText)
-                    } else {
-                        continuation.resume(throwing: NSError(domain: "TranslateError", code: -1))
+            if !input.isEmpty {
+                let translateClient = AWSTranslate(forKey: "TranslateClient")
+                let request = AWSTranslateTranslateTextRequest()!
+                request.text = input
+                request.sourceLanguageCode = "en"
+                request.targetLanguageCode = "ko"
+                
+                return try await withCheckedThrowingContinuation { continuation in
+                    translateClient.translateText(request) { response, error in
+                        if let error = error {
+                            continuation.resume(throwing: error)
+                        } else if let translatedText = response?.translatedText {
+                            continuation.resume(returning: translatedText)
+                        } else {
+                            continuation.resume(throwing: NSError(domain: "TranslateError", code: -1))
+                        }
                     }
                 }
             }
             
+            return input
         } catch {
             return input
         }

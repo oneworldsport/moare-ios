@@ -434,7 +434,7 @@ struct SearchStore {
                 state.fbGameStatsData = FBGameStatsDisplayModel(game: game)
                 
                 let dataMdoel = SportDecodableModel.fbGameStats(
-                    FBGameStatsReponseModel(stats: game),
+                    FBGameStatsReponseModel(game: game),
                     FBGameStatsDisplayModel(game: game)
                 )
                 
@@ -540,17 +540,17 @@ struct SearchStore {
                 let viewToShow = state.viewStack.last!
                 if case .fbPlayerInfo(let fbPlayerInfoResponseModel, _) = viewToShow {
                     if isPrevious {
-                        gameStatsResponseModel = FBGameStatsReponseModel(stats: fbPlayerInfoResponseModel.lastGame)
+                        gameStatsResponseModel = FBGameStatsReponseModel(game: fbPlayerInfoResponseModel.lastGame)
                     } else {
-                        gameStatsResponseModel = FBGameStatsReponseModel(stats: fbPlayerInfoResponseModel.nextGame)
+                        gameStatsResponseModel = FBGameStatsReponseModel(game: fbPlayerInfoResponseModel.nextGame)
                     }
                     
                     stats = modelConverter.fbGameStatsConverter(response: gameStatsResponseModel!)
                 } else if case .fbTeamInfo(let fBTeamInfoResponseModel, let _) = viewToShow {
                     if isPrevious {
-                        gameStatsResponseModel = FBGameStatsReponseModel(stats: fBTeamInfoResponseModel.lastGame)
+                        gameStatsResponseModel = FBGameStatsReponseModel(game: fBTeamInfoResponseModel.lastGame)
                     } else {
-                        gameStatsResponseModel = FBGameStatsReponseModel(stats: fBTeamInfoResponseModel.nextGame)
+                        gameStatsResponseModel = FBGameStatsReponseModel(game: fBTeamInfoResponseModel.nextGame)
                     }
                     
                     stats = modelConverter.fbGameStatsConverter(response: gameStatsResponseModel!)
