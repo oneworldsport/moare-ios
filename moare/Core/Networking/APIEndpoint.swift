@@ -58,9 +58,9 @@ enum APIEndpoint {
             
         case .fetchGameInfo(let category, let date, let leagueId, let fixtureId):
             components.path = "/search/game"
-            components.queryItems = [
+            components.percentEncodedQueryItems = [
                 URLQueryItem(name: "category", value: category),
-                URLQueryItem(name: "date", value: date),
+                URLQueryItem(name: "date", value: date.replacingOccurrences(of: "+", with: "%2B")),
                 URLQueryItem(name: "leagueId", value: String(leagueId)),
                 URLQueryItem(name: "fixtureId", value: String(fixtureId))
             ]

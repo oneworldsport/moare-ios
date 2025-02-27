@@ -65,7 +65,7 @@ struct FBGameStatsView: View {
                         .frame(height: 1)
                         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
                     
-                    if fbGameStatsStore.displayModel.game.fixture.status.short != "NS" {
+                    if game.fixture.status.short != "NS" {
                         /* ---------------------
                            team select button
                            --------------------- */
@@ -138,13 +138,9 @@ struct FBGameStatsView: View {
             .onAppear {
                 // init FBGameStatsStore
                 let fbGameStatsStore: StoreOf<FBGameStatsStore> = storeManager.getStore(forKey: StoreKeys.fbGameStatsStore) ?? {
-                    let newStore = Store(initialState: FBGameStatsStore.State(
-                        displayModel: displayModel
-                    )) { FBGameStatsStore() }
+                    let newStore = Store(initialState: FBGameStatsStore.State()) { FBGameStatsStore() }
                     
                     storeManager.setStore(newStore, forKey: StoreKeys.fbGameStatsStore)
-                    
-                    newStore.send(.initData)
                     
                     return newStore
                 }()
@@ -152,7 +148,7 @@ struct FBGameStatsView: View {
 //                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     self.fbGameStatsStore = fbGameStatsStore
 //                }
-                
+                fbGameStatsStore.send(.initData(displayModel: displayModel))
                 
                 // TODO: has to figure out better structure
                 // when game_stats show at first(meaning ScheduleView never showed)
@@ -171,6 +167,8 @@ struct FBGameStatsView: View {
                 }
                 
                 translate()
+                
+                searchStore.send(.refreshGame)
             } // onAppear
             .onChange(of: fbGameStatsStore?.coach) { newValue in
                 translate()
@@ -250,7 +248,7 @@ struct FBGameStatsTeamButtonContainer: View {
                         .opacity(0.6)
                 }
                 .foregroundStyle(.secondary)
-//                .padding(.trailing, UIConstants.Padding.defaultHPadding)
+                .padding(.trailing, UIConstants.Padding.defaultHPadding)
             }
         }
         .onAppear {
@@ -274,12 +272,12 @@ struct FBGameStatsTeamButtonContainer: View {
     
     private func translate() {
         Task {
-            let homeTeamKrName = await EnNameTranslationUtility.translateByAWS(input: fbGameStatsStore.displayModel.game.teams.home.name)
+            let homeTeamKrName = await EnNameTranslationUtility.translateByAWS(input: fbGameStatsStore.displayModel?.game.teams.home.name)
             self.homeTeamKrName = EnNameTranslationUtility.translateByDic(type: .team, input: homeTeamKrName)
         }
         
         Task {
-            let awayTeamKrName = await EnNameTranslationUtility.translateByAWS(input: fbGameStatsStore.displayModel.game.teams.away.name)
+            let awayTeamKrName = await EnNameTranslationUtility.translateByAWS(input: fbGameStatsStore.displayModel?.game.teams.away.name)
             self.awayTeamKrName = EnNameTranslationUtility.translateByDic(type: .team, input: awayTeamKrName)
         }
     }

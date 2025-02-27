@@ -30,7 +30,7 @@ struct FBGameStatsStore {
         /* ---------------------
            data state
            --------------------- */
-        let displayModel: FBGameStatsDisplayModel
+        var displayModel: FBGameStatsDisplayModel? = nil
         var playerStats: [FBGamePlayerStats] = []
         var lineups: FBGameLineups? = nil
         var coach: FBPerson? = nil
@@ -45,7 +45,7 @@ struct FBGameStatsStore {
     }
     
     enum Action {
-        case initData
+        case initData(displayModel: FBGameStatsDisplayModel)
         case selectFirstCategory(Int)
         case selectSecondCategory(Int)
         case selectTeam(Int)
@@ -59,8 +59,8 @@ struct FBGameStatsStore {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .initData:
-                let displayModel = state.displayModel
+            case .initData(let displayModel):
+                state.displayModel = displayModel
                 
                 // set current(home) team's players stats
                 let homeTeamId = displayModel.game.teams.home.id
@@ -109,16 +109,16 @@ struct FBGameStatsStore {
                 
                 // set selected team's players stats
                 let teamId: Int? = switch index {
-                case 0: state.displayModel.game.teams.home.id
-                case 1: state.displayModel.game.teams.away.id
+                case 0: state.displayModel?.game.teams.home.id
+                case 1: state.displayModel?.game.teams.away.id
                 default: nil
                 }
                 
-                let playersStats = state.displayModel.game.players.first { teamId != nil && $0.team.id == teamId }?.players
+                let playersStats = state.displayModel?.game.players.first { teamId != nil && $0.team.id == teamId }?.players
                 state.playerStats = playersStats ?? []
                 
                 // set selected team's coach, lineups
-                let lineups = state.displayModel.game.lineups.first { teamId != nil && $0.team.id == teamId }
+                let lineups = state.displayModel?.game.lineups.first { teamId != nil && $0.team.id == teamId }
                 state.lineups = lineups
                 state.coach = lineups?.coach
                 

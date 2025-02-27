@@ -48,31 +48,31 @@ struct EnNameTranslationUtility {
         return result
     }
     
-    static func translateByAWS(input: String) async -> String {
+    static func translateByAWS(input: String?) async -> String {
         do {
-            if !input.isEmpty {
-                let translateClient = AWSTranslate(forKey: "TranslateClient")
-                let request = AWSTranslateTranslateTextRequest()!
-                request.text = input
-                request.sourceLanguageCode = "en"
-                request.targetLanguageCode = "ko"
-                
-                return try await withCheckedThrowingContinuation { continuation in
-                    translateClient.translateText(request) { response, error in
-                        if let error = error {
-                            continuation.resume(throwing: error)
-                        } else if let translatedText = response?.translatedText {
-                            continuation.resume(returning: translatedText)
-                        } else {
-                            continuation.resume(throwing: NSError(domain: "TranslateError", code: -1))
-                        }
+            guard let input = input, !input.isEmpty else {
+                return input ?? ""
+            }
+            
+            let translateClient = AWSTranslate(forKey: "TranslateClient")
+            let request = AWSTranslateTranslateTextRequest()!
+            request.text = input
+            request.sourceLanguageCode = "en"
+            request.targetLanguageCode = "ko"
+            
+            return try await withCheckedThrowingContinuation { continuation in
+                translateClient.translateText(request) { response, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else if let translatedText = response?.translatedText {
+                        continuation.resume(returning: translatedText)
+                    } else {
+                        continuation.resume(throwing: NSError(domain: "TranslateError", code: -1))
                     }
                 }
             }
-            
-            return input
         } catch {
-            return input
+            return input ?? ""
         }
     }
 }
