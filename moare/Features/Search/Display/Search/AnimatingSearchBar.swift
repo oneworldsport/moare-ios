@@ -44,6 +44,7 @@ struct AnimatingSearchBar: View {
                             TextField(" \(searchStore.trendingKeywordList.first ?? "")", text: $query)
                                 .focused($focusState)
                                 .accentColor(.primary)
+                                .disabled(!barVisibleState)
                                 .uiState(visibleState: searchStore.textFieldVisibleState)
                             
                             Text(searchStore.query)
@@ -62,6 +63,9 @@ struct AnimatingSearchBar: View {
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.medium) {
                                     barVisibleState = true
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.medium + 0.1) {
                                     focusState.toggle()
                                 }
                             } else {
