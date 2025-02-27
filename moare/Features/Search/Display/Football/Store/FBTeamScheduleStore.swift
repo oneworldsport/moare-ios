@@ -22,8 +22,8 @@ struct FBTeamScheduleStore {
         /* ---------------------
            data state
            --------------------- */
-        let displayModel: FBTeamScheduleDisplayModel
-        let games: [FBGame]
+        var displayModel: FBTeamScheduleDisplayModel? = nil
+        var games: [FBGame] = []
         
         /* ---------------------
            ui state
@@ -33,7 +33,7 @@ struct FBTeamScheduleStore {
     }
     
     enum Action {
-        case initData
+        case initData(displayModel: FBTeamScheduleDisplayModel)
         case toggleAllResult
         case updateResultOpenedState(fixtureId: Int, isOpened: Bool)
     }
@@ -41,8 +41,9 @@ struct FBTeamScheduleStore {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .initData:
-                let displayModel = state.displayModel
+            case .initData(let displayModel):
+                state.displayModel = displayModel
+                state.games = displayModel.games
                 
                 let gameResultOpenedStateList = (state.games).reduce(into: [:]) { $0[$1.fixture.id] = false }
                 state.gameResultOpenedStateList = gameResultOpenedStateList

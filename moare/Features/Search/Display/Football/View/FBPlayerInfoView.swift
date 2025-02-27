@@ -244,13 +244,9 @@ struct FBPlayerInfoView: View {
             .onAppear {
                 // init FBPlayerInfoStore
                 let fbPlayerInfoStore: StoreOf<FBPlayerInfoStore> = storeManager.getStore(forKey: StoreKeys.fbPlayerInfoStore) ?? {
-                    let newStore = Store(initialState: FBPlayerInfoStore.State(
-                        displayModel: displayModel, player: displayModel.info
-                    )) { FBPlayerInfoStore() }
+                    let newStore = Store(initialState: FBPlayerInfoStore.State()) { FBPlayerInfoStore() }
                     
                     storeManager.setStore(newStore, forKey: StoreKeys.fbPlayerInfoStore)
-                    
-                    newStore.send(.initData)
                     
                     return newStore
                 }()
@@ -258,6 +254,8 @@ struct FBPlayerInfoView: View {
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     self.fbPlayerInfoStore = fbPlayerInfoStore
                 }
+                
+                fbPlayerInfoStore.send(.initData(displayModel: displayModel))
             }
         } // if let searchStore
     }
@@ -317,15 +315,15 @@ struct FBPlayerInfoFirstItem: View {
         VStack {
             HCapsuleBar()
             
-            URLImage(url: fbPlayerInfoStore.player.photo)
+            URLImage(url: fbPlayerInfoStore.player?.photo)
                 .opacity(showContents ? 1 : 0)
             
-            Text(fbPlayerInfoStore.player.krname)
+            Text(fbPlayerInfoStore.player?.krname ?? "")
                 .font(.system(size: 16))
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
             
-            Text(fbPlayerInfoStore.player.name)
+            Text(fbPlayerInfoStore.player?.name ?? "")
                 .font(.system(size: 12))
                 .fontWeight(.light)
                 .lineLimit(2)
@@ -367,7 +365,7 @@ struct FBPlayerInfoSecondItem: View {
                 Text("출생: ")
                     .font(.system(size: 15))
                 
-                Text(fbPlayerInfoStore.player.birth.date)
+                Text(fbPlayerInfoStore.player?.birth.date ?? "")
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }
@@ -378,7 +376,7 @@ struct FBPlayerInfoSecondItem: View {
                 Text("나이: ")
                     .font(.system(size: 15))
                 
-                Text("\(fbPlayerInfoStore.player.age)")
+                Text("\(fbPlayerInfoStore.player?.age ?? 0)")
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }
@@ -410,7 +408,7 @@ struct FBPlayerInfoThirdItem: View {
                 Text("키: ")
                     .font(.system(size: 15))
                 
-                Text("\(fbPlayerInfoStore.player.height)")
+                Text(fbPlayerInfoStore.player?.height ?? "")
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }
@@ -420,7 +418,7 @@ struct FBPlayerInfoThirdItem: View {
                 Text("몸무게: ")
                     .font(.system(size: 15))
                 
-                Text("\(fbPlayerInfoStore.player.weight)")
+                Text(fbPlayerInfoStore.player?.weight ?? "")
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }

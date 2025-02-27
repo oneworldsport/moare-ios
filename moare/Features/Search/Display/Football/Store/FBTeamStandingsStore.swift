@@ -31,8 +31,8 @@ struct FBTeamStandingsStore {
         /* ---------------------
            data state
            --------------------- */
-        let displayModel: FBTeamStandingsDisplayModel
-        var standings: [FBTeamStandingsDisplay]
+        var displayModel: FBTeamStandingsDisplayModel? = nil
+        var standings: [FBTeamStandingsDisplay] = []
         var league: FBLeague? = nil
         
         /* ---------------------
@@ -42,7 +42,7 @@ struct FBTeamStandingsStore {
     }
     
     enum Action {
-        case initData
+        case initData(displayModel: FBTeamStandingsDisplayModel)
         case selectCategory(Int)
         case sortStandings
     }
@@ -50,11 +50,12 @@ struct FBTeamStandingsStore {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .initData:
-                let displayModel = state.displayModel
-                let keywords = displayModel.keywords
-                
+            case .initData(let displayModel):
+                state.displayModel = displayModel
+                state.standings = displayModel.standings
                 state.league = displayModel.league
+                
+                let keywords = displayModel.keywords
                 
                 // select category that matches with the keyword
                 if !keywords.isEmpty {

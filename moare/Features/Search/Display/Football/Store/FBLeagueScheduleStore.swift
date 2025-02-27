@@ -23,8 +23,8 @@ struct FBLeagueScheduleStore {
         /* ---------------------
            data state
            --------------------- */
-        var displayModel: FBLeagueScheduleDisplayModel? // optional for usage in FBGameStatsView
-        let yearMonthList: [String]
+        var displayModel: FBLeagueScheduleDisplayModel? = nil
+        var yearMonthList: [String] = []
         var days: [DayInfo] = []
         var filteredGames: [Int: [FBGame]] = [:]
         
@@ -41,7 +41,7 @@ struct FBLeagueScheduleStore {
     }
     
     enum Action {
-        case initData
+        case initData(displayModel: FBLeagueScheduleDisplayModel)
         case selectYearMonth(String, Int)
         case selectDay(DayInfo, Int)
         case toggleAllResult
@@ -58,10 +58,11 @@ struct FBLeagueScheduleStore {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .initData:
-                let displayModel = state.displayModel
+            case .initData(let displayModel):
+                state.displayModel = displayModel
+                state.yearMonthList = displayModel.yearMonthList
                 
-                if let date = displayModel?.games.first?.fixture.date {
+                if let date = displayModel.games.first?.fixture.date {
                     let defaultYearMonth = CalendarUtil.formatDate(date: date, formatType: .yearMonth)
                     let defaultYearMonthIndex = state.yearMonthList.enumerated().first { $0.element == defaultYearMonth }
                     

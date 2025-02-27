@@ -273,15 +273,9 @@ struct FBTeamInfoView: View {
             .onAppear {
                 // init FBTeamInfoStore
                 let fbTeamInfoStore: StoreOf<FBTeamInfoStore> = storeManager.getStore(forKey: StoreKeys.fbTeamInfoStore) ?? {
-                    let newStore = Store(initialState: FBTeamInfoStore.State(
-                        displayModel: displayModel,
-                        team: displayModel.team,
-                        venue: displayModel.venue
-                    )) { FBTeamInfoStore() }
+                    let newStore = Store(initialState: FBTeamInfoStore.State()) { FBTeamInfoStore() }
                     
                     storeManager.setStore(newStore, forKey: StoreKeys.fbTeamInfoStore)
-                    
-                    newStore.send(.initData)
                     
                     return newStore
                 }()
@@ -289,6 +283,8 @@ struct FBTeamInfoView: View {
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     self.fbTeamInfoStore = fbTeamInfoStore
                 }
+                
+                fbTeamInfoStore.send(.initData(displayModel: displayModel))
             }
         }
     }
@@ -304,26 +300,26 @@ struct FBTeamInfoFirstItem: View {
     }
     
     var body: some View {
-        let team = fbTeamInfoStore.team
-        
-        VStack {
-            HCapsuleBar()
-            
-            URLImage(url: team.logo)
-                .opacity(showContents ? 1 : 0)
-            
-            Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.krname))
-                .font(.system(size: 16))
-                .fontWeight(.medium)
-                .opacity(showContents ? 1 : 0)
-            
-            Text(team.name)
-                .font(.system(size: 12))
-                .fontWeight(.light)
-                .lineLimit(2)
-                .opacity(showContents ? 1 : 0)
+        if let team = fbTeamInfoStore.team {
+            VStack {
+                HCapsuleBar()
+                
+                URLImage(url: team.logo)
+                    .opacity(showContents ? 1 : 0)
+                
+                Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.krname))
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+                    .opacity(showContents ? 1 : 0)
+                
+                Text(team.name)
+                    .font(.system(size: 12))
+                    .fontWeight(.light)
+                    .lineLimit(2)
+                    .opacity(showContents ? 1 : 0)
+            }
+            .frame(maxWidth: 130)
         }
-        .frame(maxWidth: 130)
     }
 }
 
@@ -350,7 +346,7 @@ struct FBTeamInfoSecondItem: View {
                 Text("창립년도: ")
                     .font(.system(size: 15))
                     
-                Text("\(fbTeamInfoStore.team.founded.description)")
+                Text("\(fbTeamInfoStore.team?.founded ?? 0)")
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }
@@ -371,7 +367,7 @@ struct FBTeamInfoSecondItem: View {
                 Text("소속나라: ")
                     .font(.system(size: 15))
                     
-                Text(EnNameTranslationUtility.translateByDic(type: .country, input: fbTeamInfoStore.team.country))
+                Text(EnNameTranslationUtility.translateByDic(type: .country, input: fbTeamInfoStore.team?.country ?? ""))
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }
@@ -385,7 +381,7 @@ struct FBTeamInfoSecondItem: View {
     
     private func translate() {
         Task {
-            let city = await EnNameTranslationUtility.translateByAWS(input: fbTeamInfoStore.venue.city)
+            let city = await EnNameTranslationUtility.translateByAWS(input: fbTeamInfoStore.venue?.city)
             self.city = city
         }
     }
@@ -424,7 +420,7 @@ struct FBTeamInfoThirdItem: View {
                 Text("좌석수: ")
                     .font(.system(size: 15))
                 
-                Text("\(fbTeamInfoStore.venue.capacity)")
+                Text("\(fbTeamInfoStore.venue?.capacity ?? 0)")
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }
@@ -440,7 +436,7 @@ struct FBTeamInfoThirdItem: View {
     // TODO: can move this to store
     private func translate() {
         Task {
-            let venueName = await EnNameTranslationUtility.translateByAWS(input: fbTeamInfoStore.venue.name)
+            let venueName = await EnNameTranslationUtility.translateByAWS(input: fbTeamInfoStore.venue?.name)
             self.venueName = venueName
         }
     }
