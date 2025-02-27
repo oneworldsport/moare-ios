@@ -65,11 +65,12 @@ struct FBGameStatsView: View {
                         .frame(height: 1)
                         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
                     
-                    if fbGameStatsStore.displayModel.game.fixture.status.short != "NS" {
+                    if game.fixture.status.short != "NS" {
                         /* ---------------------
                            team select button
                            --------------------- */
                         FBGameStatsTeamButtonContainer(
+                            searchStore: searchStore,
                             fbGameStatsStore: fbGameStatsStore
                         )
                         
@@ -137,13 +138,9 @@ struct FBGameStatsView: View {
             .onAppear {
                 // init FBGameStatsStore
                 let fbGameStatsStore: StoreOf<FBGameStatsStore> = storeManager.getStore(forKey: StoreKeys.fbGameStatsStore) ?? {
-                    let newStore = Store(initialState: FBGameStatsStore.State(
-                        displayModel: displayModel
-                    )) { FBGameStatsStore() }
+                    let newStore = Store(initialState: FBGameStatsStore.State()) { FBGameStatsStore() }
                     
                     storeManager.setStore(newStore, forKey: StoreKeys.fbGameStatsStore)
-                    
-                    newStore.send(.initData)
                     
                     return newStore
                 }()
@@ -151,7 +148,7 @@ struct FBGameStatsView: View {
 //                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     self.fbGameStatsStore = fbGameStatsStore
 //                }
-                
+                fbGameStatsStore.send(.initData(displayModel: displayModel))
                 
                 // TODO: has to figure out better structure
                 // when game_stats show at first(meaning ScheduleView never showed)
@@ -170,6 +167,8 @@ struct FBGameStatsView: View {
                 }
                 
                 translate()
+                
+                searchStore.send(.refreshGame)
             } // onAppear
             .onChange(of: fbGameStatsStore?.coach) { newValue in
                 translate()
@@ -188,6 +187,7 @@ struct FBGameStatsView: View {
 }
 
 struct FBGameStatsTeamButtonContainer: View {
+    @ComposableArchitecture.Bindable var searchStore: StoreOf<SearchStore>
     @ComposableArchitecture.Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
     
     @State var barOffset: CGSize
@@ -195,39 +195,62 @@ struct FBGameStatsTeamButtonContainer: View {
     @State private var homeTeamKrName = ""
     @State private var awayTeamKrName = ""
     
-    init(fbGameStatsStore: StoreOf<FBGameStatsStore>) {
+    init(searchStore: StoreOf<SearchStore>, fbGameStatsStore: StoreOf<FBGameStatsStore>) {
+        self.searchStore = searchStore
         self.fbGameStatsStore = fbGameStatsStore
         
         self._barOffset = State(initialValue: getOffsetOfAniCapsuleBar(itemWidth: fbGameStatsStore.teamButtonWidth, barWidth: 50))
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack(spacing: 0) {
-                // home
-                FBGameStatsTeamButton(
-                    fbGameStatsStore: fbGameStatsStore, 
-                    team: homeTeamKrName,
-                    index: 0
-                )
-                .frame(maxWidth: fbGameStatsStore.teamButtonWidth)
+        ZStack {
+            VStack(alignment: .leading) {
+                HStack(spacing: 0) {
+                    // home
+                    FBGameStatsTeamButton(
+                        fbGameStatsStore: fbGameStatsStore,
+                        team: homeTeamKrName,
+                        index: 0
+                    )
+                    .frame(maxWidth: fbGameStatsStore.teamButtonWidth)
+                    
+                    VCapsuleBar()
+                        .opacity(0.5)
+                    
+                    // away
+                    FBGameStatsTeamButton(
+                        fbGameStatsStore: fbGameStatsStore,
+                        team: awayTeamKrName,
+                        index: 1
+                    )
+                    .frame(maxWidth: fbGameStatsStore.teamButtonWidth)
+                }
+                .frame(height: 40)
                 
-                VCapsuleBar()
-                    .opacity(0.5)
-                
-                // away
-                FBGameStatsTeamButton(
-                    fbGameStatsStore: fbGameStatsStore,
-                    team: awayTeamKrName,
-                    index: 1
-                )
-                .frame(maxWidth: fbGameStatsStore.teamButtonWidth)
-            }
-            .frame(height: 40)
+                HCapsuleBar(size: .medium)
+                    .offset(barOffset)
+            } // VStack
             
-            HCapsuleBar(size: .medium)
-                .offset(barOffset)
-        } // VStack
+            // refresh button
+            HStack {
+                Spacer()
+                
+                Button(action: {
+                    searchStore.send(.refreshGame)
+                }) {
+                    Image(systemName: "arrow.clockwise")
+                        .tint(.secondary)
+                        .padding(5)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(.secondary, lineWidth: 1)
+                        }
+                        .opacity(0.6)
+                }
+                .foregroundStyle(.secondary)
+                .padding(.trailing, UIConstants.Padding.defaultHPadding)
+            }
+        }
         .onAppear {
             translate()
         }
@@ -249,12 +272,12 @@ struct FBGameStatsTeamButtonContainer: View {
     
     private func translate() {
         Task {
-            let homeTeamKrName = await EnNameTranslationUtility.translateByAWS(input: fbGameStatsStore.displayModel.game.teams.home.name)
+            let homeTeamKrName = await EnNameTranslationUtility.translateByAWS(input: fbGameStatsStore.displayModel?.game.teams.home.name)
             self.homeTeamKrName = EnNameTranslationUtility.translateByDic(type: .team, input: homeTeamKrName)
         }
         
         Task {
-            let awayTeamKrName = await EnNameTranslationUtility.translateByAWS(input: fbGameStatsStore.displayModel.game.teams.away.name)
+            let awayTeamKrName = await EnNameTranslationUtility.translateByAWS(input: fbGameStatsStore.displayModel?.game.teams.away.name)
             self.awayTeamKrName = EnNameTranslationUtility.translateByDic(type: .team, input: awayTeamKrName)
         }
     }

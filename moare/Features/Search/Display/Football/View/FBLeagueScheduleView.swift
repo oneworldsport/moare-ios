@@ -63,7 +63,7 @@ struct FBLeaugScheduleView: View {
                             selectedIndex: fbLeagueScheduleStore.selectedYearMonthIndex
                         ) { yearMonth, index in
                             shouldScrollCalendar = true
-                            fbLeagueScheduleStore.send(.selectYearMonth(yearMonth, index))
+                            fbLeagueScheduleStore.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
                         }
                         .padding(.bottom, 10)
                         
@@ -109,19 +109,37 @@ struct FBLeaugScheduleView: View {
             .onAppear {
                 // init FBLeagueScheduleStore
                 let fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.fbLeagueScheduleStore) ?? {
-                    let newStore = Store(initialState: FBLeagueScheduleStore.State(
-                        displayModel: displayModel, yearMonthList: displayModel.yearMonthList
-                    )) { FBLeagueScheduleStore() }
+                    let newStore = Store(initialState: FBLeagueScheduleStore.State()) { FBLeagueScheduleStore() }
                     
                     storeManager.setStore(newStore, forKey: StoreKeys.fbLeagueScheduleStore)
-                    
-                    newStore.send(.initData)
                     
                     return newStore
                 }()
                 
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     self.fbLeagueScheduleStore = fbLeagueScheduleStore
+                }
+                
+                if searchStore.poppedView == nil {
+                    fbLeagueScheduleStore.send(.initData(displayModel: displayModel))
+                } else if case .fbGameStats = searchStore.poppedView {
+                } else {
+                    fbLeagueScheduleStore.send(.initData(displayModel: displayModel))                    
+                }
+            }
+            .onChange(of: searchStore.viewStack) { newValue in
+                guard let lastItem = newValue.last,
+                      case .fbLeagueSchedule = lastItem,
+                      let poppedView = searchStore.poppedView,
+                      case .fbGameStats = searchStore.poppedView else {
+                    return
+                }
+                
+                fbLeagueScheduleStore?.send(.updateGamesData(fbLeagueScheduleData: lastItem, fbGameStatsData: poppedView))
+            }
+            .onChange(of: fbLeagueScheduleStore?.dataForViewStack) { newValue in
+                if let data = newValue {
+                    searchStore.send(.updateLastViewStack(data: data))
                 }
             }
         } // if let searchStore

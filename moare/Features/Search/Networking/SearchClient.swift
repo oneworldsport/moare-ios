@@ -20,8 +20,12 @@ struct SearchClient {
         return try await apiClient.fetchData(endpoint: .searchByKeyword(keyword: keyword))
     }
     
-    func fetchLeagueSchedule(leagueId: String, yearMonth: String) async throws -> DataModel {
+    func fetchLeagueSchedule(leagueId: Int, yearMonth: String) async throws -> DataModel {
         return try await apiClient.fetchData(endpoint: .getLeagueSchedule(leagueId: leagueId, yearMonth: yearMonth))
+    }
+    
+    func fetchGameInfo(category: String, date: String, leagueId: Int, fixtureId: Int) async throws -> DataModel {
+        return try await apiClient.fetchData(endpoint: .fetchGameInfo(category: category, date: date, leagueId: leagueId, fixtureId: fixtureId))
     }
 }
  

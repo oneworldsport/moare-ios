@@ -82,13 +82,9 @@ struct FBPlayerStandingsView: View {
             .onAppear {
                 // init FBPlayerStandingsStore
                 let fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore> = storeManager.getStore(forKey: StoreKeys.fbPlayerStandingsStore) ?? {
-                    let newStore = Store(initialState: FBPlayerStandingsStore.State(
-                        displayModel: displayModel, standings: displayModel.standings
-                    )) { FBPlayerStandingsStore() }
+                    let newStore = Store(initialState: FBPlayerStandingsStore.State()) { FBPlayerStandingsStore() }
                     
                     storeManager.setStore(newStore, forKey: StoreKeys.fbPlayerStandingsStore)
-                    
-                    newStore.send(.initData)
                     
                     return newStore
                 }()
@@ -96,6 +92,8 @@ struct FBPlayerStandingsView: View {
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     self.fbPlayerStandingsStore = fbPlayerStandingsStore
                 }
+                
+                fbPlayerStandingsStore.send(.initData(displayModel: displayModel))
             }
         }
     }

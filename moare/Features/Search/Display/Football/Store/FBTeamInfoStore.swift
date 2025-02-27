@@ -17,9 +17,9 @@ struct FBTeamInfoStore {
         /* ---------------------
            data state
            --------------------- */
-        let displayModel: FBTeamInfoDisplayModel
-        let team: FBTeamInfo
-        let venue: FBVenue
+        var displayModel: FBTeamInfoDisplayModel? = nil
+        var team: FBTeamInfo? = nil
+        var venue: FBVenue? = nil
         var league: FBLeague? = nil
         var stats: FBTeamStats? = nil
         var lastGame: FBGame? = nil
@@ -27,15 +27,16 @@ struct FBTeamInfoStore {
     }
     
     enum Action {
-        case initData
+        case initData(displayModel: FBTeamInfoDisplayModel)
     }
     
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .initData:
-                let displayModel = state.displayModel
-                
+            case .initData(let displayModel):
+                state.displayModel = displayModel
+                state.team = displayModel.team
+                state.venue = displayModel.venue
                 state.league = displayModel.stats?.league
                 state.stats = displayModel.stats
                 state.lastGame = displayModel.lastGame

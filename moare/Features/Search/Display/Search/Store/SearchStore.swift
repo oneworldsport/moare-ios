@@ -36,6 +36,8 @@ struct SearchStore {
         var fbPlayerInfoResponseModel: FBPlayerInfoResponseModel? = nil
         var fbTeamInfoResponseModel: FBTeamInfoResponseModel? = nil
         
+        var initialFBLeagueScheduleData: FBLeagueScheduleDisplayModel? = nil
+        
         var autoCompleteList: [String] = []
         var trendingKeywordList: [String] = []
         
@@ -56,7 +58,9 @@ struct SearchStore {
            etc
            --------------------- */
         let trie = Trie()
+        // NOTE: viewStack should always be up to date
         var viewStack: [SportDecodableModel] = []
+        var poppedView: SportDecodableModel? = nil
         var trendingKeywords: [TrendingKeyword] = []
     }
     
@@ -78,6 +82,7 @@ struct SearchStore {
         case showTeamStats(Int)
         case showGameStats(Bool)
         case updateTrendingKeywordsVisibleState(Bool)
+        case refreshGame
         
         /* ---------------------
            api request action
@@ -101,6 +106,8 @@ struct SearchStore {
         case updateResultVisibleState
         case fetchTrendingKeywords
         case setTrendingKeywords([TrendingKeyword])
+        case updateMainDisplayModel(data: SportDecodableModel)
+        case updateLastViewStack(data: SportDecodableModel)
         
         /* ---------------------
            test
@@ -314,23 +321,24 @@ struct SearchStore {
                 case .fbPlayerInfo(let responseModel, let displayModel):
                     state.fbPlayerInfoData = displayModel
                     state.fbPlayerInfoResponseModel = responseModel
-                case .fbPlayerStats(_, let data):
-                    state.fbPlayerStatsData = data
-                case .fbPlayerStandings(_, let data):
-                    state.fbPlayerStandingsData = data
+                case .fbPlayerStats(_, let displayModel):
+                    state.fbPlayerStatsData = displayModel
+                case .fbPlayerStandings(_, let displayModel):
+                    state.fbPlayerStandingsData = displayModel
                 case .fbTeamInfo(let responseModel, let displayModel):
                     state.fbTeamInfoData = displayModel
                     state.fbTeamInfoResponseModel = responseModel
-                case .fbTeamStats(_, let data):
-                    state.fbTeamStatsData = data
-                case .fbTeamStandings(_, let data):
-                    state.fbTeamStandingsData = data
-                case .fbTeamSchedule(_, let data):
-                    state.fbTeamScheduleData = data
-                case .fbLeagueSchedule(_, let data):
-                    state.fbLeagueScheduleData = data
-                case .fbGameStats(_, let data):
-                    state.fbGameStatsData = data
+                case .fbTeamStats(_, let displayModel):
+                    state.fbTeamStatsData = displayModel
+                case .fbTeamStandings(_, let displayModel):
+                    state.fbTeamStandingsData = displayModel
+                case .fbTeamSchedule(_, let displayModel):
+                    state.fbTeamScheduleData = displayModel
+                case .fbLeagueSchedule(_, let displayModel):
+                    state.fbLeagueScheduleData = displayModel
+                    state.initialFBLeagueScheduleData = displayModel
+                case .fbGameStats(_, let displayModel):
+                    state.fbGameStatsData = displayModel
                 default:
                     // TODO: animation is applied by the animation below. Should be modified
                     state.searchDataState = .failure("검색 결과가 없습니다.")
@@ -348,7 +356,11 @@ struct SearchStore {
             case .goBack:
                 guard !state.viewStack.isEmpty else { return .none }
                 
+                // After state.viewStack.popLast(), it ensures triggering onChange(viewStack) after all view is shown in below code.
+                // Maybe because of TCA Reduce feature?
                 let lastView = state.viewStack.popLast()
+                state.poppedView = lastView
+                
                 let viewToShow = state.viewStack.last
                 
 //                withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
@@ -384,7 +396,11 @@ struct SearchStore {
                     case .fbTeamSchedule(_, let displayModel):
                         state.fbTeamScheduleData = displayModel
                     case .fbLeagueSchedule(_, let displayModel):
-                        state.fbLeagueScheduleData = displayModel
+//                        if case .fbGameStats = lastView {
+//                            state.fbLeagueScheduleData = state.initialFBLeagueScheduleData
+//                        } else {
+                            state.fbLeagueScheduleData = displayModel
+//                        }
                     case .fbGameStats(_, let displayModel):
                         state.fbGameStatsData = displayModel
                     default:
@@ -431,14 +447,14 @@ struct SearchStore {
                 }
                 
             case .selectFBGame(let game):
-                state.fbGameStatsData = FBGameStatsDisplayModel(game: game)
-                
                 let dataMdoel = SportDecodableModel.fbGameStats(
-                    FBGameStatsReponseModel(stats: game),
+                    FBGameStatsReponseModel(game: game),
                     FBGameStatsDisplayModel(game: game)
                 )
                 
                 state.viewStack.append(dataMdoel)
+                
+                state.fbGameStatsData = FBGameStatsDisplayModel(game: game)
                 
                 return .none
                 
@@ -540,17 +556,17 @@ struct SearchStore {
                 let viewToShow = state.viewStack.last!
                 if case .fbPlayerInfo(let fbPlayerInfoResponseModel, _) = viewToShow {
                     if isPrevious {
-                        gameStatsResponseModel = FBGameStatsReponseModel(stats: fbPlayerInfoResponseModel.lastGame)
+                        gameStatsResponseModel = FBGameStatsReponseModel(game: fbPlayerInfoResponseModel.lastGame)
                     } else {
-                        gameStatsResponseModel = FBGameStatsReponseModel(stats: fbPlayerInfoResponseModel.nextGame)
+                        gameStatsResponseModel = FBGameStatsReponseModel(game: fbPlayerInfoResponseModel.nextGame)
                     }
                     
                     stats = modelConverter.fbGameStatsConverter(response: gameStatsResponseModel!)
                 } else if case .fbTeamInfo(let fBTeamInfoResponseModel, let _) = viewToShow {
                     if isPrevious {
-                        gameStatsResponseModel = FBGameStatsReponseModel(stats: fBTeamInfoResponseModel.lastGame)
+                        gameStatsResponseModel = FBGameStatsReponseModel(game: fBTeamInfoResponseModel.lastGame)
                     } else {
-                        gameStatsResponseModel = FBGameStatsReponseModel(stats: fBTeamInfoResponseModel.nextGame)
+                        gameStatsResponseModel = FBGameStatsReponseModel(game: fBTeamInfoResponseModel.nextGame)
                     }
                     
                     stats = modelConverter.fbGameStatsConverter(response: gameStatsResponseModel!)
@@ -580,7 +596,53 @@ struct SearchStore {
                     
                     await send(.updateResultVisibleState)
                 }
-
+                
+            case .refreshGame:
+                return .run { [fbGameStatsData = state.fbGameStatsData] send in
+                    if let game = fbGameStatsData?.game {
+                        let result = try await searchClient.fetchGameInfo(category: "football", date: game.fixture.date, leagueId: game.league.id, fixtureId: game.fixture.id)
+                        
+                        await send(.updateMainDisplayModel(data: result.data))
+                        await send(.updateLastViewStack(data: result.data))
+                    }
+                }
+                
+            case .updateMainDisplayModel(let data):
+                switch data {
+                case .fbPlayerInfo(let responseModel, let displayModel):
+                    state.fbPlayerInfoData = displayModel
+                    state.fbPlayerInfoResponseModel = responseModel
+                case .fbPlayerStats(_, let displayModel):
+                    state.fbPlayerStatsData = displayModel
+                case .fbPlayerStandings(_, let displayModel):
+                    state.fbPlayerStandingsData = displayModel
+                case .fbTeamInfo(let responseModel, let displayModel):
+                    state.fbTeamInfoData = displayModel
+                    state.fbTeamInfoResponseModel = responseModel
+                case .fbTeamStats(_, let displayModel):
+                    state.fbTeamStatsData = displayModel
+                case .fbTeamStandings(_, let displayModel):
+                    state.fbTeamStandingsData = displayModel
+                case .fbTeamSchedule(_, let displayModel):
+                    state.fbTeamScheduleData = displayModel
+                case .fbLeagueSchedule(_, let displayModel):
+                    state.fbLeagueScheduleData = displayModel
+                case .fbGameStats(_, let displayModel):
+                    state.fbGameStatsData = displayModel
+                default:
+                    break
+                }
+                
+                return .none
+                
+            case .updateLastViewStack(let data):
+                var newViewStack = state.viewStack
+                newViewStack.popLast()
+                newViewStack.append(data)
+                state.viewStack = newViewStack
+                
+                return .none
+                
             }
         }
     }

@@ -48,8 +48,12 @@ struct EnNameTranslationUtility {
         return result
     }
     
-    static func translateByAWS(input: String) async -> String {
+    static func translateByAWS(input: String?) async -> String {
         do {
+            guard let input = input, !input.isEmpty else {
+                return input ?? ""
+            }
+            
             let translateClient = AWSTranslate(forKey: "TranslateClient")
             let request = AWSTranslateTranslateTextRequest()!
             request.text = input
@@ -67,9 +71,8 @@ struct EnNameTranslationUtility {
                     }
                 }
             }
-            
         } catch {
-            return input
+            return input ?? ""
         }
     }
 }

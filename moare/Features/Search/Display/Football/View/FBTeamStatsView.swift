@@ -19,7 +19,6 @@ struct FBTeamStatsView: View {
        data
        --------------------- */
     let displayModel: FBTeamStatsDisplayModel
-    let statsList: [FBTeamStats]
     
     /* ---------------------
        animation
@@ -35,10 +34,11 @@ struct FBTeamStatsView: View {
     
     init(displayModel: FBTeamStatsDisplayModel) {
         self.displayModel = displayModel
-        self.statsList = displayModel.stats
     }
     
     var body: some View {
+        let statsList = displayModel.stats
+        
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             ScrollView {
                 if let fbTeamStatsStore = fbTeamStatsStore {
@@ -118,16 +118,9 @@ struct FBTeamStatsView: View {
             .onAppear {
                 // init FBTeamStatsStore
                 let fbTeamStatsStore: StoreOf<FBTeamStatsStore> = storeManager.getStore(forKey: StoreKeys.fbTeamStatsStore) ?? {
-                    let newStore = Store(initialState: FBTeamStatsStore.State(
-                        displayModel: displayModel,
-                        statsList: statsList,
-                        team: displayModel.team,
-                        venue: displayModel.venue
-                    )) { FBTeamStatsStore() }
+                    let newStore = Store(initialState: FBTeamStatsStore.State()) { FBTeamStatsStore() }
                     
                     storeManager.setStore(newStore, forKey: StoreKeys.fbTeamStatsStore)
-                    
-                    newStore.send(.initData)
                     
                     return newStore
                 }()
@@ -135,6 +128,8 @@ struct FBTeamStatsView: View {
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     self.fbTeamStatsStore = fbTeamStatsStore
                 }
+                
+                fbTeamStatsStore.send(.initData(displayModel: displayModel))
             }
         }
     }
@@ -151,49 +146,48 @@ struct FBTeamStatsTeamInfoItem: View {
     }
     
     var body: some View {
-        let team = fbTeamStatsStore.team
-        let venue = fbTeamStatsStore.venue
-        
-        VStack {
-            HCapsuleBar()
-            
-            HStack(spacing: 8) {
-                URLImage(url: team.logo)
+        if let team = fbTeamStatsStore.team, let venue = fbTeamStatsStore.venue {
+            VStack {
+                HCapsuleBar()
                 
-                VStack(alignment: .leading) {
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.krname))
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
+                HStack(spacing: 8) {
+                    URLImage(url: team.logo)
                     
-                    Text("\(team.name)")
-                        .font(.system(size: 15))
-                        .fontWeight(.light)
-                        .lineLimit(2)
-                }
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack(spacing: 0) {
-                        Text("연고지: ")
-                            .font(.system(size: 15))
-                            
-                        Text(venue.city)
+                    VStack(alignment: .leading) {
+                        Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.krname))
                             .font(.system(size: 16))
                             .fontWeight(.medium)
+                        
+                        Text("\(team.name)")
+                            .font(.system(size: 15))
+                            .fontWeight(.light)
+                            .lineLimit(2)
                     }
                     
-                    HStack(spacing: 0) {
-                        Text("홈구장: ")
-                            .font(.system(size: 15))
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack(spacing: 0) {
+                            Text("연고지: ")
+                                .font(.system(size: 15))
                             
-                        Text(venue.name)
-                            .font(.system(size: 16))
-                            .fontWeight(.medium)
+                            Text(venue.city)
+                                .font(.system(size: 16))
+                                .fontWeight(.medium)
+                        }
+                        
+                        HStack(spacing: 0) {
+                            Text("홈구장: ")
+                                .font(.system(size: 15))
+                            
+                            Text(venue.name)
+                                .font(.system(size: 16))
+                                .fontWeight(.medium)
+                        }
                     }
                 }
-            }
-            .opacity(showContents ? 1 : 0)
-        } // VStack
-        .padding(.horizontal, UIConstants.Padding.defaultHPadding)
+                .opacity(showContents ? 1 : 0)
+            } // VStack
+            .padding(.horizontal, UIConstants.Padding.defaultHPadding)
+        }
     }
 }
 

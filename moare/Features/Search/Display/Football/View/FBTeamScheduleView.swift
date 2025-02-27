@@ -78,13 +78,9 @@ struct FBTeamScheduleView: View {
             .onAppear {
                 // init FBLeagueScheduleStore
                 let fbTeamScheduleStore: StoreOf<FBTeamScheduleStore> = storeManager.getStore(forKey: StoreKeys.fbTeamScheduleStore) ?? {
-                    let newStore = Store(initialState: FBTeamScheduleStore.State(
-                        displayModel: displayModel, games: displayModel.games
-                    )) { FBTeamScheduleStore() }
+                    let newStore = Store(initialState: FBTeamScheduleStore.State()) { FBTeamScheduleStore() }
                     
                     storeManager.setStore(newStore, forKey: StoreKeys.fbTeamScheduleStore)
-                    
-                    newStore.send(.initData)
                     
                     return newStore
                 }()
@@ -92,6 +88,8 @@ struct FBTeamScheduleView: View {
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     self.fbTeamScheduleStore = fbTeamScheduleStore
                 }
+                
+                fbTeamScheduleStore.send(.initData(displayModel: displayModel))
             }
         } // if let searchStore
     }

@@ -19,7 +19,6 @@ struct FBPlayerStatsView: View {
        data
        --------------------- */
     let displayModel: FBPlayerStatsDisplayModel
-    let statsList: [FBPlayerStats]
     
     /* ---------------------
        animation
@@ -35,10 +34,11 @@ struct FBPlayerStatsView: View {
     
     init(displayModel: FBPlayerStatsDisplayModel) {
         self.displayModel = displayModel
-        self.statsList = displayModel.stats
     }
     
     var body: some View {
+        let statsList = displayModel.stats
+        
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             ScrollView {
                 if let fbPlayerStatsStore = fbPlayerStatsStore {
@@ -115,15 +115,9 @@ struct FBPlayerStatsView: View {
             .onAppear {
                 // init FBPlayerStatsStore
                 let fbPlayerStatsStore: StoreOf<FBPlayerStatsStore> = storeManager.getStore(forKey: StoreKeys.fbPlayerStatsStore) ?? {
-                    let newStore = Store(initialState: FBPlayerStatsStore.State(
-                        displayModel: displayModel,
-                        statsList: statsList,
-                        player: displayModel.player
-                    )) { FBPlayerStatsStore() }
+                    let newStore = Store(initialState: FBPlayerStatsStore.State()) { FBPlayerStatsStore() }
                     
                     storeManager.setStore(newStore, forKey: StoreKeys.fbPlayerStatsStore)
-                    
-                    newStore.send(.initData)
                     
                     return newStore
                 }()
@@ -131,6 +125,8 @@ struct FBPlayerStatsView: View {
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     self.fbPlayerStatsStore = fbPlayerStatsStore
                 }
+                
+                fbPlayerStatsStore.send(.initData(displayModel: displayModel))
             }
         }
     }
@@ -155,14 +151,14 @@ struct FBPlayerStatsPlayerInfoItem: View {
             HCapsuleBar()
             
             HStack {
-                URLImage(url: player.photo)
+                URLImage(url: player?.photo)
                 
                 VStack(alignment: .leading) {
-                    Text("\(player.krname)")
+                    Text("\(player?.krname ?? "")")
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                     
-                    Text("\(player.name)")
+                    Text("\(player?.name ?? "")")
                         .font(.system(size: 15))
                         .fontWeight(.light)
                         .lineLimit(2)

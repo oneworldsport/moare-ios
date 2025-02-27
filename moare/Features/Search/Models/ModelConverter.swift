@@ -138,6 +138,6 @@ struct ModelConverter {
     }
     
     func fbGameStatsConverter(response: FBGameStatsReponseModel) -> FBGameStatsDisplayModel {
-        return FBGameStatsDisplayModel(game: response.stats!)
+        return FBGameStatsDisplayModel(game: response.game!)
     }
 }

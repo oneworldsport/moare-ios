@@ -9,7 +9,7 @@ import Foundation
 
 struct FBLeagueScheduleDisplayModel: Equatable {
     let yearMonthList: [String]
-    let games: [FBGame]
+    var games: [FBGame]
 }
 
 struct FBLeagueScheduleCalendarDisplay: Equatable {
