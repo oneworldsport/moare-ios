@@ -63,7 +63,7 @@ struct FBLeaugScheduleView: View {
                             selectedIndex: fbLeagueScheduleStore.selectedYearMonthIndex
                         ) { yearMonth, index in
                             shouldScrollCalendar = true
-                            fbLeagueScheduleStore.send(.selectYearMonth(yearMonth, index))
+                            fbLeagueScheduleStore.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
                         }
                         .padding(.bottom, 10)
                         
@@ -120,7 +120,27 @@ struct FBLeaugScheduleView: View {
                     self.fbLeagueScheduleStore = fbLeagueScheduleStore
                 }
                 
-                fbLeagueScheduleStore.send(.initData(displayModel: displayModel))
+                if searchStore.poppedView == nil {
+                    fbLeagueScheduleStore.send(.initData(displayModel: displayModel))
+                } else if case .fbGameStats = searchStore.poppedView {
+                } else {
+                    fbLeagueScheduleStore.send(.initData(displayModel: displayModel))                    
+                }
+            }
+            .onChange(of: searchStore.viewStack) { newValue in
+                guard let lastItem = newValue.last,
+                      case .fbLeagueSchedule = lastItem,
+                      let poppedView = searchStore.poppedView,
+                      case .fbGameStats = searchStore.poppedView else {
+                    return
+                }
+                
+                fbLeagueScheduleStore?.send(.updateGamesData(fbLeagueScheduleData: lastItem, fbGameStatsData: poppedView))
+            }
+            .onChange(of: fbLeagueScheduleStore?.dataForViewStack) { newValue in
+                if let data = newValue {
+                    searchStore.send(.updateLastViewStack(data: data))
+                }
             }
         } // if let searchStore
     }

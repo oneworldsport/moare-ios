@@ -30,7 +30,7 @@ struct Keyword: Codable, Equatable {
     let priority: Int
 }
 
-enum SportDecodableModel {
+enum SportDecodableModel: Equatable {
     // football
     case fbPlayerInfo(FBPlayerInfoResponseModel, FBPlayerInfoDisplayModel)
     case fbPlayerStats(FBPlayerInfoResponseModel, FBPlayerStatsDisplayModel)
@@ -45,6 +45,24 @@ enum SportDecodableModel {
     // nba
     
     case unknown
+    
+    static func == (lhs: SportDecodableModel, rhs: SportDecodableModel) -> Bool {
+        switch (lhs, rhs) {
+        case (.fbPlayerInfo, .fbPlayerInfo),
+            (.fbPlayerStats, .fbPlayerStats),
+            (.fbPlayerStandings, .fbPlayerStandings),
+            (.fbTeamInfo, .fbTeamInfo),
+            (.fbTeamStats, .fbTeamStats),
+            (.fbTeamStandings, .fbTeamStandings),
+            (.fbTeamSchedule, .fbTeamSchedule),
+            (.fbLeagueSchedule, .fbLeagueSchedule),
+            (.fbGameStats, .fbGameStats),
+            (.unknown, .unknown):
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 extension DataModel {
