@@ -9,7 +9,7 @@ import Foundation
 
 struct DayInfo {
     let day: Int
-    let dayOfWeek: String
+    let dayOfWeek: Int
     let displayName: String
     var isDataEmpty: Bool = false
 }
@@ -39,11 +39,11 @@ class CalendarUtil {
             components.month = month
             components.day = day
             
-            guard let date = calendar.date(from: components) else { return DayInfo(day: day, dayOfWeek: "", displayName: "") }
+            guard let date = calendar.date(from: components) else { return DayInfo(day: day, dayOfWeek: 0, displayName: "") }
             
             let dayOfWeek = calendar.component(.weekday, from: date)
-            let dayOfWeekSymbol = calendar.weekdaySymbols[dayOfWeek - 1]
-            return DayInfo(day: day, dayOfWeek: dayOfWeekSymbol, displayName: dayOfWeekSymbol)
+            let dayOfWeekSymbol = calendar.shortWeekdaySymbols[dayOfWeek - 1]
+            return DayInfo(day: day, dayOfWeek: dayOfWeek, displayName: dayOfWeekSymbol)
         }
     }
 
