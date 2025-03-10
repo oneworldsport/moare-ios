@@ -34,6 +34,7 @@ struct FBGameStatsStore {
         var playerStats: [FBGamePlayerStats] = []
         var lineups: FBGameLineups? = nil
         var coach: FBPerson? = nil
+        var playerTotalStats: FBGamePlayerStatsDetail? = nil
         
         /* ---------------------
            ui state
@@ -54,6 +55,7 @@ struct FBGameStatsStore {
            private
            --------------------- */
         case sortPlayers
+        case setPlayersTotalStats
     }
     
     var body: some Reducer<State, Action> {
@@ -72,7 +74,10 @@ struct FBGameStatsStore {
                 state.lineups = lineups
                 state.coach = lineups?.coach
                 
-                return .send(.sortPlayers)
+                return .run { send in
+                    await send(.setPlayersTotalStats)
+                    await send(.sortPlayers)
+                }
                 
             case .selectFirstCategory(let index):
                 state.shouldScrollCategory =  true
@@ -122,7 +127,10 @@ struct FBGameStatsStore {
                 state.lineups = lineups
                 state.coach = lineups?.coach
                 
-                return .send(.sortPlayers)
+                return .run { send in
+                    await send(.setPlayersTotalStats)
+                    await send(.sortPlayers)
+                }
                 
             case .sortPlayers:
                 switch state.secondSelectedIndex {
@@ -173,6 +181,75 @@ struct FBGameStatsStore {
                 default:
                     break
                 }
+                
+                return .none
+                
+            case .setPlayersTotalStats:
+                let playersTotalStats = state.playerStats
+                    .compactMap { $0.statistics.first }
+                    .reduce(
+                        FBGamePlayerStatsDetail()
+                    ) { acc, stats in
+                        let newShots = FBPlayerStatsShots(
+                            total: acc.shots.total + stats.shots.total,
+                            on: acc.shots.on + stats.shots.on
+                        )
+                        
+                        let newGoals = FBPlayerStatsGoals(
+                            total: acc.goals.total + stats.goals.total,
+                            assists: acc.goals.assists + stats.goals.assists
+                        )
+                        
+                        let newPasses = FBGamePlayerStatsPasses(
+                            total: acc.passes.total + stats.passes.total,
+                            key: acc.passes.key + stats.passes.key
+                        )
+                        
+                        let newTackles = FBPlayerStatsTackles(
+                            total: acc.tackles.total + stats.tackles.total,
+                            interceptions: acc.tackles.interceptions + stats.tackles.interceptions
+                        )
+                        
+                        let newDuels = FBPlayerStatsDuels(
+                            total: acc.duels.total + stats.duels.total,
+                            won: acc.duels.won + stats.duels.won
+                        )
+                        
+                        let newDribbles = FBPlayerStatsDribbles(
+                            attempts: acc.dribbles.attempts + stats.dribbles.attempts,
+                            success: acc.dribbles.success + stats.dribbles.success
+                        )
+                        
+                        let newFouls = FBPlayerStatsFouls(
+                            drawn: acc.fouls.drawn + stats.fouls.drawn,
+                            committed: acc.fouls.committed + stats.fouls.committed
+                        )
+                        
+                        let newCards = FBPlayerStatsCards(
+                            yellow: acc.cards.yellow + stats.cards.yellow,
+                            red: acc.cards.red + stats.cards.red
+                        )
+                        
+                        let newPenalty = FBPlayerStatsPenalty(
+                            scored: acc.penalty.scored + stats.penalty.scored
+                        )
+                        
+                        return FBGamePlayerStatsDetail(
+                            games: FBGamePlayerStatsGames(),
+                            offsides: acc.offsides + stats.offsides,
+                            shots: newShots,
+                            goals: newGoals,
+                            passes: newPasses,
+                            tackles: newTackles,
+                            duels: newDuels,
+                            dribbles: newDribbles,
+                            fouls: newFouls,
+                            cards: newCards,
+                            penalty: newPenalty
+                        )
+                    }
+                
+                state.playerTotalStats = playersTotalStats
                 
                 return .none
             }

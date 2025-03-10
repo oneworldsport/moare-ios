@@ -19,9 +19,10 @@ struct CalendarList<T>: View {
     
     private let itemWidth: CGFloat
     private let itemSpacing: CGFloat
+    private let barYOffset: CGFloat
     
     @Binding var shouldScroll: Bool
-    @State private var barOffset: CGSize
+    @State private var barXOffset: CGFloat
     
     init(dateList: [T], calendarType: CalendarType, selectedIndex: Int, shouldScroll: Binding<Bool> = .constant(false), onItemSelected: @escaping (T, Int) -> Void) {
         self.dateList = dateList
@@ -43,13 +44,18 @@ struct CalendarList<T>: View {
         case .day: 0
         }
         
+        self.barYOffset =  switch calendarType {
+        case .day: 22
+        default: 25
+        }
+        
         self._shouldScroll = shouldScroll
-        self._barOffset = State(initialValue: getOffsetOfAniCapsuleBar(itemWidth: itemWidth, barWidth: itemWidth))
+        self._barXOffset = State(initialValue: getOffsetOfAniCapsuleBar(itemWidth: itemWidth, barWidth: itemWidth))
     }
     
     var body: some View {
         ScrollView(.horizontal) {
-            VStack(alignment: .leading, spacing: 8) {
+            ZStack(alignment: .topLeading) {
                 ScrollViewReader { proxy in
                     HStack(spacing: itemSpacing) {
                         ForEach(dateList.indices, id: \.self) { index in
@@ -70,7 +76,7 @@ struct CalendarList<T>: View {
                         }
                         
                         withAnimation(.spring(duration: 0.5)) {
-                            barOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth, barWidth: itemWidth, spacing: itemSpacing, index: selectedIndex)
+                            barXOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth, barWidth: itemWidth, spacing: itemSpacing, index: selectedIndex)
                         }
                     }
                     .onChange(of: selectedIndex) { newValue in
@@ -81,14 +87,16 @@ struct CalendarList<T>: View {
                         }
                         
                         withAnimation(.spring(duration: 0.5)) {
-                            barOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth, barWidth: itemWidth, spacing: itemSpacing, index: newValue)
+                            barXOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth, barWidth: itemWidth, spacing: itemSpacing, index: newValue)
                         }
                     }
                 } // ScrollViewReader
                 
                 HCapsuleBar(customWidth: itemWidth)
-                    .offset(barOffset)
-            }
+                    .offset(CGSize(width: barXOffset, height: 0))
+                    .padding(.top, barYOffset)
+                    .padding(.bottom, 2)
+            } // ZStack
         } // ScrollView
         .padding(.horizontal, 5)
     }
@@ -108,6 +116,13 @@ struct CalendarListItem<T>: View {
         }
     }
     
+    var dayOfWeek: String {
+        switch calendarType {
+        case .day: "\((date as! DayInfo).displayName)"
+        default: ""
+        }
+    }
+    
     var isDisabled: Bool {
         switch calendarType {
         case .day: (date as! DayInfo).isDataEmpty
@@ -119,10 +134,19 @@ struct CalendarListItem<T>: View {
         Button(action: {
             onItemSelected()
         }) {
-            Text(text)
-                .font(.system(size: 17))
-                .frame(width: width)
+            VStack(spacing: 0) {
+                Text(text)
+                    .font(.system(size: 17))
+                    .frame(height: 20, alignment: .top)
+
+                if calendarType == .day {
+                    Text(dayOfWeek)
+                        .font(.system(size: 11, weight: .light))
+                        .frame(height: 22, alignment: .bottom)
+                }
+            }
         }
+        .frame(width: width)
         .foregroundStyle(isDisabled ? .secondary : .primary)
         .opacity(isDisabled ? 0.5 : 1)
         .disabled(isDisabled)

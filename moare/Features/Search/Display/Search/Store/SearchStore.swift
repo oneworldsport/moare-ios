@@ -199,6 +199,7 @@ struct SearchStore {
                 state.query = query
                 
                 if updateAutoCompleteList {
+                    // TODO: make it to extension
                     let isBlank = state.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                     
                     if isBlank {

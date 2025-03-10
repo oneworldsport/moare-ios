@@ -194,6 +194,11 @@ struct FBPlayerStatsShots: Decodable, Equatable {
         case _total = "total"
         case _on = "on"
     }
+    
+    init(total: Int = 0, on: Int = 0) {
+        self._total = total
+        self._on = on
+    }
 }
 
 struct FBPlayerStatsGoals: Decodable, Equatable {
@@ -221,6 +226,13 @@ struct FBPlayerStatsGoals: Decodable, Equatable {
         case _assists = "assists"
         case _saves = "saves"
     }
+    
+    init(total: Int = 0, conceded: Int = 0, assists: Int = 0, saves: Int = 0) {
+        self._total = total
+        self._conceded = conceded
+        self._assists = assists
+        self._saves = saves
+    }
 }
 
 struct FBPlayerStatsPasses: Decodable, Equatable {
@@ -242,6 +254,12 @@ struct FBPlayerStatsPasses: Decodable, Equatable {
         case _total = "total"
         case _key = "key"
         case _accuracy = "accuracy"
+    }
+    
+    init(total: Int = 0, key: Int = 0, accuracy: Int = 0) {
+        self._total = total
+        self._key = key
+        self._accuracy = accuracy
     }
 }
 
@@ -265,6 +283,12 @@ struct FBPlayerStatsTackles: Decodable, Equatable {
         case _blocks = "blocks"
         case _interceptions = "interceptions"
     }
+    
+    init(total: Int = 0, blocks: Int? = nil, interceptions: Int = 0) {
+        self._total = total
+        self._blocks = blocks
+        self._interceptions = interceptions
+    }
 }
 
 struct FBPlayerStatsDuels: Decodable, Equatable {
@@ -281,6 +305,11 @@ struct FBPlayerStatsDuels: Decodable, Equatable {
     private enum CodingKeys: String, CodingKey {
         case _total = "total"
         case _won = "won"
+    }
+    
+    init(total: Int = 0, won: Int = 0) {
+        self._total = total
+        self._won = won
     }
 }
 
@@ -304,6 +333,12 @@ struct FBPlayerStatsDribbles: Decodable, Equatable {
         case _success = "success"
         case _past = "past"
     }
+    
+    init(attempts: Int = 0, success: Int = 0, past: Int? = nil) {
+        self._attempts = attempts
+        self._success = success
+        self._past = past
+    }
 }
 
 struct FBPlayerStatsFouls: Decodable, Equatable {
@@ -320,6 +355,11 @@ struct FBPlayerStatsFouls: Decodable, Equatable {
     private enum CodingKeys: String, CodingKey {
         case _drawn = "drawn"
         case _committed = "committed"
+    }
+    
+    init(drawn: Int = 0, committed: Int = 0) {
+        self._drawn = drawn
+        self._committed = committed
     }
 }
 
@@ -342,6 +382,12 @@ struct FBPlayerStatsCards: Decodable, Equatable {
         case _yellow = "yellow"
         case _yellowred = "yellowred"
         case _red = "red"
+    }
+    
+    init(yellow: Int = 0, yellowred: Int? = nil, red: Int = 0) {
+        self._yellow = yellow
+        self._yellowred = yellowred
+        self._red = red
     }
 }
 
@@ -374,6 +420,14 @@ struct FBPlayerStatsPenalty: Decodable, Equatable {
         case _scored = "scored"
         case _missed = "missed"
         case _saved = "saved"
+    }
+    
+    init(won: Int? = nil, commited: Int? = nil, scored: Int = 0, missed: Int? = nil, saved: Int? = nil) {
+        self._won = won
+        self._commited = commited
+        self._scored = scored
+        self._missed = missed
+        self._saved = saved
     }
 }
 

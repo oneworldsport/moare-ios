@@ -253,6 +253,32 @@ struct FBGamePlayerStatsDetail: Decodable, Equatable {
         case games, shots, goals, passes, tackles, duels, dribbles, fouls, cards, penalty
         case _offsides = "offsides"
     }
+    
+    init(
+        games: FBGamePlayerStatsGames = FBGamePlayerStatsGames(),
+        offsides: Int = 0,
+        shots: FBPlayerStatsShots = FBPlayerStatsShots(),
+        goals: FBPlayerStatsGoals = FBPlayerStatsGoals(),
+        passes: FBGamePlayerStatsPasses = FBGamePlayerStatsPasses(),
+        tackles: FBPlayerStatsTackles = FBPlayerStatsTackles(),
+        duels: FBPlayerStatsDuels = FBPlayerStatsDuels(),
+        dribbles: FBPlayerStatsDribbles = FBPlayerStatsDribbles(),
+        fouls: FBPlayerStatsFouls = FBPlayerStatsFouls(),
+        cards: FBPlayerStatsCards = FBPlayerStatsCards(),
+        penalty: FBPlayerStatsPenalty = FBPlayerStatsPenalty()
+    ) {
+        self.games = games
+        self._offsides = offsides
+        self.shots = shots
+        self.goals = goals
+        self.passes = passes
+        self.tackles = tackles
+        self.duels = duels
+        self.dribbles = dribbles
+        self.fouls = fouls
+        self.cards = cards
+        self.penalty = penalty
+    }
 }
 
 struct FBGamePlayerStatsPasses: Decodable, Equatable {
@@ -274,6 +300,12 @@ struct FBGamePlayerStatsPasses: Decodable, Equatable {
         case _total = "total"
         case _key = "key"
         case _accuracy = "accuracy"
+    }
+    
+    init(total: Int = 0, key: Int = 0, accuracy: String = "") {
+        self._total = total
+        self._key = key
+        self._accuracy = accuracy
     }
 }
 
@@ -311,6 +343,22 @@ struct FBGamePlayerStatsGames: Decodable, Equatable {
         case _rating = "rating"
         case _captain = "captain"
         case _substitute = "substitute"
+    }
+    
+    init(
+        minutes: Int = 0,
+        number: Int = 0,
+        position: String = "",
+        rating: String = "0",
+        captain: Bool = false,
+        substitute: Bool = false
+    ) {
+        self._minutes = minutes
+        self._number = number
+        self._position = position
+        self._rating = rating
+        self._captain = captain
+        self._substitute = substitute
     }
 }
 

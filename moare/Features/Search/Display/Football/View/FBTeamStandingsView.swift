@@ -244,7 +244,7 @@ struct FBTeamStandingsCategoryList: View {
     init(fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>) {
         self.fbTeamStandingsStore = fbTeamStandingsStore
         
-        self._barOffset = State(initialValue: getOffsetOfAniCapsuleBar(itemWidth: fbTeamStandingsStore.intDataItemWidth))
+        self._barOffset = State(initialValue: CGSize(width: getOffsetOfAniCapsuleBar(itemWidth: fbTeamStandingsStore.intDataItemWidth), height: 0))
     }
     
     var body: some View {
@@ -288,12 +288,12 @@ struct FBTeamStandingsCategoryList: View {
         withAnimation(.spring(duration: 0.5)) {
             if index == 8 || index == 9 {
                 if index == 8 {
-                    barOffset = CGSize(width: fbTeamStandingsStore.intDataItemWidth * CGFloat(index) + getOffsetOfAniCapsuleBar(itemWidth: fbTeamStandingsStore.stringDataItemWidth).width, height: 0)
+                    barOffset = CGSize(width: fbTeamStandingsStore.intDataItemWidth * CGFloat(index) + getOffsetOfAniCapsuleBar(itemWidth: fbTeamStandingsStore.stringDataItemWidth), height: 0)
                 } else {
-                    barOffset = CGSize(width: fbTeamStandingsStore.intDataItemWidth * CGFloat(index - 1) + getOffsetOfAniCapsuleBar(itemWidth: fbTeamStandingsStore.stringDataItemWidth, index: 1).width, height: 0)
+                    barOffset = CGSize(width: fbTeamStandingsStore.intDataItemWidth * CGFloat(index - 1) + getOffsetOfAniCapsuleBar(itemWidth: fbTeamStandingsStore.stringDataItemWidth, index: 1), height: 0)
                 }
             } else {
-                barOffset = getOffsetOfAniCapsuleBar(itemWidth: fbTeamStandingsStore.intDataItemWidth, index: index)
+                barOffset = CGSize(width: getOffsetOfAniCapsuleBar(itemWidth: fbTeamStandingsStore.intDataItemWidth, index: index), height: 0)
             }
         }
     }
@@ -387,13 +387,4 @@ struct FBTeamStandingsDataListItem: View {
     private func calculatePoints(data: FBTeamStatsFixtures) -> String {
         return "\((data.wins.total * 3) + data.draws.total)"
     }
-}
-
-func getOffsetOfAniCapsuleBar(
-    itemWidth: CGFloat,
-    barWidth: CGFloat = 20,
-    spacing: CGFloat = 0,
-    index: Int = 0
-) -> CGSize {
-    return CGSize(width: (itemWidth * CGFloat(index)) + ((itemWidth - barWidth) / 2) + (spacing * CGFloat(index)), height: 0)
 }

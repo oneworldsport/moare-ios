@@ -227,12 +227,24 @@ struct FBLeagueScheduleListItem: View {
 //                searchStore.send(.updateTextField("토트넘"))
 //                searchStore.send(.performSearch())
             }) {
-                VStack {
+                VStack(spacing: 0) {
                     URLImage(url: data.teams.home.logo, size: .small)
                     
                     Text(EnNameTranslationUtility.translateByDic(type: .team, input: homeTeamKrName))
                         .font(.system(size: 13))
                         .lineLimit(2)
+                        .padding(.top, 2)
+                    
+                    if let _ = searchStore.fbGameStatsData {
+                        RoundedBorderText(
+                            text: "홈",
+                            fontSize: 11,
+                            textColor: .moare,
+                            radius: 4,
+                            strokeColor: .moare
+                        )
+                        .padding(.top, 2)
+                    }
                 }
             }
             .frame(width: 100)
@@ -316,12 +328,24 @@ struct FBLeagueScheduleListItem: View {
 //                searchStore.send(.updateTextField("토트넘"))
 //                searchStore.send(.performSearch())
             }) {
-                VStack {
+                VStack(spacing: 0) {
                     URLImage(url: data.teams.away.logo, size: .small)
                     
                     Text(EnNameTranslationUtility.translateByDic(type: .team, input: awayTeamKrname))
                         .font(.system(size: 13))
                         .lineLimit(2)
+                        .padding(.top, 2)
+                    
+                    if let _ = searchStore.fbGameStatsData {
+                        RoundedBorderText(
+                            text: "원정",
+                            fontSize: 11,
+                            textColor: .secondary,
+                            radius: 4,
+                            strokeColor: .secondary
+                        )
+                        .padding(.top, 2)
+                    }
                 }
             }
             .frame(width: 100)
