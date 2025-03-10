@@ -78,7 +78,7 @@ struct SearchView: View {
                             // remove textfield for bar animation
                             searchStore.send(.updateTextFieldVisibleState(false))
                             
-                            searchStore.send(.performSearch(searchType: .keyword, aniDuration: AnimationConstants.Duration.medium))
+                            searchStore.send(.performSearch(searchType: .trendingKeyword, aniDuration: AnimationConstants.Duration.medium))
                         }
                     }
                     
@@ -102,7 +102,7 @@ struct SearchView: View {
                                 }
                                 
                                 // search
-                                searchStore.send(.performSearch(aniDuration: AnimationConstants.Duration.medium * 2))
+                                searchStore.send(.performSearch(searchType: .autoComplete, aniDuration: AnimationConstants.Duration.medium * 2))
                             })
                         }
                         

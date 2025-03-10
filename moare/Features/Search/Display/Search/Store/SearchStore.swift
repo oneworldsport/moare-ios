@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import ComposableArchitecture
 import AWSTranslate
+import Collections
 
 @Reducer
 struct SearchStore {
@@ -40,6 +41,7 @@ struct SearchStore {
         
         var autoCompleteList: [String] = []
         var trendingKeywordList: [String] = []
+        var autoCompleteDataDic: [String: KeywordInfo] = [:]
         
         /* ---------------------
            ui state
@@ -61,11 +63,11 @@ struct SearchStore {
         // NOTE: viewStack should always be up to date
         var viewStack: [SportDecodableModel] = []
         var poppedView: SportDecodableModel? = nil
-        var trendingKeywords: [TrendingKeyword] = []
+        var trendingKeywords: OrderedDictionary<String, KeywordInfo> = [:]
     }
     
     enum SearchType {
-        case query, keyword
+        case query, trendingKeyword, autoComplete
     }
     
     enum Action {
@@ -98,6 +100,7 @@ struct SearchStore {
            etc
            --------------------- */
         case initTrie
+        case initAutoCompleteDataDic(autoCompleteData: [KeywordInfo])
         case updateSearchDataState(SearchDataState)
         case translate(String, (Result<String, Error>) -> Void)
         case updateIsFocused(Bool)
@@ -105,7 +108,7 @@ struct SearchStore {
         case updateAutoCompleteList
         case updateResultVisibleState
         case fetchTrendingKeywords
-        case setTrendingKeywords([TrendingKeyword])
+        case setTrendingKeywords([KeywordInfo])
         case updateMainDisplayModel(data: SportDecodableModel)
         case updateLastViewStack(data: SportDecodableModel)
         
@@ -127,17 +130,24 @@ struct SearchStore {
                         if FileManager.default.fileExists(atPath: savedFileURL.path) {
                             let data = try Data(contentsOf: savedFileURL)
                             
-                            let autoCompleteData = try JSONDecoder().decode([AutoComplete].self, from: data)
+                            let autoCompleteData = try JSONDecoder().decode([KeywordInfo].self, from: data)
                             
                             for autoComplete in autoCompleteData {
-                                trie.insert(word: autoComplete.word)
-                                trie.insert(word: getChosung(from: autoComplete.word), originalWord: autoComplete.word, weight: autoComplete.weight)
+                                trie.insert(word: autoComplete.keyword)
+                                trie.insert(word: getChosung(from: autoComplete.keyword), originalWord: autoComplete.keyword, weight: autoComplete.weight!)
                             }
+                            
+                            await send(.initAutoCompleteDataDic(autoCompleteData: autoCompleteData))
                         }
                     } catch {
                         print("\(error)")
                     }
                 }
+                
+            case .initAutoCompleteDataDic(let autoCompleteData):
+                state.autoCompleteDataDic = Dictionary(uniqueKeysWithValues: autoCompleteData.map { ($0.keyword, $0) })
+                
+                return .none
                 
             case .initForTest:
                 state.resultVisibleState = true
@@ -164,8 +174,8 @@ struct SearchStore {
                 }
                 
             case .setTrendingKeywords(let keywords):
-                state.trendingKeywords = keywords
-                state.trendingKeywordList = state.trendingKeywords.map { $0.keyword }
+                state.trendingKeywords = OrderedDictionary(uniqueKeysWithValues: keywords.map { ($0.keyword, $0) })
+                state.trendingKeywordList = Array(state.trendingKeywords.keys)
                 
                 return .none
                 
@@ -267,18 +277,29 @@ struct SearchStore {
                     
                 }
                 
-                return .run { [query = state.query, keywords = state.trendingKeywords] send in
+                return .run { [query = state.query, keywords = state.trendingKeywords, autoCompleteDataDic = state.autoCompleteDataDic] send in
                     let tracker = TaskCompletionTracker()
                     
                     do {
                         let dataFetchTask = Task {
                             //                        try await Task.sleep(for: .seconds(5)) // delay for test
-                            let result = switch searchType {
+                            let result: DataModel
+                            
+                            switch searchType {
                             case .query:
-                                try await searchClient.fetchDataByQuery(query: query)
-                            case .keyword:
-                                if let keyword = keywords.first { $0.keyword == query } {
-                                    try await searchClient.fetchDataByKeyword(keyword: keyword)
+                                result = try await searchClient.fetchDataByQuery(query: query)
+                                
+                            case .trendingKeyword:
+                                if let keyword = keywords[query] {
+                                    result = try await searchClient.fetchDataByKeyword(keyword: keyword)
+                                } else {
+                                    throw NSError(domain: "SearchError", code: 1)
+                                }
+                                
+                            case .autoComplete:
+                                if var keywordInfo = autoCompleteDataDic[query] {
+                                    keywordInfo.weight = nil // To exclude field "weight" in the request body
+                                    result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
                                 } else {
                                     throw NSError(domain: "SearchError", code: 1)
                                 }

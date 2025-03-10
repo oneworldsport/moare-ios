@@ -16,7 +16,7 @@ struct SearchClient {
 //        return String(decoding: data, as: UTF8.self)
     }
     
-    func fetchDataByKeyword(keyword: TrendingKeyword) async throws -> DataModel {
+    func fetchDataByKeyword(keyword: KeywordInfo) async throws -> DataModel {
         return try await apiClient.fetchData(endpoint: .searchByKeyword(keyword: keyword))
     }
     

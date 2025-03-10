@@ -53,13 +53,12 @@
 		DA531BBD2D64A8CA00DB87CB /* FBTeamInfoResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B7D2D64A8CA00DB87CB /* FBTeamInfoResponseModel.swift */; };
 		DA531BBE2D64A8CA00DB87CB /* FBTeamStandingsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B7E2D64A8CA00DB87CB /* FBTeamStandingsResponseModel.swift */; };
 		DA531BBF2D64A8CA00DB87CB /* NbaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B802D64A8CA00DB87CB /* NbaModel.swift */; };
-		DA531BC02D64A8CA00DB87CB /* AutoComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B832D64A8CA00DB87CB /* AutoComplete.swift */; };
 		DA531BC12D64A8CA00DB87CB /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B842D64A8CA00DB87CB /* DataModel.swift */; };
 		DA531BC22D64A8CA00DB87CB /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B852D64A8CA00DB87CB /* Error.swift */; };
 		DA531BC32D64A8CA00DB87CB /* FootballTeamGameStatsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B862D64A8CA00DB87CB /* FootballTeamGameStatsResponseModel.swift */; };
 		DA531BC42D64A8CA00DB87CB /* ModelConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B872D64A8CA00DB87CB /* ModelConverter.swift */; };
 		DA531BC52D64A8CA00DB87CB /* SearchDataState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B882D64A8CA00DB87CB /* SearchDataState.swift */; };
-		DA531BC62D64A8CA00DB87CB /* TrendingKeyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B892D64A8CA00DB87CB /* TrendingKeyword.swift */; };
+		DA531BC62D64A8CA00DB87CB /* KeywordInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B892D64A8CA00DB87CB /* KeywordInfo.swift */; };
 		DA531BC72D64A8CA00DB87CB /* KeywordsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B8B2D64A8CA00DB87CB /* KeywordsClient.swift */; };
 		DA531BC82D64A8CA00DB87CB /* SearchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B8C2D64A8CA00DB87CB /* SearchClient.swift */; };
 		DA531BDF2D64A8F200DB87CB /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BC92D64A8F200DB87CB /* StringConstants.swift */; };
@@ -77,7 +76,6 @@
 		DA531BEB2D64A8F200DB87CB /* KoreanUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BD92D64A8F200DB87CB /* KoreanUtilities.swift */; };
 		DA531BEC2D64A8F200DB87CB /* MatchDescriptionConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BDA2D64A8F200DB87CB /* MatchDescriptionConverter.swift */; };
 		DA531BED2D64A8F200DB87CB /* TaskCompletionTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BDB2D64A8F200DB87CB /* TaskCompletionTracker.swift */; };
-		DA531BEE2D64A8F200DB87CB /* ApiRouteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BDD2D64A8F200DB87CB /* ApiRouteService.swift */; };
 		DA531C032D64A91900DB87CB /* BaseUIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BEF2D64A91900DB87CB /* BaseUIState.swift */; };
 		DA531C042D64A91900DB87CB /* HSequentialListAni.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BF02D64A91900DB87CB /* HSequentialListAni.swift */; };
 		DA531C052D64A91900DB87CB /* VSequentialListAni.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531BF12D64A91900DB87CB /* VSequentialListAni.swift */; };
@@ -92,6 +90,10 @@
 		DA531C102D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531C0F2D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift */; };
 		DA531C122D64B88F00DB87CB /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = DA531C112D64B88F00DB87CB /* .gitignore */; };
 		DA75C9F12D68310800D6C14B /* NoticeBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA75C9F02D68310800D6C14B /* NoticeBox.swift */; };
+		DABE3D6B2D7E977F0048DCAA /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABE3D6A2D7E977F0048DCAA /* Utilities.swift */; };
+		DABE3D6D2D7E9C210048DCAA /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABE3D6C2D7E9C210048DCAA /* TestView.swift */; };
+		DABE3D6F2D7ECF8F0048DCAA /* TextComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABE3D6E2D7ECF8F0048DCAA /* TextComponents.swift */; };
+		DABE3D722D7EF19D0048DCAA /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = DABE3D712D7EF19D0048DCAA /* Collections */; };
 		DADA39592D3A1AC9000D15E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DADA39582D3A1AC9000D15E0 /* Assets.xcassets */; };
 		DADA395D2D3A1AC9000D15E0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DADA395C2D3A1AC9000D15E0 /* Preview Assets.xcassets */; };
 		DADA39672D3A1AC9000D15E0 /* moareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADA39662D3A1AC9000D15E0 /* moareTests.swift */; };
@@ -167,13 +169,12 @@
 		DA531B7D2D64A8CA00DB87CB /* FBTeamInfoResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamInfoResponseModel.swift; sourceTree = "<group>"; };
 		DA531B7E2D64A8CA00DB87CB /* FBTeamStandingsResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBTeamStandingsResponseModel.swift; sourceTree = "<group>"; };
 		DA531B802D64A8CA00DB87CB /* NbaModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NbaModel.swift; sourceTree = "<group>"; };
-		DA531B832D64A8CA00DB87CB /* AutoComplete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoComplete.swift; sourceTree = "<group>"; };
 		DA531B842D64A8CA00DB87CB /* DataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		DA531B852D64A8CA00DB87CB /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		DA531B862D64A8CA00DB87CB /* FootballTeamGameStatsResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FootballTeamGameStatsResponseModel.swift; sourceTree = "<group>"; };
 		DA531B872D64A8CA00DB87CB /* ModelConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelConverter.swift; sourceTree = "<group>"; };
 		DA531B882D64A8CA00DB87CB /* SearchDataState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchDataState.swift; sourceTree = "<group>"; };
-		DA531B892D64A8CA00DB87CB /* TrendingKeyword.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrendingKeyword.swift; sourceTree = "<group>"; };
+		DA531B892D64A8CA00DB87CB /* KeywordInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeywordInfo.swift; sourceTree = "<group>"; };
 		DA531B8B2D64A8CA00DB87CB /* KeywordsClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeywordsClient.swift; sourceTree = "<group>"; };
 		DA531B8C2D64A8CA00DB87CB /* SearchClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchClient.swift; sourceTree = "<group>"; };
 		DA531BC92D64A8F200DB87CB /* StringConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringConstants.swift; sourceTree = "<group>"; };
@@ -191,7 +192,6 @@
 		DA531BD92D64A8F200DB87CB /* KoreanUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KoreanUtilities.swift; sourceTree = "<group>"; };
 		DA531BDA2D64A8F200DB87CB /* MatchDescriptionConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchDescriptionConverter.swift; sourceTree = "<group>"; };
 		DA531BDB2D64A8F200DB87CB /* TaskCompletionTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskCompletionTracker.swift; sourceTree = "<group>"; };
-		DA531BDD2D64A8F200DB87CB /* ApiRouteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiRouteService.swift; sourceTree = "<group>"; };
 		DA531BEF2D64A91900DB87CB /* BaseUIState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseUIState.swift; sourceTree = "<group>"; };
 		DA531BF02D64A91900DB87CB /* HSequentialListAni.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HSequentialListAni.swift; sourceTree = "<group>"; };
 		DA531BF12D64A91900DB87CB /* VSequentialListAni.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSequentialListAni.swift; sourceTree = "<group>"; };
@@ -206,6 +206,9 @@
 		DA531C0F2D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBPlayerStatsDisplayModel.swift; sourceTree = "<group>"; };
 		DA531C112D64B88F00DB87CB /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		DA75C9F02D68310800D6C14B /* NoticeBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeBox.swift; sourceTree = "<group>"; };
+		DABE3D6A2D7E977F0048DCAA /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		DABE3D6C2D7E9C210048DCAA /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
+		DABE3D6E2D7ECF8F0048DCAA /* TextComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextComponents.swift; sourceTree = "<group>"; };
 		DADA39512D3A1AC8000D15E0 /* moare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = moare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DADA39582D3A1AC9000D15E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DADA395A2D3A1AC9000D15E0 /* moare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = moare.entitlements; sourceTree = "<group>"; };
@@ -224,6 +227,7 @@
 			files = (
 				DADA39862D3A2006000D15E0 /* AWSS3 in Frameworks */,
 				DADA39882D3A2006000D15E0 /* AWSTranslate in Frameworks */,
+				DABE3D722D7EF19D0048DCAA /* Collections in Frameworks */,
 				DADA39812D3A1CEC000D15E0 /* ComposableArchitecture in Frameworks */,
 				DADA39842D3A2006000D15E0 /* AWSCore in Frameworks */,
 			);
@@ -479,13 +483,12 @@
 				DA531B722D64A8CA00DB87CB /* DisplayModels */,
 				DA531B782D64A8CA00DB87CB /* Models */,
 				DA531B822D64A8CA00DB87CB /* ReponseModels */,
-				DA531B832D64A8CA00DB87CB /* AutoComplete.swift */,
 				DA531B842D64A8CA00DB87CB /* DataModel.swift */,
 				DA531B852D64A8CA00DB87CB /* Error.swift */,
 				DA531B862D64A8CA00DB87CB /* FootballTeamGameStatsResponseModel.swift */,
 				DA531B872D64A8CA00DB87CB /* ModelConverter.swift */,
 				DA531B882D64A8CA00DB87CB /* SearchDataState.swift */,
-				DA531B892D64A8CA00DB87CB /* TrendingKeyword.swift */,
+				DA531B892D64A8CA00DB87CB /* KeywordInfo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -610,7 +613,6 @@
 				DA531BD22D64A8F200DB87CB /* Networking */,
 				DA531BD42D64A8F200DB87CB /* TCA */,
 				DA531BDC2D64A8F200DB87CB /* Utilities */,
-				DA531BDD2D64A8F200DB87CB /* ApiRouteService.swift */,
 			);
 			name = Core;
 			path = moare/Core;
@@ -658,6 +660,7 @@
 				DA531BF82D64A91900DB87CB /* CapsuleBar.swift */,
 				DA531BF92D64A91900DB87CB /* CapsuleButton.swift */,
 				DA531BFA2D64A91900DB87CB /* URLImage.swift */,
+				DABE3D6E2D7ECF8F0048DCAA /* TextComponents.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -690,6 +693,7 @@
 			children = (
 				DA531BFF2D64A91900DB87CB /* FlowStack.swift */,
 				DA531C002D64A91900DB87CB /* UIExtensions.swift */,
+				DABE3D6A2D7E977F0048DCAA /* Utilities.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -730,6 +734,7 @@
 		DADA39532D3A1AC8000D15E0 /* moare */ = {
 			isa = PBXGroup;
 			children = (
+				DABE3D6C2D7E9C210048DCAA /* TestView.swift */,
 				DA531B3E2D64A8A400DB87CB /* App */,
 				DA531BDE2D64A8F200DB87CB /* Core */,
 				DA531B932D64A8CA00DB87CB /* Features */,
@@ -787,6 +792,7 @@
 				DADA39832D3A2006000D15E0 /* AWSCore */,
 				DADA39852D3A2006000D15E0 /* AWSS3 */,
 				DADA39872D3A2006000D15E0 /* AWSTranslate */,
+				DABE3D712D7EF19D0048DCAA /* Collections */,
 			);
 			productName = moare;
 			productReference = DADA39512D3A1AC8000D15E0 /* moare.app */;
@@ -863,6 +869,7 @@
 			packageReferences = (
 				DADA397F2D3A1CEC000D15E0 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				DADA39822D3A2006000D15E0 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */,
+				DABE3D702D7EF19D0048DCAA /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = DADA39522D3A1AC8000D15E0 /* Products */;
 			projectDirPath = "";
@@ -913,7 +920,7 @@
 				DA531BE82D64A8F200DB87CB /* CalendarUtil.swift in Sources */,
 				DA531C0B2D64A91900DB87CB /* FlowStack.swift in Sources */,
 				DA531BB12D64A8CA00DB87CB /* FBTeamInfoDisplayModel.swift in Sources */,
-				DA531BC62D64A8CA00DB87CB /* TrendingKeyword.swift in Sources */,
+				DA531BC62D64A8CA00DB87CB /* KeywordInfo.swift in Sources */,
 				DA531B9D2D64A8CA00DB87CB /* FBTeamStandingsStore.swift in Sources */,
 				DA531B942D64A8CA00DB87CB /* FBStatDataItem.swift in Sources */,
 				DA531BA32D64A8CA00DB87CB /* FBPlayerStatsView.swift in Sources */,
@@ -937,7 +944,8 @@
 				DA531BC42D64A8CA00DB87CB /* ModelConverter.swift in Sources */,
 				DA531BB42D64A8CA00DB87CB /* FBTeamStatsDisplayModel.swift in Sources */,
 				DA531BAE2D64A8CA00DB87CB /* FBLeagueScheduleDisplayModel.swift in Sources */,
-				DA531BC02D64A8CA00DB87CB /* AutoComplete.swift in Sources */,
+				DABE3D6F2D7ECF8F0048DCAA /* TextComponents.swift in Sources */,
+				DABE3D6B2D7E977F0048DCAA /* Utilities.swift in Sources */,
 				DA531BDF2D64A8F200DB87CB /* StringConstants.swift in Sources */,
 				DA531BEA2D64A8F200DB87CB /* Extensions.swift in Sources */,
 				DA75C9F12D68310800D6C14B /* NoticeBox.swift in Sources */,
@@ -965,7 +973,6 @@
 				DA531BEB2D64A8F200DB87CB /* KoreanUtilities.swift in Sources */,
 				DA531BA92D64A8CA00DB87CB /* AnimatingSearchBar.swift in Sources */,
 				DA531BE02D64A8F200DB87CB /* UIConstants.swift in Sources */,
-				DA531BEE2D64A8F200DB87CB /* ApiRouteService.swift in Sources */,
 				DA531BEC2D64A8F200DB87CB /* MatchDescriptionConverter.swift in Sources */,
 				DA531BAB2D64A8CA00DB87CB /* SearchView.swift in Sources */,
 				DA531BAC2D64A8CA00DB87CB /* TrendingKeywords.swift in Sources */,
@@ -983,6 +990,7 @@
 				DA531BA62D64A8CA00DB87CB /* FBTeamStandingsView.swift in Sources */,
 				DA531B982D64A8CA00DB87CB /* FBPlayerInfoStore.swift in Sources */,
 				DA531BE12D64A8F200DB87CB /* BaseDisplayModel.swift in Sources */,
+				DABE3D6D2D7E9C210048DCAA /* TestView.swift in Sources */,
 				DA531BA82D64A8CA00DB87CB /* SearchStore.swift in Sources */,
 				DA531B9C2D64A8CA00DB87CB /* FBTeamScheduleStore.swift in Sources */,
 				DA531C0E2D64AA4300DB87CB /* AnimationConstants.swift in Sources */,
@@ -1355,6 +1363,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		DABE3D702D7EF19D0048DCAA /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.4;
+			};
+		};
 		DADA397F2D3A1CEC000D15E0 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
@@ -1374,6 +1390,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		DABE3D712D7EF19D0048DCAA /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DABE3D702D7EF19D0048DCAA /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
+		};
 		DADA39802D3A1CEC000D15E0 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DADA397F2D3A1CEC000D15E0 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;

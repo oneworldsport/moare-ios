@@ -10,7 +10,7 @@ import Foundation
 struct KeywordsClient {
     private let apiClient = APIClient()
     
-    func fetchTrendingKeywords() async throws -> [TrendingKeyword] {
+    func fetchTrendingKeywords() async throws -> [KeywordInfo] {
         return try await apiClient.fetchData(endpoint: .fetchTrendingKeywords)
     }
 }
