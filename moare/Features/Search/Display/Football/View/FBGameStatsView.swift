@@ -199,7 +199,7 @@ struct FBGameStatsTeamButtonContainer: View {
         self.searchStore = searchStore
         self.fbGameStatsStore = fbGameStatsStore
         
-        self._barOffset = State(initialValue: getOffsetOfAniCapsuleBar(itemWidth: fbGameStatsStore.teamButtonWidth, barWidth: 50))
+        self._barOffset = State(initialValue: CGSize(width: getOffsetOfAniCapsuleBar(itemWidth: fbGameStatsStore.teamButtonWidth, barWidth: 50), height: 0))
     }
     
     var body: some View {
@@ -263,9 +263,9 @@ struct FBGameStatsTeamButtonContainer: View {
         withAnimation(.spring(duration: 0.5)) {
             switch index {
             case 0:
-                barOffset = getOffsetOfAniCapsuleBar(itemWidth: fbGameStatsStore.teamButtonWidth, barWidth: 50)
+                barOffset = CGSize(width:getOffsetOfAniCapsuleBar(itemWidth: fbGameStatsStore.teamButtonWidth, barWidth: 50), height:0)
             default:
-                barOffset = CGSize(width: fbGameStatsStore.barWidth + getOffsetOfAniCapsuleBar(itemWidth: fbGameStatsStore.teamButtonWidth, barWidth: 50, index: index).width, height: 0)
+                barOffset = CGSize(width: fbGameStatsStore.barWidth + getOffsetOfAniCapsuleBar(itemWidth: fbGameStatsStore.teamButtonWidth, barWidth: 50, index: index), height: 0)
             }
         }
     }
@@ -505,7 +505,7 @@ struct FBGameStatsFirstCategoryList: View {
     init(fbGameStatsStore: StoreOf<FBGameStatsStore>) {
         self.fbGameStatsStore = fbGameStatsStore
         
-        self._barOffset = State(initialValue: getOffsetOfAniCapsuleBar(itemWidth: fbGameStatsStore.itemWidth * CGFloat(StringConstants.Football.gameStatsAttackCategories.count), barWidth: 80))
+        self._barOffset = State(initialValue: CGSize(width: getOffsetOfAniCapsuleBar(itemWidth: fbGameStatsStore.itemWidth * CGFloat(StringConstants.Football.gameStatsAttackCategories.count), barWidth: 80), height: 0))
     }
     
     var body: some View {
@@ -548,11 +548,11 @@ struct FBGameStatsFirstCategoryList: View {
         withAnimation(.spring(duration: 0.5)) {
             switch index {
             case 0:
-                barOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth * attackCategoriesCount, barWidth: 80)
+                barOffset = CGSize(width: getOffsetOfAniCapsuleBar(itemWidth: itemWidth * attackCategoriesCount, barWidth: 80), height: 0)
             case 1:
-                barOffset = CGSize(width: (itemWidth * attackCategoriesCount) + barWidth + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * defendCategoriesCount, barWidth: 80).width, height: 0)
+                barOffset = CGSize(width: (itemWidth * attackCategoriesCount) + barWidth + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * defendCategoriesCount, barWidth: 80), height: 0)
             default:
-                barOffset = CGSize(width: (itemWidth * attackCategoriesCount) + (barWidth * 2) + (itemWidth * defendCategoriesCount) + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * etcCategoriesCount, barWidth: 80).width, height: 0)
+                barOffset = CGSize(width: (itemWidth * attackCategoriesCount) + (barWidth * 2) + (itemWidth * defendCategoriesCount) + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * etcCategoriesCount, barWidth: 80), height: 0)
             }
         }
     }
@@ -596,7 +596,7 @@ struct FBGameStatsSecondCategoryList: View {
     init(fbGameStatsStore: StoreOf<FBGameStatsStore>) {
         self.fbGameStatsStore = fbGameStatsStore
         
-        self._barOffset = State(initialValue: getOffsetOfAniCapsuleBar(itemWidth: fbGameStatsStore.itemWidth))
+        self._barOffset = State(initialValue: CGSize(width: getOffsetOfAniCapsuleBar(itemWidth: fbGameStatsStore.itemWidth), height: 0))
     }
     
     var body: some View {
@@ -653,11 +653,11 @@ struct FBGameStatsSecondCategoryList: View {
         withAnimation(.spring(duration: 0.5)) {
             switch index {
             case 0..<attackCategoriesCount:
-                barOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index)
+                barOffset = CGSize(width: getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index), height: 0)
             case attackCategoriesCount..<attackCategoriesCount + defendCategoriesCount:
-                barOffset = CGSize(width: barWidth + getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index).width, height: 0)
+                barOffset = CGSize(width: barWidth + getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index), height: 0)
             default:
-                barOffset = CGSize(width: (barWidth * 2) + getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index).width, height: 0)
+                barOffset = CGSize(width: (barWidth * 2) + getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index), height: 0)
             }
         }
     }
