@@ -10,7 +10,7 @@ import Foundation
 enum APIEndpoint {
     case searchByQuery(query: String)
     case getLeagueSchedule(leagueId: Int, yearMonth: String)
-    case searchByKeyword(keyword: TrendingKeyword)
+    case searchByKeyword(keyword: KeywordInfo)
     case searchByEndpoint(endpoint: String)
     case fetchGameInfo(category: String, date: String, leagueId: Int, fixtureId: Int)
     
@@ -77,6 +77,7 @@ enum APIEndpoint {
         case .searchByQuery, .getLeagueSchedule, .searchByEndpoint, .fetchTrendingKeywords, .fetchGameInfo:
             return nil
         case .searchByKeyword(let keyword):
+            // NOTE: nil is excluded
             return try? JSONEncoder().encode(keyword)
         }
     }

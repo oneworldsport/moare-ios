@@ -90,7 +90,7 @@ struct AnimatingSearchBar: View {
                                             searchStore.send(.updateTextFieldVisibleState(false))
                                             
                                             // search
-                                            searchStore.send(.performSearch(searchType: .keyword, aniDuration: AnimationConstants.Duration.medium))
+                                            searchStore.send(.performSearch(searchType: .trendingKeyword, aniDuration: AnimationConstants.Duration.medium))
                                             searchStore.send(.removeAutoCompleteWithAni)
                                         }
                                     } else {
