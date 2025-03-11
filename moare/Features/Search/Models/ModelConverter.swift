@@ -62,7 +62,7 @@ struct ModelConverter {
             return nil
         }
         
-        return FBPlayerStandingsDisplayModel(keywords: keywords, standings: standings)
+        return FBPlayerStandingsDisplayModel(keywords: keywords, entityInfo: entityInfo, standings: standings)
     }
     
     func fbTeamInfoConverter(response: FBTeamInfoResponseModel) -> FBTeamInfoDisplayModel {
