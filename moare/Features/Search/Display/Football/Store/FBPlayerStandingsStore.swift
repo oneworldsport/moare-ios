@@ -11,6 +11,7 @@ import ComposableArchitecture
 
 @Reducer
 struct FBPlayerStandingsStore {
+    let searchClient = SearchClient()
     
     @ObservableState
     struct State {
@@ -29,7 +30,7 @@ struct FBPlayerStandingsStore {
            data state
            --------------------- */
         var displayModel: FBPlayerStandingsDisplayModel? = nil
-        var standings: [FBPlayerStandingsDisplay] = []
+        var filteredStandings: [FBPlayerStandingsDisplay] = []
         var league: FBLeague? = nil
         
         /* ---------------------
@@ -38,17 +39,30 @@ struct FBPlayerStandingsStore {
         var firstSelectedIndex = 0
         var secondSelectedIndex = 0
         var shouldScrollCategory = false
+        var entityIndex: Int? = nil
+        var filteredStandingsStartIndex = 0
+        
+        /* ---------------------
+           etc
+           --------------------- */
+        var standings: [FBPlayerStandingsDisplay] = []
+        var selectedEntity: EntityInfo? = nil
+        var filteredStandingsEndIndex = 0
     }
     
     enum Action {
         case initData(displayModel: FBPlayerStandingsDisplayModel)
-        case selectFirstCategory(Int)
-        case selectSecondCategory(Int)
+        case selectFirstCategory(index: Int)
+        case selectSecondCategory(index: Int, category: String)
+        case showMoreStandings(isUp: Bool)
         
         /* ---------------------
            private
            --------------------- */
+        case filterStandings
         case sortStandings
+        case fetchStandings(category: String)
+        case setDisplayModel(data: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -61,8 +75,8 @@ struct FBPlayerStandingsStore {
                 
                 let keywords = displayModel.keywords
                 
-                // select category that matches with the keyword
                 if !keywords.isEmpty {
+                    // Check matching keyword in the order of categories, doesn't matter what keyword is in keywords
                     let index = StringConstants.Football.playerStandingsSecondCategories.firstIndex { category in
                         let keyword = keywords.first { $0.keyword == category }
                         return keyword != nil
@@ -73,24 +87,32 @@ struct FBPlayerStandingsStore {
                     }
                 }
                 
-                return .send(.sortStandings)
+                return .send(.filterStandings)
                 
             case .selectFirstCategory(let index):
                 state.shouldScrollCategory = true
                 
+                var secondCategory = "득점"
+                
                 // should change secondSelectedIndex first as bar moves based on secondSelectedIndex when firstSelectedIndex changes
                 switch index {
-                case 0: state.secondSelectedIndex = 0
-                case 1: state.secondSelectedIndex = StringConstants.Football.playerStandingsAttackCategories.count
-                case 2: state.secondSelectedIndex = StringConstants.Football.playerStandingsAttackCategories.count + StringConstants.Football.playerStandingsDefendCategories.count
+                case 0: 
+                    state.secondSelectedIndex = 0
+                    secondCategory = "득점"
+                case 1: 
+                    state.secondSelectedIndex = StringConstants.Football.playerStandingsAttackCategories.count
+                    secondCategory = "태클 시도"
+                case 2:
+                    state.secondSelectedIndex = StringConstants.Football.playerStandingsAttackCategories.count + StringConstants.Football.playerStandingsDefendCategories.count
+                    secondCategory = "패스 시도"
                 default: break
                 }
                 
                 state.firstSelectedIndex = index
                 
-                return .send(.sortStandings)
+                return .send(.fetchStandings(category: secondCategory))
                 
-            case .selectSecondCategory(let index):
+            case .selectSecondCategory(let index, let category):
                 state.shouldScrollCategory = false
                 state.secondSelectedIndex = index
                 
@@ -103,10 +125,94 @@ struct FBPlayerStandingsStore {
                     state.firstSelectedIndex = 2
                 }
                 
-                return .send(.sortStandings)
+                return .send(.fetchStandings(category: category))
+                
+            case .filterStandings:
+                // Get the first entity(player) matching with the standings.(Checking in the order of standings)
+                let index = state.standings.firstIndex { player in
+                    let entity = state.displayModel?.entityInfo.first { $0.playerId == player.player.id }
+                    if entity != nil {
+                        state.selectedEntity = entity
+                    }
+                    return entity != nil
+                }
+                
+                guard let index = index else {
+                    return .none
+                }
+                
+                state.entityIndex = index
+                
+                let rangeSize = 20
+                let startIndex = max(0, index - (rangeSize / 2) + 1) // previous 9 players from entity player
+                let endIndex = min(state.standings.count, startIndex + rangeSize - 1) // next 10 players from entity player
+                
+                let newStandings = Array(state.standings[startIndex...endIndex])
+                
+                state.filteredStandingsEndIndex = endIndex
+                // NOTE: Has to set filteredStandings before filteredStandingsStartIndex because of ForEach re-render problem.(index out of bounds)
+                state.filteredStandings = newStandings
+                state.filteredStandingsStartIndex = startIndex
+                
+                return .none
+                
+            case .showMoreStandings(let isUp):
+                // get 10 more standings
+                if isUp {
+                    let newStartIndex = max(0, state.filteredStandingsStartIndex - 10)
+                    
+                    if newStartIndex == state.filteredStandingsStartIndex {
+                        return .none
+                    }
+                    
+                    let newStandings = Array(state.standings[newStartIndex...state.filteredStandingsEndIndex])
+                    
+                    state.filteredStandings = newStandings
+                    state.filteredStandingsStartIndex = newStartIndex
+                } else {
+                    let newEndIndex = min(state.standings.count - 1, state.filteredStandingsEndIndex + 10)
+                    
+                    if newEndIndex == state.filteredStandingsEndIndex {
+                        return .none
+                    }
+                    
+                    let newStandings = Array(state.standings[state.filteredStandingsStartIndex...newEndIndex])
+                    
+                    state.filteredStandings = newStandings
+                    state.filteredStandingsEndIndex = newEndIndex
+                }
+                
+                return .none
+                
+            case .fetchStandings(let category):
+                return .run { [displayModel = state.displayModel, selectedEntity = state.selectedEntity] send in
+                    // TODO: Structure should be updated(Temporary code)
+                    let standingsKeyword = displayModel?.keywords.first { $0.id == "standings" }
+                    let keywords = [standingsKeyword!, Keyword(keyword: category, id: "", priority: 100)]
+                    let entities = selectedEntity != nil ? [selectedEntity!] : []
+                    let keywordInfo = KeywordInfo(
+                        keyword: category,
+                        keywords: keywords, 
+                        entities: entities
+                    )
+                    
+                    let data = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                    
+                    await send(.setDisplayModel(data: data.data))
+                }
+                
+            case .setDisplayModel(let data):
+                if case let .fbPlayerStandings(_, displayModel) = data {
+                    state.displayModel = displayModel
+                    state.standings = displayModel.standings
+                    
+                    return .send(.filterStandings)
+                }
+                
+                return .none
                 
             case .sortStandings:
-                var standings = state.standings
+                var standings = state.filteredStandings
                 
                 switch state.secondSelectedIndex {
                 case 0:
@@ -151,7 +257,7 @@ struct FBPlayerStandingsStore {
                     break
                 }
                 
-                state.standings = Array(standings.prefix(20))
+                state.filteredStandings = Array(standings.prefix(20))
                 
                 return .none
             }

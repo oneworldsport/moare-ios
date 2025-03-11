@@ -9,6 +9,7 @@ import Foundation
 
 struct FBPlayerStandingsDisplayModel {
     let keywords: [Keyword]
+    let entityInfo: [EntityInfo]
     let standings: [FBPlayerStandingsDisplay]
 }
 

@@ -103,6 +103,8 @@
 		DADA39842D3A2006000D15E0 /* AWSCore in Frameworks */ = {isa = PBXBuildFile; productRef = DADA39832D3A2006000D15E0 /* AWSCore */; };
 		DADA39862D3A2006000D15E0 /* AWSS3 in Frameworks */ = {isa = PBXBuildFile; productRef = DADA39852D3A2006000D15E0 /* AWSS3 */; };
 		DADA39882D3A2006000D15E0 /* AWSTranslate in Frameworks */ = {isa = PBXBuildFile; productRef = DADA39872D3A2006000D15E0 /* AWSTranslate */; };
+		DAE5733E2D80104A009ED74D /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = DAE5733D2D80104A009ED74D /* Kingfisher */; };
+		DAE573402D8036D6009ED74D /* SynchronizedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE5733F2D8036D6009ED74D /* SynchronizedScrollView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -218,6 +220,7 @@
 		DADA396C2D3A1AC9000D15E0 /* moareUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = moareUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DADA39702D3A1AC9000D15E0 /* moareUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = moareUITests.swift; sourceTree = "<group>"; };
 		DADA39722D3A1AC9000D15E0 /* moareUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = moareUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		DAE5733F2D8036D6009ED74D /* SynchronizedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronizedScrollView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -225,6 +228,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAE5733E2D80104A009ED74D /* Kingfisher in Frameworks */,
 				DADA39862D3A2006000D15E0 /* AWSS3 in Frameworks */,
 				DADA39882D3A2006000D15E0 /* AWSTranslate in Frameworks */,
 				DABE3D722D7EF19D0048DCAA /* Collections in Frameworks */,
@@ -694,6 +698,7 @@
 				DA531BFF2D64A91900DB87CB /* FlowStack.swift */,
 				DA531C002D64A91900DB87CB /* UIExtensions.swift */,
 				DABE3D6A2D7E977F0048DCAA /* Utilities.swift */,
+				DAE5733F2D8036D6009ED74D /* SynchronizedScrollView.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -793,6 +798,7 @@
 				DADA39852D3A2006000D15E0 /* AWSS3 */,
 				DADA39872D3A2006000D15E0 /* AWSTranslate */,
 				DABE3D712D7EF19D0048DCAA /* Collections */,
+				DAE5733D2D80104A009ED74D /* Kingfisher */,
 			);
 			productName = moare;
 			productReference = DADA39512D3A1AC8000D15E0 /* moare.app */;
@@ -870,6 +876,7 @@
 				DADA397F2D3A1CEC000D15E0 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				DADA39822D3A2006000D15E0 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */,
 				DABE3D702D7EF19D0048DCAA /* XCRemoteSwiftPackageReference "swift-collections" */,
+				DAE5733C2D80104A009ED74D /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = DADA39522D3A1AC8000D15E0 /* Products */;
 			projectDirPath = "";
@@ -960,6 +967,7 @@
 				DA531B9A2D64A8CA00DB87CB /* FBPlayerStatsStore.swift in Sources */,
 				DA531BE22D64A8F200DB87CB /* APIClient.swift in Sources */,
 				DA531B9B2D64A8CA00DB87CB /* FBTeamInfoStore.swift in Sources */,
+				DAE573402D8036D6009ED74D /* SynchronizedScrollView.swift in Sources */,
 				DA531C032D64A91900DB87CB /* BaseUIState.swift in Sources */,
 				DA531BA42D64A8CA00DB87CB /* FBTeamInfoView.swift in Sources */,
 				DA531BC32D64A8CA00DB87CB /* FootballTeamGameStatsResponseModel.swift in Sources */,
@@ -1387,6 +1395,14 @@
 				minimumVersion = 2.40.0;
 			};
 		};
+		DAE5733C2D80104A009ED74D /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1414,6 +1430,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DADA39822D3A2006000D15E0 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
 			productName = AWSTranslate;
+		};
+		DAE5733D2D80104A009ED74D /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DAE5733C2D80104A009ED74D /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

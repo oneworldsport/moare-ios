@@ -1,5 +1,5 @@
 {
-  "originHash" : "af35255c946a4c7a5b3b141c6fb69574ae27958c1a391c703fa07d4a74fc8871",
+  "originHash" : "c6d87f28b68425d2007401a6da3114f2b03b38b4b3364614fee4dce9910713e2",
   "pins" : [
     {
       "identity" : "aws-sdk-ios-spm",
@@ -17,6 +17,15 @@
       "state" : {
         "revision" : "9fa31f4403da54855f1e2aeaeff478f4f0e40b13",
         "version" : "1.0.2"
+      }
+    },
+    {
+      "identity" : "kingfisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Kingfisher.git",
+      "state" : {
+        "revision" : "b450a3b30e0767277a6eed7e02dbdebd7d173da0",
+        "version" : "8.3.0"
       }
     },
     {
