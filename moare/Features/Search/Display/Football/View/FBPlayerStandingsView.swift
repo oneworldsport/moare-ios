@@ -230,8 +230,6 @@ struct FBPlayerStandingsFirstDataListItem: View {
     let rank: Int
     let data: FBPlayerStandingsDisplay
     
-    @State private var teamKrName = ""
-    
     var body: some View {
         HStack(spacing: 0) {
             Text("\(rank)")
@@ -252,7 +250,7 @@ struct FBPlayerStandingsFirstDataListItem: View {
                 }
                 
                 HStack {
-                    Text(teamKrName)
+                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.stats.team.name))
                         .font(.system(size: 11, weight: .light))
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
@@ -269,16 +267,6 @@ struct FBPlayerStandingsFirstDataListItem: View {
                 .opacity(0.5)
         }
         .padding(.leading, 10)
-        .onAppear {
-            translate()
-        }
-    }
-    
-    private func translate() {
-        Task {
-            let teamKrName = await EnNameTranslationUtility.translateByAWS(input: data.stats.team.name)
-            self.teamKrName = EnNameTranslationUtility.translateByDic(type: .team, input: teamKrName)
-        }
     }
 }
 

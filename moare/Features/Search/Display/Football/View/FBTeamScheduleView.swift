@@ -155,8 +155,6 @@ struct FBTeamScheduleListItem: View {
        ui state
        --------------------- */
     @State private var isResultOpened = false
-    @State private var homeTeamKrName = ""
-    @State private var awayTeamKrname = ""
     @State private var venueKrName = ""
     @State private var refereeKrName = ""
     
@@ -172,7 +170,7 @@ struct FBTeamScheduleListItem: View {
                 VStack {
                     URLImage(url: data.teams.home.logo, size: .small)
                     
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: homeTeamKrName))
+                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.teams.home.name))
                         .font(.system(size: 13))
                         .lineLimit(2)
                 }
@@ -270,7 +268,7 @@ struct FBTeamScheduleListItem: View {
                 VStack {
                     URLImage(url: data.teams.away.logo, size: .small)
                     
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: awayTeamKrname))
+                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.teams.away.name))
                         .font(.system(size: 13))
                         .lineLimit(2)
                 }
@@ -293,8 +291,6 @@ struct FBTeamScheduleListItem: View {
             } else {
                 isResultOpened = true
             }
-            
-            translate()
         }
         .onChange(of: fbTeamScheduleStore.gameResultOpenedStateList) { newValue in
             if StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) {
@@ -317,9 +313,6 @@ struct FBTeamScheduleListItem: View {
                     self.refereeKrName = refereeKrName
                 }
             }
-        }
-        .onChange(of: data) { newValue in
-            translate()
         }
     }
     
@@ -347,18 +340,6 @@ struct FBTeamScheduleListItem: View {
             }
         } else {
             .secondary
-        }
-    }
-    
-    private func translate() {
-        Task {
-            let homeTeamKrName = await EnNameTranslationUtility.translateByAWS(input: data.teams.home.name)
-            self.homeTeamKrName = homeTeamKrName
-        }
-        
-        Task {
-            let awayTeamKrName = await EnNameTranslationUtility.translateByAWS(input: data.teams.away.name)
-            self.awayTeamKrname = awayTeamKrName
         }
     }
     

@@ -213,8 +213,6 @@ struct FBLeagueScheduleListItem: View {
        ui state
        --------------------- */
     @State private var isResultOpened = false
-    @State private var homeTeamKrName = ""
-    @State private var awayTeamKrname = ""
     @State private var venueKrName = ""
     @State private var refereeKrName = ""
     
@@ -230,7 +228,7 @@ struct FBLeagueScheduleListItem: View {
                 VStack(spacing: 0) {
                     URLImage(url: data.teams.home.logo, size: .small)
                     
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: homeTeamKrName))
+                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.teams.home.name))
                         .font(.system(size: 13))
                         .lineLimit(2)
                         .padding(.top, 2)
@@ -331,7 +329,7 @@ struct FBLeagueScheduleListItem: View {
                 VStack(spacing: 0) {
                     URLImage(url: data.teams.away.logo, size: .small)
                     
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: awayTeamKrname))
+                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.teams.away.name))
                         .font(.system(size: 13))
                         .lineLimit(2)
                         .padding(.top, 2)
@@ -366,8 +364,6 @@ struct FBLeagueScheduleListItem: View {
             } else {
                 isResultOpened = true
             }
-            
-            translate()
         }
         .onChange(of: fbLeagueScheduleStore.gameResultOpenedStateList) { newValue in
             if StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) {
@@ -390,9 +386,6 @@ struct FBLeagueScheduleListItem: View {
                     self.refereeKrName = refereeKrName
                 }
             }
-        }
-        .onChange(of: data) { newValue in
-            translate()
         }
     }
     
@@ -420,18 +413,6 @@ struct FBLeagueScheduleListItem: View {
             }
         } else {
             .secondary
-        }
-    }
-    
-    private func translate() {
-        Task {
-            let homeTeamKrName = await EnNameTranslationUtility.translateByAWS(input: data.teams.home.name)
-            self.homeTeamKrName = homeTeamKrName
-        }
-        
-        Task {
-            let awayTeamKrName = await EnNameTranslationUtility.translateByAWS(input: data.teams.away.name)
-            self.awayTeamKrname = awayTeamKrName
         }
     }
 }

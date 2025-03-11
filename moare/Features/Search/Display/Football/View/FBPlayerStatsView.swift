@@ -136,8 +136,6 @@ struct FBPlayerStatsPlayerInfoItem: View {
     @ComposableArchitecture.Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
     let showContents: Bool
-    
-    @State var teamKrName = ""
 
     init(fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>, showContents: Bool = true) {
         self.fbPlayerStatsStore = fbPlayerStatsStore
@@ -182,7 +180,7 @@ struct FBPlayerStatsPlayerInfoItem: View {
                             URLImage(url: team.logo, customSize: CGSize(width: 24, height: 24))
                                 .padding(.trailing, 6)
                             
-                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: teamKrName))
+                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.name))
                                 .font(.system(size: 16))
                                 .fontWeight(.medium)
                         }
@@ -192,18 +190,6 @@ struct FBPlayerStatsPlayerInfoItem: View {
             .opacity(showContents ? 1 : 0)
         } // VStack
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
-        .onAppear {
-            translate()
-        }
-    }
-    
-    private func translate() {
-        guard let team = fbPlayerStatsStore.team else { return }
-        
-        Task {
-            let teamKrName = await EnNameTranslationUtility.translateByAWS(input: team.name)
-            self.teamKrName = teamKrName
-        }
     }
 }
 
@@ -331,8 +317,6 @@ struct FBPlayerStatsItem: View {
     
     let stats: FBPlayerStats
     let showContents: Bool
-    
-    @State var teamName = ""
 
     init(fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>, stats: FBPlayerStats, showContents: Bool = true) {
         self.fbPlayerStatsStore = fbPlayerStatsStore
@@ -357,7 +341,7 @@ struct FBPlayerStatsItem: View {
                 
                 URLImage(url: stats.team.logo, customSize: CGSize(width: 24, height: 24))
                 
-                Text(EnNameTranslationUtility.translateByDic(type: .team, input: teamName))
+                Text(EnNameTranslationUtility.translateByDic(type: .team, input: stats.team.name))
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }
@@ -463,16 +447,6 @@ struct FBPlayerStatsItem: View {
         } // VStack
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
         .padding(.bottom, UIConstants.Padding.defalutVPadding)
-        .onAppear {
-            translate()
-        }
-    }
-    
-    private func translate() {
-        Task {
-            let teamName = await EnNameTranslationUtility.translateByAWS(input: stats.team.name)
-            self.teamName = teamName
-        }
     }
 }
 

@@ -161,8 +161,6 @@ struct FBTeamStandingsFirstDataListItem: View {
     
     let rank: Int
     let data: FBTeamStandingsDisplay
-    
-    @State private var teamKrName = ""
 
     var body: some View {
         HStack(spacing: 0) {
@@ -174,7 +172,7 @@ struct FBTeamStandingsFirstDataListItem: View {
                 .padding(.leading, 4)
                 .padding(.trailing, 6)
 
-            Text(EnNameTranslationUtility.translateByDic(type: .team, input: teamKrName))
+            Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.team.name))
                 .font(.system(size: 12))
                 .lineLimit(2)
 
@@ -188,16 +186,6 @@ struct FBTeamStandingsFirstDataListItem: View {
         .padding(.leading, 10)
         .onTapGesture {
             searchStore.send(.showTeamStats(data.team.id))
-        }
-        .onAppear {
-            translate()
-        }
-    }
-    
-    private func translate() {
-        Task {
-            let teamKrName = await EnNameTranslationUtility.translateByAWS(input: data.team.name)
-            self.teamKrName = teamKrName
         }
     }
 }
