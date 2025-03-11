@@ -16,66 +16,78 @@ struct SplashView: View {
     @State private var isCiclesVisible = true
     
     var body: some View {
-        ZStack {
-            if isCiclesVisible {
-                Circle()
-                    .stroke(.moare, lineWidth: 4)
-                    .frame(width: 60, height: 60)
-                    .offset(x: 0, y: animatePosition ? -35 : 0)
-                
-                Circle()
-                    .stroke(.moare, lineWidth: 4)
-                    .frame(width: 60, height: 60)
-                    .offset(x: animatePosition ? 40 : 0, y: animatePosition ? -9 : 0)
-                
-                Circle()
-                    .stroke(.moare, lineWidth: 4)
-                    .frame(width: 60, height: 60)
-                    .offset(x: animatePosition ? 23 : 0, y: animatePosition ? 35 : 0)
-                
-                Circle()
-                    .stroke(.moare, lineWidth: 4)
-                    .frame(width: 60, height: 60)
-                    .offset(x: animatePosition ? -23 : 0, y: animatePosition ? 35 : 0)
-                
-                Circle()
-                    .stroke(.moare, lineWidth: 4)
-                    .frame(width: 60, height: 60)
-                    .offset(x: animatePosition ? -40 : 0, y: animatePosition ? -9 : 0)
-            }
-            
-            if isLogoVisible {
-                FlowerShape()
-                    .stroke(.moare, lineWidth: 4)
-                    .frame(width: 60, height: 60)
-            }
+        VStack {
+            Image("moare_logo")
+                .resizable()
+                .frame(width: 200, height: 200)
         }
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                withAnimation(.spring(duration: 0.5)) {
-                    animatePosition = true
-                }
-            }
-            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    isCiclesVisible = false
-                    isLogoVisible = true
-                }
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
-                withAnimation(.easeInOut(duration: 0.4)) {
-                    isLogoVisible = false
-                }
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
                 withAnimation(.easeInOut(duration: 0.5)) {
                     isSplashFinished = true
                 }
             }
         }
+//        ZStack {
+//            if isCiclesVisible {
+//                Circle()
+//                    .stroke(.moare, lineWidth: 4)
+//                    .frame(width: 60, height: 60)
+//                    .offset(x: 0, y: animatePosition ? -35 : 0)
+//                
+//                Circle()
+//                    .stroke(.moare, lineWidth: 4)
+//                    .frame(width: 60, height: 60)
+//                    .offset(x: animatePosition ? 40 : 0, y: animatePosition ? -9 : 0)
+//                
+//                Circle()
+//                    .stroke(.moare, lineWidth: 4)
+//                    .frame(width: 60, height: 60)
+//                    .offset(x: animatePosition ? 23 : 0, y: animatePosition ? 35 : 0)
+//                
+//                Circle()
+//                    .stroke(.moare, lineWidth: 4)
+//                    .frame(width: 60, height: 60)
+//                    .offset(x: animatePosition ? -23 : 0, y: animatePosition ? 35 : 0)
+//                
+//                Circle()
+//                    .stroke(.moare, lineWidth: 4)
+//                    .frame(width: 60, height: 60)
+//                    .offset(x: animatePosition ? -40 : 0, y: animatePosition ? -9 : 0)
+//            }
+//            
+//            if isLogoVisible {
+//                FlowerShape()
+//                    .stroke(.moare, lineWidth: 4)
+//                    .frame(width: 60, height: 60)
+//            }
+//        }
+//        .onAppear {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+//                withAnimation(.spring(duration: 0.5)) {
+//                    animatePosition = true
+//                }
+//            }
+//            
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+//                withAnimation(.easeInOut(duration: 0.3)) {
+//                    isCiclesVisible = false
+//                    isLogoVisible = true
+//                }
+//            }
+//            
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
+//                withAnimation(.easeInOut(duration: 0.4)) {
+//                    isLogoVisible = false
+//                }
+//            }
+//            
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+//                withAnimation(.easeInOut(duration: 0.5)) {
+//                    isSplashFinished = true
+//                }
+//            }
+//        }
     }
 }
 
