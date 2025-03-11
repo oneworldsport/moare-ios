@@ -434,8 +434,6 @@ struct FBPlayerInfoFourthItem: View {
     
     let showContents: Bool
     
-    @State var teamKrName = ""
-    
     init(fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>, showContents: Bool = true) {
         self.fbPlayerInfoStore = fbPlayerInfoStore
         self.showContents = showContents
@@ -463,7 +461,7 @@ struct FBPlayerInfoFourthItem: View {
                         HStack {
                             URLImage(url: team.logo, size: .small)
                             
-                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: teamKrName))
+                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.name))
                                 .font(.system(size: 16))
                                 .fontWeight(.medium)
                         }
@@ -480,18 +478,6 @@ struct FBPlayerInfoFourthItem: View {
             .opacity(showContents ? 1 : 0)
         }
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
-        .onAppear {
-            translate()
-        }
-    }
-    
-    private func translate() {
-        guard let team = fbPlayerInfoStore.team else { return }
-        
-        Task {
-            let teamKrName = await EnNameTranslationUtility.translateByAWS(input: team.name)
-            self.teamKrName = teamKrName
-        }
     }
 }
 
@@ -499,9 +485,6 @@ struct FBPlayerInfoFifthItem: View {
     @ComposableArchitecture.Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
     
     let showContents: Bool
-    
-    @State var homeTeamKrName = ""
-    @State var awayTeamKrName = ""
     
     init(fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>, showContents: Bool = true) {
         self.fbPlayerInfoStore = fbPlayerInfoStore
@@ -520,7 +503,7 @@ struct FBPlayerInfoFifthItem: View {
                 if let lastGame = fbPlayerInfoStore.lastGame {
                     VStack {
                         HStack {
-                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: homeTeamKrName))
+                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: lastGame.teams.home.name))
                                 .font(.system(size: 14))
                                 .fontWeight(.light)
                                 .lineLimit(1)
@@ -539,7 +522,7 @@ struct FBPlayerInfoFifthItem: View {
                                 .fontWeight(.medium)
                                 .foregroundStyle((lastGame.goals.away >= lastGame.goals.home) ? .moare : .primary)
                             
-                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: awayTeamKrName))
+                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: lastGame.teams.away.name))
                                 .font(.system(size: 14))
                                 .fontWeight(.light)
                                 .lineLimit(1)
@@ -566,23 +549,6 @@ struct FBPlayerInfoFifthItem: View {
             .opacity(showContents ? 1 : 0)
         } // VStack
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
-        .onAppear {
-            translate()
-        }
-    }
-    
-    private func translate() {
-        guard let lastGame = fbPlayerInfoStore.lastGame else { return }
-        
-        Task {
-            let homeTeamKrName = await EnNameTranslationUtility.translateByAWS(input: lastGame.teams.home.name)
-            self.homeTeamKrName = homeTeamKrName
-        }
-        
-        Task {
-            let awayTeamKrName = await EnNameTranslationUtility.translateByAWS(input: lastGame.teams.away.name)
-            self.awayTeamKrName = awayTeamKrName
-        }
     }
 }
 
@@ -590,9 +556,6 @@ struct FBPlayerInfoSixthItem: View {
     @ComposableArchitecture.Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
     
     let showContents: Bool
-    
-    @State var homeTeamKrName = ""
-    @State var awayTeamKrName = ""
     
     init(fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>, showContents: Bool = true) {
         self.fbPlayerInfoStore = fbPlayerInfoStore
@@ -609,7 +572,7 @@ struct FBPlayerInfoSixthItem: View {
             
             if let nextGame = fbPlayerInfoStore.nextGame {
                 HStack {
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: homeTeamKrName))
+                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: nextGame.teams.home.name))
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -617,7 +580,7 @@ struct FBPlayerInfoSixthItem: View {
                     Text(" vs ")
                         .fontWeight(.semibold)
                     
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: awayTeamKrName))
+                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: nextGame.teams.away.name))
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -631,22 +594,5 @@ struct FBPlayerInfoSixthItem: View {
             }
         } // VStack
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
-        .onAppear {
-            translate()
-        }
-    }
-    
-    private func translate() {
-        guard let nextGame = fbPlayerInfoStore.nextGame else { return }
-        
-        Task {
-            let homeTeamKrName = await EnNameTranslationUtility.translateByAWS(input: nextGame.teams.home.name)
-            self.homeTeamKrName = homeTeamKrName
-        }
-        
-        Task {
-            let awayTeamKrName = await EnNameTranslationUtility.translateByAWS(input: nextGame.teams.away.name)
-            self.awayTeamKrName = awayTeamKrName
-        }
     }
 }

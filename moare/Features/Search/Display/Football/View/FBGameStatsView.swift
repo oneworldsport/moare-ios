@@ -192,9 +192,6 @@ struct FBGameStatsTeamButtonContainer: View {
     
     @State var barOffset: CGSize
     
-    @State private var homeTeamKrName = ""
-    @State private var awayTeamKrName = ""
-    
     init(searchStore: StoreOf<SearchStore>, fbGameStatsStore: StoreOf<FBGameStatsStore>) {
         self.searchStore = searchStore
         self.fbGameStatsStore = fbGameStatsStore
@@ -209,7 +206,7 @@ struct FBGameStatsTeamButtonContainer: View {
                     // home
                     FBGameStatsTeamButton(
                         fbGameStatsStore: fbGameStatsStore,
-                        team: homeTeamKrName,
+                        team: EnNameTranslationUtility.translateByDic(type: .team, input: fbGameStatsStore.displayModel?.game.teams.home.name ?? ""),
                         index: 0
                     )
                     .frame(maxWidth: fbGameStatsStore.teamButtonWidth)
@@ -220,7 +217,7 @@ struct FBGameStatsTeamButtonContainer: View {
                     // away
                     FBGameStatsTeamButton(
                         fbGameStatsStore: fbGameStatsStore,
-                        team: awayTeamKrName,
+                        team:  EnNameTranslationUtility.translateByDic(type: .team, input: fbGameStatsStore.displayModel?.game.teams.away.name ?? ""),
                         index: 1
                     )
                     .frame(maxWidth: fbGameStatsStore.teamButtonWidth)
@@ -251,9 +248,6 @@ struct FBGameStatsTeamButtonContainer: View {
                 .padding(.trailing, UIConstants.Padding.defaultHPadding)
             }
         }
-        .onAppear {
-            translate()
-        }
         .onChange(of: fbGameStatsStore.selectedTeamIndex) { newValue in
             moveBar(index: newValue)
         }
@@ -267,18 +261,6 @@ struct FBGameStatsTeamButtonContainer: View {
             default:
                 barOffset = CGSize(width: fbGameStatsStore.barWidth + getOffsetOfAniCapsuleBar(itemWidth: fbGameStatsStore.teamButtonWidth, barWidth: 50, index: index), height: 0)
             }
-        }
-    }
-    
-    private func translate() {
-        Task {
-            let homeTeamKrName = await EnNameTranslationUtility.translateByAWS(input: fbGameStatsStore.displayModel?.game.teams.home.name)
-            self.homeTeamKrName = EnNameTranslationUtility.translateByDic(type: .team, input: homeTeamKrName)
-        }
-        
-        Task {
-            let awayTeamKrName = await EnNameTranslationUtility.translateByAWS(input: fbGameStatsStore.displayModel?.game.teams.away.name)
-            self.awayTeamKrName = EnNameTranslationUtility.translateByDic(type: .team, input: awayTeamKrName)
         }
     }
 }

@@ -307,7 +307,7 @@ struct FBTeamInfoFirstItem: View {
                 URLImage(url: team.logo)
                     .opacity(showContents ? 1 : 0)
                 
-                Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.krname))
+                Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.name))
                     .font(.system(size: 16))
                     .fontWeight(.medium)
                     .opacity(showContents ? 1 : 0)
@@ -483,9 +483,6 @@ struct FBTeamInfoFifthItem: View {
     @ComposableArchitecture.Bindable var fbTeamInfoStore: StoreOf<FBTeamInfoStore>
     let showContents: Bool
     
-    @State var homeTeamKrName = ""
-    @State var awayTeamKrName = ""
-    
     init(fbTeamInfoStore: StoreOf<FBTeamInfoStore>, showContents: Bool = true) {
         self.fbTeamInfoStore = fbTeamInfoStore
         self.showContents = showContents
@@ -501,7 +498,7 @@ struct FBTeamInfoFifthItem: View {
             
             if let lastGame = fbTeamInfoStore.lastGame {
                 HStack {
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: homeTeamKrName))
+                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: lastGame.teams.home.name))
                         .font(.system(size: 15))
                         .lineLimit(1)
                     
@@ -519,7 +516,7 @@ struct FBTeamInfoFifthItem: View {
                         .fontWeight(.medium)
                         .foregroundStyle((lastGame.goals.away > lastGame.goals.home) ? .moare : .primary)
                     
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: awayTeamKrName))
+                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: lastGame.teams.away.name))
                         .font(.system(size: 15))
                         .lineLimit(1)
                 }
@@ -533,32 +530,12 @@ struct FBTeamInfoFifthItem: View {
         } // VStack
         .frame(maxWidth: UIConstants.Width.screenWidth / 2)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
-        .onAppear {
-            translate()
-        }
-    }
-    
-    private func translate() {
-        guard let lastGame = fbTeamInfoStore.lastGame else { return }
-        
-        Task {
-            let homeTeamKrName = await EnNameTranslationUtility.translateByAWS(input: lastGame.teams.home.name)
-            self.homeTeamKrName = homeTeamKrName
-        }
-        
-        Task {
-            let awayTeamKrName = await EnNameTranslationUtility.translateByAWS(input: lastGame.teams.away.name)
-            self.awayTeamKrName = awayTeamKrName
-        }
     }
 }
 
 struct FBTeamInfoSixthItem: View {
     @ComposableArchitecture.Bindable var fbTeamInfoStore: StoreOf<FBTeamInfoStore>
     private let showContents: Bool
-    
-    @State var homeTeamKrName = ""
-    @State var awayTeamKrName = ""
     
     init(fbTeamInfoStore: StoreOf<FBTeamInfoStore>, showContents: Bool = true) {
         self.fbTeamInfoStore = fbTeamInfoStore
@@ -575,7 +552,7 @@ struct FBTeamInfoSixthItem: View {
             
             if let nextGame = fbTeamInfoStore.nextGame {
                 HStack {
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: homeTeamKrName))
+                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: nextGame.teams.home.name))
                         .font(.system(size: 15))
                         .frame(maxWidth: .infinity, alignment: .trailing)
                         .lineLimit(1)
@@ -584,7 +561,7 @@ struct FBTeamInfoSixthItem: View {
                         .font(.system(size: 15))
                         .fontWeight(.medium)
                     
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: awayTeamKrName))
+                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: nextGame.teams.away.name))
                         .font(.system(size: 15))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .lineLimit(1)
@@ -599,22 +576,5 @@ struct FBTeamInfoSixthItem: View {
         } // VStack
         .frame(maxWidth: UIConstants.Width.screenWidth / 2)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
-        .onAppear {
-            translate()
-        }
-    }
-    
-    private func translate() {
-        guard let nextGame = fbTeamInfoStore.nextGame else { return }
-        
-        Task {
-            let homeTeamKrName = await EnNameTranslationUtility.translateByAWS(input: nextGame.teams.home.name)
-            self.homeTeamKrName = homeTeamKrName
-        }
-        
-        Task {
-            let awayTeamKrName = await EnNameTranslationUtility.translateByAWS(input: nextGame.teams.away.name)
-            self.awayTeamKrName = awayTeamKrName
-        }
     }
 }
