@@ -22,7 +22,7 @@ struct SearchStore {
         /* ---------------------
            data state
            --------------------- */
-        var searchDataState: SearchDataState = .idle
+        var searchDataState: ApiFetchState = .idle
         
         var fbPlayerInfoData: FBPlayerInfoDisplayModel? = nil
         var fbPlayerStatsData: FBPlayerStatsDisplayModel? = nil
@@ -101,7 +101,7 @@ struct SearchStore {
            --------------------- */
         case initTrie
         case initAutoCompleteDataDic(autoCompleteData: [KeywordInfo])
-        case updateSearchDataState(SearchDataState)
+        case updateSearchDataState(ApiFetchState)
         case translate(String, (Result<String, Error>) -> Void)
         case updateIsFocused(Bool)
         case goBack

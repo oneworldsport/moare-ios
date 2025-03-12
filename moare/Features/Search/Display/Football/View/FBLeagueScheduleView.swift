@@ -97,13 +97,34 @@ struct FBLeaugScheduleView: View {
                         }
                     }
                     
-                    /* ---------------------
-                       schedule
-                       --------------------- */
-                    FBLeagueScheduleList(
-                        searchStore: searchStore,
-                        fbLeagueScheduleStore: fbLeagueScheduleStore
-                    )
+                    ZStack {
+                        /* ---------------------
+                           loading
+                           --------------------- */
+                        if fbLeagueScheduleStore.displayDataState == .fetching {
+                            ProgressView()
+                                .padding(.top, 8)
+                        }
+                        
+                        /* ---------------------
+                           schedule
+                           --------------------- */
+                        if fbLeagueScheduleStore.displayDataState == .success {
+                            FBLeagueScheduleList(
+                                searchStore: searchStore,
+                                fbLeagueScheduleStore: fbLeagueScheduleStore
+                            )
+                        }
+                        
+                        /* ---------------------
+                           error
+                           --------------------- */
+                        if case .failure(let message) = fbLeagueScheduleStore.displayDataState {
+                            Text(message)
+                                .padding(.top, 8)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 } // if let fbLeagueScheduleStore
             } // VStack
             .onAppear {

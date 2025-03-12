@@ -53,7 +53,9 @@ struct FBPlayerStandingsView: View {
                         .padding(.bottom, 8)
                     }
                     
-                    // category
+                    /* ---------------------
+                       category
+                       --------------------- */
                     HStack(spacing: 0) {
                         FBPlayerStandingsFirstCategoryItem(category: StringConstants.Football.standingsFirstCategory)
                         
@@ -66,72 +68,105 @@ struct FBPlayerStandingsView: View {
                     }
                     .frame(height: fbPlayerStandingsStore.categoryItemHeight * 2)
                     
-                    // standings data
-                    ScrollView {
-                        HStack(alignment: .top, spacing: 0) {
-                            FBPlayerStandingsFirstDataList(fbPlayerStandingsStore: fbPlayerStandingsStore)
-//                                .frame(maxHeight: .infinity, alignment: .top) // 정렬 안맞는 현상때문에 추가
-//                                .background(Color.red.opacity(0.3))
-                            
-                            // TODO: 아직도 1픽셀정도 미세한 차이가 있음
-                            HSynchronizedScrollView(scrollOffset: $hScrollOffset, itemWidth: fbPlayerStandingsStore.itemWidth, itemHeight: fbPlayerStandingsStore.dataItemHeight) {
-                                FBPlayerStandingsDataList(fbPlayerStandingsStore: fbPlayerStandingsStore)
-//                                    .frame(maxHeight: .infinity, alignment: .top) // 정렬 안맞는 현상때문에 추가
-//                                    .background(Color.blue.opacity(0.3))
-                            }
-                            .frame(height: fbPlayerStandingsStore.categoryItemHeight * CGFloat(fbPlayerStandingsStore.filteredStandings.count)) // 정렬 안맞는 현상때문에 추가
+                    ZStack {
+                        /* ---------------------
+                           loading
+                           --------------------- */
+                        if fbPlayerStandingsStore.displayDataState == .fetching {
+                            ProgressView()
                         }
-                        .background(
-                            WithPerceptionTracking {
+                        
+                        /* ---------------------
+                           standings
+                           --------------------- */
+                        if fbPlayerStandingsStore.displayDataState == .success {
+                            ScrollView {
+                                ScrollViewReader { proxy in
+                                    HStack(alignment: .top, spacing: 0) {
+                                        FBPlayerStandingsFirstDataList(fbPlayerStandingsStore: fbPlayerStandingsStore)
+                                        //                                .frame(maxHeight: .infinity, alignment: .top) // 정렬 안맞는 현상때문에 추가
+                                        //                                .background(Color.red.opacity(0.3))
+                                        
+                                        // TODO: 아직도 1픽셀정도 미세한 차이가 있음
+                                        HSynchronizedScrollView(scrollOffset: $hScrollOffset, itemWidth: fbPlayerStandingsStore.itemWidth, itemHeight: fbPlayerStandingsStore.dataItemHeight) {
+                                            FBPlayerStandingsDataList(fbPlayerStandingsStore: fbPlayerStandingsStore)
+                                                .padding(.top, 2) // 하이라이트 선 때문인지는 모르겠는데, 정렬 안맞는 현상 있어서 추가해줌. ScrollView가 문제인듯.
+                                            //                                    .frame(maxHeight: .infinity, alignment: .top) // 정렬 안맞는 현상때문에 추가
+                                            //                                    .background(Color.blue.opacity(0.3))
+                                        }
+                                        .frame(height: fbPlayerStandingsStore.categoryItemHeight * CGFloat(fbPlayerStandingsStore.filteredStandings.count), alignment: .top) // 정렬 안맞는 현상때문에 추가
+                                    }
+                                    .background(
+                                        WithPerceptionTracking {
+                                            GeometryReader { geometry in
+                                                let newOffset = geometry.frame(in: .global).minY
+                                                
+                                                Color.clear
+                                                    .onAppear {
+                                                        oldOffset = newOffset
+                                                        
+                                                        contentHeight = CGFloat(fbPlayerStandingsStore.filteredStandings.count) * fbPlayerStandingsStore.dataItemHeight
+                                                    }
+                                                    .onChange(of: fbPlayerStandingsStore.filteredStandings.count) { newValue in
+                                                        contentHeight = CGFloat(newValue) * fbPlayerStandingsStore.dataItemHeight
+                                                        
+                                                        // 추가로 10개의 standings가 나오고 다시 상단/하단으로 이동하는데 시간이 걸리기때문에, 다시 showMoreStandings를 가능하게 하는데 1초 delay를 주는건 괜찮아 보인다.
+                                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                                            canShowMoreStandings = true
+                                                        }
+                                                    }
+                                                    .onChange(of: newOffset) { newOffset in
+                                                        let delta = oldOffset - newOffset
+                                                        totalScrollDistance += delta
+                                                        oldOffset = newOffset
+                                                        
+                                                        let scrollableDistance = contentHeight - scrollViewHeight
+                                                        
+                                                        if canShowMoreStandings {
+                                                            if fbPlayerStandingsStore.filteredStandingsStartIndex != 0 && totalScrollDistance <= 0 {
+                                                                canShowMoreStandings = false
+                                                                fbPlayerStandingsStore.send(.showMoreStandings(isUp: true))
+//                                                                print("tooooppppp")
+                                                            } else if (fbPlayerStandingsStore.filteredStandingsEndIndex != fbPlayerStandingsStore.standings.count - 1) &&
+                                                                        (totalScrollDistance >= (scrollableDistance - 2)) { // give extra space for possible difference
+                                                                canShowMoreStandings = false
+                                                                fbPlayerStandingsStore.send(.showMoreStandings(isUp: false))
+//                                                                print("botttttooom")
+                                                            }
+                                                        }
+                                                    }
+                                            }
+                                        }
+                                    ) // .background()
+                                    .onChange(of: fbPlayerStandingsStore.filteredStandingsStartIndex) { newValue in
+                                        if fbPlayerStandingsStore.filteredStandings.count == 20 {
+                                            proxy.scrollTo(1, anchor: .top)
+                                        } else {
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                                proxy.scrollTo(10, anchor: .top)
+                                            }
+                                        }
+                                    }
+                                } // ScrollViewReader
+                            } // ScrollView
+                            .background(
                                 GeometryReader { geometry in
-                                    let newOffset = geometry.frame(in: .global).minY
-                                    
                                     Color.clear
                                         .onAppear {
-                                            oldOffset = newOffset
-                                            
-                                            contentHeight = CGFloat(fbPlayerStandingsStore.filteredStandings.count) * fbPlayerStandingsStore.dataItemHeight
-                                        }
-                                        .onChange(of: fbPlayerStandingsStore.filteredStandings.count) { newValue in
-                                            contentHeight = CGFloat(newValue) * fbPlayerStandingsStore.dataItemHeight
-
-                                            // 추가로 10개의 standings가 나오고 다시 상단/하단으로 이동하는데 시간이 걸리기때문에, 다시 showMoreStandings를 가능하게 하는데 1초 delay를 주는건 괜찮아 보인다.
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                                canShowMoreStandings = true
-                                            }
-                                        }
-                                        .onChange(of: newOffset) { newOffset in
-                                            let delta = oldOffset - newOffset
-                                            totalScrollDistance += delta
-                                            oldOffset = newOffset
-                                            
-                                            let scrollableDistance = contentHeight - scrollViewHeight
-                                            
-                                            if canShowMoreStandings {
-                                                if fbPlayerStandingsStore.filteredStandingsStartIndex != 0 && totalScrollDistance <= 0 {
-                                                    canShowMoreStandings = false
-                                                    fbPlayerStandingsStore.send(.showMoreStandings(isUp: true))
-//                                                    print("tooooppppp")
-                                                } else if (fbPlayerStandingsStore.filteredStandingsEndIndex != fbPlayerStandingsStore.standings.count - 1) &&
-                                                    (totalScrollDistance >= (scrollableDistance - 2)) { // give extra space for possible difference
-                                                    canShowMoreStandings = false
-                                                    fbPlayerStandingsStore.send(.showMoreStandings(isUp: false))
-//                                                    print("botttttooom")
-                                                }
-                                            }
+                                            scrollViewHeight = geometry.size.height
                                         }
                                 }
-                            }
-                        )
-                    }
-                    .background(
-                        GeometryReader { geometry in
-                            Color.clear
-                                .onAppear {
-                                    scrollViewHeight = geometry.size.height
-                                }
+                            )
+                        } // if fbPlayerStandingsStore.displayDataState == .success
+                        
+                        /* ---------------------
+                           error
+                           --------------------- */
+                        if case .failure(let message) = fbPlayerStandingsStore.displayDataState {
+                            Text(message)
                         }
-                    )
+                    } // ZStack
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
             .onAppear {
@@ -166,7 +201,7 @@ struct FBPlayerStandingsFirstDataList: View {
             let entityIndex = fbPlayerStandingsStore.entityIndex
             let filteredStandingsStartIndex = fbPlayerStandingsStore.filteredStandingsStartIndex
             
-            ScrollViewReader { proxy in
+//            ScrollViewReader { proxy in
                 LazyVStack(spacing: 0) {
                     ForEach(Array(fbPlayerStandingsStore.filteredStandings.enumerated()), id: \.offset) { index, item in
                         WithPerceptionTracking {
@@ -194,14 +229,16 @@ struct FBPlayerStandingsFirstDataList: View {
                         }
                     }
                 }
-                .onChange(of: fbPlayerStandingsStore.filteredStandingsStartIndex) { newValue in
-                    if fbPlayerStandingsStore.filteredStandings.count != 20 {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            proxy.scrollTo(10, anchor: .top)
-                        }
-                    }
-                }
-            }
+//                .onChange(of: fbPlayerStandingsStore.filteredStandingsStartIndex) { newValue in
+//                    if fbPlayerStandingsStore.filteredStandings.count == 20 {
+//                        proxy.scrollTo(1, anchor: .top)
+//                    } else {
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                            proxy.scrollTo(10, anchor: .top)
+//                        }
+//                    }
+//                }
+//            }
             .frame(width: fbPlayerStandingsStore.firstCategoryItemWidth)
         }
     }

@@ -24,6 +24,7 @@ struct FBLeagueScheduleStore {
            data state
            --------------------- */
         var displayModel: FBLeagueScheduleDisplayModel? = nil
+        var displayDataState: ApiFetchState = ApiFetchState.idle
         var yearMonthList: [String] = []
         var days: [DayInfo] = []
         var filteredGames: [Int: [FBGame]] = [:]
@@ -60,6 +61,7 @@ struct FBLeagueScheduleStore {
         case fetchGames
         case setDisplayModel(FBLeagueScheduleDisplayModel)
         case updateViewStack(data: SportDecodableModel)
+        case updateDisplayDataState(fetchState: ApiFetchState)
     }
     
     var body: some Reducer<State, Action> {
@@ -69,6 +71,7 @@ struct FBLeagueScheduleStore {
                 state.displayModel = displayModel
                 state.yearMonthList = displayModel.yearMonthList
                 
+                // select default yearMonth
                 if let date = displayModel.games.first?.fixture.date {
                     let defaultYearMonth = CalendarUtil.formatDate(date: date, formatType: .yearMonth)
                     let defaultYearMonthIndex = state.yearMonthList.enumerated().first { $0.element == defaultYearMonth }
@@ -139,34 +142,56 @@ struct FBLeagueScheduleStore {
                         return newDay
                     }
                     
-                    state.filteredGames = newFilteredGame
+                    // ui operation order
+                    // 1. Set default 'isOpened' value as false to every games, before 'filteredGames' show.
+                    state.gameResultOpenedStateList = gameResultOpenedStateList
+                    
+                    // 2. Set days to days calendar.
                     state.days = days
                     
-                    state.gameResultOpenedStateList = gameResultOpenedStateList
-                }
-                
-                if isInit {
-                    let defaultDay = CalendarUtil.getDefaultDay(yearMonth: state.selectedYearMonth, dayList: state.days)
-                    
-                    if let defaultDay = defaultDay {
-                        state.selectedDay = defaultDay.1
-                        state.selectedDayIndex = defaultDay.0
-                    }
-                } else {
-                    // set first day that has games as selected
-                    for (index, day) in state.days.enumerated() {
-                        if !day.isDataEmpty {
-                            state.selectedDay = day
-                            state.selectedDayIndex = index
-                            break
+                    // 3. Move bar and scroll the days calendar.
+                    if isInit {
+                        // select default day
+                        let defaultDay = CalendarUtil.getDefaultDay(yearMonth: state.selectedYearMonth, dayList: state.days)
+                        
+                        if let defaultDay = defaultDay {
+                            state.selectedDay = defaultDay.1
+                            state.selectedDayIndex = defaultDay.0
+                        }
+                    } else {
+                        // select first day that has games
+                        for (index, day) in state.days.enumerated() {
+                            if !day.isDataEmpty {
+                                state.selectedDay = day
+                                state.selectedDayIndex = index
+                                break
+                            }
                         }
                     }
+                    
+                    // 4. Remove loading.
+//                    state.displayDataState = .success
+                    
+                    // 5. Show 'filteredGames'
+                    state.filteredGames = newFilteredGame
+                    
+                    return .run { send in
+                        await send(.updateDisplayDataState(fetchState: .success))
+                    }
                 }
+                
+                // added to prevent any gaps
+                // executed before .run{}
+//                if state.displayDataState != .success {
+//                    state.displayDataState = .success
+//                }
                 
                 return .none
                 
             case .fetchGames:
                 return .run { [selectedYearMonth = state.selectedYearMonth] send in
+                    await send(.updateDisplayDataState(fetchState: .fetching))
+                    
                     do {
                         let selectedYearMonth = selectedYearMonth.split(separator: "/")
                         let yearMonth = selectedYearMonth[0] + selectedYearMonth[1]
@@ -179,6 +204,7 @@ struct FBLeagueScheduleStore {
                             await send(.updateViewStack(data: result.data))
                         }
                     } catch {
+                        await send(.updateDisplayDataState(fetchState: .failure("데이터를 불러오는데 실패하였습니다.")))
                         print("\(error)")
                     }
                 }
@@ -213,6 +239,14 @@ struct FBLeagueScheduleStore {
                 
             case .updateViewStack(let data):
                 state.dataForViewStack = data
+                
+                return .none
+                
+            case .updateDisplayDataState(let fetchState):
+                withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                    state.displayDataState = fetchState
+                }
+                
                 return .none
             }
         }
