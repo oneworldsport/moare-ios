@@ -271,32 +271,24 @@ struct FBPlayerStandingsFirstDataListItem: View {
         HStack(spacing: 0) {
             Text("\(rank)")
                 .font(.system(size: fbPlayerStandingsStore.dataFontSize, weight: .medium))
-                .frame(width: 22)
+                .frame(width: 28)
 
             URLImage(url: data.player.photo, customSize: CGSize(width: 25, height: 25))
                 .padding(.leading, 4)
                 .padding(.trailing, 6)
 
             VStack(spacing: 2) {
-                HStack {
-                    Text(data.player.krname)
-                        .font(.system(size: 12))
-                        .lineLimit(1)
-                    
-                    Spacer()
-                }
+                Text(data.player.krname)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(.system(size: 12))
+                    .lineLimit(1)
                 
-                HStack {
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.stats.team.name))
-                        .font(.system(size: 11, weight: .light))
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-
-                    Spacer()
-                }
+                Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.stats.team.name))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(.system(size: 11, weight: .light))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
             }
-
-            Spacer()
 
             Rectangle()
                 .frame(width: 2)
