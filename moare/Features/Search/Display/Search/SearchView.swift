@@ -175,7 +175,7 @@ struct SearchView: View {
                         }
                     } // ZStack
                     .onChange(of: searchStore.isFocused) { newValue in
-                        //                        focusState = newValue
+                        focusState = newValue
                     }
                 } // VStack
                 .frame(maxWidth: .infinity, maxHeight: .infinity)

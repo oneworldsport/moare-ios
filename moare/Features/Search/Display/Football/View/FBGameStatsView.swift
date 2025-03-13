@@ -145,9 +145,10 @@ struct FBGameStatsView: View {
                     return newStore
                 }()
                 
-//                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     self.fbGameStatsStore = fbGameStatsStore
-//                }
+                }
+                
                 fbGameStatsStore.send(.initData(displayModel: displayModel))
                 
                 // TODO: has to figure out better structure
