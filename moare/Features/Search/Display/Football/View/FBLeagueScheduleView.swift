@@ -221,6 +221,11 @@ struct FBLeagueScheduleList: View {
         .onChange(of: fbLeagueScheduleStore.selectedDayIndex) { newValue in
             gameListToDisplay = fbLeagueScheduleStore.filteredGames[newValue] ?? []
         }
+        .onChange(of: fbLeagueScheduleStore.filteredGames) {
+            // TODO: Has to think about better structure, because 'gameListToDisplay' could be set multiple times.
+            // Has to find if there are cases like here from other .onChange()
+            gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.selectedDayIndex] ?? []
+        }
     }
 }
 
