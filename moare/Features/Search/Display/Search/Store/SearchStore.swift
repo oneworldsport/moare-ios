@@ -70,10 +70,11 @@ struct SearchStore {
         case query, trendingKeyword, autoComplete
     }
     
-    enum Action {
+    enum Action: BindableAction {
         /* ---------------------
            ui action
            --------------------- */
+        case binding(BindingAction<State>)
         case firstOpen
         case toggleSearchBar
         case updateTextField(String, Bool = true)
@@ -119,8 +120,26 @@ struct SearchStore {
     }
     
     var body: some Reducer<State, Action> {
+        BindingReducer()
+        
         Reduce { state, action in
             switch action {
+            case .binding(\.query):
+                let isBlank = state.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                
+                if isBlank {
+                    state.autoCompleteList.removeAll()
+                } else {
+                    return .run { send in
+                        await send(.updateAutoCompleteList)
+                    }
+                }
+                
+                return .none
+                
+            case .binding:
+                return .none
+                
             case .initTrie:
                 return .run { [trie = state.trie] send in
                     do {

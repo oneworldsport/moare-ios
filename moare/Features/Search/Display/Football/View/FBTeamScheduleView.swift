@@ -96,8 +96,8 @@ struct FBTeamScheduleView: View {
 }
 
 struct FBTeamScheduleList: View {
-    @ComposableArchitecture.Bindable var searchStore: StoreOf<SearchStore>
-    @ComposableArchitecture.Bindable var fbTeamScheduleStore: StoreOf<FBTeamScheduleStore>
+    @Bindable var searchStore: StoreOf<SearchStore>
+    @Bindable var fbTeamScheduleStore: StoreOf<FBTeamScheduleStore>
     
     @State var gameListToDisplay: [FBGame] = []
     
@@ -146,8 +146,8 @@ struct FBTeamScheduleList: View {
 }
 
 struct FBTeamScheduleListItem: View {
-    @ComposableArchitecture.Bindable var searchStore: StoreOf<SearchStore>
-    @ComposableArchitecture.Bindable var fbTeamScheduleStore: StoreOf<FBTeamScheduleStore>
+    @Bindable var searchStore: StoreOf<SearchStore>
+    @Bindable var fbTeamScheduleStore: StoreOf<FBTeamScheduleStore>
     
     let data: FBGame
     

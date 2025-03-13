@@ -302,7 +302,7 @@ struct ItemCenterPositionsPreferenceKey: PreferenceKey {
 }
 
 struct FBPlayerInfoFirstItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
+    @Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
     
     let showContents: Bool
     
@@ -334,7 +334,7 @@ struct FBPlayerInfoFirstItem: View {
 }
 
 struct FBPlayerInfoSecondItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
+    @Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
     
     let showContents: Bool
     
@@ -387,7 +387,7 @@ struct FBPlayerInfoSecondItem: View {
 }
 
 struct FBPlayerInfoThirdItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
+    @Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
     
     let showContents: Bool
     
@@ -430,7 +430,7 @@ struct FBPlayerInfoThirdItem: View {
 }
 
 struct FBPlayerInfoFourthItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
+    @Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
     
     let showContents: Bool
     
@@ -482,7 +482,7 @@ struct FBPlayerInfoFourthItem: View {
 }
 
 struct FBPlayerInfoFifthItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
+    @Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
     
     let showContents: Bool
     
@@ -553,7 +553,7 @@ struct FBPlayerInfoFifthItem: View {
 }
 
 struct FBPlayerInfoSixthItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
+    @Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
     
     let showContents: Bool
     

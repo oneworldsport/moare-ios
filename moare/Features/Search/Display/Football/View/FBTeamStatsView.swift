@@ -136,7 +136,7 @@ struct FBTeamStatsView: View {
 }
 
 struct FBTeamStatsTeamInfoItem: View {
-    @ComposableArchitecture.Bindable var fbTeamStatsStore: StoreOf<FBTeamStatsStore>
+    @Bindable var fbTeamStatsStore: StoreOf<FBTeamStatsStore>
     
     let showContents: Bool
     
@@ -192,7 +192,7 @@ struct FBTeamStatsTeamInfoItem: View {
 }
 
 struct FBTeamStatsList: View {
-    @ComposableArchitecture.Bindable var fbTeamStatsStore: StoreOf<FBTeamStatsStore>
+    @Bindable var fbTeamStatsStore: StoreOf<FBTeamStatsStore>
     
     let itemPositions: [Int: CGSize]
     
@@ -216,7 +216,7 @@ struct FBTeamStatsList: View {
 }
 
 struct FBTeamStatsListItem: View {
-    @ComposableArchitecture.Bindable var fbTeamStatsStore: StoreOf<FBTeamStatsStore>
+    @Bindable var fbTeamStatsStore: StoreOf<FBTeamStatsStore>
     
     let stats: FBTeamStats
     let itemPositions: [Int : CGSize]
@@ -247,7 +247,7 @@ struct FBTeamStatsListItem: View {
 }
 
 struct FBTeamStatsAniList: View {
-    @ComposableArchitecture.Bindable var fbTeamStatsStore: StoreOf<FBTeamStatsStore>
+    @Bindable var fbTeamStatsStore: StoreOf<FBTeamStatsStore>
     
     let itemPositions: [Int: CGSize]
     let animatePositions: Bool
@@ -277,7 +277,7 @@ struct FBTeamStatsAniList: View {
 }
 
 struct FBTeamStatsAniListItem: View {
-    @ComposableArchitecture.Bindable var fbTeamStatsStore: StoreOf<FBTeamStatsStore>
+    @Bindable var fbTeamStatsStore: StoreOf<FBTeamStatsStore>
     
     let stats: FBTeamStats
     let index: Int

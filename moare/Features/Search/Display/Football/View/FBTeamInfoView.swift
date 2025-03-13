@@ -291,7 +291,7 @@ struct FBTeamInfoView: View {
 }
 
 struct FBTeamInfoFirstItem: View {
-    @ComposableArchitecture.Bindable var fbTeamInfoStore: StoreOf<FBTeamInfoStore>
+    @Bindable var fbTeamInfoStore: StoreOf<FBTeamInfoStore>
     let showContents: Bool
     
     init(fbTeamInfoStore: StoreOf<FBTeamInfoStore>, showContents: Bool = true) {
@@ -324,7 +324,7 @@ struct FBTeamInfoFirstItem: View {
 }
 
 struct FBTeamInfoSecondItem: View {
-    @ComposableArchitecture.Bindable var fbTeamInfoStore: StoreOf<FBTeamInfoStore>
+    @Bindable var fbTeamInfoStore: StoreOf<FBTeamInfoStore>
     let showContents: Bool
     
     @State var city = ""
@@ -388,7 +388,7 @@ struct FBTeamInfoSecondItem: View {
 }
 
 struct FBTeamInfoThirdItem: View {
-    @ComposableArchitecture.Bindable var fbTeamInfoStore: StoreOf<FBTeamInfoStore>
+    @Bindable var fbTeamInfoStore: StoreOf<FBTeamInfoStore>
     let showContents: Bool
     
     @State var venueName = ""
@@ -443,7 +443,7 @@ struct FBTeamInfoThirdItem: View {
 }
 
 struct FBTeamInfoFourthItem: View {
-    @ComposableArchitecture.Bindable var fbTeamInfoStore: StoreOf<FBTeamInfoStore>
+    @Bindable var fbTeamInfoStore: StoreOf<FBTeamInfoStore>
     let showContents: Bool
     
     init(fbTeamInfoStore: StoreOf<FBTeamInfoStore>, showContents: Bool = true) {
@@ -480,7 +480,7 @@ struct FBTeamInfoFourthItem: View {
 }
 
 struct FBTeamInfoFifthItem: View {
-    @ComposableArchitecture.Bindable var fbTeamInfoStore: StoreOf<FBTeamInfoStore>
+    @Bindable var fbTeamInfoStore: StoreOf<FBTeamInfoStore>
     let showContents: Bool
     
     init(fbTeamInfoStore: StoreOf<FBTeamInfoStore>, showContents: Bool = true) {
@@ -534,7 +534,7 @@ struct FBTeamInfoFifthItem: View {
 }
 
 struct FBTeamInfoSixthItem: View {
-    @ComposableArchitecture.Bindable var fbTeamInfoStore: StoreOf<FBTeamInfoStore>
+    @Bindable var fbTeamInfoStore: StoreOf<FBTeamInfoStore>
     private let showContents: Bool
     
     init(fbTeamInfoStore: StoreOf<FBTeamInfoStore>, showContents: Bool = true) {

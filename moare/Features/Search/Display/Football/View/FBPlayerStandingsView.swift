@@ -97,45 +97,43 @@ struct FBPlayerStandingsView: View {
                                         .frame(height: fbPlayerStandingsStore.categoryItemHeight * CGFloat(fbPlayerStandingsStore.filteredStandings.count), alignment: .top) // 정렬 안맞는 현상때문에 추가
                                     }
                                     .background(
-                                        WithPerceptionTracking {
-                                            GeometryReader { geometry in
-                                                let newOffset = geometry.frame(in: .global).minY
-                                                
-                                                Color.clear
-                                                    .onAppear {
-                                                        oldOffset = newOffset
-                                                        
-                                                        contentHeight = CGFloat(fbPlayerStandingsStore.filteredStandings.count) * fbPlayerStandingsStore.dataItemHeight
+                                        GeometryReader { geometry in
+                                            let newOffset = geometry.frame(in: .global).minY
+                                            
+                                            Color.clear
+                                                .onAppear {
+                                                    oldOffset = newOffset
+                                                    
+                                                    contentHeight = CGFloat(fbPlayerStandingsStore.filteredStandings.count) * fbPlayerStandingsStore.dataItemHeight
+                                                }
+                                                .onChange(of: fbPlayerStandingsStore.filteredStandings.count) { newValue in
+                                                    contentHeight = CGFloat(newValue) * fbPlayerStandingsStore.dataItemHeight
+                                                    
+                                                    // 추가로 10개의 standings가 나오고 다시 상단/하단으로 이동하는데 시간이 걸리기때문에, 다시 showMoreStandings를 가능하게 하는데 1초 delay를 주는건 괜찮아 보인다.
+                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                                        canShowMoreStandings = true
                                                     }
-                                                    .onChange(of: fbPlayerStandingsStore.filteredStandings.count) { newValue in
-                                                        contentHeight = CGFloat(newValue) * fbPlayerStandingsStore.dataItemHeight
-                                                        
-                                                        // 추가로 10개의 standings가 나오고 다시 상단/하단으로 이동하는데 시간이 걸리기때문에, 다시 showMoreStandings를 가능하게 하는데 1초 delay를 주는건 괜찮아 보인다.
-                                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                                            canShowMoreStandings = true
+                                                }
+                                                .onChange(of: newOffset) { newOffset in
+                                                    let delta = oldOffset - newOffset
+                                                    totalScrollDistance += delta
+                                                    oldOffset = newOffset
+                                                    
+                                                    let scrollableDistance = contentHeight - scrollViewHeight
+                                                    
+                                                    if canShowMoreStandings {
+                                                        if fbPlayerStandingsStore.filteredStandingsStartIndex != 0 && totalScrollDistance <= 0 {
+                                                            canShowMoreStandings = false
+                                                            fbPlayerStandingsStore.send(.showMoreStandings(isUp: true))
+                                                            //                                                                print("tooooppppp")
+                                                        } else if (fbPlayerStandingsStore.filteredStandingsEndIndex != fbPlayerStandingsStore.standings.count - 1) &&
+                                                                    (totalScrollDistance >= (scrollableDistance - 2)) { // give extra space for possible difference
+                                                            canShowMoreStandings = false
+                                                            fbPlayerStandingsStore.send(.showMoreStandings(isUp: false))
+                                                            //                                                                print("botttttooom")
                                                         }
                                                     }
-                                                    .onChange(of: newOffset) { newOffset in
-                                                        let delta = oldOffset - newOffset
-                                                        totalScrollDistance += delta
-                                                        oldOffset = newOffset
-                                                        
-                                                        let scrollableDistance = contentHeight - scrollViewHeight
-                                                        
-                                                        if canShowMoreStandings {
-                                                            if fbPlayerStandingsStore.filteredStandingsStartIndex != 0 && totalScrollDistance <= 0 {
-                                                                canShowMoreStandings = false
-                                                                fbPlayerStandingsStore.send(.showMoreStandings(isUp: true))
-//                                                                print("tooooppppp")
-                                                            } else if (fbPlayerStandingsStore.filteredStandingsEndIndex != fbPlayerStandingsStore.standings.count - 1) &&
-                                                                        (totalScrollDistance >= (scrollableDistance - 2)) { // give extra space for possible difference
-                                                                canShowMoreStandings = false
-                                                                fbPlayerStandingsStore.send(.showMoreStandings(isUp: false))
-//                                                                print("botttttooom")
-                                                            }
-                                                        }
-                                                    }
-                                            }
+                                                }
                                         }
                                     ) // .background()
                                     .onChange(of: fbPlayerStandingsStore.filteredStandingsStartIndex) { newValue in
@@ -190,57 +188,53 @@ struct FBPlayerStandingsView: View {
 }
 
 struct FBPlayerStandingsFirstDataList: View {
-    @Perception.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
+    @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     init(fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>) {
         self.fbPlayerStandingsStore = fbPlayerStandingsStore
     }
     
     var body: some View {
-        WithPerceptionTracking {
-            let entityIndex = fbPlayerStandingsStore.entityIndex
-            let filteredStandingsStartIndex = fbPlayerStandingsStore.filteredStandingsStartIndex
-            
-//            ScrollViewReader { proxy in
-                LazyVStack(spacing: 0) {
-                    ForEach(Array(fbPlayerStandingsStore.filteredStandings.enumerated()), id: \.offset) { index, item in
-                        WithPerceptionTracking {
-                            let standingsIndex = filteredStandingsStartIndex + index
-                            
-                            if entityIndex != nil && entityIndex == standingsIndex {
-                                Rectangle()
-                                    .fill(.moare)
-                                    .frame(height: 1)
-                            }
-                            
-                            FBPlayerStandingsFirstDataListItem(
-                                fbPlayerStandingsStore: fbPlayerStandingsStore,
-                                rank: standingsIndex + 1,
-                                data: item
-                            )
-                            .frame(height: fbPlayerStandingsStore.dataItemHeight)
-                            .id(index)
-                            
-                            if entityIndex != nil && entityIndex == standingsIndex {
-                                Rectangle()
-                                    .fill(.moare)
-                                    .frame(height: 1)
-                            }
-                        }
-                    }
+        let entityIndex = fbPlayerStandingsStore.entityIndex
+        let filteredStandingsStartIndex = fbPlayerStandingsStore.filteredStandingsStartIndex
+        
+        //            ScrollViewReader { proxy in
+        LazyVStack(spacing: 0) {
+            ForEach(Array(fbPlayerStandingsStore.filteredStandings.enumerated()), id: \.offset) { index, item in
+                let standingsIndex = filteredStandingsStartIndex + index
+                
+                if entityIndex != nil && entityIndex == standingsIndex {
+                    Rectangle()
+                        .fill(.moare)
+                        .frame(height: 1)
                 }
-//                .onChange(of: fbPlayerStandingsStore.filteredStandingsStartIndex) { newValue in
-//                    if fbPlayerStandingsStore.filteredStandings.count == 20 {
-//                        proxy.scrollTo(1, anchor: .top)
-//                    } else {
-//                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//                            proxy.scrollTo(10, anchor: .top)
-//                        }
-//                    }
-//                }
-//            }
-            .frame(width: fbPlayerStandingsStore.firstCategoryItemWidth)
+                
+                FBPlayerStandingsFirstDataListItem(
+                    fbPlayerStandingsStore: fbPlayerStandingsStore,
+                    rank: standingsIndex + 1,
+                    data: item
+                )
+                .frame(height: fbPlayerStandingsStore.dataItemHeight)
+                .id(index)
+                
+                if entityIndex != nil && entityIndex == standingsIndex {
+                    Rectangle()
+                        .fill(.moare)
+                        .frame(height: 1)
+                }
+            }
         }
+        //                .onChange(of: fbPlayerStandingsStore.filteredStandingsStartIndex) { newValue in
+        //                    if fbPlayerStandingsStore.filteredStandings.count == 20 {
+        //                        proxy.scrollTo(1, anchor: .top)
+        //                    } else {
+        //                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        //                            proxy.scrollTo(10, anchor: .top)
+        //                        }
+        //                    }
+        //                }
+        //            }
+        .frame(width: fbPlayerStandingsStore.firstCategoryItemWidth)
     }
 }
 
@@ -262,7 +256,7 @@ struct FBPlayerStandingsFirstCategoryItem: View {
 }
 
 struct FBPlayerStandingsFirstDataListItem: View {
-    @Perception.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
+    @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     let rank: Int
     let data: FBPlayerStandingsDisplay
@@ -300,51 +294,45 @@ struct FBPlayerStandingsFirstDataListItem: View {
 }
 
 struct FBPlayerStandingsDataList: View {
-    @Perception.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
+    @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     var body: some View {
-        WithPerceptionTracking {
-            let entityIndex = fbPlayerStandingsStore.entityIndex
-            let filteredStandingsStartIndex = fbPlayerStandingsStore.filteredStandingsStartIndex
-            
-            LazyVStack(spacing: 0) {
-                ForEach(Array(fbPlayerStandingsStore.filteredStandings.enumerated()), id: \.offset) { index, item in
-                    WithPerceptionTracking {
-                        let standingsIndex = filteredStandingsStartIndex + index
+        let entityIndex = fbPlayerStandingsStore.entityIndex
+        let filteredStandingsStartIndex = fbPlayerStandingsStore.filteredStandingsStartIndex
+        
+        LazyVStack(spacing: 0) {
+            ForEach(Array(fbPlayerStandingsStore.filteredStandings.enumerated()), id: \.offset) { index, item in
+                let standingsIndex = filteredStandingsStartIndex + index
+                
+                if entityIndex != nil && entityIndex == standingsIndex {
+                    Rectangle()
+                        .fill(.moare)
+                        .frame(height: 1)
+                }
+                
+                HStack(spacing: 0) {
+                    ForEach(0..<StringConstants.Football.playerStandingsSecondCategories.count) { index in
+                        FBPlayerStandingsDataListItem(
+                            fbPlayerStandingsStore: fbPlayerStandingsStore,
+                            data: item,
+                            index: index
+                        )
+                        .frame(height: fbPlayerStandingsStore.dataItemHeight)
+                        .id(index)
                         
-                        if entityIndex != nil && entityIndex == standingsIndex {
+                        if index == StringConstants.Football.playerStandingsAttackCategories.count - 1 || index == StringConstants.Football.playerStandingsAttackCategories.count + StringConstants.Football.playerStandingsDefendCategories.count - 1 {
                             Rectangle()
-                                .fill(.moare)
-                                .frame(height: 1)
-                        }
-                        
-                        HStack(spacing: 0) {
-                            ForEach(0..<StringConstants.Football.playerStandingsSecondCategories.count) { index in
-                                WithPerceptionTracking {
-                                    FBPlayerStandingsDataListItem(
-                                        fbPlayerStandingsStore: fbPlayerStandingsStore,
-                                        data: item,
-                                        index: index
-                                    )
-                                    .frame(height: fbPlayerStandingsStore.dataItemHeight)
-                                    .id(index)
-                                    
-                                    if index == StringConstants.Football.playerStandingsAttackCategories.count - 1 || index == StringConstants.Football.playerStandingsAttackCategories.count + StringConstants.Football.playerStandingsDefendCategories.count - 1 {
-                                        Rectangle()
-                                            .frame(width: 2)
-                                            .foregroundStyle(.secondary)
-                                            .opacity(0)
-                                    }
-                                }
-                            }
-                        }
-                        
-                        if entityIndex != nil && entityIndex == standingsIndex {
-                            Rectangle()
-                                .fill(.moare)
-                                .frame(height: 1)
+                                .frame(width: 2)
+                                .foregroundStyle(.secondary)
+                                .opacity(0)
                         }
                     }
+                }
+                
+                if entityIndex != nil && entityIndex == standingsIndex {
+                    Rectangle()
+                        .fill(.moare)
+                        .frame(height: 1)
                 }
             }
         }
@@ -352,7 +340,7 @@ struct FBPlayerStandingsDataList: View {
 }
 
 struct FBPlayerStandingsFirstCategoryList: View {
-    @Perception.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
+    @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     @State var barOffset: CGSize
     
@@ -363,37 +351,33 @@ struct FBPlayerStandingsFirstCategoryList: View {
     }
     
     var body: some View {
-        WithPerceptionTracking {
-            VStack(alignment: .leading, spacing: 0) {
-                HStack(spacing: 0) {
-                    ForEach(StringConstants.Football.statsFirstCategories.indices, id: \.self) { index in
-                        WithPerceptionTracking {
-                            let category = StringConstants.Football.statsFirstCategories[index]
-                            
-                            FBPlayerStandingsFirstCategoryListItem(
-                                fbPlayerStandingsStore: fbPlayerStandingsStore,
-                                index: index,
-                                category: category
-                            )
-                            .id(index)
-                            
-                            if index != StringConstants.Football.statsFirstCategories.count - 1 {
-                                Rectangle()
-                                    .frame(width: 2)
-                                    .foregroundStyle(.secondary)
-                                    .opacity(0.5)
-                            }
-                        }
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 0) {
+                ForEach(StringConstants.Football.statsFirstCategories.indices, id: \.self) { index in
+                    let category = StringConstants.Football.statsFirstCategories[index]
+                    
+                    FBPlayerStandingsFirstCategoryListItem(
+                        fbPlayerStandingsStore: fbPlayerStandingsStore,
+                        index: index,
+                        category: category
+                    )
+                    .id(index)
+                    
+                    if index != StringConstants.Football.statsFirstCategories.count - 1 {
+                        Rectangle()
+                            .frame(width: 2)
+                            .foregroundStyle(.secondary)
+                            .opacity(0.5)
                     }
                 }
-                .frame(height: fbPlayerStandingsStore.categoryItemHeight - 2)
-                
-                HCapsuleBar(customWidth: 80)
-                    .offset(barOffset)
             }
-            .onChange(of: fbPlayerStandingsStore.firstSelectedIndex) { newValue in
-                moveBar(index: newValue)
-            }
+            .frame(height: fbPlayerStandingsStore.categoryItemHeight - 2)
+            
+            HCapsuleBar(customWidth: 80)
+                .offset(barOffset)
+        }
+        .onChange(of: fbPlayerStandingsStore.firstSelectedIndex) { newValue in
+            moveBar(index: newValue)
         }
     }
     
@@ -419,7 +403,7 @@ struct FBPlayerStandingsFirstCategoryList: View {
 }
 
 struct FBPlayerStandingsFirstCategoryListItem: View {
-    @Perception.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
+    @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     let index: Int
     let category: String
@@ -446,7 +430,7 @@ struct FBPlayerStandingsFirstCategoryListItem: View {
 }
 
 struct FBPlayerStandingsSecondCategoryList: View {
-    @Perception.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
+    @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     @State var barOffset: CGSize
     
@@ -460,57 +444,51 @@ struct FBPlayerStandingsSecondCategoryList: View {
     }
     
     var body: some View {
-        WithPerceptionTracking {
-            VStack(alignment: .leading, spacing: 0) {
-                ScrollViewReader { proxy in
-                    WithPerceptionTracking {
-                        HStack(spacing: 0) {
-                            ForEach(StringConstants.Football.playerStandingsSecondCategories.indices, id: \.self) { index in
-                                WithPerceptionTracking {
-                                    let category = StringConstants.Football.playerStandingsSecondCategories[index]
-                                    
-                                    FBPlayerStandingsSecondCategoryListItem(
-                                        fbPlayerStandingsStore: fbPlayerStandingsStore,
-                                        index: index,
-                                        category: category
-                                    )
-                                    .id(index)
-                                    
-                                    if index == attackCategoriesCount - 1 || index == attackCategoriesCount + defendCategoriesCount - 1 {
-                                        Rectangle()
-                                            .frame(width: 2)
-                                            .foregroundStyle(.secondary)
-                                            .opacity(0.5)
-                                    }
-                                }
-                            }
-                        }
-                        .frame(height: fbPlayerStandingsStore.categoryItemHeight - 2)
-                        .onAppear {
-                            // TODO: should decide animation type
-                            // scroll and move bar to category that matches with the keyword
-                            moveBar(index: fbPlayerStandingsStore.secondSelectedIndex)
-                            
-                            withAnimation {
-                                proxy.scrollTo(fbPlayerStandingsStore.secondSelectedIndex, anchor: .leading)
-                            }
-                        }
-                        .onChange(of: fbPlayerStandingsStore.firstSelectedIndex) { newValue in
-                            if fbPlayerStandingsStore.shouldScrollCategory {
-                                withAnimation {
-                                    proxy.scrollTo(fbPlayerStandingsStore.secondSelectedIndex, anchor: .leading)
-                                }
-                            }
+        VStack(alignment: .leading, spacing: 0) {
+            ScrollViewReader { proxy in
+                HStack(spacing: 0) {
+                    ForEach(StringConstants.Football.playerStandingsSecondCategories.indices, id: \.self) { index in
+                        let category = StringConstants.Football.playerStandingsSecondCategories[index]
+                        
+                        FBPlayerStandingsSecondCategoryListItem(
+                            fbPlayerStandingsStore: fbPlayerStandingsStore,
+                            index: index,
+                            category: category
+                        )
+                        .id(index)
+                        
+                        if index == attackCategoriesCount - 1 || index == attackCategoriesCount + defendCategoriesCount - 1 {
+                            Rectangle()
+                                .frame(width: 2)
+                                .foregroundStyle(.secondary)
+                                .opacity(0.5)
                         }
                     }
-                } // ScrollViewReader
-                
-                HCapsuleBar()
-                    .offset(barOffset)
-            } // VStack
-            .onChange(of: fbPlayerStandingsStore.secondSelectedIndex) { newValue in
-                moveBar(index: newValue)
-            }
+                }
+                .frame(height: fbPlayerStandingsStore.categoryItemHeight - 2)
+                .onAppear {
+                    // TODO: should decide animation type
+                    // scroll and move bar to category that matches with the keyword
+                    moveBar(index: fbPlayerStandingsStore.secondSelectedIndex)
+                    
+                    withAnimation {
+                        proxy.scrollTo(fbPlayerStandingsStore.secondSelectedIndex, anchor: .leading)
+                    }
+                }
+                .onChange(of: fbPlayerStandingsStore.firstSelectedIndex) { newValue in
+                    if fbPlayerStandingsStore.shouldScrollCategory {
+                        withAnimation {
+                            proxy.scrollTo(fbPlayerStandingsStore.secondSelectedIndex, anchor: .leading)
+                        }
+                    }
+                }
+            } // ScrollViewReader
+            
+            HCapsuleBar()
+                .offset(barOffset)
+        } // VStack
+        .onChange(of: fbPlayerStandingsStore.secondSelectedIndex) { newValue in
+            moveBar(index: newValue)
         }
     }
     
@@ -532,7 +510,7 @@ struct FBPlayerStandingsSecondCategoryList: View {
 }
 
 struct FBPlayerStandingsSecondCategoryListItem: View {
-    @Perception.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
+    @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     let index: Int
     let category: String
@@ -557,7 +535,7 @@ struct FBPlayerStandingsSecondCategoryListItem: View {
 }
 
 struct FBPlayerStandingsDataListItem: View {
-    @Perception.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
+    @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     let data: FBPlayerStandingsDisplay
     let index: Int

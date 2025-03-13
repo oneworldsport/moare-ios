@@ -168,8 +168,8 @@ struct FBLeaugScheduleView: View {
 }
 
 struct FBLeagueScheduleList: View {
-    @ComposableArchitecture.Bindable var searchStore: StoreOf<SearchStore>
-    @ComposableArchitecture.Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
+    @Bindable var searchStore: StoreOf<SearchStore>
+    @Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
     
     @State var gameListToDisplay: [FBGame] = []
     
@@ -225,8 +225,8 @@ struct FBLeagueScheduleList: View {
 }
 
 struct FBLeagueScheduleListItem: View {
-    @ComposableArchitecture.Bindable var searchStore: StoreOf<SearchStore>
-    @ComposableArchitecture.Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
+    @Bindable var searchStore: StoreOf<SearchStore>
+    @Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
     
     let data: FBGame
     
