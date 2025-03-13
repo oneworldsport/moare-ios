@@ -229,7 +229,7 @@ struct SearchView: View {
                 }
                 .gesture(
                     // custom back handler
-                    DragGesture()
+                    DragGesture(minimumDistance: 3)
                         .onChanged { value in
                             if !searchStore.viewStack.isEmpty {
                                 dragOffset = value.translation.width

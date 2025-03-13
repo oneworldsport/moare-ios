@@ -61,6 +61,7 @@ struct FBTeamStandingsView: View {
                                     categoryOffset: $totalScrollDistance
                                 )
                             }
+                            .simultaneousGesture(DragGesture())
                         }
                         .background(
                             GeometryReader { geometry in

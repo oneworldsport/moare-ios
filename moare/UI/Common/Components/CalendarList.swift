@@ -99,6 +99,7 @@ struct CalendarList<T>: View {
             } // ZStack
         } // ScrollView
         .padding(.horizontal, 5)
+        .simultaneousGesture(DragGesture())
     }
 }
 

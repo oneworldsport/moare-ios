@@ -65,6 +65,7 @@ struct FBPlayerStandingsView: View {
                                 FBPlayerStandingsSecondCategoryList(fbPlayerStandingsStore: fbPlayerStandingsStore)
                             }
                         }
+                        .simultaneousGesture(DragGesture()) // prevent parent view's back handler DragGesture()
                     }
                     .frame(height: fbPlayerStandingsStore.categoryItemHeight * 2)
                     
@@ -95,6 +96,7 @@ struct FBPlayerStandingsView: View {
                                             //                                    .background(Color.blue.opacity(0.3))
                                         }
                                         .frame(height: fbPlayerStandingsStore.categoryItemHeight * CGFloat(fbPlayerStandingsStore.filteredStandings.count), alignment: .top) // 정렬 안맞는 현상때문에 추가
+                                        .simultaneousGesture(DragGesture())
                                     }
                                     .background(
                                         GeometryReader { geometry in

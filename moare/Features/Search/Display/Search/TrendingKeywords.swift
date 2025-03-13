@@ -32,6 +32,7 @@ struct TrendingKeywords: View {
             .padding(.horizontal)
         }
         .frame(maxHeight: 40)
+        .simultaneousGesture(DragGesture())
     }
 }
 

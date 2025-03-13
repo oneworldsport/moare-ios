@@ -208,9 +208,9 @@ struct SearchStore {
                 
             case .toggleSearchBar:
                 if state.searchState {
-//                    withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-//                        state.searchState = false
-//                    }
+                    withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                        state.searchState = false
+                    }
                     
                     return .run { [query = state.query] send in
                         await send(.updateResultVisibleState(bool: false))
