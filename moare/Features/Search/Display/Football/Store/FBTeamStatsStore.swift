@@ -32,6 +32,9 @@ struct FBTeamStatsStore {
             switch action {
             case .initData(let displayModel):
                 state.displayModel = displayModel
+                state.statsList = displayModel.stats
+                state.team = displayModel.team
+                state.venue = displayModel.venue
 
                 return .none
             }

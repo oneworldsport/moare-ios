@@ -51,6 +51,10 @@ struct FBTeamStandingsStore {
         Reduce { state, action in
             switch action {
             case .initData(let displayModel):
+                // init with default value
+                state.selectedIndex = 0
+                
+                // init data
                 state.displayModel = displayModel
                 state.standings = displayModel.standings
                 state.league = displayModel.league

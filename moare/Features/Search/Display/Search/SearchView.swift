@@ -64,6 +64,7 @@ struct SearchView: View {
                        search bar
                        --------------------- */
                     AnimatingSearchBar(
+                        searchStore: searchStore,
                         focusState: $focusState
                     )
                     
@@ -88,8 +89,6 @@ struct SearchView: View {
                            --------------------- */
                         if !searchStore.autoCompleteList.isEmpty {
                             AutoCompleteList(autoCompleteList: searchStore.autoCompleteList, onItemSelected: { words in
-                                focusState.toggle()
-                                
                                 // update bar's text
                                 searchStore.send(.updateTextField(words, false))
                                 
@@ -176,7 +175,7 @@ struct SearchView: View {
                         }
                     } // ZStack
                     .onChange(of: searchStore.isFocused) { newValue in
-                        //                        focusState = newValue
+                        focusState = newValue
                     }
                 } // VStack
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -230,7 +229,7 @@ struct SearchView: View {
                 }
                 .gesture(
                     // custom back handler
-                    DragGesture()
+                    DragGesture(minimumDistance: 3)
                         .onChanged { value in
                             if !searchStore.viewStack.isEmpty {
                                 dragOffset = value.translation.width

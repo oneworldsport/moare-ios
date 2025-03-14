@@ -133,7 +133,7 @@ struct FBPlayerStatsView: View {
 }
 
 struct FBPlayerStatsPlayerInfoItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
+    @Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
     let showContents: Bool
 
@@ -194,7 +194,7 @@ struct FBPlayerStatsPlayerInfoItem: View {
 }
 
 struct FBPlayerStatsList: View {
-    @ComposableArchitecture.Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
+    @Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
     let itemPositions: [Int : CGSize]
 
@@ -218,7 +218,7 @@ struct FBPlayerStatsList: View {
 }
 
 struct FBPlayerStatsListItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
+    @Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
     let stats: FBPlayerStats
     let itemPositions: [Int : CGSize]
@@ -252,7 +252,7 @@ struct FBPlayerStatsListItem: View {
 }
 
 struct FBPlayerStatsAniList: View {
-    @ComposableArchitecture.Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
+    @Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
     let itemPositions: [Int : CGSize]
     let animatePositions: Bool
@@ -282,7 +282,7 @@ struct FBPlayerStatsAniList: View {
 }
 
 struct FBPlayerStatsAniListItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
+    @Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
     let stats: FBPlayerStats
     
@@ -313,7 +313,7 @@ struct FBPlayerStatsAniListItem: View {
 }
 
 struct FBPlayerStatsItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
+    @Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
     let stats: FBPlayerStats
     let showContents: Bool

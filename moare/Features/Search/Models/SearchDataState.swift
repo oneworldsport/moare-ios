@@ -7,12 +7,12 @@
 
 import Foundation
 
-enum SearchDataState: Equatable {
+enum ApiFetchState: Equatable {
     case idle, fetching, success
     case failure(String)
 //    case failure(Error)
     
-    static func == (lhs: SearchDataState, rhs: SearchDataState) -> Bool {
+    static func == (lhs: ApiFetchState, rhs: ApiFetchState) -> Bool {
         switch (lhs, rhs) {
         case (.idle, .idle),
             (.fetching, .fetching),

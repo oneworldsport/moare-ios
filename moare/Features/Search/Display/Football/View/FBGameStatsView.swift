@@ -25,6 +25,8 @@ struct FBGameStatsView: View {
     @State private var oldOffset: CGFloat = 0
     @State private var coachKrName = ""
     
+    let coordinateSpaceName = "PlayerStats"
+    
     var body: some View {
         let game = displayModel.game
         
@@ -107,10 +109,11 @@ struct FBGameStatsView: View {
                                         categoryOffset: $totalScrollDistance
                                     )
                                 }
+                                .simultaneousGesture(DragGesture())
                             }
                             .background(
                                 GeometryReader { geometry in
-                                    let newOffset = geometry.frame(in: .global).minY
+                                    let newOffset = geometry.frame(in: .named(coordinateSpaceName)).minY
                                     
                                     Color.clear
                                         .onAppear {
@@ -124,6 +127,7 @@ struct FBGameStatsView: View {
                                 }
                             )
                         } // ScrollView
+                        .coordinateSpace(name: coordinateSpaceName)
                     } else {
                         Text("경기 시작 후 데이터가 업데이트됩니다.")
                             .foregroundStyle(.secondary)
@@ -145,9 +149,10 @@ struct FBGameStatsView: View {
                     return newStore
                 }()
                 
-//                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     self.fbGameStatsStore = fbGameStatsStore
-//                }
+                }
+                
                 fbGameStatsStore.send(.initData(displayModel: displayModel))
                 
                 // TODO: has to figure out better structure
@@ -187,8 +192,8 @@ struct FBGameStatsView: View {
 }
 
 struct FBGameStatsTeamButtonContainer: View {
-    @ComposableArchitecture.Bindable var searchStore: StoreOf<SearchStore>
-    @ComposableArchitecture.Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
+    @Bindable var searchStore: StoreOf<SearchStore>
+    @Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
     
     @State var barOffset: CGSize
     
@@ -266,7 +271,7 @@ struct FBGameStatsTeamButtonContainer: View {
 }
 
 struct FBGameStatsTeamButton: View {
-    @ComposableArchitecture.Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
+    @Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
     
     let team: String
     let index: Int
@@ -290,7 +295,7 @@ struct FBGameStatsTeamButton: View {
 }
 
 struct FBGameStatsFirstDataList: View {
-    @ComposableArchitecture.Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
+    @Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
     @Binding var categoryOffset: CGFloat
     
     var body: some View {
@@ -351,7 +356,7 @@ struct FBGameStatsFirstCategoryItem: View {
 }
 
 struct FBGameStatsFirstDataListItem: View {
-    @ComposableArchitecture.Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
+    @Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
     
     let data: FBPerson
     
@@ -434,7 +439,7 @@ struct FBGameStatsFirstDataListItem: View {
 }
 
 struct FBGameStatsDataList: View {
-    @ComposableArchitecture.Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
+    @Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
     
     @Binding var categoryOffset: CGFloat
     
@@ -498,7 +503,7 @@ struct FBGameStatsDataList: View {
 }
 
 struct FBGameStatsFirstCategoryList: View {
-    @ComposableArchitecture.Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
+    @Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
     
     @State var barOffset: CGSize
     
@@ -559,7 +564,7 @@ struct FBGameStatsFirstCategoryList: View {
 }
 
 struct FBGameStatsFirstCategoryListItem: View {
-    @ComposableArchitecture.Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
+    @Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
     
     let index: Int
     let category: String
@@ -586,7 +591,7 @@ struct FBGameStatsFirstCategoryListItem: View {
 }
 
 struct FBGameStatsSecondCategoryList: View {
-    @ComposableArchitecture.Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
+    @Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
     
     @State var barOffset: CGSize
     
@@ -664,7 +669,7 @@ struct FBGameStatsSecondCategoryList: View {
 }
 
 struct FBGameStatsSecondCategoryListItem: View {
-    @ComposableArchitecture.Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
+    @Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
     
     let index: Int
     let category: String
@@ -699,7 +704,7 @@ struct FBGameStatsSecondCategoryListItem: View {
 }
 
 struct FBGameStatsDataListItem: View {
-    @ComposableArchitecture.Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
+    @Bindable var fbGameStatsStore: StoreOf<FBGameStatsStore>
     
     let data: FBGamePlayerStatsDetail
     let index: Int

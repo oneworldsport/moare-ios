@@ -127,12 +127,12 @@ struct ModelConverter {
 //        
 //        yearMonthList.sort()
 
-        let yearMonthList = response.scheduledMonths.map {
+        let yearMonthList: [String] = response.scheduledMonths?.map {
             let components = $0.split(separator: "-")
             guard components.count == 2 else { return "" }
             
             return "\(components[0].suffix(2))/\(components[1])"
-        }
+        } ?? []
         
         return FBLeagueScheduleDisplayModel(yearMonthList: yearMonthList, games: response.schedule)
     }

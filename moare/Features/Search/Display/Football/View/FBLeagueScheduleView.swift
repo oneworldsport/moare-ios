@@ -97,13 +97,35 @@ struct FBLeaugScheduleView: View {
                         }
                     }
                     
-                    /* ---------------------
-                       schedule
-                       --------------------- */
-                    FBLeagueScheduleList(
-                        searchStore: searchStore,
-                        fbLeagueScheduleStore: fbLeagueScheduleStore
-                    )
+                    ZStack {
+                        /* ---------------------
+                           loading
+                           --------------------- */
+                        if fbLeagueScheduleStore.displayDataState == .fetching {
+                            ProgressView()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                                .padding(.top, 8)
+                        }
+                        
+                        /* ---------------------
+                           schedule
+                           --------------------- */
+                        if fbLeagueScheduleStore.displayDataState == .success {
+                            FBLeagueScheduleList(
+                                searchStore: searchStore,
+                                fbLeagueScheduleStore: fbLeagueScheduleStore
+                            )
+                        }
+                        
+                        /* ---------------------
+                           error
+                           --------------------- */
+                        if case .failure(let message) = fbLeagueScheduleStore.displayDataState {
+                            Text(message)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                                .padding(.top, 8)
+                        }
+                    }
                 } // if let fbLeagueScheduleStore
             } // VStack
             .onAppear {
@@ -147,8 +169,8 @@ struct FBLeaugScheduleView: View {
 }
 
 struct FBLeagueScheduleList: View {
-    @ComposableArchitecture.Bindable var searchStore: StoreOf<SearchStore>
-    @ComposableArchitecture.Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
+    @Bindable var searchStore: StoreOf<SearchStore>
+    @Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
     
     @State var gameListToDisplay: [FBGame] = []
     
@@ -200,12 +222,17 @@ struct FBLeagueScheduleList: View {
         .onChange(of: fbLeagueScheduleStore.selectedDayIndex) { newValue in
             gameListToDisplay = fbLeagueScheduleStore.filteredGames[newValue] ?? []
         }
+        .onChange(of: fbLeagueScheduleStore.filteredGames) {
+            // TODO: Has to think about better structure, because 'gameListToDisplay' could be set multiple times.
+            // Has to find if there are cases like here from other .onChange()
+            gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.selectedDayIndex] ?? []
+        }
     }
 }
 
 struct FBLeagueScheduleListItem: View {
-    @ComposableArchitecture.Bindable var searchStore: StoreOf<SearchStore>
-    @ComposableArchitecture.Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
+    @Bindable var searchStore: StoreOf<SearchStore>
+    @Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
     
     let data: FBGame
     

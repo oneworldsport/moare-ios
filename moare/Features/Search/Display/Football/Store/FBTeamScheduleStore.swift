@@ -42,6 +42,10 @@ struct FBTeamScheduleStore {
         Reduce { state, action in
             switch action {
             case .initData(let displayModel):
+                // init with default value
+                state.isAllResultOpened = false
+                
+                // init data
                 state.displayModel = displayModel
                 state.games = displayModel.games
                 

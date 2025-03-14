@@ -30,6 +30,7 @@ struct FBPlayerStandingsStore {
            data state
            --------------------- */
         var displayModel: FBPlayerStandingsDisplayModel? = nil
+        var displayDataState: ApiFetchState = .idle
         var filteredStandings: [FBPlayerStandingsDisplay] = []
         var league: FBLeague? = nil
         
@@ -63,12 +64,28 @@ struct FBPlayerStandingsStore {
         case sortStandings
         case fetchStandings(category: String)
         case setDisplayModel(data: SportDecodableModel)
+        case updateDisplayDataState(fetchState: ApiFetchState)
     }
     
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .initData(let displayModel):
+                // init with default value
+                state.displayModel = nil
+                state.displayDataState = .idle
+                state.filteredStandings = []
+                state.league = nil
+                state.firstSelectedIndex = 0
+                state.secondSelectedIndex = 0
+                state.shouldScrollCategory = false
+                state.entityIndex = nil
+                state.filteredStandingsStartIndex = 0
+                state.standings = []
+                state.selectedEntity = nil
+                state.filteredStandingsEndIndex = 0
+                
+                // init data
                 state.displayModel = displayModel
                 state.standings = displayModel.standings
                 state.league = displayModel.standings.first?.stats.league
@@ -150,11 +167,10 @@ struct FBPlayerStandingsStore {
                 let newStandings = Array(state.standings[startIndex...endIndex])
                 
                 state.filteredStandingsEndIndex = endIndex
-                // NOTE: Has to set filteredStandings before filteredStandingsStartIndex because of ForEach re-render problem.(index out of bounds)
-                state.filteredStandings = newStandings
                 state.filteredStandingsStartIndex = startIndex
+                state.filteredStandings = newStandings
                 
-                return .none
+                return .send(.updateDisplayDataState(fetchState: .success))
                 
             case .showMoreStandings(let isUp):
                 // get 10 more standings
@@ -167,8 +183,8 @@ struct FBPlayerStandingsStore {
                     
                     let newStandings = Array(state.standings[newStartIndex...state.filteredStandingsEndIndex])
                     
-                    state.filteredStandings = newStandings
                     state.filteredStandingsStartIndex = newStartIndex
+                    state.filteredStandings = newStandings
                 } else {
                     let newEndIndex = min(state.standings.count - 1, state.filteredStandingsEndIndex + 10)
                     
@@ -178,27 +194,34 @@ struct FBPlayerStandingsStore {
                     
                     let newStandings = Array(state.standings[state.filteredStandingsStartIndex...newEndIndex])
                     
-                    state.filteredStandings = newStandings
                     state.filteredStandingsEndIndex = newEndIndex
+                    state.filteredStandings = newStandings
                 }
                 
                 return .none
                 
             case .fetchStandings(let category):
                 return .run { [displayModel = state.displayModel, selectedEntity = state.selectedEntity] send in
-                    // TODO: Structure should be updated(Temporary code)
-                    let standingsKeyword = displayModel?.keywords.first { $0.id == "standings" }
-                    let keywords = [standingsKeyword!, Keyword(keyword: category, id: "", priority: 100)]
-                    let entities = selectedEntity != nil ? [selectedEntity!] : []
-                    let keywordInfo = KeywordInfo(
-                        keyword: category,
-                        keywords: keywords, 
-                        entities: entities
-                    )
+                    await send(.updateDisplayDataState(fetchState: .fetching))
                     
-                    let data = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
-                    
-                    await send(.setDisplayModel(data: data.data))
+                    do {
+                        // TODO: Structure should be updated(Temporary code)
+                        let standingsKeyword = displayModel?.keywords.first { $0.id == "standings" }
+                        let keywords = [standingsKeyword!, Keyword(keyword: category, id: "", priority: 100)]
+                        let entities = selectedEntity != nil ? [selectedEntity!] : []
+                        let keywordInfo = KeywordInfo(
+                            keyword: category,
+                            keywords: keywords,
+                            entities: entities
+                        )
+                        
+                        let data = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                        
+                        await send(.setDisplayModel(data: data.data))
+                    } catch {
+                        await send(.updateDisplayDataState(fetchState: .failure("데이터를 불러오는데 실패하였습니다.")))
+                        print("\(error)")
+                    }
                 }
                 
             case .setDisplayModel(let data):
@@ -207,6 +230,13 @@ struct FBPlayerStandingsStore {
                     state.standings = displayModel.standings
                     
                     return .send(.filterStandings)
+                }
+                
+                return .none
+                
+            case .updateDisplayDataState(let fetchState):
+                withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                    state.displayDataState = fetchState
                 }
                 
                 return .none

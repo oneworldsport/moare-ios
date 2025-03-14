@@ -26,6 +26,8 @@ struct FBTeamStandingsView: View {
     @State private var totalScrollDistance: CGFloat = 0
     @State private var oldOffset: CGFloat = 0
     
+    let coordinateSpaceName = "TeamStandings"
+    
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack {
@@ -61,10 +63,11 @@ struct FBTeamStandingsView: View {
                                     categoryOffset: $totalScrollDistance
                                 )
                             }
+                            .simultaneousGesture(DragGesture())
                         }
                         .background(
                             GeometryReader { geometry in
-                                let newOffset = geometry.frame(in: .global).minY
+                                let newOffset = geometry.frame(in: .named(coordinateSpaceName)).minY
                                 
                                 Color.clear
                                     .onAppear {
@@ -78,6 +81,7 @@ struct FBTeamStandingsView: View {
                             }
                         )
                     }
+                    .coordinateSpace(name: coordinateSpaceName)
                 }
             }
             .onAppear {
@@ -101,8 +105,8 @@ struct FBTeamStandingsView: View {
 }
 
 struct FBTeamStandingsFirstDataList: View {
-    @ComposableArchitecture.Bindable var searchStore: StoreOf<SearchStore>
-    @ComposableArchitecture.Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
+    @Bindable var searchStore: StoreOf<SearchStore>
+    @Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
     @Binding var categoryOffset: CGFloat
     
     init(searchStore: StoreOf<SearchStore>, fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>, categoryOffset: Binding<CGFloat>) {
@@ -156,8 +160,8 @@ struct FBTeamStandingsFirstCategoryItem: View {
 }
 
 struct FBTeamStandingsFirstDataListItem: View {
-    @ComposableArchitecture.Bindable var searchStore: StoreOf<SearchStore>
-    @ComposableArchitecture.Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
+    @Bindable var searchStore: StoreOf<SearchStore>
+    @Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
     
     let rank: Int
     let data: FBTeamStandingsDisplay
@@ -191,7 +195,7 @@ struct FBTeamStandingsFirstDataListItem: View {
 }
 
 struct FBTeamStandingsDataList: View {
-    @ComposableArchitecture.Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
+    @Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
     
     @Binding var categoryOffset: CGFloat
     
@@ -225,7 +229,7 @@ struct FBTeamStandingsDataList: View {
 }
 
 struct FBTeamStandingsCategoryList: View {
-    @ComposableArchitecture.Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
+    @Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
     
     @State var barOffset: CGSize
     
@@ -288,7 +292,7 @@ struct FBTeamStandingsCategoryList: View {
 }
 
 struct FBTeamStandingsCategoryListItem: View {
-    @ComposableArchitecture.Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
+    @Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
     
     let index: Int
     let category: String
@@ -307,7 +311,7 @@ struct FBTeamStandingsCategoryListItem: View {
 }
 
 struct FBTeamStandingsDataListItem: View {
-    @ComposableArchitecture.Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
+    @Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
     
     let data: FBTeamStandingsDisplay
     let isInt: Bool

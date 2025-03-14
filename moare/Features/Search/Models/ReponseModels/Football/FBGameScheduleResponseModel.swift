@@ -8,11 +8,6 @@
 import Foundation
 
 struct FBGameScheduleResponseModel: Decodable, Equatable {
-    var scheduledMonths: [String] = []
+    var scheduledMonths: [String]? = nil
     var schedule: [FBGame] = []
-    
-    private enum CodingKeys: String, CodingKey {
-        case scheduledMonths = "scheduled_months"
-        case schedule
-    }
 }

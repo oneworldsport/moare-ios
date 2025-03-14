@@ -22,7 +22,7 @@ struct SearchStore {
         /* ---------------------
            data state
            --------------------- */
-        var searchDataState: SearchDataState = .idle
+        var searchDataState: ApiFetchState = .idle
         
         var fbPlayerInfoData: FBPlayerInfoDisplayModel? = nil
         var fbPlayerStatsData: FBPlayerStatsDisplayModel? = nil
@@ -48,8 +48,8 @@ struct SearchStore {
            --------------------- */
         var firstOpened = false
         var query = ""
-        var searchState = false
-        var isFocused = false
+        var searchState = false // NOTE: Has to be animated when changing. SearchBar animation is effected by this property. TODO: Store 개선할때 개선 필요
+        var isFocused = false // NOTE: Doesn't have do be synchronized with SearchView's focusState. Because it is only used for updating focusState in .onChange().
         
         // visible state
         var textFieldVisibleState = false
@@ -70,10 +70,11 @@ struct SearchStore {
         case query, trendingKeyword, autoComplete
     }
     
-    enum Action {
+    enum Action: BindableAction {
         /* ---------------------
            ui action
            --------------------- */
+        case binding(BindingAction<State>)
         case firstOpen
         case toggleSearchBar
         case updateTextField(String, Bool = true)
@@ -101,16 +102,17 @@ struct SearchStore {
            --------------------- */
         case initTrie
         case initAutoCompleteDataDic(autoCompleteData: [KeywordInfo])
-        case updateSearchDataState(SearchDataState)
+        case updateSearchDataState(ApiFetchState)
         case translate(String, (Result<String, Error>) -> Void)
         case updateIsFocused(Bool)
         case goBack
         case updateAutoCompleteList
-        case updateResultVisibleState
+        case updateResultVisibleState(bool: Bool)
         case fetchTrendingKeywords
         case setTrendingKeywords([KeywordInfo])
-        case updateMainDisplayModel(data: SportDecodableModel)
+        case updateMainDisplayModel(data: SportDecodableModel, shouldReset: Bool = true)
         case updateLastViewStack(data: SportDecodableModel)
+        case updateSearchStateWithAni(bool: Bool)
         
         /* ---------------------
            test
@@ -119,8 +121,26 @@ struct SearchStore {
     }
     
     var body: some Reducer<State, Action> {
+        BindingReducer()
+        
         Reduce { state, action in
             switch action {
+            case .binding(\.query):
+                let isBlank = state.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                
+                if isBlank {
+                    state.autoCompleteList.removeAll()
+                } else {
+                    return .run { send in
+                        await send(.updateAutoCompleteList)
+                    }
+                }
+                
+                return .none
+                
+            case .binding:
+                return .none
+                
             case .initTrie:
                 return .run { [trie = state.trie] send in
                     do {
@@ -190,20 +210,16 @@ struct SearchStore {
                 if state.searchState {
                     withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                         state.searchState = false
-                        state.resultVisibleState = false
                     }
                     
                     return .run { [query = state.query] send in
+                        await send(.updateResultVisibleState(bool: false))
                         await send(.updateSearchDataState(.idle))
                         await send(.updateTextField(query))
                     }
-                } else {
-                    withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                        state.searchState = true
-                    }
-                    
-                    return .none
                 }
+                
+                return .none
                 
             case .updateTextField(let query, let updateAutoCompleteList):
                 state.query = query
@@ -368,7 +384,9 @@ struct SearchStore {
                 }
                 
                 // add viewStack
+                // TODO: has to make it as action
                 state.viewStack.append(model.data)
+                state.poppedView = nil
                 
                 // NOTE: if apply animation here, it is not applied because of allocating each view's store at onAppear()
                 state.resultVisibleState = true
@@ -378,72 +396,55 @@ struct SearchStore {
             case .goBack:
                 guard !state.viewStack.isEmpty else { return .none }
                 
-                // After state.viewStack.popLast(), it ensures triggering onChange(viewStack) after all view is shown in below code.
-                // Maybe because of TCA Reduce feature?
-                let lastView = state.viewStack.popLast()
-                state.poppedView = lastView
-                
-                let viewToShow = state.viewStack.last
-                
-//                withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
-                    state.resultVisibleState = false
-//                }
-                
-                if let viewToShow = viewToShow {
-                    state.fbPlayerInfoData = nil
-                    state.fbPlayerStatsData = nil
-                    state.fbPlayerStandingsData = nil
-                    state.fbTeamInfoData = nil
-                    state.fbTeamStatsData = nil
-                    state.fbTeamStandingsData = nil
-                    state.fbTeamScheduleData = nil
-                    state.fbLeagueScheduleData = nil
-                    state.fbGameStatsData = nil
-                    
-                    switch viewToShow {
-                    case .fbPlayerInfo(let responseModel, let displayModel):
-                        state.fbPlayerInfoData = displayModel
-                        state.fbPlayerInfoResponseModel = responseModel
-                    case .fbPlayerStats(_, let displayModel):
-                        state.fbPlayerStatsData = displayModel
-                    case .fbPlayerStandings(_, let displayModel):
-                        state.fbPlayerStandingsData = displayModel
-                    case .fbTeamInfo(let responseModel, let displayModel):
-                        state.fbTeamInfoData = displayModel
-                        state.fbTeamInfoResponseModel = responseModel
-                    case .fbTeamStats(_, let displayModel):
-                        state.fbTeamStatsData = displayModel
-                    case .fbTeamStandings(_, let displayModel):
-                        state.fbTeamStandingsData = displayModel
-                    case .fbTeamSchedule(_, let displayModel):
-                        state.fbTeamScheduleData = displayModel
-                    case .fbLeagueSchedule(_, let displayModel):
-//                        if case .fbGameStats = lastView {
-//                            state.fbLeagueScheduleData = state.initialFBLeagueScheduleData
-//                        } else {
-                            state.fbLeagueScheduleData = displayModel
-//                        }
-                    case .fbGameStats(_, let displayModel):
-                        state.fbGameStatsData = displayModel
-                    default:
-                        break
-                    }
+                if !state.searchState {
+                    // If searchBar is Opened and there are viewStack, show the lastView.
+                    state.textFieldVisibleState = false
                     
                     return .run { send in
-                        // wait for before view's removing animation
-                        // NOTE: 0.1 for temporary
-                        try await Task.sleep(for: .seconds(0.1))
-                        
-                        await send(.updateResultVisibleState)
+                        await send(.updateSearchStateWithAni(bool: true))
+                        await send(.updateSearchDataState(.success))
+                        await send(.updateResultVisibleState(bool: true))
+                        await send(.removeAutoCompleteWithAni)
                     }
                 } else {
-                    return .run { send in
-                        await send(.toggleSearchBar)
+                    // After state.viewStack.popLast(), it ensures triggering onChange(viewStack) after all view is shown in below code.
+                    // Maybe because of TCA Reduce feature?
+                    let lastView = state.viewStack.popLast()
+                    state.poppedView = lastView
+                    
+                    let viewToShow = state.viewStack.last
+                    
+                    if let viewToShow = viewToShow {
+                        return .run { send in
+                            await send(.updateResultVisibleState(bool: false))
+                            await send(.updateMainDisplayModel(data: viewToShow))
+                            
+                            // wait for previous view's removing animation
+                            // NOTE: 0.1 for temporary
+                            try await Task.sleep(for: .seconds(0.1))
+                            
+                            await send(.updateResultVisibleState(bool: true))
+                        }
+                    } else {
+                        state.fbPlayerInfoData = nil
+                        state.fbPlayerStatsData = nil
+                        state.fbPlayerStandingsData = nil
+                        state.fbTeamInfoData = nil
+                        state.fbTeamStatsData = nil
+                        state.fbTeamStandingsData = nil
+                        state.fbTeamScheduleData = nil
+                        state.fbLeagueScheduleData = nil
+                        state.fbGameStatsData = nil
                         
-                        try await Task.sleep(for: .seconds(0.5))
-                        
-                        await send(.updateTextFieldVisibleState(true))
-                        await send(.updateIsFocused(true))
+                        return .run { send in
+                            await send(.toggleSearchBar)
+                            
+//                            try await Task.sleep(for: .seconds(0.5))
+                            try await Task.sleep(for: .seconds(AnimationConstants.Duration.medium))
+                            
+                            await send(.updateTextFieldVisibleState(true))
+                            await send(.updateIsFocused(true))
+                        }
                     }
                 }
                 
@@ -475,6 +476,7 @@ struct SearchStore {
                 )
                 
                 state.viewStack.append(dataMdoel)
+                state.poppedView = nil
                 
                 state.fbGameStatsData = FBGameStatsDisplayModel(game: game)
                 
@@ -492,10 +494,16 @@ struct SearchStore {
                 
                 return .none
                 
-            case .updateResultVisibleState:
-//                withAnimation(.easeOut(duration: 0.5)) {
-                    state.resultVisibleState = true
-//                }
+            case .updateResultVisibleState(let bool):
+                if bool {
+                    // NOTE: If apply animation here, it is not applied because of initializing store at each view in .onAppear().
+                    // So animation is applied when initializing store at each view.
+                    state.resultVisibleState = bool
+                } else {
+                    withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                        state.resultVisibleState = bool
+                    }
+                }
                 
                 return .none
                 
@@ -520,13 +528,14 @@ struct SearchStore {
                 let dataModel = SportDecodableModel.fbPlayerStats(playerInfoResponseModel, stats)
                 
                 state.viewStack.append(dataModel)
+                state.poppedView = nil
                 
                 return .run { send in
                     // wait for before view's removing animation
                     // NOTE: 0.1 for temporary
                     try await Task.sleep(for: .seconds(0.1))
                     
-                    await send(.updateResultVisibleState)
+                    await send(.updateResultVisibleState(bool: true))
                 }
                 
             case .showTeamStats(let teamId):
@@ -562,13 +571,14 @@ struct SearchStore {
                 let dataModel = SportDecodableModel.fbTeamStats(teamInfoResponseModel!, stats!)
                 
                 state.viewStack.append(dataModel)
+                state.poppedView = nil
                 
                 return .run { send in
                     // wait for before view's removing animation
                     // NOTE: 0.1 for temporary
                     try await Task.sleep(for: .seconds(0.1))
                     
-                    await send(.updateResultVisibleState)
+                    await send(.updateResultVisibleState(bool: true))
                 }
                 
             case .showGameStats(let isPrevious):
@@ -610,13 +620,14 @@ struct SearchStore {
                 let dataModel = SportDecodableModel.fbGameStats(gameStatsResponseModel!, stats!)
                 
                 state.viewStack.append(dataModel)
+                state.poppedView = nil
                 
                 return .run { send in
                     // wait for before view's removing animation
                     // NOTE: 0.1 for temporary
                     try await Task.sleep(for: .seconds(0.1))
                     
-                    await send(.updateResultVisibleState)
+                    await send(.updateResultVisibleState(bool: true))
                 }
                 
             case .refreshGame:
@@ -624,12 +635,24 @@ struct SearchStore {
                     if let game = fbGameStatsData?.game {
                         let result = try await searchClient.fetchGameInfo(category: "football", date: game.fixture.date, leagueId: game.league.id, fixtureId: game.fixture.id)
                         
-                        await send(.updateMainDisplayModel(data: result.data))
+                        await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
                         await send(.updateLastViewStack(data: result.data))
                     }
                 }
                 
-            case .updateMainDisplayModel(let data):
+            case .updateMainDisplayModel(let data, let shouldReset):
+                if shouldReset {
+                    state.fbPlayerInfoData = nil
+                    state.fbPlayerStatsData = nil
+                    state.fbPlayerStandingsData = nil
+                    state.fbTeamInfoData = nil
+                    state.fbTeamStatsData = nil
+                    state.fbTeamStandingsData = nil
+                    state.fbTeamScheduleData = nil
+                    state.fbLeagueScheduleData = nil
+                    state.fbGameStatsData = nil
+                }
+                
                 switch data {
                 case .fbPlayerInfo(let responseModel, let displayModel):
                     state.fbPlayerInfoData = displayModel
@@ -662,6 +685,13 @@ struct SearchStore {
                 newViewStack.popLast()
                 newViewStack.append(data)
                 state.viewStack = newViewStack
+                
+                return .none
+                
+            case .updateSearchStateWithAni(let bool):
+                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                    state.searchState = bool
+                }
                 
                 return .none
                 
