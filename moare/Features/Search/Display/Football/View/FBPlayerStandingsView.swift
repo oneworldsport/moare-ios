@@ -33,6 +33,8 @@ struct FBPlayerStandingsView: View {
     
     @State private var hScrollOffset: CGFloat = 0
     
+    let coordinateSpaceName = "PlayerStandings"
+    
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack(spacing: 0) {
@@ -88,7 +90,6 @@ struct FBPlayerStandingsView: View {
                                         //                                .frame(maxHeight: .infinity, alignment: .top) // 정렬 안맞는 현상때문에 추가
                                         //                                .background(Color.red.opacity(0.3))
                                         
-                                        // TODO: 아직도 1픽셀정도 미세한 차이가 있음
                                         HSynchronizedScrollView(scrollOffset: $hScrollOffset, itemWidth: fbPlayerStandingsStore.itemWidth, itemHeight: fbPlayerStandingsStore.dataItemHeight) {
                                             FBPlayerStandingsDataList(fbPlayerStandingsStore: fbPlayerStandingsStore)
                                                 .padding(.top, 2) // 하이라이트 선 때문인지는 모르겠는데, 정렬 안맞는 현상 있어서 추가해줌. ScrollView가 문제인듯.
@@ -100,7 +101,7 @@ struct FBPlayerStandingsView: View {
                                     }
                                     .background(
                                         GeometryReader { geometry in
-                                            let newOffset = geometry.frame(in: .global).minY
+                                            let newOffset = geometry.frame(in: .named(coordinateSpaceName)).minY
                                             
                                             Color.clear
                                                 .onAppear {
@@ -157,6 +158,7 @@ struct FBPlayerStandingsView: View {
                                         }
                                 }
                             )
+                            .coordinateSpace(name: coordinateSpaceName)
                         } // if fbPlayerStandingsStore.displayDataState == .success
                         
                         /* ---------------------

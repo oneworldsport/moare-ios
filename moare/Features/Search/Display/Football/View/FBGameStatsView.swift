@@ -25,6 +25,8 @@ struct FBGameStatsView: View {
     @State private var oldOffset: CGFloat = 0
     @State private var coachKrName = ""
     
+    let coordinateSpaceName = "PlayerStats"
+    
     var body: some View {
         let game = displayModel.game
         
@@ -111,7 +113,7 @@ struct FBGameStatsView: View {
                             }
                             .background(
                                 GeometryReader { geometry in
-                                    let newOffset = geometry.frame(in: .global).minY
+                                    let newOffset = geometry.frame(in: .named(coordinateSpaceName)).minY
                                     
                                     Color.clear
                                         .onAppear {
@@ -125,6 +127,7 @@ struct FBGameStatsView: View {
                                 }
                             )
                         } // ScrollView
+                        .coordinateSpace(name: coordinateSpaceName)
                     } else {
                         Text("경기 시작 후 데이터가 업데이트됩니다.")
                             .foregroundStyle(.secondary)

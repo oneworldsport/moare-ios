@@ -26,6 +26,8 @@ struct FBTeamStandingsView: View {
     @State private var totalScrollDistance: CGFloat = 0
     @State private var oldOffset: CGFloat = 0
     
+    let coordinateSpaceName = "TeamStandings"
+    
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack {
@@ -65,7 +67,7 @@ struct FBTeamStandingsView: View {
                         }
                         .background(
                             GeometryReader { geometry in
-                                let newOffset = geometry.frame(in: .global).minY
+                                let newOffset = geometry.frame(in: .named(coordinateSpaceName)).minY
                                 
                                 Color.clear
                                     .onAppear {
@@ -79,6 +81,7 @@ struct FBTeamStandingsView: View {
                             }
                         )
                     }
+                    .coordinateSpace(name: coordinateSpaceName)
                 }
             }
             .onAppear {
