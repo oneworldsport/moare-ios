@@ -61,6 +61,7 @@ struct FBLeagueScheduleStore {
         case fetchGames
         case setDisplayModel(FBLeagueScheduleDisplayModel)
         case updateViewStack(data: SportDecodableModel)
+        case resetDataForViewStack
         case updateDisplayDataState(fetchState: ApiFetchState)
     }
     
@@ -68,6 +69,22 @@ struct FBLeagueScheduleStore {
         Reduce { state, action in
             switch action {
             case .initData(let displayModel):
+                // init with default value
+                state.displayModel = nil
+                state.displayDataState = .idle
+                state.yearMonthList = []
+                state.days = []
+                state.filteredGames = [:]
+                state.selectedYearMonth = ""
+                state.selectedDay = nil
+                state.selectedYearMonthIndex = 0
+                state.selectedDayIndex = 0
+                state.isAllResultOpened = false
+                state.scrollCalendar = true
+                state.gameResultOpenedStateList = [:]
+                state.dataForViewStack = nil
+                
+                // init data
                 state.displayModel = displayModel
                 state.yearMonthList = displayModel.yearMonthList
                 
@@ -239,6 +256,15 @@ struct FBLeagueScheduleStore {
                 
             case .updateViewStack(let data):
                 state.dataForViewStack = data
+                
+                return .run { send in
+                    await send(.resetDataForViewStack)
+                }
+                
+            case .resetDataForViewStack:
+                // Set nil for next update. Because the data is same as SportDecodableModel, .onChange() is not triggered.
+                // Has to figure out better structrue.
+                state.dataForViewStack = nil
                 
                 return .none
                 

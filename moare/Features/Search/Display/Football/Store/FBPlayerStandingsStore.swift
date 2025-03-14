@@ -30,7 +30,7 @@ struct FBPlayerStandingsStore {
            data state
            --------------------- */
         var displayModel: FBPlayerStandingsDisplayModel? = nil
-        var displayDataState: ApiFetchState = ApiFetchState.idle
+        var displayDataState: ApiFetchState = .idle
         var filteredStandings: [FBPlayerStandingsDisplay] = []
         var league: FBLeague? = nil
         
@@ -71,6 +71,21 @@ struct FBPlayerStandingsStore {
         Reduce { state, action in
             switch action {
             case .initData(let displayModel):
+                // init with default value
+                state.displayModel = nil
+                state.displayDataState = .idle
+                state.filteredStandings = []
+                state.league = nil
+                state.firstSelectedIndex = 0
+                state.secondSelectedIndex = 0
+                state.shouldScrollCategory = false
+                state.entityIndex = nil
+                state.filteredStandingsStartIndex = 0
+                state.standings = []
+                state.selectedEntity = nil
+                state.filteredStandingsEndIndex = 0
+                
+                // init data
                 state.displayModel = displayModel
                 state.standings = displayModel.standings
                 state.league = displayModel.standings.first?.stats.league

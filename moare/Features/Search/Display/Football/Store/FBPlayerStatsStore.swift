@@ -34,8 +34,8 @@ struct FBPlayerStatsStore {
             switch action {
             case .initData(let displayModel):
                 state.displayModel = displayModel
-                state.player = displayModel.player
                 state.statsList = displayModel.stats
+                state.player = displayModel.player
                 state.team = displayModel.team
                 state.nationalityKrName = EnNameTranslationUtility.translateByDic(type: .country, input: displayModel.player.nationality)
                 

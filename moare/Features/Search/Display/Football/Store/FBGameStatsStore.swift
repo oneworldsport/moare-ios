@@ -62,6 +62,18 @@ struct FBGameStatsStore {
         Reduce { state, action in
             switch action {
             case .initData(let displayModel):
+                // init with default value
+                state.displayModel = nil
+                state.playerStats = []
+                state.lineups = nil
+                state.coach = nil
+                state.playerTotalStats = nil
+                state.firstSelectedIndex = 0
+                state.secondSelectedIndex = 0
+                state.selectedTeamIndex = 0
+                state.shouldScrollCategory = false
+                
+                // init data
                 state.displayModel = displayModel
                 
                 // set current(home) team's players stats
