@@ -103,6 +103,7 @@ struct FBLeaugScheduleView: View {
                            --------------------- */
                         if fbLeagueScheduleStore.displayDataState == .fetching {
                             ProgressView()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                                 .padding(.top, 8)
                         }
                         
@@ -121,10 +122,10 @@ struct FBLeaugScheduleView: View {
                            --------------------- */
                         if case .failure(let message) = fbLeagueScheduleStore.displayDataState {
                             Text(message)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                                 .padding(.top, 8)
                         }
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 } // if let fbLeagueScheduleStore
             } // VStack
             .onAppear {

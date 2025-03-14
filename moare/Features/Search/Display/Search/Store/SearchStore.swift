@@ -110,7 +110,7 @@ struct SearchStore {
         case updateResultVisibleState(bool: Bool)
         case fetchTrendingKeywords
         case setTrendingKeywords([KeywordInfo])
-        case updateMainDisplayModel(data: SportDecodableModel)
+        case updateMainDisplayModel(data: SportDecodableModel, shouldReset: Bool = true)
         case updateLastViewStack(data: SportDecodableModel)
         case updateSearchStateWithAni(bool: Bool)
         
@@ -629,21 +629,23 @@ struct SearchStore {
                     if let game = fbGameStatsData?.game {
                         let result = try await searchClient.fetchGameInfo(category: "football", date: game.fixture.date, leagueId: game.league.id, fixtureId: game.fixture.id)
                         
-                        await send(.updateMainDisplayModel(data: result.data))
+                        await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
                         await send(.updateLastViewStack(data: result.data))
                     }
                 }
                 
-            case .updateMainDisplayModel(let data):
-                state.fbPlayerInfoData = nil
-                state.fbPlayerStatsData = nil
-                state.fbPlayerStandingsData = nil
-                state.fbTeamInfoData = nil
-                state.fbTeamStatsData = nil
-                state.fbTeamStandingsData = nil
-                state.fbTeamScheduleData = nil
-                state.fbLeagueScheduleData = nil
-                state.fbGameStatsData = nil
+            case .updateMainDisplayModel(let data, let shouldReset):
+                if shouldReset {
+                    state.fbPlayerInfoData = nil
+                    state.fbPlayerStatsData = nil
+                    state.fbPlayerStandingsData = nil
+                    state.fbTeamInfoData = nil
+                    state.fbTeamStatsData = nil
+                    state.fbTeamStandingsData = nil
+                    state.fbTeamScheduleData = nil
+                    state.fbLeagueScheduleData = nil
+                    state.fbGameStatsData = nil                    
+                }
                 
                 switch data {
                 case .fbPlayerInfo(let responseModel, let displayModel):
