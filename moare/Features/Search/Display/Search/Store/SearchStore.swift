@@ -384,7 +384,9 @@ struct SearchStore {
                 }
                 
                 // add viewStack
+                // TODO: has to make it as action
                 state.viewStack.append(model.data)
+                state.poppedView = nil
                 
                 // NOTE: if apply animation here, it is not applied because of allocating each view's store at onAppear()
                 state.resultVisibleState = true
@@ -474,6 +476,7 @@ struct SearchStore {
                 )
                 
                 state.viewStack.append(dataMdoel)
+                state.poppedView = nil
                 
                 state.fbGameStatsData = FBGameStatsDisplayModel(game: game)
                 
@@ -525,6 +528,7 @@ struct SearchStore {
                 let dataModel = SportDecodableModel.fbPlayerStats(playerInfoResponseModel, stats)
                 
                 state.viewStack.append(dataModel)
+                state.poppedView = nil
                 
                 return .run { send in
                     // wait for before view's removing animation
@@ -567,6 +571,7 @@ struct SearchStore {
                 let dataModel = SportDecodableModel.fbTeamStats(teamInfoResponseModel!, stats!)
                 
                 state.viewStack.append(dataModel)
+                state.poppedView = nil
                 
                 return .run { send in
                     // wait for before view's removing animation
@@ -615,6 +620,7 @@ struct SearchStore {
                 let dataModel = SportDecodableModel.fbGameStats(gameStatsResponseModel!, stats!)
                 
                 state.viewStack.append(dataModel)
+                state.poppedView = nil
                 
                 return .run { send in
                     // wait for before view's removing animation
@@ -644,7 +650,7 @@ struct SearchStore {
                     state.fbTeamStandingsData = nil
                     state.fbTeamScheduleData = nil
                     state.fbLeagueScheduleData = nil
-                    state.fbGameStatsData = nil                    
+                    state.fbGameStatsData = nil
                 }
                 
                 switch data {
