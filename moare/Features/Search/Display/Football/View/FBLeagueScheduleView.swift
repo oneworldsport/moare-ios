@@ -294,8 +294,8 @@ struct FBLeagueScheduleListItem: View {
                 .contentShape(Rectangle())
             
             /* ---------------------
-             game info
-             --------------------- */
+               game info
+               --------------------- */
             VStack {
                 // game status
                 CapsuleButton(
@@ -312,7 +312,7 @@ struct FBLeagueScheduleListItem: View {
                     .padding(.vertical, 2)
                 
                 // venue
-                if let fbGameStatsData = searchStore.fbGameStatsData {
+                if let _ = searchStore.fbGameStatsData {
                     Text("장소: \(venueKrName)")
                         .font(.system(size: 12, weight: .light))
                         .lineLimit(1)
@@ -335,8 +335,8 @@ struct FBLeagueScheduleListItem: View {
                 .contentShape(Rectangle())
             
             /* ---------------------
-             away
-             --------------------- */
+               away
+               --------------------- */
             // socre
             if StringConstants.Football.gameLiveList.contains(data.fixture.status.short) ||
                 StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) && isResultOpened {
