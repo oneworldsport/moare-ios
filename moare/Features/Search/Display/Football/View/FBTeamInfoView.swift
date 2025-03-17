@@ -307,7 +307,7 @@ struct FBTeamInfoFirstItem: View {
                 URLImage(url: team.logo)
                     .opacity(showContents ? 1 : 0)
                 
-                Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.name))
+                Text(EnNameTranslationUtility.translateByDic(type: .team, isShort: false, input: team.name))
                     .font(.system(size: 16))
                     .fontWeight(.medium)
                     .opacity(showContents ? 1 : 0)

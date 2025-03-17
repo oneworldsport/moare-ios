@@ -154,7 +154,7 @@ struct FBTeamStatsTeamInfoItem: View {
                     URLImage(url: team.logo)
                     
                     VStack(alignment: .leading) {
-                        Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.name))
+                        Text(EnNameTranslationUtility.translateByDic(type: .team, isShort: false, input: team.name))
                             .font(.system(size: 16))
                             .fontWeight(.medium)
                         
@@ -326,14 +326,14 @@ struct FBTeamStatsItem: View {
                     leagueSeason: stats.league.season
                 )
                 
-                Text(" - ")
-                    .fontWeight(.medium)
-                
-                URLImage(url: stats.team.logo, customSize: CGSize(width: 24, height: 24))
-                
-                Text(EnNameTranslationUtility.translateByDic(type: .team, input: stats.team.name))
-                    .font(.system(size: 16))
-                    .fontWeight(.medium)
+//                Text(" - ")
+//                    .fontWeight(.medium)
+//                
+//                URLImage(url: stats.team.logo, customSize: CGSize(width: 24, height: 24))
+//                
+//                Text(EnNameTranslationUtility.translateByDic(type: .team, input: stats.team.name))
+//                    .font(.system(size: 16))
+//                    .fontWeight(.medium)
             }
             .padding(.bottom, UIConstants.Padding.defalutVPadding)
             .opacity(showContents ? 1 : 0)
