@@ -252,13 +252,12 @@ struct FBLeagueScheduleListItem: View {
 //                searchStore.send(.updateTextField("토트넘"))
 //                searchStore.send(.performSearch())
             }) {
-                VStack(spacing: 0) {
+                VStack(spacing: 2) {
                     URLImage(url: data.teams.home.logo, size: .small)
                     
                     Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.teams.home.name))
                         .font(.system(size: 13))
                         .lineLimit(2)
-                        .padding(.top, 2)
                     
                     if let _ = searchStore.fbGameStatsData {
                         RoundedBorderText(
@@ -268,7 +267,6 @@ struct FBLeagueScheduleListItem: View {
                             radius: 4,
                             strokeColor: .moare
                         )
-                        .padding(.top, 2)
                     }
                 }
             }
@@ -353,13 +351,12 @@ struct FBLeagueScheduleListItem: View {
 //                searchStore.send(.updateTextField("토트넘"))
 //                searchStore.send(.performSearch())
             }) {
-                VStack(spacing: 0) {
+                VStack(spacing: 2) {
                     URLImage(url: data.teams.away.logo, size: .small)
                     
                     Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.teams.away.name))
                         .font(.system(size: 13))
                         .lineLimit(2)
-                        .padding(.top, 2)
                     
                     if let _ = searchStore.fbGameStatsData {
                         RoundedBorderText(
@@ -369,7 +366,6 @@ struct FBLeagueScheduleListItem: View {
                             radius: 4,
                             strokeColor: .secondary
                         )
-                        .padding(.top, 2)
                     }
                 }
             }
