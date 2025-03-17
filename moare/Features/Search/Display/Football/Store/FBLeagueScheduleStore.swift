@@ -206,15 +206,16 @@ struct FBLeagueScheduleStore {
                 return .none
                 
             case .fetchGames:
-                return .run { [selectedYearMonth = state.selectedYearMonth] send in
+                return .run { [selectedYearMonth = state.selectedYearMonth, displayModel = state.displayModel] send in
                     await send(.updateDisplayDataState(fetchState: .fetching))
                     
                     do {
                         let selectedYearMonth = selectedYearMonth.split(separator: "/")
                         let yearMonth = selectedYearMonth[0] + selectedYearMonth[1]
                         
-                        // TODO: temporary leagueId
-                        let result = try await searchClient.fetchLeagueSchedule(leagueId: 39, yearMonth: String(yearMonth))
+                        let leagueId = displayModel?.games.first?.league.id ?? 39
+                        
+                        let result = try await searchClient.fetchLeagueSchedule(leagueId: leagueId, yearMonth: String(yearMonth))
                         
                         if case .fbLeagueSchedule(_, let displayModel) = result.data {
                             await send(.setDisplayModel(displayModel))
