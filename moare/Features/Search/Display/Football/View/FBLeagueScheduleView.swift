@@ -144,9 +144,11 @@ struct FBLeaugScheduleView: View {
                 
                 if searchStore.poppedView == nil {
                     fbLeagueScheduleStore.send(.initData(displayModel: displayModel))
-                } else if case .fbGameStats = searchStore.poppedView {
-                } else {
-                    fbLeagueScheduleStore.send(.initData(displayModel: displayModel))                    
+                }
+            }
+            .onChange(of: displayModel) {
+                if case .fbLeagueSchedule = searchStore.poppedView {
+                    fbLeagueScheduleStore?.send(.initData(displayModel: displayModel))
                 }
             }
             .onChange(of: searchStore.viewStack) { newValue in

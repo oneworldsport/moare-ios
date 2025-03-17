@@ -153,7 +153,9 @@ struct FBGameStatsView: View {
                     self.fbGameStatsStore = fbGameStatsStore
                 }
                 
-                fbGameStatsStore.send(.initData(displayModel: displayModel))
+                if searchStore.poppedView == nil {
+                    fbGameStatsStore.send(.initData(displayModel: displayModel))
+                }
                 
                 // TODO: has to figure out better structure
                 // when game_stats show at first(meaning ScheduleView never showed)
@@ -175,6 +177,11 @@ struct FBGameStatsView: View {
                 
                 searchStore.send(.refreshGame)
             } // onAppear
+            .onChange(of: displayModel) {
+                if case .fbGameStats = searchStore.poppedView {
+                    fbGameStatsStore?.send(.initData(displayModel: displayModel))
+                }
+            }
             .onChange(of: fbGameStatsStore?.coach) { newValue in
                 translate()
             }

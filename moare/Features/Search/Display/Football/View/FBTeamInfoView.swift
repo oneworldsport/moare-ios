@@ -284,7 +284,14 @@ struct FBTeamInfoView: View {
                     self.fbTeamInfoStore = fbTeamInfoStore
                 }
                 
-                fbTeamInfoStore.send(.initData(displayModel: displayModel))
+                if searchStore.poppedView == nil {
+                    fbTeamInfoStore.send(.initData(displayModel: displayModel))
+                }
+            }
+            .onChange(of: displayModel) {
+                if case .fbTeamInfo = searchStore.poppedView {
+                    fbTeamInfoStore?.send(.initData(displayModel: displayModel))
+                }
             }
         }
     }

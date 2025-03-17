@@ -89,7 +89,14 @@ struct FBTeamScheduleView: View {
                     self.fbTeamScheduleStore = fbTeamScheduleStore
                 }
                 
-                fbTeamScheduleStore.send(.initData(displayModel: displayModel))
+                if searchStore.poppedView == nil {
+                    fbTeamScheduleStore.send(.initData(displayModel: displayModel))
+                }
+            }
+            .onChange(of: displayModel) {
+                if case .fbTeamSchedule = searchStore.poppedView {
+                    fbTeamScheduleStore?.send(.initData(displayModel: displayModel))
+                }
             }
         } // if let searchStore
     }

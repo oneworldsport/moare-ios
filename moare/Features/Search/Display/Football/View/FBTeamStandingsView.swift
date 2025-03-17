@@ -98,7 +98,17 @@ struct FBTeamStandingsView: View {
                     self.fbTeamStandingsStore = fbTeamStandingsStore
                 }
                 
-                fbTeamStandingsStore.send(.initData(displayModel: displayModel))
+                if searchStore.poppedView == nil {
+                    fbTeamStandingsStore.send(.initData(displayModel: displayModel))
+                }
+            }
+            .onChange(of: displayModel) {
+                // NOTE: When come to this view(go back action) from same type of view(FBTeamStandingsView), .onAppear is not triggered.
+                // So this .onChange is used to execute .initData. Should think about better structure.
+                // And still has problem about some properties in store like some ui states, not sustaining its before value.
+                if case .fbTeamStandings = searchStore.poppedView {
+                    fbTeamStandingsStore?.send(.initData(displayModel: displayModel))
+                }
             }
         }
     }

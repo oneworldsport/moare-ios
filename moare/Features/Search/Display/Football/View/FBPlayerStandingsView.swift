@@ -185,9 +185,16 @@ struct FBPlayerStandingsView: View {
                     self.fbPlayerStandingsStore = fbPlayerStandingsStore
                 }
                 
-                fbPlayerStandingsStore.send(.initData(displayModel: displayModel))
+                if searchStore.poppedView == nil {
+                    fbPlayerStandingsStore.send(.initData(displayModel: displayModel))
+                }
             }
-        }
+            .onChange(of: displayModel) {
+                if case .fbPlayerStandings = searchStore.poppedView {
+                    fbPlayerStandingsStore?.send(.initData(displayModel: displayModel))
+                }
+            }
+        } // if let searchStore
     }
 }
 

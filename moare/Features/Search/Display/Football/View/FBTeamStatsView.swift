@@ -129,7 +129,14 @@ struct FBTeamStatsView: View {
                     self.fbTeamStatsStore = fbTeamStatsStore
                 }
                 
-                fbTeamStatsStore.send(.initData(displayModel: displayModel))
+                if searchStore.poppedView == nil {
+                    fbTeamStatsStore.send(.initData(displayModel: displayModel))
+                }
+            }
+            .onChange(of: displayModel) {
+                if case .fbTeamStats = searchStore.poppedView {
+                    fbTeamStatsStore?.send(.initData(displayModel: displayModel))
+                }
             }
         }
     }

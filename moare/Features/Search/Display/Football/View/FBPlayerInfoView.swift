@@ -255,7 +255,14 @@ struct FBPlayerInfoView: View {
                     self.fbPlayerInfoStore = fbPlayerInfoStore
                 }
                 
-                fbPlayerInfoStore.send(.initData(displayModel: displayModel))
+                if searchStore.poppedView == nil {
+                    fbPlayerInfoStore.send(.initData(displayModel: displayModel))
+                }
+            }
+            .onChange(of: displayModel) {
+                if case .fbPlayerInfo = searchStore.poppedView {
+                    fbPlayerInfoStore?.send(.initData(displayModel: displayModel))
+                }
             }
         } // if let searchStore
     }
