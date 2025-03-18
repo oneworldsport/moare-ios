@@ -199,7 +199,7 @@ struct FBTeamStandingsFirstDataListItem: View {
         }
         .padding(.leading, 10)
         .onTapGesture {
-            searchStore.send(.showTeamStats(data.team.id))
+            searchStore.send(.showTeamStats(teamId: data.team.id))
         }
     }
 }

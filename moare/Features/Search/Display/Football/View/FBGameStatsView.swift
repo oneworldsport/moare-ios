@@ -175,7 +175,7 @@ struct FBGameStatsView: View {
                 
                 translate()
                 
-                searchStore.send(.refreshGame)
+                searchStore.send(.refreshGame(category: "football"))
             } // onAppear
             .onChange(of: displayModel) {
                 if case .fbGameStats = searchStore.poppedView {
@@ -245,7 +245,7 @@ struct FBGameStatsTeamButtonContainer: View {
                 Spacer()
                 
                 Button(action: {
-                    searchStore.send(.refreshGame)
+                    searchStore.send(.refreshGame(category: "football"))
                 }) {
                     Image(systemName: "arrow.clockwise")
                         .tint(.secondary)

@@ -34,9 +34,6 @@ struct SearchStore {
         var fbLeagueScheduleData: FBLeagueScheduleDisplayModel? = nil
         var fbGameStatsData: FBGameStatsDisplayModel? = nil
         
-        var fbPlayerInfoResponseModel: FBPlayerInfoResponseModel? = nil
-        var fbTeamInfoResponseModel: FBTeamInfoResponseModel? = nil
-        
         var initialFBLeagueScheduleData: FBLeagueScheduleDisplayModel? = nil
         
         var autoCompleteList: [String] = []
@@ -81,11 +78,11 @@ struct SearchStore {
         case updateTextFieldVisibleState(Bool)
         case performSearch(searchType: SearchType = .query, aniDuration: CGFloat = 0)
         case selectFBGame(FBGame)
-        case showPlayerStats(Int)
-        case showTeamStats(Int)
-        case showGameStats(Bool)
+        case showPlayerStats(category: String? = nil, playerId: Int)
+        case showTeamStats(teamId: Int)
+        case showGameStats(gameType: String)
         case updateTrendingKeywordsVisibleState(Bool)
-        case refreshGame
+        case refreshGame(category: String)
         
         /* ---------------------
            api request action
@@ -113,6 +110,7 @@ struct SearchStore {
         case updateMainDisplayModel(data: SportDecodableModel, shouldReset: Bool = true)
         case updateLastViewStack(data: SportDecodableModel)
         case updateSearchStateWithAni(bool: Bool)
+        case addViewStack(data: SportDecodableModel)
         
         /* ---------------------
            test
@@ -358,14 +356,12 @@ struct SearchStore {
                 switch model.data {
                 case .fbPlayerInfo(let responseModel, let displayModel):
                     state.fbPlayerInfoData = displayModel
-                    state.fbPlayerInfoResponseModel = responseModel
                 case .fbPlayerStats(_, let displayModel):
                     state.fbPlayerStatsData = displayModel
                 case .fbPlayerStandings(_, let displayModel):
                     state.fbPlayerStandingsData = displayModel
                 case .fbTeamInfo(let responseModel, let displayModel):
                     state.fbTeamInfoData = displayModel
-                    state.fbTeamInfoResponseModel = responseModel
                 case .fbTeamStats(_, let displayModel):
                     state.fbTeamStatsData = displayModel
                 case .fbTeamStandings(_, let displayModel):
@@ -507,30 +503,53 @@ struct SearchStore {
                 
                 return .none
                 
-            case .showPlayerStats(let _):
-                guard let playerInfoResponseModel = state.fbPlayerInfoResponseModel else { return .none }
-                
-                let stats = modelConverter.fbPlayerStatsConverter(response: playerInfoResponseModel)
-                
+            case .showPlayerStats(let category, let playerId):
                 state.resultVisibleState = false
                 
-                state.fbPlayerInfoData = nil
-                state.fbPlayerStatsData = stats
-                state.fbPlayerStandingsData = nil
-                state.fbTeamInfoData = nil
-                state.fbTeamStatsData = nil
-                state.fbTeamStandingsData = nil
-                state.fbTeamScheduleData = nil
-                state.fbLeagueScheduleData = nil
-                state.fbGameStatsData = nil
-                
-                // TODO: can use viewStack
-                let dataModel = SportDecodableModel.fbPlayerStats(playerInfoResponseModel, stats)
-                
-                state.viewStack.append(dataModel)
-                state.poppedView = nil
-                
-                return .run { send in
+                return .run { [viewStack = state.viewStack] send in
+                    let dataModel: SportDecodableModel
+                    
+                    switch viewStack.last {
+                    case .fbPlayerStandings(let responseModel, let displayModel):
+                        if let category = category {
+                            let leagueId = responseModel.standings.first?.statistics.first?.league.id ?? 39
+                            
+                            // TODO: Has to add loading
+                            let result = try await searchClient.fetchById(
+                                category: category,
+                                dataType: "\(category)_player_stats",
+                                leagueId: leagueId,
+                                id: playerId
+                            )
+                            
+                            if case .fbPlayerStats = result.data {
+                                dataModel = result.data
+                            } else {
+                                return
+                            }
+                        } else {
+                            let player = responseModel.standings.first { $0.player.id == playerId }
+                            
+                            let playerInfoResponseModel = FBPlayerInfoResponseModel(info: player, lastGame: nil, nextGame: nil)
+                            dataModel = .fbPlayerStats(
+                                playerInfoResponseModel,
+                                modelConverter.fbPlayerStatsConverter(response: playerInfoResponseModel)
+                            )
+                        }
+                        
+                    case .fbPlayerInfo(let responseModel, let displayModel):
+                        dataModel = .fbPlayerStats(
+                            responseModel,
+                            modelConverter.fbPlayerStatsConverter(response: responseModel)
+                        )
+                        
+                    default: return // Make it do nothing
+                    }
+                    
+                    
+                    await send(.updateMainDisplayModel(data: dataModel))
+                    await send(.addViewStack(data: dataModel))
+                    
                     // wait for before view's removing animation
                     // NOTE: 0.1 for temporary
                     try await Task.sleep(for: .seconds(0.1))
@@ -539,41 +558,35 @@ struct SearchStore {
                 }
                 
             case .showTeamStats(let teamId):
-                var teamInfoResponseModel: FBTeamInfoResponseModel? = nil
-                var stats: FBTeamStatsDisplayModel? = nil
+                let dataModel: SportDecodableModel
                 
                 let viewToShow = state.viewStack.last!
                 
-                if case .fbTeamStandings(let fBTeamStandingsResponseModel, _) = viewToShow {
-                    let team = fBTeamStandingsResponseModel.standings.first { $0.team.id == teamId }
+                switch state.viewStack.last {
+                case .fbTeamStandings(let responseModel, let displayModel):
+                    let team = responseModel.standings.first { $0.team.id == teamId }
                     
-                    teamInfoResponseModel = FBTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
+                    let teamInfoResponseModel = FBTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
+                    dataModel = .fbTeamStats(
+                        teamInfoResponseModel,
+                        modelConverter.fbTeamStatsConverter(response: teamInfoResponseModel)
+                    )
                     
-                    stats = modelConverter.fbTeamStatsConverter(response: teamInfoResponseModel!)
-                } else {
-                    teamInfoResponseModel = state.fbTeamInfoResponseModel
-                    stats = modelConverter.fbTeamStatsConverter(response: state.fbTeamInfoResponseModel!)
+                case .fbTeamInfo(let responseModel, let displayModel):
+                    dataModel = .fbTeamStats(
+                        responseModel,
+                        modelConverter.fbTeamStatsConverter(response: responseModel)
+                    )
+                    
+                default: return .none // Make it do nothing
                 }
                 
                 state.resultVisibleState = false
                 
-                state.fbPlayerInfoData = nil
-                state.fbPlayerStatsData = nil
-                state.fbPlayerStandingsData = nil
-                state.fbTeamInfoData = nil
-                state.fbTeamStatsData = stats
-                state.fbTeamStandingsData = nil
-                state.fbTeamScheduleData = nil
-                state.fbLeagueScheduleData = nil
-                state.fbGameStatsData = nil
-                
-                // TODO: can use viewStack
-                let dataModel = SportDecodableModel.fbTeamStats(teamInfoResponseModel!, stats!)
-                
-                state.viewStack.append(dataModel)
-                state.poppedView = nil
-                
                 return .run { send in
+                    await send(.updateMainDisplayModel(data: dataModel))
+                    await send(.addViewStack(data: dataModel))
+                    
                     // wait for before view's removing animation
                     // NOTE: 0.1 for temporary
                     try await Task.sleep(for: .seconds(0.1))
@@ -581,48 +594,35 @@ struct SearchStore {
                     await send(.updateResultVisibleState(bool: true))
                 }
                 
-            case .showGameStats(let isPrevious):
-                var gameStatsResponseModel: FBGameStatsReponseModel? = nil
-                var stats: FBGameStatsDisplayModel? = nil
+            case .showGameStats(let gameType):
+                let dataModel: SportDecodableModel
                 
-                let viewToShow = state.viewStack.last!
-                if case .fbPlayerInfo(let fbPlayerInfoResponseModel, _) = viewToShow {
-                    if isPrevious {
-                        gameStatsResponseModel = FBGameStatsReponseModel(game: fbPlayerInfoResponseModel.lastGame)
-                    } else {
-                        gameStatsResponseModel = FBGameStatsReponseModel(game: fbPlayerInfoResponseModel.nextGame)
-                    }
+                switch state.viewStack.last {
+                case .fbPlayerInfo(let responseModel, let displayModel):
+                    let gameStatsResponseModel = gameType == "previous" ? FBGameStatsReponseModel(game: responseModel.lastGame) : FBGameStatsReponseModel(game: responseModel.nextGame)
                     
-                    stats = modelConverter.fbGameStatsConverter(response: gameStatsResponseModel!)
-                } else if case .fbTeamInfo(let fBTeamInfoResponseModel, let _) = viewToShow {
-                    if isPrevious {
-                        gameStatsResponseModel = FBGameStatsReponseModel(game: fBTeamInfoResponseModel.lastGame)
-                    } else {
-                        gameStatsResponseModel = FBGameStatsReponseModel(game: fBTeamInfoResponseModel.nextGame)
-                    }
+                    dataModel = .fbGameStats(
+                        gameStatsResponseModel,
+                        modelConverter.fbGameStatsConverter(response: gameStatsResponseModel)
+                    )
                     
-                    stats = modelConverter.fbGameStatsConverter(response: gameStatsResponseModel!)
+                case .fbTeamInfo(let responseModel, let displayModel):
+                    let gameStatsResponseModel = gameType == "previous" ? FBGameStatsReponseModel(game: responseModel.lastGame) : FBGameStatsReponseModel(game: responseModel.nextGame)
+                    
+                    dataModel = .fbGameStats(
+                        gameStatsResponseModel,
+                        modelConverter.fbGameStatsConverter(response: gameStatsResponseModel)
+                    )
+                    
+                default: return .none // Make it do nothing
                 }
                 
                 state.resultVisibleState = false
                 
-                state.fbPlayerInfoData = nil
-                state.fbPlayerStatsData = nil
-                state.fbPlayerStandingsData = nil
-                state.fbTeamInfoData = nil
-                state.fbTeamStatsData = nil
-                state.fbTeamStandingsData = nil
-                state.fbTeamScheduleData = nil
-                state.fbLeagueScheduleData = nil
-                state.fbGameStatsData = stats
-                
-                // TODO: can use viewStack
-                let dataModel = SportDecodableModel.fbGameStats(gameStatsResponseModel!, stats!)
-                
-                state.viewStack.append(dataModel)
-                state.poppedView = nil
-                
                 return .run { send in
+                    await send(.updateMainDisplayModel(data: dataModel))
+                    await send(.addViewStack(data: dataModel))
+                    
                     // wait for before view's removing animation
                     // NOTE: 0.1 for temporary
                     try await Task.sleep(for: .seconds(0.1))
@@ -630,10 +630,16 @@ struct SearchStore {
                     await send(.updateResultVisibleState(bool: true))
                 }
                 
-            case .refreshGame:
+            case .refreshGame(let category):
                 return .run { [fbGameStatsData = state.fbGameStatsData] send in
                     if let game = fbGameStatsData?.game {
-                        let result = try await searchClient.fetchGameInfo(category: "football", date: game.fixture.date, leagueId: game.league.id, fixtureId: game.fixture.id)
+                        let result = try await searchClient.fetchById(
+                            category: category,
+                            date: game.fixture.date,
+                            dataType: "\(category)_game_stats",
+                            leagueId: game.league.id,
+                            id: game.fixture.id
+                        )
                         
                         await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
                         await send(.updateLastViewStack(data: result.data))
@@ -656,14 +662,12 @@ struct SearchStore {
                 switch data {
                 case .fbPlayerInfo(let responseModel, let displayModel):
                     state.fbPlayerInfoData = displayModel
-                    state.fbPlayerInfoResponseModel = responseModel
                 case .fbPlayerStats(_, let displayModel):
                     state.fbPlayerStatsData = displayModel
                 case .fbPlayerStandings(_, let displayModel):
                     state.fbPlayerStandingsData = displayModel
                 case .fbTeamInfo(let responseModel, let displayModel):
                     state.fbTeamInfoData = displayModel
-                    state.fbTeamInfoResponseModel = responseModel
                 case .fbTeamStats(_, let displayModel):
                     state.fbTeamStatsData = displayModel
                 case .fbTeamStandings(_, let displayModel):
@@ -695,6 +699,11 @@ struct SearchStore {
                 
                 return .none
                 
+            case .addViewStack(let data):
+                state.viewStack.append(data)
+                state.poppedView = nil
+                
+                return .none
             }
         }
     }

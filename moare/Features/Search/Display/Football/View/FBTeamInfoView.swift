@@ -214,7 +214,9 @@ struct FBTeamInfoView: View {
                     )
                     .offset(animatePositions ? itemPositions[3] ?? .zero : itemCenterPositions[3] ?? .zero)
                     .onTapGesture {
-                        searchStore.send(.showTeamStats(0))
+                        if let team = fbTeamInfoStore.team {
+                            searchStore.send(.showTeamStats(teamId: team.id))
+                        }
                     }
                     
                     // last game stats
@@ -224,7 +226,7 @@ struct FBTeamInfoView: View {
                     )
                     .offset(animatePositions ? itemPositions[4] ?? .zero : itemCenterPositions[4] ?? .zero)
                     .onTapGesture {
-                        searchStore.send(.showGameStats(true))
+                        searchStore.send(.showGameStats(gameType: "previous"))
                     }
                     
                     // next game stats
@@ -234,7 +236,7 @@ struct FBTeamInfoView: View {
                     )
                     .offset(animatePositions ? itemPositions[5] ?? .zero : itemCenterPositions[5] ?? .zero)
                     .onTapGesture {
-                        searchStore.send(.showGameStats(false))
+                        searchStore.send(.showGameStats(gameType: "next"))
                     }
                     
                 }

@@ -190,21 +190,23 @@ struct FBPlayerInfoView: View {
                     FBPlayerInfoFourthItem(fbPlayerInfoStore: fbPlayerInfoStore, showContents: showContents)
                         .offset(animatePositions ? itemPositions[3] ?? .zero : itemCenterPositions[3] ?? .zero)
                         .onTapGesture {
-                            searchStore.send(.showPlayerStats(0))
+                            if let player = fbPlayerInfoStore.player {
+                                searchStore.send(.showPlayerStats(playerId: player.id))
+                            }
                         }
                     
                     // last game stats
                     FBPlayerInfoFifthItem(fbPlayerInfoStore: fbPlayerInfoStore, showContents: showContents)
                         .offset(animatePositions ? itemPositions[4] ?? .zero : itemCenterPositions[4] ?? .zero)
                         .onTapGesture {
-                            searchStore.send(.showGameStats(true))
+                            searchStore.send(.showGameStats(gameType: "previous"))
                         }
                     
                     // next game
                     FBPlayerInfoSixthItem(fbPlayerInfoStore: fbPlayerInfoStore, showContents: showContents)
                         .offset(animatePositions ? itemPositions[5] ?? .zero : itemCenterPositions[5] ?? .zero)
                         .onTapGesture {
-                            searchStore.send(.showGameStats(false))
+                            searchStore.send(.showGameStats(gameType: "next"))
                         }
                 } // if let fbPlayerInfoStore
             } // ZStack
