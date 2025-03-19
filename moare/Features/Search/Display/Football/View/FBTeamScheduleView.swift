@@ -89,7 +89,14 @@ struct FBTeamScheduleView: View {
                     self.fbTeamScheduleStore = fbTeamScheduleStore
                 }
                 
-                fbTeamScheduleStore.send(.initData(displayModel: displayModel))
+                if searchStore.poppedView == nil {
+                    fbTeamScheduleStore.send(.initData(displayModel: displayModel))
+                }
+            }
+            .onChange(of: displayModel) {
+                if case .fbTeamSchedule = searchStore.poppedView {
+                    fbTeamScheduleStore?.send(.initData(displayModel: displayModel))
+                }
             }
         } // if let searchStore
     }
@@ -167,12 +174,22 @@ struct FBTeamScheduleListItem: View {
 //                searchStore.send(.updateTextField("토트넘"))
 //                searchStore.send(.performSearch())
             }) {
-                VStack {
+                VStack(spacing: 2) {
                     URLImage(url: data.teams.home.logo, size: .small)
                     
                     Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.teams.home.name))
                         .font(.system(size: 13))
                         .lineLimit(2)
+                    
+                    if let _ = searchStore.fbGameStatsData {
+                        RoundedBorderText(
+                            text: "홈",
+                            fontSize: 11,
+                            textColor: .moare,
+                            radius: 4,
+                            strokeColor: .moare
+                        )
+                    }
                 }
             }
             .frame(width: 100)
@@ -197,8 +214,8 @@ struct FBTeamScheduleListItem: View {
                 .contentShape(Rectangle())
             
             /* ---------------------
-             game info
-             --------------------- */
+               game info
+               --------------------- */
             VStack {
                 // game status
                 CapsuleButton(
@@ -210,7 +227,7 @@ struct FBTeamScheduleListItem: View {
                 .disabled(searchStore.fbGameStatsData != nil || !StringConstants.Football.gameFinishedList.contains(data.fixture.status.short))
                 
                 // game date
-                if let fbGameStatsData = searchStore.fbGameStatsData {
+                if let _ = searchStore.fbGameStatsData {
                     Text(CalendarUtil.formatDate(date: data.fixture.date, formatType: .ampm))
                         .font(.system(size: 12))
                         .padding(.vertical, 2)
@@ -225,7 +242,7 @@ struct FBTeamScheduleListItem: View {
                 }
                 
                 // venue
-                if let fbGameStatsData = searchStore.fbGameStatsData {
+                if let _ = searchStore.fbGameStatsData {
                     Text("장소: \(venueKrName)")
                         .font(.system(size: 12, weight: .light))
                         .lineLimit(1)
@@ -247,8 +264,8 @@ struct FBTeamScheduleListItem: View {
                 .contentShape(Rectangle())
             
             /* ---------------------
-             away
-             --------------------- */
+               away
+               --------------------- */
             // socre
             if StringConstants.Football.gameLiveList.contains(data.fixture.status.short) ||
                 StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) && isResultOpened {
@@ -265,12 +282,22 @@ struct FBTeamScheduleListItem: View {
 //                searchStore.send(.updateTextField("토트넘"))
 //                searchStore.send(.performSearch())
             }) {
-                VStack {
+                VStack(spacing: 2) {
                     URLImage(url: data.teams.away.logo, size: .small)
                     
                     Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.teams.away.name))
                         .font(.system(size: 13))
                         .lineLimit(2)
+                    
+                    if let _ = searchStore.fbGameStatsData {
+                        RoundedBorderText(
+                            text: "원정",
+                            fontSize: 11,
+                            textColor: .secondary,
+                            radius: 4,
+                            strokeColor: .secondary
+                        )
+                    }
                 }
             }
             .frame(width: 100)

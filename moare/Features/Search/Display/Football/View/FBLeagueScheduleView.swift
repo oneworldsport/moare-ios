@@ -144,9 +144,11 @@ struct FBLeaugScheduleView: View {
                 
                 if searchStore.poppedView == nil {
                     fbLeagueScheduleStore.send(.initData(displayModel: displayModel))
-                } else if case .fbGameStats = searchStore.poppedView {
-                } else {
-                    fbLeagueScheduleStore.send(.initData(displayModel: displayModel))                    
+                }
+            }
+            .onChange(of: displayModel) {
+                if case .fbLeagueSchedule = searchStore.poppedView {
+                    fbLeagueScheduleStore?.send(.initData(displayModel: displayModel))
                 }
             }
             .onChange(of: searchStore.viewStack) { newValue in
@@ -252,13 +254,12 @@ struct FBLeagueScheduleListItem: View {
 //                searchStore.send(.updateTextField("토트넘"))
 //                searchStore.send(.performSearch())
             }) {
-                VStack(spacing: 0) {
+                VStack(spacing: 2) {
                     URLImage(url: data.teams.home.logo, size: .small)
                     
                     Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.teams.home.name))
                         .font(.system(size: 13))
                         .lineLimit(2)
-                        .padding(.top, 2)
                     
                     if let _ = searchStore.fbGameStatsData {
                         RoundedBorderText(
@@ -268,7 +269,6 @@ struct FBLeagueScheduleListItem: View {
                             radius: 4,
                             strokeColor: .moare
                         )
-                        .padding(.top, 2)
                     }
                 }
             }
@@ -294,8 +294,8 @@ struct FBLeagueScheduleListItem: View {
                 .contentShape(Rectangle())
             
             /* ---------------------
-             game info
-             --------------------- */
+               game info
+               --------------------- */
             VStack {
                 // game status
                 CapsuleButton(
@@ -312,7 +312,7 @@ struct FBLeagueScheduleListItem: View {
                     .padding(.vertical, 2)
                 
                 // venue
-                if let fbGameStatsData = searchStore.fbGameStatsData {
+                if let _ = searchStore.fbGameStatsData {
                     Text("장소: \(venueKrName)")
                         .font(.system(size: 12, weight: .light))
                         .lineLimit(1)
@@ -335,8 +335,8 @@ struct FBLeagueScheduleListItem: View {
                 .contentShape(Rectangle())
             
             /* ---------------------
-             away
-             --------------------- */
+               away
+               --------------------- */
             // socre
             if StringConstants.Football.gameLiveList.contains(data.fixture.status.short) ||
                 StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) && isResultOpened {
@@ -353,13 +353,12 @@ struct FBLeagueScheduleListItem: View {
 //                searchStore.send(.updateTextField("토트넘"))
 //                searchStore.send(.performSearch())
             }) {
-                VStack(spacing: 0) {
+                VStack(spacing: 2) {
                     URLImage(url: data.teams.away.logo, size: .small)
                     
                     Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.teams.away.name))
                         .font(.system(size: 13))
                         .lineLimit(2)
-                        .padding(.top, 2)
                     
                     if let _ = searchStore.fbGameStatsData {
                         RoundedBorderText(
@@ -369,7 +368,6 @@ struct FBLeagueScheduleListItem: View {
                             radius: 4,
                             strokeColor: .secondary
                         )
-                        .padding(.top, 2)
                     }
                 }
             }

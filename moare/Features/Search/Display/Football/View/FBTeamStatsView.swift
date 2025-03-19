@@ -25,96 +25,60 @@ struct FBTeamStatsView: View {
        --------------------- */
     let coordinateSpaceName = "FBTeamStatsView"
     
-    private var parentCenterPosition = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
-    @State private var itemPositions: [Int: CGSize] = [:]
+    @State private var firstItemPosition: CGPoint = .zero
+    @State private var itemPositions: [Int: CGPoint] = [:]
+    
     @State private var animatePositions = false
     @State private var showContents = false
     
-    @State private var mainUIVisibleState = false
-    
-    init(displayModel: FBTeamStatsDisplayModel) {
-        self.displayModel = displayModel
-    }
+    var centerPosition = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
     
     var body: some View {
-        let statsList = displayModel.stats
-        
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             ScrollView {
                 if let fbTeamStatsStore = fbTeamStatsStore {
                     ZStack(alignment: .topLeading) {
                         /* ---------------------
-                         ui
-                         - invisible first
-                         - set ani ui's position
-                         - visible after ani ui
-                         --------------------- */
+                           ui
+                           - invisible first
+                           - set ani ui's position
+                           - visible after ani ui
+                           --------------------- */
                         VStack {
-                            FBTeamStatsTeamInfoItem(
-                                fbTeamStatsStore: fbTeamStatsStore
-                            )
-                            .background(
-                                GeometryReader { geometry in
-                                    if itemPositions[0] == nil {
-                                        Color.clear.preference(
-                                            key: ItemPositionsPreferenceKey.self,
-                                            value: [0: CGSize(
-                                                width: geometry.frame(in: .named(coordinateSpaceName)).minX,
-                                                height: geometry.frame(in: .named(coordinateSpaceName)).minY)]
-                                        )
+                            FBTeamStatsTeamInfoItem(fbTeamStatsStore: fbTeamStatsStore)
+                                .background(
+                                    GeometryReader { proxy in
+                                        Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
+                                            firstItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
+                                        }
                                     }
-                                }
-                            )
+                                )
                             
-                            FBTeamStatsList(
-                                fbTeamStatsStore: fbTeamStatsStore,
-                                itemPositions: itemPositions
-                            )
+                            FBTeamStatsList(fbTeamStatsStore: fbTeamStatsStore, itemPositions: $itemPositions)
                         }
-                        .opacity(mainUIVisibleState ? 1 : 0)
+                        .opacity(0)
                         
                         /* ---------------------
-                         aimation ui
-                         - invisible after ani
-                         --------------------- */
-                        if !mainUIVisibleState {
-                            FBTeamStatsTeamInfoItem(
-                                fbTeamStatsStore: fbTeamStatsStore,
-                                showContents: showContents
+                           aimation ui
+                           - invisible after ani
+                           --------------------- */
+                        FBTeamStatsTeamInfoItem(fbTeamStatsStore: fbTeamStatsStore, showContents: showContents)
+                            .offset(
+                                x: animatePositions ? firstItemPosition.x : 0,
+                                y: animatePositions ? firstItemPosition.y : centerPosition.height
                             )
-                            .offset(animatePositions ? itemPositions[0] ?? parentCenterPosition : parentCenterPosition)
-                            
-                            FBTeamStatsAniList(
-                                fbTeamStatsStore: fbTeamStatsStore,
-                                itemPositions: itemPositions,
-                                animatePositions: animatePositions,
-                                showContents: showContents
-                            )
-                        }
+                        
+                        FBTeamStatsList(
+                            fbTeamStatsStore: fbTeamStatsStore,
+                            animatePositions: animatePositions,
+                            showContents: showContents,
+                            isAniList: true,
+                            itemPositions: $itemPositions
+                        )
                     } // ZStack
+                    .coordinateSpace(name: coordinateSpaceName)
                 } // if let fbTeamStatsStore
             } // ScrollView
-            .coordinateSpace(name: coordinateSpaceName)
-            .onPreferenceChange(ItemPositionsPreferenceKey.self) { positions in
-                self.itemPositions = positions
-                
-                if positions.count == statsList.count + 1 {
-                    withAnimation(.spring(response: 1)) {
-                        animatePositions = true
-                    }
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        withAnimation(.easeInOut(duration: 0.5)) {
-                            showContents = true
-                        }
-                    }
-                    
-                    // make animation ui invisible after all animation ends
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        mainUIVisibleState = true
-                    }
-                }
-            }
             .onAppear {
                 // init FBTeamStatsStore
                 let fbTeamStatsStore: StoreOf<FBTeamStatsStore> = storeManager.getStore(forKey: StoreKeys.fbTeamStatsStore) ?? {
@@ -125,11 +89,34 @@ struct FBTeamStatsView: View {
                     return newStore
                 }()
                 
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                     self.fbTeamStatsStore = fbTeamStatsStore
                 }
                 
-                fbTeamStatsStore.send(.initData(displayModel: displayModel))
+                if searchStore.poppedView == nil {
+                    fbTeamStatsStore.send(.initData(displayModel: displayModel))
+                }
+                
+                triggerAnimation()
+            }
+            .onChange(of: displayModel) {
+                if case .fbTeamStats = searchStore.poppedView {
+                    fbTeamStatsStore?.send(.initData(displayModel: displayModel))
+                }
+            }
+        }
+    }
+    
+    private func triggerAnimation() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short) {
+            withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                animatePositions = true
+            }
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short + AnimationConstants.Duration.medium) {
+            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                showContents = true
             }
         }
     }
@@ -154,7 +141,7 @@ struct FBTeamStatsTeamInfoItem: View {
                     URLImage(url: team.logo)
                     
                     VStack(alignment: .leading) {
-                        Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.name))
+                        Text(EnNameTranslationUtility.translateByDic(type: .team, isShort: false, input: team.name))
                             .font(.system(size: 16))
                             .fontWeight(.medium)
                         
@@ -194,11 +181,24 @@ struct FBTeamStatsTeamInfoItem: View {
 struct FBTeamStatsList: View {
     @Bindable var fbTeamStatsStore: StoreOf<FBTeamStatsStore>
     
-    let itemPositions: [Int: CGSize]
+    let animatePositions: Bool
+    let showContents: Bool
+    let isAniList: Bool
     
-    init(fbTeamStatsStore: StoreOf<FBTeamStatsStore>, itemPositions: [Int : CGSize]) {
+    @Binding var itemPositions: [Int : CGPoint]
+
+    init(
+        fbTeamStatsStore: StoreOf<FBTeamStatsStore>,
+        animatePositions: Bool = true,
+        showContents: Bool = true,
+        isAniList: Bool = false,
+        itemPositions: Binding<[Int: CGPoint]>
+    ) {
         self.fbTeamStatsStore = fbTeamStatsStore
-        self.itemPositions = itemPositions
+        self.animatePositions = animatePositions
+        self.showContents = showContents
+        self.isAniList = isAniList
+        self._itemPositions = itemPositions
     }
     
     var body: some View {
@@ -208,8 +208,11 @@ struct FBTeamStatsList: View {
             FBTeamStatsListItem(
                 fbTeamStatsStore: fbTeamStatsStore,
                 stats: stats,
-                itemPositions: itemPositions,
-                index: index
+                index: index,
+                animatePositions: animatePositions,
+                showContents: showContents,
+                isAniList: isAniList,
+                itemPositions: $itemPositions
             )
         }
     }
@@ -219,89 +222,30 @@ struct FBTeamStatsListItem: View {
     @Bindable var fbTeamStatsStore: StoreOf<FBTeamStatsStore>
     
     let stats: FBTeamStats
-    let itemPositions: [Int : CGSize]
     let index: Int
+    let animatePositions: Bool
+    let showContents: Bool
+    let isAniList: Bool
     
-    init(fbTeamStatsStore: StoreOf<FBTeamStatsStore>, stats: FBTeamStats, itemPositions: [Int : CGSize], index: Int) {
-        self.fbTeamStatsStore = fbTeamStatsStore
-        self.stats = stats
-        self.itemPositions = itemPositions
-        self.index = index
-    }
+    @Binding var itemPositions: [Int : CGPoint]
+    
+    var centerPosition = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
     
     var body: some View {
-        FBTeamStatsItem(stats: stats)
+        FBTeamStatsItem(stats: stats, showContents: showContents)
             .background(
-                GeometryReader { geometry in
-                    if itemPositions[index + 1] == nil {
-                        Color.clear.preference(
-                            key: ItemPositionsPreferenceKey.self,
-                            value: [index + 1: CGSize(
-                                width: geometry.frame(in: .named("FBTeamStatsView")).minX,
-                                height: geometry.frame(in: .named("FBTeamStatsView")).minY)]
-                        )
+                GeometryReader { proxy in
+                    if !isAniList {
+                        Color.clear.onChange(of: proxy.frame(in: .named("FBTeamStatsView")).origin) {
+                            itemPositions[index] = proxy.frame(in: .named("FBTeamStatsView")).origin
+                        }
                     }
                 }
             )
-    }
-}
-
-struct FBTeamStatsAniList: View {
-    @Bindable var fbTeamStatsStore: StoreOf<FBTeamStatsStore>
-    
-    let itemPositions: [Int: CGSize]
-    let animatePositions: Bool
-    let showContents: Bool
-    
-    init(fbTeamStatsStore: StoreOf<FBTeamStatsStore>, itemPositions: [Int : CGSize], animatePositions: Bool, showContents: Bool) {
-        self.fbTeamStatsStore = fbTeamStatsStore
-        self.itemPositions = itemPositions
-        self.animatePositions = animatePositions
-        self.showContents = showContents
-    }
-    
-    var body: some View {
-        ForEach(fbTeamStatsStore.statsList.indices, id: \.self) { index in
-            let stats = fbTeamStatsStore.statsList[index]
-            
-            FBTeamStatsAniListItem(
-                fbTeamStatsStore: fbTeamStatsStore,
-                stats: stats,
-                index: index,
-                itemPositions: itemPositions,
-                animatePositions: animatePositions,
-                showContents: showContents
+            .offset(
+                x: isAniList ? (animatePositions ? (itemPositions[index]?.x ?? 0) : 0) : 0,
+                y: isAniList ? (animatePositions ? (itemPositions[index]?.y ?? 0) : centerPosition.height) : 0
             )
-        }
-    }
-}
-
-struct FBTeamStatsAniListItem: View {
-    @Bindable var fbTeamStatsStore: StoreOf<FBTeamStatsStore>
-    
-    let stats: FBTeamStats
-    let index: Int
-    let itemPositions: [Int : CGSize]
-    let animatePositions: Bool
-    let showContents: Bool
-    
-    private var parentCenterPosition = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
-    
-    init(fbTeamStatsStore: StoreOf<FBTeamStatsStore>, stats: FBTeamStats, index: Int, itemPositions: [Int : CGSize], animatePositions: Bool, showContents: Bool) {
-        self.fbTeamStatsStore = fbTeamStatsStore
-        self.stats = stats
-        self.index = index
-        self.itemPositions = itemPositions
-        self.animatePositions = animatePositions
-        self.showContents = showContents
-    }
-    
-    var body: some View {
-        FBTeamStatsItem(
-            stats: stats,
-            showContents: showContents
-        )
-        .offset(animatePositions ? itemPositions[index + 1] ?? parentCenterPosition : parentCenterPosition)
     }
 }
 
@@ -326,14 +270,14 @@ struct FBTeamStatsItem: View {
                     leagueSeason: stats.league.season
                 )
                 
-                Text(" - ")
-                    .fontWeight(.medium)
-                
-                URLImage(url: stats.team.logo, customSize: CGSize(width: 24, height: 24))
-                
-                Text(EnNameTranslationUtility.translateByDic(type: .team, input: stats.team.name))
-                    .font(.system(size: 16))
-                    .fontWeight(.medium)
+//                Text(" - ")
+//                    .fontWeight(.medium)
+//                
+//                URLImage(url: stats.team.logo, customSize: CGSize(width: 24, height: 24))
+//                
+//                Text(EnNameTranslationUtility.translateByDic(type: .team, input: stats.team.name))
+//                    .font(.system(size: 16))
+//                    .fontWeight(.medium)
             }
             .padding(.bottom, UIConstants.Padding.defalutVPadding)
             .opacity(showContents ? 1 : 0)

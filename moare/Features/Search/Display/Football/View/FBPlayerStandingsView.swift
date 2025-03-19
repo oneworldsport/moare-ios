@@ -86,7 +86,7 @@ struct FBPlayerStandingsView: View {
                             ScrollView {
                                 ScrollViewReader { proxy in
                                     HStack(alignment: .top, spacing: 0) {
-                                        FBPlayerStandingsFirstDataList(fbPlayerStandingsStore: fbPlayerStandingsStore)
+                                        FBPlayerStandingsFirstDataList(searchStore: searchStore, fbPlayerStandingsStore: fbPlayerStandingsStore)
                                         //                                .frame(maxHeight: .infinity, alignment: .top) // 정렬 안맞는 현상때문에 추가
                                         //                                .background(Color.red.opacity(0.3))
                                         
@@ -185,18 +185,22 @@ struct FBPlayerStandingsView: View {
                     self.fbPlayerStandingsStore = fbPlayerStandingsStore
                 }
                 
-                fbPlayerStandingsStore.send(.initData(displayModel: displayModel))
+                if searchStore.poppedView == nil {
+                    fbPlayerStandingsStore.send(.initData(displayModel: displayModel))
+                }
             }
-        }
+            .onChange(of: displayModel) {
+                if case .fbPlayerStandings = searchStore.poppedView {
+                    fbPlayerStandingsStore?.send(.initData(displayModel: displayModel))
+                }
+            }
+        } // if let searchStore
     }
 }
 
 struct FBPlayerStandingsFirstDataList: View {
+    @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
-    
-    init(fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>) {
-        self.fbPlayerStandingsStore = fbPlayerStandingsStore
-    }
     
     var body: some View {
         let entityIndex = fbPlayerStandingsStore.entityIndex
@@ -214,6 +218,7 @@ struct FBPlayerStandingsFirstDataList: View {
                 }
                 
                 FBPlayerStandingsFirstDataListItem(
+                    searchStore: searchStore,
                     fbPlayerStandingsStore: fbPlayerStandingsStore,
                     rank: standingsIndex + 1,
                     data: item
@@ -260,6 +265,7 @@ struct FBPlayerStandingsFirstCategoryItem: View {
 }
 
 struct FBPlayerStandingsFirstDataListItem: View {
+    @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     let rank: Int
@@ -294,6 +300,9 @@ struct FBPlayerStandingsFirstDataListItem: View {
                 .opacity(0.5)
         }
         .padding(.leading, 10)
+        .onTapGesture {
+            searchStore.send(.showPlayerStats(category: "football", playerId: data.player.id))
+        }
     }
 }
 

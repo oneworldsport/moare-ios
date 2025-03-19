@@ -25,15 +25,30 @@ struct FBTeamInfoView: View {
        --------------------- */
     let coordinateSpaceName = "FBTeamInfoView"
     
-    @State private var parentCenterPosition = CGSize(width: UIScreen.main.bounds.width / 2, height: UIScreen.main.bounds.height / 2)
-    @State private var itemPositions: [Int: CGSize] = [:]
-    @State private var itemCenterPositions: [Int: CGSize] = [:]
+    @State private var firstItemPosition: CGPoint = .zero
+    @State private var secondItemPosition: CGPoint = .zero
+    @State private var thirdItemPosition: CGPoint = .zero
+    @State private var fourthItemPosition: CGPoint = .zero
+    @State private var fifthItemPosition: CGPoint = .zero
+    @State private var sixthItemPosition: CGPoint = .zero
+    
+    @State private var containerSize: CGSize = .zero
+    @State private var firstItemSize: CGSize = .zero
+    @State private var secondItemSize: CGSize = .zero
+    @State private var thirdItemSize: CGSize = .zero
+    @State private var fourthItemSize: CGSize = .zero
+    @State private var fifthItemSize: CGSize = .zero
+    @State private var sixthItemSize: CGSize = .zero
+    
     @State private var animatePositions = false
     @State private var showContents = false
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             ZStack(alignment: .topLeading) {
+                Spacer() // empty space for smooth animation effect
+                    .frame(maxWidth: .infinity, maxHeight: 0)
+                
                 if let fbTeamInfoStore = fbTeamInfoStore {
                     /* ---------------------
                        invisible ui
@@ -42,144 +57,74 @@ struct FBTeamInfoView: View {
                     VStack(spacing: 20) {
                         HStack(alignment: .top) {
                             // logo, name
-                            FBTeamInfoFirstItem(
-                                fbTeamInfoStore: fbTeamInfoStore
-                            )
-                            .background(
-                                GeometryReader { geometry in
-                                    Color.clear.preference(
-                                        key: ItemPositionsPreferenceKey.self,
-                                        value: [0: CGSize(
-                                            width: geometry.frame(in: .named(coordinateSpaceName)).minX,
-                                            height: geometry.frame(in: .named(coordinateSpaceName)).minY)]
-                                    )
-                                    Color.clear.preference(
-                                        key: ItemCenterPositionsPreferenceKey.self,
-                                        value: [0: CGSize(
-                                            width: geometry.frame(in: .named(coordinateSpaceName)).midX - geometry.frame(in: .named(coordinateSpaceName)).minX,
-                                            height: 0)]
-                                    )
-                                }
-                            )
+                            FBTeamInfoFirstItem(fbTeamInfoStore: fbTeamInfoStore)
+                                .background(
+                                    GeometryReader { proxy in
+                                        Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
+                                            firstItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
+                                            firstItemSize = proxy.size
+                                        }
+                                    }
+                                )
                             
                             // founded, city, country
-                            FBTeamInfoSecondItem(
-                                fbTeamInfoStore: fbTeamInfoStore
-                            )
-                            .background(
-                                GeometryReader { geometry in
-                                    Color.clear.preference(
-                                        key: ItemPositionsPreferenceKey.self,
-                                        value: [1: CGSize(
-                                            width: geometry.frame(in: .named(coordinateSpaceName)).minX,
-                                            height: geometry.frame(in: .named(coordinateSpaceName)).minY)]
-                                    )
-                                    Color.clear.preference(
-                                        key: ItemCenterPositionsPreferenceKey.self,
-                                        value: [1: CGSize(
-                                            width: geometry.frame(in: .named(coordinateSpaceName)).midX - geometry.frame(in: .named(coordinateSpaceName)).minX,
-                                            height: 0)]
-                                    )
-                                }
-                            )
+                            FBTeamInfoSecondItem(fbTeamInfoStore: fbTeamInfoStore)
+                                .background(
+                                    GeometryReader { proxy in
+                                        Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
+                                            secondItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
+                                            secondItemSize = proxy.size
+                                        }
+                                    }
+                                )
                             
                             // venue
-                            FBTeamInfoThirdItem(
-                                fbTeamInfoStore: fbTeamInfoStore
-                            )
-                            .background(
-                                GeometryReader { geometry in
-                                    Color.clear.preference(
-                                        key: ItemPositionsPreferenceKey.self,
-                                        value: [2: CGSize(
-                                            width: geometry.frame(in: .named(coordinateSpaceName)).minX,
-                                            height: geometry.frame(in: .named(coordinateSpaceName)).minY)]
-                                    )
-                                    Color.clear.preference(
-                                        key: ItemCenterPositionsPreferenceKey.self,
-                                        value: [2: CGSize(
-                                            width: geometry.frame(in: .named(coordinateSpaceName)).midX - geometry.frame(in: .named(coordinateSpaceName)).minX,
-                                            height: 0)]
-                                    )
-                                }
-                            )
+                            FBTeamInfoThirdItem(fbTeamInfoStore: fbTeamInfoStore)
+                                .background(
+                                    GeometryReader { proxy in
+                                        Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
+                                            thirdItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
+                                            thirdItemSize = proxy.size
+                                        }
+                                    }
+                                )
                         }
                         
                         // league stats
-                        FBTeamInfoFourthItem(
-                            fbTeamInfoStore: fbTeamInfoStore
-                        )
-                        .background(
-                            GeometryReader { geometry in
-                                Color.clear.preference(
-                                    key: ItemPositionsPreferenceKey.self,
-                                    value: [3: CGSize(
-                                        width: geometry.frame(in: .named(coordinateSpaceName)).minX,
-                                        height: geometry.frame(in: .named(coordinateSpaceName)).minY)]
-                                )
-                                Color.clear.preference(
-                                    key: ItemCenterPositionsPreferenceKey.self,
-                                    value: [3: CGSize(
-                                        width: geometry.frame(in: .named(coordinateSpaceName)).midX - geometry.frame(in: .named(coordinateSpaceName)).minX,
-                                        height: 0)]
-                                )
-                            }
-                        )
+                        FBTeamInfoFourthItem(fbTeamInfoStore: fbTeamInfoStore)
+                            .background(
+                                GeometryReader { proxy in
+                                    Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
+                                        fourthItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
+                                        fourthItemSize = proxy.size
+                                    }
+                                }
+                            )
                         
                         HStack {
                             // last game stats
-                            FBTeamInfoFifthItem(
-                                fbTeamInfoStore: fbTeamInfoStore
-                            )
-                            .background(
-                                GeometryReader { geometry in
-                                    Color.clear.preference(
-                                        key: ItemPositionsPreferenceKey.self,
-                                        value: [4: CGSize(
-                                            width: geometry.frame(in: .named(coordinateSpaceName)).minX,
-                                            height: geometry.frame(in: .named(coordinateSpaceName)).minY)]
-                                    )
-                                    Color.clear.preference(
-                                        key: ItemCenterPositionsPreferenceKey.self,
-                                        value: [4: CGSize(
-                                            width: geometry.frame(in: .named(coordinateSpaceName)).midX - geometry.frame(in: .named(coordinateSpaceName)).minX,
-                                            height: 0)]
-                                    )
-                                }
-                            )
+                            FBTeamInfoFifthItem(fbTeamInfoStore: fbTeamInfoStore)
+                                .background(
+                                    GeometryReader { proxy in
+                                        Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
+                                            fifthItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
+                                            fifthItemSize = proxy.size
+                                        }
+                                    }
+                                )
 
                             // next game stats
-                            FBTeamInfoSixthItem(
-                                fbTeamInfoStore: fbTeamInfoStore
-                            )
+                            FBTeamInfoSixthItem(fbTeamInfoStore: fbTeamInfoStore)
                             .background(
-                                GeometryReader { geometry in
-                                    Color.clear.preference(
-                                        key: ItemPositionsPreferenceKey.self,
-                                        value: [5: CGSize(
-                                            width: geometry.frame(in: .named(coordinateSpaceName)).minX,
-                                            height: geometry.frame(in: .named(coordinateSpaceName)).minY)]
-                                    )
-                                    Color.clear.preference(
-                                        key: ItemCenterPositionsPreferenceKey.self,
-                                        value: [5: CGSize(
-                                            width: geometry.frame(in: .named(coordinateSpaceName)).midX - geometry.frame(in: .named(coordinateSpaceName)).minX,
-                                            height: 0)]
-                                    )
+                                GeometryReader { proxy in
+                                    Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
+                                        sixthItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
+                                        sixthItemSize = proxy.size
+                                    }
                                 }
                             )
                         }
                     } // VStack
-                    .background(
-                        GeometryReader { geometry in
-                            Color.clear
-                                .onAppear {
-                                parentCenterPosition = CGSize(
-                                    width: geometry.size.width / 2, height: geometry.size.height / 2
-                                )
-                            }
-                        }
-                    )
                     .opacity(0)
                     
                     /* ---------------------
@@ -187,89 +132,69 @@ struct FBTeamInfoView: View {
                        - with animation effect
                        --------------------- */
                     // logo, name
-                    FBTeamInfoFirstItem(
-                        fbTeamInfoStore: fbTeamInfoStore,
-                        showContents: showContents
-                    )
-                    .offset(animatePositions ? itemPositions[0] ?? .zero : itemCenterPositions[0] ?? .zero)
+                    FBTeamInfoFirstItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
+                        .offset(
+                            x: animatePositions ? firstItemPosition.x : containerSize.width / 2 - firstItemSize.width / 2,
+                            y: animatePositions ? firstItemPosition.y : containerSize.height / 2
+                        )
                     
                     // founded, city, country
-                    FBTeamInfoSecondItem(
-                        fbTeamInfoStore: fbTeamInfoStore,
-                        showContents: showContents
-                    )
-                    .offset(animatePositions ? itemPositions[1] ?? .zero : itemCenterPositions[1] ?? .zero)
+                    FBTeamInfoSecondItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
+                        .offset(
+                            x: animatePositions ? secondItemPosition.x : containerSize.width / 2 - secondItemSize.width / 2,
+                            y: animatePositions ? secondItemPosition.y : containerSize.height / 2
+                        )
                     
                     // venue
-                    FBTeamInfoThirdItem(
-                        fbTeamInfoStore: fbTeamInfoStore,
-                        showContents: showContents
-                    )
-                    .offset(animatePositions ? itemPositions[2] ?? .zero : itemCenterPositions[2] ?? .zero)
+                    FBTeamInfoThirdItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
+                        .offset(
+                            x: animatePositions ? thirdItemPosition.x : containerSize.width / 2 - thirdItemSize.width / 2,
+                            y: animatePositions ? thirdItemPosition.y : containerSize.height / 2
+                        )
                     
                     // league stats
-                    FBTeamInfoFourthItem(
-                        fbTeamInfoStore: fbTeamInfoStore,
-                        showContents: showContents
-                    )
-                    .offset(animatePositions ? itemPositions[3] ?? .zero : itemCenterPositions[3] ?? .zero)
-                    .onTapGesture {
-                        searchStore.send(.showTeamStats(0))
-                    }
+                    FBTeamInfoFourthItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
+                        .offset(
+                            x: animatePositions ? fourthItemPosition.x : containerSize.width / 2 - fourthItemSize.width / 2,
+                            y: animatePositions ? fourthItemPosition.y : containerSize.height / 2
+                        )
+                        .onTapGesture {
+                            if let team = fbTeamInfoStore.team {
+                                searchStore.send(.showTeamStats(teamId: team.id))
+                            }
+                        }
                     
                     // last game stats
-                    FBTeamInfoFifthItem(
-                        fbTeamInfoStore: fbTeamInfoStore,
-                        showContents: showContents
-                    )
-                    .offset(animatePositions ? itemPositions[4] ?? .zero : itemCenterPositions[4] ?? .zero)
-                    .onTapGesture {
-                        searchStore.send(.showGameStats(true))
-                    }
+                    FBTeamInfoFifthItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
+                        .offset(
+                            x: animatePositions ? fifthItemPosition.x : containerSize.width / 2 - fifthItemSize.width / 2,
+                            y: animatePositions ? fifthItemPosition.y : containerSize.height / 2
+                        )
+                        .onTapGesture {
+                            searchStore.send(.showGameStats(gameType: "previous"))
+                        }
                     
                     // next game stats
-                    FBTeamInfoSixthItem(
-                        fbTeamInfoStore: fbTeamInfoStore,
-                        showContents: showContents
-                    )
-                    .offset(animatePositions ? itemPositions[5] ?? .zero : itemCenterPositions[5] ?? .zero)
-                    .onTapGesture {
-                        searchStore.send(.showGameStats(false))
-                    }
-                    
-                }
-            }
-            .coordinateSpace(name: coordinateSpaceName)
-            .onPreferenceChange(ItemPositionsPreferenceKey.self) { positions in
-                self.itemPositions = positions
-                
-                if positions.count == 6 {
-                }
-            }
-            .onPreferenceChange(ItemCenterPositionsPreferenceKey.self) { positions in
-                self.itemCenterPositions = positions
-            }
-            .onChange(of: parentCenterPosition) { newValue in
-                // TODO: Cannot ensure if parentCenterPosition is set after all the positions are set.
-                if itemPositions.count == 6 {
-                    self.itemCenterPositions = self.itemCenterPositions.mapValues { currentVaule in
-                        CGSize(
-                            width: parentCenterPosition.width - currentVaule.width,
-                            height: parentCenterPosition.height
+                    FBTeamInfoSixthItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
+                        .offset(
+                            x: animatePositions ? sixthItemPosition.x : containerSize.width / 2 - sixthItemSize.width / 2,
+                            y: animatePositions ? sixthItemPosition.y : containerSize.height / 2
                         )
-                    }
-                    
-                    withAnimation(.spring(response: 1)) {
-                        animatePositions = true
-                    }
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        withAnimation(.easeInOut(duration: 0.5)) {
-                            showContents = true
+                        .onTapGesture {
+                            searchStore.send(.showGameStats(gameType: "next"))
+                        }
+                } // if let fbTeamInfoStore
+            } // ZStack
+            .coordinateSpace(name: coordinateSpaceName)
+            .background(
+                GeometryReader { proxy in
+                    Color.clear.onAppear {
+                        DispatchQueue.main.async {
+                            containerSize = proxy.size
                         }
                     }
                 }
-            }
+            )
             .onAppear {
                 // init FBTeamInfoStore
                 let fbTeamInfoStore: StoreOf<FBTeamInfoStore> = storeManager.getStore(forKey: StoreKeys.fbTeamInfoStore) ?? {
@@ -280,11 +205,34 @@ struct FBTeamInfoView: View {
                     return newStore
                 }()
                 
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                     self.fbTeamInfoStore = fbTeamInfoStore
                 }
                 
-                fbTeamInfoStore.send(.initData(displayModel: displayModel))
+                if searchStore.poppedView == nil {
+                    fbTeamInfoStore.send(.initData(displayModel: displayModel))
+                }
+                
+                triggerAnimation()
+            }
+            .onChange(of: displayModel) {
+                if case .fbTeamInfo = searchStore.poppedView {
+                    fbTeamInfoStore?.send(.initData(displayModel: displayModel))
+                }
+            }
+        } // if let searchStore
+    }
+    
+    private func triggerAnimation() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short) {
+            withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                animatePositions = true
+            }
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short + AnimationConstants.Duration.medium) {
+            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                showContents = true
             }
         }
     }
@@ -307,7 +255,7 @@ struct FBTeamInfoFirstItem: View {
                 URLImage(url: team.logo)
                     .opacity(showContents ? 1 : 0)
                 
-                Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.name))
+                Text(EnNameTranslationUtility.translateByDic(type: .team, isShort: false, input: team.name))
                     .font(.system(size: 16))
                     .fontWeight(.medium)
                     .opacity(showContents ? 1 : 0)

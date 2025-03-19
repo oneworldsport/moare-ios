@@ -153,7 +153,9 @@ struct FBGameStatsView: View {
                     self.fbGameStatsStore = fbGameStatsStore
                 }
                 
-                fbGameStatsStore.send(.initData(displayModel: displayModel))
+                if searchStore.poppedView == nil {
+                    fbGameStatsStore.send(.initData(displayModel: displayModel))
+                }
                 
                 // TODO: has to figure out better structure
                 // when game_stats show at first(meaning ScheduleView never showed)
@@ -173,8 +175,13 @@ struct FBGameStatsView: View {
                 
                 translate()
                 
-                searchStore.send(.refreshGame)
+                searchStore.send(.refreshGame(category: "football"))
             } // onAppear
+            .onChange(of: displayModel) {
+                if case .fbGameStats = searchStore.poppedView {
+                    fbGameStatsStore?.send(.initData(displayModel: displayModel))
+                }
+            }
             .onChange(of: fbGameStatsStore?.coach) { newValue in
                 translate()
             }
@@ -238,7 +245,7 @@ struct FBGameStatsTeamButtonContainer: View {
                 Spacer()
                 
                 Button(action: {
-                    searchStore.send(.refreshGame)
+                    searchStore.send(.refreshGame(category: "football"))
                 }) {
                     Image(systemName: "arrow.clockwise")
                         .tint(.secondary)

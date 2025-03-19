@@ -28,7 +28,7 @@ struct URLImage: View {
                 .resizable()
                 .scaledToFill()
                 .frame(width: customSize != nil ? customSize?.width : imageSize.width, height: customSize != nil ? customSize?.height : imageSize.height)
-                .clipShape(Circle())
+//                .clipShape(Circle())
             
 //            AsyncImage(url: URL(string: url)) { image in
 //                image
