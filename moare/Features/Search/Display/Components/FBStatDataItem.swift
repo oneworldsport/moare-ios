@@ -30,7 +30,7 @@ struct FBStatDataItem: View {
                 .fontWeight(.medium)
                 .frame(maxHeight: 30) // make it feature constants
         }
-        .frame(maxWidth: customWidth ?? 50)
+        .frame(width: customWidth ?? 50, height: 60)
     }
 }
 
