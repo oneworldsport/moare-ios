@@ -148,7 +148,7 @@ struct FBLeagueScheduleStore {
                             CalendarUtil.isSameDate(stringDate: game.fixture.date, selectedYearMonth: state.selectedYearMonth, selectedDay: day.day)
                         }
                         
-                        gameResultOpenedStateList.merge((games ?? []).reduce(into: [:]) { $0[$1.fixture.id] = false }) { _, new in new }
+                        gameResultOpenedStateList.merge((games ?? []).reduce(into: [:]) { $0[$1.fixture.id] = state.isAllResultOpened }) { _, new in new }
                         
                         newFilteredGame[index] = games
                         

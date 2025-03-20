@@ -389,27 +389,20 @@ struct FBLeagueScheduleListItem: View {
             } else {
                 isResultOpened = true
             }
+            
+            translate()
         }
-        .onChange(of: fbLeagueScheduleStore.gameResultOpenedStateList) { newValue in
+        .onChange(of: fbLeagueScheduleStore.gameResultOpenedStateList) {
             if StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                     isResultOpened = fbLeagueScheduleStore.gameResultOpenedStateList[data.fixture.id] ?? false
                 }
             }
         }
-        .onChange(of: searchStore.fbGameStatsData) { newValue in
-            if let fbGameStatsData = newValue {
+        .onChange(of: searchStore.fbGameStatsData) {
+            if let _ = searchStore.fbGameStatsData {
                 isResultOpened = true
-                
-                Task {
-                    let venueKrName = await EnNameTranslationUtility.translateByAWS(input: fbGameStatsData.game.fixture.venue.name)
-                    self.venueKrName = venueKrName
-                }
-                
-                Task {
-                    let refereeKrName = await EnNameTranslationUtility.translateByAWS(input: fbGameStatsData.game.fixture.referee)
-                    self.refereeKrName = refereeKrName
-                }
+                translate()
             }
         }
     }
@@ -438,6 +431,18 @@ struct FBLeagueScheduleListItem: View {
             }
         } else {
             .secondary
+        }
+    }
+    
+    private func translate() {
+        Task {
+            let venueKrName = await EnNameTranslationUtility.translateByAWS(input: searchStore.fbGameStatsData?.game.fixture.venue.name)
+            self.venueKrName = venueKrName
+        }
+        
+        Task {
+            let refereeKrName = await EnNameTranslationUtility.translateByAWS(input: searchStore.fbGameStatsData?.game.fixture.referee)
+            self.refereeKrName = refereeKrName
         }
     }
 }

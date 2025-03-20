@@ -26,7 +26,7 @@ struct URLImage: View {
                     ProgressView()
                 }
                 .resizable()
-                .scaledToFill()
+                .scaledToFit()
                 .frame(width: customSize != nil ? customSize?.width : imageSize.width, height: customSize != nil ? customSize?.height : imageSize.height)
 //                .clipShape(Circle())
             

@@ -29,7 +29,6 @@ struct AnimatingSearchBar: View {
     
     @State private var startPathAni = false
     @State private var barVisibleState = false
-    @State private var textFieldVisibleState = false
     
     var body: some View {
         let barWidth = UIConstants.Width.screenWidth - 20
@@ -140,21 +139,5 @@ struct AnimatingSearchBar: View {
             )
             .uiState(visibleState: !barVisibleState)
         }
-//        .onChange(of: query) { newValue in
-//            if searchStore.query != query {
-//                searchStore.send(.updateTextField(query))
-//            }
-//        }
-//        .onChange(of: searchStore.query) { newValue in
-//            // if self.query == newValue -> doesn't trigger onChange(of: query)
-//            self.query = newValue
-//        }
     }
 }
-
-//#Preview {
-//    @State var isSearched = false
-//    return AnimatingSearchBar(store: Store(initialState: SearchFeature.State()) {
-//        SearchFeature()
-//    }, isSearched: $isSearched)
-//}
