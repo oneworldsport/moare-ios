@@ -42,7 +42,7 @@ struct SearchView: View {
                     HStack {
                         Spacer()
                         
-                        VStack(alignment: .trailing, spacing: 4) {
+                        VStack(alignment: .trailing, spacing: 0) {
                             NoticeBox()
                                 .opacity(isNoticeOpened ? 1 : 0)
                             
@@ -51,10 +51,13 @@ struct SearchView: View {
                             }) {
                                 Image(systemName: "info.circle")
                                     .tint(.secondary)
+                                    .padding(.leading, 8)
+                                    .padding(.trailing, 12)
+                                    .padding(.top, 4)
                             }
                         }
                     }
-                    .offset(x: -12, y: -113)
+                    .offset(x: 0, y: -113)
                     .zIndex(1)
                     // y: 전체 박스 높이(100 + 20 + 4) / 2 + (검색창 높이(50) + 트렌딩 키워드 높이(40)) / 2 + 추가 패딩 6
                 }
