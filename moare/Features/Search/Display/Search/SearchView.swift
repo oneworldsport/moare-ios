@@ -174,8 +174,11 @@ struct SearchView: View {
                                 .padding(.top, UIConstants.Padding.defaultPadding)
                         }
                     } // ZStack
-                    .onChange(of: searchStore.isFocused) { newValue in
-                        focusState = newValue
+                    .onChange(of: searchStore.isFocused) {
+                        if searchStore.isFocused {
+                            focusState.toggle()
+                            searchStore.send(.updateIsFocused(false)) // Reset searchStore's isFocused to ensure this .onChange() triggered when isFocused set true.
+                        }
                     }
                 } // VStack
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -183,31 +186,31 @@ struct SearchView: View {
                 // TODO: has to think about better structure
                 .onChange(of: searchStore.searchState) { newVaue in
                     if newVaue {
-                        withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                        withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                             isNoticeOpened = false
                             isNoticeIconVisible = false
+                            searchStore.send(.updateTrendingKeywordsVisibleState(false))
                         }
-                        searchStore.send(.updateTrendingKeywordsVisibleState(false))
                     } else {
-                        withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                        withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                             isNoticeIconVisible = true
+                            searchStore.send(.updateTrendingKeywordsVisibleState(true))
                         }
-                        searchStore.send(.updateTrendingKeywordsVisibleState(true))
                     }
                 }
                 // TODO: has to think about better structure
                 .onChange(of: searchStore.autoCompleteList) { newValue in
                     if newValue.isEmpty && !searchStore.searchState {
-                        withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                        withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                             isNoticeIconVisible = true
+                            searchStore.send(.updateTrendingKeywordsVisibleState(true))
                         }
-                        searchStore.send(.updateTrendingKeywordsVisibleState(true))
                     } else {
-                        withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                        withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                             isNoticeOpened = false
                             isNoticeIconVisible = false
+                            searchStore.send(.updateTrendingKeywordsVisibleState(false))
                         }
-                        searchStore.send(.updateTrendingKeywordsVisibleState(false))
                     }
                 }
                 .onChange(of: searchStore.firstOpened) { newValue in
@@ -215,8 +218,8 @@ struct SearchView: View {
                         DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.medium) {
                             withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                                 isNoticeIconVisible = true
+                                searchStore.send(.updateTrendingKeywordsVisibleState(true))
                             }
-                            searchStore.send(.updateTrendingKeywordsVisibleState(true))
                         }
                     }
                 }

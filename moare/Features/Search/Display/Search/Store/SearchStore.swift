@@ -198,9 +198,12 @@ struct SearchStore {
                 return .none
                 
             case .updateTrendingKeywordsVisibleState(let bool):
-                withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                // RECORD: Crash occured when animation applied at .onChange to other view and also animation applied hear.
+                // So it resolved by applying animation together at .onChange.
+                // NOTE: Has to figure out not to change state at the same time in .onChange and store as possible that effect the ui.
+//                withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                     state.trendingKeyowrdsVisibleState = bool
-                }
+//                }
                 
                 return .none
                 
@@ -397,7 +400,8 @@ struct SearchStore {
                     state.textFieldVisibleState = false
                     
                     return .run { send in
-                        await send(.updateSearchStateWithAni(bool: true))
+                        await send(.updateSearchStateWithAni(bool: true), animation: AnimationConstants.AnimationType.mediumDefaultAnimation)
+                        try await Task.sleep(for: .seconds(0.1)) // NOTE: Due to crash
                         await send(.updateSearchDataState(.success))
                         await send(.updateResultVisibleState(bool: true))
                         await send(.removeAutoCompleteWithAni)
@@ -693,9 +697,9 @@ struct SearchStore {
                 return .none
                 
             case .updateSearchStateWithAni(let bool):
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+//                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     state.searchState = bool
-                }
+//                }
                 
                 return .none
                 
