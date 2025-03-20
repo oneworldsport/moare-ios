@@ -19,126 +19,116 @@ struct FBPlayerStatsView: View {
        data
        --------------------- */
     let displayModel: FBPlayerStatsDisplayModel
-    let statsList: [FBPlayerStats]
     
     /* ---------------------
        animation
        --------------------- */
     let coordinateSpaceName = "FBPlayerStatsView"
     
-    private var parentCenterPosition = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
-    @State private var itemPositions: [Int: CGSize] = [:]
+    @State private var firstItemPosition: CGPoint = .zero
+    @State private var itemPositions: [Int: CGPoint] = [:]
+    
     @State private var animatePositions = false
     @State private var showContents = false
     
-    @State private var mainUIVisibleState = false
-    
-    init(displayModel: FBPlayerStatsDisplayModel) {
-        self.displayModel = displayModel
-        self.statsList = displayModel.stats
-    }
+    var centerPosition = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             ScrollView {
                 if let fbPlayerStatsStore = fbPlayerStatsStore {
                     ZStack(alignment: .topLeading) {
-                        /* ---------------------
-                         ui
-                         - invisible first
-                         - set ani ui's position
-                         - visible after ani ui
-                         --------------------- */
-                        VStack {
-                            FBPlayerStatsPlayerInfoItem(
-                                fbPlayerStatsStore: fbPlayerStatsStore
-                            )
-                            .background(
-                                GeometryReader { geometry in
-                                    if itemPositions[0] == nil {
-                                        Color.clear.preference(
-                                            key: ItemPositionsPreferenceKey.self,
-                                            value: [0: CGSize(
-                                                width: geometry.frame(in: .named(coordinateSpaceName)).minX,
-                                                height: geometry.frame(in: .named(coordinateSpaceName)).minY)]
-                                        )
-                                    }
-                                }
-                            )
-                            
-                            FBPlayerStatsList(fbPlayerStatsStore: fbPlayerStatsStore, itemPositions: itemPositions)
-                        }
-                        .opacity(mainUIVisibleState ? 1 : 0)
+//                        Spacer() // empty space for smooth animation effect
+//                            .frame(maxWidth: .infinity, maxHeight: 0)
                         
                         /* ---------------------
-                         aimation ui
-                         - invisible after ani
-                         --------------------- */
-                        if !mainUIVisibleState {
-                            FBPlayerStatsPlayerInfoItem(
-                                fbPlayerStatsStore: fbPlayerStatsStore,
-                                showContents: showContents
-                            )
-                            .offset(animatePositions ? itemPositions[0] ?? parentCenterPosition : parentCenterPosition)
+                           ui
+                           - invisible first
+                           - set ani ui's position
+                           - visible after ani ui
+                           --------------------- */
+                        VStack {
+                            FBPlayerStatsPlayerInfoItem(fbPlayerStatsStore: fbPlayerStatsStore)
+                                .background(
+                                    GeometryReader { proxy in
+                                        Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
+                                            firstItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
+                                        }
+                                    }
+                                )
                             
-                            FBPlayerStatsAniList(
-                                fbPlayerStatsStore: fbPlayerStatsStore,
-                                itemPositions: itemPositions,
-                                animatePositions: animatePositions,
-                                showContents: showContents
-                            )
+                            FBPlayerStatsList(fbPlayerStatsStore: fbPlayerStatsStore, itemPositions: $itemPositions)
                         }
+                        .opacity(0)
+                        
+                        /* ---------------------
+                           aimation ui
+                           - invisible after ani
+                           --------------------- */
+                        FBPlayerStatsPlayerInfoItem(fbPlayerStatsStore: fbPlayerStatsStore, showContents: showContents)
+                            .offset(
+                                x: animatePositions ? firstItemPosition.x : 0,
+                                y: animatePositions ? firstItemPosition.y : centerPosition.height
+                            )
+                        
+                        FBPlayerStatsList(
+                            fbPlayerStatsStore: fbPlayerStatsStore,
+                            animatePositions: animatePositions,
+                            showContents: showContents,
+                            isAniList: true,
+                            itemPositions: $itemPositions
+                        )
                     } // ZStack
+                    .coordinateSpace(name: coordinateSpaceName)
                 } // if let fbPlayerStatsStore
             } // ScrollView
-            .coordinateSpace(name: coordinateSpaceName)
-            .onPreferenceChange(ItemPositionsPreferenceKey.self) { positions in
-                self.itemPositions = positions
-                
-                if positions.count == statsList.count + 1 {
-                    withAnimation(.spring(response: 1)) {
-                        animatePositions = true
-                    }
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        withAnimation(.easeInOut(duration: 0.5)) {
-                            showContents = true
-                        }
-                    }
-                    
-                    // make animation ui invisible after all animation ends
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        mainUIVisibleState = true
-                    }
-                }
-            }
             .onAppear {
                 // init FBPlayerStatsStore
-                storeManager.setStore(
-                    Store(initialState: FBPlayerStatsStore.State(
-                        displayModel: displayModel,
-                        statsList: statsList,
-                        player: displayModel.player
-                    )) { FBPlayerStatsStore() },
-                    forKey: StoreKeys.fbPlayerStatsStore
-                )
+                let fbPlayerStatsStore: StoreOf<FBPlayerStatsStore> = storeManager.getStore(forKey: StoreKeys.fbPlayerStatsStore) ?? {
+                    let newStore = Store(initialState: FBPlayerStatsStore.State()) { FBPlayerStatsStore() }
+                    
+                    storeManager.setStore(newStore, forKey: StoreKeys.fbPlayerStatsStore)
+                    
+                    return newStore
+                }()
                 
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    fbPlayerStatsStore = storeManager.getStore(forKey: StoreKeys.fbPlayerStatsStore)
+                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                    self.fbPlayerStatsStore = fbPlayerStatsStore
                 }
                 
-                fbPlayerStatsStore?.send(.initData)
+                if searchStore.poppedView == nil {
+                    fbPlayerStatsStore.send(.initData(displayModel: displayModel))
+                }
+                
+                triggerAnimation()
+            }
+            .onChange(of: displayModel) {
+                if case .fbPlayerStats = searchStore.poppedView {
+                    fbPlayerStatsStore?.send(.initData(displayModel: displayModel))
+                }
+            }
+        }
+    }
+    
+    private func triggerAnimation() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short) {
+            withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                animatePositions = true
+            }
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short + AnimationConstants.Duration.medium) {
+            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                showContents = true
             }
         }
     }
 }
 
 struct FBPlayerStatsPlayerInfoItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
+    @Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
     let showContents: Bool
-    
-    @State var teamName = ""
 
     init(fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>, showContents: Bool = true) {
         self.fbPlayerStatsStore = fbPlayerStatsStore
@@ -152,14 +142,14 @@ struct FBPlayerStatsPlayerInfoItem: View {
             HCapsuleBar()
             
             HStack {
-                URLImage(url: player.photo, size: .medium)
+                URLImage(url: player?.photo)
                 
                 VStack(alignment: .leading) {
-                    Text("\(player.krname)")
+                    Text("\(player?.krname ?? "")")
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                     
-                    Text("\(player.name)")
+                    Text("\(player?.name ?? "")")
                         .font(.system(size: 15))
                         .fontWeight(.light)
                         .lineLimit(2)
@@ -183,7 +173,7 @@ struct FBPlayerStatsPlayerInfoItem: View {
                             URLImage(url: team.logo, customSize: CGSize(width: 24, height: 24))
                                 .padding(.trailing, 6)
                             
-                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: teamName))
+                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.name))
                                 .font(.system(size: 16))
                                 .fontWeight(.medium)
                         }
@@ -192,30 +182,32 @@ struct FBPlayerStatsPlayerInfoItem: View {
             }
             .opacity(showContents ? 1 : 0)
         } // VStack
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
-        .onAppear {
-            translate()
-        }
-    }
-    
-    private func translate() {
-        guard let team = fbPlayerStatsStore.team else { return }
-        
-        Task {
-            let teamName = await EnNameTranslationUtility.translateByAWS(input: team.name)
-            self.teamName = teamName
-        }
     }
 }
 
 struct FBPlayerStatsList: View {
-    @ComposableArchitecture.Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
+    @Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
-    let itemPositions: [Int : CGSize]
-
-    init(fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>, itemPositions: [Int : CGSize]) {
+    let animatePositions: Bool
+    let showContents: Bool
+    let isAniList: Bool
+    
+    @Binding var itemPositions: [Int : CGPoint]
+    
+    init(
+        fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>,
+        animatePositions: Bool = true,
+        showContents: Bool = true,
+        isAniList: Bool = false,
+        itemPositions: Binding<[Int: CGPoint]>
+    ) {
         self.fbPlayerStatsStore = fbPlayerStatsStore
-        self.itemPositions = itemPositions
+        self.animatePositions = animatePositions
+        self.showContents = showContents
+        self.isAniList = isAniList
+        self._itemPositions = itemPositions
     }
     
     var body: some View {
@@ -225,97 +217,28 @@ struct FBPlayerStatsList: View {
             FBPlayerStatsListItem(
                 fbPlayerStatsStore: fbPlayerStatsStore,
                 stats: stats,
-                itemPositions: itemPositions,
-                index: index
+                index: index,
+                animatePositions: animatePositions,
+                showContents: showContents,
+                isAniList: isAniList,
+                itemPositions: $itemPositions
             )
         }
     }
 }
 
 struct FBPlayerStatsListItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
+    @Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
     let stats: FBPlayerStats
-    let itemPositions: [Int : CGSize]
     let index: Int
-
-    init(fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>, stats: FBPlayerStats, itemPositions: [Int : CGSize], index: Int) {
-        self.fbPlayerStatsStore = fbPlayerStatsStore
-        self.stats = stats
-        self.itemPositions = itemPositions
-        self.index = index
-    }
-    
-    var body: some View {
-        FBPlayerStatsItem(
-            fbPlayerStatsStore: fbPlayerStatsStore,
-            stats: stats
-        )
-        .background(
-            GeometryReader { geometry in
-                if itemPositions[index + 1] == nil {
-                    Color.clear.preference(
-                        key: ItemPositionsPreferenceKey.self,
-                        value: [index + 1: CGSize(
-                            width: geometry.frame(in: .named("FBPlayerStatsView")).minX,
-                            height: geometry.frame(in: .named("FBPlayerStatsView")).minY)]
-                    )
-                }
-            }
-        )
-    }
-}
-
-struct FBPlayerStatsAniList: View {
-    @ComposableArchitecture.Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
-    
-    let itemPositions: [Int : CGSize]
     let animatePositions: Bool
     let showContents: Bool
-
-    init(fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>, itemPositions: [Int : CGSize], animatePositions: Bool, showContents: Bool) {
-        self.fbPlayerStatsStore = fbPlayerStatsStore
-        self.itemPositions = itemPositions
-        self.animatePositions = animatePositions
-        self.showContents = showContents
-    }
+    let isAniList: Bool
     
-    var body: some View {
-        ForEach(fbPlayerStatsStore.statsList.indices, id: \.self) { index in
-            let stats = fbPlayerStatsStore.statsList[index]
-            
-            FBPlayerStatsAniListItem(
-                fbPlayerStatsStore: fbPlayerStatsStore,
-                stats: stats,
-                index: index,
-                itemPositions: itemPositions,
-                animatePositions: animatePositions,
-                showContents: showContents
-            )
-        }
-    }
-}
-
-struct FBPlayerStatsAniListItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
+    @Binding var itemPositions: [Int : CGPoint]
     
-    let stats: FBPlayerStats
-    
-    let index: Int
-    let itemPositions: [Int : CGSize]
-    let animatePositions: Bool
-    let showContents: Bool
-    
-    private var parentCenterPosition = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
-
-    init(fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>, stats: FBPlayerStats, index: Int, itemPositions: [Int : CGSize], animatePositions: Bool, showContents: Bool) {
-        self.fbPlayerStatsStore = fbPlayerStatsStore
-        self.stats = stats
-        self.index = index
-        self.itemPositions = itemPositions
-        self.animatePositions = animatePositions
-        self.showContents = showContents
-    }
+    var centerPosition = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
     
     var body: some View {
         FBPlayerStatsItem(
@@ -323,17 +246,27 @@ struct FBPlayerStatsAniListItem: View {
             stats: stats,
             showContents: showContents
         )
-        .offset(animatePositions ? itemPositions[index + 1] ?? parentCenterPosition : parentCenterPosition)
+        .background(
+            GeometryReader { proxy in
+                if !isAniList {
+                    Color.clear.onChange(of: proxy.frame(in: .named("FBPlayerStatsView")).origin) {
+                        itemPositions[index] = proxy.frame(in: .named("FBPlayerStatsView")).origin
+                    }
+                }
+            }
+        )
+        .offset(
+            x: isAniList ? (animatePositions ? (itemPositions[index]?.x ?? 0) : 0) : 0,
+            y: isAniList ? (animatePositions ? (itemPositions[index]?.y ?? 0) : centerPosition.height) : 0
+        )
     }
 }
 
 struct FBPlayerStatsItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
+    @Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
     let stats: FBPlayerStats
     let showContents: Bool
-    
-    @State var teamName = ""
 
     init(fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>, stats: FBPlayerStats, showContents: Bool = true) {
         self.fbPlayerStatsStore = fbPlayerStatsStore
@@ -358,7 +291,7 @@ struct FBPlayerStatsItem: View {
                 
                 URLImage(url: stats.team.logo, customSize: CGSize(width: 24, height: 24))
                 
-                Text(EnNameTranslationUtility.translateByDic(type: .team, input: teamName))
+                Text(EnNameTranslationUtility.translateByDic(type: .team, input: stats.team.name))
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }
@@ -464,19 +397,5 @@ struct FBPlayerStatsItem: View {
         } // VStack
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
         .padding(.bottom, UIConstants.Padding.defalutVPadding)
-        .onAppear {
-            translate()
-        }
-    }
-    
-    private func translate() {
-        Task {
-            let teamName = await EnNameTranslationUtility.translateByAWS(input: stats.team.name)
-            self.teamName = teamName
-        }
     }
 }
-
-//#Preview {
-//    FBPlayerStatsView()
-//}

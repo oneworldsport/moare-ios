@@ -31,8 +31,8 @@ struct FBTeamStandingsStore {
         /* ---------------------
            data state
            --------------------- */
-        let displayModel: FBTeamStandingsDisplayModel
-        var standings: [FBTeamStandingsDisplay]
+        var displayModel: FBTeamStandingsDisplayModel? = nil
+        var standings: [FBTeamStandingsDisplay] = []
         var league: FBLeague? = nil
         
         /* ---------------------
@@ -42,19 +42,24 @@ struct FBTeamStandingsStore {
     }
     
     enum Action {
-        case initData
+        case initData(displayModel: FBTeamStandingsDisplayModel)
         case selectCategory(Int)
-        case filterStandings
+        case sortStandings
     }
     
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .initData:
-                let displayModel = state.displayModel
-                let keywords = displayModel.keywords
+            case .initData(let displayModel):
+                // init with default value
+                state.selectedIndex = 0
                 
+                // init data
+                state.displayModel = displayModel
+                state.standings = displayModel.standings
                 state.league = displayModel.league
+                
+                let keywords = displayModel.keywords
                 
                 // select category that matches with the keyword
                 if !keywords.isEmpty {
@@ -68,14 +73,14 @@ struct FBTeamStandingsStore {
                     }
                 }
                 
-                return .send(.filterStandings)
+                return .send(.sortStandings)
                 
             case .selectCategory(let index):
                 state.selectedIndex = index
                 
-                return .send(.filterStandings)
+                return .send(.sortStandings)
                 
-            case .filterStandings:
+            case .sortStandings:
                 // TODO: 값이 같은경우 다른 카테고리 활용해서 우선순위 정하는 로직 개발
                 switch state.selectedIndex {
                 case 0:

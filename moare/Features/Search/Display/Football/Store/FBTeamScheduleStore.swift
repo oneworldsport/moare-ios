@@ -22,33 +22,49 @@ struct FBTeamScheduleStore {
         /* ---------------------
            data state
            --------------------- */
-        let displayModel: FBTeamScheduleDisplayModel
-        let games: [FBGame]
+        var displayModel: FBTeamScheduleDisplayModel? = nil
+        var games: [FBGame] = []
         
         /* ---------------------
            ui state
            --------------------- */
         var isAllResultOpened = false
+        var gameResultOpenedStateList: [Int: Bool] = [:]
     }
     
     enum Action {
-        case initData
+        case initData(displayModel: FBTeamScheduleDisplayModel)
         case toggleAllResult
+        case updateResultOpenedState(fixtureId: Int, isOpened: Bool)
     }
     
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .initData:
-                let displayModel = state.displayModel
+            case .initData(let displayModel):
+                // init with default value
+                state.isAllResultOpened = false
+                
+                // init data
+                state.displayModel = displayModel
+                state.games = displayModel.games
+                
+                let gameResultOpenedStateList = (state.games).reduce(into: [:]) { $0[$1.fixture.id] = false }
+                state.gameResultOpenedStateList = gameResultOpenedStateList
                 
                 return .none
                 
             case .toggleAllResult:
-                state.isAllResultOpened.toggle()
+                let newState = !state.isAllResultOpened
+                state.isAllResultOpened = newState
+                state.gameResultOpenedStateList = state.gameResultOpenedStateList.mapValues { _ in newState }
                 
                 return .none
                 
+            case .updateResultOpenedState(let fixtureId, let isOpened):
+                state.gameResultOpenedStateList[fixtureId] = isOpened
+                
+                return .none
             }
         }
     }

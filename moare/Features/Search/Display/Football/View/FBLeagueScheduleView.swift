@@ -44,7 +44,7 @@ struct FBLeaugScheduleView: View {
                                     .font(.system(size: 14))
                             }
                             
-                            Text(" - \(MatchDescriptionConverter.convert(input: gameStatsData.game.league.round))")
+                            Text(" - \(MatchDescriptionConverter.convert(descriptionType: .roundWithoutDash, input: gameStatsData.game.league.round))")
                                 .font(.system(size: 14))
                             
                             Spacer()
@@ -63,7 +63,7 @@ struct FBLeaugScheduleView: View {
                             selectedIndex: fbLeagueScheduleStore.selectedYearMonthIndex
                         ) { yearMonth, index in
                             shouldScrollCalendar = true
-                            fbLeagueScheduleStore.send(.selectYearMonth(yearMonth, index))
+                            fbLeagueScheduleStore.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
                         }
                         .padding(.bottom, 10)
                         
@@ -73,6 +73,7 @@ struct FBLeaugScheduleView: View {
                             selectedIndex: fbLeagueScheduleStore.selectedDayIndex,
                             shouldScroll: $shouldScrollCalendar
                         ) { day, index in
+                            shouldScrollCalendar = false
                             fbLeagueScheduleStore.send(.selectDay(day, index))
                         }
                         .padding(.bottom, 6)
@@ -96,37 +97,82 @@ struct FBLeaugScheduleView: View {
                         }
                     }
                     
-                    /* ---------------------
-                       schedule
-                       --------------------- */
-                    FBLeagueScheduleList(
-                        searchStore: searchStore,
-                        fbLeagueScheduleStore: fbLeagueScheduleStore
-                    )
+                    ZStack {
+                        /* ---------------------
+                           loading
+                           --------------------- */
+                        if fbLeagueScheduleStore.displayDataState == .fetching {
+                            ProgressView()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                                .padding(.top, 8)
+                        }
+                        
+                        /* ---------------------
+                           schedule
+                           --------------------- */
+                        if fbLeagueScheduleStore.displayDataState == .success {
+                            FBLeagueScheduleList(
+                                searchStore: searchStore,
+                                fbLeagueScheduleStore: fbLeagueScheduleStore
+                            )
+                        }
+                        
+                        /* ---------------------
+                           error
+                           --------------------- */
+                        if case .failure(let message) = fbLeagueScheduleStore.displayDataState {
+                            Text(message)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                                .padding(.top, 8)
+                        }
+                    }
                 } // if let fbLeagueScheduleStore
             } // VStack
             .onAppear {
                 // init FBLeagueScheduleStore
-                storeManager.setStore(
-                    Store(initialState: FBLeagueScheduleStore.State(
-                        displayModel: displayModel, yearMonthList: displayModel.yearMonthList
-                    )) { FBLeagueScheduleStore() },
-                    forKey: StoreKeys.fbLeagueScheduleStore
-                )
+                let fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.fbLeagueScheduleStore) ?? {
+                    let newStore = Store(initialState: FBLeagueScheduleStore.State()) { FBLeagueScheduleStore() }
+                    
+                    storeManager.setStore(newStore, forKey: StoreKeys.fbLeagueScheduleStore)
+                    
+                    return newStore
+                }()
                 
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    fbLeagueScheduleStore = storeManager.getStore(forKey: StoreKeys.fbLeagueScheduleStore)
+                    self.fbLeagueScheduleStore = fbLeagueScheduleStore
                 }
                 
-                fbLeagueScheduleStore?.send(.initData)
+                if searchStore.poppedView == nil {
+                    fbLeagueScheduleStore.send(.initData(displayModel: displayModel))
+                }
+            }
+            .onChange(of: displayModel) {
+                if case .fbLeagueSchedule = searchStore.poppedView {
+                    fbLeagueScheduleStore?.send(.initData(displayModel: displayModel))
+                }
+            }
+            .onChange(of: searchStore.viewStack) { newValue in
+                guard let lastItem = newValue.last,
+                      case .fbLeagueSchedule = lastItem,
+                      let poppedView = searchStore.poppedView,
+                      case .fbGameStats = searchStore.poppedView else {
+                    return
+                }
+                
+                fbLeagueScheduleStore?.send(.updateGamesData(fbLeagueScheduleData: lastItem, fbGameStatsData: poppedView))
+            }
+            .onChange(of: fbLeagueScheduleStore?.dataForViewStack) { newValue in
+                if let data = newValue {
+                    searchStore.send(.updateLastViewStack(data: data))
+                }
             }
         } // if let searchStore
     }
 }
 
 struct FBLeagueScheduleList: View {
-    @ComposableArchitecture.Bindable var searchStore: StoreOf<SearchStore>
-    @ComposableArchitecture.Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
+    @Bindable var searchStore: StoreOf<SearchStore>
+    @Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
     
     @State var gameListToDisplay: [FBGame] = []
     
@@ -137,11 +183,11 @@ struct FBLeagueScheduleList: View {
 //            }
             
             LazyVStack(spacing: 8) {
-                ForEach(gameListToDisplay.indices, id: \.self) { index in
+                ForEach(gameListToDisplay, id: \.fixture.id) { value in
                     FBLeagueScheduleListItem(
                         searchStore: searchStore,
                         fbLeagueScheduleStore: fbLeagueScheduleStore,
-                        data: gameListToDisplay[index]
+                        data: value
                     )
                     .padding(.vertical, 8)
 //                    .vSequentialListAni(
@@ -178,12 +224,17 @@ struct FBLeagueScheduleList: View {
         .onChange(of: fbLeagueScheduleStore.selectedDayIndex) { newValue in
             gameListToDisplay = fbLeagueScheduleStore.filteredGames[newValue] ?? []
         }
+        .onChange(of: fbLeagueScheduleStore.filteredGames) {
+            // TODO: Has to think about better structure, because 'gameListToDisplay' could be set multiple times.
+            // Has to find if there are cases like here from other .onChange()
+            gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.selectedDayIndex] ?? []
+        }
     }
 }
 
 struct FBLeagueScheduleListItem: View {
-    @ComposableArchitecture.Bindable var searchStore: StoreOf<SearchStore>
-    @ComposableArchitecture.Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
+    @Bindable var searchStore: StoreOf<SearchStore>
+    @Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
     
     let data: FBGame
     
@@ -191,24 +242,34 @@ struct FBLeagueScheduleListItem: View {
        ui state
        --------------------- */
     @State private var isResultOpened = false
-    @State private var homeTeamKrName = ""
-    @State private var awayTeamKrname = ""
+    @State private var venueKrName = ""
+    @State private var refereeKrName = ""
     
     var body: some View {
         HStack {
             /* ---------------------
-             home
-             --------------------- */
+               home
+               --------------------- */
             Button(action: {
 //                searchStore.send(.updateTextField("토트넘"))
 //                searchStore.send(.performSearch())
             }) {
-                VStack {
+                VStack(spacing: 2) {
                     URLImage(url: data.teams.home.logo, size: .small)
                     
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: homeTeamKrName))
+                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.teams.home.name))
                         .font(.system(size: 13))
                         .lineLimit(2)
+                    
+                    if let _ = searchStore.fbGameStatsData {
+                        RoundedBorderText(
+                            text: "홈",
+                            fontSize: 11,
+                            textColor: .moare,
+                            radius: 4,
+                            strokeColor: .moare
+                        )
+                    }
                 }
             }
             .frame(width: 100)
@@ -221,9 +282,11 @@ struct FBLeagueScheduleListItem: View {
                 .contentShape(Rectangle())
             
             // score
-            if isResultOpened && data.fixture.status.short == "FT" {
+            if StringConstants.Football.gameLiveList.contains(data.fixture.status.short) ||
+                StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) && isResultOpened {
                 Text("\(data.goals.home)")
                     .frame(maxWidth: 20)
+                    .foregroundStyle(data.goals.home >= data.goals.away ? .moare : .primary)
             }
             
             Spacer()
@@ -231,19 +294,17 @@ struct FBLeagueScheduleListItem: View {
                 .contentShape(Rectangle())
             
             /* ---------------------
-             game info
-             --------------------- */
+               game info
+               --------------------- */
             VStack {
                 // game status
                 CapsuleButton(
                     text: gameStatusText,
                     color: gameStatusColor
                 ) {
-                    withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                        isResultOpened.toggle()
-                    }
+                    fbLeagueScheduleStore.send(.updateResultOpenedState(fixtureId: data.fixture.id, isOpened: !isResultOpened))
                 }
-                .disabled(searchStore.fbGameStatsData != nil || data.fixture.status.short != "FT")
+                .disabled(searchStore.fbGameStatsData != nil || !StringConstants.Football.gameFinishedList.contains(data.fixture.status.short))
                 
                 // game date
                 Text(CalendarUtil.formatDate(date: data.fixture.date, formatType: .ampm))
@@ -251,8 +312,8 @@ struct FBLeagueScheduleListItem: View {
                     .padding(.vertical, 2)
                 
                 // venue
-                if let fbGameStatsData = searchStore.fbGameStatsData {
-                    Text("장소: \(fbGameStatsData.game.fixture.venue.name)")
+                if let _ = searchStore.fbGameStatsData {
+                    Text("장소: \(venueKrName)")
                         .font(.system(size: 12, weight: .light))
                         .lineLimit(1)
                     .padding(.bottom, 2)
@@ -261,10 +322,11 @@ struct FBLeagueScheduleListItem: View {
                 // game type or referee
                 Text(
                     searchStore.fbGameStatsData != nil ?
-                    "심판: \(searchStore.fbGameStatsData!.game.fixture.referee)"
+                    "심판: \(refereeKrName)"
                     : MatchDescriptionConverter.convert(input: data.league.round)
                 )
                 .font(.system(size: 12, weight: .light))
+                .lineLimit(1)
             }
             .frame(width: 110)
             
@@ -273,12 +335,14 @@ struct FBLeagueScheduleListItem: View {
                 .contentShape(Rectangle())
             
             /* ---------------------
-             away
-             --------------------- */
+               away
+               --------------------- */
             // socre
-            if isResultOpened && data.fixture.status.short == "FT" {
+            if StringConstants.Football.gameLiveList.contains(data.fixture.status.short) ||
+                StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) && isResultOpened {
                 Text("\(data.goals.away)")
                     .frame(maxWidth: 20)
+                    .foregroundStyle(data.goals.away >= data.goals.home ? .moare : .primary)
             }
             
             Spacer()
@@ -289,12 +353,22 @@ struct FBLeagueScheduleListItem: View {
 //                searchStore.send(.updateTextField("토트넘"))
 //                searchStore.send(.performSearch())
             }) {
-                VStack {
+                VStack(spacing: 2) {
                     URLImage(url: data.teams.away.logo, size: .small)
                     
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: awayTeamKrname))
+                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.teams.away.name))
                         .font(.system(size: 13))
                         .lineLimit(2)
+                    
+                    if let _ = searchStore.fbGameStatsData {
+                        RoundedBorderText(
+                            text: "원정",
+                            fontSize: 11,
+                            textColor: .secondary,
+                            radius: 4,
+                            strokeColor: .secondary
+                        )
+                    }
                 }
             }
             .frame(width: 100)
@@ -305,41 +379,43 @@ struct FBLeagueScheduleListItem: View {
         .background(Color.clear) // added for tapGesture on Spacer()
         .onTapGesture {
             searchStore.send(.selectFBGame(data))
+            
+            // set selected game's isOpened true
+            fbLeagueScheduleStore.send(.updateResultOpenedState(fixtureId: data.fixture.id, isOpened: true))
         }
         .onAppear {
-            if data.fixture.status.short == "FT" {
-                isResultOpened = fbLeagueScheduleStore.isAllResultOpened
+            if StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) {
+                isResultOpened = fbLeagueScheduleStore.gameResultOpenedStateList[data.fixture.id] ?? false
             } else {
                 isResultOpened = true
             }
             
             translate()
         }
-        .onChange(of: fbLeagueScheduleStore.isAllResultOpened) { newValue in
-            if data.fixture.status.short == "FT" {
+        .onChange(of: fbLeagueScheduleStore.gameResultOpenedStateList) {
+            if StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    isResultOpened = fbLeagueScheduleStore.isAllResultOpened
+                    isResultOpened = fbLeagueScheduleStore.gameResultOpenedStateList[data.fixture.id] ?? false
                 }
             }
         }
-        .onChange(of: searchStore.fbGameStatsData) { newValue in
-            if let _ = newValue {
+        .onChange(of: searchStore.fbGameStatsData) {
+            if let _ = searchStore.fbGameStatsData {
                 isResultOpened = true
+                translate()
             }
-        }
-        .onChange(of: data) { newValue in
-            translate()
         }
     }
     
     private var gameStatusText: String {
         if isResultOpened {
             switch data.fixture.status.short {
-            case "NS": StringConstants.Football.gameNotStarted
-            case "1H": StringConstants.Football.gameFirstHalf
-            case "HT": StringConstants.Football.gameHalftime
-            case "2H": StringConstants.Football.gameSecondHalf
-            case "FT", "AET", "PEN": StringConstants.Football.gameFinished
+            case StringConstants.Football.gameNotStarted: StringConstants.Football.gameNotStartedStr
+            case StringConstants.Football.gameFirstHalf: StringConstants.Football.gameFirstHalfStr
+            case StringConstants.Football.gameHalftime: StringConstants.Football.gameHalftimeStr
+            case StringConstants.Football.gameSecondHalf: StringConstants.Football.gameSecondHalfStr
+            case let status where StringConstants.Football.gameFinishedList.contains(status):
+                StringConstants.Football.gameFinishedStr
             default: ""
             }
         } else {
@@ -350,7 +426,7 @@ struct FBLeagueScheduleListItem: View {
     private var gameStatusColor: Color {
         if isResultOpened {
             switch data.fixture.status.short {
-            case "1H", "HT", "2H": .moare
+            case let status where StringConstants.Football.gameLiveList.contains(status): .moare
             default: .secondary
             }
         } else {
@@ -360,13 +436,13 @@ struct FBLeagueScheduleListItem: View {
     
     private func translate() {
         Task {
-            let homeTeamKrName = await EnNameTranslationUtility.translateByAWS(input: data.teams.home.name)
-            self.homeTeamKrName = homeTeamKrName
+            let venueKrName = await EnNameTranslationUtility.translateByAWS(input: searchStore.fbGameStatsData?.game.fixture.venue.name)
+            self.venueKrName = venueKrName
         }
         
         Task {
-            let awayTeamKrName = await EnNameTranslationUtility.translateByAWS(input: data.teams.away.name)
-            self.awayTeamKrname = awayTeamKrName
+            let refereeKrName = await EnNameTranslationUtility.translateByAWS(input: searchStore.fbGameStatsData?.game.fixture.referee)
+            self.refereeKrName = refereeKrName
         }
     }
 }

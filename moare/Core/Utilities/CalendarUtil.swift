@@ -9,17 +9,20 @@ import Foundation
 
 struct DayInfo {
     let day: Int
-    let dayOfWeek: String
+    let dayOfWeek: Int
     let displayName: String
     var isDataEmpty: Bool = false
 }
 
 enum TimeFormatType {
-    case ampm
-    case ampmWithDate
+    case ampm, ampmWithDate, yearMonth
 }
 
 class CalendarUtil {
+    enum DefaultYearMonthType {
+        case nextYearMonth, currentYearMonth, previousYearMonth
+    }
+    
     static func getDaysInMonth(year: Int, month: Int, locale: Locale = Locale(identifier: "ko_KR")) -> [DayInfo] {
         var calendar = Calendar.current
         calendar.locale = locale
@@ -36,11 +39,11 @@ class CalendarUtil {
             components.month = month
             components.day = day
             
-            guard let date = calendar.date(from: components) else { return DayInfo(day: day, dayOfWeek: "", displayName: "") }
+            guard let date = calendar.date(from: components) else { return DayInfo(day: day, dayOfWeek: 0, displayName: "") }
             
             let dayOfWeek = calendar.component(.weekday, from: date)
-            let dayOfWeekSymbol = calendar.weekdaySymbols[dayOfWeek - 1]
-            return DayInfo(day: day, dayOfWeek: dayOfWeekSymbol, displayName: dayOfWeekSymbol)
+            let dayOfWeekSymbol = calendar.shortWeekdaySymbols[dayOfWeek - 1]
+            return DayInfo(day: day, dayOfWeek: dayOfWeek, displayName: dayOfWeekSymbol)
         }
     }
 
@@ -85,14 +88,71 @@ class CalendarUtil {
         
         dateFormatter.locale = Locale(identifier: "ko_KR")
         
-        if formatType == .ampm {
-            dateFormatter.dateFormat = "a hh:mm"
-        } else {
-            dateFormatter.dateFormat = "yyyy.MM.dd a hh:mm"
-            
+        switch formatType {
+        case .ampm: dateFormatter.dateFormat = "a hh:mm"
+        case .ampmWithDate: dateFormatter.dateFormat = "yyyy.MM.dd a hh:mm"
+        case .yearMonth: dateFormatter.dateFormat = "yy/MM"
         }
+        
         dateFormatter.timeZone = zoneId
         
         return dateFormatter.string(from: parsedDate)
+    }
+    
+    static func getDefaultDay(yearMonth: String, dayList: [DayInfo]) -> (Int, DayInfo)? {
+        let defaultYearMonthType = getDefaultYearMonthType(yearMonth: yearMonth)
+        
+        switch defaultYearMonthType {
+        case .currentYearMonth:
+            // Return closest future day that has games.
+            // If there are no matching days, get the last day that has games from the current month.
+            let currentDay = Calendar.current.component(.day, from: Date())
+           
+            if let result = dayList.enumerated().first(where: { $0.element.day >= currentDay && !$0.element.isDataEmpty }) {
+                return (result.offset, result.element)
+            } else if let result = Array(dayList.enumerated()).last(where: { !$0.element.isDataEmpty }) {
+                return (result.offset, result.element)
+            }
+            
+        case .nextYearMonth:
+            if let result = dayList.enumerated().first(where: { !$0.element.isDataEmpty }) {
+                return (result.offset, result.element)
+            }
+            
+        case .previousYearMonth:
+            if let result = Array(dayList.enumerated()).last(where: { !$0.element.isDataEmpty }) {
+                return (result.offset, result.element)
+            }
+        }
+        
+        return nil
+    }
+    
+    static func getDefaultYearMonthType(yearMonth: String) -> DefaultYearMonthType {
+        let currentDate = Date()
+        let calendar = Calendar(identifier: .gregorian)
+        
+        let currentYear = calendar.component(.year, from: currentDate) % 100
+        let currentMonth = calendar.component(.month, from: currentDate)
+        let totalCurrentYearMonth = currentYear * 12 + currentMonth
+        
+        let components = yearMonth.split(separator: "/")
+        
+        guard components.count == 2,
+              let year = Int(components[0]),
+              let month = Int(components[1]) else {
+            return .currentYearMonth
+        }
+        
+        let totalYearMonth = year * 12 + month
+        
+        switch totalYearMonth {
+        case totalCurrentYearMonth:
+            return .currentYearMonth
+        case _ where totalYearMonth > totalCurrentYearMonth:
+            return .nextYearMonth
+        default:
+            return .previousYearMonth
+        }
     }
 }

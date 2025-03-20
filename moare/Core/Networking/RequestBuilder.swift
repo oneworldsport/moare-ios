@@ -28,6 +28,10 @@ struct RequestBuilder {
         
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
+        if method == "POST" {
+            request.httpBody = endpoint.httpBody
+        }
+        
         return request
     }
 }

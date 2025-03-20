@@ -9,7 +9,6 @@ import Foundation
 
 struct SearchClient {
     private let session = URLSession.shared
-    
     private let apiClient = APIClient()
     
     func fetchDataByQuery(query: String) async throws -> DataModel {
@@ -17,16 +16,16 @@ struct SearchClient {
 //        return String(decoding: data, as: UTF8.self)
     }
     
-    func fetchLeagueSchedule(leagueId: String, yearMonth: String) async throws -> DataModel {
+    func fetchDataByKeyword(keyword: KeywordInfo) async throws -> DataModel {
+        return try await apiClient.fetchData(endpoint: .searchByKeyword(keyword: keyword))
+    }
+    
+    func fetchLeagueSchedule(leagueId: Int, yearMonth: String) async throws -> DataModel {
         return try await apiClient.fetchData(endpoint: .getLeagueSchedule(leagueId: leagueId, yearMonth: yearMonth))
     }
     
-    func fetchDataByKeyword(keyword: String) async throws -> DataModel {
-        return try await apiClient.fetchData(endpoint: .searchByKeyword(keyword: keyword), testQuery: keyword)
-    }
-    
-    func fetchHotKeywords() async throws -> [String] {
-        return try await apiClient.fetchData(endpoint: .hotKeyword, testQuery: "hot keyword")
+    func fetchById(category: String, date: String? = nil, dataType:String, leagueId: Int, id: Int) async throws -> DataModel {
+        return try await apiClient.fetchData(endpoint: .searchById(category: category, date: date, dataType: dataType, leagueId: leagueId, id: id))
     }
 }
  

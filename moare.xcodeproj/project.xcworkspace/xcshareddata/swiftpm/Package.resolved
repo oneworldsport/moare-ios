@@ -1,5 +1,5 @@
 {
-  "originHash" : "a57a59085ad7f9666ba7651551c1e423bb6f6f40c86af281b413881f1d34d7ae",
+  "originHash" : "a8d930d19f5aa8a316e89742cf532db633420cfe9be79dabed34e0d2c4fb17bd",
   "pins" : [
     {
       "identity" : "aws-sdk-ios-spm",
@@ -17,6 +17,15 @@
       "state" : {
         "revision" : "9fa31f4403da54855f1e2aeaeff478f4f0e40b13",
         "version" : "1.0.2"
+      }
+    },
+    {
+      "identity" : "kingfisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Kingfisher.git",
+      "state" : {
+        "revision" : "b450a3b30e0767277a6eed7e02dbdebd7d173da0",
+        "version" : "8.3.0"
       }
     },
     {
@@ -42,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections",
       "state" : {
-        "revision" : "94cf62b3ba8d4bed62680a282d4c25f9c63c2efb",
-        "version" : "1.1.0"
+        "revision" : "671108c96644956dddcd89dd59c203dcdb36cec7",
+        "version" : "1.1.4"
       }
     },
     {

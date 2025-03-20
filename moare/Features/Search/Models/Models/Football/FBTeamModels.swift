@@ -29,15 +29,10 @@ struct FBTeamStats: Decodable, Equatable {
     }
     
     enum CodingKeys: String, CodingKey {
-        case league
-        case team
+        case league, team, fixtures, goals, biggest, penalty
         case _form = "form"
-        case fixtures
-        case goals
-        case biggest
         case cleanSheet = "clean_sheet"
         case failedToScore = "failed_to_score"
-        case penalty
     }
 }
 
@@ -112,8 +107,7 @@ struct FBTeamStatsPenalty: Decodable, Equatable {
     }
     
     enum CodingKeys: String, CodingKey {
-        case scored
-        case missed
+        case scored, missed
         case _total = "total"
     }
 }

@@ -8,5 +8,5 @@
 import Foundation
 
 struct FBGameStatsReponseModel: Decodable, Equatable {
-    let stats: FBGame?
+    let game: FBGame?
 }

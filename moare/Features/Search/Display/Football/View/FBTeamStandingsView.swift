@@ -26,6 +26,8 @@ struct FBTeamStandingsView: View {
     @State private var totalScrollDistance: CGFloat = 0
     @State private var oldOffset: CGFloat = 0
     
+    let coordinateSpaceName = "TeamStandings"
+    
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack {
@@ -61,10 +63,11 @@ struct FBTeamStandingsView: View {
                                     categoryOffset: $totalScrollDistance
                                 )
                             }
+                            .simultaneousGesture(DragGesture())
                         }
                         .background(
                             GeometryReader { geometry in
-                                let newOffset = geometry.frame(in: .global).minY
+                                let newOffset = geometry.frame(in: .named(coordinateSpaceName)).minY
                                 
                                 Color.clear
                                     .onAppear {
@@ -78,30 +81,42 @@ struct FBTeamStandingsView: View {
                             }
                         )
                     }
+                    .coordinateSpace(name: coordinateSpaceName)
                 }
             }
             .onAppear {
                 // init FBTeamStandingsStore
-                storeManager.setStore(
-                    Store(initialState: FBTeamStandingsStore.State(
-                        displayModel: displayModel, standings: displayModel.standings
-                    )) { FBTeamStandingsStore() },
-                    forKey: StoreKeys.fbTeamStandingsStore
-                )
+                let fbTeamStandingsStore: StoreOf<FBTeamStandingsStore> = storeManager.getStore(forKey: StoreKeys.fbTeamStandingsStore) ?? {
+                    let newStore = Store(initialState: FBTeamStandingsStore.State()) { FBTeamStandingsStore() }
+                    
+                    storeManager.setStore(newStore, forKey: StoreKeys.fbTeamStandingsStore)
+                    
+                    return newStore
+                }()
                 
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    fbTeamStandingsStore = storeManager.getStore(forKey: StoreKeys.fbTeamStandingsStore)                    
+                    self.fbTeamStandingsStore = fbTeamStandingsStore
                 }
                 
-                fbTeamStandingsStore?.send(.initData)
+                if searchStore.poppedView == nil {
+                    fbTeamStandingsStore.send(.initData(displayModel: displayModel))
+                }
+            }
+            .onChange(of: displayModel) {
+                // NOTE: When come to this view(go back action) from same type of view(FBTeamStandingsView), .onAppear is not triggered.
+                // So this .onChange is used to execute .initData. Should think about better structure.
+                // And still has problem about some properties in store like some ui states, not sustaining its before value.
+                if case .fbTeamStandings = searchStore.poppedView {
+                    fbTeamStandingsStore?.send(.initData(displayModel: displayModel))
+                }
             }
         }
     }
 }
 
 struct FBTeamStandingsFirstDataList: View {
-    @ComposableArchitecture.Bindable var searchStore: StoreOf<SearchStore>
-    @ComposableArchitecture.Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
+    @Bindable var searchStore: StoreOf<SearchStore>
+    @Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
     @Binding var categoryOffset: CGFloat
     
     init(searchStore: StoreOf<SearchStore>, fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>, categoryOffset: Binding<CGFloat>) {
@@ -155,13 +170,11 @@ struct FBTeamStandingsFirstCategoryItem: View {
 }
 
 struct FBTeamStandingsFirstDataListItem: View {
-    @ComposableArchitecture.Bindable var searchStore: StoreOf<SearchStore>
-    @ComposableArchitecture.Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
+    @Bindable var searchStore: StoreOf<SearchStore>
+    @Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
     
     let rank: Int
     let data: FBTeamStandingsDisplay
-    
-    @State private var teamKrName = ""
 
     var body: some View {
         HStack(spacing: 0) {
@@ -173,7 +186,7 @@ struct FBTeamStandingsFirstDataListItem: View {
                 .padding(.leading, 4)
                 .padding(.trailing, 6)
 
-            Text(EnNameTranslationUtility.translateByDic(type: .team, input: teamKrName))
+            Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.team.name))
                 .font(.system(size: 12))
                 .lineLimit(2)
 
@@ -186,23 +199,13 @@ struct FBTeamStandingsFirstDataListItem: View {
         }
         .padding(.leading, 10)
         .onTapGesture {
-            searchStore.send(.showTeamStats(data.team.id))
-        }
-        .onAppear {
-            translate()
-        }
-    }
-    
-    private func translate() {
-        Task {
-            let teamKrName = await EnNameTranslationUtility.translateByAWS(input: data.team.name)
-            self.teamKrName = teamKrName
+            searchStore.send(.showTeamStats(teamId: data.team.id))
         }
     }
 }
 
 struct FBTeamStandingsDataList: View {
-    @ComposableArchitecture.Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
+    @Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
     
     @Binding var categoryOffset: CGFloat
     
@@ -236,14 +239,14 @@ struct FBTeamStandingsDataList: View {
 }
 
 struct FBTeamStandingsCategoryList: View {
-    @ComposableArchitecture.Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
+    @Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
     
     @State var barOffset: CGSize
     
     init(fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>) {
         self.fbTeamStandingsStore = fbTeamStandingsStore
         
-        self._barOffset = State(initialValue: getOffsetOfAniCapsuleBar(itemWidth: fbTeamStandingsStore.intDataItemWidth))
+        self._barOffset = State(initialValue: CGSize(width: getOffsetOfAniCapsuleBar(itemWidth: fbTeamStandingsStore.intDataItemWidth), height: 0))
     }
     
     var body: some View {
@@ -287,19 +290,19 @@ struct FBTeamStandingsCategoryList: View {
         withAnimation(.spring(duration: 0.5)) {
             if index == 8 || index == 9 {
                 if index == 8 {
-                    barOffset = CGSize(width: fbTeamStandingsStore.intDataItemWidth * CGFloat(index) + getOffsetOfAniCapsuleBar(itemWidth: fbTeamStandingsStore.stringDataItemWidth).width, height: 0)
+                    barOffset = CGSize(width: fbTeamStandingsStore.intDataItemWidth * CGFloat(index) + getOffsetOfAniCapsuleBar(itemWidth: fbTeamStandingsStore.stringDataItemWidth), height: 0)
                 } else {
-                    barOffset = CGSize(width: fbTeamStandingsStore.intDataItemWidth * CGFloat(index - 1) + getOffsetOfAniCapsuleBar(itemWidth: fbTeamStandingsStore.stringDataItemWidth, index: 1).width, height: 0)
+                    barOffset = CGSize(width: fbTeamStandingsStore.intDataItemWidth * CGFloat(index - 1) + getOffsetOfAniCapsuleBar(itemWidth: fbTeamStandingsStore.stringDataItemWidth, index: 1), height: 0)
                 }
             } else {
-                barOffset = getOffsetOfAniCapsuleBar(itemWidth: fbTeamStandingsStore.intDataItemWidth, index: index)
+                barOffset = CGSize(width: getOffsetOfAniCapsuleBar(itemWidth: fbTeamStandingsStore.intDataItemWidth, index: index), height: 0)
             }
         }
     }
 }
 
 struct FBTeamStandingsCategoryListItem: View {
-    @ComposableArchitecture.Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
+    @Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
     
     let index: Int
     let category: String
@@ -310,7 +313,6 @@ struct FBTeamStandingsCategoryListItem: View {
             fbTeamStandingsStore.send(.selectCategory(index))
         }) {
             Text(category)
-                .fontWeight(.medium)
                 .font(.system(size: fbTeamStandingsStore.categoryFontSize, weight: .medium))
                 .frame(width: isInt ? fbTeamStandingsStore.intDataItemWidth : fbTeamStandingsStore.stringDataItemWidth)
         }
@@ -319,7 +321,7 @@ struct FBTeamStandingsCategoryListItem: View {
 }
 
 struct FBTeamStandingsDataListItem: View {
-    @ComposableArchitecture.Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
+    @Bindable var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>
     
     let data: FBTeamStandingsDisplay
     let isInt: Bool
@@ -387,13 +389,4 @@ struct FBTeamStandingsDataListItem: View {
     private func calculatePoints(data: FBTeamStatsFixtures) -> String {
         return "\((data.wins.total * 3) + data.draws.total)"
     }
-}
-
-func getOffsetOfAniCapsuleBar(
-    itemWidth: CGFloat,
-    barWidth: CGFloat = 20,
-    spacing: CGFloat = 0,
-    index: Int = 0
-) -> CGSize {
-    return CGSize(width: (itemWidth * CGFloat(index)) + ((itemWidth - barWidth) / 2) + (spacing * CGFloat(index)), height: 0)
 }

@@ -9,24 +9,29 @@ import Foundation
 
 enum APIEndpoint {
     case searchByQuery(query: String)
-    case getLeagueSchedule(leagueId: String, yearMonth: String)
-    case searchByKeyword(keyword: String)
+    case getLeagueSchedule(leagueId: Int, yearMonth: String)
+    case searchByKeyword(keyword: KeywordInfo)
     case searchByEndpoint(endpoint: String)
+    case searchById(category: String, date: String?, dataType: String, leagueId: Int, id: Int)
     
-    case hotKeyword
+    case fetchTrendingKeywords
     
     var defaultHTTPMethod: String {
         switch self {
-        case .searchByQuery, .getLeagueSchedule, .searchByKeyword, .searchByEndpoint, .hotKeyword:
+        case .searchByQuery, .getLeagueSchedule, .searchByEndpoint, .fetchTrendingKeywords, .searchById:
             return "GET"
+        case .searchByKeyword:
+            return "POST"
         }
     }
     
     func url(isTest: Bool = true) -> URL? {
         var components = URLComponents()
+//        components.scheme = APIConfiguration.localscheme
+//        components.host = APIConfiguration.localhost
+//        components.port = APIConfiguration.localport
         components.scheme = APIConfiguration.scheme
         components.host = APIConfiguration.host
-//        components.port = APIConfiguration.localport
         
         switch self {
         case .searchByQuery(let query):
@@ -38,15 +43,12 @@ enum APIEndpoint {
         case .getLeagueSchedule(let leagueId, let yearMonth):
             components.path = "/search/schedule"
             components.queryItems = [
-                URLQueryItem(name: "leagueId", value: leagueId),
+                URLQueryItem(name: "leagueId", value: String(leagueId)),
                 URLQueryItem(name: "yearMonth", value: yearMonth)
             ]
             
         case .searchByKeyword(let keyword):
-            components.path = "/search/...."
-            components.queryItems = [
-                URLQueryItem(name: "keyword", value: keyword)
-            ]
+            components.path = "/search/keyword"
             
         case .searchByEndpoint(let endpoint):
             components.path = "/search/...."
@@ -54,10 +56,36 @@ enum APIEndpoint {
                 URLQueryItem(name: "endpoint", value: endpoint)
             ]
             
-        case .hotKeyword:
-            components.path = "//...."
+        case .searchById(let category, let date, let dataType, let leagueId, let id):
+            components.path = "/search/id"
+            
+            var queryItems = [
+                URLQueryItem(name: "category", value: category),
+                URLQueryItem(name: "dataType", value: dataType),
+                URLQueryItem(name: "leagueId", value: String(leagueId)),
+                URLQueryItem(name: "id", value: String(id))
+            ]
+            
+            if let date = date {
+                queryItems.append(URLQueryItem(name: "date", value: date.replacingOccurrences(of: "+", with: "%2B")))
+            }
+            
+            components.percentEncodedQueryItems = queryItems
+            
+        case .fetchTrendingKeywords:
+            components.path = "/keywords/trending"
         }
         
         return components.url
+    }
+    
+    var httpBody: Data? {
+        switch self {
+        case .searchByQuery, .getLeagueSchedule, .searchByEndpoint, .fetchTrendingKeywords, .searchById:
+            return nil
+        case .searchByKeyword(let keyword):
+            // NOTE: nil is excluded
+            return try? JSONEncoder().encode(keyword)
+        }
     }
 }

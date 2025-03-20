@@ -26,9 +26,18 @@ struct FBPlayerStandingsView: View {
     @State private var totalScrollDistance: CGFloat = 0
     @State private var oldOffset: CGFloat = 0
     
+    @State private var contentHeight: CGFloat = 0
+    @State private var scrollViewHeight: CGFloat = 0
+    
+    @State private var canShowMoreStandings = true
+    
+    @State private var hScrollOffset: CGFloat = 0
+    
+    let coordinateSpaceName = "PlayerStandings"
+    
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            VStack {
+            VStack(spacing: 0) {
                 if let fbPlayerStandingsStore = fbPlayerStandingsStore {
                     // league
                     if let league = fbPlayerStandingsStore.league {
@@ -43,93 +52,198 @@ struct FBPlayerStandingsView: View {
                         }
                         .padding(.horizontal)
                         .padding(.top, 4)
+                        .padding(.bottom, 8)
                     }
                     
-                    // standings data
-                    ScrollView {
-                        HStack(spacing: 0) {
-                            FBPlayerStandingsFirstDataList(
-                                fbPlayerStandingsStore: fbPlayerStandingsStore,
-                                categoryOffset: $totalScrollDistance
-                            )
-                            
-                            
-                            ScrollView(.horizontal) {
-                                FBPlayerStandingsDataList(
-                                    fbPlayerStandingsStore: fbPlayerStandingsStore,
-                                    categoryOffset: $totalScrollDistance
-                                )
+                    /* ---------------------
+                       category
+                       --------------------- */
+                    HStack(spacing: 0) {
+                        FBPlayerStandingsFirstCategoryItem(category: StringConstants.Football.standingsFirstCategory)
+                        
+                        HSynchronizedScrollView(scrollOffset: $hScrollOffset, itemWidth: fbPlayerStandingsStore.itemWidth, itemHeight: fbPlayerStandingsStore.categoryItemHeight) {
+                            VStack(spacing: 0) {
+                                FBPlayerStandingsFirstCategoryList(fbPlayerStandingsStore: fbPlayerStandingsStore)
+                                FBPlayerStandingsSecondCategoryList(fbPlayerStandingsStore: fbPlayerStandingsStore)
                             }
                         }
-                        .background(
-                            GeometryReader { geometry in
-                                let newOffset = geometry.frame(in: .global).minY
-                                
-                                Color.clear
-                                    .onAppear {
-                                        oldOffset = newOffset
-                                    }
-                                    .onChange(of: newOffset) { newOffset in
-                                        let delta = oldOffset - newOffset
-                                        totalScrollDistance += delta
-                                        oldOffset = newOffset
-                                    }
-                            }
-                        )
+                        .simultaneousGesture(DragGesture()) // prevent parent view's back handler DragGesture()
                     }
+                    .frame(height: fbPlayerStandingsStore.categoryItemHeight * 2)
+                    
+                    ZStack {
+                        /* ---------------------
+                           loading
+                           --------------------- */
+                        if fbPlayerStandingsStore.displayDataState == .fetching {
+                            ProgressView()
+                        }
+                        
+                        /* ---------------------
+                           standings
+                           --------------------- */
+                        if fbPlayerStandingsStore.displayDataState == .success {
+                            ScrollView {
+                                ScrollViewReader { proxy in
+                                    HStack(alignment: .top, spacing: 0) {
+                                        FBPlayerStandingsFirstDataList(searchStore: searchStore, fbPlayerStandingsStore: fbPlayerStandingsStore)
+                                        //                                .frame(maxHeight: .infinity, alignment: .top) // 정렬 안맞는 현상때문에 추가
+                                        //                                .background(Color.red.opacity(0.3))
+                                        
+                                        HSynchronizedScrollView(scrollOffset: $hScrollOffset, itemWidth: fbPlayerStandingsStore.itemWidth, itemHeight: fbPlayerStandingsStore.dataItemHeight) {
+                                            FBPlayerStandingsDataList(fbPlayerStandingsStore: fbPlayerStandingsStore)
+                                                .padding(.top, 2) // 하이라이트 선 때문인지는 모르겠는데, 정렬 안맞는 현상 있어서 추가해줌. ScrollView가 문제인듯.
+                                            //                                    .frame(maxHeight: .infinity, alignment: .top) // 정렬 안맞는 현상때문에 추가
+                                            //                                    .background(Color.blue.opacity(0.3))
+                                        }
+                                        .frame(height: fbPlayerStandingsStore.categoryItemHeight * CGFloat(fbPlayerStandingsStore.filteredStandings.count), alignment: .top) // 정렬 안맞는 현상때문에 추가
+                                        .simultaneousGesture(DragGesture())
+                                    }
+                                    .background(
+                                        GeometryReader { geometry in
+                                            let newOffset = geometry.frame(in: .named(coordinateSpaceName)).minY
+                                            
+                                            Color.clear
+                                                .onAppear {
+                                                    oldOffset = newOffset
+                                                    
+                                                    contentHeight = CGFloat(fbPlayerStandingsStore.filteredStandings.count) * fbPlayerStandingsStore.dataItemHeight
+                                                }
+                                                .onChange(of: fbPlayerStandingsStore.filteredStandings.count) { newValue in
+                                                    contentHeight = CGFloat(newValue) * fbPlayerStandingsStore.dataItemHeight
+                                                    
+                                                    // 추가로 10개의 standings가 나오고 다시 상단/하단으로 이동하는데 시간이 걸리기때문에, 다시 showMoreStandings를 가능하게 하는데 1초 delay를 주는건 괜찮아 보인다.
+                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                                        canShowMoreStandings = true
+                                                    }
+                                                }
+                                                .onChange(of: newOffset) { newOffset in
+                                                    let delta = oldOffset - newOffset
+                                                    totalScrollDistance += delta
+                                                    oldOffset = newOffset
+                                                    
+                                                    let scrollableDistance = contentHeight - scrollViewHeight
+                                                    
+                                                    if canShowMoreStandings {
+                                                        if fbPlayerStandingsStore.filteredStandingsStartIndex != 0 && totalScrollDistance <= 0 {
+                                                            canShowMoreStandings = false
+                                                            fbPlayerStandingsStore.send(.showMoreStandings(isUp: true))
+                                                            //                                                                print("tooooppppp")
+                                                        } else if (fbPlayerStandingsStore.filteredStandingsEndIndex != fbPlayerStandingsStore.standings.count - 1) &&
+                                                                    (totalScrollDistance >= (scrollableDistance - 2)) { // give extra space for possible difference
+                                                            canShowMoreStandings = false
+                                                            fbPlayerStandingsStore.send(.showMoreStandings(isUp: false))
+                                                            //                                                                print("botttttooom")
+                                                        }
+                                                    }
+                                                }
+                                        }
+                                    ) // .background()
+                                    .onChange(of: fbPlayerStandingsStore.filteredStandingsStartIndex) { newValue in
+                                        if fbPlayerStandingsStore.filteredStandings.count == 20 {
+                                            proxy.scrollTo(1, anchor: .top)
+                                        } else {
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                                proxy.scrollTo(10, anchor: .top)
+                                            }
+                                        }
+                                    }
+                                } // ScrollViewReader
+                            } // ScrollView
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear
+                                        .onAppear {
+                                            scrollViewHeight = geometry.size.height
+                                        }
+                                }
+                            )
+                            .coordinateSpace(name: coordinateSpaceName)
+                        } // if fbPlayerStandingsStore.displayDataState == .success
+                        
+                        /* ---------------------
+                           error
+                           --------------------- */
+                        if case .failure(let message) = fbPlayerStandingsStore.displayDataState {
+                            Text(message)
+                        }
+                    } // ZStack
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
             .onAppear {
                 // init FBPlayerStandingsStore
-                storeManager.setStore(
-                    Store(initialState: FBPlayerStandingsStore.State(
-                        displayModel: displayModel, standings: displayModel.standings
-                    )) { FBPlayerStandingsStore() },
-                    forKey: StoreKeys.fbPlayerStandingsStore
-                )
+                let fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore> = storeManager.getStore(forKey: StoreKeys.fbPlayerStandingsStore) ?? {
+                    let newStore = Store(initialState: FBPlayerStandingsStore.State()) { FBPlayerStandingsStore() }
+                    
+                    storeManager.setStore(newStore, forKey: StoreKeys.fbPlayerStandingsStore)
+                    
+                    return newStore
+                }()
                 
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    fbPlayerStandingsStore = storeManager.getStore(forKey: StoreKeys.fbPlayerStandingsStore)                    
+                    self.fbPlayerStandingsStore = fbPlayerStandingsStore
                 }
                 
-                fbPlayerStandingsStore?.send(.initData)
+                if searchStore.poppedView == nil {
+                    fbPlayerStandingsStore.send(.initData(displayModel: displayModel))
+                }
             }
-        }
+            .onChange(of: displayModel) {
+                if case .fbPlayerStandings = searchStore.poppedView {
+                    fbPlayerStandingsStore?.send(.initData(displayModel: displayModel))
+                }
+            }
+        } // if let searchStore
     }
 }
 
 struct FBPlayerStandingsFirstDataList: View {
-    @ComposableArchitecture.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
-    @Binding var categoryOffset: CGFloat
-    
-    init(fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>, categoryOffset: Binding<CGFloat>) {
-        self.fbPlayerStandingsStore = fbPlayerStandingsStore
-        self._categoryOffset = categoryOffset
-    }
+    @Bindable var searchStore: StoreOf<SearchStore>
+    @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     var body: some View {
-        ZStack(alignment: .top) {
-            FBPlayerStandingsFirstCategoryItem(category: fbPlayerStandingsStore.firstCategory)
-                .frame(height: fbPlayerStandingsStore.categoryItemHeight * 2)
-                .background(.white)
-                .offset(y: categoryOffset < 0 ? 0 : categoryOffset)
-                .zIndex(1)
-
-            LazyVStack(spacing: 0) {
-                ForEach(fbPlayerStandingsStore.standings.indices, id: \.self) { index in
-                    let data = fbPlayerStandingsStore.standings[index]
-                    
-                    FBPlayerStandingsFirstDataListItem(
-                        fbPlayerStandingsStore: fbPlayerStandingsStore,
-                        rank: index + 1,
-                        data: data
-                    )
-                    .frame(height: fbPlayerStandingsStore.dataItemHeight)
+        let entityIndex = fbPlayerStandingsStore.entityIndex
+        let filteredStandingsStartIndex = fbPlayerStandingsStore.filteredStandingsStartIndex
+        
+        //            ScrollViewReader { proxy in
+        LazyVStack(spacing: 0) {
+            ForEach(Array(fbPlayerStandingsStore.filteredStandings.enumerated()), id: \.offset) { index, item in
+                let standingsIndex = filteredStandingsStartIndex + index
+                
+                if entityIndex != nil && entityIndex == standingsIndex {
+                    Rectangle()
+                        .fill(.moare)
+                        .frame(height: 1)
+                }
+                
+                FBPlayerStandingsFirstDataListItem(
+                    searchStore: searchStore,
+                    fbPlayerStandingsStore: fbPlayerStandingsStore,
+                    rank: standingsIndex + 1,
+                    data: item
+                )
+                .frame(height: fbPlayerStandingsStore.dataItemHeight)
+                .id(index)
+                
+                if entityIndex != nil && entityIndex == standingsIndex {
+                    Rectangle()
+                        .fill(.moare)
+                        .frame(height: 1)
                 }
             }
-            .frame(width: fbPlayerStandingsStore.firstCategoryItemWidth)
-            .padding(.top, fbPlayerStandingsStore.categoryItemHeight * 2)
         }
+        //                .onChange(of: fbPlayerStandingsStore.filteredStandingsStartIndex) { newValue in
+        //                    if fbPlayerStandingsStore.filteredStandings.count == 20 {
+        //                        proxy.scrollTo(1, anchor: .top)
+        //                    } else {
+        //                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        //                            proxy.scrollTo(10, anchor: .top)
+        //                        }
+        //                    }
+        //                }
+        //            }
+        .frame(width: fbPlayerStandingsStore.firstCategoryItemWidth)
     }
 }
 
@@ -151,7 +265,8 @@ struct FBPlayerStandingsFirstCategoryItem: View {
 }
 
 struct FBPlayerStandingsFirstDataListItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
+    @Bindable var searchStore: StoreOf<SearchStore>
+    @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     let rank: Int
     let data: FBPlayerStandingsDisplay
@@ -160,17 +275,24 @@ struct FBPlayerStandingsFirstDataListItem: View {
         HStack(spacing: 0) {
             Text("\(rank)")
                 .font(.system(size: fbPlayerStandingsStore.dataFontSize, weight: .medium))
-                .frame(width: 22)
+                .frame(width: 28)
 
             URLImage(url: data.player.photo, customSize: CGSize(width: 25, height: 25))
                 .padding(.leading, 4)
                 .padding(.trailing, 6)
 
-            Text(data.player.krname)
-                .font(.system(size: 12))
-                .lineLimit(2)
-
-            Spacer()
+            VStack(spacing: 2) {
+                Text(data.player.krname)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(.system(size: 12))
+                    .lineLimit(1)
+                
+                Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.stats.team.name))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(.system(size: 11, weight: .light))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
 
             Rectangle()
                 .frame(width: 2)
@@ -178,86 +300,91 @@ struct FBPlayerStandingsFirstDataListItem: View {
                 .opacity(0.5)
         }
         .padding(.leading, 10)
+        .onTapGesture {
+            searchStore.send(.showPlayerStats(category: "football", playerId: data.player.id))
+        }
     }
 }
 
 struct FBPlayerStandingsDataList: View {
-    @ComposableArchitecture.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
-    
-    @Binding var categoryOffset: CGFloat
+    @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     var body: some View {
-        ZStack(alignment: .top) {
-            VStack(spacing: 0) {
-                FBPlayerStandingsFirstCategoryList(fbPlayerStandingsStore: fbPlayerStandingsStore)
+        let entityIndex = fbPlayerStandingsStore.entityIndex
+        let filteredStandingsStartIndex = fbPlayerStandingsStore.filteredStandingsStartIndex
+        
+        LazyVStack(spacing: 0) {
+            ForEach(Array(fbPlayerStandingsStore.filteredStandings.enumerated()), id: \.offset) { index, item in
+                let standingsIndex = filteredStandingsStartIndex + index
                 
-                FBPlayerStandingsSecondCategoryList(fbPlayerStandingsStore: fbPlayerStandingsStore)
-            }
-            .background(.white)
-            .zIndex(1)
-            .offset(y: categoryOffset < 0 ? 0 : categoryOffset)
-            
-            LazyVStack(spacing: 0) {
-                ForEach(fbPlayerStandingsStore.standings.indices, id: \.self) { index in
-                    let data = fbPlayerStandingsStore.standings[index]
-                    
-                    HStack(spacing: 0) {
-                        ForEach(0..<11) { index in
-                            FBPlayerStandingsDataListItem(
-                                fbPlayerStandingsStore: fbPlayerStandingsStore,
-                                data: data,
-                                index: index
-                            )
-                            .frame(height: fbPlayerStandingsStore.dataItemHeight)
-                            
-                            if index == fbPlayerStandingsStore.attackCategoryList.count - 1 || index == fbPlayerStandingsStore.attackCategoryList.count + fbPlayerStandingsStore.defendCategoryList.count - 1 {
-                                Rectangle()
-                                    .frame(width: 2)
-                                    .foregroundStyle(.secondary)
-                                    .opacity(0)
-                            }
+                if entityIndex != nil && entityIndex == standingsIndex {
+                    Rectangle()
+                        .fill(.moare)
+                        .frame(height: 1)
+                }
+                
+                HStack(spacing: 0) {
+                    ForEach(0..<StringConstants.Football.playerStandingsSecondCategories.count) { index in
+                        FBPlayerStandingsDataListItem(
+                            fbPlayerStandingsStore: fbPlayerStandingsStore,
+                            data: item,
+                            index: index
+                        )
+                        .frame(height: fbPlayerStandingsStore.dataItemHeight)
+                        .id(index)
+                        
+                        if index == StringConstants.Football.playerStandingsAttackCategories.count - 1 || index == StringConstants.Football.playerStandingsAttackCategories.count + StringConstants.Football.playerStandingsDefendCategories.count - 1 {
+                            Rectangle()
+                                .frame(width: 2)
+                                .foregroundStyle(.secondary)
+                                .opacity(0)
                         }
                     }
                 }
+                
+                if entityIndex != nil && entityIndex == standingsIndex {
+                    Rectangle()
+                        .fill(.moare)
+                        .frame(height: 1)
+                }
             }
-            .padding(.top, fbPlayerStandingsStore.categoryItemHeight * 2)
         }
     }
 }
 
 struct FBPlayerStandingsFirstCategoryList: View {
-    @ComposableArchitecture.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
+    @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     @State var barOffset: CGSize
     
     init(fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>) {
         self.fbPlayerStandingsStore = fbPlayerStandingsStore
         
-        self._barOffset = State(initialValue: getOffsetOfAniCapsuleBar(itemWidth: fbPlayerStandingsStore.itemWidth * 5, barWidth: 80))
+        self._barOffset = State(initialValue: CGSize(width: getOffsetOfAniCapsuleBar(itemWidth: fbPlayerStandingsStore.itemWidth * CGFloat(StringConstants.Football.playerStandingsAttackCategories.count), barWidth: 80), height: 0))
     }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-                HStack(spacing: 0) {
-                    ForEach(fbPlayerStandingsStore.firstCategoryList.indices, id: \.self) { index in
-                        let category = fbPlayerStandingsStore.firstCategoryList[index]
-                        
-                        FBPlayerStandingsFirstCategoryListItem(
-                            fbPlayerStandingsStore: fbPlayerStandingsStore,
-                            index: index,
-                            category: category
-                        )
-                        .id(index)
-                        
-                        if index != fbPlayerStandingsStore.firstCategoryList.count - 1 {
-                            Rectangle()
-                                .frame(width: 2)
-                                .foregroundStyle(.secondary)
-                                .opacity(0.5)
-                        }
+            HStack(spacing: 0) {
+                ForEach(StringConstants.Football.statsFirstCategories.indices, id: \.self) { index in
+                    let category = StringConstants.Football.statsFirstCategories[index]
+                    
+                    FBPlayerStandingsFirstCategoryListItem(
+                        fbPlayerStandingsStore: fbPlayerStandingsStore,
+                        index: index,
+                        category: category
+                    )
+                    .id(index)
+                    
+                    if index != StringConstants.Football.statsFirstCategories.count - 1 {
+                        Rectangle()
+                            .frame(width: 2)
+                            .foregroundStyle(.secondary)
+                            .opacity(0.5)
                     }
                 }
-                .frame(height: fbPlayerStandingsStore.categoryItemHeight - 2)
+            }
+            .frame(height: fbPlayerStandingsStore.categoryItemHeight - 2)
             
             HCapsuleBar(customWidth: 80)
                 .offset(barOffset)
@@ -271,21 +398,25 @@ struct FBPlayerStandingsFirstCategoryList: View {
         let itemWidth = fbPlayerStandingsStore.itemWidth
         let barWidth = fbPlayerStandingsStore.barWidth
         
+        let attackCategoriesCount = CGFloat(StringConstants.Football.playerStandingsAttackCategories.count)
+        let defendCategoriesCount = CGFloat(StringConstants.Football.playerStandingsDefendCategories.count)
+        let etcCategoriesCount = CGFloat(StringConstants.Football.playerStandingsEtcCategories.count)
+        
         withAnimation(.spring(duration: 0.5)) {
             switch index {
             case 0:
-                barOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth * 5, barWidth: 80)
+                barOffset = CGSize(width: getOffsetOfAniCapsuleBar(itemWidth: itemWidth * attackCategoriesCount, barWidth: 80), height: 0)
             case 1:
-                barOffset = CGSize(width: (itemWidth * 5) + barWidth + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * 2, barWidth: 80).width, height: 0)
+                barOffset = CGSize(width: (itemWidth * attackCategoriesCount) + barWidth + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * defendCategoriesCount, barWidth: 80), height: 0)
             default:
-                barOffset = CGSize(width: (itemWidth * 5) + (barWidth * 2) + (itemWidth * 2) + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * 4, barWidth: 80).width, height: 0)
+                barOffset = CGSize(width: (itemWidth * attackCategoriesCount) + (barWidth * 2) + (itemWidth * defendCategoriesCount) + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * etcCategoriesCount, barWidth: 80), height: 0)
             }
         }
     }
 }
 
 struct FBPlayerStandingsFirstCategoryListItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
+    @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     let index: Int
     let category: String
@@ -293,7 +424,7 @@ struct FBPlayerStandingsFirstCategoryListItem: View {
     var body: some View {
         
         Button(action: {
-            fbPlayerStandingsStore.send(.selectFirstCategory(index))
+            fbPlayerStandingsStore.send(.selectFirstCategory(index: index))
         }) {
             Text(category)
                 .font(.system(size: fbPlayerStandingsStore.categoryFontSize, weight: .medium))
@@ -304,30 +435,33 @@ struct FBPlayerStandingsFirstCategoryListItem: View {
     
     private var width: CGFloat {
         switch index {
-        case 0: fbPlayerStandingsStore.itemWidth * 5
-        case 1: fbPlayerStandingsStore.itemWidth * 2
-        default: fbPlayerStandingsStore.itemWidth * 4
+        case 0: fbPlayerStandingsStore.itemWidth * CGFloat(StringConstants.Football.playerStandingsAttackCategories.count)
+        case 1: fbPlayerStandingsStore.itemWidth * CGFloat(StringConstants.Football.playerStandingsDefendCategories.count)
+        default: fbPlayerStandingsStore.itemWidth * CGFloat(StringConstants.Football.playerStandingsEtcCategories.count)
         }
     }
 }
 
 struct FBPlayerStandingsSecondCategoryList: View {
-    @ComposableArchitecture.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
+    @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     @State var barOffset: CGSize
+    
+    let attackCategoriesCount = StringConstants.Football.playerStandingsAttackCategories.count
+    let defendCategoriesCount = StringConstants.Football.playerStandingsDefendCategories.count
     
     init(fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>) {
         self.fbPlayerStandingsStore = fbPlayerStandingsStore
         
-        self._barOffset = State(initialValue: getOffsetOfAniCapsuleBar(itemWidth: fbPlayerStandingsStore.itemWidth))
+        self._barOffset = State(initialValue: CGSize(width: getOffsetOfAniCapsuleBar(itemWidth: fbPlayerStandingsStore.itemWidth), height: 0))
     }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollViewReader { proxy in
                 HStack(spacing: 0) {
-                    ForEach(fbPlayerStandingsStore.secondCategoryList.indices, id: \.self) { index in
-                        let category = fbPlayerStandingsStore.secondCategoryList[index]
+                    ForEach(StringConstants.Football.playerStandingsSecondCategories.indices, id: \.self) { index in
+                        let category = StringConstants.Football.playerStandingsSecondCategories[index]
                         
                         FBPlayerStandingsSecondCategoryListItem(
                             fbPlayerStandingsStore: fbPlayerStandingsStore,
@@ -336,7 +470,7 @@ struct FBPlayerStandingsSecondCategoryList: View {
                         )
                         .id(index)
                         
-                        if index == fbPlayerStandingsStore.attackCategoryList.count - 1 || index == fbPlayerStandingsStore.attackCategoryList.count + fbPlayerStandingsStore.defendCategoryList.count - 1 {
+                        if index == attackCategoriesCount - 1 || index == attackCategoriesCount + defendCategoriesCount - 1 {
                             Rectangle()
                                 .frame(width: 2)
                                 .foregroundStyle(.secondary)
@@ -365,7 +499,7 @@ struct FBPlayerStandingsSecondCategoryList: View {
             
             HCapsuleBar()
                 .offset(barOffset)
-        }
+        } // VStack
         .onChange(of: fbPlayerStandingsStore.secondSelectedIndex) { newValue in
             moveBar(index: newValue)
         }
@@ -377,19 +511,19 @@ struct FBPlayerStandingsSecondCategoryList: View {
         
         withAnimation(.spring(duration: 0.5)) {
             switch index {
-            case 0..<fbPlayerStandingsStore.attackCategoryList.count:
-                barOffset = getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index)
-            case fbPlayerStandingsStore.attackCategoryList.count..<fbPlayerStandingsStore.attackCategoryList.count + fbPlayerStandingsStore.debugDescription.count:
-                barOffset = CGSize(width: barWidth + getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index).width, height: 0)
+            case 0..<attackCategoriesCount:
+                barOffset = CGSize(width: getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index), height: 0)
+            case attackCategoriesCount..<attackCategoriesCount + defendCategoriesCount:
+                barOffset = CGSize(width: barWidth + getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index), height: 0)
             default:
-                barOffset = CGSize(width: (barWidth * 2) + getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index).width, height: 0)
+                barOffset = CGSize(width: (barWidth * 2) + getOffsetOfAniCapsuleBar(itemWidth: itemWidth, index: index), height: 0)
             }
         }
     }
 }
 
 struct FBPlayerStandingsSecondCategoryListItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
+    @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     let index: Int
     let category: String
@@ -403,7 +537,7 @@ struct FBPlayerStandingsSecondCategoryListItem: View {
     
     var body: some View {
         Button(action: {
-            fbPlayerStandingsStore.send(.selectSecondCategory(index))
+            fbPlayerStandingsStore.send(.selectSecondCategory(index: index, category: category))
         }) {
             Text(category)
                 .font(.system(size: fontSize, weight: .medium))
@@ -414,7 +548,7 @@ struct FBPlayerStandingsSecondCategoryListItem: View {
 }
 
 struct FBPlayerStandingsDataListItem: View {
-    @ComposableArchitecture.Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
+    @Bindable var fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore>
     
     let data: FBPlayerStandingsDisplay
     let index: Int
@@ -432,12 +566,20 @@ struct FBPlayerStandingsDataListItem: View {
         case 2: "\(data.stats.goals.total + data.stats.goals.assists)"
         case 3: "\(data.stats.shots.total)"
         case 4: "\(data.stats.shots.on)"
-        case 5: "\(data.stats.tackles.total)"
-        case 6: "\(data.stats.passes.total)"
-        case 7: "\(data.stats.fouls.committed)"
-        case 8: "\(data.stats.cards.yellow)"
-        case 9: "\(data.stats.cards.red)"
-        case 10: "\(data.stats.games.appearences)"
+        case 5: "\(data.stats.passes.key)"
+        case 6: "\(data.stats.dribbles.success)"
+        case 7: "\(data.stats.penalty.scored)"
+        case 8: "\(data.stats.tackles.total)"
+        case 9: "\(data.stats.duels.won)"
+        case 10: "\(data.stats.passes.total)"
+        case 11: "\(data.stats.fouls.committed)"
+        case 12: "\(data.stats.cards.yellow)"
+        case 13: "\(data.stats.cards.red)"
+        case 14: "\(data.stats.games.appearences)"
+        case 15: "\(data.stats.games.lineups)"
+        case 16: "\(data.stats.substitutes.substituteIn)"
+        case 17: "\(data.stats.games.minutes)"
+        case 18: "\(Double(data.stats.games.rating)?.rounded(to: 2) ?? 0)"
         default: ""
         }
     }

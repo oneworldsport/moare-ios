@@ -28,71 +28,63 @@ struct SearchView: View {
     @State private var dragOffset: CGFloat = 0
     @State private var opacity: Double = 1.0
     
-    @State private var isInfoIconVisible = true
-    @State private var isInfoOpened = false
+    @State private var isNoticeIconVisible = false
+    @State private var isNoticeOpened = false
     
     var body: some View {
         ZStack {
             if let searchStore = searchStore {
                 /* ---------------------
-                   info icon
-                   - info about currently providing data
+                   notice
+                   - notice about providing data
                    --------------------- */
-                if isInfoIconVisible {
-                    if isInfoOpened {
-                        HStack {
-                            Spacer()
-                            
-                            ScrollView {
-                                VStack(alignment: .leading) {
-                                    Text("현재 제공중인 스포츠 데이터:")
-                                        .font(.system(size: 12))
-                                        .foregroundStyle(.secondary)
-                                    Text("• 프리미어리그 24/25")
-                                        .font(.system(size: 12))
-                                        .foregroundStyle(.secondary)
-                                    Text("\n제공 예정 스포츠 데이터:")
-                                        .font(.system(size: 12))
-                                        .foregroundStyle(.secondary)
-                                    Text("• 라리가 24/25\n• 분데스리가 24/25\n• 리그 1 24/25\n• 챔피언스리그 24/25")
-                                        .font(.system(size: 12))
-                                        .foregroundStyle(.secondary)
-                                }
-                                .padding(10)
-                            }
-                            .frame(maxHeight: 100)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: UIConstants.CornerRadius.small)
-                                    .stroke(.secondary, lineWidth: UIConstants.StrokeWidth.thin)
-                            )
-                        }
-                        .padding(.trailing, 12)
-                        .padding(.bottom, 210)
-                    }
-                    
+                if isNoticeIconVisible {
                     HStack {
                         Spacer()
                         
-                        Button(action: {
-                            isInfoOpened.toggle()
-                        }) {
-                            Image(systemName: "info.circle")
-                                .tint(.secondary)
+                        VStack(alignment: .trailing, spacing: 0) {
+                            NoticeBox()
+                                .opacity(isNoticeOpened ? 1 : 0)
+                            
+                            Button(action: {
+                                isNoticeOpened.toggle()
+                            }) {
+                                Image(systemName: "info.circle")
+                                    .tint(.secondary)
+                                    .padding(.leading, 8)
+                                    .padding(.trailing, 12)
+                                    .padding(.top, 4)
+                            }
                         }
                     }
-                    .padding(.trailing, 12)
-                    .padding(.bottom, 80)
+                    .offset(x: 0, y: -113)
+                    .zIndex(1)
+                    // y: 전체 박스 높이(100 + 20 + 4) / 2 + (검색창 높이(50) + 트렌딩 키워드 높이(40)) / 2 + 추가 패딩 6
                 }
-            
+                
                 VStack(spacing: 0) {
-                    Spacer()
-                    
                     /* ---------------------
-                     search bar
-                     --------------------- */
+                       search bar
+                       --------------------- */
                     AnimatingSearchBar(
+                        searchStore: searchStore,
                         focusState: $focusState
                     )
+                    
+                    /* ---------------------
+                       trending keywords
+                       --------------------- */
+                    if searchStore.trendingKeyowrdsVisibleState {
+                        TrendingKeywords(keywords: searchStore.trendingKeywordList) { keyword in
+                            // update bar's text
+                            searchStore.send(.updateTextField(keyword, false))
+                            
+                            // remove textfield for bar animation
+                            searchStore.send(.updateTextFieldVisibleState(false))
+                            
+                            searchStore.send(.performSearch(searchType: .trendingKeyword, aniDuration: AnimationConstants.Duration.medium))
+                        }
+                    }
                     
                     ZStack {
                         /* ---------------------
@@ -100,8 +92,6 @@ struct SearchView: View {
                            --------------------- */
                         if !searchStore.autoCompleteList.isEmpty {
                             AutoCompleteList(autoCompleteList: searchStore.autoCompleteList, onItemSelected: { words in
-                                focusState.toggle()
-                                
                                 // update bar's text
                                 searchStore.send(.updateTextField(words, false))
                                 
@@ -114,7 +104,7 @@ struct SearchView: View {
                                 }
                                 
                                 // search
-                                searchStore.send(.performSearch(AnimationConstants.Duration.medium * 2))
+                                searchStore.send(.performSearch(searchType: .autoComplete, aniDuration: AnimationConstants.Duration.medium * 2))
                             })
                         }
                         
@@ -187,41 +177,65 @@ struct SearchView: View {
                                 .padding(.top, UIConstants.Padding.defaultPadding)
                         }
                     } // ZStack
-                    .onChange(of: searchStore.isFocused) { newValue in
-                        //                        focusState = newValue
+                    .onChange(of: searchStore.isFocused) {
+                        if searchStore.isFocused {
+                            focusState.toggle()
+                            searchStore.send(.updateIsFocused(false)) // Reset searchStore's isFocused to ensure this .onChange() triggered when isFocused set true.
+                        }
                     }
-                    
-                    Spacer()
                 } // VStack
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .contentShape(Rectangle()) // for .onTapGesture{}
                 // TODO: has to think about better structure
                 .onChange(of: searchStore.searchState) { newVaue in
                     if newVaue {
-                        withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                            isInfoOpened = false
-                            isInfoIconVisible = false
+                        withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                            isNoticeOpened = false
+                            isNoticeIconVisible = false
+                            searchStore.send(.updateTrendingKeywordsVisibleState(false))
                         }
                     } else {
-                        withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                            isInfoIconVisible = true
+                        withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                            isNoticeIconVisible = true
+                            searchStore.send(.updateTrendingKeywordsVisibleState(true))
                         }
                     }
                 }
                 // TODO: has to think about better structure
                 .onChange(of: searchStore.autoCompleteList) { newValue in
                     if newValue.isEmpty && !searchStore.searchState {
-                        withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                            isInfoIconVisible = true
+                        withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                            isNoticeIconVisible = true
+                            searchStore.send(.updateTrendingKeywordsVisibleState(true))
                         }
                     } else {
-                        withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                            isInfoOpened = false
-                            isInfoIconVisible = false
+                        withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                            isNoticeOpened = false
+                            isNoticeIconVisible = false
+                            searchStore.send(.updateTrendingKeywordsVisibleState(false))
                         }
+                    }
+                }
+                .onChange(of: searchStore.firstOpened) { newValue in
+                    if newValue {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.medium) {
+                            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                                isNoticeIconVisible = true
+                                searchStore.send(.updateTrendingKeywordsVisibleState(true))
+                            }
+                        }
+                    }
+                }
+                .onTapGesture {
+                    if isNoticeOpened {
+                        isNoticeOpened = false
+                    } else {
+                        focusState = false
                     }
                 }
                 .gesture(
                     // custom back handler
-                    DragGesture()
+                    DragGesture(minimumDistance: 3)
                         .onChanged { value in
                             if !searchStore.viewStack.isEmpty {
                                 dragOffset = value.translation.width
@@ -259,6 +273,8 @@ struct SearchView: View {
                 // init Trie
                 searchStore?.send(.initTrie)
             }
+            
+            searchStore?.send(.fetchTrendingKeywords)
             
             // test
 //            searchStore?.send(.initForTest)

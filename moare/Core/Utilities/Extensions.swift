@@ -15,3 +15,19 @@ extension Binding where Value == Bool {
         )
     }
 }
+
+extension Double {
+    func rounded(to decimalPlaces: Int) -> Double {
+        let multiplier = pow(10.0, Double(decimalPlaces))
+        return (self * multiplier).rounded() / multiplier
+    }
+}
+
+extension Int {
+    func percentage(of total: Int, to decimalPlaces: Int) -> Double {
+        guard total != 0 else { return 0 }
+        let percentage = (Double(self) / Double(total)) * 100
+        let roundedPercentage = percentage.rounded(to: decimalPlaces)
+        return roundedPercentage
+    }
+}

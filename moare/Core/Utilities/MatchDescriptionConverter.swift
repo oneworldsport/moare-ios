@@ -62,7 +62,7 @@ struct MatchDescriptionConverter {
         "Regular Season": "정규 시즌"
     ]
 
-    static func convert(input: String) -> String {
+    static func convert(descriptionType: DescriptionType = .roundWithDash, input: String) -> String {
         // TODO: 패턴 더 추가해서 함수로 작성
         let dashNumberPattern = try! NSRegularExpression(pattern: "- (\\d+)$") // "- 숫자" 패턴
 
@@ -75,12 +75,21 @@ struct MatchDescriptionConverter {
                 break
             }
         }
+        
+        let replacementTemplate = switch descriptionType {
+        case .roundWithDash: "- $1라운드"
+        case .roundWithoutDash: "$1라운드"
+        }
 
         // replace "- 숫자" pattern with "숫자라운드"
         let range = NSRange(result.startIndex..<result.endIndex, in: result)
 //        result = dashNumberPattern.stringByReplacingMatches(in: result, range: range, withTemplate: "- $1라운드")
-        result = dashNumberPattern.stringByReplacingMatches(in: result, range: range, withTemplate: "- $1라운드")
+        result = dashNumberPattern.stringByReplacingMatches(in: result, range: range, withTemplate: replacementTemplate)
 
         return result
+    }
+    
+    enum DescriptionType {
+        case roundWithDash, roundWithoutDash
     }
 }

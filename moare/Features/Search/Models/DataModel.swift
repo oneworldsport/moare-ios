@@ -15,7 +15,7 @@ struct DataModel: Decodable {
     let data: SportDecodableModel
 }
 
-struct EntityInfo: Decodable {
+struct EntityInfo: Codable, Equatable {
     let entityName: String
     let category: String
     let entityType: String
@@ -24,13 +24,13 @@ struct EntityInfo: Decodable {
     let playerId: Int?
 }
 
-struct Keyword: Decodable, Equatable {
+struct Keyword: Codable, Equatable {
     let keyword: String
     let id: String
     let priority: Int
 }
 
-enum SportDecodableModel {
+enum SportDecodableModel: Equatable {
     // football
     case fbPlayerInfo(FBPlayerInfoResponseModel, FBPlayerInfoDisplayModel)
     case fbPlayerStats(FBPlayerInfoResponseModel, FBPlayerStatsDisplayModel)
@@ -45,6 +45,24 @@ enum SportDecodableModel {
     // nba
     
     case unknown
+    
+    static func == (lhs: SportDecodableModel, rhs: SportDecodableModel) -> Bool {
+        switch (lhs, rhs) {
+        case (.fbPlayerInfo, .fbPlayerInfo),
+            (.fbPlayerStats, .fbPlayerStats),
+            (.fbPlayerStandings, .fbPlayerStandings),
+            (.fbTeamInfo, .fbTeamInfo),
+            (.fbTeamStats, .fbTeamStats),
+            (.fbTeamStandings, .fbTeamStandings),
+            (.fbTeamSchedule, .fbTeamSchedule),
+            (.fbLeagueSchedule, .fbLeagueSchedule),
+            (.fbGameStats, .fbGameStats),
+            (.unknown, .unknown):
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 extension DataModel {
@@ -131,7 +149,7 @@ extension DataModel {
         case let dataType where dataType == "football_game_stats":
             let responseModel = try container.decode(FBGameStatsReponseModel.self, forKey: .data)
             
-            if responseModel.stats == nil {
+            if responseModel.game == nil {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.fbGameStatsConverter(response: responseModel)

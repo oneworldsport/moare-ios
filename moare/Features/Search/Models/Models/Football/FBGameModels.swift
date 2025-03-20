@@ -50,9 +50,7 @@ struct FBGameFixture: Decodable, Equatable {
         case _timezone = "timezone"
         case _date = "date"
         case _timestamp = "timestamp"
-        case periods
-        case venue
-        case status
+        case periods, venue, status
     }
 }
 
@@ -124,11 +122,8 @@ struct FBGameLineups: Decodable, Equatable {
     }
     
     private enum CodingKeys: String, CodingKey {
-        case team
-        case coach
+        case team, coach, startXI, substitutes
         case _formation = "formation"
-        case startXI
-        case substitutes
     }
 }
 
@@ -255,17 +250,34 @@ struct FBGamePlayerStatsDetail: Decodable, Equatable {
     }
     
     private enum CodingKeys: String, CodingKey {
-        case games
+        case games, shots, goals, passes, tackles, duels, dribbles, fouls, cards, penalty
         case _offsides = "offsides"
-        case shots
-        case goals
-        case passes
-        case tackles
-        case duels
-        case dribbles
-        case fouls
-        case cards
-        case penalty
+    }
+    
+    init(
+        games: FBGamePlayerStatsGames = FBGamePlayerStatsGames(),
+        offsides: Int = 0,
+        shots: FBPlayerStatsShots = FBPlayerStatsShots(),
+        goals: FBPlayerStatsGoals = FBPlayerStatsGoals(),
+        passes: FBGamePlayerStatsPasses = FBGamePlayerStatsPasses(),
+        tackles: FBPlayerStatsTackles = FBPlayerStatsTackles(),
+        duels: FBPlayerStatsDuels = FBPlayerStatsDuels(),
+        dribbles: FBPlayerStatsDribbles = FBPlayerStatsDribbles(),
+        fouls: FBPlayerStatsFouls = FBPlayerStatsFouls(),
+        cards: FBPlayerStatsCards = FBPlayerStatsCards(),
+        penalty: FBPlayerStatsPenalty = FBPlayerStatsPenalty()
+    ) {
+        self.games = games
+        self._offsides = offsides
+        self.shots = shots
+        self.goals = goals
+        self.passes = passes
+        self.tackles = tackles
+        self.duels = duels
+        self.dribbles = dribbles
+        self.fouls = fouls
+        self.cards = cards
+        self.penalty = penalty
     }
 }
 
@@ -289,6 +301,12 @@ struct FBGamePlayerStatsPasses: Decodable, Equatable {
         case _key = "key"
         case _accuracy = "accuracy"
     }
+    
+    init(total: Int = 0, key: Int = 0, accuracy: String = "") {
+        self._total = total
+        self._key = key
+        self._accuracy = accuracy
+    }
 }
 
 struct FBGamePlayerStatsGames: Decodable, Equatable {
@@ -309,7 +327,7 @@ struct FBGamePlayerStatsGames: Decodable, Equatable {
         return _position ?? ""
     }
     var rating: String {
-        return _rating ?? ""
+        return _rating ?? "0"
     }
     var captain: Bool {
         return _captain ?? false
@@ -325,6 +343,22 @@ struct FBGamePlayerStatsGames: Decodable, Equatable {
         case _rating = "rating"
         case _captain = "captain"
         case _substitute = "substitute"
+    }
+    
+    init(
+        minutes: Int = 0,
+        number: Int = 0,
+        position: String = "",
+        rating: String = "0",
+        captain: Bool = false,
+        substitute: Bool = false
+    ) {
+        self._minutes = minutes
+        self._number = number
+        self._position = position
+        self._rating = rating
+        self._captain = captain
+        self._substitute = substitute
     }
 }
 

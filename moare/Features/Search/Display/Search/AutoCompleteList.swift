@@ -13,6 +13,7 @@ struct AutoCompleteList: View {
     
     let itemHeight:CGFloat = 34
     let itemBottomPadding: CGFloat = 3
+    let topPadding: CGFloat = 8
     let maxVisibleItemCount = 6
     
     @State private var selectedKeyword = ""
@@ -20,9 +21,8 @@ struct AutoCompleteList: View {
     
     var body: some View {
         ScrollView {
-            HStack {
-                Spacer()
-            }
+            Spacer() // empty space for .vSequentialListAni()
+                .frame(maxWidth: .infinity, maxHeight: 0)
             
             VStack(spacing: 0) {
                 ForEach(autoCompleteList.indices, id: \.self) { index in
@@ -46,20 +46,20 @@ struct AutoCompleteList: View {
                     )
                 }
             }
+            .padding(.top, topPadding)
             .onAppear {
                 self.isOpened = true
             }
         }
-        .padding(.vertical, 0)
         .frame(maxHeight: calculateMaxHeight())
         .scrollDisabled(autoCompleteList.count > maxVisibleItemCount ? false : true)
     }
     
     private func calculateMaxHeight() -> CGFloat {
         if autoCompleteList.count > maxVisibleItemCount {
-            return (itemHeight + itemBottomPadding) * CGFloat(maxVisibleItemCount)
+            return topPadding + (itemHeight * CGFloat(maxVisibleItemCount)) + (itemHeight / 2) // more space to tell there are more items to scroll
         } else {
-            return (itemHeight + itemBottomPadding) * CGFloat(autoCompleteList.count)
+            return topPadding + (itemHeight * CGFloat(autoCompleteList.count))
         }
     }
 }

@@ -23,12 +23,11 @@ struct UIConstants {
         static let screenWidth: CGFloat = UIScreen.main.bounds.width
     }
     
-    // NOTE: if there are name that already exist, name as plural
-    struct Sizes {
+    struct Size {
         
     }
     
-    struct Colors {
+    struct Color {
         
     }
     
