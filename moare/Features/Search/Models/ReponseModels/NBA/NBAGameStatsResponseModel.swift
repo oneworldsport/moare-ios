@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+struct NBAGameStatsReponseModel: Decodable, Equatable {
+    let game: NBAGame?
+}
