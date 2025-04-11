@@ -158,12 +158,57 @@ struct SearchView: View {
                                 
                                 // football_league_schedule
                                 if let data = searchStore.fbLeagueScheduleData {
-                                    FBLeaugScheduleView(displayModel: data)
+                                    FBLeaugeScheduleView(displayModel: data)
                                 }
                                 
                                 // football_game_stats
                                 if let data = searchStore.fbGameStatsData {
                                     FBGameStatsView(displayModel: data)
+                                }
+                                
+                                // basketball_player_info
+                                if let data = searchStore.nbaPlayerInfoData {
+                                    NBAPlayerInfoView(displayModel: data)
+                                }
+                                
+                                // basketball_player_stats
+                                if let data = searchStore.nbaPlayerStatsData {
+                                    NBAPlayerStatsView(displayModel: data)
+                                }
+                                
+                                // basketball_player_standings
+                                if let data = searchStore.nbaPlayerStandingsData {
+                                    NBAPlayerStandingsView(displayModel: data)
+                                }
+                                
+                                // basketball_team_info
+                                if let data = searchStore.nbaTeamInfoData {
+                                    NBATeamInfoView(displayModel: data)
+                                }
+                                
+                                // basketball_team_stats
+                                if let data = searchStore.nbaTeamStatsData {
+                                    NBATeamStatsView(displayModel: data)
+                                }
+                                
+                                // basketball_team_standings
+                                if let data = searchStore.nbaTeamStandingsData {
+                                    NBATeamStandingsView(displayModel: data)
+                                }
+                                
+                                // basketball_team_schedule
+                                if let data = searchStore.nbaTeamScheduleData {
+                                    NBATeamScheduleView(displayModel: data)
+                                }
+                                
+                                // basketball_league_schedule
+                                if let data = searchStore.nbaLeagueScheduleData {
+                                    NBALeagueScheduleView(displayModel: data)
+                                }
+                                
+                                // basketball_game_stats
+                                if let data = searchStore.nbaGameStatsData {
+                                    NBAGameStatsView(displayModel: data)
                                 }
                             } // VStack
                             .padding(.top, UIConstants.Padding.defaultPadding)

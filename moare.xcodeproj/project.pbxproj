@@ -3,12 +3,33 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		DA1701FC2DA8BBB80021EF80 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = DA1701FB2DA8BBB80021EF80 /* SDWebImageSwiftUI */; };
 		DA1701FF2DA8BBF60021EF80 /* SDWebImageSVGCoder in Frameworks */ = {isa = PBXBuildFile; productRef = DA1701FE2DA8BBF60021EF80 /* SDWebImageSVGCoder */; };
+		DA17021A2DA8C6600021EF80 /* NBAGameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702162DA8C6600021EF80 /* NBAGameModels.swift */; };
+		DA17021B2DA8C6600021EF80 /* NBAPlayerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702172DA8C6600021EF80 /* NBAPlayerModels.swift */; };
+		DA17021C2DA8C6600021EF80 /* NBATeamModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702182DA8C6600021EF80 /* NBATeamModels.swift */; };
+		DA1702272DA8C67A0021EF80 /* NBAGameStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA17021D2DA8C67A0021EF80 /* NBAGameStatsView.swift */; };
+		DA1702282DA8C67A0021EF80 /* NBALeagueScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA17021E2DA8C67A0021EF80 /* NBALeagueScheduleView.swift */; };
+		DA1702292DA8C67A0021EF80 /* NBAPlayerInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA17021F2DA8C67A0021EF80 /* NBAPlayerInfoView.swift */; };
+		DA17022A2DA8C67A0021EF80 /* NBAPlayerStandingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702202DA8C67A0021EF80 /* NBAPlayerStandingsView.swift */; };
+		DA17022B2DA8C67A0021EF80 /* NBAPlayerStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702212DA8C67A0021EF80 /* NBAPlayerStatsView.swift */; };
+		DA17022C2DA8C67A0021EF80 /* NBATeamInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702222DA8C67A0021EF80 /* NBATeamInfoView.swift */; };
+		DA17022D2DA8C67A0021EF80 /* NBATeamScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702232DA8C67A0021EF80 /* NBATeamScheduleView.swift */; };
+		DA17022E2DA8C67A0021EF80 /* NBATeamStandingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702242DA8C67A0021EF80 /* NBATeamStandingsView.swift */; };
+		DA17022F2DA8C67A0021EF80 /* NBATeamStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702252DA8C67A0021EF80 /* NBATeamStatsView.swift */; };
+		DA1702322DA8C70D0021EF80 /* NBAPlayerInfoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702312DA8C7050021EF80 /* NBAPlayerInfoStore.swift */; };
+		DA1702342DA8C7100021EF80 /* NBAGameStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702332DA8C7100021EF80 /* NBAGameStatsStore.swift */; };
+		DA1702362DA8C7110021EF80 /* NBALeagueScheduleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702352DA8C7110021EF80 /* NBALeagueScheduleStore.swift */; };
+		DA1702382DA8C7110021EF80 /* NBATeamScheduleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702372DA8C7110021EF80 /* NBATeamScheduleStore.swift */; };
+		DA17023A2DA8C7120021EF80 /* NBATeamStandingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702392DA8C7120021EF80 /* NBATeamStandingsStore.swift */; };
+		DA17023C2DA8C7130021EF80 /* NBATeamStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA17023B2DA8C7130021EF80 /* NBATeamStatsStore.swift */; };
+		DA17023E2DA8C7130021EF80 /* NBATeamInfoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA17023D2DA8C7130021EF80 /* NBATeamInfoStore.swift */; };
+		DA1702402DA8C7140021EF80 /* NBAPlayerStandingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA17023F2DA8C7140021EF80 /* NBAPlayerStandingsStore.swift */; };
+		DA1702422DA8C7150021EF80 /* NBAPlayerStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702412DA8C7150021EF80 /* NBAPlayerStatsStore.swift */; };
 		DA4777232DA7B67A00F3459C /* NBATeamStandingsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777222DA7B67A00F3459C /* NBATeamStandingsResponseModel.swift */; };
 		DA4777252DA7B67C00F3459C /* NBATeamInfoResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777242DA7B67C00F3459C /* NBATeamInfoResponseModel.swift */; };
 		DA4777272DA7B67E00F3459C /* NBAPlayerStandingsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777262DA7B67E00F3459C /* NBAPlayerStandingsResponseModel.swift */; };
@@ -141,6 +162,27 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DA1702162DA8C6600021EF80 /* NBAGameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAGameModels.swift; sourceTree = "<group>"; };
+		DA1702172DA8C6600021EF80 /* NBAPlayerModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAPlayerModels.swift; sourceTree = "<group>"; };
+		DA1702182DA8C6600021EF80 /* NBATeamModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamModels.swift; sourceTree = "<group>"; };
+		DA17021D2DA8C67A0021EF80 /* NBAGameStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAGameStatsView.swift; sourceTree = "<group>"; };
+		DA17021E2DA8C67A0021EF80 /* NBALeagueScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBALeagueScheduleView.swift; sourceTree = "<group>"; };
+		DA17021F2DA8C67A0021EF80 /* NBAPlayerInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAPlayerInfoView.swift; sourceTree = "<group>"; };
+		DA1702202DA8C67A0021EF80 /* NBAPlayerStandingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAPlayerStandingsView.swift; sourceTree = "<group>"; };
+		DA1702212DA8C67A0021EF80 /* NBAPlayerStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAPlayerStatsView.swift; sourceTree = "<group>"; };
+		DA1702222DA8C67A0021EF80 /* NBATeamInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamInfoView.swift; sourceTree = "<group>"; };
+		DA1702232DA8C67A0021EF80 /* NBATeamScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamScheduleView.swift; sourceTree = "<group>"; };
+		DA1702242DA8C67A0021EF80 /* NBATeamStandingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamStandingsView.swift; sourceTree = "<group>"; };
+		DA1702252DA8C67A0021EF80 /* NBATeamStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamStatsView.swift; sourceTree = "<group>"; };
+		DA1702312DA8C7050021EF80 /* NBAPlayerInfoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAPlayerInfoStore.swift; sourceTree = "<group>"; };
+		DA1702332DA8C7100021EF80 /* NBAGameStatsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAGameStatsStore.swift; sourceTree = "<group>"; };
+		DA1702352DA8C7110021EF80 /* NBALeagueScheduleStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBALeagueScheduleStore.swift; sourceTree = "<group>"; };
+		DA1702372DA8C7110021EF80 /* NBATeamScheduleStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamScheduleStore.swift; sourceTree = "<group>"; };
+		DA1702392DA8C7120021EF80 /* NBATeamStandingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamStandingsStore.swift; sourceTree = "<group>"; };
+		DA17023B2DA8C7130021EF80 /* NBATeamStatsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamStatsStore.swift; sourceTree = "<group>"; };
+		DA17023D2DA8C7130021EF80 /* NBATeamInfoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamInfoStore.swift; sourceTree = "<group>"; };
+		DA17023F2DA8C7140021EF80 /* NBAPlayerStandingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAPlayerStandingsStore.swift; sourceTree = "<group>"; };
+		DA1702412DA8C7150021EF80 /* NBAPlayerStatsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAPlayerStatsStore.swift; sourceTree = "<group>"; };
 		DA4777222DA7B67A00F3459C /* NBATeamStandingsResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamStandingsResponseModel.swift; sourceTree = "<group>"; };
 		DA4777242DA7B67C00F3459C /* NBATeamInfoResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamInfoResponseModel.swift; sourceTree = "<group>"; };
 		DA4777262DA7B67E00F3459C /* NBAPlayerStandingsResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAPlayerStandingsResponseModel.swift; sourceTree = "<group>"; };
@@ -253,10 +295,6 @@
 		DAE5733F2D8036D6009ED74D /* SynchronizedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronizedScrollView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		DA47773E2DA7B96B00F3459C /* NBA */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = NBA; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
 		DADA394E2D3A1AC8000D15E0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -290,6 +328,48 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DA1702192DA8C6600021EF80 /* NBA */ = {
+			isa = PBXGroup;
+			children = (
+				DA1702172DA8C6600021EF80 /* NBAPlayerModels.swift */,
+				DA1702182DA8C6600021EF80 /* NBATeamModels.swift */,
+				DA1702162DA8C6600021EF80 /* NBAGameModels.swift */,
+			);
+			path = NBA;
+			sourceTree = "<group>";
+		};
+		DA1702262DA8C67A0021EF80 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DA17021F2DA8C67A0021EF80 /* NBAPlayerInfoView.swift */,
+				DA1702212DA8C67A0021EF80 /* NBAPlayerStatsView.swift */,
+				DA1702202DA8C67A0021EF80 /* NBAPlayerStandingsView.swift */,
+				DA1702222DA8C67A0021EF80 /* NBATeamInfoView.swift */,
+				DA1702252DA8C67A0021EF80 /* NBATeamStatsView.swift */,
+				DA1702242DA8C67A0021EF80 /* NBATeamStandingsView.swift */,
+				DA1702232DA8C67A0021EF80 /* NBATeamScheduleView.swift */,
+				DA17021E2DA8C67A0021EF80 /* NBALeagueScheduleView.swift */,
+				DA17021D2DA8C67A0021EF80 /* NBAGameStatsView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DA1702302DA8C67D0021EF80 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				DA1702312DA8C7050021EF80 /* NBAPlayerInfoStore.swift */,
+				DA1702412DA8C7150021EF80 /* NBAPlayerStatsStore.swift */,
+				DA17023F2DA8C7140021EF80 /* NBAPlayerStandingsStore.swift */,
+				DA17023D2DA8C7130021EF80 /* NBATeamInfoStore.swift */,
+				DA17023B2DA8C7130021EF80 /* NBATeamStatsStore.swift */,
+				DA1702392DA8C7120021EF80 /* NBATeamStandingsStore.swift */,
+				DA1702372DA8C7110021EF80 /* NBATeamScheduleStore.swift */,
+				DA1702352DA8C7110021EF80 /* NBALeagueScheduleStore.swift */,
+				DA1702332DA8C7100021EF80 /* NBAGameStatsStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
 		DA531B3E2D64A8A400DB87CB /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -343,15 +423,15 @@
 		DA531B512D64A8CA00DB87CB /* Store */ = {
 			isa = PBXGroup;
 			children = (
-				DA531B482D64A8CA00DB87CB /* FBGameStatsStore.swift */,
-				DA531B492D64A8CA00DB87CB /* FBLeagueScheduleStore.swift */,
 				DA531B4A2D64A8CA00DB87CB /* FBPlayerInfoStore.swift */,
-				DA531B4B2D64A8CA00DB87CB /* FBPlayerStandingsStore.swift */,
 				DA531B4C2D64A8CA00DB87CB /* FBPlayerStatsStore.swift */,
+				DA531B4B2D64A8CA00DB87CB /* FBPlayerStandingsStore.swift */,
 				DA531B4D2D64A8CA00DB87CB /* FBTeamInfoStore.swift */,
-				DA531B4E2D64A8CA00DB87CB /* FBTeamScheduleStore.swift */,
-				DA531B4F2D64A8CA00DB87CB /* FBTeamStandingsStore.swift */,
 				DA531B502D64A8CA00DB87CB /* FBTeamStatsStore.swift */,
+				DA531B4F2D64A8CA00DB87CB /* FBTeamStandingsStore.swift */,
+				DA531B4E2D64A8CA00DB87CB /* FBTeamScheduleStore.swift */,
+				DA531B492D64A8CA00DB87CB /* FBLeagueScheduleStore.swift */,
+				DA531B482D64A8CA00DB87CB /* FBGameStatsStore.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -359,15 +439,15 @@
 		DA531B5B2D64A8CA00DB87CB /* View */ = {
 			isa = PBXGroup;
 			children = (
-				DA531B522D64A8CA00DB87CB /* FBGameStatsView.swift */,
-				DA531B532D64A8CA00DB87CB /* FBLeagueScheduleView.swift */,
 				DA531B542D64A8CA00DB87CB /* FBPlayerInfoView.swift */,
-				DA531B552D64A8CA00DB87CB /* FBPlayerStandingsView.swift */,
 				DA531B562D64A8CA00DB87CB /* FBPlayerStatsView.swift */,
+				DA531B552D64A8CA00DB87CB /* FBPlayerStandingsView.swift */,
 				DA531B572D64A8CA00DB87CB /* FBTeamInfoView.swift */,
-				DA531B582D64A8CA00DB87CB /* FBTeamScheduleView.swift */,
-				DA531B592D64A8CA00DB87CB /* FBTeamStandingsView.swift */,
 				DA531B5A2D64A8CA00DB87CB /* FBTeamStatsView.swift */,
+				DA531B592D64A8CA00DB87CB /* FBTeamStandingsView.swift */,
+				DA531B582D64A8CA00DB87CB /* FBTeamScheduleView.swift */,
+				DA531B532D64A8CA00DB87CB /* FBLeagueScheduleView.swift */,
+				DA531B522D64A8CA00DB87CB /* FBGameStatsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -375,31 +455,17 @@
 		DA531B5C2D64A8CA00DB87CB /* Football */ = {
 			isa = PBXGroup;
 			children = (
-				DA531B512D64A8CA00DB87CB /* Store */,
 				DA531B5B2D64A8CA00DB87CB /* View */,
+				DA531B512D64A8CA00DB87CB /* Store */,
 			);
 			path = Football;
-			sourceTree = "<group>";
-		};
-		DA531B5D2D64A8CA00DB87CB /* PlayerInfo */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = PlayerInfo;
-			sourceTree = "<group>";
-		};
-		DA531B5E2D64A8CA00DB87CB /* Standings */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Standings;
 			sourceTree = "<group>";
 		};
 		DA531B5F2D64A8CA00DB87CB /* NBA */ = {
 			isa = PBXGroup;
 			children = (
-				DA531B5D2D64A8CA00DB87CB /* PlayerInfo */,
-				DA531B5E2D64A8CA00DB87CB /* Standings */,
+				DA1702262DA8C67A0021EF80 /* View */,
+				DA1702302DA8C67D0021EF80 /* Store */,
 			);
 			path = NBA;
 			sourceTree = "<group>";
@@ -480,10 +546,10 @@
 		DA531B772D64A8CA00DB87CB /* Football */ = {
 			isa = PBXGroup;
 			children = (
-				DA531B732D64A8CA00DB87CB /* FBCommonModels.swift */,
-				DA531B742D64A8CA00DB87CB /* FBGameModels.swift */,
 				DA531B752D64A8CA00DB87CB /* FBPlayerModels.swift */,
 				DA531B762D64A8CA00DB87CB /* FBTeamModels.swift */,
+				DA531B742D64A8CA00DB87CB /* FBGameModels.swift */,
+				DA531B732D64A8CA00DB87CB /* FBCommonModels.swift */,
 			);
 			path = Football;
 			sourceTree = "<group>";
@@ -492,7 +558,7 @@
 			isa = PBXGroup;
 			children = (
 				DA531B772D64A8CA00DB87CB /* Football */,
-				DA47773E2DA7B96B00F3459C /* NBA */,
+				DA1702192DA8C6600021EF80 /* NBA */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -842,9 +908,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				DA47773E2DA7B96B00F3459C /* NBA */,
-			);
 			name = moare;
 			packageProductDependencies = (
 				DADA39802D3A1CEC000D15E0 /* ComposableArchitecture */,
@@ -989,6 +1052,7 @@
 				DA4777382DA7B7EF00F3459C /* NBATeamInfoDisplayModel.swift in Sources */,
 				DA4777392DA7B7EF00F3459C /* NBATeamStandingsDisplayModel.swift in Sources */,
 				DA47773A2DA7B7EF00F3459C /* NBAPlayerInfoDisplayModel.swift in Sources */,
+				DA17023C2DA8C7130021EF80 /* NBATeamStatsStore.swift in Sources */,
 				DA47773B2DA7B7EF00F3459C /* NBAGameStatsDisplayModel.swift in Sources */,
 				DA47773C2DA7B7EF00F3459C /* NBATeamScheduleDisplayModel.swift in Sources */,
 				DA47773D2DA7B7EF00F3459C /* NBALeagueScheduleDisplayModel.swift in Sources */,
@@ -1005,11 +1069,15 @@
 				DA531BC72D64A8CA00DB87CB /* KeywordsClient.swift in Sources */,
 				DA531BA22D64A8CA00DB87CB /* FBPlayerStandingsView.swift in Sources */,
 				DA531B972D64A8CA00DB87CB /* FBLeagueScheduleStore.swift in Sources */,
+				DA1702362DA8C7110021EF80 /* NBALeagueScheduleStore.swift in Sources */,
+				DA1702422DA8C7150021EF80 /* NBAPlayerStatsStore.swift in Sources */,
 				DA531BB22D64A8CA00DB87CB /* FBTeamScheduleDisplayModel.swift in Sources */,
+				DA17023E2DA8C7130021EF80 /* NBATeamInfoStore.swift in Sources */,
 				DA531BE42D64A8F200DB87CB /* APIEndpoint.swift in Sources */,
 				DA531BE92D64A8F200DB87CB /* EnNameTranslationUtility.swift in Sources */,
 				DA531BE52D64A8F200DB87CB /* RequestBuilder.swift in Sources */,
 				DA531C072D64A91900DB87CB /* CalendarList.swift in Sources */,
+				DA1702322DA8C70D0021EF80 /* NBAPlayerInfoStore.swift in Sources */,
 				DA531BC82D64A8CA00DB87CB /* SearchClient.swift in Sources */,
 				DA531B3F2D64A8A400DB87CB /* moareApp.swift in Sources */,
 				DA531B992D64A8CA00DB87CB /* FBPlayerStandingsStore.swift in Sources */,
@@ -1027,17 +1095,31 @@
 				DA531B962D64A8CA00DB87CB /* FBGameStatsStore.swift in Sources */,
 				DA531B9F2D64A8CA00DB87CB /* FBGameStatsView.swift in Sources */,
 				DA531BBF2D64A8CA00DB87CB /* NBAGameScheduleResponseModel.swift in Sources */,
+				DA17021A2DA8C6600021EF80 /* NBAGameModels.swift in Sources */,
+				DA17021B2DA8C6600021EF80 /* NBAPlayerModels.swift in Sources */,
+				DA17021C2DA8C6600021EF80 /* NBATeamModels.swift in Sources */,
 				DA531BC22D64A8CA00DB87CB /* Error.swift in Sources */,
 				DA531C042D64A91900DB87CB /* HSequentialListAni.swift in Sources */,
 				DA531BA02D64A8CA00DB87CB /* FBLeagueScheduleView.swift in Sources */,
 				DA531BAF2D64A8CA00DB87CB /* FBPlayerInfoDisplayModel.swift in Sources */,
 				DA531BED2D64A8F200DB87CB /* TaskCompletionTracker.swift in Sources */,
+				DA1702402DA8C7140021EF80 /* NBAPlayerStandingsStore.swift in Sources */,
 				DA531B9A2D64A8CA00DB87CB /* FBPlayerStatsStore.swift in Sources */,
+				DA1702342DA8C7100021EF80 /* NBAGameStatsStore.swift in Sources */,
 				DA531BE22D64A8F200DB87CB /* APIClient.swift in Sources */,
 				DA531B9B2D64A8CA00DB87CB /* FBTeamInfoStore.swift in Sources */,
 				DAE573402D8036D6009ED74D /* SynchronizedScrollView.swift in Sources */,
 				DA531C032D64A91900DB87CB /* BaseUIState.swift in Sources */,
 				DA531BA42D64A8CA00DB87CB /* FBTeamInfoView.swift in Sources */,
+				DA1702272DA8C67A0021EF80 /* NBAGameStatsView.swift in Sources */,
+				DA1702282DA8C67A0021EF80 /* NBALeagueScheduleView.swift in Sources */,
+				DA1702292DA8C67A0021EF80 /* NBAPlayerInfoView.swift in Sources */,
+				DA17022A2DA8C67A0021EF80 /* NBAPlayerStandingsView.swift in Sources */,
+				DA17022B2DA8C67A0021EF80 /* NBAPlayerStatsView.swift in Sources */,
+				DA17022C2DA8C67A0021EF80 /* NBATeamInfoView.swift in Sources */,
+				DA17022D2DA8C67A0021EF80 /* NBATeamScheduleView.swift in Sources */,
+				DA17022E2DA8C67A0021EF80 /* NBATeamStandingsView.swift in Sources */,
+				DA17022F2DA8C67A0021EF80 /* NBATeamStatsView.swift in Sources */,
 				DA531BC32D64A8CA00DB87CB /* FootballTeamGameStatsResponseModel.swift in Sources */,
 				DA531BA72D64A8CA00DB87CB /* FBTeamStatsView.swift in Sources */,
 				DA531C082D64A91900DB87CB /* CapsuleBar.swift in Sources */,
@@ -1048,6 +1130,7 @@
 				DA531BB72D64A8CA00DB87CB /* FBPlayerModels.swift in Sources */,
 				DA531BEB2D64A8F200DB87CB /* KoreanUtilities.swift in Sources */,
 				DA4777252DA7B67C00F3459C /* NBATeamInfoResponseModel.swift in Sources */,
+				DA1702382DA8C7110021EF80 /* NBATeamScheduleStore.swift in Sources */,
 				DA531BA92D64A8CA00DB87CB /* AnimatingSearchBar.swift in Sources */,
 				DA531BE02D64A8F200DB87CB /* UIConstants.swift in Sources */,
 				DA531BEC2D64A8F200DB87CB /* MatchDescriptionConverter.swift in Sources */,
@@ -1066,6 +1149,7 @@
 				DA531C0A2D64A91900DB87CB /* URLImage.swift in Sources */,
 				DA47772B2DA7B68500F3459C /* NBAGameStatsResponseModel.swift in Sources */,
 				DA531BE32D64A8F200DB87CB /* APIConfiguration.swift in Sources */,
+				DA17023A2DA8C7120021EF80 /* NBATeamStandingsStore.swift in Sources */,
 				DA531BA62D64A8CA00DB87CB /* FBTeamStandingsView.swift in Sources */,
 				DA531B982D64A8CA00DB87CB /* FBPlayerInfoStore.swift in Sources */,
 				DA4777272DA7B67E00F3459C /* NBAPlayerStandingsResponseModel.swift in Sources */,

@@ -24,6 +24,7 @@ struct SearchStore {
            --------------------- */
         var searchDataState: ApiFetchState = .idle
         
+        // football
         var fbPlayerInfoData: FBPlayerInfoDisplayModel? = nil
         var fbPlayerStatsData: FBPlayerStatsDisplayModel? = nil
         var fbPlayerStandingsData: FBPlayerStandingsDisplayModel? = nil
@@ -35,6 +36,17 @@ struct SearchStore {
         var fbGameStatsData: FBGameStatsDisplayModel? = nil
         
         var initialFBLeagueScheduleData: FBLeagueScheduleDisplayModel? = nil
+        
+        // nba
+        var nbaPlayerInfoData: NBAPlayerInfoDisplayModel? = nil
+        var nbaPlayerStatsData: NBAPlayerStatsDisplayModel? = nil
+        var nbaPlayerStandingsData: NBAPlayerStandingsDisplayModel? = nil
+        var nbaTeamInfoData: NBATeamInfoDisplayModel? = nil
+        var nbaTeamStatsData: NBATeamStatsDisplayModel? = nil
+        var nbaTeamStandingsData: NBATeamStandingsDisplayModel? = nil
+        var nbaTeamScheduleData: NBATeamScheduleDisplayModel? = nil
+        var nbaLeagueScheduleData: NBALeagueScheduleDisplayModel? = nil
+        var nbaGameStatsData: NBAGameStatsDisplayModel? = nil
         
         var autoCompleteList: [String] = []
         var trendingKeywordList: [String] = []

@@ -8,7 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct FBLeaugScheduleView: View {
+struct FBLeaugeScheduleView: View {
     /* ---------------------
        store
        --------------------- */
