@@ -127,6 +127,7 @@
 		DA531C102D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531C0F2D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift */; };
 		DA531C122D64B88F00DB87CB /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = DA531C112D64B88F00DB87CB /* .gitignore */; };
 		DA75C9F12D68310800D6C14B /* NoticeBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA75C9F02D68310800D6C14B /* NoticeBox.swift */; };
+		DA9202192DA8E10000BB6B15 /* NBAUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9202182DA8E10000BB6B15 /* NBAUtil.swift */; };
 		DABE3D6B2D7E977F0048DCAA /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABE3D6A2D7E977F0048DCAA /* Utilities.swift */; };
 		DABE3D6D2D7E9C210048DCAA /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABE3D6C2D7E9C210048DCAA /* TestView.swift */; };
 		DABE3D6F2D7ECF8F0048DCAA /* TextComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABE3D6E2D7ECF8F0048DCAA /* TextComponents.swift */; };
@@ -280,6 +281,7 @@
 		DA531C0F2D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBPlayerStatsDisplayModel.swift; sourceTree = "<group>"; };
 		DA531C112D64B88F00DB87CB /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		DA75C9F02D68310800D6C14B /* NoticeBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeBox.swift; sourceTree = "<group>"; };
+		DA9202182DA8E10000BB6B15 /* NBAUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAUtil.swift; sourceTree = "<group>"; };
 		DABE3D6A2D7E977F0048DCAA /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		DABE3D6C2D7E9C210048DCAA /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		DABE3D6E2D7ECF8F0048DCAA /* TextComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextComponents.swift; sourceTree = "<group>"; };
@@ -722,6 +724,7 @@
 				DA531BD92D64A8F200DB87CB /* KoreanUtilities.swift */,
 				DA531BDA2D64A8F200DB87CB /* MatchDescriptionConverter.swift */,
 				DA531BDB2D64A8F200DB87CB /* TaskCompletionTracker.swift */,
+				DA9202182DA8E10000BB6B15 /* NBAUtil.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1089,6 +1092,7 @@
 				DABE3D6F2D7ECF8F0048DCAA /* TextComponents.swift in Sources */,
 				DABE3D6B2D7E977F0048DCAA /* Utilities.swift in Sources */,
 				DA531BDF2D64A8F200DB87CB /* StringConstants.swift in Sources */,
+				DA9202192DA8E10000BB6B15 /* NBAUtil.swift in Sources */,
 				DA531BEA2D64A8F200DB87CB /* Extensions.swift in Sources */,
 				DA4777292DA7B67F00F3459C /* NBAPlayerInfoResponseModel.swift in Sources */,
 				DA75C9F12D68310800D6C14B /* NoticeBox.swift in Sources */,

@@ -17,9 +17,14 @@ extension Binding where Value == Bool {
 }
 
 extension Double {
+    // 반올림해서 decimalPlaces자리까지 표시
     func rounded(to decimalPlaces: Int) -> Double {
         let multiplier = pow(10.0, Double(decimalPlaces))
         return (self * multiplier).rounded() / multiplier
+    }
+    
+    func toKg(decimalPlaces: Int = 0) -> Double {
+        return (self * 0.453592).rounded(to: decimalPlaces)
     }
 }
 
@@ -29,5 +34,9 @@ extension Int {
         let percentage = (Double(self) / Double(total)) * 100
         let roundedPercentage = percentage.rounded(to: decimalPlaces)
         return roundedPercentage
+    }
+    
+    func toKg(decimalPlaces: Int = 0) -> Double {
+        return (Double(self) * 0.453592).rounded(to: decimalPlaces)
     }
 }
