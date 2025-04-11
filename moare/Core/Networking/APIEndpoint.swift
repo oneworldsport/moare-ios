@@ -9,7 +9,7 @@ import Foundation
 
 enum APIEndpoint {
     case searchByQuery(query: String)
-    case getLeagueSchedule(leagueId: Int, yearMonth: String)
+    case getLeagueSchedule(entity: EntityInfo, yearMonth: String)
     case searchByKeyword(keyword: KeywordInfo)
     case searchByEndpoint(endpoint: String)
     case searchById(category: String, date: String?, dataType: String, leagueId: Int, id: String)
@@ -18,9 +18,9 @@ enum APIEndpoint {
     
     var defaultHTTPMethod: String {
         switch self {
-        case .searchByQuery, .getLeagueSchedule, .searchByEndpoint, .fetchTrendingKeywords, .searchById:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById:
             return "GET"
-        case .searchByKeyword:
+        case .getLeagueSchedule, .searchByKeyword:
             return "POST"
         }
     }
@@ -40,10 +40,9 @@ enum APIEndpoint {
                 URLQueryItem(name: "query", value: query)
             ]
             
-        case .getLeagueSchedule(let leagueId, let yearMonth):
+        case .getLeagueSchedule(_, let yearMonth):
             components.path = "/search/schedule"
             components.queryItems = [
-                URLQueryItem(name: "leagueId", value: String(leagueId)),
                 URLQueryItem(name: "yearMonth", value: yearMonth)
             ]
             
@@ -81,11 +80,13 @@ enum APIEndpoint {
     
     var httpBody: Data? {
         switch self {
-        case .searchByQuery, .getLeagueSchedule, .searchByEndpoint, .fetchTrendingKeywords, .searchById:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById:
             return nil
         case .searchByKeyword(let keyword):
             // NOTE: nil is excluded
             return try? JSONEncoder().encode(keyword)
+        case .getLeagueSchedule(let entity, _):
+            return try? JSONEncoder().encode(entity)
         }
     }
 }

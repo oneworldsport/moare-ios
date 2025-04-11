@@ -16,12 +16,13 @@ struct DataModel: Decodable {
 }
 
 struct EntityInfo: Codable, Equatable {
+    let entityId: Int
     let entityName: String
     let category: String
     let entityType: String
     let leagueId: Int
-    let teamId: Int?
-    let playerId: Int?
+    let teamId: Int? = nil
+    let playerId: Int? = nil
 }
 
 struct Keyword: Codable, Equatable {

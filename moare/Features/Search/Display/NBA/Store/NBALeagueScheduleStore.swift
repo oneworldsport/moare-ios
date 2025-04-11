@@ -219,13 +219,13 @@ struct NBALeagueScheduleStore {
                             leagueId: 90001
                         )
                         
-//                        let result = try await searchClient.fetchLeagueSchedule(leagueId: leagueId, yearMonth: String(yearMonth))
-//                        
-//                        if case let .nbaLeagueSchedule(_, displayModel) = result.data {
-//                            await send(.setDisplayModel(displayModel))
-//                            await send(.updateViewStack(data: result.data))
-//                            await send(.setDays())
-//                        }
+                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, yearMonth: String(yearMonth))
+                        
+                        if case let .nbaLeagueSchedule(_, displayModel) = result.data {
+                            await send(.setDisplayModel(displayModel: displayModel))
+                            await send(.updateViewStack(data: result.data))
+                            await send(.setDays())
+                        }
                     } catch {
                         await send(.updateDisplayDataState(fetchState: .failure("데이터를 불러오는데 실패하였습니다.")), animation: AnimationConstants.AnimationType.defaultAnimation)
                         print("\(error)")

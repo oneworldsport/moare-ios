@@ -223,9 +223,15 @@ struct FBLeagueScheduleStore {
                         let selectedYearMonth = selectedYearMonth.split(separator: "/")
                         let yearMonth = selectedYearMonth[0] + selectedYearMonth[1]
                         
-                        let leagueId = displayModel?.games.first?.league.id ?? 39
+                        let entity = displayModel?.entityInfo.first ?? EntityInfo(
+                            entityId: 39,
+                            entityName: "프리미어리그",
+                            category: "football",
+                            entityType: "league",
+                            leagueId: 39
+                        )
                         
-                        let result = try await searchClient.fetchLeagueSchedule(leagueId: leagueId, yearMonth: String(yearMonth))
+                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, yearMonth: String(yearMonth))
                         
                         if case .fbLeagueSchedule(_, let displayModel) = result.data {
                             await send(.setDisplayModel(displayModel))
