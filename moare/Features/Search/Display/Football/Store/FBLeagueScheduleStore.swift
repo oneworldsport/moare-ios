@@ -40,11 +40,21 @@ struct FBLeagueScheduleStore {
         var scrollCalendar = true
         var gameResultOpenedStateList: [Int: Bool] = [:]
         
+        /* ---------------------
+           etc
+           --------------------- */
         var dataForViewStack: SportDecodableModel? = nil
     }
     
     enum Action {
+        /* ---------------------
+           init
+           --------------------- */
         case initData(displayModel: FBLeagueScheduleDisplayModel)
+        
+        /* ---------------------
+           view action
+           --------------------- */
         case selectYearMonth(yearMonth: String, selectedIndex: Int)
         case selectDay(DayInfo, Int)
         case toggleAllResult
@@ -220,6 +230,7 @@ struct FBLeagueScheduleStore {
                         if case .fbLeagueSchedule(_, let displayModel) = result.data {
                             await send(.setDisplayModel(displayModel))
                             await send(.updateViewStack(data: result.data))
+                            await send(.setDays())
                         }
                     } catch {
                         await send(.updateDisplayDataState(fetchState: .failure("데이터를 불러오는데 실패하였습니다.")))
@@ -230,7 +241,7 @@ struct FBLeagueScheduleStore {
             case .setDisplayModel(let displayModel):
                 state.displayModel = displayModel
                 
-                return .send(.setDays())
+                return .none
                 
             case .updateGamesData(let fbLeagueScheduleData, let fbGameStatsData):
                 guard case .fbLeagueSchedule(let leagueScheduleResponseModel, let leagueScheduleDisplayModel) = fbLeagueScheduleData,
@@ -275,7 +286,7 @@ struct FBLeagueScheduleStore {
                 }
                 
                 return .none
-            }
+            } // switch action
         }
     }
 }

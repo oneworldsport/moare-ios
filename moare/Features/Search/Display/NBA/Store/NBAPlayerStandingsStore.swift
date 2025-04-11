@@ -303,7 +303,7 @@ struct NBAPlayerStandingsStore {
                 }
                 
                 return .none
-            }
+            } // switch action
         }
     }
 }

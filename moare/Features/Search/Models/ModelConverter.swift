@@ -220,7 +220,7 @@ struct ModelConverter {
             return "\(components[0].suffix(2))/\(components[1])"
         } ?? []
         
-        return NBALeagueScheduleDisplayModel(yearMonthList: yearMonthList, games: response.schedule)
+        return NBALeagueScheduleDisplayModel(yearMonthList: yearMonthList, games: response.schedule, entityInfo: entityInfo)
     }
     
     func nbaGameStatsConverter(response: NBAGameStatsReponseModel) -> NBAGameStatsDisplayModel {
