@@ -9,6 +9,7 @@ import Foundation
 
 struct NBATeamStandingsDisplayModel: Equatable {
     let keywords: [Keyword]
+    let entityInfo: [EntityInfo]
     let standings: [NBATeamStandingsDisplay]
 }
 

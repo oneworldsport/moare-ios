@@ -205,7 +205,7 @@ struct ModelConverter {
             )
         }
         
-        return NBATeamStandingsDisplayModel(keywords: keywords, standings: standings)
+        return NBATeamStandingsDisplayModel(keywords: keywords, entityInfo: entityInfo, standings: standings)
     }
     
     func nbaTeamScheduleConverter(response: NBAGameScheduleResponseModel) -> NBATeamScheduleDisplayModel {
