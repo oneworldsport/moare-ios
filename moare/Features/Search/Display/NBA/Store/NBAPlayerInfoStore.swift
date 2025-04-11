@@ -14,6 +14,11 @@ struct NBAPlayerInfoStore {
     @ObservableState
     struct State {
         /* ---------------------
+           constants
+           --------------------- */
+        let itemHeight: CGFloat = 30
+        
+        /* ---------------------
            data state
            --------------------- */
         var displayModel: NBAPlayerInfoDisplayModel? = nil

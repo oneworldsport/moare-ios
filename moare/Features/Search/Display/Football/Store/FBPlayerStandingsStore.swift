@@ -52,7 +52,14 @@ struct FBPlayerStandingsStore {
     }
     
     enum Action {
+        /* ---------------------
+           init
+           --------------------- */
         case initData(displayModel: FBPlayerStandingsDisplayModel)
+        
+        /* ---------------------
+           view action
+           --------------------- */
         case selectFirstCategory(index: Int)
         case selectSecondCategory(index: Int, category: String)
         case showMoreStandings(isUp: Bool)
