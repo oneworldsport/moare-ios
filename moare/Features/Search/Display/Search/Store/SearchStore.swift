@@ -535,7 +535,7 @@ struct SearchStore {
                                 category: category,
                                 dataType: "\(category)_player_stats",
                                 leagueId: leagueId,
-                                id: playerId
+                                id: String(playerId)
                             )
                             
                             if case .fbPlayerStats = result.data {
@@ -654,7 +654,7 @@ struct SearchStore {
                             date: game.fixture.date,
                             dataType: "\(category)_game_stats",
                             leagueId: game.league.id,
-                            id: game.fixture.id
+                            id: String(game.fixture.id)
                         )
                         
                         await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
