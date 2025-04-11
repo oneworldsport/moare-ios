@@ -56,7 +56,7 @@ struct FBTeamScheduleView: View {
                             Spacer()
                             
                             CapsuleButton(
-                                text: fbTeamScheduleStore.isAllResultOpened ? StringConstants.Football.resultHide : StringConstants.Football.resultOpen,
+                                text: fbTeamScheduleStore.isAllResultOpened ? StringConstants.resultHide : StringConstants.resultOpen,
                                 color: .secondary
                             ) {
                                 fbTeamScheduleStore.send(.toggleAllResult)
@@ -346,16 +346,16 @@ struct FBTeamScheduleListItem: View {
     private var gameStatusText: String {
         if isResultOpened {
             switch data.fixture.status.short {
-            case StringConstants.Football.gameNotStarted: StringConstants.Football.gameNotStartedStr
+            case StringConstants.Football.gameNotStarted: StringConstants.gameNotStartedStr
             case StringConstants.Football.gameFirstHalf: StringConstants.Football.gameFirstHalfStr
             case StringConstants.Football.gameHalftime: StringConstants.Football.gameHalftimeStr
             case StringConstants.Football.gameSecondHalf: StringConstants.Football.gameSecondHalfStr
             case let status where StringConstants.Football.gameFinishedList.contains(status):
-                StringConstants.Football.gameFinishedStr
+                StringConstants.gameFinishedStr
             default: ""
             }
         } else {
-            StringConstants.Football.resultOpen
+            StringConstants.resultOpen
         }
     }
     

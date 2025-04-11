@@ -59,7 +59,7 @@ struct FBPlayerStandingsView: View {
                        category
                        --------------------- */
                     HStack(spacing: 0) {
-                        FBPlayerStandingsFirstCategoryItem(category: StringConstants.Football.standingsFirstCategory)
+                        FBPlayerStandingsFirstCategoryItem(category: StringConstants.standingsFirstCategory)
                         
                         HSynchronizedScrollView(scrollOffset: $hScrollOffset, itemWidth: fbPlayerStandingsStore.itemWidth, itemHeight: fbPlayerStandingsStore.categoryItemHeight) {
                             VStack(spacing: 0) {
@@ -366,8 +366,8 @@ struct FBPlayerStandingsFirstCategoryList: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 0) {
-                ForEach(StringConstants.Football.statsFirstCategories.indices, id: \.self) { index in
-                    let category = StringConstants.Football.statsFirstCategories[index]
+                ForEach(StringConstants.statsFirstCategories.indices, id: \.self) { index in
+                    let category = StringConstants.statsFirstCategories[index]
                     
                     FBPlayerStandingsFirstCategoryListItem(
                         fbPlayerStandingsStore: fbPlayerStandingsStore,
@@ -376,7 +376,7 @@ struct FBPlayerStandingsFirstCategoryList: View {
                     )
                     .id(index)
                     
-                    if index != StringConstants.Football.statsFirstCategories.count - 1 {
+                    if index != StringConstants.statsFirstCategories.count - 1 {
                         Rectangle()
                             .frame(width: 2)
                             .foregroundStyle(.secondary)
@@ -400,7 +400,7 @@ struct FBPlayerStandingsFirstCategoryList: View {
         
         let attackCategoriesCount = CGFloat(StringConstants.Football.playerStandingsAttackCategories.count)
         let defendCategoriesCount = CGFloat(StringConstants.Football.playerStandingsDefendCategories.count)
-        let etcCategoriesCount = CGFloat(StringConstants.Football.playerStandingsEtcCategories.count)
+        let etcCategoriesCount = CGFloat(StringConstants.Football.playerStandingsCommonCategories.count)
         
         withAnimation(.spring(duration: 0.5)) {
             switch index {
@@ -437,7 +437,7 @@ struct FBPlayerStandingsFirstCategoryListItem: View {
         switch index {
         case 0: fbPlayerStandingsStore.itemWidth * CGFloat(StringConstants.Football.playerStandingsAttackCategories.count)
         case 1: fbPlayerStandingsStore.itemWidth * CGFloat(StringConstants.Football.playerStandingsDefendCategories.count)
-        default: fbPlayerStandingsStore.itemWidth * CGFloat(StringConstants.Football.playerStandingsEtcCategories.count)
+        default: fbPlayerStandingsStore.itemWidth * CGFloat(StringConstants.Football.playerStandingsCommonCategories.count)
         }
     }
 }
