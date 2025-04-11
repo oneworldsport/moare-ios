@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FBPlayerInfoDisplayModel: Equatable {
+struct NBAPlayerInfoDisplayModel: Equatable {
     let info: NBAPlayerInfo
     let stats: NBAPlayerStats?
     let lastGame: NBAGame?

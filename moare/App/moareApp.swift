@@ -10,6 +10,8 @@ import ComposableArchitecture
 import AWSCore
 import AWSTranslate
 import AWSS3
+import SDWebImageSwiftUI
+import SDWebImageSVGCoder
 
 @main
 struct SportSearchEngine_iOSApp: App {
@@ -20,6 +22,8 @@ struct SportSearchEngine_iOSApp: App {
     init() {
         configureAWS()
         checkAutoCompleteJson()
+        
+        SDImageCodersManager.shared.addCoder(SDImageSVGCoder.shared)
     }
     
     private func configureAWS() {

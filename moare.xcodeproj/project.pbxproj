@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA1701FC2DA8BBB80021EF80 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = DA1701FB2DA8BBB80021EF80 /* SDWebImageSwiftUI */; };
+		DA1701FF2DA8BBF60021EF80 /* SDWebImageSVGCoder in Frameworks */ = {isa = PBXBuildFile; productRef = DA1701FE2DA8BBF60021EF80 /* SDWebImageSVGCoder */; };
 		DA4777232DA7B67A00F3459C /* NBATeamStandingsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777222DA7B67A00F3459C /* NBATeamStandingsResponseModel.swift */; };
 		DA4777252DA7B67C00F3459C /* NBATeamInfoResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777242DA7B67C00F3459C /* NBATeamInfoResponseModel.swift */; };
 		DA4777272DA7B67E00F3459C /* NBAPlayerStandingsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777262DA7B67E00F3459C /* NBAPlayerStandingsResponseModel.swift */; };
@@ -260,12 +262,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA1701FC2DA8BBB80021EF80 /* SDWebImageSwiftUI in Frameworks */,
 				DAE5733E2D80104A009ED74D /* Kingfisher in Frameworks */,
 				DADA39862D3A2006000D15E0 /* AWSS3 in Frameworks */,
 				DADA39882D3A2006000D15E0 /* AWSTranslate in Frameworks */,
 				DABE3D722D7EF19D0048DCAA /* Collections in Frameworks */,
 				DADA39812D3A1CEC000D15E0 /* ComposableArchitecture in Frameworks */,
 				DADA39842D3A2006000D15E0 /* AWSCore in Frameworks */,
+				DA1701FF2DA8BBF60021EF80 /* SDWebImageSVGCoder in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -849,6 +853,8 @@
 				DADA39872D3A2006000D15E0 /* AWSTranslate */,
 				DABE3D712D7EF19D0048DCAA /* Collections */,
 				DAE5733D2D80104A009ED74D /* Kingfisher */,
+				DA1701FB2DA8BBB80021EF80 /* SDWebImageSwiftUI */,
+				DA1701FE2DA8BBF60021EF80 /* SDWebImageSVGCoder */,
 			);
 			productName = moare;
 			productReference = DADA39512D3A1AC8000D15E0 /* moare.app */;
@@ -927,6 +933,8 @@
 				DADA39822D3A2006000D15E0 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */,
 				DABE3D702D7EF19D0048DCAA /* XCRemoteSwiftPackageReference "swift-collections" */,
 				DAE5733C2D80104A009ED74D /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				DA1701FA2DA8BBB80021EF80 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				DA1701FD2DA8BBF60021EF80 /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */,
 			);
 			productRefGroup = DADA39522D3A1AC8000D15E0 /* Products */;
 			projectDirPath = "";
@@ -1435,6 +1443,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		DA1701FA2DA8BBB80021EF80 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.3;
+			};
+		};
+		DA1701FD2DA8BBF60021EF80 /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSVGCoder.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.8.0;
+			};
+		};
 		DABE3D702D7EF19D0048DCAA /* XCRemoteSwiftPackageReference "swift-collections" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-collections.git";
@@ -1470,6 +1494,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		DA1701FB2DA8BBB80021EF80 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA1701FA2DA8BBB80021EF80 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+		DA1701FE2DA8BBF60021EF80 /* SDWebImageSVGCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA1701FD2DA8BBF60021EF80 /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */;
+			productName = SDWebImageSVGCoder;
+		};
 		DABE3D712D7EF19D0048DCAA /* Collections */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DABE3D702D7EF19D0048DCAA /* XCRemoteSwiftPackageReference "swift-collections" */;
