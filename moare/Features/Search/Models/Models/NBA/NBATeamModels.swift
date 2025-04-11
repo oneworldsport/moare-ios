@@ -173,7 +173,7 @@ struct NBATeamStats: Decodable, Equatable {
     var ftmPG: Double { gp != 0 ? (Double(ftm) / Double(gp)).rounded(to: 1) : 0.0 }
     var pfPG: Double { gp != 0 ? (Double(pf) / Double(gp)).rounded(to: 1) : 0.0 }
     var pfdPG: Double { gp != 0 ? (Double(pfd) / Double(gp)).rounded(to: 1) : 0.0 }
-    var minPG: String { gp != 0 ? CalendarUtil.formatMinutesToHourMinute(min) : "0:0" }
+    var minPG: String { gp != 0 ? CalendarUtil.formatMinutesToHourMinute(min: min) : "0:0" }
     var plusMinusPG: Double { gp != 0 ? (Double(plusMinus) / Double(gp)).rounded(to: 1) : 0.0 }
 
     private enum CodingKeys: String, CodingKey {
