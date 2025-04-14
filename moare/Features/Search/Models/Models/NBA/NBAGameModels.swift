@@ -183,6 +183,49 @@ struct NBAGameBoxScoreStats: Decodable, Equatable {
         case _threePointersPercentage = "threePointersPercentage"
         case _turnovers = "turnovers"
     }
+    
+    init(assists: Int? = nil,
+         blocks: Int? = nil,
+         fieldGoalsAttempted: Int? = nil,
+         fieldGoalsMade: Int? = nil,
+         fieldGoalsPercentage: Double? = nil,
+         foulsPersonal: Int? = nil,
+         freeThrowsAttempted: Int? = nil,
+         freeThrowsMade: Int? = nil,
+         freeThrowsPercentage: Double? = nil,
+         minutes: String? = nil,
+         plusMinusPoints: Int? = nil,
+         points: Int? = nil,
+         reboundsDefensive: Int? = nil,
+         reboundsOffensive: Int? = nil,
+         reboundsTotal: Int? = nil,
+         steals: Int? = nil,
+         threePointersAttempted: Int? = nil,
+         threePointersMade: Int? = nil,
+         threePointersPercentage: Double? = nil,
+         turnovers: Int? = nil
+    ) {
+        self._assists = assists
+        self._blocks = blocks
+        self._fieldGoalsAttempted = fieldGoalsAttempted
+        self._fieldGoalsMade = fieldGoalsMade
+        self._fieldGoalsPercentage = fieldGoalsPercentage
+        self._foulsPersonal = foulsPersonal
+        self._freeThrowsAttempted = freeThrowsAttempted
+        self._freeThrowsMade = freeThrowsMade
+        self._freeThrowsPercentage = freeThrowsPercentage
+        self._minutes = minutes
+        self._plusMinusPoints = plusMinusPoints
+        self._points = points
+        self._reboundsDefensive = reboundsDefensive
+        self._reboundsOffensive = reboundsOffensive
+        self._reboundsTotal = reboundsTotal
+        self._steals = steals
+        self._threePointersAttempted = threePointersAttempted
+        self._threePointersMade = threePointersMade
+        self._threePointersPercentage = threePointersPercentage
+        self._turnovers = turnovers
+    }
 }
 
 struct NBAGameInfo: Decodable, Equatable {
