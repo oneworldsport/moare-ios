@@ -130,6 +130,8 @@ struct SearchStore {
         case initForTest
     }
     
+    @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
+    
     var body: some Reducer<State, Action> {
         BindingReducer()
         
@@ -180,11 +182,14 @@ struct SearchStore {
                 return .none
                 
             case .initForTest:
-                state.resultVisibleState = true
+//                state.resultVisibleState = true
                 
                 return .run { [query = state.query] send in
-                    let data = try await searchClient.fetchDataByQuery(query: "프리미어리그 일정")
-                    await send(.searchResultsReceived(data))
+//                    let data = try await searchClient.fetchDataByQuery(query: "프리미어리그 일정")
+//                    await send(.searchResultsReceived(data))
+                    
+                    let result = try await trendingKeywordsClient.wait()
+                    print(result)
                 }
                 
             case .firstOpen:
@@ -369,13 +374,13 @@ struct SearchStore {
                 state.fbGameStatsData = nil
                 
                 switch model.data {
-                case .fbPlayerInfo(let responseModel, let displayModel):
+                case .fbPlayerInfo(_, let displayModel):
                     state.fbPlayerInfoData = displayModel
                 case .fbPlayerStats(_, let displayModel):
                     state.fbPlayerStatsData = displayModel
                 case .fbPlayerStandings(_, let displayModel):
                     state.fbPlayerStandingsData = displayModel
-                case .fbTeamInfo(let responseModel, let displayModel):
+                case .fbTeamInfo(_, let displayModel):
                     state.fbTeamInfoData = displayModel
                 case .fbTeamStats(_, let displayModel):
                     state.fbTeamStatsData = displayModel
@@ -388,6 +393,10 @@ struct SearchStore {
                     state.initialFBLeagueScheduleData = displayModel
                 case .fbGameStats(_, let displayModel):
                     state.fbGameStatsData = displayModel
+                    
+                case .nbaPlayerInfo(_, let displayModel):
+                    state.nbaPlayerInfoData = displayModel
+                    
                 default:
                     // TODO: animation is applied by the animation below. Should be modified
                     state.searchDataState = .failure("검색 결과가 없습니다.")

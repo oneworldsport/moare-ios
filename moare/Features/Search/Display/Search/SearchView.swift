@@ -75,7 +75,7 @@ struct SearchView: View {
                        trending keywords
                        --------------------- */
                     if searchStore.trendingKeyowrdsVisibleState {
-                        TrendingKeywords(keywords: searchStore.trendingKeywordList) { keyword in
+                        TrendingKeywordList(keywords: searchStore.trendingKeywordList) { keyword in
                             // update bar's text
                             searchStore.send(.updateTextField(keyword, false))
                             
@@ -319,10 +319,10 @@ struct SearchView: View {
                 searchStore?.send(.initTrie)
             }
             
-            searchStore?.send(.fetchTrendingKeywords)
+//            searchStore?.send(.fetchTrendingKeywords)
             
             // test
-//            searchStore?.send(.initForTest)
+            searchStore?.send(.initForTest)
         }
     }
 }

@@ -20,39 +20,13 @@ struct SportSearchEngine_iOSApp: App {
     @State var isSplashFinished = false
     
     init() {
-        configureAWS()
-        checkAutoCompleteJson()
+        Task {
+            await AWSManager.shared.loadInitialData()
+        }
+        
+//        checkAutoCompleteJson()
         
         SDImageCodersManager.shared.addCoder(SDImageSVGCoder.shared)
-    }
-    
-    private func configureAWS() {
-        let credentialsProvider = AWSCognitoCredentialsProvider(
-            regionType: .APNortheast2,
-            identityPoolId: "ap-northeast-2:efa201e1-412b-438a-927f-411cc4838469"
-        )
-    
-        let configuration = AWSServiceConfiguration(
-            region: .APNortheast2,
-            credentialsProvider: credentialsProvider
-        )
-        
-        AWSServiceManager.default().defaultServiceConfiguration = configuration
-        
-        // Translate
-        AWSTranslate.register(with: configuration!, forKey: "TranslateClient")
-        
-        // S3
-        let transferUtilityConfiguration = AWSS3TransferUtilityConfiguration()
-        transferUtilityConfiguration.bucket = "sport-search-engine"
-        AWSS3TransferUtility.register(
-            with: configuration!,
-            transferUtilityConfiguration: transferUtilityConfiguration,
-            forKey: "TransferUtilityClient"
-        )
-        
-//        AWSDDLog.sharedInstance.logLevel = .verbose
-//        AWSDDLog.add(AWSDDTTYLogger.sharedInstance)
     }
     
     private func checkAutoCompleteJson() {
