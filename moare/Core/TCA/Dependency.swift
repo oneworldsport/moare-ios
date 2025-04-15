@@ -69,6 +69,7 @@ struct TrieTupleClient {
     var wait: () async throws -> (Trie, [KeywordInfo])
 }
 
+// TODO: class 이름 고민
 class TranslatedNameProvider {
     private var dictionaryMap: [String: [String: String]] = [:]
     

@@ -49,7 +49,7 @@ struct FBTeamInfoView: View {
                 Spacer() // empty space for smooth animation effect
                     .frame(maxWidth: .infinity, maxHeight: 0)
                 
-                if let fbTeamInfoStore = fbTeamInfoStore {
+                if let fbTeamInfoStore {
                     /* ---------------------
                        invisible ui
                        - for position
@@ -291,7 +291,7 @@ struct FBTeamInfoSecondItem: View {
             .frame(maxWidth: .infinity)
             
             HStack(spacing: 0) {
-                Text("창립년도: ")
+                Text("창단연도: ")
                     .font(.system(size: 15))
                     
                 Text("\(fbTeamInfoStore.team?.founded ?? 0)")

@@ -54,6 +54,7 @@ struct NBAPlayerInfoView: View {
             ZStack(alignment: .topLeading) {
                 Spacer() // empty space for smooth animation effect
                     .frame(maxWidth: .infinity, maxHeight: 0)
+                
                 if let nbaPlayerInfoStore {
                     /* ---------------------
                        invisible ui
