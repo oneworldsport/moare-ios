@@ -8,26 +8,23 @@
 import SwiftUI
 
 struct NoticeBox: View {
+    let noticeList: [NoticeModel]
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                Text("현재 제공중인 스포츠 데이터:")
+                ForEach(noticeList.indices, id: \.self) { index in
+                    let notice = noticeList[index]
+                    
+                    Text(index == 0 ? notice.title : "\n\(notice.title)")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
+                    
+                    Text(notice.content)
                     .font(.system(size: 12))
                     .foregroundStyle(.secondary)
-                Text("• 프리미어리그 24/25" +
-                     "\n• 라리가 24/25" +
-                     "\n• 분데스리가 24/25" +
-                     "\n• 리그 1 24/25")
-                    .font(.system(size: 12))
-                    .foregroundStyle(.secondary)
-                Text("\n제공 예정 스포츠 데이터:")
-                    .font(.system(size: 12))
-                    .foregroundStyle(.secondary)
-                Text("• 챔피언스리그 24/25" +
-                     "\n• KBO 리그 2025" +
-                     "\n• MLB 2025")
-                    .font(.system(size: 12))
-                    .foregroundStyle(.secondary)
+                    
+                }
             }
             .padding(10)
         }
@@ -39,6 +36,6 @@ struct NoticeBox: View {
     }
 }
 
-#Preview {
-    NoticeBox()
-}
+//#Preview {
+//    NoticeBox()
+//}

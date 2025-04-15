@@ -43,7 +43,7 @@ struct SearchView: View {
                         Spacer()
                         
                         VStack(alignment: .trailing, spacing: 0) {
-                            NoticeBox()
+                            NoticeBox(noticeList: searchStore.noticeList)
                                 .opacity(isNoticeOpened ? 1 : 0)
                             
                             Button(action: {
@@ -315,14 +315,11 @@ struct SearchView: View {
                 storeManager.setStore(Store(initialState: SearchStore.State()) { SearchStore() }, forKey: StoreKeys.searchStore)
                 searchStore = storeManager.getStore(forKey: StoreKeys.searchStore)
                 
-                // init Trie
-                searchStore?.send(.initTrie)
+                searchStore?.send(.initData)
             }
             
-//            searchStore?.send(.fetchTrendingKeywords)
-            
             // test
-            searchStore?.send(.initForTest)
+//            searchStore?.send(.initForTest)
         }
     }
 }

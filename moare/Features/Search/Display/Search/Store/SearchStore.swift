@@ -68,11 +68,12 @@ struct SearchStore {
         /* ---------------------
            etc
            --------------------- */
-        let trie = Trie()
+        var trie: Trie?
         // NOTE: viewStack should always be up to date
         var viewStack: [SportDecodableModel] = []
         var poppedView: SportDecodableModel? = nil
         var trendingKeywords: OrderedDictionary<String, KeywordInfo> = [:]
+        var noticeList: [NoticeModel] = []
     }
     
     enum SearchType {
@@ -109,16 +110,17 @@ struct SearchStore {
         /* ---------------------
            etc
            --------------------- */
-        case initTrie
-        case initAutoCompleteDataDic(autoCompleteData: [KeywordInfo])
+        case initData
+        case initTrendingKeywords([KeywordInfo])
+        case initTrieTuple(trieTuple: (Trie, [KeywordInfo]))
+        case initNoticeList([NoticeModel])
         case updateSearchDataState(ApiFetchState)
         case translate(String, (Result<String, Error>) -> Void)
         case updateIsFocused(Bool)
         case goBack
         case updateAutoCompleteList
         case updateResultVisibleState(bool: Bool)
-        case fetchTrendingKeywords
-        case setTrendingKeywords([KeywordInfo])
+//        case fetchTrendingKeywords
         case updateMainDisplayModel(data: SportDecodableModel, shouldReset: Bool = true)
         case updateLastViewStack(data: SportDecodableModel)
         case updateSearchStateWithAni(bool: Bool)
@@ -131,6 +133,8 @@ struct SearchStore {
     }
     
     @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
+    @Dependency(\.trieTupleClient) var trieTupleClient
+    @Dependency(\.noticeListClient) var noticeListClient
     
     var body: some Reducer<State, Action> {
         BindingReducer()
@@ -153,31 +157,38 @@ struct SearchStore {
             case .binding:
                 return .none
                 
-            case .initTrie:
-                return .run { [trie = state.trie] send in
-                    do {
-                        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-                        let savedFileURL = documentsDirectory.appendingPathComponent("autocomplete.json")
-                        
-                        if FileManager.default.fileExists(atPath: savedFileURL.path) {
-                            let data = try Data(contentsOf: savedFileURL)
-                            
-                            let autoCompleteData = try JSONDecoder().decode([KeywordInfo].self, from: data)
-                            
-                            for autoComplete in autoCompleteData {
-                                trie.insert(word: autoComplete.keyword)
-                                trie.insert(word: getChosung(from: autoComplete.keyword), originalWord: autoComplete.keyword, weight: autoComplete.weight!)
-                            }
-                            
-                            await send(.initAutoCompleteDataDic(autoCompleteData: autoCompleteData))
-                        }
-                    } catch {
-                        print("\(error)")
-                    }
+            case .initData:
+                return .run { send in
+                    async let trendingKeywords = trendingKeywordsClient.wait()
+                    async let trieTuple = trieTupleClient.wait()
+                    async let noticeList = noticeListClient.wait()
+                    
+                    // NOTE: 아직 완전 병렬은 아님. 완벽하게 병렬로 처리하고 싶으면 각각 따로 .run{}을 실행해 줘야함(.onAppear에서 따로 실행).
+                    // 위처럼 완전 병렬로 처리하면 UI에서 각각 따로 반영 되겠지만, 한 UI의 높이가 변경될때 동시에 해당 UI에 영향을 미치는 다른 UI가 그려지면 충돌 가능성이 있을수도 있음.
+                    // 하지만 해당 충돌은 이전에 xcode, iOS 버전 업데이트 하기 전에 이상하게(원인불명) 발생했던 오류로 인해 겪었던 것이고, 지금은 발생할지 미지수임.
+                    let trendingKeyowrdsResult = try await trendingKeywords
+                    let trieTupleResult = try await trieTuple
+                    let noticeListResult = try await noticeList
+                    
+                    await send(.initTrendingKeywords(trendingKeyowrdsResult.keywords))
+                    await send(.initTrieTuple(trieTuple: trieTupleResult))
+                    await send(.initNoticeList(noticeListResult))
                 }
                 
-            case .initAutoCompleteDataDic(let autoCompleteData):
-                state.autoCompleteDataDic = Dictionary(uniqueKeysWithValues: autoCompleteData.map { ($0.keyword, $0) })
+            case .initTrieTuple(let trieTuple):
+                state.trie = trieTuple.0
+                state.autoCompleteDataDic = Dictionary(uniqueKeysWithValues: trieTuple.1.map { ($0.keyword, $0) })
+                
+                return .none
+                
+            case .initTrendingKeywords(let keywords):
+                state.trendingKeywords = OrderedDictionary(uniqueKeysWithValues: keywords.map { ($0.keyword, $0) })
+                state.trendingKeywordList = Array(state.trendingKeywords.keys)
+                
+                return .none
+                
+            case .initNoticeList(let noticeList):
+                state.noticeList = noticeList
                 
                 return .none
                 
@@ -189,30 +200,23 @@ struct SearchStore {
 //                    await send(.searchResultsReceived(data))
                     
                     let result = try await trendingKeywordsClient.wait()
-                    print(result)
                 }
                 
             case .firstOpen:
                 state.firstOpened = true
                 return .none
                 
-            case .fetchTrendingKeywords:
-                return .run { send in
-                    
-                    do {
-                        let data = try await keywordsClient.fetchTrendingKeywords()
-                        
-                        await send(.setTrendingKeywords(data))
-                    } catch {
-                        print("\(error)")
-                    }
-                }
-                
-            case .setTrendingKeywords(let keywords):
-                state.trendingKeywords = OrderedDictionary(uniqueKeysWithValues: keywords.map { ($0.keyword, $0) })
-                state.trendingKeywordList = Array(state.trendingKeywords.keys)
-                
-                return .none
+//            case .fetchTrendingKeywords:
+//                return .run { send in
+//                    
+//                    do {
+//                        let data = try await keywordsClient.fetchTrendingKeywords()
+//                        
+//                        await send(.setTrendingKeywords(data))
+//                    } catch {
+//                        print("\(error)")
+//                    }
+//                }
                 
             case .updateTrendingKeywordsVisibleState(let bool):
                 // RECORD: Crash occured when animation applied at .onChange to other view and also animation applied hear.
@@ -267,19 +271,22 @@ struct SearchStore {
 //                result.formUnion(state.trie.search(prefix: state.query))
 //                result.formUnion(state.trie.search(prefix: getChosung(from: state.query)))
                 
-                var result: [String] = []
-                result.append(contentsOf: state.trie.search(prefix: getChosung(from: state.query)))
-                
-                let additionalResult = state.trie.search(prefix: state.query)
-                
-                for word in additionalResult {
-                    if !result.contains(word) {
-                        result.append(word)
+                if let trie = state.trie {
+                    var result: [String] = []
+                 
+                    result.append(contentsOf: trie.search(prefix: getChosung(from: state.query)))
+                    
+                    let additionalResult = trie.search(prefix: state.query)
+                    
+                    for word in additionalResult {
+                        if !result.contains(word) {
+                            result.append(word)
+                        }
                     }
-                }
-                
-                withAnimation {
-                    state.autoCompleteList = result
+                    
+                    withAnimation {
+                        state.autoCompleteList = result
+                    }
                 }
                 
 //                var result = [String: Int]()

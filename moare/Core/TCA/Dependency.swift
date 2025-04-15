@@ -13,6 +13,16 @@ extension DependencyValues {
         set { self[TrendingKeywordsKey.self] = newValue }
     }
     
+    var trieTupleClient: TrieTupleClient {
+        get { self[TrieTupleKey.self] }
+        set { self[TrieTupleKey.self] = newValue }
+    }
+    
+    var noticeListClient: NoticeListClient {
+        get { self[NoticeListKey.self] }
+        set { self[NoticeListKey.self] = newValue }
+    }
+    
     var translatedNameProvider: TranslatedNameProvider {
         get { self[TranslatedNameProviderKey.self] }
         set { self[TranslatedNameProviderKey.self] = newValue }
@@ -27,12 +37,36 @@ private enum TrendingKeywordsKey: DependencyKey {
     )
 }
 
+private enum TrieTupleKey: DependencyKey {
+    static let liveValue = TrieTupleClient(
+        wait: {
+            try await AWSManager.shared.waitForTrieTuple()
+        }
+    )
+}
+
+private enum NoticeListKey: DependencyKey {
+    static let liveValue = NoticeListClient(
+        wait: {
+            try await AWSManager.shared.waitForNoticeList()
+        }
+    )
+}
+
 struct TranslatedNameProviderKey: DependencyKey {
     static let liveValue = TranslatedNameProvider()
 }
 
 struct TrendingKeywordsClient {
     var wait: () async throws -> TrendingKeywords
+}
+
+struct NoticeListClient {
+    var wait: () async throws -> [NoticeModel]
+}
+
+struct TrieTupleClient {
+    var wait: () async throws -> (Trie, [KeywordInfo])
 }
 
 class TranslatedNameProvider {
