@@ -22,7 +22,15 @@ struct NBAPlayerInfoStore {
            data state
            --------------------- */
         var displayModel: NBAPlayerInfoDisplayModel? = nil
+        
+        /* ---------------------
+           etc
+           --------------------- */
+        var playerNameDictionary: [String: String] = [:]
+        var teamNameDictionary: [String: String] = [:]
     }
+    
+    @Dependency(\.translatedNameProvider) var nameProvider
     
     enum Action {
         case initData(displayModel: NBAPlayerInfoDisplayModel)
@@ -33,6 +41,9 @@ struct NBAPlayerInfoStore {
             switch action {
             case .initData(let displayModel):
                 state.displayModel = displayModel
+                
+                state.playerNameDictionary = nameProvider.getDictionary(category: "nba_player")
+                state.teamNameDictionary = nameProvider.getDictionary(category: "nba_team")
                 
                 return .none
             }

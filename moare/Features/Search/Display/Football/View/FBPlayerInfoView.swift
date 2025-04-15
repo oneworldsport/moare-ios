@@ -50,7 +50,7 @@ struct FBPlayerInfoView: View {
                 Spacer() // empty space for smooth animation effect
                     .frame(maxWidth: .infinity, maxHeight: 0)
             
-                if let fbPlayerInfoStore = fbPlayerInfoStore {
+                if let fbPlayerInfoStore {
                 /* ---------------------
                    invisible ui
                    - for position

@@ -10,25 +10,37 @@ import SwiftUI
 struct FBStatDataItem: View {
     let category: String
     let data: String
-    let customFontSize: CGFloat?
+    let customCategoryFontSize: CGFloat?
+    let customDataFontSize: CGFloat?
     let customWidth: CGFloat?
+    let customCategoryHeight: CGFloat?
     
-    init(category: String, data: String, customFontSize: CGFloat? = nil, customWidth: CGFloat? = nil) {
+    init(
+        category: String,
+        data: String,
+        customCategoryFontSize: CGFloat? = nil,
+        customDataFontSize: CGFloat? = nil,
+        customWidth: CGFloat? = nil,
+        customCategoryHeight: CGFloat? = nil
+    ) {
         self.category = category
         self.data = data
-        self.customFontSize = customFontSize
+        self.customCategoryFontSize = customCategoryFontSize
+        self.customDataFontSize = customDataFontSize
         self.customWidth = customWidth
+        self.customCategoryHeight = customCategoryHeight
     }
     
     var body: some View {
         VStack {
             Text(category)
-                .font(.system(size: customFontSize ?? 15))
+                .font(.system(size: customCategoryFontSize ?? 15))
+                .frame(height: customCategoryHeight ?? 25)
             
             Text(data)
-                .font(.system(size: 16))
+                .font(.system(size: customDataFontSize ?? 16))
                 .fontWeight(.medium)
-                .frame(maxHeight: 30) // make it feature constants
+                .frame(maxHeight: 30) // make it constant
         }
         .frame(width: customWidth ?? 50, height: 60)
     }

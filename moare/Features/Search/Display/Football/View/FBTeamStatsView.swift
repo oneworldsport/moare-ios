@@ -320,7 +320,7 @@ struct FBTeamStatsItem: View {
                 FBStatDataItem(
                     category: "경기당 평균득점",
                     data: "\(stats.goals.teamGoalsFor.average.total)",
-                    customFontSize: 11,
+                    customCategoryFontSize: 11,
                     customWidth: 80
                 )
                 
@@ -333,7 +333,7 @@ struct FBTeamStatsItem: View {
                 FBStatDataItem(
                     category: "경기당 평균실점",
                     data: "\(stats.goals.teamGoalsAgainst.average.total)",
-                    customFontSize: 11,
+                    customCategoryFontSize: 11,
                     customWidth: 80
                 )
             }

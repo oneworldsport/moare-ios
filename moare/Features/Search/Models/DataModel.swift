@@ -21,8 +21,8 @@ struct EntityInfo: Codable, Equatable {
     let category: String
     let entityType: String
     let leagueId: Int
-    let teamId: Int? = nil
-    let playerId: Int? = nil
+    var teamId: Int? = nil
+    var playerId: Int? = nil
 }
 
 struct Keyword: Codable, Equatable {
