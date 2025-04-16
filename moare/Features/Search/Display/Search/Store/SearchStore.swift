@@ -403,6 +403,22 @@ struct SearchStore {
                     
                 case .nbaPlayerInfo(_, let displayModel):
                     state.nbaPlayerInfoData = displayModel
+                case .nbaPlayerStats(_, let displayModel):
+                    state.nbaPlayerStatsData = displayModel
+                case .nbaPlayerStandings(_, let displayModel):
+                    state.nbaPlayerStandingsData = displayModel
+                case .nbaTeamInfo(_, let displayModel):
+                    state.nbaTeamInfoData = displayModel
+                case .nbaTeamStats(_, let displayModel):
+                    state.nbaTeamStatsData = displayModel
+                case .nbaTeamStandings(_, let displayModel):
+                    state.nbaTeamStandingsData = displayModel
+                case .nbaTeamSchedule(_, let displayModel):
+                    state.nbaTeamScheduleData = displayModel
+                case .nbaLeagueSchedule(_, let displayModel):
+                    state.nbaLeagueScheduleData = displayModel
+                case .nbaGameStats(_, let displayModel):
+                    state.nbaGameStatsData = displayModel
                     
                 default:
                     // TODO: animation is applied by the animation below. Should be modified
