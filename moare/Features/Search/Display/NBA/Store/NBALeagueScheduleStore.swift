@@ -38,6 +38,7 @@ struct NBALeagueScheduleStore {
            etc
            --------------------- */
         var dataForViewStack: SportDecodableModel? = nil
+        var teamNameDictionary: [String: String] = [:]
     }
     
     enum Action {
@@ -71,6 +72,8 @@ struct NBALeagueScheduleStore {
         case setDisplayModel(displayModel: NBALeagueScheduleDisplayModel)
     }
     
+    @Dependency(\.translatedNameProvider) var nameProvider
+    
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
@@ -91,6 +94,8 @@ struct NBALeagueScheduleStore {
                 // init data
                 state.displayModel = displayModel
                 state.yearMonthList = displayModel.yearMonthList
+                
+                state.teamNameDictionary = nameProvider.getDictionary(category: "nba_team")
                 
                 // select default yearMonth
                 if let date = displayModel.games.first?.gameSummary?.date {

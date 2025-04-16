@@ -372,20 +372,20 @@ struct NBALineScore: Decodable, Equatable {
     private let _teamWinsLosses: String?
 
     var pts: Int { _pts ?? 0 }
-    var ptsOt1: Int { _ptsOt1 ?? 0 }
-    var ptsOt2: Int { _ptsOt2 ?? 0 }
-    var ptsOt3: Int { _ptsOt3 ?? 0 }
-    var ptsOt4: Int { _ptsOt4 ?? 0 }
-    var ptsOt5: Int { _ptsOt5 ?? 0 }
-    var ptsOt6: Int { _ptsOt6 ?? 0 }
-    var ptsOt7: Int { _ptsOt7 ?? 0 }
-    var ptsOt8: Int { _ptsOt8 ?? 0 }
-    var ptsOt9: Int { _ptsOt9 ?? 0 }
-    var ptsOt10: Int { _ptsOt10 ?? 0 }
-    var ptsQtr1: Int { _ptsQtr1 ?? 0 }
-    var ptsQtr2: Int { _ptsQtr2 ?? 0 }
-    var ptsQtr3: Int { _ptsQtr3 ?? 0 }
-    var ptsQtr4: Int { _ptsQtr4 ?? 0 }
+    var ptsOt1: Int? { _ptsOt1 }
+    var ptsOt2: Int? { _ptsOt2 }
+    var ptsOt3: Int? { _ptsOt3 }
+    var ptsOt4: Int? { _ptsOt4 }
+    var ptsOt5: Int? { _ptsOt5 }
+    var ptsOt6: Int? { _ptsOt6 }
+    var ptsOt7: Int? { _ptsOt7 }
+    var ptsOt8: Int? { _ptsOt8 }
+    var ptsOt9: Int? { _ptsOt9 }
+    var ptsOt10: Int? { _ptsOt10 }
+    var ptsQtr1: Int? { _ptsQtr1 }
+    var ptsQtr2: Int? { _ptsQtr2 }
+    var ptsQtr3: Int? { _ptsQtr3 }
+    var ptsQtr4: Int? { _ptsQtr4 }
     var teamAbbreviation: String { _teamAbbreviation ?? "" }
     var teamCityName: String { _teamCityName ?? "" }
     var teamId: Int { _teamId ?? 0 }

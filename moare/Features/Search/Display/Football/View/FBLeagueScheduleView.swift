@@ -28,7 +28,7 @@ struct FBLeaugeScheduleView: View {
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack(spacing: 0) {
-                if let fbLeagueScheduleStore = fbLeagueScheduleStore {
+                if let fbLeagueScheduleStore {
                     /* ---------------------
                        game title, info
                        - shows when game selected
@@ -151,8 +151,8 @@ struct FBLeaugeScheduleView: View {
                     fbLeagueScheduleStore?.send(.initData(displayModel: displayModel))
                 }
             }
-            .onChange(of: searchStore.viewStack) { newValue in
-                guard let lastItem = newValue.last,
+            .onChange(of: searchStore.viewStack) {
+                guard let lastItem = searchStore.viewStack.last,
                       case .fbLeagueSchedule = lastItem,
                       let poppedView = searchStore.poppedView,
                       case .fbGameStats = searchStore.poppedView else {
@@ -161,8 +161,8 @@ struct FBLeaugeScheduleView: View {
                 
                 fbLeagueScheduleStore?.send(.updateGamesData(fbLeagueScheduleData: lastItem, fbGameStatsData: poppedView))
             }
-            .onChange(of: fbLeagueScheduleStore?.dataForViewStack) { newValue in
-                if let data = newValue {
+            .onChange(of: fbLeagueScheduleStore?.dataForViewStack) {
+                if let data = fbLeagueScheduleStore?.dataForViewStack {
                     searchStore.send(.updateLastViewStack(data: data))
                 }
             }
