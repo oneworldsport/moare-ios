@@ -197,12 +197,18 @@ struct ModelConverter {
     
     func nbaTeamStandingsConverter(response: NBATeamStandingsResponseModel) -> NBATeamStandingsDisplayModel {
         let standings: [NBATeamStandingsDisplay] = response.standings.compactMap { teamInfo in
-            let stats = teamInfo.statistics.first { $0.seasonType == "Reqular Season" }
+            let statsList = teamInfo.statistics
             
-            return NBATeamStandingsDisplay(
-                team: teamInfo.team,
-                stats: stats
-            )
+            for item in statsList {
+                if item.seasonType == "Regular Season" {
+                    return NBATeamStandingsDisplay(
+                        team: teamInfo.team,
+                        stats: item
+                    )
+                }
+            }
+            
+            return nil
         }
         
         return NBATeamStandingsDisplayModel(keywords: keywords, entityInfo: entityInfo, standings: standings)

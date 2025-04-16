@@ -15,5 +15,5 @@ struct NBATeamStandingsDisplayModel: Equatable {
 
 struct NBATeamStandingsDisplay: Equatable {
     let team: NBATeamInfo
-    let stats: NBATeamStats?
+    let stats: NBATeamStats
 }

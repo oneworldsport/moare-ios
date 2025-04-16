@@ -19,7 +19,7 @@ struct NBATeamStandingsStore {
         let dataItemHeight: CGFloat = 40
         let categoryItemHeight: CGFloat = 44
         let firstCategoryItemWidth: CGFloat = 132
-        let dataItemWidth: CGFloat = 50
+        let dataItemWidth: CGFloat = 60
         let categoryFontSize: CGFloat = 15
         let dataFontSize: CGFloat = 15
         
@@ -34,6 +34,11 @@ struct NBATeamStandingsStore {
            --------------------- */
         var selectedConferenceIndex = 0
         var selectedCategoryIndex = 1
+        
+        /* ---------------------
+           etc
+           --------------------- */
+        var teamNameDictionary: [String: String] = [:]
     }
     
     enum Action {
@@ -54,6 +59,8 @@ struct NBATeamStandingsStore {
         case sortStandings
     }
     
+    @Dependency(\.translatedNameProvider) var nameProvider
+    
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
@@ -64,6 +71,8 @@ struct NBATeamStandingsStore {
                 
                 // init data
                 state.displayModel = displayModel
+                
+                state.teamNameDictionary = nameProvider.getDictionary(category: "nba_team")
                 
                 let keywords = displayModel.keywords
                 // select category that matches with the keyword
@@ -129,35 +138,35 @@ struct NBATeamStandingsStore {
                 case 0:
                     state.standings.sort { calculateGamesBack(standings: standings, team: $0.stats) > calculateGamesBack(standings: standings, team: $1.stats) }
                 case 1:
-                    state.standings.sort { $0.stats?.winsPct ?? 0 > $1.stats?.winsPct ?? 0 }
+                    state.standings.sort { $0.stats.winsPct > $1.stats.winsPct }
                 case 2:
-                    state.standings.sort { $0.stats?.wins ?? 0 > $1.stats?.wins ?? 0 }
+                    state.standings.sort { $0.stats.wins > $1.stats.wins }
                 case 3:
-                    state.standings.sort { $0.stats?.losses ?? 0 < $1.stats?.losses ?? 0 }
+                    state.standings.sort { $0.stats.losses < $1.stats.losses }
                 case 4:
-                    state.standings.sort { $0.stats?.gp ?? 0 > $1.stats?.gp ?? 0 }
+                    state.standings.sort { $0.stats.gp > $1.stats.gp }
                 case 5:
-                    state.standings.sort { $0.stats?.ptsPG ?? 0 > $1.stats?.ptsPG ?? 0 }
+                    state.standings.sort { $0.stats.ptsPG > $1.stats.ptsPG }
                 case 6:
-                    state.standings.sort { $0.stats?.plusMinusPG ?? 0 > $1.stats?.plusMinusPG ?? 0 }
+                    state.standings.sort { $0.stats.plusMinusPG > $1.stats.plusMinusPG }
                 case 7:
-                    state.standings.sort { $0.stats?.astPG ?? 0 > $1.stats?.astPG ?? 0 }
+                    state.standings.sort { $0.stats.astPG > $1.stats.astPG }
                 case 8:
-                    state.standings.sort { $0.stats?.rebPG ?? 0 > $1.stats?.rebPG ?? 0 }
+                    state.standings.sort { $0.stats.rebPG > $1.stats.rebPG }
                 case 9:
-                    state.standings.sort { $0.stats?.fgPct ?? 0 > $1.stats?.fgPct ?? 0 }
+                    state.standings.sort { $0.stats.fgPct > $1.stats.fgPct }
                 case 10:
-                    state.standings.sort { $0.stats?.fg3Pct ?? 0 > $1.stats?.fg3Pct ?? 0 }
+                    state.standings.sort { $0.stats.fg3Pct > $1.stats.fg3Pct }
                 case 11:
-                    state.standings.sort { $0.stats?.ftPct ?? 0 > $1.stats?.ftPct ?? 0 }
+                    state.standings.sort { $0.stats.ftPct > $1.stats.ftPct }
                 case 12:
-                    state.standings.sort { $0.stats?.blkPG ?? 0 > $1.stats?.blkPG ?? 0 }
+                    state.standings.sort { $0.stats.blkPG > $1.stats.blkPG }
                 case 13:
-                    state.standings.sort { $0.stats?.stlPG ?? 0 > $1.stats?.stlPG ?? 0 }
+                    state.standings.sort { $0.stats.stlPG > $1.stats.stlPG }
                 case 14:
-                    state.standings.sort { $0.stats?.tovPG ?? 0 < $1.stats?.tovPG ?? 0 }
+                    state.standings.sort { $0.stats.tovPG < $1.stats.tovPG }
                 case 15:
-                    state.standings.sort { $0.stats?.pfPG ?? 0 < $1.stats?.pfPG ?? 0 }
+                    state.standings.sort { $0.stats.pfPG < $1.stats.pfPG }
                 default:
                     break
                 }
@@ -166,12 +175,12 @@ struct NBATeamStandingsStore {
             } // switch action
             
             // TODO: Should move to util
-            func calculateGamesBack(standings: [NBATeamStandingsDisplay], team: NBATeamStats?) -> Double {
-                guard let team, let leader = standings.max(by: { $0.stats?.winsPct ?? 0 < $1.stats?.winsPct ?? 0 }), let leader = leader.stats else {
+            func calculateGamesBack(standings: [NBATeamStandingsDisplay], team: NBATeamStats) -> Double {
+                guard let leader = standings.max(by: { $0.stats.winsPct < $1.stats.winsPct }) else {
                     return 0
                 }
                 
-                return (Double(leader.wins - team.wins) + Double(team.losses - leader.losses)) / 2.0
+                return Double((leader.stats.wins - team.wins) + (team.losses - leader.stats.losses)) / 2.0
             }
         }
     }
