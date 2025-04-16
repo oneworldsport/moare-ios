@@ -113,7 +113,7 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.fbPlayerStatsConverter(response: responseModel)
-                data = .fbPlayerStats(responseModel, displayModel)
+                self.data = .fbPlayerStats(responseModel, displayModel)
             }
             
         case let dataType where dataType == "football_player_standings":
@@ -123,7 +123,7 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.fbPlayerStandingsConverter(response: responseModel)
-                data = .fbPlayerStandings(responseModel, displayModel)
+                self.data = .fbPlayerStandings(responseModel, displayModel)
             }
             
         case let dataType where dataType == "football_team_info":
@@ -133,7 +133,7 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.fbTeamInfoConverter(response: responseModel)
-                data = .fbTeamInfo(responseModel, displayModel)
+                self.data = .fbTeamInfo(responseModel, displayModel)
             }
             
         case let dataType where dataType == "football_team_stats":
@@ -143,7 +143,7 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.fbTeamStatsConverter(response: responseModel)
-                data = .fbTeamStats(responseModel, displayModel)
+                self.data = .fbTeamStats(responseModel, displayModel)
             }
             
         case let dataType where dataType == "football_team_standings":
@@ -153,18 +153,18 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.fbTeamStandingsConverter(response: responseModel)
-                data = .fbTeamStandings(responseModel, displayModel)
+                self.data = .fbTeamStandings(responseModel, displayModel)
             }
             
         case let dataType where dataType == "football_team_schedule":
             let responseModel = try container.decode(FBGameScheduleResponseModel.self, forKey: .data)
             let displayModel = modelConverter.fbTeamScheduleConverter(response: responseModel)
-            data = .fbTeamSchedule(responseModel, displayModel)
+            self.data = .fbTeamSchedule(responseModel, displayModel)
             
         case let dataType where dataType == "football_league_schedule":
             let responseModel = try container.decode(FBGameScheduleResponseModel.self, forKey: .data)
             let displayModel = modelConverter.fbLeagueScheduleConverter(response: responseModel)
-            data = .fbLeagueSchedule(responseModel, displayModel)
+            self.data = .fbLeagueSchedule(responseModel, displayModel)
             
         case let dataType where dataType == "football_game_stats":
             let responseModel = try container.decode(FBGameStatsReponseModel.self, forKey: .data)
@@ -173,7 +173,7 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.fbGameStatsConverter(response: responseModel)
-                data = .fbGameStats(responseModel, displayModel)
+                self.data = .fbGameStats(responseModel, displayModel)
             }
             
         // basketball
@@ -194,7 +194,7 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.nbaPlayerStatsConverter(response: responseModel)
-                data = .nbaPlayerStats(responseModel, displayModel)
+                self.data = .nbaPlayerStats(responseModel, displayModel)
             }
             
         case let dataType where dataType == "basketball_player_standings":
@@ -204,7 +204,7 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.nbaPlayerStandingsConverter(response: responseModel)
-                data = .nbaPlayerStandings(responseModel, displayModel)
+                self.data = .nbaPlayerStandings(responseModel, displayModel)
             }
             
         case let dataType where dataType == "basketball_team_info":
@@ -214,7 +214,7 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.nbaTeamInfoConverter(response: responseModel)
-                data = .nbaTeamInfo(responseModel, displayModel)
+                self.data = .nbaTeamInfo(responseModel, displayModel)
             }
             
         case let dataType where dataType == "basketball_team_stats":
@@ -224,7 +224,7 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.nbaTeamStatsConverter(response: responseModel)
-                data = .nbaTeamStats(responseModel, displayModel)
+                self.data = .nbaTeamStats(responseModel, displayModel)
             }
             
         case let dataType where dataType == "basketball_team_standings":
@@ -234,18 +234,18 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.nbaTeamStandingsConverter(response: responseModel)
-                data = .nbaTeamStandings(responseModel, displayModel)
+                self.data = .nbaTeamStandings(responseModel, displayModel)
             }
             
         case let dataType where dataType == "basketball_team_schedule":
             let responseModel = try container.decode(NBAGameScheduleResponseModel.self, forKey: .data)
             let displayModel = modelConverter.nbaTeamScheduleConverter(response: responseModel)
-            data = .nbaTeamSchedule(responseModel, displayModel)
+            self.data = .nbaTeamSchedule(responseModel, displayModel)
             
         case let dataType where dataType == "basketball_league_schedule":
             let responseModel = try container.decode(NBAGameScheduleResponseModel.self, forKey: .data)
             let displayModel = modelConverter.nbaLeagueScheduleConverter(response: responseModel)
-            data = .nbaLeagueSchedule(responseModel, displayModel)
+            self.data = .nbaLeagueSchedule(responseModel, displayModel)
             
         case let dataType where dataType == "basketball_game_stats":
             let responseModel = try container.decode(NBAGameStatsReponseModel.self, forKey: .data)
@@ -254,7 +254,7 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.nbaGameStatsConverter(response: responseModel)
-                data = .nbaGameStats(responseModel, displayModel)
+                self.data = .nbaGameStats(responseModel, displayModel)
             }
             
         default:

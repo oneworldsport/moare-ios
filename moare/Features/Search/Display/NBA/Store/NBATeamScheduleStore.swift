@@ -24,6 +24,11 @@ struct NBATeamScheduleStore {
            --------------------- */
         var isAllResultOpened = false
         var gameResultOpenedStateList: [String: Bool] = [:]
+        
+        /* ---------------------
+           etc
+           --------------------- */
+        var teamNameDictionary: [String: String] = [:]
     }
     
     enum Action {
@@ -39,6 +44,8 @@ struct NBATeamScheduleStore {
         case updateResultOpenedState(gameCode: String, isOpened: Bool)
     }
     
+    @Dependency(\.translatedNameProvider) var nameProvider
+    
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
@@ -49,6 +56,8 @@ struct NBATeamScheduleStore {
                 // init data
                 state.displayModel = displayModel
                 state.games = displayModel.games
+                
+                state.teamNameDictionary = nameProvider.getDictionary(category: "nba_team")
                 
                 let gameResultOpenedStateList = (state.games).reduce(into: [:]) { $0[$1.gameSummary?.gameCode ?? ""] = false }
                 state.gameResultOpenedStateList = gameResultOpenedStateList

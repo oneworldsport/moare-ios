@@ -271,7 +271,7 @@ struct NBALeagueScheduleListItem: View {
             if data.gameSummary?.gameStatusId == 2 ||
                 (data.gameSummary?.gameStatusId == 3 && isResultOpened) {
                 Text("\(homeTeamScore)")
-                    .frame(maxWidth: 20)
+                    .frame(maxWidth: 30)
                     .foregroundStyle(homeTeamScore >= awayTeamScore ? .moare : .primary)
             }
             
@@ -312,7 +312,7 @@ struct NBALeagueScheduleListItem: View {
             if data.gameSummary?.gameStatusId == 2 ||
                 (data.gameSummary?.gameStatusId == 3 && isResultOpened) {
                 Text("\(awayTeamScore)")
-                    .frame(maxWidth: 20)
+                    .frame(maxWidth: 30)
                     .foregroundStyle(awayTeamScore >= homeTeamScore ? .moare : .primary)
             }
             

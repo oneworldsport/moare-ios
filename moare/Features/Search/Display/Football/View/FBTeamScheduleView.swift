@@ -23,7 +23,7 @@ struct FBTeamScheduleView: View {
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack(spacing: 0) {
-                if let fbTeamScheduleStore = fbTeamScheduleStore {
+                if let fbTeamScheduleStore {
                     /* ---------------------
                        game title, info
                        - shows when game selected
@@ -76,7 +76,7 @@ struct FBTeamScheduleView: View {
                 } // if let fbTeamScheduleStore
             } // VStack
             .onAppear {
-                // init FBLeagueScheduleStore
+                // init FBTeamScheduleStore
                 let fbTeamScheduleStore: StoreOf<FBTeamScheduleStore> = storeManager.getStore(forKey: StoreKeys.fbTeamScheduleStore) ?? {
                     let newStore = Store(initialState: FBTeamScheduleStore.State()) { FBTeamScheduleStore() }
                     
