@@ -50,6 +50,8 @@ struct NBAPlayerStandingsStore {
         var standings: [NBAPlayerStandingsDisplay] = []
         var selectedEntity: EntityInfo? = nil
         var filteredStandingsEndIndex = 0
+        var playerNameDictionary: [String: String] = [:]
+        var teamNameDictionary: [String: String] = [:]
     }
     
     enum Action {
@@ -77,6 +79,8 @@ struct NBAPlayerStandingsStore {
         case setDisplayModel(data: SportDecodableModel)
     }
     
+    @Dependency(\.translatedNameProvider) var nameProvider
+    
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
@@ -95,6 +99,9 @@ struct NBAPlayerStandingsStore {
                 // init data
                 state.displayModel = displayModel
                 state.standings = displayModel.standings
+                
+                state.playerNameDictionary = nameProvider.getDictionary(category: "nba_player")
+                state.teamNameDictionary = nameProvider.getDictionary(category: "nba_team")
                 
                 let keywords = displayModel.keywords
                 if !keywords.isEmpty {

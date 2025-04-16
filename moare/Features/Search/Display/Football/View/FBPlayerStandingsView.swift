@@ -38,7 +38,7 @@ struct FBPlayerStandingsView: View {
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack(spacing: 0) {
-                if let fbPlayerStandingsStore = fbPlayerStandingsStore {
+                if let fbPlayerStandingsStore {
                     // league
                     if let league = fbPlayerStandingsStore.league {
                         HStack {
@@ -169,8 +169,8 @@ struct FBPlayerStandingsView: View {
                         }
                     } // ZStack
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
-            }
+                } // if let fbPlayerStandingsStore
+            } // VStack
             .onAppear {
                 // init FBPlayerStandingsStore
                 let fbPlayerStandingsStore: StoreOf<FBPlayerStandingsStore> = storeManager.getStore(forKey: StoreKeys.fbPlayerStandingsStore) ?? {
@@ -400,7 +400,7 @@ struct FBPlayerStandingsFirstCategoryList: View {
         
         let attackCategoriesCount = CGFloat(StringConstants.Football.playerStandingsAttackCategories.count)
         let defendCategoriesCount = CGFloat(StringConstants.Football.playerStandingsDefendCategories.count)
-        let etcCategoriesCount = CGFloat(StringConstants.Football.playerStandingsCommonCategories.count)
+        let commonCategoriesCount = CGFloat(StringConstants.Football.playerStandingsCommonCategories.count)
         
         withAnimation(.spring(duration: 0.5)) {
             switch index {
@@ -409,7 +409,7 @@ struct FBPlayerStandingsFirstCategoryList: View {
             case 1:
                 barOffset = CGSize(width: (itemWidth * attackCategoriesCount) + barWidth + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * defendCategoriesCount, barWidth: 80), height: 0)
             default:
-                barOffset = CGSize(width: (itemWidth * attackCategoriesCount) + (barWidth * 2) + (itemWidth * defendCategoriesCount) + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * etcCategoriesCount, barWidth: 80), height: 0)
+                barOffset = CGSize(width: (itemWidth * attackCategoriesCount) + (barWidth * 2) + (itemWidth * defendCategoriesCount) + getOffsetOfAniCapsuleBar(itemWidth: itemWidth * commonCategoriesCount, barWidth: 80), height: 0)
             }
         }
     }
