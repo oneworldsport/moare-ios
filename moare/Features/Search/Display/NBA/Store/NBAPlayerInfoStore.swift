@@ -30,11 +30,11 @@ struct NBAPlayerInfoStore {
         var teamNameDictionary: [String: String] = [:]
     }
     
-    @Dependency(\.translatedNameProvider) var nameProvider
-    
     enum Action {
         case initData(displayModel: NBAPlayerInfoDisplayModel)
     }
+    
+    @Dependency(\.translatedNameProvider) var nameProvider
     
     var body: some Reducer<State, Action> {
         Reduce { state, action in

@@ -249,9 +249,8 @@ struct NBATeamInfoFirstItem: View {
     
     var body: some View {
         let displayModel = nbaTeamInfoStore.displayModel
-        let team = displayModel?.team
         
-        if let team {
+        if let team = displayModel?.team {
             VStack {
                 HCapsuleBar()
                 
@@ -285,9 +284,8 @@ struct NBATeamInfoSecondItem: View {
     
     var body: some View {
         let displayModel = nbaTeamInfoStore.displayModel
-        let team = displayModel?.team
         
-        if let team {
+        if let team = displayModel?.team {
             VStack(alignment:.leading) {
                 // added HStack to position Capsule at center
                 HStack {
@@ -342,10 +340,9 @@ struct NBATeamInfoThirdItem: View {
     
     var body: some View {
         let displayModel = nbaTeamInfoStore.displayModel
-        let team = displayModel?.team
-        let venue = displayModel?.venue
         
-        if let venue, let team {
+        if let venue = displayModel?.venue,
+           let team = displayModel?.team {
             VStack(alignment:.leading) {
                 // added HStack to position Capsule at center
                 HStack {
@@ -400,10 +397,9 @@ struct NBATeamInfoFourthItem: View {
     
     var body: some View {
         let displayModel = nbaTeamInfoStore.displayModel
-        let team = displayModel?.team
         let stats = displayModel?.stats
         
-        if let team {
+        if let team = displayModel?.team {
             VStack {
                 HCapsuleBar()
                 
@@ -418,7 +414,7 @@ struct NBATeamInfoFourthItem: View {
                         FBStatDataItem(
                             category: "서부 컨퍼런스 순위",
                             data: "\(team.confRank)",
-                            customCategoryFontSize: 13
+                            customCategoryFontSize: 12
                         )
                         FBStatDataItem(
                             category: "승",

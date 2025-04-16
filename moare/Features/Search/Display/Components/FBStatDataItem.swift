@@ -35,7 +35,7 @@ struct FBStatDataItem: View {
         VStack {
             Text(category)
                 .font(.system(size: customCategoryFontSize ?? 15))
-                .frame(height: customCategoryHeight ?? 25)
+                .frame(height: customCategoryHeight ?? 30)
             
             Text(data)
                 .font(.system(size: customDataFontSize ?? 16))

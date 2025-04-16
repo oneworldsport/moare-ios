@@ -305,9 +305,8 @@ struct NBAPlayerInfoFirstItem: View {
     
     var body: some View {
         let displayModel = nbaPlayerInfoStore.displayModel
-        let player = displayModel?.info
         
-        if let player {
+        if let player = displayModel?.info {
             VStack {
                 HCapsuleBar()
                 
@@ -342,9 +341,8 @@ struct NBAPlayerInfoSecondItem: View {
     
     var body: some View {
         let displayModel = nbaPlayerInfoStore.displayModel
-        let player = displayModel?.info
         
-        if let player {
+        if let player = displayModel?.info {
             VStack {
                 HCapsuleBar()
                 
@@ -373,9 +371,8 @@ struct NBAPlayerInfoThirdItem: View {
     
     var body: some View {
         let displayModel = nbaPlayerInfoStore.displayModel
-        let player = displayModel?.info
         
-        if let player {
+        if let player = displayModel?.info {
             VStack(alignment:.leading) {
                 // added HStack to position Capsule at center
                 HStack {
@@ -421,9 +418,8 @@ struct NBAPlayerInfoFourthItem: View {
     
     var body: some View {
         let displayModel = nbaPlayerInfoStore.displayModel
-        let player = displayModel?.info
         
-        if let player {
+        if let player = displayModel?.info {
             VStack(alignment:.leading) {
                 // added HStack to position Capsule at center
                 HStack {
@@ -479,9 +475,8 @@ struct NBAPlayerInfoFifthItem: View {
     
     var body: some View {
         let displayModel = nbaPlayerInfoStore.displayModel
-        let player = displayModel?.info
         
-        if let player {
+        if let player = displayModel?.info {
             VStack(alignment:.leading) {
                 // added HStack to position Capsule at center
                 HStack {
@@ -589,9 +584,8 @@ struct NBAPlayerInfoSeventhItem: View {
     
     var body: some View {
         let displayModel = nbaPlayerInfoStore.displayModel
-        let stats = displayModel?.stats
         
-        if let stats {
+        if let stats = displayModel?.stats {
             VStack {
                 HCapsuleBar()
                 
