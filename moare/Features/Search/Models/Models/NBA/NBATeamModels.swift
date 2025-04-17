@@ -10,7 +10,7 @@ import Foundation
 struct NBATeam: Decodable, Equatable {
     let team: NBATeamInfo
     let venue: NBAVenue
-    var statistics: [NBATeamStats] = []
+    let statistics: [NBATeamStats]
 }
 
 struct NBATeamInfo: Decodable, Equatable {

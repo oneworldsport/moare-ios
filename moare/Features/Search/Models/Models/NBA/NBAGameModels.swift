@@ -11,11 +11,11 @@ struct NBAGame: Decodable, Equatable {
     let boxScoreTraditional: NBABoxScoreTraditional?
     let gameInfo: NBAGameInfo?
     let gameSummary: NBAGameSummary?
-    var inactivePlayers: [NBAPlayerForInactive] = []
+    let inactivePlayers: [NBAPlayerForInactive]
     let lastMeeting: NBALastMeeting?
-    var lineScore: [NBALineScore] = []
-    var officials: [NBAOfficial] = []
-    var otherStats: [NBAOtherStats] = []
+    let lineScore: [NBALineScore]
+    let officials: [NBAOfficial]
+    let otherStats: [NBAOtherStats]
     let seasonSeries: NBASeasonSeries?
 }
 
@@ -40,7 +40,7 @@ struct NBABoxScoreTraditional: Decodable, Equatable {
 
 struct NBABoxScoreTeam: Decodable, Equatable {
     let bench: NBAGameBoxScoreStats
-    var players: [NBABoxScoreTeamPlayer] = []
+    let players: [NBABoxScoreTeamPlayer]
     let starters: NBAGameBoxScoreStats
     let statistics: NBAGameBoxScoreStats
     private let _teamCity: String?

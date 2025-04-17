@@ -8,6 +8,6 @@
 import Foundation
 
 struct NBAGameScheduleResponseModel: Decodable, Equatable {
-    var scheduledMonths: [String]? = nil
-    var schedule: [NBAGame] = []
+    let scheduledMonths: [String]?
+    let schedule: [NBAGame]
 }
