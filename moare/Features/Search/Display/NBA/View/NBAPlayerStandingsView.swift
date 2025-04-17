@@ -242,8 +242,8 @@ struct NBAPlayerStandingsFirstCategoryList: View {
             HCapsuleBar(customWidth: 80)
                 .offset(barOffset)
         }
-        .onChange(of: nbaPlayerStandingsStore.firstSelectedIndex) { newValue in
-            moveBar(index: newValue)
+        .onChange(of: nbaPlayerStandingsStore.firstSelectedIndex) {
+            moveBar(index: nbaPlayerStandingsStore.firstSelectedIndex)
         }
     }
     

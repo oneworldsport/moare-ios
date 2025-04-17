@@ -32,7 +32,7 @@ struct FBGameStatsView: View {
         
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack(spacing: 10) {
-                if let fbGameStatsStore = fbGameStatsStore, let fbLeagueScheduleStore = fbLeagueScheduleStore {
+                if let fbGameStatsStore, let fbLeagueScheduleStore {
                     /* ---------------------
                        game title, info
                        - hides when game selected by schedule
@@ -327,7 +327,7 @@ struct FBGameStatsFirstDataList: View {
                 HStack(spacing: 0) {
                     Spacer()
                     
-                    Text("팀 총합")
+                    Text("합계(팀 기록)")
                         .font(.system(size: 12))
                     
                     Spacer()

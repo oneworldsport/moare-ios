@@ -24,6 +24,8 @@ struct NBAGameStatsStore {
         let secondCategoryFontSize: CGFloat = 13
         let dataFontSize: CGFloat = 14
         let barWidth: CGFloat = 2
+        let lineScoreItemHeight: CGFloat = 50
+        let teamButtonWidth: CGFloat = 120
         
         /* ---------------------
            data state
@@ -47,6 +49,8 @@ struct NBAGameStatsStore {
            --------------------- */
         var homeTeamId = 0
         var awayTeamId = 0
+        var playerNameDictionary: [String: String] = [:]
+        var teamNameDictionary: [String: String] = [:]
     }
     
     enum Action {
@@ -69,6 +73,8 @@ struct NBAGameStatsStore {
         case setPlayersTotalStats
     }
     
+    @Dependency(\.translatedNameProvider) var nameProvider
+    
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
@@ -83,6 +89,9 @@ struct NBAGameStatsStore {
                 
                 // init data
                 state.displayModel = displayModel
+                
+                state.playerNameDictionary = nameProvider.getDictionary(category: "nba_player")
+                state.teamNameDictionary = nameProvider.getDictionary(category: "nba_team")
                 
                 if let gameSummary = displayModel.game.gameSummary {
                     state.homeTeamId = gameSummary.homeTeamId
