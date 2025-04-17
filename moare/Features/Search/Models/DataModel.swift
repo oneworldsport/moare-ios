@@ -31,7 +31,7 @@ struct Keyword: Codable, Equatable {
     let priority: Int
 }
 
-enum SportDecodableModel: Equatable {
+indirect enum SportDecodableModel: Equatable {
     // football
     case fbPlayerInfo(FBPlayerInfoResponseModel, FBPlayerInfoDisplayModel)
     case fbPlayerStats(FBPlayerInfoResponseModel, FBPlayerStatsDisplayModel)

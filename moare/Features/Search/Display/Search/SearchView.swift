@@ -121,94 +121,9 @@ struct SearchView: View {
                            --------------------- */
                         if searchStore.resultVisibleState {
                             VStack {
-                                // football_player_info
-                                if let data = searchStore.fbPlayerInfoData {
-                                    FBPlayerInfoView(displayModel: data)
-                                }
-                                
-                                // football_player_stats
-                                if let data = searchStore.fbPlayerStatsData {
-                                    FBPlayerStatsView(displayModel: data)
-                                }
-                                
-                                // football_player_standings
-                                if let data = searchStore.fbPlayerStandingsData {
-                                    FBPlayerStandingsView(displayModel: data)
-                                }
-                                
-                                // football_team_info
-                                if let data = searchStore.fbTeamInfoData {
-                                    FBTeamInfoView(displayModel: data)
-                                }
-                                
-                                // football_team_stats
-                                if let data = searchStore.fbTeamStatsData {
-                                    FBTeamStatsView(displayModel: data)
-                                }
-                                
-                                // football_team_standings
-                                if let data = searchStore.fbTeamStandingsData {
-                                    FBTeamStandingsView(displayModel: data)
-                                }
-                                
-                                // football_team_schedule
-                                if let data = searchStore.fbTeamScheduleData {
-                                    FBTeamScheduleView(displayModel: data)
-                                }
-                                
-                                // football_league_schedule
-                                if let data = searchStore.fbLeagueScheduleData {
-                                    FBLeaugeScheduleView(displayModel: data)
-                                }
-                                
-                                // football_game_stats
-                                if let data = searchStore.fbGameStatsData {
-                                    FBGameStatsView(displayModel: data)
-                                }
-                                
-                                // basketball_player_info
-                                if let data = searchStore.nbaPlayerInfoData {
-                                    NBAPlayerInfoView(displayModel: data)
-                                }
-                                
-                                // basketball_player_stats
-                                if let data = searchStore.nbaPlayerStatsData {
-                                    NBAPlayerStatsView(displayModel: data)
-                                }
-                                
-                                // basketball_player_standings
-                                if let data = searchStore.nbaPlayerStandingsData {
-                                    NBAPlayerStandingsView(displayModel: data)
-                                }
-                                
-                                // basketball_team_info
-                                if let data = searchStore.nbaTeamInfoData {
-                                    NBATeamInfoView(displayModel: data)
-                                }
-                                
-                                // basketball_team_stats
-                                if let data = searchStore.nbaTeamStatsData {
-                                    NBATeamStatsView(displayModel: data)
-                                }
-                                
-                                // basketball_team_standings
-                                if let data = searchStore.nbaTeamStandingsData {
-                                    NBATeamStandingsView(displayModel: data)
-                                }
-                                
-                                // basketball_team_schedule
-                                if let data = searchStore.nbaTeamScheduleData {
-                                    NBATeamScheduleView(displayModel: data)
-                                }
-                                
-                                // basketball_league_schedule
-                                if let data = searchStore.nbaLeagueScheduleData {
-                                    NBALeagueScheduleView(displayModel: data)
-                                }
-                                
-                                // basketball_game_stats
-                                if let data = searchStore.nbaGameStatsData {
-                                    NBAGameStatsView(displayModel: data)
+                                let views = viewsToRender()
+                                ForEach(views.indices, id: \.self) { index in
+                                    views[index]
                                 }
                             } // VStack
                             .padding(.top, UIConstants.Padding.defaultPadding)
@@ -232,8 +147,8 @@ struct SearchView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .contentShape(Rectangle()) // for .onTapGesture{}
                 // TODO: has to think about better structure
-                .onChange(of: searchStore.searchState) { newVaue in
-                    if newVaue {
+                .onChange(of: searchStore.searchState) {
+                    if searchStore.searchState {
                         withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                             isNoticeOpened = false
                             isNoticeIconVisible = false
@@ -247,8 +162,8 @@ struct SearchView: View {
                     }
                 }
                 // TODO: has to think about better structure
-                .onChange(of: searchStore.autoCompleteList) { newValue in
-                    if newValue.isEmpty && !searchStore.searchState {
+                .onChange(of: searchStore.autoCompleteList) {
+                    if searchStore.autoCompleteList.isEmpty && !searchStore.searchState {
                         withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                             isNoticeIconVisible = true
                             searchStore.send(.updateTrendingKeywordsVisibleState(true))
@@ -261,8 +176,8 @@ struct SearchView: View {
                         }
                     }
                 }
-                .onChange(of: searchStore.firstOpened) { newValue in
-                    if newValue {
+                .onChange(of: searchStore.firstOpened) {
+                    if searchStore.firstOpened {
                         DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.medium) {
                             withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                                 isNoticeIconVisible = true
@@ -309,17 +224,96 @@ struct SearchView: View {
         .opacity(opacity)
         .onAppear {
             // init SearchStore
-            if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-                self.searchStore = searchStore
-            } else {
-                storeManager.setStore(Store(initialState: SearchStore.State()) { SearchStore() }, forKey: StoreKeys.searchStore)
-                searchStore = storeManager.getStore(forKey: StoreKeys.searchStore)
+            let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) ?? {
+                let newStore = Store(initialState: SearchStore.State()) { SearchStore() }
                 
-                searchStore?.send(.initData)
+                storeManager.setStore(newStore, forKey: StoreKeys.searchStore)
+                
+                return newStore
+            }()
+            
+            self.searchStore = searchStore
+            
+            if searchStore.poppedView == nil {
+                searchStore.send(.initData)
             }
+            
+//            if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
+//                self.searchStore = searchStore
+//            } else {
+//                storeManager.setStore(Store(initialState: SearchStore.State()) { SearchStore() }, forKey: StoreKeys.searchStore)
+//                searchStore = storeManager.getStore(forKey: StoreKeys.searchStore)
+//                
+//                searchStore?.send(.initData)
+//            }
             
             // test
 //            searchStore?.send(.initForTest)
         }
+    }
+    
+    // NOTE: VStack안에 if let 조건문 너무 많아서 생긴 런타임 에러(EXC_BAD_ACCESS)로 인해 추가. 정확한 원인 및 해결 방법은 더 조사 필요.
+    func viewsToRender() -> [AnyView] {
+        var views: [AnyView] = []
+        
+        // football
+        if let data = searchStore?.fbPlayerInfoData {
+            views.append(AnyView(FBPlayerInfoView(displayModel: data)))
+        }
+        if let data = searchStore?.fbPlayerStatsData {
+            views.append(AnyView(FBPlayerStatsView(displayModel: data)))
+        }
+        if let data = searchStore?.fbPlayerStandingsData {
+            views.append(AnyView(FBPlayerStandingsView(displayModel: data)))
+        }
+        if let data = searchStore?.fbTeamInfoData {
+            views.append(AnyView(FBTeamInfoView(displayModel: data)))
+        }
+        if let data = searchStore?.fbTeamStatsData {
+            views.append(AnyView(FBTeamStatsView(displayModel: data)))
+        }
+        if let data = searchStore?.fbTeamStandingsData {
+            views.append(AnyView(FBTeamStandingsView(displayModel: data)))
+        }
+        if let data = searchStore?.fbTeamScheduleData {
+            views.append(AnyView(FBTeamScheduleView(displayModel: data)))
+        }
+        if let data = searchStore?.fbLeagueScheduleData {
+            views.append(AnyView(FBLeaugeScheduleView(displayModel: data)))
+        }
+        if let data = searchStore?.fbGameStatsData {
+            views.append(AnyView(FBGameStatsView(displayModel: data)))
+        }
+
+        // basketball
+        if let data = searchStore?.nbaPlayerInfoData {
+            views.append(AnyView(NBAPlayerInfoView(displayModel: data)))
+        }
+        if let data = searchStore?.nbaPlayerStatsData {
+            views.append(AnyView(NBAPlayerStatsView(displayModel: data)))
+        }
+        if let data = searchStore?.nbaPlayerStandingsData {
+            views.append(AnyView(NBAPlayerStandingsView(displayModel: data)))
+        }
+        if let data = searchStore?.nbaTeamInfoData {
+            views.append(AnyView(NBATeamInfoView(displayModel: data)))
+        }
+        if let data = searchStore?.nbaTeamStatsData {
+            views.append(AnyView(NBATeamStatsView(displayModel: data)))
+        }
+        if let data = searchStore?.nbaTeamStandingsData {
+            views.append(AnyView(NBATeamStandingsView(displayModel: data)))
+        }
+        if let data = searchStore?.nbaTeamScheduleData {
+            views.append(AnyView(NBATeamScheduleView(displayModel: data)))
+        }
+        if let data = searchStore?.nbaLeagueScheduleData {
+            views.append(AnyView(NBALeagueScheduleView(displayModel: data)))
+        }
+        if let data = searchStore?.nbaGameStatsData {
+            views.append(AnyView(NBAGameStatsView(displayModel: data)))
+        }
+
+        return views
     }
 }
