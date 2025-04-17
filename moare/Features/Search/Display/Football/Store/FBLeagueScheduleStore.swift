@@ -228,7 +228,9 @@ struct FBLeagueScheduleStore {
                             entityName: "프리미어리그",
                             category: "football",
                             entityType: "league",
-                            leagueId: 39
+                            leagueId: 39,
+                            teamId: nil,
+                            playerId: nil
                         )
                         
                         let result = try await searchClient.fetchLeagueSchedule(entity: entity, yearMonth: String(yearMonth))

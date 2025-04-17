@@ -221,7 +221,9 @@ struct NBALeagueScheduleStore {
                             entityName: "NBA",
                             category: "basketball",
                             entityType: "league",
-                            leagueId: 90001
+                            leagueId: 90001,
+                            teamId: nil,
+                            playerId: nil
                         )
                         
                         let result = try await searchClient.fetchLeagueSchedule(entity: entity, yearMonth: String(yearMonth))
