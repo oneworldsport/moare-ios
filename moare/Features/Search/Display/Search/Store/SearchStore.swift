@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 import ComposableArchitecture
-import AWSTranslate
 import Collections
 
 @Reducer
@@ -117,7 +116,6 @@ struct SearchStore {
         case initTrieTuple(trieTuple: (Trie, [KeywordInfo]))
         case initNoticeList([NoticeModel])
         case updateSearchDataState(ApiFetchState)
-        case translate(String, (Result<String, Error>) -> Void)
         case updateIsFocused(Bool)
         case goBack
         case updateAutoCompleteList
@@ -201,7 +199,7 @@ struct SearchStore {
 //                    let data = try await searchClient.fetchDataByQuery(query: "프리미어리그 일정")
 //                    await send(.searchResultsReceived(data))
                     
-                    let result = try await trendingKeywordsClient.wait()
+//                    let result = try await trendingKeywordsClient.wait()
                 }
                 
             case .firstOpen:
@@ -521,21 +519,6 @@ struct SearchStore {
                 }
                 return .none
                 
-            case .translate(let text, let onResult):
-                return .run { send in
-                    let translateClient = AWSTranslate(forKey: "TranslateClient")
-                    let request = AWSTranslateTranslateTextRequest()!
-                    request.text = text
-                    request.sourceLanguageCode = "en"
-                    request.targetLanguageCode = "ko"
-                    
-                    translateClient.translateText(request) { response, error in
-                        if let translatedText = response?.translatedText {
-                            onResult(.success(translatedText))
-                        }
-                    }
-                }
-                
             case .selectFBGame(let game):
                 let dataMdoel = SportDecodableModel.fbGameStats(
                     FBGameStatsReponseModel(game: game),
@@ -659,8 +642,6 @@ struct SearchStore {
                 
             case .showTeamStats(let teamId):
                 let dataModel: SportDecodableModel
-                
-                let viewToShow = state.viewStack.last!
                 
                 switch state.viewStack.last {
                 case .fbTeamStandings(let responseModel, let displayModel):
