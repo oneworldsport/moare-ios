@@ -23,7 +23,7 @@ struct FBTeamScheduleView: View {
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack(spacing: 0) {
-                if let fbTeamScheduleStore = fbTeamScheduleStore {
+                if let fbTeamScheduleStore {
                     /* ---------------------
                        game title, info
                        - shows when game selected
@@ -56,7 +56,7 @@ struct FBTeamScheduleView: View {
                             Spacer()
                             
                             CapsuleButton(
-                                text: fbTeamScheduleStore.isAllResultOpened ? StringConstants.Football.resultHide : StringConstants.Football.resultOpen,
+                                text: fbTeamScheduleStore.isAllResultOpened ? StringConstants.resultHide : StringConstants.resultOpen,
                                 color: .secondary
                             ) {
                                 fbTeamScheduleStore.send(.toggleAllResult)
@@ -76,7 +76,7 @@ struct FBTeamScheduleView: View {
                 } // if let fbTeamScheduleStore
             } // VStack
             .onAppear {
-                // init FBLeagueScheduleStore
+                // init FBTeamScheduleStore
                 let fbTeamScheduleStore: StoreOf<FBTeamScheduleStore> = storeManager.getStore(forKey: StoreKeys.fbTeamScheduleStore) ?? {
                     let newStore = Store(initialState: FBTeamScheduleStore.State()) { FBTeamScheduleStore() }
                     
@@ -307,7 +307,7 @@ struct FBTeamScheduleListItem: View {
         } // HStack
         .background(Color.clear) // added for tapGesture on Spacer()
         .onTapGesture {
-            searchStore.send(.selectFBGame(data))
+            searchStore.send(.selectFBGame(game: data))
             
             // set selected game's isOpened true
             fbTeamScheduleStore.send(.updateResultOpenedState(fixtureId: data.fixture.id, isOpened: true))
@@ -346,16 +346,16 @@ struct FBTeamScheduleListItem: View {
     private var gameStatusText: String {
         if isResultOpened {
             switch data.fixture.status.short {
-            case StringConstants.Football.gameNotStarted: StringConstants.Football.gameNotStartedStr
+            case StringConstants.Football.gameNotStarted: StringConstants.gameNotStartedStr
             case StringConstants.Football.gameFirstHalf: StringConstants.Football.gameFirstHalfStr
             case StringConstants.Football.gameHalftime: StringConstants.Football.gameHalftimeStr
             case StringConstants.Football.gameSecondHalf: StringConstants.Football.gameSecondHalfStr
             case let status where StringConstants.Football.gameFinishedList.contains(status):
-                StringConstants.Football.gameFinishedStr
+                StringConstants.gameFinishedStr
             default: ""
             }
         } else {
-            StringConstants.Football.resultOpen
+            StringConstants.resultOpen
         }
     }
     

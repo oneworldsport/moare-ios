@@ -11,6 +11,8 @@ import SwiftUI
 
 struct StoreKeys {
     static let searchStore = "SearchStore"
+    
+    // football
     static let fbPlayerInfoStore = "FBPlayerInfoStore"
     static let fbPlayerStatsStore = "FBPlayerStatsStore"
     static let fbPlayerStandingsStore = "FBPlayerStandingsStore"
@@ -20,6 +22,17 @@ struct StoreKeys {
     static let fbTeamScheduleStore = "FBTeamScheduleStore"
     static let fbLeagueScheduleStore = "FBLeagueScheduleStore"
     static let fbGameStatsStore = "FBGameStatsStore"
+    
+    // nba
+    static let nbaPlayerInfoStore = "NBAPlayerInfoStore"
+    static let nbaPlayerStatsStore = "NBAPlayerStatsStore"
+    static let nbaPlayerStandingsStore = "NBAPlayerStandingsStore"
+    static let nbaTeamInfoStore = "NBATeamInfoStore"
+    static let nbaTeamStatsStore = "NBATeamStatsStore"
+    static let nbaTeamStandingsStore = "NBATeamStandingsStore"
+    static let nbaTeamScheduleStore = "NBATeamScheduleStore"
+    static let nbaLeagueScheduleStore = "NBALeagueScheduleStore"
+    static let nbaGameStatsStore = "NBAGameStatsStore"
 }
 
 class StoreManager: ObservableObject {

@@ -40,11 +40,21 @@ struct FBLeagueScheduleStore {
         var scrollCalendar = true
         var gameResultOpenedStateList: [Int: Bool] = [:]
         
+        /* ---------------------
+           etc
+           --------------------- */
         var dataForViewStack: SportDecodableModel? = nil
     }
     
     enum Action {
+        /* ---------------------
+           init
+           --------------------- */
         case initData(displayModel: FBLeagueScheduleDisplayModel)
+        
+        /* ---------------------
+           view action
+           --------------------- */
         case selectYearMonth(yearMonth: String, selectedIndex: Int)
         case selectDay(DayInfo, Int)
         case toggleAllResult
@@ -213,13 +223,22 @@ struct FBLeagueScheduleStore {
                         let selectedYearMonth = selectedYearMonth.split(separator: "/")
                         let yearMonth = selectedYearMonth[0] + selectedYearMonth[1]
                         
-                        let leagueId = displayModel?.games.first?.league.id ?? 39
+                        let entity = displayModel?.entityInfo.first ?? EntityInfo(
+                            entityId: 39,
+                            entityName: "프리미어리그",
+                            category: "football",
+                            entityType: "league",
+                            leagueId: 39,
+                            teamId: nil,
+                            playerId: nil
+                        )
                         
-                        let result = try await searchClient.fetchLeagueSchedule(leagueId: leagueId, yearMonth: String(yearMonth))
+                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, yearMonth: String(yearMonth))
                         
                         if case .fbLeagueSchedule(_, let displayModel) = result.data {
                             await send(.setDisplayModel(displayModel))
                             await send(.updateViewStack(data: result.data))
+                            await send(.setDays())
                         }
                     } catch {
                         await send(.updateDisplayDataState(fetchState: .failure("데이터를 불러오는데 실패하였습니다.")))
@@ -230,7 +249,7 @@ struct FBLeagueScheduleStore {
             case .setDisplayModel(let displayModel):
                 state.displayModel = displayModel
                 
-                return .send(.setDays())
+                return .none
                 
             case .updateGamesData(let fbLeagueScheduleData, let fbGameStatsData):
                 guard case .fbLeagueSchedule(let leagueScheduleResponseModel, let leagueScheduleDisplayModel) = fbLeagueScheduleData,
@@ -275,7 +294,7 @@ struct FBLeagueScheduleStore {
                 }
                 
                 return .none
-            }
+            } // switch action
         }
     }
 }

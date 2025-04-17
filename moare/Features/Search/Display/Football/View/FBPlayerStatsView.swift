@@ -36,18 +36,18 @@ struct FBPlayerStatsView: View {
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             ScrollView {
-                if let fbPlayerStatsStore = fbPlayerStatsStore {
+                if let fbPlayerStatsStore {
+                    // NOTE: Item's position is based on top left corner
                     ZStack(alignment: .topLeading) {
 //                        Spacer() // empty space for smooth animation effect
 //                            .frame(maxWidth: .infinity, maxHeight: 0)
                         
                         /* ---------------------
-                           ui
-                           - invisible first
-                           - set ani ui's position
-                           - visible after ani ui
+                           invisible ui
+                           - for position
                            --------------------- */
                         VStack {
+                            // player info
                             FBPlayerStatsPlayerInfoItem(fbPlayerStatsStore: fbPlayerStatsStore)
                                 .background(
                                     GeometryReader { proxy in
@@ -57,13 +57,14 @@ struct FBPlayerStatsView: View {
                                     }
                                 )
                             
+                            // stats list
                             FBPlayerStatsList(fbPlayerStatsStore: fbPlayerStatsStore, itemPositions: $itemPositions)
                         }
                         .opacity(0)
                         
                         /* ---------------------
-                           aimation ui
-                           - invisible after ani
+                           visible ui
+                           - with animation effect
                            --------------------- */
                         FBPlayerStatsPlayerInfoItem(fbPlayerStatsStore: fbPlayerStatsStore, showContents: showContents)
                             .offset(

@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 import ComposableArchitecture
-import AWSTranslate
 import Collections
 
 @Reducer
@@ -24,6 +23,7 @@ struct SearchStore {
            --------------------- */
         var searchDataState: ApiFetchState = .idle
         
+        // football
         var fbPlayerInfoData: FBPlayerInfoDisplayModel? = nil
         var fbPlayerStatsData: FBPlayerStatsDisplayModel? = nil
         var fbPlayerStandingsData: FBPlayerStandingsDisplayModel? = nil
@@ -35,6 +35,18 @@ struct SearchStore {
         var fbGameStatsData: FBGameStatsDisplayModel? = nil
         
         var initialFBLeagueScheduleData: FBLeagueScheduleDisplayModel? = nil
+        var initialNBALeagueScheduleData: NBALeagueScheduleDisplayModel? = nil
+        
+        // nba
+        var nbaPlayerInfoData: NBAPlayerInfoDisplayModel? = nil
+        var nbaPlayerStatsData: NBAPlayerStatsDisplayModel? = nil
+        var nbaPlayerStandingsData: NBAPlayerStandingsDisplayModel? = nil
+        var nbaTeamInfoData: NBATeamInfoDisplayModel? = nil
+        var nbaTeamStatsData: NBATeamStatsDisplayModel? = nil
+        var nbaTeamStandingsData: NBATeamStandingsDisplayModel? = nil
+        var nbaTeamScheduleData: NBATeamScheduleDisplayModel? = nil
+        var nbaLeagueScheduleData: NBALeagueScheduleDisplayModel? = nil
+        var nbaGameStatsData: NBAGameStatsDisplayModel? = nil
         
         var autoCompleteList: [String] = []
         var trendingKeywordList: [String] = []
@@ -56,11 +68,12 @@ struct SearchStore {
         /* ---------------------
            etc
            --------------------- */
-        let trie = Trie()
+        var trie: Trie?
         // NOTE: viewStack should always be up to date
         var viewStack: [SportDecodableModel] = []
         var poppedView: SportDecodableModel? = nil
         var trendingKeywords: OrderedDictionary<String, KeywordInfo> = [:]
+        var noticeList: [NoticeModel] = []
     }
     
     enum SearchType {
@@ -77,7 +90,8 @@ struct SearchStore {
         case updateTextField(String, Bool = true)
         case updateTextFieldVisibleState(Bool)
         case performSearch(searchType: SearchType = .query, aniDuration: CGFloat = 0)
-        case selectFBGame(FBGame)
+        case selectFBGame(game: FBGame)
+        case selectNBAGame(game: NBAGame)
         case showPlayerStats(category: String? = nil, playerId: Int)
         case showTeamStats(teamId: Int)
         case showGameStats(gameType: String)
@@ -97,16 +111,16 @@ struct SearchStore {
         /* ---------------------
            etc
            --------------------- */
-        case initTrie
-        case initAutoCompleteDataDic(autoCompleteData: [KeywordInfo])
+        case initData
+        case initTrendingKeywords([KeywordInfo])
+        case initTrieTuple(trieTuple: (Trie, [KeywordInfo]))
+        case initNoticeList([NoticeModel])
         case updateSearchDataState(ApiFetchState)
-        case translate(String, (Result<String, Error>) -> Void)
         case updateIsFocused(Bool)
         case goBack
         case updateAutoCompleteList
         case updateResultVisibleState(bool: Bool)
-        case fetchTrendingKeywords
-        case setTrendingKeywords([KeywordInfo])
+//        case fetchTrendingKeywords
         case updateMainDisplayModel(data: SportDecodableModel, shouldReset: Bool = true)
         case updateLastViewStack(data: SportDecodableModel)
         case updateSearchStateWithAni(bool: Bool)
@@ -117,6 +131,10 @@ struct SearchStore {
            --------------------- */
         case initForTest
     }
+    
+    @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
+    @Dependency(\.trieTupleClient) var trieTupleClient
+    @Dependency(\.noticeListClient) var noticeListClient
     
     var body: some Reducer<State, Action> {
         BindingReducer()
@@ -139,63 +157,66 @@ struct SearchStore {
             case .binding:
                 return .none
                 
-            case .initTrie:
-                return .run { [trie = state.trie] send in
-                    do {
-                        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-                        let savedFileURL = documentsDirectory.appendingPathComponent("autocomplete.json")
-                        
-                        if FileManager.default.fileExists(atPath: savedFileURL.path) {
-                            let data = try Data(contentsOf: savedFileURL)
-                            
-                            let autoCompleteData = try JSONDecoder().decode([KeywordInfo].self, from: data)
-                            
-                            for autoComplete in autoCompleteData {
-                                trie.insert(word: autoComplete.keyword)
-                                trie.insert(word: getChosung(from: autoComplete.keyword), originalWord: autoComplete.keyword, weight: autoComplete.weight!)
-                            }
-                            
-                            await send(.initAutoCompleteDataDic(autoCompleteData: autoCompleteData))
-                        }
-                    } catch {
-                        print("\(error)")
-                    }
+            case .initData:
+                return .run { send in
+                    async let trendingKeywords = trendingKeywordsClient.wait()
+                    async let trieTuple = trieTupleClient.wait()
+                    async let noticeList = noticeListClient.wait()
+                    
+                    // NOTE: 아직 완전 병렬은 아님. 완벽하게 병렬로 처리하고 싶으면 각각 따로 .run{}을 실행해 줘야함(.onAppear에서 따로 실행).
+                    // 위처럼 완전 병렬로 처리하면 UI에서 각각 따로 반영 되겠지만, 한 UI의 높이가 변경될때 동시에 해당 UI에 영향을 미치는 다른 UI가 그려지면 충돌 가능성이 있을수도 있음.
+                    // 하지만 해당 충돌은 이전에 xcode, iOS 버전 업데이트 하기 전에 이상하게(원인불명) 발생했던 오류로 인해 겪었던 것이고, 지금은 발생할지 미지수임.
+                    let trendingKeyowrdsResult = try await trendingKeywords
+                    let trieTupleResult = try await trieTuple
+                    let noticeListResult = try await noticeList
+                    
+                    await send(.initTrendingKeywords(trendingKeyowrdsResult.keywords))
+                    await send(.initTrieTuple(trieTuple: trieTupleResult))
+                    await send(.initNoticeList(noticeListResult))
                 }
                 
-            case .initAutoCompleteDataDic(let autoCompleteData):
-                state.autoCompleteDataDic = Dictionary(uniqueKeysWithValues: autoCompleteData.map { ($0.keyword, $0) })
+            case .initTrieTuple(let trieTuple):
+                state.trie = trieTuple.0
+                state.autoCompleteDataDic = Dictionary(uniqueKeysWithValues: trieTuple.1.map { ($0.keyword, $0) })
+                
+                return .none
+                
+            case .initTrendingKeywords(let keywords):
+                state.trendingKeywords = OrderedDictionary(uniqueKeysWithValues: keywords.map { ($0.keyword, $0) })
+                state.trendingKeywordList = Array(state.trendingKeywords.keys)
+                
+                return .none
+                
+            case .initNoticeList(let noticeList):
+                state.noticeList = noticeList
                 
                 return .none
                 
             case .initForTest:
-                state.resultVisibleState = true
+//                state.resultVisibleState = true
                 
                 return .run { [query = state.query] send in
-                    let data = try await searchClient.fetchDataByQuery(query: "프리미어리그 일정")
-                    await send(.searchResultsReceived(data))
+//                    let data = try await searchClient.fetchDataByQuery(query: "프리미어리그 일정")
+//                    await send(.searchResultsReceived(data))
+                    
+//                    let result = try await trendingKeywordsClient.wait()
                 }
                 
             case .firstOpen:
                 state.firstOpened = true
                 return .none
                 
-            case .fetchTrendingKeywords:
-                return .run { send in
-                    
-                    do {
-                        let data = try await keywordsClient.fetchTrendingKeywords()
-                        
-                        await send(.setTrendingKeywords(data))
-                    } catch {
-                        print("\(error)")
-                    }
-                }
-                
-            case .setTrendingKeywords(let keywords):
-                state.trendingKeywords = OrderedDictionary(uniqueKeysWithValues: keywords.map { ($0.keyword, $0) })
-                state.trendingKeywordList = Array(state.trendingKeywords.keys)
-                
-                return .none
+//            case .fetchTrendingKeywords:
+//                return .run { send in
+//                    
+//                    do {
+//                        let data = try await keywordsClient.fetchTrendingKeywords()
+//                        
+//                        await send(.setTrendingKeywords(data))
+//                    } catch {
+//                        print("\(error)")
+//                    }
+//                }
                 
             case .updateTrendingKeywordsVisibleState(let bool):
                 // RECORD: Crash occured when animation applied at .onChange to other view and also animation applied hear.
@@ -250,19 +271,22 @@ struct SearchStore {
 //                result.formUnion(state.trie.search(prefix: state.query))
 //                result.formUnion(state.trie.search(prefix: getChosung(from: state.query)))
                 
-                var result: [String] = []
-                result.append(contentsOf: state.trie.search(prefix: getChosung(from: state.query)))
-                
-                let additionalResult = state.trie.search(prefix: state.query)
-                
-                for word in additionalResult {
-                    if !result.contains(word) {
-                        result.append(word)
+                if let trie = state.trie {
+                    var result: [String] = []
+                 
+                    result.append(contentsOf: trie.search(prefix: getChosung(from: state.query)))
+                    
+                    let additionalResult = trie.search(prefix: state.query)
+                    
+                    for word in additionalResult {
+                        if !result.contains(word) {
+                            result.append(word)
+                        }
                     }
-                }
-                
-                withAnimation {
-                    state.autoCompleteList = result
+                    
+                    withAnimation {
+                        state.autoCompleteList = result
+                    }
                 }
                 
 //                var result = [String: Int]()
@@ -356,14 +380,24 @@ struct SearchStore {
                 state.fbLeagueScheduleData = nil
                 state.fbGameStatsData = nil
                 
+                state.nbaPlayerInfoData = nil
+                state.nbaPlayerStatsData = nil
+                state.nbaPlayerStandingsData = nil
+                state.nbaTeamInfoData = nil
+                state.nbaTeamStatsData = nil
+                state.nbaTeamStandingsData = nil
+                state.nbaTeamScheduleData = nil
+                state.nbaLeagueScheduleData = nil
+                state.nbaGameStatsData = nil
+                
                 switch model.data {
-                case .fbPlayerInfo(let responseModel, let displayModel):
+                case .fbPlayerInfo(_, let displayModel):
                     state.fbPlayerInfoData = displayModel
                 case .fbPlayerStats(_, let displayModel):
                     state.fbPlayerStatsData = displayModel
                 case .fbPlayerStandings(_, let displayModel):
                     state.fbPlayerStandingsData = displayModel
-                case .fbTeamInfo(let responseModel, let displayModel):
+                case .fbTeamInfo(_, let displayModel):
                     state.fbTeamInfoData = displayModel
                 case .fbTeamStats(_, let displayModel):
                     state.fbTeamStatsData = displayModel
@@ -376,6 +410,27 @@ struct SearchStore {
                     state.initialFBLeagueScheduleData = displayModel
                 case .fbGameStats(_, let displayModel):
                     state.fbGameStatsData = displayModel
+                    
+                case .nbaPlayerInfo(_, let displayModel):
+                    state.nbaPlayerInfoData = displayModel
+                case .nbaPlayerStats(_, let displayModel):
+                    state.nbaPlayerStatsData = displayModel
+                case .nbaPlayerStandings(_, let displayModel):
+                    state.nbaPlayerStandingsData = displayModel
+                case .nbaTeamInfo(_, let displayModel):
+                    state.nbaTeamInfoData = displayModel
+                case .nbaTeamStats(_, let displayModel):
+                    state.nbaTeamStatsData = displayModel
+                case .nbaTeamStandings(_, let displayModel):
+                    state.nbaTeamStandingsData = displayModel
+                case .nbaTeamSchedule(_, let displayModel):
+                    state.nbaTeamScheduleData = displayModel
+                case .nbaLeagueSchedule(_, let displayModel):
+                    state.nbaLeagueScheduleData = displayModel
+                    state.initialNBALeagueScheduleData = displayModel
+                case .nbaGameStats(_, let displayModel):
+                    state.nbaGameStatsData = displayModel
+                    
                 default:
                     // TODO: animation is applied by the animation below. Should be modified
                     state.searchDataState = .failure("검색 결과가 없습니다.")
@@ -436,6 +491,16 @@ struct SearchStore {
                         state.fbLeagueScheduleData = nil
                         state.fbGameStatsData = nil
                         
+                        state.nbaPlayerInfoData = nil
+                        state.nbaPlayerStatsData = nil
+                        state.nbaPlayerStandingsData = nil
+                        state.nbaTeamInfoData = nil
+                        state.nbaTeamStatsData = nil
+                        state.nbaTeamStandingsData = nil
+                        state.nbaTeamScheduleData = nil
+                        state.nbaLeagueScheduleData = nil
+                        state.nbaGameStatsData = nil
+                        
                         return .run { send in
                             await send(.toggleSearchBar)
                             
@@ -454,21 +519,6 @@ struct SearchStore {
                 }
                 return .none
                 
-            case .translate(let text, let onResult):
-                return .run { send in
-                    let translateClient = AWSTranslate(forKey: "TranslateClient")
-                    let request = AWSTranslateTranslateTextRequest()!
-                    request.text = text
-                    request.sourceLanguageCode = "en"
-                    request.targetLanguageCode = "ko"
-                    
-                    translateClient.translateText(request) { response, error in
-                        if let translatedText = response?.translatedText {
-                            onResult(.success(translatedText))
-                        }
-                    }
-                }
-                
             case .selectFBGame(let game):
                 let dataMdoel = SportDecodableModel.fbGameStats(
                     FBGameStatsReponseModel(game: game),
@@ -479,6 +529,19 @@ struct SearchStore {
                 state.poppedView = nil
                 
                 state.fbGameStatsData = FBGameStatsDisplayModel(game: game)
+                
+                return .none
+                
+            case .selectNBAGame(let game):
+                let dataMdoel = SportDecodableModel.nbaGameStats(
+                    NBAGameStatsReponseModel(game: game),
+                    NBAGameStatsDisplayModel(game: game)
+                )
+                
+                state.viewStack.append(dataMdoel)
+                state.poppedView = nil
+                
+                state.nbaGameStatsData = NBAGameStatsDisplayModel(game: game)
                 
                 return .none
                 
@@ -523,7 +586,7 @@ struct SearchStore {
                                 category: category,
                                 dataType: "\(category)_player_stats",
                                 leagueId: leagueId,
-                                id: playerId
+                                id: String(playerId)
                             )
                             
                             if case .fbPlayerStats = result.data {
@@ -547,6 +610,22 @@ struct SearchStore {
                             modelConverter.fbPlayerStatsConverter(response: responseModel)
                         )
                         
+                    case .nbaPlayerStandings(let responseModel, let displayModel):
+                        // NOTE: nba player stats data in standings has all the stats for now, so doesn't has to fetchById like football above.
+                        let player = responseModel.standings.first { $0.player.personId == playerId }
+                        
+                        let playerInfoResponseModel = NBAPlayerInfoResponseModel(info: player, lastGame: nil, nextGame: nil)
+                        dataModel = .nbaPlayerStats(
+                            playerInfoResponseModel,
+                            modelConverter.nbaPlayerStatsConverter(response: playerInfoResponseModel)
+                        )
+                        
+                    case .nbaPlayerInfo(let responseModel, let displayModel):
+                        dataModel = .nbaPlayerStats(
+                            responseModel,
+                            modelConverter.nbaPlayerStatsConverter(response: responseModel)
+                        )
+                        
                     default: return // Make it do nothing
                     }
                     
@@ -564,8 +643,6 @@ struct SearchStore {
             case .showTeamStats(let teamId):
                 let dataModel: SportDecodableModel
                 
-                let viewToShow = state.viewStack.last!
-                
                 switch state.viewStack.last {
                 case .fbTeamStandings(let responseModel, let displayModel):
                     let team = responseModel.standings.first { $0.team.id == teamId }
@@ -580,6 +657,21 @@ struct SearchStore {
                     dataModel = .fbTeamStats(
                         responseModel,
                         modelConverter.fbTeamStatsConverter(response: responseModel)
+                    )
+                    
+                case .nbaTeamStandings(let responseModel, let displayModel):
+                    let team = responseModel.standings.first { $0.team.id == teamId }
+                    
+                    let teamInfoResponseModel = NBATeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
+                    dataModel = .nbaTeamStats(
+                        teamInfoResponseModel,
+                        modelConverter.nbaTeamStatsConverter(response: teamInfoResponseModel)
+                    )
+                    
+                case .nbaTeamInfo(let responseModel, let displayModel):
+                    dataModel = .nbaTeamStats(
+                        responseModel,
+                        modelConverter.nbaTeamStatsConverter(response: responseModel)
                     )
                     
                 default: return .none // Make it do nothing
@@ -618,6 +710,22 @@ struct SearchStore {
                         modelConverter.fbGameStatsConverter(response: gameStatsResponseModel)
                     )
                     
+                case .nbaPlayerInfo(let responseModel, let displayModel):
+                    let gameStatsResponseModel = gameType == "previous" ? NBAGameStatsReponseModel(game: responseModel.lastGame) : NBAGameStatsReponseModel(game: responseModel.nextGame)
+                    
+                    dataModel = .nbaGameStats(
+                        gameStatsResponseModel,
+                        modelConverter.nbaGameStatsConverter(response: gameStatsResponseModel)
+                    )
+                    
+                case .nbaTeamInfo(let responseModel, let displayModel):
+                    let gameStatsResponseModel = gameType == "previous" ? NBAGameStatsReponseModel(game: responseModel.lastGame) : NBAGameStatsReponseModel(game: responseModel.nextGame)
+                    
+                    dataModel = .nbaGameStats(
+                        gameStatsResponseModel,
+                        modelConverter.nbaGameStatsConverter(response: gameStatsResponseModel)
+                    )
+                    
                 default: return .none // Make it do nothing
                 }
                 
@@ -635,18 +743,38 @@ struct SearchStore {
                 }
                 
             case .refreshGame(let category):
-                return .run { [fbGameStatsData = state.fbGameStatsData] send in
-                    if let game = fbGameStatsData?.game {
-                        let result = try await searchClient.fetchById(
-                            category: category,
-                            date: game.fixture.date,
-                            dataType: "\(category)_game_stats",
-                            leagueId: game.league.id,
-                            id: game.fixture.id
-                        )
+                return .run { [viewStack = state.viewStack, fbGameStatsData = state.fbGameStatsData, nbaGameStatsData = state.nbaGameStatsData] send in
+                    switch viewStack.last {
+                    case .fbGameStats(let responseModel, let displayModel):
+                        if let game = fbGameStatsData?.game {
+                            let result = try await searchClient.fetchById(
+                                category: category,
+                                date: game.fixture.date,
+                                dataType: "\(category)_game_stats",
+                                leagueId: game.league.id,
+                                id: String(game.fixture.id)
+                            )
+                            
+                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+                            await send(.updateLastViewStack(data: result.data))
+                        }
                         
-                        await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
-                        await send(.updateLastViewStack(data: result.data))
+                    case .nbaGameStats(let responseModel, let displayModel):
+                        if let gameSummary = nbaGameStatsData?.game.gameSummary,
+                           let boxScoreTraditional = nbaGameStatsData?.game.boxScoreTraditional {
+                            let result = try await searchClient.fetchById(
+                                category: category,
+                                date: gameSummary.date,
+                                dataType: "\(category)_game_stats",
+                                leagueId: 90001,
+                                id: boxScoreTraditional.gameId
+                            )
+                            
+                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+                            await send(.updateLastViewStack(data: result.data))
+                        }
+                        
+                    default: return // Make it do nothing
                     }
                 }
                 
@@ -661,6 +789,16 @@ struct SearchStore {
                     state.fbTeamScheduleData = nil
                     state.fbLeagueScheduleData = nil
                     state.fbGameStatsData = nil
+                    
+                    state.nbaPlayerInfoData = nil
+                    state.nbaPlayerStatsData = nil
+                    state.nbaPlayerStandingsData = nil
+                    state.nbaTeamInfoData = nil
+                    state.nbaTeamStatsData = nil
+                    state.nbaTeamStandingsData = nil
+                    state.nbaTeamScheduleData = nil
+                    state.nbaLeagueScheduleData = nil
+                    state.nbaGameStatsData = nil
                 }
                 
                 switch data {
@@ -682,6 +820,26 @@ struct SearchStore {
                     state.fbLeagueScheduleData = displayModel
                 case .fbGameStats(_, let displayModel):
                     state.fbGameStatsData = displayModel
+                    
+                case .nbaPlayerInfo(_, let displayModel):
+                    state.nbaPlayerInfoData = displayModel
+                case .nbaPlayerStats(_, let displayModel):
+                    state.nbaPlayerStatsData = displayModel
+                case .nbaPlayerStandings(_, let displayModel):
+                    state.nbaPlayerStandingsData = displayModel
+                case .nbaTeamInfo(_, let displayModel):
+                    state.nbaTeamInfoData = displayModel
+                case .nbaTeamStats(_, let displayModel):
+                    state.nbaTeamStatsData = displayModel
+                case .nbaTeamStandings(_, let displayModel):
+                    state.nbaTeamStandingsData = displayModel
+                case .nbaTeamSchedule(_, let displayModel):
+                    state.nbaTeamScheduleData = displayModel
+                case .nbaLeagueSchedule(_, let displayModel):
+                    state.nbaLeagueScheduleData = displayModel
+                case .nbaGameStats(_, let displayModel):
+                    state.nbaGameStatsData = displayModel
+                    
                 default:
                     break
                 }

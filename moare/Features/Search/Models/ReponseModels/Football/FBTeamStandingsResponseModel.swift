@@ -8,5 +8,5 @@
 import Foundation
 
 struct FBTeamStandingsResponseModel: Decodable, Equatable {
-    var standings: [FBTeam] = []
+    let standings: [FBTeam]
 }

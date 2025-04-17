@@ -13,9 +13,9 @@ struct FBGame: Decodable, Equatable {
     let teams: FBGameTeams
     let goals: FBHomeAwayIntStats
     let score: FBGameScore
-    var lineups: [FBGameLineups] = []
-    var statistics: [FBGameStats] = []
-    var players: [FBGamePlayers] = []
+    let lineups: [FBGameLineups]
+    let statistics: [FBGameStats]
+    let players: [FBGamePlayers]
 }
 
 struct FBGameFixture: Decodable, Equatable {
@@ -114,8 +114,8 @@ struct FBGameLineups: Decodable, Equatable {
     let team: FBTeamInfo
     let coach: FBPerson
     private let _formation: String?
-    var startXI: [FBGameStartXI] = []
-    var substitutes: [FBGameStartXI] = []
+    let startXI: [FBGameStartXI]
+    let substitutes: [FBGameStartXI]
     
     var formation: String {
         return _formation ?? ""
@@ -192,7 +192,7 @@ struct FBGamePlayer: Decodable, Equatable {
 
 struct FBGameStats: Decodable, Equatable {
     let team: FBTeamInfo
-    var statistics: [FBGameTeamStats] = []
+    let statistics: [FBGameTeamStats]
 }
 
 struct FBGameTeamStats: Decodable, Equatable {
@@ -224,12 +224,12 @@ struct FBGameTeamStats: Decodable, Equatable {
 
 struct FBGamePlayers: Decodable, Equatable {
     let team: FBTeamInfo
-    var players: [FBGamePlayerStats] = []
+    let players: [FBGamePlayerStats]
 }
 
 struct FBGamePlayerStats: Decodable, Equatable {
     let player: FBPerson
-    var statistics: [FBGamePlayerStatsDetail] = []
+    let statistics: [FBGamePlayerStatsDetail]
 }
 
 struct FBGamePlayerStatsDetail: Decodable, Equatable {

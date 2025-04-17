@@ -111,22 +111,6 @@ struct ModelConverter {
     }
     
     func fbLeagueScheduleConverter(response: FBGameScheduleResponseModel) -> FBLeagueScheduleDisplayModel {
-//        let calendar = Calendar.current
-//        
-//        var yearMonthList = response.schedule.compactMap { game -> String? in
-//            if let date = ISO8601DateFormatter().date(from: game.fixture.date) {
-//                let year = calendar.component(.year, from: date) % 100
-//                let month = calendar.component(.month, from: date)
-//                return String(format: "%02d/%02d", year, month)
-//            }
-//            
-//            return nil
-//        }
-//        
-//        yearMonthList = Array(Set(yearMonthList))
-//        
-//        yearMonthList.sort()
-
         let yearMonthList: [String] = response.scheduledMonths?.map {
             let components = $0.split(separator: "-")
             guard components.count == 2 else { return "" }
@@ -134,10 +118,118 @@ struct ModelConverter {
             return "\(components[0].suffix(2))/\(components[1])"
         } ?? []
         
-        return FBLeagueScheduleDisplayModel(yearMonthList: yearMonthList, games: response.schedule)
+        return FBLeagueScheduleDisplayModel(yearMonthList: yearMonthList, games: response.schedule, entityInfo: entityInfo)
     }
     
     func fbGameStatsConverter(response: FBGameStatsReponseModel) -> FBGameStatsDisplayModel {
         return FBGameStatsDisplayModel(game: response.game!)
+    }
+    
+    /* ---------------------
+       nba
+       --------------------- */
+    func nbaPlayerInfoConverter(response: NBAPlayerInfoResponseModel) -> NBAPlayerInfoDisplayModel {
+        let info = response.info!
+        
+        let stats = info.statistics.first { $0.seasonType == "Regular Season" }
+        
+        let lastGameTeam = if response.lastGame?.boxScoreTraditional?.homeTeamId == entityInfo.first?.teamId {
+            response.lastGame?.boxScoreTraditional?.homeTeam
+        } else {
+            response.lastGame?.boxScoreTraditional?.awayTeam
+        }
+        
+        let lastGamePlayerStats = lastGameTeam?.players.first {
+            $0.personId == entityInfo.first?.playerId
+        }
+        
+        return NBAPlayerInfoDisplayModel(
+            info: info.player,
+            stats: stats,
+            lastGame: response.lastGame,
+            lastGamePlayerStats: lastGamePlayerStats,
+            nextGame: response.nextGame
+        )
+    }
+    
+    func nbaPlayerStatsConverter(response: NBAPlayerInfoResponseModel) -> NBAPlayerStatsDisplayModel {
+        let info = response.info!
+        
+        return NBAPlayerStatsDisplayModel(player: info.player, stats: info.statistics)
+    }
+    
+    func nbaPlayerStandingsConverter(response: NBAPlayerStandingsResponseModel) -> NBAPlayerStandingsDisplayModel {
+        let standings: [NBAPlayerStandingsDisplay] = response.standings.compactMap { playerInfo in
+            let player = playerInfo.player
+            let statsList = playerInfo.statistics
+            
+            for item in statsList {
+                if item.seasonType == "Regular Season" {
+                    return NBAPlayerStandingsDisplay(player: player, stats: item)
+                }
+            }
+            
+            return nil
+        }
+        
+        return NBAPlayerStandingsDisplayModel(keywords: keywords, entityInfo: entityInfo, standings: standings)
+    }
+    
+    func nbaTeamInfoConverter(response: NBATeamInfoResponseModel) -> NBATeamInfoDisplayModel {
+        let info = response.info!
+        
+        let stats = info.statistics.first { $0.seasonType == "Regular Season" }
+        
+        return NBATeamInfoDisplayModel(
+            team: info.team,
+            venue: info.venue,
+            stats: stats,
+            lastGame: response.lastGame,
+            nextGame: response.nextGame
+        )
+    }
+    
+    func nbaTeamStatsConverter(response: NBATeamInfoResponseModel) -> NBATeamStatsDisplayModel {
+        let info = response.info!
+        
+        return NBATeamStatsDisplayModel(team: info.team, venue: info.venue, stats: info.statistics)
+    }
+    
+    func nbaTeamStandingsConverter(response: NBATeamStandingsResponseModel) -> NBATeamStandingsDisplayModel {
+        let standings: [NBATeamStandingsDisplay] = response.standings.compactMap { teamInfo in
+            let statsList = teamInfo.statistics
+            
+            for item in statsList {
+                if item.seasonType == "Regular Season" {
+                    return NBATeamStandingsDisplay(
+                        team: teamInfo.team,
+                        stats: item
+                    )
+                }
+            }
+            
+            return nil
+        }
+        
+        return NBATeamStandingsDisplayModel(keywords: keywords, entityInfo: entityInfo, standings: standings)
+    }
+    
+    func nbaTeamScheduleConverter(response: NBAGameScheduleResponseModel) -> NBATeamScheduleDisplayModel {
+        return NBATeamScheduleDisplayModel(games: response.schedule)
+    }
+    
+    func nbaLeagueScheduleConverter(response: NBAGameScheduleResponseModel) -> NBALeagueScheduleDisplayModel {
+        let yearMonthList: [String] = response.scheduledMonths?.map {
+            let components = $0.split(separator: "-")
+            guard components.count == 2 else { return "" }
+            
+            return "\(components[0].suffix(2))/\(components[1])"
+        } ?? []
+        
+        return NBALeagueScheduleDisplayModel(yearMonthList: yearMonthList, games: response.schedule, entityInfo: entityInfo)
+    }
+    
+    func nbaGameStatsConverter(response: NBAGameStatsReponseModel) -> NBAGameStatsDisplayModel {
+        return NBAGameStatsDisplayModel(game: response.game!)
     }
 }

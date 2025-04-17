@@ -16,6 +16,7 @@ struct DataModel: Decodable {
 }
 
 struct EntityInfo: Codable, Equatable {
+    let entityId: Int
     let entityName: String
     let category: String
     let entityType: String
@@ -30,7 +31,7 @@ struct Keyword: Codable, Equatable {
     let priority: Int
 }
 
-enum SportDecodableModel: Equatable {
+indirect enum SportDecodableModel: Equatable {
     // football
     case fbPlayerInfo(FBPlayerInfoResponseModel, FBPlayerInfoDisplayModel)
     case fbPlayerStats(FBPlayerInfoResponseModel, FBPlayerStatsDisplayModel)
@@ -43,6 +44,15 @@ enum SportDecodableModel: Equatable {
     case fbGameStats(FBGameStatsReponseModel, FBGameStatsDisplayModel)
     
     // nba
+    case nbaPlayerInfo(NBAPlayerInfoResponseModel, NBAPlayerInfoDisplayModel)
+    case nbaPlayerStats(NBAPlayerInfoResponseModel, NBAPlayerStatsDisplayModel)
+    case nbaPlayerStandings(NBAPlayerStandingsResponseModel, NBAPlayerStandingsDisplayModel)
+    case nbaTeamInfo(NBATeamInfoResponseModel, NBATeamInfoDisplayModel)
+    case nbaTeamStats(NBATeamInfoResponseModel, NBATeamStatsDisplayModel)
+    case nbaTeamStandings(NBATeamStandingsResponseModel, NBATeamStandingsDisplayModel)
+    case nbaTeamSchedule(NBAGameScheduleResponseModel, NBATeamScheduleDisplayModel)
+    case nbaLeagueSchedule(NBAGameScheduleResponseModel, NBALeagueScheduleDisplayModel)
+    case nbaGameStats(NBAGameStatsReponseModel, NBAGameStatsDisplayModel)
     
     case unknown
     
@@ -57,6 +67,15 @@ enum SportDecodableModel: Equatable {
             (.fbTeamSchedule, .fbTeamSchedule),
             (.fbLeagueSchedule, .fbLeagueSchedule),
             (.fbGameStats, .fbGameStats),
+            (.nbaPlayerInfo, .nbaPlayerInfo),
+            (.nbaPlayerStats, .nbaPlayerStats),
+            (.nbaPlayerStandings, .nbaPlayerStandings),
+            (.nbaTeamInfo, .nbaTeamInfo),
+            (.nbaTeamStats, .nbaTeamStats),
+            (.nbaTeamStandings, .nbaTeamStandings),
+            (.nbaTeamSchedule, .nbaTeamSchedule),
+            (.nbaLeagueSchedule, .nbaLeagueSchedule),
+            (.nbaGameStats, .nbaGameStats),
             (.unknown, .unknown):
             return true
         default:
@@ -76,6 +95,7 @@ extension DataModel {
         let modelConverter = ModelConverter(keywords: keywords, entityInfo: entityInfo)
         
         switch dataType {
+        // football
         case let dataType where dataType == "football_player_info":
             let responseModel = try container.decode(FBPlayerInfoResponseModel.self, forKey: .data)
             
@@ -93,7 +113,7 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.fbPlayerStatsConverter(response: responseModel)
-                data = .fbPlayerStats(responseModel, displayModel)
+                self.data = .fbPlayerStats(responseModel, displayModel)
             }
             
         case let dataType where dataType == "football_player_standings":
@@ -103,7 +123,7 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.fbPlayerStandingsConverter(response: responseModel)
-                data = .fbPlayerStandings(responseModel, displayModel)
+                self.data = .fbPlayerStandings(responseModel, displayModel)
             }
             
         case let dataType where dataType == "football_team_info":
@@ -113,7 +133,7 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.fbTeamInfoConverter(response: responseModel)
-                data = .fbTeamInfo(responseModel, displayModel)
+                self.data = .fbTeamInfo(responseModel, displayModel)
             }
             
         case let dataType where dataType == "football_team_stats":
@@ -123,7 +143,7 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.fbTeamStatsConverter(response: responseModel)
-                data = .fbTeamStats(responseModel, displayModel)
+                self.data = .fbTeamStats(responseModel, displayModel)
             }
             
         case let dataType where dataType == "football_team_standings":
@@ -133,18 +153,18 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.fbTeamStandingsConverter(response: responseModel)
-                data = .fbTeamStandings(responseModel, displayModel)
+                self.data = .fbTeamStandings(responseModel, displayModel)
             }
             
         case let dataType where dataType == "football_team_schedule":
             let responseModel = try container.decode(FBGameScheduleResponseModel.self, forKey: .data)
             let displayModel = modelConverter.fbTeamScheduleConverter(response: responseModel)
-            data = .fbTeamSchedule(responseModel, displayModel)
+            self.data = .fbTeamSchedule(responseModel, displayModel)
             
         case let dataType where dataType == "football_league_schedule":
             let responseModel = try container.decode(FBGameScheduleResponseModel.self, forKey: .data)
             let displayModel = modelConverter.fbLeagueScheduleConverter(response: responseModel)
-            data = .fbLeagueSchedule(responseModel, displayModel)
+            self.data = .fbLeagueSchedule(responseModel, displayModel)
             
         case let dataType where dataType == "football_game_stats":
             let responseModel = try container.decode(FBGameStatsReponseModel.self, forKey: .data)
@@ -153,7 +173,88 @@ extension DataModel {
                 self.data = .unknown
             } else {
                 let displayModel = modelConverter.fbGameStatsConverter(response: responseModel)
-                data = .fbGameStats(responseModel, displayModel)
+                self.data = .fbGameStats(responseModel, displayModel)
+            }
+            
+        // basketball
+        case let dataType where dataType == "basketball_player_info":
+            let responseModel = try container.decode(NBAPlayerInfoResponseModel.self, forKey: .data)
+            
+            if responseModel.info == nil {
+                self.data = .unknown
+            } else {
+                let displayModel = modelConverter.nbaPlayerInfoConverter(response: responseModel)
+                self.data = .nbaPlayerInfo(responseModel, displayModel)
+            }
+            
+        case let dataType where dataType == "basketball_player_stats":
+            let responseModel = try container.decode(NBAPlayerInfoResponseModel.self, forKey: .data)
+            
+            if responseModel.info == nil {
+                self.data = .unknown
+            } else {
+                let displayModel = modelConverter.nbaPlayerStatsConverter(response: responseModel)
+                self.data = .nbaPlayerStats(responseModel, displayModel)
+            }
+            
+        case let dataType where dataType == "basketball_player_standings":
+            let responseModel = try container.decode(NBAPlayerStandingsResponseModel.self, forKey: .data)
+            
+            if responseModel.standings.isEmpty {
+                self.data = .unknown
+            } else {
+                let displayModel = modelConverter.nbaPlayerStandingsConverter(response: responseModel)
+                self.data = .nbaPlayerStandings(responseModel, displayModel)
+            }
+            
+        case let dataType where dataType == "basketball_team_info":
+            let responseModel = try container.decode(NBATeamInfoResponseModel.self, forKey: .data)
+            
+            if responseModel.info == nil {
+                self.data = .unknown
+            } else {
+                let displayModel = modelConverter.nbaTeamInfoConverter(response: responseModel)
+                self.data = .nbaTeamInfo(responseModel, displayModel)
+            }
+            
+        case let dataType where dataType == "basketball_team_stats":
+            let responseModel = try container.decode(NBATeamInfoResponseModel.self, forKey: .data)
+            
+            if responseModel.info == nil {
+                self.data = .unknown
+            } else {
+                let displayModel = modelConverter.nbaTeamStatsConverter(response: responseModel)
+                self.data = .nbaTeamStats(responseModel, displayModel)
+            }
+            
+        case let dataType where dataType == "basketball_team_standings":
+            let responseModel = try container.decode(NBATeamStandingsResponseModel.self, forKey: .data)
+            
+            if responseModel.standings.isEmpty {
+                self.data = .unknown
+            } else {
+                let displayModel = modelConverter.nbaTeamStandingsConverter(response: responseModel)
+                self.data = .nbaTeamStandings(responseModel, displayModel)
+            }
+            
+        case let dataType where dataType == "basketball_team_schedule":
+            let responseModel = try container.decode(NBAGameScheduleResponseModel.self, forKey: .data)
+            let displayModel = modelConverter.nbaTeamScheduleConverter(response: responseModel)
+            self.data = .nbaTeamSchedule(responseModel, displayModel)
+            
+        case let dataType where dataType == "basketball_league_schedule":
+            let responseModel = try container.decode(NBAGameScheduleResponseModel.self, forKey: .data)
+            let displayModel = modelConverter.nbaLeagueScheduleConverter(response: responseModel)
+            self.data = .nbaLeagueSchedule(responseModel, displayModel)
+            
+        case let dataType where dataType == "basketball_game_stats":
+            let responseModel = try container.decode(NBAGameStatsReponseModel.self, forKey: .data)
+            
+            if responseModel.game == nil {
+                self.data = .unknown
+            } else {
+                let displayModel = modelConverter.nbaGameStatsConverter(response: responseModel)
+                self.data = .nbaGameStats(responseModel, displayModel)
             }
             
         default:

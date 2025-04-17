@@ -36,15 +36,14 @@ struct FBTeamStatsView: View {
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             ScrollView {
-                if let fbTeamStatsStore = fbTeamStatsStore {
+                if let fbTeamStatsStore {
                     ZStack(alignment: .topLeading) {
                         /* ---------------------
-                           ui
-                           - invisible first
-                           - set ani ui's position
-                           - visible after ani ui
+                           invisible ui
+                           - for position
                            --------------------- */
                         VStack {
+                            // team info
                             FBTeamStatsTeamInfoItem(fbTeamStatsStore: fbTeamStatsStore)
                                 .background(
                                     GeometryReader { proxy in
@@ -54,13 +53,14 @@ struct FBTeamStatsView: View {
                                     }
                                 )
                             
+                            // stats list
                             FBTeamStatsList(fbTeamStatsStore: fbTeamStatsStore, itemPositions: $itemPositions)
                         }
                         .opacity(0)
                         
                         /* ---------------------
-                           aimation ui
-                           - invisible after ani
+                           visible ui
+                           - with animation effect
                            --------------------- */
                         FBTeamStatsTeamInfoItem(fbTeamStatsStore: fbTeamStatsStore, showContents: showContents)
                             .offset(
@@ -320,7 +320,7 @@ struct FBTeamStatsItem: View {
                 FBStatDataItem(
                     category: "경기당 평균득점",
                     data: "\(stats.goals.teamGoalsFor.average.total)",
-                    customFontSize: 11,
+                    customCategoryFontSize: 11,
                     customWidth: 80
                 )
                 
@@ -333,7 +333,7 @@ struct FBTeamStatsItem: View {
                 FBStatDataItem(
                     category: "경기당 평균실점",
                     data: "\(stats.goals.teamGoalsAgainst.average.total)",
-                    customFontSize: 11,
+                    customCategoryFontSize: 11,
                     customWidth: 80
                 )
             }
