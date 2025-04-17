@@ -33,7 +33,14 @@ struct FBTeamScheduleStore {
     }
     
     enum Action {
+        /* ---------------------
+           init
+           --------------------- */
         case initData(displayModel: FBTeamScheduleDisplayModel)
+        
+        /* ---------------------
+           view action
+           --------------------- */
         case toggleAllResult
         case updateResultOpenedState(fixtureId: Int, isOpened: Bool)
     }
@@ -65,7 +72,7 @@ struct FBTeamScheduleStore {
                 state.gameResultOpenedStateList[fixtureId] = isOpened
                 
                 return .none
-            }
+            } // switch action
         }
     }
 }

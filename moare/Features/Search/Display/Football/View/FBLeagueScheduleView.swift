@@ -8,7 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct FBLeaugScheduleView: View {
+struct FBLeaugeScheduleView: View {
     /* ---------------------
        store
        --------------------- */
@@ -28,7 +28,7 @@ struct FBLeaugScheduleView: View {
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack(spacing: 0) {
-                if let fbLeagueScheduleStore = fbLeagueScheduleStore {
+                if let fbLeagueScheduleStore {
                     /* ---------------------
                        game title, info
                        - shows when game selected
@@ -88,7 +88,7 @@ struct FBLeaugScheduleView: View {
                             Spacer()
                             
                             CapsuleButton(
-                                text: fbLeagueScheduleStore.isAllResultOpened ? StringConstants.Football.resultHide : StringConstants.Football.resultOpen,
+                                text: fbLeagueScheduleStore.isAllResultOpened ? StringConstants.resultHide : StringConstants.resultOpen,
                                 color: .secondary
                             ) {
                                 fbLeagueScheduleStore.send(.toggleAllResult)
@@ -151,8 +151,8 @@ struct FBLeaugScheduleView: View {
                     fbLeagueScheduleStore?.send(.initData(displayModel: displayModel))
                 }
             }
-            .onChange(of: searchStore.viewStack) { newValue in
-                guard let lastItem = newValue.last,
+            .onChange(of: searchStore.viewStack) {
+                guard let lastItem = searchStore.viewStack.last,
                       case .fbLeagueSchedule = lastItem,
                       let poppedView = searchStore.poppedView,
                       case .fbGameStats = searchStore.poppedView else {
@@ -161,8 +161,8 @@ struct FBLeaugScheduleView: View {
                 
                 fbLeagueScheduleStore?.send(.updateGamesData(fbLeagueScheduleData: lastItem, fbGameStatsData: poppedView))
             }
-            .onChange(of: fbLeagueScheduleStore?.dataForViewStack) { newValue in
-                if let data = newValue {
+            .onChange(of: fbLeagueScheduleStore?.dataForViewStack) {
+                if let data = fbLeagueScheduleStore?.dataForViewStack {
                     searchStore.send(.updateLastViewStack(data: data))
                 }
             }
@@ -378,7 +378,7 @@ struct FBLeagueScheduleListItem: View {
         } // HStack
         .background(Color.clear) // added for tapGesture on Spacer()
         .onTapGesture {
-            searchStore.send(.selectFBGame(data))
+            searchStore.send(.selectFBGame(game: data))
             
             // set selected game's isOpened true
             fbLeagueScheduleStore.send(.updateResultOpenedState(fixtureId: data.fixture.id, isOpened: true))
@@ -410,16 +410,16 @@ struct FBLeagueScheduleListItem: View {
     private var gameStatusText: String {
         if isResultOpened {
             switch data.fixture.status.short {
-            case StringConstants.Football.gameNotStarted: StringConstants.Football.gameNotStartedStr
+            case StringConstants.Football.gameNotStarted: StringConstants.gameNotStartedStr
             case StringConstants.Football.gameFirstHalf: StringConstants.Football.gameFirstHalfStr
             case StringConstants.Football.gameHalftime: StringConstants.Football.gameHalftimeStr
             case StringConstants.Football.gameSecondHalf: StringConstants.Football.gameSecondHalfStr
             case let status where StringConstants.Football.gameFinishedList.contains(status):
-                StringConstants.Football.gameFinishedStr
+                StringConstants.gameFinishedStr
             default: ""
             }
         } else {
-            StringConstants.Football.resultOpen
+            StringConstants.resultOpen
         }
     }
     

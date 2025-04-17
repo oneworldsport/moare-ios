@@ -13,3 +13,8 @@ struct KeywordInfo: Codable {
     let keywords: [Keyword]
     let entities: [EntityInfo]
 }
+
+struct TrendingKeywords: Codable {
+    let date: String
+    let keywords: [KeywordInfo]
+}

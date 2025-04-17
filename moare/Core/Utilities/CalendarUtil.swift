@@ -55,48 +55,50 @@ class CalendarUtil {
             return false
         }
         
-        var calendar = Calendar.current
-        calendar.timeZone = TimeZone(identifier: "UTC")!
+//        var calendar = Calendar.current
+//        calendar.timeZone = TimeZone(identifier: "UTC")!
         
         let components = DateComponents(year: year, month: month, day: selectedDay)
-        guard let selectedDate = calendar.date(from: components) else {
+        guard let selectedDate = Calendar.current.date(from: components) else {
             return false
         }
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXXXX"
-        dateFormatter.locale = Locale(identifier: "ko_KR")
-        guard let stringLocalDate = dateFormatter.date(from: stringDate) else {
+//        dateFormatter.locale = Locale(identifier: "ko_KR")
+        guard let parsedDate = dateFormatter.date(from: stringDate) else {
             return false
         }
         
-        return Calendar.current.isDate(stringLocalDate, inSameDayAs: selectedDate)
+        return Calendar.current.isDate(parsedDate, inSameDayAs: selectedDate)
     }
     
     static func formatDate(
-        date: String,
+        date: String?,
         formatType: TimeFormatType = .ampmWithDate,
         zoneId: TimeZone = TimeZone(identifier: "Asia/Seoul")!
     ) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        guard let date = date, !date.isEmpty else { return "" }
         
-        guard let parsedDate = dateFormatter.date(from: date) else {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        inputFormatter.locale = Locale(identifier: "en_US_POSIX") // NOTE: 예상치 못한 오류 방지위해 설정 권장
+        
+        guard let parsedDate = inputFormatter.date(from: date) else {
             return ""
         }
         
-        dateFormatter.locale = Locale(identifier: "ko_KR")
+        let outputFormatter = DateFormatter()
+        outputFormatter.locale = Locale(identifier: "ko_KR")
+        outputFormatter.timeZone = zoneId
         
         switch formatType {
-        case .ampm: dateFormatter.dateFormat = "a hh:mm"
-        case .ampmWithDate: dateFormatter.dateFormat = "yyyy.MM.dd a hh:mm"
-        case .yearMonth: dateFormatter.dateFormat = "yy/MM"
+        case .ampm: outputFormatter.dateFormat = "a hh:mm"
+        case .ampmWithDate: outputFormatter.dateFormat = "yyyy.MM.dd a hh:mm"
+        case .yearMonth: outputFormatter.dateFormat = "yy/MM"
         }
         
-        dateFormatter.timeZone = zoneId
-        
-        return dateFormatter.string(from: parsedDate)
+        return outputFormatter.string(from: parsedDate)
     }
     
     static func getDefaultDay(yearMonth: String, dayList: [DayInfo]) -> (Int, DayInfo)? {
@@ -153,6 +155,57 @@ class CalendarUtil {
             return .nextYearMonth
         default:
             return .previousYearMonth
+        }
+    }
+    
+    static func calculateAge(from birthDate: String) -> Int {
+        var birthDateString = birthDate
+        
+        if birthDateString.contains("T") {
+            birthDateString = birthDateString.components(separatedBy: "T").first ?? ""
+        }
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        
+        guard let parsedBirthDate = formatter.date(from: birthDateString) else {
+            return 0
+        }
+        
+        let calendar = Calendar.current
+        let now = Date()
+        
+        var age = calendar.dateComponents([.year], from: parsedBirthDate, to: now).year ?? 0
+        
+        // 올해 생일
+        // parsedBirthDate에서 연도만 올해로 바꿔주는 작업
+        let birthDayThisYear = calendar.date(
+            bySetting: .year, // 설정할 항목: 연도
+            value: calendar.component(.year, from: now), // 설정할 값: 현재 연도
+            of: parsedBirthDate // 기준(반영할) 값
+        )
+        
+        if let birthDayThisYear, birthDayThisYear > now {
+            age -= 1 // 생일 아직 안 지났음
+        }
+        
+        return age
+    }
+    
+    static func formatMinutesToHourMinute(min: Int) -> String {
+        let hours = min / 60
+        let minutes = min % 60
+        return "\(hours):\(minutes)"
+    }
+    
+    static func formatHourMinuteToMinutes(time: String) -> Int {
+        let parts = time.components(separatedBy: ":")
+        if parts.count == 2,
+           let hours = Int(parts[0]),
+           let minutes = Int(parts[1]) {
+            return (hours * 60) + minutes
+        } else {
+            return 0
         }
     }
 }

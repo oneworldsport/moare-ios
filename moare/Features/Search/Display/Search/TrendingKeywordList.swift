@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TrendingKeywords: View {
+struct TrendingKeywordList: View {
     let keywords: [String]
     
     let onItemSelected: (String) -> ()
@@ -76,7 +76,7 @@ struct KeywordButtonStyle: ButtonStyle {
     }
 }
 
-#Preview {
-    let data = ["test", "test1", "test2", "test2", "test2", "test2", "test2", "test2"]
-    return TrendingKeywords(keywords: data, onItemSelected: {_ in })
-}
+//#Preview {
+//    let data = ["test", "test1", "test2", "test2", "test2", "test2", "test2", "test2"]
+//    return TrendingKeywords(keywords: data, onItemSelected: {_ in })
+//}

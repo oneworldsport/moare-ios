@@ -8,14 +8,20 @@
 import Foundation
 
 struct StringConstants {
+    static let resultOpen = "결과 보기"
+    static let resultHide = "결과 숨기기"
+    static let gameNotStartedStr = "경기 전"
+    static let gameFinishedStr = "경기 종료"
+    
+    static let standingsFirstCategory = "순위"
+    static let statsFirstCategories = ["공격 지표", "수비 지표", "공통 지표"]
+    
+    static let gameStatsFirstCategory = "선수 이름"
+    
     struct Football {
-        static let resultOpen = "결과 보기"
-        static let resultHide = "결과 숨기기"
-        static let gameNotStartedStr = "경기 전"
         static let gameFirstHalfStr = "전반전"
         static let gameHalftimeStr = "전반 종료"
         static let gameSecondHalfStr = "후반전"
-        static let gameFinishedStr = "경기 종료"
         
         static let gameNotStarted = "NS"
         static let gameFirstHalf = "1H"
@@ -32,18 +38,43 @@ struct StringConstants {
         static let gameLiveList = [gameFirstHalf, gameHalftime, gameSecondHalf, gameExtraTime, gameBreakTime, gamePenaltyShootout]
         static let gameFinishedList = [gameFinished, gameFinishedAfterExtraTime, gameFinishedAfterPenaltyShootout]
         
-        static let standingsFirstCategory = "순위"
-        static let statsFirstCategories = ["공격 지표", "수비 지표", "공통 지표"]
-        static let playerStandingsSecondCategories = ["득점", "도움", "공격포인트", "슈팅", "유효슈팅", "키패스", "드리블 성공", "pk골", "태클 시도", "볼 경합 성공", "패스 시도", "파울", "경고", "퇴장", "경기수", "선발출전", "교체출전", "출전시간(분)", "평균평점"]
+        static let teamStandingsCategories = ["승점", "승", "무", "패", "경기수", "득점", "실점", "득실차", "홈성적", "원정성적"]
+        
         static let playerStandingsAttackCategories = ["득점", "도움", "공격포인트", "슈팅", "유효슈팅", "키패스", "드리블 성공", "pk골"]
         static let playerStandingsDefendCategories = ["태클 시도", "볼 경합 성공"]
-        static let playerStandingsEtcCategories = ["패스 시도", "파울", "경고", "퇴장", "경기수", "선발출전", "교체출전", "출전시간(분)", "평균평점"]
+        static let playerStandingsCommonCategories = ["패스 시도", "파울", "경고", "퇴장", "경기수", "선발출전", "교체출전", "출전시간(분)", "평균평점"]
+        static let playerStandingsSecondCategories = playerStandingsAttackCategories + playerStandingsDefendCategories + playerStandingsCommonCategories
         
-        static let gameStatsFirstCategory = "선수 이름"
         // 보류: 세이브, 실점, 패널티 실패, 패널티 세이브
-        static let gameStatsSecondCategories = ["득점", "pk골", "도움", "슈팅", "유효슈팅", "키패스", "드리블 성공/시도(%)", "오프사이드", "태클 시도", "볼 경합 성공/시도(%)", "가로채기", "패스 시도", "얻은 파울", "파울", "경고", "퇴장", "출전시간(분)", "평점"]
         static let gameStatsAttackCategories = ["득점", "pk골", "도움", "슈팅", "유효슈팅", "키패스", "드리블 성공/시도(%)", "오프사이드"]
         static let gameStatsDefendCategories = ["태클 시도", "볼 경합 성공/시도(%)", "가로채기"]
-        static let gameStatsEtcCategories = ["패스 시도", "얻은 파울", "파울", "경고", "퇴장", "출전시간(분)", "평점"]
+        static let gameStatsCommonCategories = ["패스 시도", "얻은 파울", "파울", "경고", "퇴장", "출전시간(분)", "평점"]
+        static let gameStatsSecondCategories = gameStatsAttackCategories + gameStatsDefendCategories + gameStatsCommonCategories
+    }
+    
+    struct NBA {
+        static let gameQtr1 = "1쿼터"
+        static let gameQtr2 = "2쿼터"
+        static let gameQtr3 = "3쿼터"
+        static let gameQtr4 = "4쿼터"
+        static let gameOt1 = "연장 1쿼터"
+        static let gameOt2 = "연장 2쿼터"
+        static let gameOt3 = "연장 3쿼터"
+        
+        static let conferenceCategory = ["서부", "동부"]
+        
+        // TODO: 나중에 데이터 추가되면 카테고리 추가
+        //        static let teamStandingsCategories = ["게임차", "승률", "승", "패", "경기수", "홈성적", "원정성적", "경기당 득점", "경기당 득실마진", "경기당 도움", "경기당 리바운드", "야투 성공률", "3점 성공률", "자유투 성공률", "경기당 블록", "경기당 스틸", "경기당 턴오버", "경기당 파울")
+        static let teamStandingsCategories = ["게임차", "승률", "승", "패", "경기수", "경기당 득점", "경기당 득실마진", "경기당 도움", "경기당 리바운드", "야투 성공률", "3점 성공률", "자유투 성공률", "경기당 블록", "경기당 스틸", "경기당 턴오버", "경기당 파울"]
+        
+        static let playerStandingsAttackCategories = ["경기당 득점", "경기당 도움", "경기당 공격리바운드", "경기당 야투 시도", "경기당 야투 성공", "야투 성공률", "경기당 3점 시도", "경기당 3점 성공", "3점 성공률", "경기당 자유투 시도", "경기당 자유투 성공", "자유투 성공률"]
+        static let playerStandingsDefendCategories = ["경기당 수비리바운드", "경기당 블록", "경기당 스틸"]
+        static let playerStandingsCommonCategories = ["경기당 리바운드", "경기당 턴오버", "경기당 파울", "경기당 파울 유도", "경기당 피블록", "경기당 득실마진", "경기수", "경기당 출전시간", "출전 경기 승", "출전 경기 패", "출전 경기 승률", "트리플더블", "더블더블"]
+        static let playerStandingsSecondCategories = playerStandingsAttackCategories + playerStandingsDefendCategories + playerStandingsCommonCategories
+        
+        static let gameStatsAttackCategories = ["득점", "도움", "공격리바운드", "야투 시도", "야투 성공", "야투 성공률", "3점 시도", "3점 성공", "3점 성공률", "자유투 시도", "자유투 성공", "자유투 성공률"]
+        static let gameStatsDefendCategories = ["수비리바운드", "블록", "스틸"]
+        static let gameStatsCommonCategories = ["리바운드", "턴오버", "파울", "득실마진", "출전시간"]
+        static let gameStatsSecondCategories = gameStatsAttackCategories + gameStatsDefendCategories + gameStatsCommonCategories
     }
 }

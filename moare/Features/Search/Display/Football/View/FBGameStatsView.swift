@@ -32,7 +32,7 @@ struct FBGameStatsView: View {
         
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack(spacing: 10) {
-                if let fbGameStatsStore = fbGameStatsStore, let fbLeagueScheduleStore = fbLeagueScheduleStore {
+                if let fbGameStatsStore, let fbLeagueScheduleStore {
                     /* ---------------------
                        game title, info
                        - hides when game selected by schedule
@@ -307,7 +307,7 @@ struct FBGameStatsFirstDataList: View {
     
     var body: some View {
         ZStack(alignment: .top) {
-            FBGameStatsFirstCategoryItem(category: StringConstants.Football.gameStatsFirstCategory)
+            FBGameStatsFirstCategoryItem(category: StringConstants.gameStatsFirstCategory)
                 .frame(height: fbGameStatsStore.categoryItemHeight * 2)
                 .background(.white)
                 .offset(y: categoryOffset < 0 ? 0 : categoryOffset)
@@ -327,7 +327,7 @@ struct FBGameStatsFirstDataList: View {
                 HStack(spacing: 0) {
                     Spacer()
                     
-                    Text("팀 총합")
+                    Text("합계(팀 기록)")
                         .font(.system(size: 12))
                     
                     Spacer()
@@ -523,8 +523,8 @@ struct FBGameStatsFirstCategoryList: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
-                    ForEach(StringConstants.Football.statsFirstCategories.indices, id: \.self) { index in
-                        let category = StringConstants.Football.statsFirstCategories[index]
+                    ForEach(StringConstants.statsFirstCategories.indices, id: \.self) { index in
+                        let category = StringConstants.statsFirstCategories[index]
                         
                         FBGameStatsFirstCategoryListItem(
                             fbGameStatsStore: fbGameStatsStore,
@@ -533,7 +533,7 @@ struct FBGameStatsFirstCategoryList: View {
                         )
                         .id(index)
                         
-                        if index != StringConstants.Football.statsFirstCategories.count - 1 {
+                        if index != StringConstants.statsFirstCategories.count - 1 {
                             VCapsuleBar()
                                 .opacity(0.5)
                         }
@@ -555,7 +555,7 @@ struct FBGameStatsFirstCategoryList: View {
         
         let attackCategoriesCount = CGFloat(StringConstants.Football.gameStatsAttackCategories.count)
         let defendCategoriesCount = CGFloat(StringConstants.Football.gameStatsDefendCategories.count)
-        let etcCategoriesCount = CGFloat(StringConstants.Football.gameStatsEtcCategories.count)
+        let etcCategoriesCount = CGFloat(StringConstants.Football.gameStatsCommonCategories.count)
         
         withAnimation(.spring(duration: 0.5)) {
             switch index {
@@ -592,7 +592,7 @@ struct FBGameStatsFirstCategoryListItem: View {
         switch index {
         case 0: fbGameStatsStore.itemWidth * CGFloat(StringConstants.Football.gameStatsAttackCategories.count)
         case 1: fbGameStatsStore.itemWidth * CGFloat(StringConstants.Football.gameStatsDefendCategories.count)
-        default: fbGameStatsStore.itemWidth * CGFloat(StringConstants.Football.gameStatsEtcCategories.count)
+        default: fbGameStatsStore.itemWidth * CGFloat(StringConstants.Football.gameStatsCommonCategories.count)
         }
     }
 }

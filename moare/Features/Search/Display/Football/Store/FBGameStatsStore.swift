@@ -46,7 +46,14 @@ struct FBGameStatsStore {
     }
     
     enum Action {
+        /* ---------------------
+           init
+           --------------------- */
         case initData(displayModel: FBGameStatsDisplayModel)
+        
+        /* ---------------------
+           view action
+           --------------------- */
         case selectFirstCategory(Int)
         case selectSecondCategory(Int)
         case selectTeam(Int)
@@ -190,18 +197,18 @@ struct FBGameStatsStore {
                     state.playerStats.sort { $0.statistics.first?.games.minutes ?? 0 > $1.statistics.first?.games.minutes ?? 0 }
                 case 17:
                     state.playerStats.sort { Double($0.statistics.first?.games.rating ?? "0") ?? 0 > Double($1.statistics.first?.games.rating ?? "0") ?? 0 }
-                default:
-                    break
+                default: break
                 }
                 
                 return .none
                 
             case .setPlayersTotalStats:
-                let playersTotalStats = state.playerStats
+                state.playerTotalStats = state.playerStats
                     .compactMap { $0.statistics.first }
                     .reduce(
                         FBGamePlayerStatsDetail()
                     ) { acc, stats in
+                        // NOTE: 생성자에 바로 선언하지 않고 프로퍼티를 따로 만들어 생성자에 전달하면 오류가 안난다..?
                         let newShots = FBPlayerStatsShots(
                             total: acc.shots.total + stats.shots.total,
                             on: acc.shots.on + stats.shots.on
@@ -261,10 +268,8 @@ struct FBGameStatsStore {
                         )
                     }
                 
-                state.playerTotalStats = playersTotalStats
-                
                 return .none
-            }
+            } // switch action
         }
     }
 }

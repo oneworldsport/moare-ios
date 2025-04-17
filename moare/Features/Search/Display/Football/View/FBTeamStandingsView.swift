@@ -31,7 +31,7 @@ struct FBTeamStandingsView: View {
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack {
-                if let fbTeamStandingsStore = fbTeamStandingsStore {
+                if let fbTeamStandingsStore {
                     // league
                     if let league = fbTeamStandingsStore.league {
                         HStack {
@@ -47,7 +47,7 @@ struct FBTeamStandingsView: View {
                         .padding(.top, 4)
                     }
                     
-                    // standings data
+                    // category, standings data
                     ScrollView {
                         HStack(spacing: 0) {
                             FBTeamStandingsFirstDataList(
@@ -82,8 +82,8 @@ struct FBTeamStandingsView: View {
                         )
                     }
                     .coordinateSpace(name: coordinateSpaceName)
-                }
-            }
+                } // if let fbTeamStandingsStore
+            } // VStack
             .onAppear {
                 // init FBTeamStandingsStore
                 let fbTeamStandingsStore: StoreOf<FBTeamStandingsStore> = storeManager.getStore(forKey: StoreKeys.fbTeamStandingsStore) ?? {
@@ -110,7 +110,7 @@ struct FBTeamStandingsView: View {
                     fbTeamStandingsStore?.send(.initData(displayModel: displayModel))
                 }
             }
-        }
+        } // if let searchStore
     }
 }
 
@@ -221,7 +221,7 @@ struct FBTeamStandingsDataList: View {
                     let data = fbTeamStandingsStore.standings[index]
                     
                     HStack(spacing: 0) {
-                        ForEach(0..<10) { index in
+                        ForEach(0..<StringConstants.Football.teamStandingsCategories.count) { index in
                             FBTeamStandingsDataListItem(
                                 fbTeamStandingsStore: fbTeamStandingsStore,
                                 data: data,
