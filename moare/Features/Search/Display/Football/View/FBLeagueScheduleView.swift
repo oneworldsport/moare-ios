@@ -378,7 +378,7 @@ struct FBLeagueScheduleListItem: View {
         } // HStack
         .background(Color.clear) // added for tapGesture on Spacer()
         .onTapGesture {
-            searchStore.send(.selectFBGame(data))
+            searchStore.send(.selectFBGame(game: data))
             
             // set selected game's isOpened true
             fbLeagueScheduleStore.send(.updateResultOpenedState(fixtureId: data.fixture.id, isOpened: true))

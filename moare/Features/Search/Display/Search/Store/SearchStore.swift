@@ -36,6 +36,7 @@ struct SearchStore {
         var fbGameStatsData: FBGameStatsDisplayModel? = nil
         
         var initialFBLeagueScheduleData: FBLeagueScheduleDisplayModel? = nil
+        var initialNBALeagueScheduleData: NBALeagueScheduleDisplayModel? = nil
         
         // nba
         var nbaPlayerInfoData: NBAPlayerInfoDisplayModel? = nil
@@ -90,7 +91,8 @@ struct SearchStore {
         case updateTextField(String, Bool = true)
         case updateTextFieldVisibleState(Bool)
         case performSearch(searchType: SearchType = .query, aniDuration: CGFloat = 0)
-        case selectFBGame(FBGame)
+        case selectFBGame(game: FBGame)
+        case selectNBAGame(game: NBAGame)
         case showPlayerStats(category: String? = nil, playerId: Int)
         case showTeamStats(teamId: Int)
         case showGameStats(gameType: String)
@@ -380,6 +382,16 @@ struct SearchStore {
                 state.fbLeagueScheduleData = nil
                 state.fbGameStatsData = nil
                 
+                state.nbaPlayerInfoData = nil
+                state.nbaPlayerStatsData = nil
+                state.nbaPlayerStandingsData = nil
+                state.nbaTeamInfoData = nil
+                state.nbaTeamStatsData = nil
+                state.nbaTeamStandingsData = nil
+                state.nbaTeamScheduleData = nil
+                state.nbaLeagueScheduleData = nil
+                state.nbaGameStatsData = nil
+                
                 switch model.data {
                 case .fbPlayerInfo(_, let displayModel):
                     state.fbPlayerInfoData = displayModel
@@ -417,6 +429,7 @@ struct SearchStore {
                     state.nbaTeamScheduleData = displayModel
                 case .nbaLeagueSchedule(_, let displayModel):
                     state.nbaLeagueScheduleData = displayModel
+                    state.initialNBALeagueScheduleData = displayModel
                 case .nbaGameStats(_, let displayModel):
                     state.nbaGameStatsData = displayModel
                     
@@ -480,6 +493,16 @@ struct SearchStore {
                         state.fbLeagueScheduleData = nil
                         state.fbGameStatsData = nil
                         
+                        state.nbaPlayerInfoData = nil
+                        state.nbaPlayerStatsData = nil
+                        state.nbaPlayerStandingsData = nil
+                        state.nbaTeamInfoData = nil
+                        state.nbaTeamStatsData = nil
+                        state.nbaTeamStandingsData = nil
+                        state.nbaTeamScheduleData = nil
+                        state.nbaLeagueScheduleData = nil
+                        state.nbaGameStatsData = nil
+                        
                         return .run { send in
                             await send(.toggleSearchBar)
                             
@@ -523,6 +546,19 @@ struct SearchStore {
                 state.poppedView = nil
                 
                 state.fbGameStatsData = FBGameStatsDisplayModel(game: game)
+                
+                return .none
+                
+            case .selectNBAGame(let game):
+                let dataMdoel = SportDecodableModel.nbaGameStats(
+                    NBAGameStatsReponseModel(game: game),
+                    NBAGameStatsDisplayModel(game: game)
+                )
+                
+                state.viewStack.append(dataMdoel)
+                state.poppedView = nil
+                
+                state.nbaGameStatsData = NBAGameStatsDisplayModel(game: game)
                 
                 return .none
                 
@@ -591,6 +627,22 @@ struct SearchStore {
                             modelConverter.fbPlayerStatsConverter(response: responseModel)
                         )
                         
+                    case .nbaPlayerStandings(let responseModel, let displayModel):
+                        // NOTE: nba player stats data in standings has all the stats for now, so doesn't has to fetchById like football above.
+                        let player = responseModel.standings.first { $0.player.personId == playerId }
+                        
+                        let playerInfoResponseModel = NBAPlayerInfoResponseModel(info: player, lastGame: nil, nextGame: nil)
+                        dataModel = .nbaPlayerStats(
+                            playerInfoResponseModel,
+                            modelConverter.nbaPlayerStatsConverter(response: playerInfoResponseModel)
+                        )
+                        
+                    case .nbaPlayerInfo(let responseModel, let displayModel):
+                        dataModel = .nbaPlayerStats(
+                            responseModel,
+                            modelConverter.nbaPlayerStatsConverter(response: responseModel)
+                        )
+                        
                     default: return // Make it do nothing
                     }
                     
@@ -624,6 +676,21 @@ struct SearchStore {
                     dataModel = .fbTeamStats(
                         responseModel,
                         modelConverter.fbTeamStatsConverter(response: responseModel)
+                    )
+                    
+                case .nbaTeamStandings(let responseModel, let displayModel):
+                    let team = responseModel.standings.first { $0.team.id == teamId }
+                    
+                    let teamInfoResponseModel = NBATeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
+                    dataModel = .nbaTeamStats(
+                        teamInfoResponseModel,
+                        modelConverter.nbaTeamStatsConverter(response: teamInfoResponseModel)
+                    )
+                    
+                case .nbaTeamInfo(let responseModel, let displayModel):
+                    dataModel = .nbaTeamStats(
+                        responseModel,
+                        modelConverter.nbaTeamStatsConverter(response: responseModel)
                     )
                     
                 default: return .none // Make it do nothing
@@ -662,6 +729,22 @@ struct SearchStore {
                         modelConverter.fbGameStatsConverter(response: gameStatsResponseModel)
                     )
                     
+                case .nbaPlayerInfo(let responseModel, let displayModel):
+                    let gameStatsResponseModel = gameType == "previous" ? NBAGameStatsReponseModel(game: responseModel.lastGame) : NBAGameStatsReponseModel(game: responseModel.nextGame)
+                    
+                    dataModel = .nbaGameStats(
+                        gameStatsResponseModel,
+                        modelConverter.nbaGameStatsConverter(response: gameStatsResponseModel)
+                    )
+                    
+                case .nbaTeamInfo(let responseModel, let displayModel):
+                    let gameStatsResponseModel = gameType == "previous" ? NBAGameStatsReponseModel(game: responseModel.lastGame) : NBAGameStatsReponseModel(game: responseModel.nextGame)
+                    
+                    dataModel = .nbaGameStats(
+                        gameStatsResponseModel,
+                        modelConverter.nbaGameStatsConverter(response: gameStatsResponseModel)
+                    )
+                    
                 default: return .none // Make it do nothing
                 }
                 
@@ -679,18 +762,38 @@ struct SearchStore {
                 }
                 
             case .refreshGame(let category):
-                return .run { [fbGameStatsData = state.fbGameStatsData] send in
-                    if let game = fbGameStatsData?.game {
-                        let result = try await searchClient.fetchById(
-                            category: category,
-                            date: game.fixture.date,
-                            dataType: "\(category)_game_stats",
-                            leagueId: game.league.id,
-                            id: String(game.fixture.id)
-                        )
+                return .run { [viewStack = state.viewStack, fbGameStatsData = state.fbGameStatsData, nbaGameStatsData = state.nbaGameStatsData] send in
+                    switch viewStack.last {
+                    case .fbGameStats(let responseModel, let displayModel):
+                        if let game = fbGameStatsData?.game {
+                            let result = try await searchClient.fetchById(
+                                category: category,
+                                date: game.fixture.date,
+                                dataType: "\(category)_game_stats",
+                                leagueId: game.league.id,
+                                id: String(game.fixture.id)
+                            )
+                            
+                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+                            await send(.updateLastViewStack(data: result.data))
+                        }
                         
-                        await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
-                        await send(.updateLastViewStack(data: result.data))
+                    case .nbaGameStats(let responseModel, let displayModel):
+                        if let gameSummary = nbaGameStatsData?.game.gameSummary,
+                           let boxScoreTraditional = nbaGameStatsData?.game.boxScoreTraditional {
+                            let result = try await searchClient.fetchById(
+                                category: category,
+                                date: gameSummary.date,
+                                dataType: "\(category)_game_stats",
+                                leagueId: 90001,
+                                id: boxScoreTraditional.gameId
+                            )
+                            
+                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+                            await send(.updateLastViewStack(data: result.data))
+                        }
+                        
+                    default: return // Make it do nothing
                     }
                 }
                 
@@ -705,6 +808,16 @@ struct SearchStore {
                     state.fbTeamScheduleData = nil
                     state.fbLeagueScheduleData = nil
                     state.fbGameStatsData = nil
+                    
+                    state.nbaPlayerInfoData = nil
+                    state.nbaPlayerStatsData = nil
+                    state.nbaPlayerStandingsData = nil
+                    state.nbaTeamInfoData = nil
+                    state.nbaTeamStatsData = nil
+                    state.nbaTeamStandingsData = nil
+                    state.nbaTeamScheduleData = nil
+                    state.nbaLeagueScheduleData = nil
+                    state.nbaGameStatsData = nil
                 }
                 
                 switch data {
@@ -726,6 +839,26 @@ struct SearchStore {
                     state.fbLeagueScheduleData = displayModel
                 case .fbGameStats(_, let displayModel):
                     state.fbGameStatsData = displayModel
+                    
+                case .nbaPlayerInfo(_, let displayModel):
+                    state.nbaPlayerInfoData = displayModel
+                case .nbaPlayerStats(_, let displayModel):
+                    state.nbaPlayerStatsData = displayModel
+                case .nbaPlayerStandings(_, let displayModel):
+                    state.nbaPlayerStandingsData = displayModel
+                case .nbaTeamInfo(_, let displayModel):
+                    state.nbaTeamInfoData = displayModel
+                case .nbaTeamStats(_, let displayModel):
+                    state.nbaTeamStatsData = displayModel
+                case .nbaTeamStandings(_, let displayModel):
+                    state.nbaTeamStandingsData = displayModel
+                case .nbaTeamSchedule(_, let displayModel):
+                    state.nbaTeamScheduleData = displayModel
+                case .nbaLeagueSchedule(_, let displayModel):
+                    state.nbaLeagueScheduleData = displayModel
+                case .nbaGameStats(_, let displayModel):
+                    state.nbaGameStatsData = displayModel
+                    
                 default:
                     break
                 }

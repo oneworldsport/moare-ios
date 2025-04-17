@@ -271,7 +271,7 @@ struct NBATeamScheduleListItem: View {
         } // HStack
         .background(Color.clear) // added for tapGesture on Spacer()
         .onTapGesture {
-//            searchStore.send(.selectNBAGame(data))
+            searchStore.send(.selectNBAGame(game: data))
             
             // set selected game's isOpened true
             if let gameSummary = data.gameSummary {
