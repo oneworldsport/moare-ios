@@ -254,12 +254,12 @@ struct NBALeagueScheduleListItem: View {
                         isSvg: true
                     )
                     
-                    Text(teamNameDic["short_\(homeTeamId)"] ?? "")
+                    Text(teamNameDic["short_\(homeTeamId ?? 0)"] ?? "")
                         .font(.system(size: 13))
                         .lineLimit(2)
                 }
             }
-            .frame(width: 100)
+            .frame(width: 90)
             .foregroundStyle(.primary)
             .disabled(true) // TODO: modify when api added
             
@@ -271,7 +271,7 @@ struct NBALeagueScheduleListItem: View {
             if data.gameSummary?.gameStatusId == 2 ||
                 (data.gameSummary?.gameStatusId == 3 && isResultOpened) {
                 Text("\(homeTeamScore)")
-                    .frame(maxWidth: 30)
+                    .frame(maxWidth: .infinity)
                     .foregroundStyle(homeTeamScore >= awayTeamScore ? .moare : .primary)
             }
             
@@ -299,7 +299,7 @@ struct NBALeagueScheduleListItem: View {
                     .font(.system(size: 12))
                     .padding(.vertical, 2)
             }
-            .frame(width: 110)
+            .frame(width: 80)
             
             Spacer()
                 .frame(maxHeight: 80)
@@ -312,7 +312,7 @@ struct NBALeagueScheduleListItem: View {
             if data.gameSummary?.gameStatusId == 2 ||
                 (data.gameSummary?.gameStatusId == 3 && isResultOpened) {
                 Text("\(awayTeamScore)")
-                    .frame(maxWidth: 30)
+                    .frame(maxWidth: .infinity)
                     .foregroundStyle(awayTeamScore >= homeTeamScore ? .moare : .primary)
             }
             
@@ -331,12 +331,12 @@ struct NBALeagueScheduleListItem: View {
                         isSvg: true
                     )
                     
-                    Text(teamNameDic["short_\(awayTeamId)"] ?? "")
+                    Text(teamNameDic["short_\(awayTeamId ?? 0)"] ?? "")
                         .font(.system(size: 13))
                         .lineLimit(2)
                 }
             }
-            .frame(width: 100)
+            .frame(width: 90)
             .foregroundStyle(.primary)
             .disabled(true) // TODO: modify when api added
         } // HStack

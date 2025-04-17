@@ -37,7 +37,7 @@ struct NBAGameStatsView: View {
                        --------------------- */
                     HStack(spacing: 0) {
                         NBATitle(
-                            leagueName: "NBA 정규시즌",
+                            leagueName: "NBA",
                             leagueSeason: Int(nbaGameStatsStore.displayModel?.game.gameSummary?.season.split(separator: "-").first ?? "2024")!
                         )
                         
@@ -258,9 +258,9 @@ struct NBAGameStatsLineScoreContainer: View {
     var body: some View {
         if let homeTeamLineScore = nbaGameStatsStore.homeTeamLineScore,
            let awayTeamLineScore = nbaGameStatsStore.awayTeamLineScore {
-            VStack {
+            VStack(spacing: 0) {
                 HStack {
-                    VStack {
+                    VStack(spacing: 0) {
                         Spacer()
                             .frame(height: 26)
                         
@@ -272,8 +272,9 @@ struct NBAGameStatsLineScoreContainer: View {
                             .foregroundStyle(homeTeamLineScore.pts >= awayTeamLineScore.pts ? .moare : .primary)
                     }
                     
-                    VStack {
+                    VStack(spacing: 0) {
                         NBAGameStatsLineScoreTitle(lineScore: homeTeamLineScore)
+                            .frame(height: 25)
                         
                         Capsule()
                             .fill(.secondary)
@@ -284,6 +285,7 @@ struct NBAGameStatsLineScoreContainer: View {
                             nbaGameStatsStore: nbaGameStatsStore,
                             lineScore: homeTeamLineScore
                         )
+                        .frame(height: nbaGameStatsStore.lineScoreItemHeight)
                     }
                 }
                 
@@ -304,6 +306,7 @@ struct NBAGameStatsLineScoreContainer: View {
                         nbaGameStatsStore: nbaGameStatsStore,
                         lineScore: awayTeamLineScore
                     )
+                    .frame(height: nbaGameStatsStore.lineScoreItemHeight)
                 }
             }
         }
@@ -317,54 +320,54 @@ struct NBAGameStatsLineScoreTitle: View {
     var body: some View {
         HStack {
             Rectangle()
-                .frame(width: 2)
+                .frame(width: 1)
                 .foregroundStyle(.secondary)
                 .opacity(0.5)
             Text("1쿼터")
                 .font(.system(size: 15))
                 .frame(maxWidth: .infinity)
             Rectangle()
-                .frame(width: 2)
+                .frame(width: 1)
                 .foregroundStyle(.secondary)
                 .opacity(0.5)
             Text("2쿼터")
                 .font(.system(size: 15))
                 .frame(maxWidth: .infinity)
             Rectangle()
-                .frame(width: 2)
+                .frame(width: 1)
                 .foregroundStyle(.secondary)
                 .opacity(0.5)
             Text("3쿼터")
                 .font(.system(size: 15))
                 .frame(maxWidth: .infinity)
             Rectangle()
-                .frame(width: 2)
+                .frame(width: 1)
                 .foregroundStyle(.secondary)
                 .opacity(0.5)
             Text("4쿼터")
                 .font(.system(size: 15))
                 .frame(maxWidth: .infinity)
-            if let _ = lineScore.ptsOt1 {
+            if let score = lineScore.ptsOt1, score != 0 {
                 Rectangle()
-                    .frame(width: 2)
+                    .frame(width: 1)
                     .foregroundStyle(.secondary)
                     .opacity(0.5)
                 Text("연장 1쿼터")
                     .font(.system(size: 15))
                     .frame(maxWidth: .infinity)
             }
-            if let _ = lineScore.ptsOt2 {
+            if let score = lineScore.ptsOt2, score != 0 {
                 Rectangle()
-                    .frame(width: 2)
+                    .frame(width: 1)
                     .foregroundStyle(.secondary)
                     .opacity(0.5)
                 Text("연장 2쿼터")
                     .font(.system(size: 15))
                     .frame(maxWidth: .infinity)
             }
-            if let _ = lineScore.ptsOt3 {
+            if let score = lineScore.ptsOt3, score != 0 {
                 Rectangle()
-                    .frame(width: 2)
+                    .frame(width: 1)
                     .foregroundStyle(.secondary)
                     .opacity(0.5)
                 Text("연장 3쿼터")
@@ -372,7 +375,7 @@ struct NBAGameStatsLineScoreTitle: View {
                     .frame(maxWidth: .infinity)
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: 25)
+//        .frame(maxWidth: .infinity, maxHeight: 25)
     }
 }
 
@@ -384,54 +387,54 @@ struct NBAGameStatsLineScoreItem: View {
     var body: some View {
         HStack {
             Rectangle()
-                .frame(width: 2)
+                .frame(width: 1)
                 .foregroundStyle(.secondary)
                 .opacity(0.5)
             Text("\(lineScore.ptsQtr1 ?? 0)")
                 .fontWeight(.medium)
                 .frame(maxWidth: .infinity)
             Rectangle()
-                .frame(width: 2)
+                .frame(width: 1)
                 .foregroundStyle(.secondary)
                 .opacity(0.5)
             Text("\(lineScore.ptsQtr2 ?? 0)")
                 .fontWeight(.medium)
                 .frame(maxWidth: .infinity)
             Rectangle()
-                .frame(width: 2)
+                .frame(width: 1)
                 .foregroundStyle(.secondary)
                 .opacity(0.5)
             Text("\(lineScore.ptsQtr3 ?? 0)")
                 .fontWeight(.medium)
                 .frame(maxWidth: .infinity)
             Rectangle()
-                .frame(width: 2)
+                .frame(width: 1)
                 .foregroundStyle(.secondary)
                 .opacity(0.5)
             Text("\(lineScore.ptsQtr1 ?? 0)")
                 .fontWeight(.medium)
                 .frame(maxWidth: .infinity)
-            if let score = lineScore.ptsOt1 {
+            if let score = lineScore.ptsOt1, score != 0 {
                 Rectangle()
-                    .frame(width: 2)
+                    .frame(width: 1)
                     .foregroundStyle(.secondary)
                     .opacity(0.5)
                 Text("\(score)")
                     .fontWeight(.medium)
                     .frame(maxWidth: .infinity)
             }
-            if let score = lineScore.ptsOt2 {
+            if let score = lineScore.ptsOt2, score != 0 {
                 Rectangle()
-                    .frame(width: 2)
+                    .frame(width: 1)
                     .foregroundStyle(.secondary)
                     .opacity(0.5)
                 Text("\(score)")
                     .fontWeight(.medium)
                     .frame(maxWidth: .infinity)
             }
-            if let score = lineScore.ptsOt3 {
+            if let score = lineScore.ptsOt3, score != 0 {
                 Rectangle()
-                    .frame(width: 2)
+                    .frame(width: 1)
                     .foregroundStyle(.secondary)
                     .opacity(0.5)
                 Text("\(score)")
@@ -439,7 +442,7 @@ struct NBAGameStatsLineScoreItem: View {
                     .frame(maxWidth: .infinity)
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: nbaGameStatsStore.lineScoreItemHeight)
+//        .frame(maxWidth: .infinity, maxHeight: nbaGameStatsStore.lineScoreItemHeight)
     }
 }
 
@@ -466,7 +469,7 @@ struct NBAGameStatsTeamButtonAdditionalInfoContainer: View {
                     // home
                     NBAGameStatsTeamButton(
                         nbaGameStatsStore: nbaGameStatsStore,
-                        team: teamNameDic["short_\(displayModel?.game.gameSummary?.homeTeamId)"] ?? "",
+                        team: teamNameDic["short_\(displayModel?.game.gameSummary?.homeTeamId ?? 0)"] ?? "",
                         index: 0
                     )
                     .frame(maxWidth: nbaGameStatsStore.teamButtonWidth)
@@ -477,7 +480,7 @@ struct NBAGameStatsTeamButtonAdditionalInfoContainer: View {
                     // away
                     NBAGameStatsTeamButton(
                         nbaGameStatsStore: nbaGameStatsStore,
-                        team: teamNameDic["short_\(displayModel?.game.gameSummary?.visitorTeamId)"] ?? "",
+                        team: teamNameDic["short_\(displayModel?.game.gameSummary?.visitorTeamId ?? 0)"] ?? "",
                         index: 1
                     )
                     .frame(maxWidth: nbaGameStatsStore.teamButtonWidth)
@@ -506,14 +509,14 @@ struct NBAGameStatsTeamButtonAdditionalInfoContainer: View {
                 .foregroundStyle(.secondary)
 //                .padding(.trailing, UIConstants.Padding.defaultHPadding)
                 
-                VStack {
+                VStack(alignment: .leading) {
                     Text("날짜: \(CalendarUtil.formatDate(date: displayModel?.game.gameSummary?.date).split(separator: " ").first ?? "")")
                         .font(.system(size: 12))
                     
                     Text("\(CalendarUtil.formatDate(date: displayModel?.game.gameSummary?.date, formatType: .ampm))")
                         .font(.system(size: 12))
                     
-                    Text("장소: \(teamNameDic["venue_\(displayModel?.game.gameSummary?.homeTeamId)"] ?? "")")
+                    Text("장소: \(teamNameDic["venue_\(displayModel?.game.gameSummary?.homeTeamId ?? 0)"] ?? "")")
                         .font(.system(size: 12))
                     
                     Text("관중수: \(displayModel?.game.gameInfo?.attendance ?? 0)")
