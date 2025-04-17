@@ -30,7 +30,6 @@ struct NBATeamInfo: Decodable, Equatable {
     private let _teamCode: String?
     private let _teamConference: String?
     private let _teamDivision: String?
-    private let _teamLogo: String?
     private let _w: Int?
     private let _yearFounded: Int?
 
@@ -50,7 +49,6 @@ struct NBATeamInfo: Decodable, Equatable {
     var teamCode: String { _teamCode ?? "" }
     var teamConference: String { _teamConference ?? "" }
     var teamDivision: String { _teamDivision ?? "" }
-    var teamLogo: String { _teamLogo ?? "" }
     var wins: Int { _w ?? 0 }
     var yearFounded: Int { _yearFounded ?? 0 }
 
@@ -71,7 +69,6 @@ struct NBATeamInfo: Decodable, Equatable {
         case _teamCode = "teamCode"
         case _teamConference = "teamConference"
         case _teamDivision = "teamDivision"
-        case _teamLogo = "teamLogo"
         case _w = "w"
         case _yearFounded = "yearFounded"
     }
