@@ -19,6 +19,7 @@ struct SearchView: View {
        constants
        --------------------- */
     private let dragMaxOffset = UIConstants.Width.screenWidth / 3 + 20
+    let barHeight: CGFloat = 50
     
     /* ---------------------
        ui state
@@ -34,6 +35,28 @@ struct SearchView: View {
     var body: some View {
         ZStack {
             if let searchStore = searchStore {
+                /* ---------------------
+                   back button
+                   --------------------- */
+                VStack {
+                    HStack {
+                        Button(action: {
+                            searchStore.send(.goBack)
+                        }) {
+                            Image(systemName: "chevron.backward")
+                                .font(.system(size: 22))
+                                .frame(width: 30, height: barHeight)
+                                .padding(.leading, 10)
+                        }
+                        .foregroundStyle(.moare)
+                        
+                        Spacer()
+                    }
+
+                    Spacer()
+                }
+                .zIndex(1)
+                
                 /* ---------------------
                    notice
                    - notice about providing data

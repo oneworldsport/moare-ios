@@ -18,7 +18,8 @@ struct AnimatingSearchBar: View {
     /* ---------------------
        constants
        --------------------- */
-    let barHeight = 50.0
+    let barHeight: CGFloat = 50
+    let paddingForBackButton: CGFloat = 40
     
     /* ---------------------
        ui state
@@ -122,7 +123,7 @@ struct AnimatingSearchBar: View {
                         }
                     }
                 }
-                .padding(.horizontal, UIConstants.Padding.defaultHPadding)
+                .padding(.horizontal, searchStore.searchState ? UIConstants.Padding.defaultHPadding + paddingForBackButton : UIConstants.Padding.defaultHPadding)
                 
                 Spacer()
                     .uiState(visibleState: searchStore.searchState)
