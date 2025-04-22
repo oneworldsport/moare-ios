@@ -67,10 +67,13 @@ struct SearchView: View {
                         
                         VStack(alignment: .trailing, spacing: 0) {
                             NoticeBox(noticeList: searchStore.noticeList)
+                                .padding(.trailing, 12)
                                 .opacity(isNoticeOpened ? 1 : 0)
                             
                             Button(action: {
-                                isNoticeOpened.toggle()
+                                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                                    isNoticeOpened.toggle()
+                                }
                             }) {
                                 Image(systemName: "info.circle")
                                     .tint(.secondary)
@@ -211,7 +214,9 @@ struct SearchView: View {
                 }
                 .onTapGesture {
                     if isNoticeOpened {
-                        isNoticeOpened = false
+                        withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                            isNoticeOpened = false
+                        }
                     } else {
                         focusState = false
                     }
