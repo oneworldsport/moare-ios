@@ -98,6 +98,7 @@ struct SearchStore {
         case showGameStats(gameType: String)
         case updateTrendingKeywordsVisibleState(Bool)
         case refreshGame(category: String)
+        case selectNBATournamentRound(gameList: [NBAGame])
         
         /* ---------------------
            api request action
@@ -761,6 +762,34 @@ struct SearchStore {
                         
                     default: return // Make it do nothing
                     }
+                }
+                
+            case .selectNBATournamentRound(let gameList):
+                let dataModel: SportDecodableModel
+                
+                switch state.viewStack.last {
+                case .nbaLeagueTournament(let responseModel, let displayModel):
+                    let teamScheduleResponseModel = NBAGameScheduleResponseModel(scheduledMonths: nil, schedule: gameList)
+                    
+                    dataModel = .nbaTeamSchedule(
+                        teamScheduleResponseModel,
+                        modelConverter.nbaTeamScheduleConverter(response: teamScheduleResponseModel)
+                    )
+                    
+                default: return .none // Make it do nothing
+                }
+                
+                state.resultVisibleState = false
+                
+                return .run { send in
+                    await send(.updateMainDisplayModel(data: dataModel))
+                    await send(.addViewStack(data: dataModel))
+                    
+                    // wait for before view's removing animation
+                    // NOTE: 0.1 for temporary
+                    try await Task.sleep(for: .seconds(0.1))
+                    
+                    await send(.updateResultVisibleState(bool: true))
                 }
                 
             case .updateMainDisplayModel(let data, let shouldReset):

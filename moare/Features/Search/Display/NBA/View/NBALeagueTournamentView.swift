@@ -417,8 +417,10 @@ struct NBALeagueTournamentRoundContainer: View {
                 .frame(height: itemSize.height)
             } // if !isLeft
             
-            Button(actino: {
-                
+            Button(action: {
+                if let gameList {
+                    searchStore.send(.selectNBATournamentRound(gameList: gameList))                    
+                }
             }) {
                 VStack(spacing: 0) {
                     HStack {
@@ -516,6 +518,7 @@ struct NBALeagueTournamentRoundContainer: View {
                     }
                 )
             } // Button
+            .foregroundStyle(.primary)
             
             if isLeft {
                 HStack(spacing: 0) {
