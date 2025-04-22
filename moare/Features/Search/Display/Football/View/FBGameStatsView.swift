@@ -175,14 +175,16 @@ struct FBGameStatsView: View {
                 
                 translate()
                 
-                searchStore.send(.refreshGame(category: "football"))
+                if displayModel.game.fixture.status.short != "NS" && displayModel.game.fixture.status.short != "FT" {
+                    searchStore.send(.refreshGame(category: "football"))
+                }
             } // onAppear
             .onChange(of: displayModel) {
                 if case .fbGameStats = searchStore.poppedView {
                     fbGameStatsStore?.send(.initData(displayModel: displayModel))
                 }
             }
-            .onChange(of: fbGameStatsStore?.coach) { newValue in
+            .onChange(of: fbGameStatsStore?.coach) {
                 translate()
             }
         } // if let searchStore
@@ -244,20 +246,22 @@ struct FBGameStatsTeamButtonContainer: View {
             HStack {
                 Spacer()
                 
-                Button(action: {
-                    searchStore.send(.refreshGame(category: "football"))
-                }) {
-                    Image(systemName: "arrow.clockwise")
-                        .tint(.secondary)
-                        .padding(5)
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(.secondary, lineWidth: 1)
-                        }
-                        .opacity(0.6)
+                if fbGameStatsStore.displayModel?.game.fixture.status.short != "NS" && fbGameStatsStore.displayModel?.game.fixture.status.short != "FT" {
+                    Button(action: {
+                        searchStore.send(.refreshGame(category: "football"))
+                    }) {
+                        Image(systemName: "arrow.clockwise")
+                            .tint(.secondary)
+                            .padding(5)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(.secondary, lineWidth: 1)
+                            }
+                            .opacity(0.6)
+                    }
+                    .foregroundStyle(.secondary)
+                    .padding(.trailing, UIConstants.Padding.defaultHPadding)
                 }
-                .foregroundStyle(.secondary)
-                .padding(.trailing, UIConstants.Padding.defaultHPadding)
             }
         }
         .onChange(of: fbGameStatsStore.selectedTeamIndex) { newValue in

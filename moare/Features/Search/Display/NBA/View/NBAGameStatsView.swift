@@ -138,7 +138,9 @@ struct NBAGameStatsView: View {
                     nbaGameStatsStore.send(.initData(displayModel: displayModel))
                 }
                 
-                searchStore.send(.refreshGame(category: "basketball"))
+                if displayModel.game.gameSummary?.gameStatusId == 2 {
+                    searchStore.send(.refreshGame(category: "basketball"))
+                }
             } // onAppear
             .onChange(of: displayModel) {
                 if case .nbaGameStats = searchStore.poppedView {
@@ -520,20 +522,21 @@ struct NBAGameStatsTeamButtonAdditionalInfoContainer: View {
             
             HStack(alignment: .top) {
                 // refresh button
-                Button(action: {
-                    searchStore.send(.refreshGame(category: "basketball"))
-                }) {
-                    Image(systemName: "arrow.clockwise")
-                        .tint(.secondary)
-                        .padding(5)
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(.secondary, lineWidth: 1)
-                        }
-                        .opacity(0.6)
+                if displayModel?.game.gameSummary?.gameStatusId == 2 {
+                    Button(action: {
+                        searchStore.send(.refreshGame(category: "basketball"))
+                    }) {
+                        Image(systemName: "arrow.clockwise")
+                            .tint(.secondary)
+                            .padding(5)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(.secondary, lineWidth: 1)
+                            }
+                            .opacity(0.6)
+                    }
+                    .foregroundStyle(.secondary)
                 }
-                .foregroundStyle(.secondary)
-//                .padding(.trailing, UIConstants.Padding.defaultHPadding)
                 
                 VStack(alignment: .leading) {
                     Text("날짜: \(CalendarUtil.formatDate(date: displayModel?.game.gameSummary?.date).split(separator: " ").first ?? "")")
