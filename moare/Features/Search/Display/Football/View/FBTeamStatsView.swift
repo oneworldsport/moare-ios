@@ -82,6 +82,7 @@ struct FBTeamStatsView: View {
                     .coordinateSpace(name: coordinateSpaceName)
                 } // if let fbTeamStatsStore
             } // ScrollView
+            .padding(.top, 6)
             .onAppear {
                 // init FBTeamStatsStore
                 let fbTeamStatsStore: StoreOf<FBTeamStatsStore> = storeManager.getStore(forKey: StoreKeys.fbTeamStatsStore) ?? {

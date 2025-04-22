@@ -240,6 +240,7 @@ struct NBAPlayerInfoView: View {
                         }
                 } // if let nbaPlayerInfoStore
             } // ZStack
+            .padding(.top, 6)
             .coordinateSpace(name: coordinateSpaceName)
             .background(
                 GeometryReader { proxy in

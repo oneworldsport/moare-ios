@@ -185,6 +185,7 @@ struct FBTeamInfoView: View {
                         }
                 } // if let fbTeamInfoStore
             } // ZStack
+            .padding(.top, 6)
             .coordinateSpace(name: coordinateSpaceName)
             .background(
                 GeometryReader { proxy in

@@ -83,6 +83,7 @@ struct FBPlayerStatsView: View {
                     .coordinateSpace(name: coordinateSpaceName)
                 } // if let fbPlayerStatsStore
             } // ScrollView
+            .padding(.top, 6)
             .onAppear {
                 // init FBPlayerStatsStore
                 let fbPlayerStatsStore: StoreOf<FBPlayerStatsStore> = storeManager.getStore(forKey: StoreKeys.fbPlayerStatsStore) ?? {

@@ -79,6 +79,7 @@ struct NBATeamStatsView: View {
                     .coordinateSpace(name: coordinateSpaceName)
                 } // if let nbaTeamStatsStore
             } // ScrollView
+            .padding(.top, 6)
             .onAppear {
                 // init NBATeamStatsStore
                 let nbaTeamStatsStore: StoreOf<NBATeamStatsStore> = storeManager.getStore(forKey: StoreKeys.nbaTeamStatsStore) ?? {
