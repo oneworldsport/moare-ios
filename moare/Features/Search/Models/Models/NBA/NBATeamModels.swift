@@ -76,18 +76,15 @@ struct NBATeamInfo: Decodable, Equatable {
 
 struct NBAVenue: Decodable, Equatable {
     private let _capacity: Int?
-    private let _krname: String?
     private let _name: String?
     private let _opened: Int?
 
     var capacity: Int { _capacity ?? 0 }
-    var krname: String { _krname ?? "" }
     var name: String { _name ?? "" }
     var opened: Int { _opened ?? 0 }
 
     private enum CodingKeys: String, CodingKey {
         case _capacity = "capacity"
-        case _krname = "krname"
         case _name = "name"
         case _opened = "opened"
     }
