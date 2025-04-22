@@ -40,3 +40,9 @@ extension Int {
         return (Double(self) * 0.453592).rounded(to: decimalPlaces)
     }
 }
+
+extension Optional where Wrapped == Int {
+    var displayOrDash: String {
+        self.map{ "\($0)" } ?? "-"
+    }
+}

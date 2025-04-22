@@ -23,12 +23,15 @@ struct URLImage: View {
     }
     
     var body: some View {
-        if let url = url {
+        if let url {
             if isSvg {
                 WebImage(url: URL(string: url))
                     .resizable()
                     .scaledToFit()
-                    .frame(width: customSize != nil ? customSize?.width : imageSize.width, height: customSize != nil ? customSize?.height : imageSize.height)
+                    .frame(
+                        width: customSize != nil ? customSize?.width : imageSize.width,
+                        height: customSize != nil ? customSize?.height : imageSize.height
+                    )
             } else {
                 KFImage(URL(string: url))
                     .placeholder {
@@ -36,7 +39,10 @@ struct URLImage: View {
                     }
                     .resizable()
                     .scaledToFit()
-                    .frame(width: customSize != nil ? customSize?.width : imageSize.width, height: customSize != nil ? customSize?.height : imageSize.height)
+                    .frame(
+                        width: customSize != nil ? customSize?.width : imageSize.width,
+                        height: customSize != nil ? customSize?.height : imageSize.height
+                    )
             }
             
 //            AsyncImage(url: URL(string: url)) { image in
@@ -48,6 +54,14 @@ struct URLImage: View {
 //            }
 //            .frame(width: customSize != nil ? customSize?.width : imageSize.width, height: customSize != nil ? customSize?.height : imageSize.height)
 //            .clipShape(Circle())
+        } else {
+            Circle()
+                .fill(.secondary)
+                .opacity(0.6)
+                .frame(
+                    width: customSize != nil ? customSize?.width : imageSize.width,
+                    height: customSize != nil ? customSize?.height : imageSize.height
+                )
         }
     }
     

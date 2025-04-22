@@ -313,6 +313,9 @@ struct SearchView: View {
         if let data = searchStore?.nbaGameStatsData {
             views.append(AnyView(NBAGameStatsView(displayModel: data)))
         }
+        if let data = searchStore?.nbaLeagueTournamentData {
+            views.append(AnyView(NBALeagueTournamentView(displayModel: data)))
+        }
 
         return views
     }
