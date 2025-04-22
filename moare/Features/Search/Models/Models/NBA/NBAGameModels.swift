@@ -242,7 +242,14 @@ struct NBAGameInfo: Decodable, Equatable {
 }
 
 struct NBAGameSummary: Decodable, Equatable {
+    private let _gameId: String?
     private let _date: String?
+    private let _weekNumber: Int?
+    private let _weekName: String?
+    private let _seriesGameNumber: String?
+    private let _gameLabel: String?
+    private let _gameSubLabel: String?
+    private let _seriesText: String?
     private let _gameCode: String?
     private let _gameStatusId: Int?
     private let _gameStatusText: String?
@@ -252,7 +259,14 @@ struct NBAGameSummary: Decodable, Equatable {
     private let _visitorTeamId: Int?
     private let _whStatus: Int?
 
+    var gameId: String { _gameId ?? "" }
     var date: String { _date ?? "" }
+    var weekNumber: Int { _weekNumber ?? 0 }
+    var weekName: String { _weekName ?? "" }
+    var seriesGameNumber: String { _seriesGameNumber ?? "" }
+    var gameLabel: String { _gameLabel ?? "" }
+    var gameSubLabel: String { _gameSubLabel ?? "" }
+    var seriesText: String { _seriesText ?? "" }
     var gameCode: String { _gameCode ?? "" }
     var gameStatusId: Int { _gameStatusId ?? 0 }
     var gameStatusText: String { _gameStatusText ?? "" }
@@ -263,7 +277,14 @@ struct NBAGameSummary: Decodable, Equatable {
     var whStatus: Int { _whStatus ?? 0 }
 
     private enum CodingKeys: String, CodingKey {
+        case _gameId = "gameId"
         case _date = "date"
+        case _weekNumber = "weekNumber"
+        case _weekName = "weekName"
+        case _seriesGameNumber = "seriesGameNumber"
+        case _gameLabel = "gameLabel"
+        case _gameSubLabel = "gameSubLabel"
+        case _seriesText = "seriesText"
         case _gameCode = "gamecode"
         case _gameStatusId = "gameStatusId"
         case _gameStatusText = "gameStatusText"

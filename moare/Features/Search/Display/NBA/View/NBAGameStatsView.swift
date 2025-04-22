@@ -41,12 +41,19 @@ struct NBAGameStatsView: View {
                             leagueSeason: Int(nbaGameStatsStore.displayModel?.game.gameSummary?.season.split(separator: "-").first ?? "2024")!
                         )
                         
-                        Text(" - 정규시즌")
+                        Text(" | \(NBAUtil.gameType(gameSummary: displayModel.game.gameSummary))")
                             .font(.system(size: 14))
                         
                         Spacer()
                     }
                     .padding(.leading, UIConstants.Padding.defaultHPadding)
+                    
+                    /* ---------------------
+                       playoffs series text
+                       --------------------- */
+                    if displayModel.game.gameSummary?.seriesGameNumber != "" {
+                        NBAGameStatsPlayoffsSeriesTextContainer(nbaGameStatsStore: nbaGameStatsStore)
+                    }
                     
                     NBAGameStatsScoreInfoItem(
                         nbaGameStatsStore: nbaGameStatsStore
@@ -990,6 +997,40 @@ struct NBAGameStatsDataListItem: View {
         case 18: "\(data.plusMinusPoints)"
         case 19: isTotalStats ? "" : data.minutes
         default: ""
+        }
+    }
+}
+
+struct NBAGameStatsPlayoffsSeriesTextContainer: View {
+    @Bindable var nbaGameStatsStore: StoreOf<NBAGameStatsStore>
+    
+    var body: some View {
+        let teamNameDic = nbaGameStatsStore.teamNameDictionary
+        
+        if let series = nbaGameStatsStore.displayModel?.game.seasonSeries {
+            HStack {
+                // NOTE: 게임별 시리즈 스코어 정보를 가져올 방법을 찾지 못해서 일단은 현재 시리즈 스코어로 표시
+                Text("현재 시리즈 스코어: ")
+                    .font(.system(size: 14))
+                
+                Text(teamNameDic["short_\(series.homeTeamId)"] ?? "")
+                    .font(.system(size: 14))
+                
+                Text("\(series.homeTeamWins)")
+                    .foregroundStyle(series.homeTeamWins >= series.homeTeamLosses ? .moare : .primary)
+                
+                Text("-")
+                    .font(.system(size: 14))
+                
+                Text("\(series.homeTeamLosses)")
+                    .foregroundStyle(series.homeTeamLosses >= series.homeTeamWins ? .moare : .primary)
+                
+                Text(teamNameDic["short_\(series.visitorTeamId)"] ?? "")
+                    .font(.system(size: 14))
+                
+                Spacer()
+            }
+            .padding(.horizontal, UIConstants.Padding.defaultHPadding)
         }
     }
 }

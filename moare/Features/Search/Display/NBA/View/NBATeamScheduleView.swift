@@ -227,8 +227,32 @@ struct NBATeamScheduleListItem: View {
                 Text(CalendarUtil.formatDate(date: data.gameSummary?.date, formatType: .ampm))
                     .font(.system(size: 12))
                     .padding(.bottom, 2)
+                
+                // playoffs info
+                if let gameSummary = data.gameSummary, gameSummary.weekName.isEmpty {
+                    Text("\(NBAUtil.gameType(gameSummary: data.gameSummary, isShort: true))")
+                        .font(.system(size: 11))
+                    
+                    if let series = data.seasonSeries, !gameSummary.seriesGameNumber.isEmpty {
+                        HStack(spacing: 0) {
+                            Text("시리즈 스코어: ")
+                                .font(.system(size: 11))
+                            
+                            Text("\(series.homeTeamWins)")
+                                .font(.system(size: 11))
+                                .foregroundStyle(series.homeTeamWins >= series.homeTeamLosses ? .moare : .primary)
+                            
+                            Text(" - ")
+                                .font(.system(size: 11))
+                            
+                            Text("\(series.homeTeamLosses)")
+                                .font(.system(size: 11))
+                                .foregroundStyle(series.homeTeamLosses >= series.homeTeamWins ? .moare : .primary)
+                        }
+                    }
+                }
             }
-            .frame(width: 80)
+            .frame(width: 100)
             
             Spacer()
                 .frame(maxHeight: 80)
