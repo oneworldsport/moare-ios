@@ -264,12 +264,22 @@ struct NBAGameStatsLineScoreContainer: View {
                         Spacer()
                             .frame(height: 26)
                         
-                        Text("\(homeTeamLineScore.pts)")
-                            .frame(width: 30, height: nbaGameStatsStore.lineScoreItemHeight)
-                            .fontWeight(.medium)
-                            .padding(.leading, 4)
-                            .padding(.trailing, 8)
-                            .foregroundStyle(homeTeamLineScore.pts >= awayTeamLineScore.pts ? .moare : .primary)
+                        if let homeTeamPts = homeTeamLineScore.pts, let awayTeamPts = awayTeamLineScore.pts {
+                            Text("\(homeTeamPts)")
+                                .frame(width: 30, height: nbaGameStatsStore.lineScoreItemHeight)
+                                .fontWeight(.medium)
+                                .padding(.leading, 4)
+                                .padding(.trailing, 8)
+                                .foregroundStyle(homeTeamPts >= awayTeamPts ? .moare : .primary)
+                        } else {
+                            Text("-")
+                                .frame(width: 30, height: nbaGameStatsStore.lineScoreItemHeight)
+                                .fontWeight(.medium)
+                                .padding(.leading, 4)
+                                .padding(.trailing, 8)
+                                .foregroundStyle(.primary)
+                        }
+                        
                     }
                     
                     VStack(spacing: 0) {
@@ -295,12 +305,21 @@ struct NBAGameStatsLineScoreContainer: View {
                     .opacity(0.5)
                 
                 HStack {
-                    Text("\(awayTeamLineScore.pts)")
-                        .frame(width: 30, height: nbaGameStatsStore.lineScoreItemHeight)
-                        .fontWeight(.medium)
-                        .padding(.leading, 4)
-                        .padding(.trailing, 8)
-                        .foregroundStyle(awayTeamLineScore.pts >= homeTeamLineScore.pts ? .moare : .primary)
+                    if let homeTeamPts = homeTeamLineScore.pts, let awayTeamPts = awayTeamLineScore.pts {
+                        Text("\(awayTeamPts)")
+                            .frame(width: 30, height: nbaGameStatsStore.lineScoreItemHeight)
+                            .fontWeight(.medium)
+                            .padding(.leading, 4)
+                            .padding(.trailing, 8)
+                            .foregroundStyle(awayTeamPts >= homeTeamPts ? .moare : .primary)
+                    } else {
+                        Text("-")
+                            .frame(width: 30, height: nbaGameStatsStore.lineScoreItemHeight)
+                            .fontWeight(.medium)
+                            .padding(.leading, 4)
+                            .padding(.trailing, 8)
+                            .foregroundStyle(.primary)
+                    }
                     
                     NBAGameStatsLineScoreItem(
                         nbaGameStatsStore: nbaGameStatsStore,

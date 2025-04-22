@@ -371,7 +371,7 @@ struct NBALineScore: Decodable, Equatable {
     private let _teamNickname: String?
     private let _teamWinsLosses: String?
 
-    var pts: Int { _pts ?? 0 }
+    var pts: Int? { _pts }
     var ptsOt1: Int? { _ptsOt1 }
     var ptsOt2: Int? { _ptsOt2 }
     var ptsOt3: Int? { _ptsOt3 }

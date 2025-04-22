@@ -18,12 +18,20 @@ struct NBAUtil {
         }
     }
     
-    static func playerPhotoURL(id: Int) -> String {
-        return "https://cdn.nba.com/headshots/nba/latest/1040x760/\(id).png"
+    static func playerPhotoURL(id: Int?) -> String? {
+        if let id {
+            return "https://cdn.nba.com/headshots/nba/latest/1040x760/\(id).png"
+        } else {
+            return nil
+        }
     }
     
-    static func teamLogoURL(id: Int) -> String {
-        return "https://cdn.nba.com/logos/nba/\(id)/primary/L/logo.svg"
+    static func teamLogoURL(id: Int?) -> String? {
+        if let id {
+            return "https://cdn.nba.com/logos/nba/\(id)/primary/L/logo.svg"
+        } else {
+            return nil
+        }
     }
     
     // TODO: 다른곳에서 다시 정리 필요
