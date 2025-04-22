@@ -60,6 +60,7 @@ struct FBPlayerInfoView: View {
                             FBPlayerInfoFirstItem(fbPlayerInfoStore: fbPlayerInfoStore)
                                 .background(
                                     GeometryReader { proxy in
+                                        // NOTE: 처음 오픈 시 animation이 적용되기 때문에 onAppear가 아니라 onChange로 해야함
                                         Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
                                             firstItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
                                             firstItemSize = proxy.size

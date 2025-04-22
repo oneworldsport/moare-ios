@@ -64,7 +64,7 @@ struct NBAPlayerStatsView: View {
                            --------------------- */
                         NBAPlayerStatsPlayerInfoItem(nbaPlayerStatsStore: nbaPlayerStatsStore, showContents: showContents)
                             .offset(
-                                x: animatePositions ? firstItemPosition.x : 0,
+                                x: 0,
                                 y: animatePositions ? firstItemPosition.y : centerPosition.height
                             )
                         
@@ -262,14 +262,14 @@ struct NBAPlayerStatsListItem: View {
         .background(
             GeometryReader { proxy in
                 if !isAniList {
-                    Color.clear.onChange(of: proxy.frame(in: .named("NBAPlayerStatsView")).origin) {
+                    Color.clear.onAppear {
                         itemPositions[index] = proxy.frame(in: .named("NBAPlayerStatsView")).origin
                     }
                 }
             }
         )
         .offset(
-            x: isAniList ? (animatePositions ? (itemPositions[index]?.x ?? 0) : 0) : 0,
+            x: 0,
             y: isAniList ? (animatePositions ? (itemPositions[index]?.y ?? 0) : centerPosition.height) : 0
         )
     }
@@ -523,6 +523,7 @@ struct NBAPlayerStatsItem: View {
             }
             .opacity(showContents ? 1 : 0)
         } // VStack
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
         .padding(.bottom, UIConstants.Padding.defalutVPadding)
     }
