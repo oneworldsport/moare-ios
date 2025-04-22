@@ -47,6 +47,7 @@ struct SearchStore {
         var nbaTeamScheduleData: NBATeamScheduleDisplayModel? = nil
         var nbaLeagueScheduleData: NBALeagueScheduleDisplayModel? = nil
         var nbaGameStatsData: NBAGameStatsDisplayModel? = nil
+        var nbaLeagueTournamentData: NBALeagueScheduleDisplayModel? = nil
         
         var autoCompleteList: [String] = []
         var trendingKeywordList: [String] = []
@@ -121,7 +122,7 @@ struct SearchStore {
         case updateAutoCompleteList
         case updateResultVisibleState(bool: Bool)
 //        case fetchTrendingKeywords
-        case updateMainDisplayModel(data: SportDecodableModel, shouldReset: Bool = true)
+        case updateMainDisplayModel(data: SportDecodableModel?, shouldReset: Bool = true)
         case updateLastViewStack(data: SportDecodableModel)
         case updateSearchStateWithAni(bool: Bool)
         case addViewStack(data: SportDecodableModel)
@@ -389,6 +390,7 @@ struct SearchStore {
                 state.nbaTeamScheduleData = nil
                 state.nbaLeagueScheduleData = nil
                 state.nbaGameStatsData = nil
+                state.nbaLeagueTournamentData = nil
                 
                 switch model.data {
                 case .fbPlayerInfo(_, let displayModel):
@@ -430,6 +432,8 @@ struct SearchStore {
                     state.initialNBALeagueScheduleData = displayModel
                 case .nbaGameStats(_, let displayModel):
                     state.nbaGameStatsData = displayModel
+                case .nbaLeagueTournament(_, let displayModel):
+                    state.nbaLeagueTournamentData = displayModel
                     
                 default:
                     // TODO: animation is applied by the animation below. Should be modified
@@ -481,27 +485,8 @@ struct SearchStore {
                             await send(.updateResultVisibleState(bool: true))
                         }
                     } else {
-                        state.fbPlayerInfoData = nil
-                        state.fbPlayerStatsData = nil
-                        state.fbPlayerStandingsData = nil
-                        state.fbTeamInfoData = nil
-                        state.fbTeamStatsData = nil
-                        state.fbTeamStandingsData = nil
-                        state.fbTeamScheduleData = nil
-                        state.fbLeagueScheduleData = nil
-                        state.fbGameStatsData = nil
-                        
-                        state.nbaPlayerInfoData = nil
-                        state.nbaPlayerStatsData = nil
-                        state.nbaPlayerStandingsData = nil
-                        state.nbaTeamInfoData = nil
-                        state.nbaTeamStatsData = nil
-                        state.nbaTeamStandingsData = nil
-                        state.nbaTeamScheduleData = nil
-                        state.nbaLeagueScheduleData = nil
-                        state.nbaGameStatsData = nil
-                        
                         return .run { send in
+                            await send(.updateMainDisplayModel(data: nil))
                             await send(.toggleSearchBar)
                             
 //                            try await Task.sleep(for: .seconds(0.5))
@@ -799,6 +784,7 @@ struct SearchStore {
                     state.nbaTeamScheduleData = nil
                     state.nbaLeagueScheduleData = nil
                     state.nbaGameStatsData = nil
+                    state.nbaLeagueTournamentData = nil
                 }
                 
                 switch data {
@@ -839,6 +825,8 @@ struct SearchStore {
                     state.nbaLeagueScheduleData = displayModel
                 case .nbaGameStats(_, let displayModel):
                     state.nbaGameStatsData = displayModel
+                case .nbaLeagueTournament(_, let displayModel):
+                    state.nbaLeagueTournamentData = displayModel
                     
                 default:
                     break
