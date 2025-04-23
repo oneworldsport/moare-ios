@@ -11,4 +11,5 @@ struct FBTeamStatsDisplayModel: Equatable {
     let team: FBTeamInfo
     let venue: FBVenue
     let stats: [FBTeamStats]
+    let leagueId: Int?
 }

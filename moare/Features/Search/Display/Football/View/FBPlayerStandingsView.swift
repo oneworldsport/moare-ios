@@ -109,15 +109,15 @@ struct FBPlayerStandingsView: View {
                                                     
                                                     contentHeight = CGFloat(fbPlayerStandingsStore.filteredStandings.count) * fbPlayerStandingsStore.dataItemHeight
                                                 }
-                                                .onChange(of: fbPlayerStandingsStore.filteredStandings.count) { newValue in
-                                                    contentHeight = CGFloat(newValue) * fbPlayerStandingsStore.dataItemHeight
+                                                .onChange(of: fbPlayerStandingsStore.filteredStandings.count) {
+                                                    contentHeight = CGFloat(fbPlayerStandingsStore.filteredStandings.count) * fbPlayerStandingsStore.dataItemHeight
                                                     
                                                     // 추가로 10개의 standings가 나오고 다시 상단/하단으로 이동하는데 시간이 걸리기때문에, 다시 showMoreStandings를 가능하게 하는데 1초 delay를 주는건 괜찮아 보인다.
                                                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                                                         canShowMoreStandings = true
                                                     }
                                                 }
-                                                .onChange(of: newOffset) { newOffset in
+                                                .onChange(of: newOffset) {
                                                     let delta = oldOffset - newOffset
                                                     totalScrollDistance += delta
                                                     oldOffset = newOffset
@@ -139,7 +139,7 @@ struct FBPlayerStandingsView: View {
                                                 }
                                         }
                                     ) // .background()
-                                    .onChange(of: fbPlayerStandingsStore.filteredStandingsStartIndex) { newValue in
+                                    .onChange(of: fbPlayerStandingsStore.filteredStandingsStartIndex) {
                                         if fbPlayerStandingsStore.filteredStandings.count == 20 {
                                             proxy.scrollTo(1, anchor: .top)
                                         } else {
@@ -272,6 +272,9 @@ struct FBPlayerStandingsFirstDataListItem: View {
     let data: FBPlayerStandingsDisplay
     
     var body: some View {
+        let playerNameDic = fbPlayerStandingsStore.playerNameDictionary
+        let teamNameDic = fbPlayerStandingsStore.teamNameDictionary
+        
         HStack(spacing: 0) {
             Text("\(rank)")
                 .font(.system(size: fbPlayerStandingsStore.dataFontSize, weight: .medium))
@@ -282,12 +285,12 @@ struct FBPlayerStandingsFirstDataListItem: View {
                 .padding(.trailing, 6)
 
             VStack(spacing: 2) {
-                Text(data.player.krname)
+                Text(playerNameDic["\(data.player.id)"] ?? data.player.name)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.system(size: 12))
                     .lineLimit(1)
                 
-                Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.stats.team.name))
+                Text(teamNameDic["short_\(data.stats.team.id)"] ?? data.stats.team.name)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.system(size: 11, weight: .light))
                     .foregroundStyle(.secondary)
@@ -389,8 +392,8 @@ struct FBPlayerStandingsFirstCategoryList: View {
             HCapsuleBar(customWidth: 80)
                 .offset(barOffset)
         }
-        .onChange(of: fbPlayerStandingsStore.firstSelectedIndex) { newValue in
-            moveBar(index: newValue)
+        .onChange(of: fbPlayerStandingsStore.firstSelectedIndex) {
+            moveBar(index: fbPlayerStandingsStore.firstSelectedIndex)
         }
     }
     
@@ -488,7 +491,7 @@ struct FBPlayerStandingsSecondCategoryList: View {
                         proxy.scrollTo(fbPlayerStandingsStore.secondSelectedIndex, anchor: .leading)
                     }
                 }
-                .onChange(of: fbPlayerStandingsStore.firstSelectedIndex) { newValue in
+                .onChange(of: fbPlayerStandingsStore.firstSelectedIndex) {
                     if fbPlayerStandingsStore.shouldScrollCategory {
                         withAnimation {
                             proxy.scrollTo(fbPlayerStandingsStore.secondSelectedIndex, anchor: .leading)
@@ -500,8 +503,8 @@ struct FBPlayerStandingsSecondCategoryList: View {
             HCapsuleBar()
                 .offset(barOffset)
         } // VStack
-        .onChange(of: fbPlayerStandingsStore.secondSelectedIndex) { newValue in
-            moveBar(index: newValue)
+        .onChange(of: fbPlayerStandingsStore.secondSelectedIndex) {
+            moveBar(index: fbPlayerStandingsStore.secondSelectedIndex)
         }
     }
     

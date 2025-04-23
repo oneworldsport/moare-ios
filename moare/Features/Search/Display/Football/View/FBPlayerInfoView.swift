@@ -60,6 +60,7 @@ struct FBPlayerInfoView: View {
                             FBPlayerInfoFirstItem(fbPlayerInfoStore: fbPlayerInfoStore)
                                 .background(
                                     GeometryReader { proxy in
+                                        // NOTE: 처음 오픈 시 animation이 적용되기 때문에 onAppear가 아니라 onChange로 해야함
                                         Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
                                             firstItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
                                             firstItemSize = proxy.size
@@ -182,6 +183,7 @@ struct FBPlayerInfoView: View {
                         }
                 } // if let fbPlayerInfoStore
             } // ZStack
+            .padding(.top, 6)
             .coordinateSpace(name: coordinateSpaceName)
             .background(
                 GeometryReader { proxy in
@@ -247,13 +249,15 @@ struct FBPlayerInfoFirstItem: View {
     }
     
     var body: some View {
+        let playerNameDic = fbPlayerInfoStore.playerNameDictionary
+        
         VStack {
             HCapsuleBar()
             
             URLImage(url: fbPlayerInfoStore.player?.photo)
                 .opacity(showContents ? 1 : 0)
             
-            Text(fbPlayerInfoStore.player?.krname ?? "")
+            Text(playerNameDic["\(fbPlayerInfoStore.player?.id ?? 0)"] ?? (fbPlayerInfoStore.player?.name ?? ""))
                 .font(.system(size: 16))
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
@@ -375,6 +379,8 @@ struct FBPlayerInfoFourthItem: View {
     }
     
     var body: some View {
+        let teamNameDic = fbPlayerInfoStore.teamNameDictionary
+        
         VStack {
             HCapsuleBar()
             
@@ -396,7 +402,7 @@ struct FBPlayerInfoFourthItem: View {
                         HStack {
                             URLImage(url: team.logo, size: .small)
                             
-                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.name))
+                            Text(teamNameDic["full_\(team.id)"] ?? team.name)
                                 .font(.system(size: 16))
                                 .fontWeight(.medium)
                         }
@@ -427,6 +433,8 @@ struct FBPlayerInfoFifthItem: View {
     }
     
     var body: some View {
+        let teamNameDic = fbPlayerInfoStore.teamNameDictionary
+        
         VStack {
             HCapsuleBar()
             
@@ -438,7 +446,7 @@ struct FBPlayerInfoFifthItem: View {
                 if let lastGame = fbPlayerInfoStore.lastGame {
                     VStack {
                         HStack {
-                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: lastGame.teams.home.name))
+                            Text(teamNameDic["short_\(lastGame.teams.home.id)"] ?? lastGame.teams.home.name)
                                 .font(.system(size: 14))
                                 .fontWeight(.light)
                                 .lineLimit(1)
@@ -457,7 +465,7 @@ struct FBPlayerInfoFifthItem: View {
                                 .fontWeight(.medium)
                                 .foregroundStyle((lastGame.goals.away >= lastGame.goals.home) ? .moare : .primary)
                             
-                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: lastGame.teams.away.name))
+                            Text(teamNameDic["short_\(lastGame.teams.away.id)"] ?? lastGame.teams.away.name)
                                 .font(.system(size: 14))
                                 .fontWeight(.light)
                                 .lineLimit(1)
@@ -498,6 +506,8 @@ struct FBPlayerInfoSixthItem: View {
     }
     
     var body: some View {
+        let teamNameDic = fbPlayerInfoStore.teamNameDictionary
+        
         VStack {
             HCapsuleBar()
             
@@ -507,7 +517,7 @@ struct FBPlayerInfoSixthItem: View {
             
             if let nextGame = fbPlayerInfoStore.nextGame {
                 HStack {
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: nextGame.teams.home.name))
+                    Text(teamNameDic["short_\(nextGame.teams.home.id)"] ?? nextGame.teams.home.name)
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -515,7 +525,7 @@ struct FBPlayerInfoSixthItem: View {
                     Text(" vs ")
                         .fontWeight(.semibold)
                     
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: nextGame.teams.away.name))
+                    Text(teamNameDic["short_\(nextGame.teams.away.id)"] ?? nextGame.teams.away.name)
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .leading)

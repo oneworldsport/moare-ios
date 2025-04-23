@@ -15,7 +15,6 @@ struct FBPlayer: Decodable, Equatable {
 struct FBPlayerInfo: Decodable, Equatable {
     private let _id: Int?
     private let _name: String?
-    private let _krname: String?
     private let _firstname: String?
     private let _lastname: String?
     private let _age: Int?
@@ -31,9 +30,6 @@ struct FBPlayerInfo: Decodable, Equatable {
     }
     var name: String {
         return _name ?? ""
-    }
-    var krname: String {
-        return _krname ?? ""
     }
     var firstname: String {
         return _firstname ?? ""
@@ -63,7 +59,6 @@ struct FBPlayerInfo: Decodable, Equatable {
     private enum CodingKeys: String, CodingKey {
         case _id = "id"
         case _name = "name"
-        case _krname = "krname"
         case _firstname = "firstname"
         case _lastname = "lastname"
         case _age = "age"

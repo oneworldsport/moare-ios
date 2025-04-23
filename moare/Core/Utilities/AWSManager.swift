@@ -96,43 +96,43 @@ class AWSManager {
         }
         
         if let eplPlayerNameDictionary = try? await eplPlayerNameDictionary {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: "epl_player", nameMap: eplPlayerNameDictionary)
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.eplPlayerDic, nameMap: eplPlayerNameDictionary)
         }
         
         if let eplTeamNameDictionary = try? await eplTeamNameDictionary {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: "epl_team", nameMap: eplTeamNameDictionary)
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.eplTeamDic, nameMap: eplTeamNameDictionary)
         }
         
         if let nbaPlayerNameDictionary = try? await nbaPlayerNameDictionary {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: "nba_player", nameMap: nbaPlayerNameDictionary)
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.nbaPlayerDic, nameMap: nbaPlayerNameDictionary)
         }
         
         if let nbaTeamNameDictionary = try? await nbaTeamNameDictionary {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: "nba_team", nameMap: nbaTeamNameDictionary)
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.nbaTeamDic, nameMap: nbaTeamNameDictionary)
         }
         
         if let laligaPlayerNameDictionary = try? await laligaPlayerNameDictionary {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: "laliga_player", nameMap: laligaPlayerNameDictionary)
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.laligaPlayerDic, nameMap: laligaPlayerNameDictionary)
         }
         
         if let laligaTeamNameDictionary = try? await laligaTeamNameDictionary {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: "laliga_team", nameMap: laligaTeamNameDictionary)
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.laligaTeamDic, nameMap: laligaTeamNameDictionary)
         }
         
         if let bundesligaPlayerNameDictionary = try? await bundesligaPlayerNameDictionary {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: "bundesliga_player", nameMap: bundesligaPlayerNameDictionary)
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.bundesligaPlayerDic, nameMap: bundesligaPlayerNameDictionary)
         }
         
         if let bundesligaTeamNameDictionary = try? await bundesligaTeamNameDictionary {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: "bundesliga_team", nameMap: bundesligaTeamNameDictionary)
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.bundesligaTeamDic, nameMap: bundesligaTeamNameDictionary)
         }
         
         if let lique1PlayerNameDictionary = try? await lique1PlayerNameDictionary {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: "lique1_player", nameMap: lique1PlayerNameDictionary)
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.ligue1PlayerDic, nameMap: lique1PlayerNameDictionary)
         }
         
         if let lique1TeamNameDictionary = try? await lique1TeamNameDictionary {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: "lique1_team", nameMap: lique1TeamNameDictionary)
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.liege1TeamDic, nameMap: lique1TeamNameDictionary)
         }
     }
     

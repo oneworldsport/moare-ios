@@ -1,0 +1,62 @@
+//
+//  Constants.swift
+//  moare
+//
+//  Created by Mohwa Yoon on 4/23/25.
+//
+
+struct Constants {
+    struct Keys {
+        static let eplPlayerDic = "epl_player"
+        static let eplTeamDic = "epl_team"
+        static let laligaPlayerDic = "laliga_player"
+        static let laligaTeamDic = "laliga_team"
+        static let bundesligaPlayerDic = "bundesliga_player"
+        static let bundesligaTeamDic = "bundesliga_team"
+        static let ligue1PlayerDic = "ligue1_player"
+        static let liege1TeamDic = "ligue1_team"
+        static let nbaPlayerDic = "nba_player"
+        static let nbaTeamDic = "nba_team"
+    }
+    
+    struct Ids {
+        // league
+        static let epl = 39
+        static let laliga = 140
+        static let bundesliga = 78
+        static let ligue1 = 61
+        static let nba = 90001
+        
+        // nba team
+        static let atl = 1610612737
+        static let bos = 1610612738
+        static let cle = 1610612739
+        static let nop = 1610612740
+        static let chi = 1610612741
+        static let dal = 1610612742
+        static let den = 1610612743
+        static let gsw = 1610612744
+        static let hou = 1610612745
+        static let lac = 1610612746
+        static let lal = 1610612747
+        static let mia = 1610612748
+        static let mil = 1610612749
+        static let min = 1610612750
+        static let bkn = 1610612751
+        static let nyk = 1610612752
+        static let orl = 1610612753
+        static let ind = 1610612754
+        static let phi = 1610612755
+        static let phx = 1610612756
+        static let por = 1610612757
+        static let sac = 1610612758
+        static let sas = 1610612759
+        static let okc = 1610612760
+        static let tor = 1610612761
+        static let uta = 1610612762
+        static let mem = 1610612763
+        static let was = 1610612764
+        static let det = 1610612765
+        static let cha = 1610612766
+    }
+}

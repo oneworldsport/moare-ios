@@ -18,7 +18,8 @@ struct AnimatingSearchBar: View {
     /* ---------------------
        constants
        --------------------- */
-    let barHeight = 50.0
+    let barHeight: CGFloat = 50
+    let paddingForBackButton: CGFloat = 40
     
     /* ---------------------
        ui state
@@ -46,6 +47,10 @@ struct AnimatingSearchBar: View {
                             .accentColor(.primary)
                             .disabled(!barVisibleState)
                             .uiState(visibleState: searchStore.textFieldVisibleState)
+                            .submitLabel(.search)
+                            .onSubmit {
+                                performSearch()
+                            }
                         
                         Text(searchStore.query)
                             .frame(maxWidth: searchStore.searchState ? nil : .infinity, alignment: .leading)
@@ -77,26 +82,7 @@ struct AnimatingSearchBar: View {
                                     focusState.toggle()
                                 }
                             } else {
-                                let isBlank = searchStore.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                                
-                                if isBlank {
-                                    if let firstTrendingKeyword = searchStore.trendingKeywordList.first {                                        
-                                        // update bar's text
-                                        searchStore.send(.updateTextField(firstTrendingKeyword, false))
-                                        
-                                        // remove textfield for bar animation
-                                        searchStore.send(.updateTextFieldVisibleState(false))
-                                        
-                                        // search
-                                        searchStore.send(.performSearch(searchType: .trendingKeyword, aniDuration: AnimationConstants.Duration.medium))
-                                        searchStore.send(.removeAutoCompleteWithAni)
-                                    }
-                                } else {
-                                    searchStore.send(.updateTextFieldVisibleState(false))
-                                    
-                                    searchStore.send(.performSearch(aniDuration: AnimationConstants.Duration.medium))
-                                    searchStore.send(.removeAutoCompleteWithAni)
-                                }
+                                performSearch()
                             }
                         }
                     }) {
@@ -122,7 +108,7 @@ struct AnimatingSearchBar: View {
                         }
                     }
                 }
-                .padding(.horizontal, UIConstants.Padding.defaultHPadding)
+                .padding(.horizontal, searchStore.searchState ? UIConstants.Padding.defaultHPadding + paddingForBackButton : UIConstants.Padding.defaultHPadding)
                 
                 Spacer()
                     .uiState(visibleState: searchStore.searchState)
@@ -138,6 +124,29 @@ struct AnimatingSearchBar: View {
                 drawPath: startPathAni
             )
             .uiState(visibleState: !barVisibleState)
+        }
+    }
+    
+    private func performSearch() {
+        let isBlank = searchStore.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        
+        if isBlank {
+            if let firstTrendingKeyword = searchStore.trendingKeywordList.first {
+                // update bar's text
+                searchStore.send(.updateTextField(firstTrendingKeyword, false))
+                
+                // remove textfield for bar animation
+                searchStore.send(.updateTextFieldVisibleState(false))
+                
+                // search
+                searchStore.send(.performSearch(searchType: .trendingKeyword, aniDuration: AnimationConstants.Duration.medium))
+                searchStore.send(.removeAutoCompleteWithAni)
+            }
+        } else {
+            searchStore.send(.updateTextFieldVisibleState(false))
+            
+            searchStore.send(.performSearch(aniDuration: AnimationConstants.Duration.medium))
+            searchStore.send(.removeAutoCompleteWithAni)
         }
     }
 }

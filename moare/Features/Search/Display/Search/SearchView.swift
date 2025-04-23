@@ -19,6 +19,7 @@ struct SearchView: View {
        constants
        --------------------- */
     private let dragMaxOffset = UIConstants.Width.screenWidth / 3 + 20
+    let barHeight: CGFloat = 50
     
     /* ---------------------
        ui state
@@ -35,6 +36,28 @@ struct SearchView: View {
         ZStack {
             if let searchStore = searchStore {
                 /* ---------------------
+                   back button
+                   --------------------- */
+                VStack {
+                    HStack {
+                        Button(action: {
+                            searchStore.send(.goBack)
+                        }) {
+                            Image(systemName: "chevron.backward")
+                                .font(.system(size: 22))
+                                .frame(width: 30, height: barHeight)
+                                .padding(.leading, 10)
+                        }
+                        .foregroundStyle(.moare)
+                        
+                        Spacer()
+                    }
+
+                    Spacer()
+                }
+                .zIndex(1)
+                
+                /* ---------------------
                    notice
                    - notice about providing data
                    --------------------- */
@@ -44,10 +67,13 @@ struct SearchView: View {
                         
                         VStack(alignment: .trailing, spacing: 0) {
                             NoticeBox(noticeList: searchStore.noticeList)
+                                .padding(.trailing, 12)
                                 .opacity(isNoticeOpened ? 1 : 0)
                             
                             Button(action: {
-                                isNoticeOpened.toggle()
+                                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                                    isNoticeOpened.toggle()
+                                }
                             }) {
                                 Image(systemName: "info.circle")
                                     .tint(.secondary)
@@ -188,7 +214,9 @@ struct SearchView: View {
                 }
                 .onTapGesture {
                     if isNoticeOpened {
-                        isNoticeOpened = false
+                        withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                            isNoticeOpened = false
+                        }
                     } else {
                         focusState = false
                     }
@@ -312,6 +340,9 @@ struct SearchView: View {
         }
         if let data = searchStore?.nbaGameStatsData {
             views.append(AnyView(NBAGameStatsView(displayModel: data)))
+        }
+        if let data = searchStore?.nbaLeagueTournamentData {
+            views.append(AnyView(NBALeagueTournamentView(displayModel: data)))
         }
 
         return views

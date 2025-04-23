@@ -49,6 +49,8 @@ struct FBPlayerStandingsStore {
         var standings: [FBPlayerStandingsDisplay] = []
         var selectedEntity: EntityInfo? = nil
         var filteredStandingsEndIndex = 0
+        var playerNameDictionary: [String: String] = [:]
+        var teamNameDictionary: [String: String] = [:]
     }
     
     enum Action {
@@ -74,6 +76,8 @@ struct FBPlayerStandingsStore {
         case updateDisplayDataState(fetchState: ApiFetchState)
     }
     
+    @Dependency(\.translatedNameProvider) var nameProvider
+    
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
@@ -96,6 +100,24 @@ struct FBPlayerStandingsStore {
                 state.displayModel = displayModel
                 state.standings = displayModel.standings
                 state.league = displayModel.standings.first?.stats.league
+                
+                if let leagueId = displayModel.leagueId {
+                    switch leagueId {
+                    case Constants.Ids.epl:
+                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplPlayerDic)
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplTeamDic)
+                    case Constants.Ids.laliga:
+                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaPlayerDic)
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaTeamDic)
+                    case Constants.Ids.bundesliga:
+                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
+                    case Constants.Ids.ligue1:
+                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
+                    default: break
+                    }
+                }
                 
                 let keywords = displayModel.keywords
                 

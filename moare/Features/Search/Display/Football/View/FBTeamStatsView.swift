@@ -38,6 +38,9 @@ struct FBTeamStatsView: View {
             ScrollView {
                 if let fbTeamStatsStore {
                     ZStack(alignment: .topLeading) {
+//                        Spacer() // empty space for smooth animation effect
+//                            .frame(maxWidth: .infinity, maxHeight: 0)
+                        
                         /* ---------------------
                            invisible ui
                            - for position
@@ -64,7 +67,7 @@ struct FBTeamStatsView: View {
                            --------------------- */
                         FBTeamStatsTeamInfoItem(fbTeamStatsStore: fbTeamStatsStore, showContents: showContents)
                             .offset(
-                                x: animatePositions ? firstItemPosition.x : 0,
+                                x: 0,
                                 y: animatePositions ? firstItemPosition.y : centerPosition.height
                             )
                         
@@ -79,6 +82,7 @@ struct FBTeamStatsView: View {
                     .coordinateSpace(name: coordinateSpaceName)
                 } // if let fbTeamStatsStore
             } // ScrollView
+            .padding(.top, 6)
             .onAppear {
                 // init FBTeamStatsStore
                 let fbTeamStatsStore: StoreOf<FBTeamStatsStore> = storeManager.getStore(forKey: StoreKeys.fbTeamStatsStore) ?? {
@@ -133,6 +137,8 @@ struct FBTeamStatsTeamInfoItem: View {
     }
     
     var body: some View {
+        let teamNameDic = fbTeamStatsStore.teamNameDictionary
+        
         if let team = fbTeamStatsStore.team, let venue = fbTeamStatsStore.venue {
             VStack {
                 HCapsuleBar()
@@ -141,7 +147,7 @@ struct FBTeamStatsTeamInfoItem: View {
                     URLImage(url: team.logo)
                     
                     VStack(alignment: .leading) {
-                        Text(EnNameTranslationUtility.translateByDic(type: .team, isShort: false, input: team.name))
+                        Text(teamNameDic["full_\(team.id)"] ?? team.name)
                             .font(.system(size: 16))
                             .fontWeight(.medium)
                         
@@ -173,6 +179,7 @@ struct FBTeamStatsTeamInfoItem: View {
                 }
                 .opacity(showContents ? 1 : 0)
             } // VStack
+            .frame(maxWidth: .infinity)
             .padding(.horizontal, UIConstants.Padding.defaultHPadding)
         }
     }
@@ -236,14 +243,19 @@ struct FBTeamStatsListItem: View {
             .background(
                 GeometryReader { proxy in
                     if !isAniList {
-                        Color.clear.onChange(of: proxy.frame(in: .named("FBTeamStatsView")).origin) {
-                            itemPositions[index] = proxy.frame(in: .named("FBTeamStatsView")).origin
-                        }
+                        // NOTE: InfoView에서는 onChange로 하였는데, 여기서는 onAppear로만 해도 문제가 없어보임. 정확한 원인은 더 리서치 해야함.
+                        Color.clear
+                            .onAppear {
+                                itemPositions[index] = proxy.frame(in: .named("FBTeamStatsView")).origin
+                            }
+//                            .onChange(of: proxy.frame(in: .named("FBTeamStatsView")).origin) {
+//                                itemPositions[index] = proxy.frame(in: .named("FBTeamStatsView")).origin
+//                            }
                     }
                 }
             )
             .offset(
-                x: isAniList ? (animatePositions ? (itemPositions[index]?.x ?? 0) : 0) : 0,
+                x: 0,
                 y: isAniList ? (animatePositions ? (itemPositions[index]?.y ?? 0) : centerPosition.height) : 0
             )
     }
@@ -366,6 +378,7 @@ struct FBTeamStatsItem: View {
             }
             .opacity(showContents ? 1 : 0)
         } // VStack
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
         .padding(.bottom, UIConstants.Padding.defalutVPadding)
     }

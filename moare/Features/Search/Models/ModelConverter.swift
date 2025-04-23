@@ -36,7 +36,8 @@ struct ModelConverter {
             stats: stats,
             lastGame: response.lastGame,
             lastGamePlayerStats: lastGamePlayerStats,
-            nextGame: response.nextGame
+            nextGame: response.nextGame,
+            leagueId: leagueId
         )
     }
     
@@ -45,7 +46,12 @@ struct ModelConverter {
         
         let stats = info.statistics.first { $0.league.id == leagueId }
         
-        return FBPlayerStatsDisplayModel(player: info.player, team: stats?.team, stats: info.statistics)
+        return FBPlayerStatsDisplayModel(
+            player: info.player,
+            team: stats?.team,
+            stats: info.statistics,
+            leagueId: leagueId
+        )
     }
     
     func fbPlayerStandingsConverter(response: FBPlayerStandingsResponseModel) -> FBPlayerStandingsDisplayModel {
@@ -62,7 +68,12 @@ struct ModelConverter {
             return nil
         }
         
-        return FBPlayerStandingsDisplayModel(keywords: keywords, entityInfo: entityInfo, standings: standings)
+        return FBPlayerStandingsDisplayModel(
+            keywords: keywords,
+            entityInfo: entityInfo,
+            standings: standings,
+            leagueId: leagueId
+        )
     }
     
     func fbTeamInfoConverter(response: FBTeamInfoResponseModel) -> FBTeamInfoDisplayModel {
@@ -70,13 +81,25 @@ struct ModelConverter {
         
         let stats = info.statistics.first { $0.league.id == leagueId }
         
-        return FBTeamInfoDisplayModel(team: info.team, venue: info.venue, stats: stats, lastGame: response.lastGame, nextGame: response.nextGame)
+        return FBTeamInfoDisplayModel(
+            team: info.team,
+            venue: info.venue,
+            stats: stats,
+            lastGame: response.lastGame,
+            nextGame: response.nextGame,
+            leagueId: leagueId
+        )
     }
     
     func fbTeamStatsConverter(response: FBTeamInfoResponseModel) -> FBTeamStatsDisplayModel {
         let info = response.info!
         
-        return FBTeamStatsDisplayModel(team: info.team, venue: info.venue, stats: info.statistics)
+        return FBTeamStatsDisplayModel(
+            team: info.team,
+            venue: info.venue,
+            stats: info.statistics,
+            leagueId: leagueId
+        )
     }
     
     func fbTeamStandingsConverter(response: FBTeamStandingsResponseModel) -> FBTeamStandingsDisplayModel {
@@ -103,11 +126,19 @@ struct ModelConverter {
             return nil
         }
         
-        return FBTeamStandingsDisplayModel(keywords: keywords, league: league, standings: standings)
+        return FBTeamStandingsDisplayModel(
+            keywords: keywords,
+            league: league,
+            standings: standings,
+            leagueId: leagueId
+        )
     }
     
     func fbTeamScheduleConverter(response: FBGameScheduleResponseModel) -> FBTeamScheduleDisplayModel {
-        return FBTeamScheduleDisplayModel(games: response.schedule)
+        return FBTeamScheduleDisplayModel(
+            games: response.schedule,
+            leagueId: leagueId
+        )
     }
     
     func fbLeagueScheduleConverter(response: FBGameScheduleResponseModel) -> FBLeagueScheduleDisplayModel {
@@ -118,11 +149,19 @@ struct ModelConverter {
             return "\(components[0].suffix(2))/\(components[1])"
         } ?? []
         
-        return FBLeagueScheduleDisplayModel(yearMonthList: yearMonthList, games: response.schedule, entityInfo: entityInfo)
+        return FBLeagueScheduleDisplayModel(
+            yearMonthList: yearMonthList,
+            games: response.schedule,
+            entityInfo: entityInfo,
+            leagueId: leagueId
+        )
     }
     
     func fbGameStatsConverter(response: FBGameStatsReponseModel) -> FBGameStatsDisplayModel {
-        return FBGameStatsDisplayModel(game: response.game!)
+        return FBGameStatsDisplayModel(
+            game: response.game!,
+            leagueId: leagueId
+        )
     }
     
     /* ---------------------
@@ -231,5 +270,9 @@ struct ModelConverter {
     
     func nbaGameStatsConverter(response: NBAGameStatsReponseModel) -> NBAGameStatsDisplayModel {
         return NBAGameStatsDisplayModel(game: response.game!)
+    }
+    
+    func nbaLeagueTournamentConverter(response: NBAGameScheduleResponseModel) -> NBALeagueScheduleDisplayModel {
+        return NBALeagueScheduleDisplayModel(yearMonthList: [], games: response.schedule, entityInfo: entityInfo)
     }
 }
