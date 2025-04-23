@@ -30,6 +30,7 @@
 		DA17023E2DA8C7130021EF80 /* NBATeamInfoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA17023D2DA8C7130021EF80 /* NBATeamInfoStore.swift */; };
 		DA1702402DA8C7140021EF80 /* NBAPlayerStandingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA17023F2DA8C7140021EF80 /* NBAPlayerStandingsStore.swift */; };
 		DA1702422DA8C7150021EF80 /* NBAPlayerStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702412DA8C7150021EF80 /* NBAPlayerStatsStore.swift */; };
+		DA2ABC282DB8EB720088CB2C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2ABC272DB8EB720088CB2C /* Constants.swift */; };
 		DA4777232DA7B67A00F3459C /* NBATeamStandingsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777222DA7B67A00F3459C /* NBATeamStandingsResponseModel.swift */; };
 		DA4777252DA7B67C00F3459C /* NBATeamInfoResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777242DA7B67C00F3459C /* NBATeamInfoResponseModel.swift */; };
 		DA4777272DA7B67E00F3459C /* NBAPlayerStandingsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777262DA7B67E00F3459C /* NBAPlayerStandingsResponseModel.swift */; };
@@ -191,6 +192,7 @@
 		DA17023D2DA8C7130021EF80 /* NBATeamInfoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamInfoStore.swift; sourceTree = "<group>"; };
 		DA17023F2DA8C7140021EF80 /* NBAPlayerStandingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAPlayerStandingsStore.swift; sourceTree = "<group>"; };
 		DA1702412DA8C7150021EF80 /* NBAPlayerStatsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAPlayerStatsStore.swift; sourceTree = "<group>"; };
+		DA2ABC272DB8EB720088CB2C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		DA4777222DA7B67A00F3459C /* NBATeamStandingsResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamStandingsResponseModel.swift; sourceTree = "<group>"; };
 		DA4777242DA7B67C00F3459C /* NBATeamInfoResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamInfoResponseModel.swift; sourceTree = "<group>"; };
 		DA4777262DA7B67E00F3459C /* NBAPlayerStandingsResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAPlayerStandingsResponseModel.swift; sourceTree = "<group>"; };
@@ -700,6 +702,7 @@
 				DA531BC92D64A8F200DB87CB /* StringConstants.swift */,
 				DA531BCA2D64A8F200DB87CB /* UIConstants.swift */,
 				DA531C0D2D64AA4300DB87CB /* AnimationConstants.swift */,
+				DA2ABC272DB8EB720088CB2C /* Constants.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -1151,6 +1154,7 @@
 				DA17022D2DA8C67A0021EF80 /* NBATeamScheduleView.swift in Sources */,
 				DA17022E2DA8C67A0021EF80 /* NBATeamStandingsView.swift in Sources */,
 				DA17022F2DA8C67A0021EF80 /* NBATeamStatsView.swift in Sources */,
+				DA2ABC282DB8EB720088CB2C /* Constants.swift in Sources */,
 				DA531BC32D64A8CA00DB87CB /* FootballTeamGameStatsResponseModel.swift in Sources */,
 				DA531BA72D64A8CA00DB87CB /* FBTeamStatsView.swift in Sources */,
 				DA531C082D64A91900DB87CB /* CapsuleBar.swift in Sources */,

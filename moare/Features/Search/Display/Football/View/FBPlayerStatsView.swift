@@ -139,6 +139,8 @@ struct FBPlayerStatsPlayerInfoItem: View {
     
     var body: some View {
         let player = fbPlayerStatsStore.player
+        let playerNameDic = fbPlayerStatsStore.playerNameDictionary
+        let teamNameDic = fbPlayerStatsStore.teamNameDictionary
         
         VStack(spacing: UIConstants.Padding.defaultHPadding) {
             HCapsuleBar()
@@ -147,7 +149,7 @@ struct FBPlayerStatsPlayerInfoItem: View {
                 URLImage(url: player?.photo)
                 
                 VStack(alignment: .leading) {
-                    Text("\(player?.krname ?? "")")
+                    Text(playerNameDic["\(player?.id ?? 0)"] ?? (player?.name ?? ""))
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                     
@@ -175,7 +177,7 @@ struct FBPlayerStatsPlayerInfoItem: View {
                             URLImage(url: team.logo, customSize: CGSize(width: 24, height: 24))
                                 .padding(.trailing, 6)
                             
-                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.name))
+                            Text(teamNameDic["full_\(team.id)"] ?? team.name)
                                 .font(.system(size: 16))
                                 .fontWeight(.medium)
                         }
@@ -277,6 +279,8 @@ struct FBPlayerStatsItem: View {
     }
     
     var body: some View {
+        let teamNameDic = fbPlayerStatsStore.teamNameDictionary
+        
         VStack {
             HCapsuleBar()
             
@@ -293,7 +297,7 @@ struct FBPlayerStatsItem: View {
                 
                 URLImage(url: stats.team.logo, customSize: CGSize(width: 24, height: 24))
                 
-                Text(EnNameTranslationUtility.translateByDic(type: .team, input: stats.team.name))
+                Text(teamNameDic["short_\(stats.team.id)"] ?? stats.team.name)
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }

@@ -142,8 +142,8 @@ struct FBTeamScheduleList: View {
                 gameListToDisplay = fbTeamScheduleStore.games
             }
         }
-        .onChange(of: searchStore.fbGameStatsData) { newValue in
-            if let game = newValue?.game {
+        .onChange(of: searchStore.fbGameStatsData) {
+            if let game = searchStore.fbGameStatsData?.game {
                 gameListToDisplay = [game]
             } else {
                 gameListToDisplay = fbTeamScheduleStore.games
@@ -162,10 +162,11 @@ struct FBTeamScheduleListItem: View {
        ui state
        --------------------- */
     @State private var isResultOpened = false
-    @State private var venueKrName = ""
     @State private var refereeKrName = ""
     
     var body: some View {
+        let teamNameDic = fbTeamScheduleStore.teamNameDictionary
+        
         HStack {
             /* ---------------------
              home
@@ -177,7 +178,7 @@ struct FBTeamScheduleListItem: View {
                 VStack(spacing: 2) {
                     URLImage(url: data.teams.home.logo, size: .small)
                     
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.teams.home.name))
+                    Text(teamNameDic["short_\(data.teams.home.id)"] ?? data.teams.home.name)
                         .font(.system(size: 13))
                         .lineLimit(2)
                     
@@ -243,7 +244,7 @@ struct FBTeamScheduleListItem: View {
                 
                 // venue
                 if let _ = searchStore.fbGameStatsData {
-                    Text("장소: \(venueKrName)")
+                    Text(teamNameDic["venue_\(data.teams.home.id)"] ?? data.fixture.venue.name)
                         .font(.system(size: 12, weight: .light))
                         .lineLimit(1)
                     .padding(.bottom, 2)
@@ -285,7 +286,7 @@ struct FBTeamScheduleListItem: View {
                 VStack(spacing: 2) {
                     URLImage(url: data.teams.away.logo, size: .small)
                     
-                    Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.teams.away.name))
+                    Text(teamNameDic["short_\(data.teams.away.id)"] ?? data.teams.away.name)
                         .font(.system(size: 13))
                         .lineLimit(2)
                     
@@ -307,7 +308,7 @@ struct FBTeamScheduleListItem: View {
         } // HStack
         .background(Color.clear) // added for tapGesture on Spacer()
         .onTapGesture {
-            searchStore.send(.selectFBGame(game: data))
+            searchStore.send(.selectFBGame(game: data, leagueId: fbTeamScheduleStore.displayModel?.leagueId))
             
             // set selected game's isOpened true
             fbTeamScheduleStore.send(.updateResultOpenedState(fixtureId: data.fixture.id, isOpened: true))
@@ -319,21 +320,16 @@ struct FBTeamScheduleListItem: View {
                 isResultOpened = true
             }
         }
-        .onChange(of: fbTeamScheduleStore.gameResultOpenedStateList) { newValue in
+        .onChange(of: fbTeamScheduleStore.gameResultOpenedStateList) {
             if StringConstants.Football.gameFinishedList.contains(data.fixture.status.short) {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                     isResultOpened = fbTeamScheduleStore.gameResultOpenedStateList[data.fixture.id] ?? false
                 }
             }
         }
-        .onChange(of: searchStore.fbGameStatsData) { newValue in
-            if let fbGameStatsData = newValue {
+        .onChange(of: searchStore.fbGameStatsData) {
+            if let fbGameStatsData = searchStore.fbGameStatsData {
                 isResultOpened = true
-                
-                Task {
-                    let venueKrName = await EnNameTranslationUtility.translateByAWS(input: fbGameStatsData.game.fixture.venue.name)
-                    self.venueKrName = venueKrName
-                }
                 
                 Task {
                     let refereeKrName = await EnNameTranslationUtility.translateByAWS(input: fbGameStatsData.game.fixture.referee)

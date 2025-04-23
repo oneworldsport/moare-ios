@@ -137,6 +137,8 @@ struct FBTeamStatsTeamInfoItem: View {
     }
     
     var body: some View {
+        let teamNameDic = fbTeamStatsStore.teamNameDictionary
+        
         if let team = fbTeamStatsStore.team, let venue = fbTeamStatsStore.venue {
             VStack {
                 HCapsuleBar()
@@ -145,7 +147,7 @@ struct FBTeamStatsTeamInfoItem: View {
                     URLImage(url: team.logo)
                     
                     VStack(alignment: .leading) {
-                        Text(EnNameTranslationUtility.translateByDic(type: .team, isShort: false, input: team.name))
+                        Text(teamNameDic["full_\(team.id)"] ?? team.name)
                             .font(.system(size: 16))
                             .fontWeight(.medium)
                         

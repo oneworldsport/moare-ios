@@ -214,13 +214,15 @@ struct FBGameStatsTeamButtonContainer: View {
     }
     
     var body: some View {
+        let teamNameDic = fbGameStatsStore.teamNameDictionary
+        
         ZStack {
             VStack(alignment: .leading) {
                 HStack(spacing: 0) {
                     // home
                     FBGameStatsTeamButton(
                         fbGameStatsStore: fbGameStatsStore,
-                        team: EnNameTranslationUtility.translateByDic(type: .team, input: fbGameStatsStore.displayModel?.game.teams.home.name ?? ""),
+                        team: teamNameDic["short_\(fbGameStatsStore.displayModel?.game.teams.home.id ?? 0)"] ?? (fbGameStatsStore.displayModel?.game.teams.home.name ?? ""),
                         index: 0
                     )
                     .frame(maxWidth: fbGameStatsStore.teamButtonWidth)
@@ -231,7 +233,7 @@ struct FBGameStatsTeamButtonContainer: View {
                     // away
                     FBGameStatsTeamButton(
                         fbGameStatsStore: fbGameStatsStore,
-                        team:  EnNameTranslationUtility.translateByDic(type: .team, input: fbGameStatsStore.displayModel?.game.teams.away.name ?? ""),
+                        team: teamNameDic["short_\(fbGameStatsStore.displayModel?.game.teams.away.id ?? 0)"] ?? (fbGameStatsStore.displayModel?.game.teams.away.name ?? ""),
                         index: 1
                     )
                     .frame(maxWidth: fbGameStatsStore.teamButtonWidth)
@@ -264,8 +266,8 @@ struct FBGameStatsTeamButtonContainer: View {
                 }
             }
         }
-        .onChange(of: fbGameStatsStore.selectedTeamIndex) { newValue in
-            moveBar(index: newValue)
+        .onChange(of: fbGameStatsStore.selectedTeamIndex) {
+            moveBar(index: fbGameStatsStore.selectedTeamIndex)
         }
     }
     
@@ -371,17 +373,18 @@ struct FBGameStatsFirstDataListItem: View {
     
     let data: FBPerson
     
-    @State private var krName = ""
     @State private var isStarter = false
     @State private var position = ""
     
     var body: some View {
+        let playerNameDic = fbGameStatsStore.playerNameDictionary
+        
         HStack(spacing: 0) {
             URLImage(url: data.photo, customSize: CGSize(width: 25, height: 25))
                 .padding(.leading, 8)
                 .padding(.trailing, 3)
 
-            Text(krName)
+            Text(playerNameDic["\(data.id)"] ?? data.name)
                 .font(.system(size: 12))
                 .lineLimit(2)
                 .frame(maxWidth: 80, alignment: .leading)
@@ -409,21 +412,7 @@ struct FBGameStatsFirstDataListItem: View {
                 .opacity(0.5)
         }
         .onAppear {
-            translate()
             checkStarterAndPosition()
-        }
-        .onChange(of: fbGameStatsStore.selectedTeamIndex) { newValue in
-            translate()
-        }
-        .onChange(of: fbGameStatsStore.secondSelectedIndex) { newValue in
-            translate()
-        }
-    }
-    
-    private func translate() {
-        Task {
-            let krName = await EnNameTranslationUtility.translateByAWS(input: data.name)
-            self.krName = krName
         }
     }
     
@@ -548,8 +537,8 @@ struct FBGameStatsFirstCategoryList: View {
             HCapsuleBar(size: .large)
                 .offset(barOffset)
         }
-        .onChange(of: fbGameStatsStore.firstSelectedIndex) { newValue in
-            moveBar(index: newValue)
+        .onChange(of: fbGameStatsStore.firstSelectedIndex) {
+            moveBar(index: fbGameStatsStore.firstSelectedIndex)
         }
     }
     
@@ -645,7 +634,7 @@ struct FBGameStatsSecondCategoryList: View {
                         proxy.scrollTo(fbGameStatsStore.secondSelectedIndex, anchor: .leading)
                     }
                 }
-                .onChange(of: fbGameStatsStore.firstSelectedIndex) { newValue in
+                .onChange(of: fbGameStatsStore.firstSelectedIndex) {
                     if fbGameStatsStore.shouldScrollCategory {
                         withAnimation {
                             proxy.scrollTo(fbGameStatsStore.secondSelectedIndex, anchor: .leading)
@@ -657,8 +646,8 @@ struct FBGameStatsSecondCategoryList: View {
             HCapsuleBar()
                 .offset(barOffset)
         }
-        .onChange(of: fbGameStatsStore.secondSelectedIndex) { newValue in
-            moveBar(index: newValue)
+        .onChange(of: fbGameStatsStore.secondSelectedIndex) {
+            moveBar(index: fbGameStatsStore.secondSelectedIndex)
         }
     }
     

@@ -91,7 +91,7 @@ struct SearchStore {
         case updateTextField(String, Bool = true)
         case updateTextFieldVisibleState(Bool)
         case performSearch(searchType: SearchType = .query, aniDuration: CGFloat = 0)
-        case selectFBGame(game: FBGame)
+        case selectFBGame(game: FBGame, leagueId: Int?)
         case selectNBAGame(game: NBAGame)
         case showPlayerStats(category: String? = nil, playerId: Int)
         case showTeamStats(teamId: Int)
@@ -505,16 +505,16 @@ struct SearchStore {
                 }
                 return .none
                 
-            case .selectFBGame(let game):
+            case .selectFBGame(let game, let leagueId):
                 let dataMdoel = SportDecodableModel.fbGameStats(
                     FBGameStatsReponseModel(game: game),
-                    FBGameStatsDisplayModel(game: game)
+                    FBGameStatsDisplayModel(game: game, leagueId: leagueId)
                 )
                 
                 state.viewStack.append(dataMdoel)
                 state.poppedView = nil
                 
-                state.fbGameStatsData = FBGameStatsDisplayModel(game: game)
+                state.fbGameStatsData = FBGameStatsDisplayModel(game: game, leagueId: leagueId)
                 
                 return .none
                 
