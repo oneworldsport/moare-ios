@@ -44,6 +44,7 @@ struct FBLeagueScheduleStore {
            etc
            --------------------- */
         var dataForViewStack: SportDecodableModel? = nil
+        var teamNameDictionary: [String: String] = [:]
     }
     
     enum Action {
@@ -75,6 +76,8 @@ struct FBLeagueScheduleStore {
         case updateDisplayDataState(fetchState: ApiFetchState)
     }
     
+    @Dependency(\.translatedNameProvider) var nameProvider
+    
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
@@ -97,6 +100,20 @@ struct FBLeagueScheduleStore {
                 // init data
                 state.displayModel = displayModel
                 state.yearMonthList = displayModel.yearMonthList
+                
+                if let leagueId = displayModel.leagueId {
+                    switch leagueId {
+                    case Constants.Ids.epl:
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplTeamDic)
+                    case Constants.Ids.laliga:
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaTeamDic)
+                    case Constants.Ids.bundesliga:
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
+                    case Constants.Ids.ligue1:
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
+                    default: break
+                    }
+                }
                 
                 // select default yearMonth
                 if let date = displayModel.games.first?.fixture.date {

@@ -13,4 +13,5 @@ struct FBPlayerInfoDisplayModel: Equatable {
     let lastGame: FBGame?
     let lastGamePlayerStats: FBGamePlayerStatsDetail?
     let nextGame: FBGame?
+    let leagueId: Int?
 }

@@ -10,11 +10,13 @@ struct Constants {
         static let eplPlayerDic = "epl_player"
         static let eplTeamDic = "epl_team"
         static let laligaPlayerDic = "laliga_player"
-        static let laliagaTeamDic = "laliga_team"
+        static let laligaTeamDic = "laliga_team"
         static let bundesligaPlayerDic = "bundesliga_player"
         static let bundesligaTeamDic = "bundesliga_team"
         static let ligue1PlayerDic = "ligue1_player"
         static let liege1TeamDic = "ligue1_team"
+        static let nbaPlayerDic = "nba_player"
+        static let nbaTeamDic = "nba_team"
     }
     
     struct Ids {
