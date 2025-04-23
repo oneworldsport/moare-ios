@@ -638,7 +638,6 @@ struct NBALeagueTournamentFinalContainer: View {
     
     var body: some View {
         let teamNameDic = nbaLeagueTournamentStore.teamNameDictionary
-//        let teamId = getOrderedTeamIds(homeTeamId: gameList?.first?.gameSummary?.homeTeamId, awayTeamId: gameList?.first?.gameSummary?.visitorTeamId)
         let seriesGame = gameList?.max(by: {
             (($0.seasonSeries?.homeTeamWins ?? 0) + ($0.seasonSeries?.homeTeamLosses ?? 0)) < (($1.seasonSeries?.homeTeamWins ?? 0) + ($1.seasonSeries?.homeTeamLosses ?? 0))
         })
@@ -764,21 +763,6 @@ struct NBALeagueTournamentFinalContainer: View {
             }
         } // VStack
     }
-    
-//    func getOrderedTeamIds(homeTeamId: Int?, awayTeamId: Int?) -> (firstTeamId: Int?, secondTeamId: Int?) {
-//        if let homeTeamId, let awayTeamId {
-//            let homePriority = nbaLeagueTournamentStore.priorityList.firstIndex(of: homeTeamId) ?? Int.max
-//            let awayPriority = nbaLeagueTournamentStore.priorityList.firstIndex(of: awayTeamId) ?? Int.max
-//
-//            if homePriority <= awayPriority {
-//                return (firstTeamId: homeTeamId, secondTeamId: awayTeamId)
-//            } else {
-//                return (firstTeamId: awayTeamId, secondTeamId: homeTeamId)
-//            }
-//        } else {
-//            return (firstTeamId: nil, secondTeamId: nil)
-//        }
-//    }
 }
 
 struct NBALeagueTournamentFinalScoreContainer: View {

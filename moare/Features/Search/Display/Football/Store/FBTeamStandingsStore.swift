@@ -39,6 +39,11 @@ struct FBTeamStandingsStore {
            ui state
            --------------------- */
         var selectedIndex = 0
+        
+        /* ---------------------
+           etc
+           --------------------- */
+        var teamNameDictionary: [String: String] = [:]
     }
     
     enum Action {
@@ -46,6 +51,8 @@ struct FBTeamStandingsStore {
         case selectCategory(Int)
         case sortStandings
     }
+    
+    @Dependency(\.translatedNameProvider) var nameProvider
     
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -58,6 +65,20 @@ struct FBTeamStandingsStore {
                 state.displayModel = displayModel
                 state.standings = displayModel.standings
                 state.league = displayModel.league
+                
+                if let leagueId = displayModel.leagueId {
+                    switch leagueId {
+                    case Constants.Ids.epl:
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplTeamDic)
+                    case Constants.Ids.laliga:
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaTeamDic)
+                    case Constants.Ids.bundesliga:
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
+                    case Constants.Ids.ligue1:
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
+                    default: break
+                    }
+                }
                 
                 let keywords = displayModel.keywords
                 

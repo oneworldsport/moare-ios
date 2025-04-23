@@ -17,26 +17,6 @@ struct NBALeagueTournamentStore {
         /* ---------------------
            constants
            --------------------- */
-        let priorityList = [
-            1610612760, 1610612763, 1610612743, 1610612746, 1610612747, 1610612750, 1610612745, 1610612744,
-            1610612739, 1610612748, 1610612754, 1610612749, 1610612752, 1610612765, 1610612738, 1610612753
-        ]
-        // 1610612760 okc
-        // 1610612763 mem
-        // 1610612743 den
-        // 1610612746 lac
-        // 1610612747 lal
-        // 1610612750 min
-        // 1610612745 hou
-        // 1610612744 gsw
-        // 1610612739 cle
-        // 1610612748 mia
-        // 1610612754 ind
-        // 1610612749 mil
-        // 1610612752 nyk
-        // 1610612765 det
-        // 1610612738 bos
-        // 1610612753 orl
         
         /* ---------------------
            data state
@@ -44,36 +24,36 @@ struct NBALeagueTournamentStore {
         var displayModel: NBALeagueScheduleDisplayModel? = nil
         
         var westFirstRoundFirstGameList: [NBAGame]? = nil
-        var westFirstRoundFirstGameFirstTeamId: Int = 1610612760
-        var westFirstRoundFirstGameSecondTeamId: Int = 1610612763
+        var westFirstRoundFirstGameFirstTeamId: Int = Constants.Ids.okc
+        var westFirstRoundFirstGameSecondTeamId: Int = Constants.Ids.mem
         
         var westFirstRoundSecondGameList: [NBAGame]? = nil
-        var westFirstRoundSecondGameFirstTeamId: Int = 1610612743
-        var westFirstRoundSecondGameSecondTeamId: Int = 1610612746
+        var westFirstRoundSecondGameFirstTeamId: Int = Constants.Ids.den
+        var westFirstRoundSecondGameSecondTeamId: Int = Constants.Ids.lac
         
         var westFirstRoundThirdGameList: [NBAGame]? = nil
-        var westFirstRoundThirdGameFirstTeamId: Int = 1610612747
-        var westFirstRoundThirdGameSecondTeamId: Int = 1610612750
+        var westFirstRoundThirdGameFirstTeamId: Int = Constants.Ids.lal
+        var westFirstRoundThirdGameSecondTeamId: Int = Constants.Ids.min
         
         var westFirstRoundFourthGameList: [NBAGame]? = nil
-        var westFirstRoundFourthGameFirstTeamId: Int = 1610612745
-        var westFirstRoundFourthGameSecondTeamId: Int = 1610612744
+        var westFirstRoundFourthGameFirstTeamId: Int = Constants.Ids.hou
+        var westFirstRoundFourthGameSecondTeamId: Int = Constants.Ids.gsw
         
         var eastFirstRoundFirstGameList: [NBAGame]? = nil
-        var eastFirstRoundFirstGameFirstTeamId: Int = 1610612739
-        var eastFirstRoundFirstGameSecondTeamId: Int = 1610612748
+        var eastFirstRoundFirstGameFirstTeamId: Int = Constants.Ids.cle
+        var eastFirstRoundFirstGameSecondTeamId: Int = Constants.Ids.mia
         
         var eastFirstRoundSecondGameList: [NBAGame]? = nil
-        var eastFirstRoundSecondGameFirstTeamId: Int = 1610612754
-        var eastFirstRoundSecondGameSecondTeamId: Int = 1610612749
+        var eastFirstRoundSecondGameFirstTeamId: Int = Constants.Ids.ind
+        var eastFirstRoundSecondGameSecondTeamId: Int = Constants.Ids.mil
         
         var eastFirstRoundThirdGameList: [NBAGame]? = nil
-        var eastFirstRoundThirdGameFirstTeamId: Int = 1610612752
-        var eastFirstRoundThirdGameSecondTeamId: Int = 1610612765
+        var eastFirstRoundThirdGameFirstTeamId: Int = Constants.Ids.nyk
+        var eastFirstRoundThirdGameSecondTeamId: Int = Constants.Ids.det
         
         var eastFirstRoundFourthGameList: [NBAGame]? = nil
-        var eastFirstRoundFourthGameFirstTeamId: Int = 1610612738
-        var eastFirstRoundFourthGameSecondTeamId: Int = 1610612753
+        var eastFirstRoundFourthGameFirstTeamId: Int = Constants.Ids.bos
+        var eastFirstRoundFourthGameSecondTeamId: Int = Constants.Ids.orl
         
         var westSecondRoundFirstGameList: [NBAGame]? = nil
         var westSecondRoundFirstGameFirstTeamId: Int? = nil
@@ -141,38 +121,38 @@ struct NBALeagueTournamentStore {
                 
                 // western first round
                 state.westFirstRoundFirstGameList = displayModel.games.filter {
-                    ($0.gameSummary?.homeTeamId == 1610612760 && $0.gameSummary?.visitorTeamId == 1610612763) ||
-                    ($0.gameSummary?.visitorTeamId == 1610612763 && $0.gameSummary?.homeTeamId == 1610612760)
+                    ($0.gameSummary?.homeTeamId == Constants.Ids.okc && $0.gameSummary?.visitorTeamId == Constants.Ids.mem) ||
+                    ($0.gameSummary?.visitorTeamId == Constants.Ids.mem && $0.gameSummary?.homeTeamId == Constants.Ids.okc)
                 }
                 state.westFirstRoundSecondGameList = displayModel.games.filter {
-                    ($0.gameSummary?.homeTeamId == 1610612743 && $0.gameSummary?.visitorTeamId == 1610612746) ||
-                    ($0.gameSummary?.homeTeamId == 1610612746 && $0.gameSummary?.visitorTeamId == 1610612743)
+                    ($0.gameSummary?.homeTeamId == Constants.Ids.den && $0.gameSummary?.visitorTeamId == Constants.Ids.lac) ||
+                    ($0.gameSummary?.homeTeamId == Constants.Ids.lac && $0.gameSummary?.visitorTeamId == Constants.Ids.den)
                 }
                 state.westFirstRoundThirdGameList = displayModel.games.filter {
-                    ($0.gameSummary?.homeTeamId == 1610612747 && $0.gameSummary?.visitorTeamId == 1610612750) ||
-                    ($0.gameSummary?.homeTeamId == 1610612750 && $0.gameSummary?.visitorTeamId == 1610612747)
+                    ($0.gameSummary?.homeTeamId == Constants.Ids.lal && $0.gameSummary?.visitorTeamId == Constants.Ids.min) ||
+                    ($0.gameSummary?.homeTeamId == Constants.Ids.min && $0.gameSummary?.visitorTeamId == Constants.Ids.lal)
                 }
                 state.westFirstRoundFourthGameList = displayModel.games.filter {
-                    ($0.gameSummary?.homeTeamId == 1610612745 && $0.gameSummary?.visitorTeamId == 1610612744) ||
-                    ($0.gameSummary?.homeTeamId == 1610612744 && $0.gameSummary?.visitorTeamId == 1610612745)
+                    ($0.gameSummary?.homeTeamId == Constants.Ids.hou && $0.gameSummary?.visitorTeamId == Constants.Ids.gsw) ||
+                    ($0.gameSummary?.homeTeamId == Constants.Ids.gsw && $0.gameSummary?.visitorTeamId == Constants.Ids.hou)
                 }
                 
                 // eastern first round
                 state.eastFirstRoundFirstGameList = displayModel.games.filter {
-                    ($0.gameSummary?.homeTeamId == 1610612739 && $0.gameSummary?.visitorTeamId == 1610612748) ||
-                    ($0.gameSummary?.homeTeamId == 1610612748 && $0.gameSummary?.visitorTeamId == 1610612739)
+                    ($0.gameSummary?.homeTeamId == Constants.Ids.cle && $0.gameSummary?.visitorTeamId == Constants.Ids.mia) ||
+                    ($0.gameSummary?.homeTeamId == Constants.Ids.mia && $0.gameSummary?.visitorTeamId == Constants.Ids.cle)
                 }
                 state.eastFirstRoundSecondGameList = displayModel.games.filter {
-                    ($0.gameSummary?.homeTeamId == 1610612754 && $0.gameSummary?.visitorTeamId == 1610612749) ||
-                    ($0.gameSummary?.homeTeamId == 1610612749 && $0.gameSummary?.visitorTeamId == 1610612754)
+                    ($0.gameSummary?.homeTeamId == Constants.Ids.ind && $0.gameSummary?.visitorTeamId == Constants.Ids.mil) ||
+                    ($0.gameSummary?.homeTeamId == Constants.Ids.mil && $0.gameSummary?.visitorTeamId == Constants.Ids.ind)
                 }
                 state.eastFirstRoundThirdGameList = displayModel.games.filter {
-                    ($0.gameSummary?.homeTeamId == 1610612752 && $0.gameSummary?.visitorTeamId == 1610612765) ||
-                    ($0.gameSummary?.homeTeamId == 1610612765 && $0.gameSummary?.visitorTeamId == 1610612752)
+                    ($0.gameSummary?.homeTeamId == Constants.Ids.nyk && $0.gameSummary?.visitorTeamId == Constants.Ids.det) ||
+                    ($0.gameSummary?.homeTeamId == Constants.Ids.det && $0.gameSummary?.visitorTeamId == Constants.Ids.nyk)
                 }
                 state.eastFirstRoundFourthGameList = displayModel.games.filter {
-                    ($0.gameSummary?.homeTeamId == 1610612738 && $0.gameSummary?.visitorTeamId == 1610612753) ||
-                    ($0.gameSummary?.homeTeamId == 1610612753 && $0.gameSummary?.visitorTeamId == 1610612738)
+                    ($0.gameSummary?.homeTeamId == Constants.Ids.bos && $0.gameSummary?.visitorTeamId == Constants.Ids.orl) ||
+                    ($0.gameSummary?.homeTeamId == Constants.Ids.orl && $0.gameSummary?.visitorTeamId == Constants.Ids.bos)
                 }
                 
                 // western second round

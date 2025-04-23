@@ -73,7 +73,7 @@ struct FBTeamStandingsView: View {
                                     .onAppear {
                                         oldOffset = newOffset
                                     }
-                                    .onChange(of: newOffset) { newOffset in
+                                    .onChange(of: newOffset) {
                                         let delta = oldOffset - newOffset
                                         totalScrollDistance += delta
                                         oldOffset = newOffset
@@ -177,6 +177,8 @@ struct FBTeamStandingsFirstDataListItem: View {
     let data: FBTeamStandingsDisplay
 
     var body: some View {
+        let teamNameDic = fbTeamStandingsStore.teamNameDictionary
+        
         HStack(spacing: 0) {
             Text("\(rank)")
                 .font(.system(size: fbTeamStandingsStore.dataFontSize, weight: .medium))
@@ -186,7 +188,7 @@ struct FBTeamStandingsFirstDataListItem: View {
                 .padding(.leading, 4)
                 .padding(.trailing, 6)
 
-            Text(EnNameTranslationUtility.translateByDic(type: .team, input: data.team.name))
+            Text(teamNameDic["short_\(data.team.id)"] ?? data.team.name)
                 .font(.system(size: 12))
                 .lineLimit(2)
 

@@ -185,6 +185,7 @@ struct NBATeamInfoView: View {
                         }
                 } // if let nbaTeamInfoStore
             } // ZStack
+            .padding(.top, 6)
             .coordinateSpace(name: coordinateSpaceName)
             .background(
                 GeometryReader { proxy in

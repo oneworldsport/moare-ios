@@ -11,6 +11,7 @@ struct FBTeamStandingsDisplayModel: Equatable {
     let keywords: [Keyword]
     let league: FBLeague?
     let standings: [FBTeamStandingsDisplay]
+    let leagueId: Int?
 }
 
 // 이름 고민 필요

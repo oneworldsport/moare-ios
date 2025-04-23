@@ -68,7 +68,7 @@ struct FBPlayerStatsView: View {
                            --------------------- */
                         FBPlayerStatsPlayerInfoItem(fbPlayerStatsStore: fbPlayerStatsStore, showContents: showContents)
                             .offset(
-                                x: animatePositions ? firstItemPosition.x : 0,
+                                x: 0,
                                 y: animatePositions ? firstItemPosition.y : centerPosition.height
                             )
                         
@@ -83,6 +83,7 @@ struct FBPlayerStatsView: View {
                     .coordinateSpace(name: coordinateSpaceName)
                 } // if let fbPlayerStatsStore
             } // ScrollView
+            .padding(.top, 6)
             .onAppear {
                 // init FBPlayerStatsStore
                 let fbPlayerStatsStore: StoreOf<FBPlayerStatsStore> = storeManager.getStore(forKey: StoreKeys.fbPlayerStatsStore) ?? {
@@ -138,6 +139,8 @@ struct FBPlayerStatsPlayerInfoItem: View {
     
     var body: some View {
         let player = fbPlayerStatsStore.player
+        let playerNameDic = fbPlayerStatsStore.playerNameDictionary
+        let teamNameDic = fbPlayerStatsStore.teamNameDictionary
         
         VStack(spacing: UIConstants.Padding.defaultHPadding) {
             HCapsuleBar()
@@ -146,7 +149,7 @@ struct FBPlayerStatsPlayerInfoItem: View {
                 URLImage(url: player?.photo)
                 
                 VStack(alignment: .leading) {
-                    Text("\(player?.krname ?? "")")
+                    Text(playerNameDic["\(player?.id ?? 0)"] ?? (player?.name ?? ""))
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                     
@@ -174,7 +177,7 @@ struct FBPlayerStatsPlayerInfoItem: View {
                             URLImage(url: team.logo, customSize: CGSize(width: 24, height: 24))
                                 .padding(.trailing, 6)
                             
-                            Text(EnNameTranslationUtility.translateByDic(type: .team, input: team.name))
+                            Text(teamNameDic["full_\(team.id)"] ?? team.name)
                                 .font(.system(size: 16))
                                 .fontWeight(.medium)
                         }
@@ -250,14 +253,14 @@ struct FBPlayerStatsListItem: View {
         .background(
             GeometryReader { proxy in
                 if !isAniList {
-                    Color.clear.onChange(of: proxy.frame(in: .named("FBPlayerStatsView")).origin) {
+                    Color.clear.onAppear {
                         itemPositions[index] = proxy.frame(in: .named("FBPlayerStatsView")).origin
                     }
                 }
             }
         )
         .offset(
-            x: isAniList ? (animatePositions ? (itemPositions[index]?.x ?? 0) : 0) : 0,
+            x: 0,
             y: isAniList ? (animatePositions ? (itemPositions[index]?.y ?? 0) : centerPosition.height) : 0
         )
     }
@@ -276,6 +279,8 @@ struct FBPlayerStatsItem: View {
     }
     
     var body: some View {
+        let teamNameDic = fbPlayerStatsStore.teamNameDictionary
+        
         VStack {
             HCapsuleBar()
             
@@ -292,7 +297,7 @@ struct FBPlayerStatsItem: View {
                 
                 URLImage(url: stats.team.logo, customSize: CGSize(width: 24, height: 24))
                 
-                Text(EnNameTranslationUtility.translateByDic(type: .team, input: stats.team.name))
+                Text(teamNameDic["short_\(stats.team.id)"] ?? stats.team.name)
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }
@@ -396,6 +401,7 @@ struct FBPlayerStatsItem: View {
             }
             .opacity(showContents ? 1 : 0)
         } // VStack
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
         .padding(.bottom, UIConstants.Padding.defalutVPadding)
     }

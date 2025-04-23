@@ -11,6 +11,7 @@ struct FBLeagueScheduleDisplayModel: Equatable {
     let yearMonthList: [String]
     var games: [FBGame]
     let entityInfo: [EntityInfo]
+    let leagueId: Int?
 }
 
 struct FBLeagueScheduleCalendarDisplay: Equatable {

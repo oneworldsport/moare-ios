@@ -9,4 +9,5 @@ import Foundation
 
 struct FBTeamScheduleDisplayModel: Equatable {
     let games: [FBGame]
+    let leagueId: Int?
 }
