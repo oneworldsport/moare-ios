@@ -67,15 +67,16 @@ struct NBALeagueTournamentMainContainer: View {
     // 130 + 30 + 1 + 30 + 1 = 192
     // 192 - 65 = 127
     // 127 * 2 = 254
-    private let infoContainerWidth: CGFloat = 130
-    private let hBarWidth: CGFloat = 30
-    private let barThickness: CGFloat = 1
+//    private let infoContainerWidth: CGFloat = 130
+//    private let hBarWidth: CGFloat = 30
+//    private let barThickness: CGFloat = 1
     
     var body: some View {
-        let secondRoundContainerSpace = (infoContainerWidth + (hBarWidth * 2) + (barThickness * 2)) - (infoContainerWidth / 2)
+        let secondRoundContainerSpace = (nbaLeagueTournamentStore.infoContainerWidth + (nbaLeagueTournamentStore.hBarWidth * 2) + (nbaLeagueTournamentStore.barThickness * 2)) - (nbaLeagueTournamentStore.infoContainerWidth / 2)
         let finalRoundContainerSpace = secondRoundContainerSpace * 2
         
         HStack(spacing: 0) {
+            // western conference
             VStack(alignment: .leading, spacing: 0) {
                 // western 1 round - first game
                 HStack(spacing: 0) {
@@ -84,9 +85,7 @@ struct NBALeagueTournamentMainContainer: View {
                         nbaLeagueTournamentStore: nbaLeagueTournamentStore,
                         gameList: nbaLeagueTournamentStore.westFirstRoundFirstGameList,
                         firstTeamId: nbaLeagueTournamentStore.westFirstRoundFirstGameFirstTeamId,
-                        secondTeamId: nbaLeagueTournamentStore.westFirstRoundFirstGameSecondTeamId,
-                        infoContainerWidth: infoContainerWidth,
-                        hBarWidth: hBarWidth
+                        secondTeamId: nbaLeagueTournamentStore.westFirstRoundFirstGameSecondTeamId
                     )
                 }
                 
@@ -100,9 +99,7 @@ struct NBALeagueTournamentMainContainer: View {
                         nbaLeagueTournamentStore: nbaLeagueTournamentStore,
                         gameList: nbaLeagueTournamentStore.westSecondRoundFirstGameList,
                         firstTeamId: nbaLeagueTournamentStore.westSecondRoundFirstGameFirstTeamId,
-                        secondTeamId: nbaLeagueTournamentStore.westSecondRoundFirstGameSecondTeamId,
-                        infoContainerWidth: infoContainerWidth,
-                        hBarWidth: hBarWidth
+                        secondTeamId: nbaLeagueTournamentStore.westSecondRoundFirstGameSecondTeamId
                     )
                 }
                 
@@ -114,9 +111,7 @@ struct NBALeagueTournamentMainContainer: View {
                         gameList: nbaLeagueTournamentStore.westFirstRoundSecondGameList,
                         firstTeamId: nbaLeagueTournamentStore.westFirstRoundSecondGameFirstTeamId,
                         secondTeamId: nbaLeagueTournamentStore.westFirstRoundSecondGameSecondTeamId,
-                        isUp: true,
-                        infoContainerWidth: infoContainerWidth,
-                        hBarWidth: hBarWidth,
+                        isUp: true
                     )
                 }
                 
@@ -132,9 +127,7 @@ struct NBALeagueTournamentMainContainer: View {
                         firstTeamId: nbaLeagueTournamentStore.westFinalRoundGameFirstTeamId,
                         secondTeamId: nbaLeagueTournamentStore.westFinalRoundGameSecondTeamId,
                         isUp: true,
-                        isFinal: true,
-                        infoContainerWidth: infoContainerWidth,
-                        hBarWidth: hBarWidth,
+                        isFinal: true
                     )
                 }
                 
@@ -145,9 +138,7 @@ struct NBALeagueTournamentMainContainer: View {
                         nbaLeagueTournamentStore: nbaLeagueTournamentStore,
                         gameList: nbaLeagueTournamentStore.westFirstRoundThirdGameList,
                         firstTeamId: nbaLeagueTournamentStore.westFirstRoundThirdGameFirstTeamId,
-                        secondTeamId: nbaLeagueTournamentStore.westFirstRoundThirdGameSecondTeamId,
-                        infoContainerWidth: infoContainerWidth,
-                        hBarWidth: hBarWidth,
+                        secondTeamId: nbaLeagueTournamentStore.westFirstRoundThirdGameSecondTeamId
                     )
                 }
                 
@@ -162,9 +153,7 @@ struct NBALeagueTournamentMainContainer: View {
                         gameList: nbaLeagueTournamentStore.westSecondRoundSecondGameList,
                         firstTeamId: nbaLeagueTournamentStore.westSecondRoundSecondGameFirstTeamId,
                         secondTeamId: nbaLeagueTournamentStore.westSecondRoundSecondGameSecondTeamId,
-                        isUp: true,
-                        infoContainerWidth: infoContainerWidth,
-                        hBarWidth: hBarWidth,
+                        isUp: true
                     )
                 }
                 
@@ -176,9 +165,7 @@ struct NBALeagueTournamentMainContainer: View {
                         gameList: nbaLeagueTournamentStore.westFirstRoundFourthGameList,
                         firstTeamId: nbaLeagueTournamentStore.westFirstRoundFourthGameFirstTeamId,
                         secondTeamId: nbaLeagueTournamentStore.westFirstRoundFourthGameSecondTeamId,
-                        isUp: true,
-                        infoContainerWidth: infoContainerWidth,
-                        hBarWidth: hBarWidth,
+                        isUp: true
                     )
                 }
             } // VStack
@@ -189,9 +176,10 @@ struct NBALeagueTournamentMainContainer: View {
                 nbaLeagueTournamentStore: nbaLeagueTournamentStore,
                 gameList: nbaLeagueTournamentStore.finalRoundGameList,
                 firstTeamId: nbaLeagueTournamentStore.finalRoundGameFirstTeamId,
-                secondTeamId: nbaLeagueTournamentStore.finalRoundGameFirstTeamId,
+                secondTeamId: nbaLeagueTournamentStore.finalRoundGameSecondTeamId,
             )
             
+            // eastern conference
             VStack(alignment: .trailing, spacing: 0) {
                 // eastern 1 round - first game
                 HStack(spacing: 0) {
@@ -201,9 +189,7 @@ struct NBALeagueTournamentMainContainer: View {
                         gameList: nbaLeagueTournamentStore.eastFirstRoundFirstGameList,
                         firstTeamId: nbaLeagueTournamentStore.eastFirstRoundFirstGameFirstTeamId,
                         secondTeamId: nbaLeagueTournamentStore.eastFirstRoundFirstGameSecondTeamId,
-                        isLeft: false,
-                        infoContainerWidth: infoContainerWidth,
-                        hBarWidth: hBarWidth,
+                        isLeft: false
                     )
                 }
                 
@@ -215,9 +201,7 @@ struct NBALeagueTournamentMainContainer: View {
                         gameList: nbaLeagueTournamentStore.eastSecondRoundFirstGameList,
                         firstTeamId: nbaLeagueTournamentStore.eastSecondRoundFirstGameFirstTeamId,
                         secondTeamId: nbaLeagueTournamentStore.eastSecondRoundFirstGameSecondTeamId,
-                        isLeft: false,
-                        infoContainerWidth: infoContainerWidth,
-                        hBarWidth: hBarWidth,
+                        isLeft: false
                     )
                     
                     Spacer()
@@ -233,9 +217,7 @@ struct NBALeagueTournamentMainContainer: View {
                         firstTeamId: nbaLeagueTournamentStore.eastFirstRoundSecondGameFirstTeamId,
                         secondTeamId: nbaLeagueTournamentStore.eastFirstRoundSecondGameSecondTeamId,
                         isUp: true,
-                        isLeft: false,
-                        infoContainerWidth: infoContainerWidth,
-                        hBarWidth: hBarWidth,
+                        isLeft: false
                     )
                 }
                 
@@ -249,9 +231,7 @@ struct NBALeagueTournamentMainContainer: View {
                         secondTeamId: nbaLeagueTournamentStore.eastFinalRoundGameSecondTeamId,
                         isUp: true,
                         isLeft: false,
-                        isFinal: true,
-                        infoContainerWidth: infoContainerWidth,
-                        hBarWidth: hBarWidth,
+                        isFinal: true
                     )
                     
                     Spacer()
@@ -266,9 +246,7 @@ struct NBALeagueTournamentMainContainer: View {
                         gameList: nbaLeagueTournamentStore.eastFirstRoundThirdGameList,
                         firstTeamId: nbaLeagueTournamentStore.eastFirstRoundThirdGameFirstTeamId,
                         secondTeamId: nbaLeagueTournamentStore.eastFirstRoundThirdGameSecondTeamId,
-                        isLeft: false,
-                        infoContainerWidth: infoContainerWidth,
-                        hBarWidth: hBarWidth,
+                        isLeft: false
                     )
                 }
                 
@@ -281,9 +259,7 @@ struct NBALeagueTournamentMainContainer: View {
                         firstTeamId: nbaLeagueTournamentStore.eastSecondRoundSecondGameFirstTeamId,
                         secondTeamId: nbaLeagueTournamentStore.eastSecondRoundSecondGameSecondTeamId,
                         isUp: true,
-                        isLeft: false,
-                        infoContainerWidth: infoContainerWidth,
-                        hBarWidth: hBarWidth,
+                        isLeft: false
                     )
                     
                     Spacer()
@@ -299,9 +275,7 @@ struct NBALeagueTournamentMainContainer: View {
                         firstTeamId: nbaLeagueTournamentStore.eastFirstRoundFourthGameFirstTeamId,
                         secondTeamId: nbaLeagueTournamentStore.eastFirstRoundFourthGameSecondTeamId,
                         isUp: true,
-                        isLeft: false,
-                        infoContainerWidth: infoContainerWidth,
-                        hBarWidth: hBarWidth,
+                        isLeft: false
                     )
                 }
             } // VStack
@@ -320,8 +294,6 @@ struct NBALeagueTournamentRoundContainer: View {
     let isUp: Bool
     let isLeft: Bool
     let isFinal: Bool
-    let infoContainerWidth: CGFloat
-    let hBarWidth: CGFloat
     
     @State private var itemSize: CGSize = .zero
     @State private var isScoreOpened = false
@@ -336,9 +308,7 @@ struct NBALeagueTournamentRoundContainer: View {
         secondTeamId: Int?,
         isUp: Bool = false,
         isLeft: Bool = true,
-        isFinal: Bool = false,
-        infoContainerWidth: CGFloat,
-        hBarWidth: CGFloat,
+        isFinal: Bool = false
     ) {
         self.searchStore = searchStore
         self.nbaLeagueTournamentStore = nbaLeagueTournamentStore
@@ -348,8 +318,6 @@ struct NBALeagueTournamentRoundContainer: View {
         self.isUp = isUp
         self.isLeft = isLeft
         self.isFinal = isFinal
-        self.infoContainerWidth = infoContainerWidth
-        self.hBarWidth = hBarWidth
     }
     
     var body: some View {
@@ -376,7 +344,7 @@ struct NBALeagueTournamentRoundContainer: View {
                         }
                     }
                     
-                    NBALeagueTournamentHBar(width: hBarWidth)
+                    NBALeagueTournamentHBar(width: nbaLeagueTournamentStore.hBarWidth)
                     
                     Rectangle()
                         .fill(.secondary)
@@ -386,7 +354,7 @@ struct NBALeagueTournamentRoundContainer: View {
                     
                     VStack(spacing: 0) {
                         HStack {
-                            NBALeagueTournamentHBar(width: hBarWidth)
+                            NBALeagueTournamentHBar(width: nbaLeagueTournamentStore.hBarWidth)
                             
                             if let first = firstTeamRecord, let second = secondTeamRecord {
                                 Text("\(first)")
@@ -401,7 +369,7 @@ struct NBALeagueTournamentRoundContainer: View {
                         Spacer()
                         
                         HStack {
-                            NBALeagueTournamentHBar(width: hBarWidth)
+                            NBALeagueTournamentHBar(width: nbaLeagueTournamentStore.hBarWidth)
                             
                             if let first = firstTeamRecord, let second = secondTeamRecord {
                                 Text("\(second)")
@@ -508,7 +476,7 @@ struct NBALeagueTournamentRoundContainer: View {
                     }
                     .padding(.top, 6)
                 } // VStack
-                .frame(width: infoContainerWidth)
+                .frame(width: nbaLeagueTournamentStore.infoContainerWidth)
                 .background(
                     GeometryReader { proxy in
                         DispatchQueue.main.async {
@@ -532,7 +500,7 @@ struct NBALeagueTournamentRoundContainer: View {
                                     .foregroundStyle(.primary)
                             }
                             
-                            NBALeagueTournamentHBar(width: hBarWidth)
+                            NBALeagueTournamentHBar(width: nbaLeagueTournamentStore.hBarWidth)
                         }
                         .frame(height: recordTextHeight)
                         
@@ -547,7 +515,7 @@ struct NBALeagueTournamentRoundContainer: View {
                                     .foregroundStyle(.primary)
                             }
                             
-                            NBALeagueTournamentHBar(width: hBarWidth)
+                            NBALeagueTournamentHBar(width: nbaLeagueTournamentStore.hBarWidth)
                         }
                         .frame(height: recordTextHeight)
                     }
@@ -558,7 +526,7 @@ struct NBALeagueTournamentRoundContainer: View {
                         .padding(.vertical, recordTextHeight / 2)
                         .frame(width: 1)
                     
-                    NBALeagueTournamentHBar(width: hBarWidth)
+                    NBALeagueTournamentHBar(width: nbaLeagueTournamentStore.hBarWidth)
                     
                     if !isFinal {
                         VStack(spacing: 0) {
@@ -700,26 +668,26 @@ struct NBALeagueTournamentFinalContainer: View {
             .padding(.bottom, 2)
 
             if isScoreOpened {
-                VStack(spacing: 0) {
-                    if let gameList {
-                        ForEach(gameList.indices, id: \.self) { index in
-                            let game = gameList[index]
-                            let firstTeamPts = game.lineScore.first { $0.teamId == firstTeamId }?.pts
-                            let secondTeamPts = game.lineScore.first { $0.teamId == secondTeamId }?.pts
-                            
-                            if let gameSummary = game.gameSummary {
-                                NBALeagueTournamentFinalScoreContainer(
-                                    searchStore: searchStore,
-                                    nbaLeagueTournamentStore: nbaLeagueTournamentStore,
-                                    index: index + 1,
-                                    date: gameSummary.date,
-                                    firstTeamPts: firstTeamPts,
-                                    secondTeamPts: secondTeamPts
-                                )
-                            }
+                if let gameList {
+                    ForEach(gameList.indices, id: \.self) { index in
+                        let game = gameList[index]
+                        let firstTeamPts = game.lineScore.first { $0.teamId == firstTeamId }?.pts
+                        let secondTeamPts = game.lineScore.first { $0.teamId == secondTeamId }?.pts
+                        
+                        if let gameSummary = game.gameSummary {
+                            NBALeagueTournamentFinalScoreContainer(
+                                searchStore: searchStore,
+                                nbaLeagueTournamentStore: nbaLeagueTournamentStore,
+                                index: index + 1,
+                                date: gameSummary.date,
+                                firstTeamPts: firstTeamPts,
+                                secondTeamPts: secondTeamPts
+                            )
                         }
                     }
-                } // VStack
+                }
+//                VStack(spacing: 0) {
+//                } // VStack
                 
                 Button(action: {
                     isScoreOpened.toggle()

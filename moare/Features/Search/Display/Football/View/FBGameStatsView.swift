@@ -245,10 +245,10 @@ struct FBGameStatsTeamButtonContainer: View {
             } // VStack
             
             // refresh button
-            HStack {
-                Spacer()
-                
-                if fbGameStatsStore.displayModel?.game.fixture.status.short != "NS" && fbGameStatsStore.displayModel?.game.fixture.status.short != "FT" {
+            if fbGameStatsStore.displayModel?.game.fixture.status.short != "NS" && fbGameStatsStore.displayModel?.game.fixture.status.short != "FT" {
+                HStack {
+                    Spacer()
+                    
                     Button(action: {
                         searchStore.send(.refreshGame(category: "football"))
                     }) {

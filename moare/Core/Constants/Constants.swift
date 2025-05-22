@@ -59,4 +59,10 @@ struct Constants {
         static let det = 1610612765
         static let cha = 1610612766
     }
+    
+    struct NBAGameStatus {
+        static let notStarted = 1
+        static let live = 2
+        static let finished = 3
+    }
 }

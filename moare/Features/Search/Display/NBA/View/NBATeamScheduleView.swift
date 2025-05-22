@@ -230,7 +230,7 @@ struct NBATeamScheduleListItem: View {
                 
                 // playoffs info
                 if let gameSummary = data.gameSummary, gameSummary.weekName.isEmpty {
-                    Text("\(NBAUtil.gameType(gameSummary: data.gameSummary, isShort: true))")
+                    Text("\(NBAUtil.gameType(gameSummary: gameSummary, isShort: true))")
                         .font(.system(size: 11))
                     
                     if let series = data.seasonSeries, !gameSummary.seriesGameNumber.isEmpty {
