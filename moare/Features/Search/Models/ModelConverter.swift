@@ -32,12 +32,14 @@ struct ModelConverter {
         }?.statistics.first
         
         return FBPlayerInfoDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.epl,
+            keywords: keywords,
+            entityInfo: entityInfo,
             info: info.player,
             stats: stats,
             lastGame: response.lastGame,
             lastGamePlayerStats: lastGamePlayerStats,
-            nextGame: response.nextGame,
-            leagueId: leagueId
+            nextGame: response.nextGame
         )
     }
     
@@ -183,6 +185,9 @@ struct ModelConverter {
         }
         
         return NBAPlayerInfoDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.nba,
+            keywords: keywords,
+            entityInfo: entityInfo,
             info: info.player,
             stats: stats,
             lastGame: response.lastGame,

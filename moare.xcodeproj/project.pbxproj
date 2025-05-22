@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA081BCA2DDF2C3000034589 /* BaseInfoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA081BC92DDF2C3000034589 /* BaseInfoStore.swift */; };
+		DA081BCC2DDF386D00034589 /* DisplayModelBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA081BCB2DDF385B00034589 /* DisplayModelBase.swift */; };
 		DA1701FC2DA8BBB80021EF80 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = DA1701FB2DA8BBB80021EF80 /* SDWebImageSwiftUI */; };
 		DA1701FF2DA8BBF60021EF80 /* SDWebImageSVGCoder in Frameworks */ = {isa = PBXBuildFile; productRef = DA1701FE2DA8BBF60021EF80 /* SDWebImageSVGCoder */; };
 		DA17021A2DA8C6600021EF80 /* NBAGameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1702162DA8C6600021EF80 /* NBAGameModels.swift */; };
@@ -171,6 +173,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DA081BC92DDF2C3000034589 /* BaseInfoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseInfoStore.swift; sourceTree = "<group>"; };
+		DA081BCB2DDF385B00034589 /* DisplayModelBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayModelBase.swift; sourceTree = "<group>"; };
 		DA1702162DA8C6600021EF80 /* NBAGameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAGameModels.swift; sourceTree = "<group>"; };
 		DA1702172DA8C6600021EF80 /* NBAPlayerModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAPlayerModels.swift; sourceTree = "<group>"; };
 		DA1702182DA8C6600021EF80 /* NBATeamModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamModels.swift; sourceTree = "<group>"; };
@@ -346,6 +350,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DA081BC62DDF2B9C00034589 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				DA081BC82DDF2BC000034589 /* Container */,
+				DA081BC72DDF2BA700034589 /* Store */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		DA081BC72DDF2BA700034589 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				DA081BC92DDF2C3000034589 /* BaseInfoStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		DA081BC82DDF2BC000034589 /* Container */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Container;
+			sourceTree = "<group>";
+		};
 		DA1702192DA8C6600021EF80 /* NBA */ = {
 			isa = PBXGroup;
 			children = (
@@ -514,6 +542,7 @@
 		DA531B672D64A8CA00DB87CB /* Display */ = {
 			isa = PBXGroup;
 			children = (
+				DA081BC62DDF2B9C00034589 /* Common */,
 				DA531B472D64A8CA00DB87CB /* Components */,
 				DA531B5C2D64A8CA00DB87CB /* Football */,
 				DA531B5F2D64A8CA00DB87CB /* NBA */,
@@ -557,6 +586,7 @@
 		DA531B722D64A8CA00DB87CB /* DisplayModels */ = {
 			isa = PBXGroup;
 			children = (
+				DA081BCB2DDF385B00034589 /* DisplayModelBase.swift */,
 				DA531B702D64A8CA00DB87CB /* Football */,
 				DA531B712D64A8CA00DB87CB /* NBA */,
 			);
@@ -1189,6 +1219,7 @@
 				DA4777272DA7B67E00F3459C /* NBAPlayerStandingsResponseModel.swift in Sources */,
 				DA531BE12D64A8F200DB87CB /* BaseDisplayModel.swift in Sources */,
 				DABE3D6D2D7E9C210048DCAA /* TestView.swift in Sources */,
+				DA081BCA2DDF2C3000034589 /* BaseInfoStore.swift in Sources */,
 				DA531BA82D64A8CA00DB87CB /* SearchStore.swift in Sources */,
 				DA531B9C2D64A8CA00DB87CB /* FBTeamScheduleStore.swift in Sources */,
 				DA531C0E2D64AA4300DB87CB /* AnimationConstants.swift in Sources */,
@@ -1199,6 +1230,7 @@
 				DA531BBC2D64A8CA00DB87CB /* FBPlayerStandingsResponseModel.swift in Sources */,
 				DAFCB41B2DADCEAD00839653 /* AsyncPromise.swift in Sources */,
 				DA531BBE2D64A8CA00DB87CB /* FBTeamStandingsResponseModel.swift in Sources */,
+				DA081BCC2DDF386D00034589 /* DisplayModelBase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

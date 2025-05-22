@@ -132,7 +132,7 @@ class AWSManager {
         }
         
         if let lique1TeamNameDictionary = try? await lique1TeamNameDictionary {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.liege1TeamDic, nameMap: lique1TeamNameDictionary)
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.ligue1TeamDic, nameMap: lique1TeamNameDictionary)
         }
     }
     
