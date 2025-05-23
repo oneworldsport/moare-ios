@@ -159,7 +159,7 @@ struct FBTeamInfoView: View {
                             y: animatePositions ? fourthItemPosition.y : containerSize.height / 2
                         )
                         .onTapGesture {
-                            if let team = fbTeamInfoStore.team {
+                            if let team = fbTeamInfoStore.baseInfo.displayModel?.team {
                                 searchStore.send(.showTeamStats(teamId: team.id))
                             }
                         }
@@ -211,14 +211,14 @@ struct FBTeamInfoView: View {
                 }
                 
                 if searchStore.poppedView == nil {
-                    fbTeamInfoStore.send(.initData(displayModel: displayModel))
+                    fbTeamInfoStore.send(.baseInfo(.initData(displayModel: displayModel)))
                 }
                 
                 triggerAnimation()
             }
             .onChange(of: displayModel) {
                 if case .fbTeamInfo = searchStore.poppedView {
-                    fbTeamInfoStore?.send(.initData(displayModel: displayModel))
+                    fbTeamInfoStore?.send(.baseInfo(.initData(displayModel: displayModel)))
                 }
             }
         } // if let searchStore
@@ -249,9 +249,9 @@ struct FBTeamInfoFirstItem: View {
     }
     
     var body: some View {
-        let teamNameDic = fbTeamInfoStore.teamNameDictionary
+        let teamNameDic = fbTeamInfoStore.baseInfo.teamNameDictionary
         
-        if let team = fbTeamInfoStore.team {
+        if let team = fbTeamInfoStore.baseInfo.displayModel?.team {
             VStack {
                 HCapsuleBar()
                 
@@ -278,7 +278,7 @@ struct FBTeamInfoSecondItem: View {
     @Bindable var fbTeamInfoStore: StoreOf<FBTeamInfoStore>
     let showContents: Bool
     
-    @State var city = ""
+//    @State var city = ""
     
     init(fbTeamInfoStore: StoreOf<FBTeamInfoStore>, showContents: Bool = true) {
         self.fbTeamInfoStore = fbTeamInfoStore
@@ -286,6 +286,9 @@ struct FBTeamInfoSecondItem: View {
     }
     
     var body: some View {
+        let displayModel = fbTeamInfoStore.baseInfo.displayModel
+        let team = displayModel?.team
+        
         VStack(alignment:.leading) {
             // added HStack to position Capsule at center
             HStack {
@@ -297,7 +300,7 @@ struct FBTeamInfoSecondItem: View {
                 Text("창단연도: ")
                     .font(.system(size: 15))
                     
-                Text("\(fbTeamInfoStore.team?.founded ?? 0)")
+                Text("\(team?.founded ?? 0)")
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }
@@ -307,7 +310,7 @@ struct FBTeamInfoSecondItem: View {
                 Text("연고지: ")
                     .font(.system(size: 15))
                     
-                Text(city)
+                Text(displayModel?.venue.city ?? "")
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }
@@ -318,24 +321,24 @@ struct FBTeamInfoSecondItem: View {
                 Text("소속나라: ")
                     .font(.system(size: 15))
                     
-                Text(EnNameTranslationUtility.translateByDic(type: .country, input: fbTeamInfoStore.team?.country ?? ""))
+                Text(EnNameTranslationUtility.translateByDic(type: .country, input: team?.country ?? ""))
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }
             .opacity(showContents ? 1 : 0)
         } // VStack
         .frame(maxWidth: 130)
-        .onAppear {
-            translate()
-        }
+//        .onAppear {
+//            translate()
+//        }
     }
     
-    private func translate() {
-        Task {
-            let city = await EnNameTranslationUtility.translateByAWS(input: fbTeamInfoStore.venue?.city)
-            self.city = city
-        }
-    }
+//    private func translate() {
+//        Task {
+//            let city = await EnNameTranslationUtility.translateByAWS(input: fbTeamInfoStore.venue?.city)
+//            self.city = city
+//        }
+//    }
 }
 
 struct FBTeamInfoThirdItem: View {
@@ -348,7 +351,9 @@ struct FBTeamInfoThirdItem: View {
     }
     
     var body: some View {
-        let teamNameDic = fbTeamInfoStore.teamNameDictionary
+        let teamNameDic = fbTeamInfoStore.baseInfo.teamNameDictionary
+        let team = fbTeamInfoStore.baseInfo.displayModel?.team
+        let venue = fbTeamInfoStore.baseInfo.displayModel?.venue
         
         VStack(alignment:.leading) {
             // added HStack to position Capsule at center
@@ -361,7 +366,7 @@ struct FBTeamInfoThirdItem: View {
                 Text("홈구장: ")
                     .font(.system(size: 15))
                 
-                Text(teamNameDic["venue_\(fbTeamInfoStore.team?.id ?? 0)"] ?? (fbTeamInfoStore.venue?.name ?? ""))
+                Text(teamNameDic["venue_\(team?.id ?? 0)"] ?? (venue?.name ?? ""))
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }
@@ -371,7 +376,7 @@ struct FBTeamInfoThirdItem: View {
                 Text("좌석수: ")
                     .font(.system(size: 15))
                 
-                Text("\(fbTeamInfoStore.venue?.capacity ?? 0)")
+                Text("\(venue?.capacity ?? 0)")
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             }
@@ -392,10 +397,12 @@ struct FBTeamInfoFourthItem: View {
     }
     
     var body: some View {
+        let displayModel = fbTeamInfoStore.baseInfo.displayModel
+        
         VStack {
             HCapsuleBar()
             
-            if let league = fbTeamInfoStore.league {
+            if let league = displayModel?.stats?.league {
                 LeagueTitle(
                     url: league.logo,
                     leagueName: league.name,
@@ -404,7 +411,7 @@ struct FBTeamInfoFourthItem: View {
                 .opacity(showContents ? 1 : 0)
             }
             
-            if let stats = fbTeamInfoStore.stats {
+            if let stats = displayModel?.stats {
                 HStack {
                     FBStatDataItem(category: "승", data: "\(stats.fixtures.wins.total)")
                     FBStatDataItem(category: "무", data: "\(stats.fixtures.draws.total)")
@@ -429,7 +436,7 @@ struct FBTeamInfoFifthItem: View {
     }
     
     var body: some View {
-        let teamNameDic = fbTeamInfoStore.teamNameDictionary
+        let teamNameDic = fbTeamInfoStore.baseInfo.teamNameDictionary
         
         VStack {
             HCapsuleBar()
@@ -438,7 +445,7 @@ struct FBTeamInfoFifthItem: View {
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
             
-            if let lastGame = fbTeamInfoStore.lastGame {
+            if let lastGame = fbTeamInfoStore.baseInfo.displayModel?.lastGame {
                 HStack {
                     Text(teamNameDic["short_\(lastGame.teams.home.id)"] ?? lastGame.teams.home.name)
                         .font(.system(size: 15))
@@ -485,7 +492,7 @@ struct FBTeamInfoSixthItem: View {
     }
     
     var body: some View {
-        let teamNameDic = fbTeamInfoStore.teamNameDictionary
+        let teamNameDic = fbTeamInfoStore.baseInfo.teamNameDictionary
         
         VStack {
             HCapsuleBar()
@@ -494,7 +501,7 @@ struct FBTeamInfoSixthItem: View {
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
             
-            if let nextGame = fbTeamInfoStore.nextGame {
+            if let nextGame = fbTeamInfoStore.baseInfo.displayModel?.nextGame {
                 HStack {
                     Text(teamNameDic["short_\(nextGame.teams.home.id)"] ?? nextGame.teams.home.name)
                         .font(.system(size: 15))

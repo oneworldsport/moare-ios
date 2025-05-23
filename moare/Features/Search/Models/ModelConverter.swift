@@ -84,12 +84,14 @@ struct ModelConverter {
         let stats = info.statistics.first { $0.league.id == leagueId }
         
         return FBTeamInfoDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.epl,
+            keywords: keywords,
+            entityInfo: entityInfo,
             team: info.team,
             venue: info.venue,
             stats: stats,
             lastGame: response.lastGame,
-            nextGame: response.nextGame,
-            leagueId: leagueId
+            nextGame: response.nextGame
         )
     }
     
@@ -225,6 +227,9 @@ struct ModelConverter {
         let stats = info.statistics.first { $0.seasonType == "Regular Season" }
         
         return NBATeamInfoDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.nba,
+            keywords: keywords,
+            entityInfo: entityInfo,
             team: info.team,
             venue: info.venue,
             stats: stats,

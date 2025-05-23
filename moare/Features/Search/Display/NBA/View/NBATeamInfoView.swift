@@ -159,7 +159,7 @@ struct NBATeamInfoView: View {
                             y: animatePositions ? fourthItemPosition.y : containerSize.height / 2
                         )
                         .onTapGesture {
-                            if let team = nbaTeamInfoStore.displayModel?.team {
+                            if let team = nbaTeamInfoStore.baseInfo.displayModel?.team {
                                 searchStore.send(.showTeamStats(teamId: team.id))
                             }
                         }
@@ -211,14 +211,14 @@ struct NBATeamInfoView: View {
                 }
                 
                 if searchStore.poppedView == nil {
-                    nbaTeamInfoStore.send(.initData(displayModel: displayModel))
+                    nbaTeamInfoStore.send(.baseInfo(.initData(displayModel: displayModel)))
                 }
                 
                 triggerAnimation()
             }
             .onChange(of: displayModel) {
                 if case .nbaTeamInfo = searchStore.poppedView {
-                    nbaTeamInfoStore?.send(.initData(displayModel: displayModel))
+                    nbaTeamInfoStore?.send(.baseInfo(.initData(displayModel: displayModel)))
                 }
             }
         } // if let searchStore
@@ -249,7 +249,7 @@ struct NBATeamInfoFirstItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaTeamInfoStore.displayModel
+        let displayModel = nbaTeamInfoStore.baseInfo.displayModel
         
         if let team = displayModel?.team {
             VStack {
@@ -258,7 +258,7 @@ struct NBATeamInfoFirstItem: View {
                 URLImage(url: NBAUtil.teamLogoURL(id: team.id), isSvg: true)
                     .opacity(showContents ? 1 : 0)
                 
-                Text(nbaTeamInfoStore.teamNameDictionary["full_\(team.id)"] ?? team.fullName)
+                Text(nbaTeamInfoStore.baseInfo.teamNameDictionary["full_\(team.id)"] ?? team.fullName)
                     .font(.system(size: 16))
                     .fontWeight(.medium)
                     .opacity(showContents ? 1 : 0)
@@ -284,7 +284,7 @@ struct NBATeamInfoSecondItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaTeamInfoStore.displayModel
+        let displayModel = nbaTeamInfoStore.baseInfo.displayModel
         
         if let team = displayModel?.team {
             VStack(alignment:.leading) {
@@ -340,7 +340,7 @@ struct NBATeamInfoThirdItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaTeamInfoStore.displayModel
+        let displayModel = nbaTeamInfoStore.baseInfo.displayModel
         
         if let venue = displayModel?.venue,
            let team = displayModel?.team {
@@ -355,7 +355,7 @@ struct NBATeamInfoThirdItem: View {
                     Text("홈구장: ")
                         .font(.system(size: 15))
                     
-                    Text(nbaTeamInfoStore.teamNameDictionary["venue_\(team.id)"] ?? venue.name)
+                    Text(nbaTeamInfoStore.baseInfo.teamNameDictionary["venue_\(team.id)"] ?? venue.name)
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                 }
@@ -397,7 +397,7 @@ struct NBATeamInfoFourthItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaTeamInfoStore.displayModel
+        let displayModel = nbaTeamInfoStore.baseInfo.displayModel
         let stats = displayModel?.stats
         
         if let team = displayModel?.team {
@@ -448,9 +448,9 @@ struct NBATeamInfoFifthItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaTeamInfoStore.displayModel
+        let displayModel = nbaTeamInfoStore.baseInfo.displayModel
         let lastGame = displayModel?.lastGame
-        let teamNameDic = nbaTeamInfoStore.teamNameDictionary
+        let teamNameDic = nbaTeamInfoStore.baseInfo.teamNameDictionary
         
         VStack {
             HCapsuleBar()
@@ -511,9 +511,9 @@ struct NBATeamInfoSixthItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaTeamInfoStore.displayModel
+        let displayModel = nbaTeamInfoStore.baseInfo.displayModel
         let nextGame = displayModel?.nextGame
-        let teamNameDic = nbaTeamInfoStore.teamNameDictionary
+        let teamNameDic = nbaTeamInfoStore.baseInfo.teamNameDictionary
         
         VStack {
             HCapsuleBar()

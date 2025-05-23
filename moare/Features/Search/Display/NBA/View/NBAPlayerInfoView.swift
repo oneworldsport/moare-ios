@@ -214,7 +214,7 @@ struct NBAPlayerInfoView: View {
                             y: animatePositions ? seventhItemPosition.y : containerSize.height / 2
                         )
                         .onTapGesture {
-                            if let player = nbaPlayerInfoStore.displayModel?.info {
+                            if let player = nbaPlayerInfoStore.baseInfo.displayModel?.info {
                                 searchStore.send(.showPlayerStats(playerId: player.personId))
                             }
                         }
@@ -266,14 +266,14 @@ struct NBAPlayerInfoView: View {
                 }
                 
                 if searchStore.poppedView == nil {
-                    nbaPlayerInfoStore.send(.initData(displayModel: displayModel))
+                    nbaPlayerInfoStore.send(.baseInfo(.initData(displayModel: displayModel)))
                 }
                 
                 triggerAnimation()
             }
             .onChange(of: displayModel) {
                 if case .nbaPlayerInfo = searchStore.poppedView {
-                    nbaPlayerInfoStore?.send(.initData(displayModel: displayModel))
+                    nbaPlayerInfoStore?.send(.baseInfo(.initData(displayModel: displayModel)))
                 }
             }
         } // if let searchStore
@@ -305,7 +305,7 @@ struct NBAPlayerInfoFirstItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaPlayerInfoStore.displayModel
+        let displayModel = nbaPlayerInfoStore.baseInfo.displayModel
         
         if let player = displayModel?.info {
             VStack {
@@ -314,7 +314,7 @@ struct NBAPlayerInfoFirstItem: View {
                 URLImage(url: NBAUtil.playerPhotoURL(id: player.personId))
                     .opacity(showContents ? 1 : 0)
                 
-                Text(nbaPlayerInfoStore.playerNameDictionary[player.displayFirstLast.lowercased()] ?? player.displayFirstLast)
+                Text(nbaPlayerInfoStore.baseInfo.playerNameDictionary[player.displayFirstLast.lowercased()] ?? player.displayFirstLast)
                     .font(.system(size: 16))
                     .fontWeight(.medium)
                     .opacity(showContents ? 1 : 0)
@@ -341,7 +341,7 @@ struct NBAPlayerInfoSecondItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaPlayerInfoStore.displayModel
+        let displayModel = nbaPlayerInfoStore.baseInfo.displayModel
         
         if let player = displayModel?.info {
             VStack {
@@ -350,7 +350,7 @@ struct NBAPlayerInfoSecondItem: View {
                 URLImage(url: NBAUtil.teamLogoURL(id: player.teamId), isSvg: true)
                     .opacity(showContents ? 1 : 0)
                 
-                Text(nbaPlayerInfoStore.teamNameDictionary["full_\(player.teamId)"] ?? "\(player.teamCity) \(player.teamName)")
+                Text(nbaPlayerInfoStore.baseInfo.teamNameDictionary["full_\(player.teamId)"] ?? "\(player.teamCity) \(player.teamName)")
                     .font(.system(size: 16))
                     .fontWeight(.medium)
                     .opacity(showContents ? 1 : 0)
@@ -371,7 +371,7 @@ struct NBAPlayerInfoThirdItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaPlayerInfoStore.displayModel
+        let displayModel = nbaPlayerInfoStore.baseInfo.displayModel
         
         if let player = displayModel?.info {
             VStack(alignment:.leading) {
@@ -418,7 +418,7 @@ struct NBAPlayerInfoFourthItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaPlayerInfoStore.displayModel
+        let displayModel = nbaPlayerInfoStore.baseInfo.displayModel
         
         if let player = displayModel?.info {
             VStack(alignment:.leading) {
@@ -475,7 +475,7 @@ struct NBAPlayerInfoFifthItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaPlayerInfoStore.displayModel
+        let displayModel = nbaPlayerInfoStore.baseInfo.displayModel
         
         if let player = displayModel?.info {
             VStack(alignment:.leading) {
@@ -532,7 +532,7 @@ struct NBAPlayerInfoSixthItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaPlayerInfoStore.displayModel
+        let displayModel = nbaPlayerInfoStore.baseInfo.displayModel
         
         if let displayModel {
             let player = displayModel.info
@@ -584,7 +584,7 @@ struct NBAPlayerInfoSeventhItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaPlayerInfoStore.displayModel
+        let displayModel = nbaPlayerInfoStore.baseInfo.displayModel
         
         if let stats = displayModel?.stats {
             VStack {
@@ -641,8 +641,8 @@ struct NBAPlayerInfoEighthItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaPlayerInfoStore.displayModel
-        let teamNameDic = nbaPlayerInfoStore.teamNameDictionary
+        let displayModel = nbaPlayerInfoStore.baseInfo.displayModel
+        let teamNameDic = nbaPlayerInfoStore.baseInfo.teamNameDictionary
         
         if let displayModel {
             let lastGame = displayModel.lastGame
@@ -740,9 +740,9 @@ struct NBAPlayerInfoNinthItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaPlayerInfoStore.displayModel
+        let displayModel = nbaPlayerInfoStore.baseInfo.displayModel
         let nextGame = displayModel?.nextGame
-        let teamNameDic = nbaPlayerInfoStore.teamNameDictionary
+        let teamNameDic = nbaPlayerInfoStore.baseInfo.teamNameDictionary
         
         VStack {
             HCapsuleBar()

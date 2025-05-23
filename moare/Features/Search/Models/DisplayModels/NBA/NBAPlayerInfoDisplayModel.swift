@@ -7,7 +7,10 @@
 
 import Foundation
 
-struct NBAPlayerInfoDisplayModel: Equatable {
+struct NBAPlayerInfoDisplayModel: DisplayModelBase {
+    let leagueId: Int
+    let keywords: [Keyword]
+    let entityInfo: [EntityInfo]
     let info: NBAPlayerInfo
     let stats: NBAPlayerStats?
     let lastGame: NBAGame?
