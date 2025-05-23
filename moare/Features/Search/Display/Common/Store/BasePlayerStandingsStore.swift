@@ -1,5 +1,5 @@
 //
-//  BaseInfoStore.swift
+//  BasePlayerStandingsStore.swift
 //  moare
 //
 //  Created by Mohwa Yoon on 5/22/25.
@@ -9,7 +9,7 @@ import Foundation
 import ComposableArchitecture
 
 @Reducer
-struct BaseInfoStore<T> {
+struct BasePlayerStandingsStore<T> {
     
     @ObservableState
     struct State {
@@ -17,16 +17,31 @@ struct BaseInfoStore<T> {
            data state
            --------------------- */
         var displayModel: T? = nil
+        var displayDataState: ApiFetchState = .idle
+        
+        /* ---------------------
+           ui state
+           --------------------- */
+        var firstSelectedIndex = 0
+        var secondSelectedIndex = 0
+        var shouldScrollCategory = false
+        var entityIndex: Int? = nil
+        var filteredStandingsStartIndex = 0
         
         /* ---------------------
            etc
            --------------------- */
         var playerNameDictionary: [String: String] = [:]
         var teamNameDictionary: [String: String] = [:]
+        var selectedEntity: EntityInfo? = nil
+        var filteredStandingsEndIndex = 0
     }
     
     enum Action {
         case initData(displayModel: T)
+        case selectFirstCategory(index: Int)
+        case selectSecondCategory(index: Int, category: String)
+//        case fetchStandings(category: String)
     }
     
     @Dependency(\.translatedNameProvider) var nameProvider
@@ -35,6 +50,19 @@ struct BaseInfoStore<T> {
         Reduce { state, action in
             switch action {
             case .initData(let displayModel):
+                // init with default value
+                state.displayDataState = .idle
+                
+                state.firstSelectedIndex = 0
+                state.secondSelectedIndex = 0
+                state.shouldScrollCategory = false
+                state.entityIndex = nil
+                state.filteredStandingsStartIndex = 0
+                
+                state.selectedEntity = nil
+                state.filteredStandingsEndIndex = 0
+                
+                // init data
                 state.displayModel = displayModel
                 
                 if let displayModel = displayModel as? DisplayModelBase {
@@ -56,9 +84,36 @@ struct BaseInfoStore<T> {
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
                     default: break
                     }
+                    
+                    let keywords = displayModel.keywords
+                    if !keywords.isEmpty {
+                        // Check matching keyword in the order of categories, doesn't matter what keyword is in keywords
+                        let index = StringConstants.Football.playerStandingsSecondCategories.firstIndex { category in
+                            let keyword = keywords.first { $0.keyword == category }
+                            return keyword != nil
+                        }
+                        
+                        if let index {
+                            state.secondSelectedIndex = index
+                        }
+                    }
                 }
                 
                 return .none
+                
+            case .selectFirstCategory(let index):
+                state.shouldScrollCategory = true
+                
+                return .none
+                
+            case .selectSecondCategory(let index, let category):
+                state.shouldScrollCategory = false
+                state.secondSelectedIndex = index
+                
+                return .none
+                
+//            case .fetchStandings(let category):
+//                return .none
             }
         }
     }

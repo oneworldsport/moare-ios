@@ -1,5 +1,5 @@
 //
-//  BaseInfoStore.swift
+//  BaseScheduleStore.swift
 //  moare
 //
 //  Created by Mohwa Yoon on 5/22/25.
@@ -9,7 +9,7 @@ import Foundation
 import ComposableArchitecture
 
 @Reducer
-struct BaseInfoStore<T> {
+struct BaseScheduleStore<T> {
     
     @ObservableState
     struct State {
@@ -17,16 +17,29 @@ struct BaseInfoStore<T> {
            data state
            --------------------- */
         var displayModel: T? = nil
+        var displayDataState: ApiFetchState = ApiFetchState.idle
+        var yearMonthList: [String] = []
+        var days: [DayInfo] = []
+        
+        /* ---------------------
+           ui state
+           --------------------- */
+        var selectedYearMonth = ""
+        var selectedDay: DayInfo? = nil
+        var selectedYearMonthIndex = 0
+        var selectedDayIndex = 0
+        var isAllResultOpened = false
+        var scrollCalendar = true
         
         /* ---------------------
            etc
            --------------------- */
-        var playerNameDictionary: [String: String] = [:]
         var teamNameDictionary: [String: String] = [:]
     }
     
     enum Action {
         case initData(displayModel: T)
+        case selectDay(DayInfo, Int)
     }
     
     @Dependency(\.translatedNameProvider) var nameProvider
@@ -35,28 +48,42 @@ struct BaseInfoStore<T> {
         Reduce { state, action in
             switch action {
             case .initData(let displayModel):
+                // init with default value
+                state.displayDataState = .idle
+                state.yearMonthList = []
+                state.days = []
+                
+                state.selectedYearMonth = ""
+                state.selectedDay = nil
+                state.selectedYearMonthIndex = 0
+                state.selectedDayIndex = 0
+                state.isAllResultOpened = false
+                state.scrollCalendar = true
+                
+                // init data
                 state.displayModel = displayModel
                 
                 if let displayModel = displayModel as? DisplayModelBase {
                     switch displayModel.leagueId {
                     case Constants.Ids.epl:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplPlayerDic)
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplTeamDic)
                     case Constants.Ids.laliga:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaPlayerDic)
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaTeamDic)
                     case Constants.Ids.bundesliga:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
                     case Constants.Ids.ligue1:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.ligue1PlayerDic)
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.ligue1TeamDic)
                     case Constants.Ids.nba:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaPlayerDic)
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
                     default: break
                     }
                 }
+                
+                return .none
+                
+            case .selectDay(let day, let index):
+                state.selectedDay = day
+                state.selectedDayIndex = index
                 
                 return .none
             }

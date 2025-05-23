@@ -1,5 +1,5 @@
 //
-//  BaseInfoStore.swift
+//  BaseGameStatsStore.swift
 //  moare
 //
 //  Created by Mohwa Yoon on 5/22/25.
@@ -9,7 +9,7 @@ import Foundation
 import ComposableArchitecture
 
 @Reducer
-struct BaseInfoStore<T> {
+struct BaseGameStatsStore<T> {
     
     @ObservableState
     struct State {
@@ -17,6 +17,15 @@ struct BaseInfoStore<T> {
            data state
            --------------------- */
         var displayModel: T? = nil
+        var displayDataState: ApiFetchState = ApiFetchState.idle
+        
+        /* ---------------------
+           ui state
+           --------------------- */
+        var firstSelectedIndex = 0
+        var secondSelectedIndex = 0
+        var selectedTeamIndex = 0
+        var shouldScrollCategory = false
         
         /* ---------------------
            etc
@@ -27,6 +36,9 @@ struct BaseInfoStore<T> {
     
     enum Action {
         case initData(displayModel: T)
+        case selectFirstCategory(Int)
+        case selectSecondCategory(Int)
+        case selectTeam(Int)
     }
     
     @Dependency(\.translatedNameProvider) var nameProvider
@@ -35,6 +47,15 @@ struct BaseInfoStore<T> {
         Reduce { state, action in
             switch action {
             case .initData(let displayModel):
+                // init with default value
+                state.displayDataState = .idle
+                
+                state.firstSelectedIndex = 0
+                state.secondSelectedIndex = 0
+                state.selectedTeamIndex = 0
+                state.shouldScrollCategory = false
+                
+                // init data
                 state.displayModel = displayModel
                 
                 if let displayModel = displayModel as? DisplayModelBase {
@@ -57,6 +78,22 @@ struct BaseInfoStore<T> {
                     default: break
                     }
                 }
+                
+                return .none
+                
+            case .selectFirstCategory(let index):
+                state.shouldScrollCategory =  true
+                
+                return .none
+                
+            case .selectSecondCategory(let index):
+                state.shouldScrollCategory = false
+                state.secondSelectedIndex = index
+                
+                return .none
+                
+            case .selectTeam(let index):
+                state.selectedTeamIndex = index
                 
                 return .none
             }

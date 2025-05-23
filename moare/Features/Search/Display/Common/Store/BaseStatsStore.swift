@@ -1,5 +1,5 @@
 //
-//  BaseInfoStore.swift
+//  BaseStatsStore.swift
 //  moare
 //
 //  Created by Mohwa Yoon on 5/22/25.
@@ -9,7 +9,7 @@ import Foundation
 import ComposableArchitecture
 
 @Reducer
-struct BaseInfoStore<T> {
+struct BaseStatsStore<T> {
     
     @ObservableState
     struct State {
