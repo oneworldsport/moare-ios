@@ -24,69 +24,66 @@ struct FBPlayerInfoView: View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             InfoViewContainer(itemCount: 6) { scope in
                 if let fbPlayerInfoStore {
-                    VStack(spacing: 20) {
-                        HStack(alignment: .top) {
-                            FBPlayerInfoFirstItem(fbPlayerInfoStore: fbPlayerInfoStore)
-                                .background(
-                                    GeometryReader { geometry in
-                                        // NOTE: 처음 오픈 시 animation이 적용되기 때문에 onAppear가 아니라 onChange로 해야함
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
-                                    }
-                                )
-                            
-                            Spacer()
-                            
-                            FBPlayerInfoSecondItem(fbPlayerInfoStore: fbPlayerInfoStore)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 1, geometry: geometry)
-                                        }
-                                    }
-                                )
-                            
-                            Spacer()
-                            
-                            FBPlayerInfoThirdItem(fbPlayerInfoStore: fbPlayerInfoStore)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 2, geometry: geometry)
-                                        }
-                                    }
-                                )
-                        }
-                        
-                        FBPlayerInfoFourthItem(fbPlayerInfoStore: fbPlayerInfoStore)
+                    HStack(alignment: .top) {
+                        FBPlayerInfoFirstItem(fbPlayerInfoStore: fbPlayerInfoStore)
                             .background(
                                 GeometryReader { geometry in
+                                    // NOTE: 처음 오픈 시 animation이 적용되기 때문에 onAppear가 아니라 onChange로 해야함
                                     Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                        scope.updateItemFrame(index: 3, geometry: geometry)
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
                                     }
                                 }
                             )
                         
-                        FBPlayerInfoFifthItem(fbPlayerInfoStore: fbPlayerInfoStore)
+                        Spacer()
+                        
+                        FBPlayerInfoSecondItem(fbPlayerInfoStore: fbPlayerInfoStore)
                             .background(
                                 GeometryReader { geometry in
                                     Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                        scope.updateItemFrame(index: 4, geometry: geometry)
+                                        scope.updateItemFrame(index: 1, geometry: geometry)
                                     }
                                 }
                             )
                         
-                        FBPlayerInfoSixthItem(fbPlayerInfoStore: fbPlayerInfoStore)
+                        Spacer()
+                        
+                        FBPlayerInfoThirdItem(fbPlayerInfoStore: fbPlayerInfoStore)
                             .background(
                                 GeometryReader { geometry in
                                     Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                        scope.updateItemFrame(index: 5, geometry: geometry)
+                                        scope.updateItemFrame(index: 2, geometry: geometry)
                                     }
                                 }
                             )
-                    } // VStack
-                    .opacity(0)
+                    }
+                    
+                    FBPlayerInfoFourthItem(fbPlayerInfoStore: fbPlayerInfoStore)
+                        .background(
+                            GeometryReader { geometry in
+                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                    scope.updateItemFrame(index: 3, geometry: geometry)
+                                }
+                            }
+                        )
+                    
+                    FBPlayerInfoFifthItem(fbPlayerInfoStore: fbPlayerInfoStore)
+                        .background(
+                            GeometryReader { geometry in
+                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                    scope.updateItemFrame(index: 4, geometry: geometry)
+                                }
+                            }
+                        )
+                    
+                    FBPlayerInfoSixthItem(fbPlayerInfoStore: fbPlayerInfoStore)
+                        .background(
+                            GeometryReader { geometry in
+                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                    scope.updateItemFrame(index: 5, geometry: geometry)
+                                }
+                            }
+                        )
                 } // if let fbPlayerInfoStore
             } displayContent: { scope in
                 if let fbPlayerInfoStore {

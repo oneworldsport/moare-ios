@@ -45,119 +45,89 @@ struct FBTeamInfoView: View {
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            ZStack(alignment: .topLeading) {
-                Spacer() // empty space for smooth animation effect
-                    .frame(maxWidth: .infinity, maxHeight: 0)
-                
+            InfoViewContainer(itemCount: 6) { scope in
                 if let fbTeamInfoStore {
-                    /* ---------------------
-                       invisible ui
-                       - for position
-                       --------------------- */
-                    VStack(spacing: 20) {
-                        HStack(alignment: .top) {
-                            // logo, name
-                            FBTeamInfoFirstItem(fbTeamInfoStore: fbTeamInfoStore)
-                                .background(
-                                    GeometryReader { proxy in
-                                        Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
-                                            firstItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
-                                            firstItemSize = proxy.size
-                                        }
-                                    }
-                                )
-                            
-                            // founded, city, country
-                            FBTeamInfoSecondItem(fbTeamInfoStore: fbTeamInfoStore)
-                                .background(
-                                    GeometryReader { proxy in
-                                        Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
-                                            secondItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
-                                            secondItemSize = proxy.size
-                                        }
-                                    }
-                                )
-                            
-                            // venue
-                            FBTeamInfoThirdItem(fbTeamInfoStore: fbTeamInfoStore)
-                                .background(
-                                    GeometryReader { proxy in
-                                        Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
-                                            thirdItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
-                                            thirdItemSize = proxy.size
-                                        }
-                                    }
-                                )
-                        }
-                        
-                        // league stats
-                        FBTeamInfoFourthItem(fbTeamInfoStore: fbTeamInfoStore)
+                    HStack(alignment: .top) {
+                        // logo, name
+                        FBTeamInfoFirstItem(fbTeamInfoStore: fbTeamInfoStore)
                             .background(
-                                GeometryReader { proxy in
-                                    Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
-                                        fourthItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
-                                        fourthItemSize = proxy.size
+                                GeometryReader { geometry in
+                                    Color.clear.onChange(of: geometry.frame(in: .named(coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
                                     }
                                 }
                             )
                         
-                        HStack {
-                            // last game stats
-                            FBTeamInfoFifthItem(fbTeamInfoStore: fbTeamInfoStore)
-                                .background(
-                                    GeometryReader { proxy in
-                                        Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
-                                            fifthItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
-                                            fifthItemSize = proxy.size
-                                        }
-                                    }
-                                )
-
-                            // next game stats
-                            FBTeamInfoSixthItem(fbTeamInfoStore: fbTeamInfoStore)
+                        // founded, city, country
+                        FBTeamInfoSecondItem(fbTeamInfoStore: fbTeamInfoStore)
                             .background(
-                                GeometryReader { proxy in
-                                    Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
-                                        sixthItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
-                                        sixthItemSize = proxy.size
+                                GeometryReader { geometry in
+                                    Color.clear.onChange(of: geometry.frame(in: .named(coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 1, geometry: geometry)
                                     }
                                 }
                             )
-                        }
-                    } // VStack
-                    .opacity(0)
+                        
+                        // venue
+                        FBTeamInfoThirdItem(fbTeamInfoStore: fbTeamInfoStore)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onChange(of: geometry.frame(in: .named(coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 2, geometry: geometry)
+                                    }
+                                }
+                            )
+                    }
                     
-                    /* ---------------------
-                       visible ui
-                       - with animation effect
-                       --------------------- */
+                    // league stats
+                    FBTeamInfoFourthItem(fbTeamInfoStore: fbTeamInfoStore)
+                        .background(
+                            GeometryReader { geometry in
+                                Color.clear.onChange(of: geometry.frame(in: .named(coordinateSpaceName)).origin) {
+                                    scope.updateItemFrame(index: 3, geometry: geometry)
+                                }
+                            }
+                        )
+                    
+                    HStack {
+                        // last game stats
+                        FBTeamInfoFifthItem(fbTeamInfoStore: fbTeamInfoStore)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onChange(of: geometry.frame(in: .named(coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 4, geometry: geometry)
+                                    }
+                                }
+                            )
+                        
+                        // next game stats
+                        FBTeamInfoSixthItem(fbTeamInfoStore: fbTeamInfoStore)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onChange(of: geometry.frame(in: .named(coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 5, geometry: geometry)
+                                    }
+                                }
+                            )
+                    }
+                }
+            } displayContent: { scope in
+                if let fbTeamInfoStore {
                     // logo, name
                     FBTeamInfoFirstItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
-                        .offset(
-                            x: animatePositions ? firstItemPosition.x : containerSize.width / 2 - firstItemSize.width / 2,
-                            y: animatePositions ? firstItemPosition.y : containerSize.height / 2
-                        )
+                        .offset(scope.computedOffset(for: 0))
                     
                     // founded, city, country
                     FBTeamInfoSecondItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
-                        .offset(
-                            x: animatePositions ? secondItemPosition.x : containerSize.width / 2 - secondItemSize.width / 2,
-                            y: animatePositions ? secondItemPosition.y : containerSize.height / 2
-                        )
+                        .offset(scope.computedOffset(for: 1))
                     
                     // venue
                     FBTeamInfoThirdItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
-                        .offset(
-                            x: animatePositions ? thirdItemPosition.x : containerSize.width / 2 - thirdItemSize.width / 2,
-                            y: animatePositions ? thirdItemPosition.y : containerSize.height / 2
-                        )
+                        .offset(scope.computedOffset(for: 2))
                     
                     // league stats
                     FBTeamInfoFourthItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
-                        .offset(
-                            x: animatePositions ? fourthItemPosition.x : containerSize.width / 2 - fourthItemSize.width / 2,
-                            y: animatePositions ? fourthItemPosition.y : containerSize.height / 2
-                        )
+                        .offset(scope.computedOffset(for: 3))
                         .onTapGesture {
                             if let team = fbTeamInfoStore.baseInfo.displayModel?.team {
                                 searchStore.send(.showTeamStats(teamId: team.id))
@@ -166,36 +136,19 @@ struct FBTeamInfoView: View {
                     
                     // last game stats
                     FBTeamInfoFifthItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
-                        .offset(
-                            x: animatePositions ? fifthItemPosition.x : containerSize.width / 2 - fifthItemSize.width / 2,
-                            y: animatePositions ? fifthItemPosition.y : containerSize.height / 2
-                        )
+                        .offset(scope.computedOffset(for: 4))
                         .onTapGesture {
                             searchStore.send(.showGameStats(gameType: "previous"))
                         }
                     
                     // next game stats
                     FBTeamInfoSixthItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
-                        .offset(
-                            x: animatePositions ? sixthItemPosition.x : containerSize.width / 2 - sixthItemSize.width / 2,
-                            y: animatePositions ? sixthItemPosition.y : containerSize.height / 2
-                        )
+                        .offset(scope.computedOffset(for: 5))
                         .onTapGesture {
                             searchStore.send(.showGameStats(gameType: "next"))
                         }
-                } // if let fbTeamInfoStore
-            } // ZStack
-            .padding(.top, 6)
-            .coordinateSpace(name: coordinateSpaceName)
-            .background(
-                GeometryReader { proxy in
-                    Color.clear.onAppear {
-                        DispatchQueue.main.async {
-                            containerSize = proxy.size
-                        }
-                    }
                 }
-            )
+            }
             .onAppear {
                 // init FBTeamInfoStore
                 let fbTeamInfoStore: StoreOf<FBTeamInfoStore> = storeManager.getStore(forKey: StoreKeys.fbTeamInfoStore) ?? {
@@ -213,8 +166,6 @@ struct FBTeamInfoView: View {
                 if searchStore.poppedView == nil {
                     fbTeamInfoStore.send(.baseInfo(.initData(displayModel: displayModel)))
                 }
-                
-                triggerAnimation()
             }
             .onChange(of: displayModel) {
                 if case .fbTeamInfo = searchStore.poppedView {
@@ -222,20 +173,6 @@ struct FBTeamInfoView: View {
                 }
             }
         } // if let searchStore
-    }
-    
-    private func triggerAnimation() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short) {
-            withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                animatePositions = true
-            }
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short + AnimationConstants.Duration.medium) {
-            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
-                showContents = true
-            }
-        }
     }
 }
 
