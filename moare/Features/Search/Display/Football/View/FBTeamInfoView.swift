@@ -20,29 +20,6 @@ struct FBTeamInfoView: View {
        --------------------- */
     let displayModel: FBTeamInfoDisplayModel
     
-    /* ---------------------
-       animation
-       --------------------- */
-    let coordinateSpaceName = "FBTeamInfoView"
-    
-    @State private var firstItemPosition: CGPoint = .zero
-    @State private var secondItemPosition: CGPoint = .zero
-    @State private var thirdItemPosition: CGPoint = .zero
-    @State private var fourthItemPosition: CGPoint = .zero
-    @State private var fifthItemPosition: CGPoint = .zero
-    @State private var sixthItemPosition: CGPoint = .zero
-    
-    @State private var containerSize: CGSize = .zero
-    @State private var firstItemSize: CGSize = .zero
-    @State private var secondItemSize: CGSize = .zero
-    @State private var thirdItemSize: CGSize = .zero
-    @State private var fourthItemSize: CGSize = .zero
-    @State private var fifthItemSize: CGSize = .zero
-    @State private var sixthItemSize: CGSize = .zero
-    
-    @State private var animatePositions = false
-    @State private var showContents = false
-    
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             InfoViewContainer(itemCount: 6) { scope in
@@ -52,7 +29,7 @@ struct FBTeamInfoView: View {
                         FBTeamInfoFirstItem(fbTeamInfoStore: fbTeamInfoStore)
                             .background(
                                 GeometryReader { geometry in
-                                    Color.clear.onChange(of: geometry.frame(in: .named(coordinateSpaceName)).origin) {
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
                                         scope.updateItemFrame(index: 0, geometry: geometry)
                                     }
                                 }
@@ -62,7 +39,7 @@ struct FBTeamInfoView: View {
                         FBTeamInfoSecondItem(fbTeamInfoStore: fbTeamInfoStore)
                             .background(
                                 GeometryReader { geometry in
-                                    Color.clear.onChange(of: geometry.frame(in: .named(coordinateSpaceName)).origin) {
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
                                         scope.updateItemFrame(index: 1, geometry: geometry)
                                     }
                                 }
@@ -72,7 +49,7 @@ struct FBTeamInfoView: View {
                         FBTeamInfoThirdItem(fbTeamInfoStore: fbTeamInfoStore)
                             .background(
                                 GeometryReader { geometry in
-                                    Color.clear.onChange(of: geometry.frame(in: .named(coordinateSpaceName)).origin) {
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
                                         scope.updateItemFrame(index: 2, geometry: geometry)
                                     }
                                 }
@@ -83,7 +60,7 @@ struct FBTeamInfoView: View {
                     FBTeamInfoFourthItem(fbTeamInfoStore: fbTeamInfoStore)
                         .background(
                             GeometryReader { geometry in
-                                Color.clear.onChange(of: geometry.frame(in: .named(coordinateSpaceName)).origin) {
+                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
                                     scope.updateItemFrame(index: 3, geometry: geometry)
                                 }
                             }
@@ -94,7 +71,7 @@ struct FBTeamInfoView: View {
                         FBTeamInfoFifthItem(fbTeamInfoStore: fbTeamInfoStore)
                             .background(
                                 GeometryReader { geometry in
-                                    Color.clear.onChange(of: geometry.frame(in: .named(coordinateSpaceName)).origin) {
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
                                         scope.updateItemFrame(index: 4, geometry: geometry)
                                     }
                                 }
@@ -104,7 +81,7 @@ struct FBTeamInfoView: View {
                         FBTeamInfoSixthItem(fbTeamInfoStore: fbTeamInfoStore)
                             .background(
                                 GeometryReader { geometry in
-                                    Color.clear.onChange(of: geometry.frame(in: .named(coordinateSpaceName)).origin) {
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
                                         scope.updateItemFrame(index: 5, geometry: geometry)
                                     }
                                 }
@@ -114,19 +91,19 @@ struct FBTeamInfoView: View {
             } displayContent: { scope in
                 if let fbTeamInfoStore {
                     // logo, name
-                    FBTeamInfoFirstItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
+                    FBTeamInfoFirstItem(fbTeamInfoStore: fbTeamInfoStore, showContents: scope.showContents)
                         .offset(scope.computedOffset(for: 0))
                     
                     // founded, city, country
-                    FBTeamInfoSecondItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
+                    FBTeamInfoSecondItem(fbTeamInfoStore: fbTeamInfoStore, showContents: scope.showContents)
                         .offset(scope.computedOffset(for: 1))
                     
                     // venue
-                    FBTeamInfoThirdItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
+                    FBTeamInfoThirdItem(fbTeamInfoStore: fbTeamInfoStore, showContents: scope.showContents)
                         .offset(scope.computedOffset(for: 2))
                     
                     // league stats
-                    FBTeamInfoFourthItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
+                    FBTeamInfoFourthItem(fbTeamInfoStore: fbTeamInfoStore, showContents: scope.showContents)
                         .offset(scope.computedOffset(for: 3))
                         .onTapGesture {
                             if let team = fbTeamInfoStore.baseInfo.displayModel?.team {
@@ -135,14 +112,14 @@ struct FBTeamInfoView: View {
                         }
                     
                     // last game stats
-                    FBTeamInfoFifthItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
+                    FBTeamInfoFifthItem(fbTeamInfoStore: fbTeamInfoStore, showContents: scope.showContents)
                         .offset(scope.computedOffset(for: 4))
                         .onTapGesture {
                             searchStore.send(.showGameStats(gameType: "previous"))
                         }
                     
                     // next game stats
-                    FBTeamInfoSixthItem(fbTeamInfoStore: fbTeamInfoStore, showContents: showContents)
+                    FBTeamInfoSixthItem(fbTeamInfoStore: fbTeamInfoStore, showContents: scope.showContents)
                         .offset(scope.computedOffset(for: 5))
                         .onTapGesture {
                             searchStore.send(.showGameStats(gameType: "next"))
