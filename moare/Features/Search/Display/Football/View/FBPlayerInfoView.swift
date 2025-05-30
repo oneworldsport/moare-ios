@@ -26,6 +26,7 @@ struct FBPlayerInfoView: View {
                 if let fbPlayerInfoStore {
                     HStack(alignment: .top) {
                         FBPlayerInfoFirstItem(fbPlayerInfoStore: fbPlayerInfoStore)
+                            .frame(maxWidth: .infinity)
                             .background(
                                 GeometryReader { geometry in
                                     // NOTE: 처음 오픈 시 animation이 적용되기 때문에 onAppear가 아니라 onChange로 해야함
@@ -35,9 +36,8 @@ struct FBPlayerInfoView: View {
                                 }
                             )
                         
-                        Spacer()
-                        
                         FBPlayerInfoSecondItem(fbPlayerInfoStore: fbPlayerInfoStore)
+                            .frame(maxWidth: .infinity)
                             .background(
                                 GeometryReader { geometry in
                                     Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
@@ -46,9 +46,8 @@ struct FBPlayerInfoView: View {
                                 }
                             )
                         
-                        Spacer()
-                        
                         FBPlayerInfoThirdItem(fbPlayerInfoStore: fbPlayerInfoStore)
+                            .frame(maxWidth: .infinity)
                             .background(
                                 GeometryReader { geometry in
                                     Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
@@ -58,69 +57,100 @@ struct FBPlayerInfoView: View {
                             )
                     }
                     
-                    FBPlayerInfoFourthItem(fbPlayerInfoStore: fbPlayerInfoStore)
-                        .background(
-                            GeometryReader { geometry in
-                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                    scope.updateItemFrame(index: 3, geometry: geometry)
-                                }
+                    FBPlayerInfoFourthItem(
+                        searchStore: searchStore,
+                        fbPlayerInfoStore: fbPlayerInfoStore
+                    )
+                    .background(
+                        GeometryReader { geometry in
+                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                scope.updateItemFrame(index: 3, geometry: geometry)
                             }
-                        )
+                        }
+                    )
                     
-                    FBPlayerInfoFifthItem(fbPlayerInfoStore: fbPlayerInfoStore)
-                        .background(
-                            GeometryReader { geometry in
-                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                    scope.updateItemFrame(index: 4, geometry: geometry)
-                                }
+                    FBPlayerInfoFifthItem(
+                        searchStore: searchStore,
+                        fbPlayerInfoStore: fbPlayerInfoStore
+                    )
+                    .background(
+                        GeometryReader { geometry in
+                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                scope.updateItemFrame(index: 4, geometry: geometry)
                             }
-                        )
+                        }
+                    )
                     
-                    FBPlayerInfoSixthItem(fbPlayerInfoStore: fbPlayerInfoStore)
-                        .background(
-                            GeometryReader { geometry in
-                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                    scope.updateItemFrame(index: 5, geometry: geometry)
-                                }
+                    FBPlayerInfoSixthItem(
+                        searchStore: searchStore,
+                        fbPlayerInfoStore: fbPlayerInfoStore
+                    )
+                    .background(
+                        GeometryReader { geometry in
+                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                scope.updateItemFrame(index: 5, geometry: geometry)
                             }
-                        )
+                        }
+                    )
                 } // if let fbPlayerInfoStore
             } displayContent: { scope in
                 if let fbPlayerInfoStore {
                     // photo, name
-                    FBPlayerInfoFirstItem(fbPlayerInfoStore: fbPlayerInfoStore, showContents: scope.showContents)
-                        .offset(scope.computedOffset(for: 0))
+                    FBPlayerInfoFirstItem(
+                        fbPlayerInfoStore: fbPlayerInfoStore,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[0],
+                        itemOffset: scope.computedOffset(for: 0),
+                        showContents: scope.showContents
+                    )
                     
                     // age, birth, nationality
-                    FBPlayerInfoSecondItem(fbPlayerInfoStore: fbPlayerInfoStore, showContents: scope.showContents)
-                        .offset(scope.computedOffset(for: 1))
+                    FBPlayerInfoSecondItem(
+                        fbPlayerInfoStore: fbPlayerInfoStore,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[1],
+                        itemOffset: scope.computedOffset(for: 1),
+                        showContents: scope.showContents
+                    )
                     
                     // weight, height
-                    FBPlayerInfoThirdItem(fbPlayerInfoStore: fbPlayerInfoStore, showContents: scope.showContents)
-                        .offset(scope.computedOffset(for: 2))
+                    FBPlayerInfoThirdItem(
+                        fbPlayerInfoStore: fbPlayerInfoStore,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[2],
+                        itemOffset: scope.computedOffset(for: 2),
+                        showContents: scope.showContents
+                    )
                     
                     // league stats
-                    FBPlayerInfoFourthItem(fbPlayerInfoStore: fbPlayerInfoStore, showContents: scope.showContents)
-                        .offset(scope.computedOffset(for: 3))
-                        .onTapGesture {
-                            if let player = fbPlayerInfoStore.baseInfo.displayModel?.info {
-                                searchStore.send(.showPlayerStats(playerId: player.id))
-                            }
-                        }
+                    FBPlayerInfoFourthItem(
+                        searchStore: searchStore,
+                        fbPlayerInfoStore: fbPlayerInfoStore,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[3],
+                        itemOffset: scope.computedOffset(for: 3),
+                        showContents: scope.showContents
+                    )
                     
                     // last game stats
-                    FBPlayerInfoFifthItem(fbPlayerInfoStore: fbPlayerInfoStore, showContents: scope.showContents)
-                        .offset(scope.computedOffset(for: 4))
-                        .onTapGesture {
-                            searchStore.send(.showGameStats(gameType: "previous"))
-                        }
+                    FBPlayerInfoFifthItem(
+                        searchStore: searchStore,
+                        fbPlayerInfoStore: fbPlayerInfoStore,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[4],
+                        itemOffset: scope.computedOffset(for: 4),
+                        showContents: scope.showContents
+                    )
                     
                     // next game
-                    FBPlayerInfoSixthItem(fbPlayerInfoStore: fbPlayerInfoStore, showContents: scope.showContents)
-                        .offset(scope.computedOffset(for: 5))
-                        .onTapGesture {
-                            searchStore.send(.showGameStats(gameType: "next"))
-                        }
+                    FBPlayerInfoSixthItem(
+                        searchStore: searchStore,
+                        fbPlayerInfoStore: fbPlayerInfoStore,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[5],
+                        itemOffset: scope.computedOffset(for: 5),
+                        showContents: scope.showContents
+                    )
                 }
             }
             .onAppear {
@@ -153,10 +183,22 @@ struct FBPlayerInfoView: View {
 struct FBPlayerInfoFirstItem: View {
     @Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
     
+    let isAniItem: Bool
+    let itemSize: CGSize?
+    let itemOffset: CGSize?
     let showContents: Bool
     
-    init(fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>, showContents: Bool = true) {
+    init(
+        fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>,
+        isAniItem: Bool = false,
+        itemSize: CGSize? = nil,
+        itemOffset: CGSize? = nil,
+        showContents: Bool = true
+    ) {
         self.fbPlayerInfoStore = fbPlayerInfoStore
+        self.itemSize = itemSize
+        self.isAniItem = isAniItem
+        self.itemOffset = itemOffset
         self.showContents = showContents
     }
     
@@ -164,7 +206,11 @@ struct FBPlayerInfoFirstItem: View {
         let playerNameDic = fbPlayerInfoStore.baseInfo.playerNameDictionary
         let player = fbPlayerInfoStore.baseInfo.displayModel?.info
         
-        VStack {
+        MovingCapsuleItemContainer(
+            isAniItem: isAniItem,
+            itemSize: itemSize,
+            itemOffset: itemOffset,
+        ) {
             HCapsuleBar()
             
             URLImage(url: player?.photo)
@@ -181,22 +227,38 @@ struct FBPlayerInfoFirstItem: View {
                 .lineLimit(2)
                 .opacity(showContents ? 1 : 0)
         }
-        .frame(maxWidth: 130)
     }
 }
 
 struct FBPlayerInfoSecondItem: View {
     @Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
     
+    let isAniItem: Bool
+    let itemSize: CGSize?
+    let itemOffset: CGSize?
     let showContents: Bool
     
-    init(fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>, showContents: Bool = true) {
+    init(
+        fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>,
+        isAniItem: Bool = false,
+        itemSize: CGSize? = nil,
+        itemOffset: CGSize? = nil,
+        showContents: Bool = true
+    ) {
         self.fbPlayerInfoStore = fbPlayerInfoStore
+        self.itemSize = itemSize
+        self.isAniItem = isAniItem
+        self.itemOffset = itemOffset
         self.showContents = showContents
     }
     
     var body: some View {
-        VStack(alignment:.leading) {
+        MovingCapsuleItemContainer(
+            isAniItem: isAniItem,
+            itemSize: itemSize,
+            itemOffset: itemOffset,
+            horizontalAlignment: .leading
+        ) {
             // added HStack to position Capsule at center
             HStack {
                 HCapsuleBar()
@@ -236,22 +298,38 @@ struct FBPlayerInfoSecondItem: View {
                 .opacity(showContents ? 1 : 0)
             }
         }
-        .frame(maxWidth: 130)
     }
 }
 
 struct FBPlayerInfoThirdItem: View {
     @Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
     
+    let isAniItem: Bool
+    let itemSize: CGSize?
+    let itemOffset: CGSize?
     let showContents: Bool
     
-    init(fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>, showContents: Bool = true) {
+    init(
+        fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>,
+        isAniItem: Bool = false,
+        itemSize: CGSize? = nil,
+        itemOffset: CGSize? = nil,
+        showContents: Bool = true
+    ) {
         self.fbPlayerInfoStore = fbPlayerInfoStore
+        self.itemSize = itemSize
+        self.isAniItem = isAniItem
+        self.itemOffset = itemOffset
         self.showContents = showContents
     }
     
     var body: some View {
-        VStack(alignment:.leading) {
+        MovingCapsuleItemContainer(
+            isAniItem: isAniItem,
+            itemSize: itemSize,
+            itemOffset: itemOffset,
+            horizontalAlignment: .leading
+        ) {
             // added HStack to position Capsule at center
             HStack {
                 HCapsuleBar()
@@ -281,17 +359,31 @@ struct FBPlayerInfoThirdItem: View {
                 .opacity(showContents ? 1 : 0)
             }
         }
-        .frame(maxWidth: 130)
     }
 }
 
 struct FBPlayerInfoFourthItem: View {
+    @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
     
+    let isAniItem: Bool
+    let itemSize: CGSize?
+    let itemOffset: CGSize?
     let showContents: Bool
     
-    init(fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>, showContents: Bool = true) {
+    init(
+        searchStore: StoreOf<SearchStore>,
+        fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>,
+        isAniItem: Bool = false,
+        itemSize: CGSize? = nil,
+        itemOffset: CGSize? = nil,
+        showContents: Bool = true
+    ) {
+        self.searchStore = searchStore
         self.fbPlayerInfoStore = fbPlayerInfoStore
+        self.itemSize = itemSize
+        self.isAniItem = isAniItem
+        self.itemOffset = itemOffset
         self.showContents = showContents
     }
     
@@ -300,7 +392,16 @@ struct FBPlayerInfoFourthItem: View {
         let stats = fbPlayerInfoStore.baseInfo.displayModel?.stats
         let team = stats?.team
         
-        VStack {
+        MovingCapsuleItemContainer(
+            isAniItem: isAniItem,
+            itemSize: itemSize,
+            itemOffset: itemOffset,
+            onClick: {
+                if let player = fbPlayerInfoStore.baseInfo.displayModel?.info {
+                    searchStore.send(.showPlayerStats(playerId: player.id))
+                }
+            }
+        ) {
             HCapsuleBar()
             
             if let league = stats?.league {
@@ -342,19 +443,41 @@ struct FBPlayerInfoFourthItem: View {
 }
 
 struct FBPlayerInfoFifthItem: View {
+    @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
     
+    let isAniItem: Bool
+    let itemSize: CGSize?
+    let itemOffset: CGSize?
     let showContents: Bool
     
-    init(fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>, showContents: Bool = true) {
+    init(
+        searchStore: StoreOf<SearchStore>,
+        fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>,
+        isAniItem: Bool = false,
+        itemSize: CGSize? = nil,
+        itemOffset: CGSize? = nil,
+        showContents: Bool = true
+    ) {
+        self.searchStore = searchStore
         self.fbPlayerInfoStore = fbPlayerInfoStore
+        self.itemSize = itemSize
+        self.isAniItem = isAniItem
+        self.itemOffset = itemOffset
         self.showContents = showContents
     }
     
     var body: some View {
         let teamNameDic = fbPlayerInfoStore.baseInfo.teamNameDictionary
         
-        VStack {
+        MovingCapsuleItemContainer(
+            isAniItem: isAniItem,
+            itemSize: itemSize,
+            itemOffset: itemOffset,
+            onClick: {
+                searchStore.send(.showGameStats(gameType: "previous"))
+            }
+        ) {
             HCapsuleBar()
             
             Text("최근경기")
@@ -415,19 +538,41 @@ struct FBPlayerInfoFifthItem: View {
 }
 
 struct FBPlayerInfoSixthItem: View {
+    @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>
     
+    let isAniItem: Bool
+    let itemSize: CGSize?
+    let itemOffset: CGSize?
     let showContents: Bool
     
-    init(fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>, showContents: Bool = true) {
+    init(
+        searchStore: StoreOf<SearchStore>,
+        fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>,
+        isAniItem: Bool = false,
+        itemSize: CGSize? = nil,
+        itemOffset: CGSize? = nil,
+        showContents: Bool = true
+    ) {
+        self.searchStore = searchStore
         self.fbPlayerInfoStore = fbPlayerInfoStore
+        self.itemSize = itemSize
+        self.isAniItem = isAniItem
+        self.itemOffset = itemOffset
         self.showContents = showContents
     }
     
     var body: some View {
         let teamNameDic = fbPlayerInfoStore.baseInfo.teamNameDictionary
         
-        VStack {
+        MovingCapsuleItemContainer(
+            isAniItem: isAniItem,
+            itemSize: itemSize,
+            itemOffset: itemOffset,
+            onClick: {
+                searchStore.send(.showGameStats(gameType: "next"))
+            }
+        ) {
             HCapsuleBar()
             
             Text("다음경기")
