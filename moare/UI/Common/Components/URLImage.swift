@@ -12,14 +12,27 @@ import SDWebImageSwiftUI
 struct URLImage: View {
     let url: String?
     let size: URLImageSize
-    let customSize: CGSize?
     let isSvg: Bool
+    
+    private let imageSize: CGSize
     
     init(url: String?, size: URLImageSize = .medium, customSize: CGSize? = nil, isSvg: Bool = false) {
         self.url = url
         self.size = size
-        self.customSize = customSize
         self.isSvg = isSvg
+        
+        if let customSize {
+            self.imageSize = customSize
+        } else {
+            self.imageSize = switch size {
+            case .small:
+                CGSize(width: 30, height: 30)
+            case .medium:
+                CGSize(width: 50, height: 50)
+            case .big:
+                CGSize(width: 80, height: 80)
+            }
+        }
     }
     
     var body: some View {
@@ -29,8 +42,8 @@ struct URLImage: View {
                     .resizable()
                     .scaledToFit()
                     .frame(
-                        width: customSize != nil ? customSize?.width : imageSize.width,
-                        height: customSize != nil ? customSize?.height : imageSize.height
+                        width: imageSize.width,
+                        height: imageSize.height
                     )
             } else {
                 KFImage(URL(string: url))
@@ -40,8 +53,8 @@ struct URLImage: View {
                     .resizable()
                     .scaledToFit()
                     .frame(
-                        width: customSize != nil ? customSize?.width : imageSize.width,
-                        height: customSize != nil ? customSize?.height : imageSize.height
+                        width: imageSize.width,
+                        height: imageSize.height
                     )
             }
             
@@ -59,22 +72,11 @@ struct URLImage: View {
                 .fill(.secondary)
                 .opacity(0.6)
                 .frame(
-                    width: customSize != nil ? customSize?.width : imageSize.width,
-                    height: customSize != nil ? customSize?.height : imageSize.height
+                    width: imageSize.width,
+                    height: imageSize.height
                 )
         }
     }
-    
-    private var imageSize: CGSize {
-            switch size {
-            case .small:
-                return CGSize(width: 30, height: 30)
-            case .medium:
-                return CGSize(width: 50, height: 50)
-            case .big:
-                return CGSize(width: 80, height: 80)
-            }
-        }
     
     enum URLImageSize {
         case small, medium, big

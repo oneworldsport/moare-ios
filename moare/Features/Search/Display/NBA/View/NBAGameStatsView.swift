@@ -46,7 +46,7 @@ struct NBAGameStatsView: View {
                         
                         Spacer()
                     }
-                    .padding(.leading, UIConstants.Padding.defaultHPadding)
+                    .padding(.horizontal, UIConstants.Padding.defaultHPadding)
                     
                     /* ---------------------
                        playoffs series text
