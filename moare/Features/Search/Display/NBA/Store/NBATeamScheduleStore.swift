@@ -17,7 +17,7 @@ struct NBATeamScheduleStore {
            data state
            --------------------- */
         var displayModel: NBATeamScheduleDisplayModel? = nil
-        var games: [NBAGame] = []
+        var games: [NBAGameForSchedule] = []
         
         /* ---------------------
            ui state
@@ -59,7 +59,7 @@ struct NBATeamScheduleStore {
                 
                 state.teamNameDictionary = nameProvider.getDictionary(category: "nba_team")
                 
-                let gameResultOpenedStateList = (state.games).reduce(into: [:]) { $0[$1.gameSummary?.gameCode ?? ""] = false }
+                let gameResultOpenedStateList = (state.games).reduce(into: [:]) { $0[$1.gameId ?? ""] = false }
                 state.gameResultOpenedStateList = gameResultOpenedStateList
                 
                 return .none

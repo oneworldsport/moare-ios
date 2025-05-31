@@ -53,7 +53,7 @@ indirect enum SportDecodableModel: Equatable {
     case nbaTeamSchedule(NBAGameScheduleResponseModel, NBATeamScheduleDisplayModel)
     case nbaLeagueSchedule(NBAGameScheduleResponseModel, NBALeagueScheduleDisplayModel)
     case nbaGameStats(NBAGameStatsReponseModel, NBAGameStatsDisplayModel)
-    case nbaLeagueTournament(NBAGameScheduleResponseModel, NBALeagueScheduleDisplayModel)
+    case nbaLeagueTournament(NBAGameListResponseModel, NBATournamentDisplayModel) // TODO: Should change models to use NBAGameForSchedule(Which is used in NBAGameScheduleResponsModel)
     
     case unknown
     
@@ -259,7 +259,7 @@ extension DataModel {
             }
             
         case let dataType where dataType == "basketball_league_tournament":
-            let responseModel = try container.decode(NBAGameScheduleResponseModel.self, forKey: .data)
+            let responseModel = try container.decode(NBAGameListResponseModel.self, forKey: .data)
             let displayModel = modelConverter.nbaLeagueTournamentConverter(response: responseModel)
             self.data = .nbaLeagueTournament(responseModel, displayModel)
             

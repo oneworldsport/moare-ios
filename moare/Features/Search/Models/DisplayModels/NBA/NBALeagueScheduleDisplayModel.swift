@@ -9,6 +9,6 @@ import Foundation
 
 struct NBALeagueScheduleDisplayModel: Equatable {
     let yearMonthList: [String]
-    var games: [NBAGame]
+    var games: [NBAGameForSchedule]
     let entityInfo: [EntityInfo]
 }

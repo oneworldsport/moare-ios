@@ -23,7 +23,7 @@ struct NBALeagueTournamentStore {
         /* ---------------------
            data state
            --------------------- */
-        var displayModel: NBALeagueScheduleDisplayModel? = nil
+        var displayModel: NBATournamentDisplayModel? = nil
         
         var westFirstRoundFirstGameList: [NBAGame]? = nil
         var westFirstRoundFirstGameFirstTeamId: Int = Constants.Ids.okc
@@ -99,7 +99,7 @@ struct NBALeagueTournamentStore {
         /* ---------------------
            init
            --------------------- */
-        case initData(displayModel: NBALeagueScheduleDisplayModel)
+        case initData(displayModel: NBATournamentDisplayModel)
         
         /* ---------------------
            view action

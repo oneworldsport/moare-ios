@@ -138,9 +138,9 @@ struct NBAGameStatsView: View {
                     nbaGameStatsStore.send(.initData(displayModel: displayModel))
                 }
                 
-                if displayModel.game.gameSummary?.gameStatusId == 2 {
-                    searchStore.send(.refreshGame(category: "basketball"))
-                }
+//                if displayModel.game.gameSummary?.gameStatusId == 2 {
+//                    searchStore.send(.refreshGame(category: "basketball"))
+//                }
             } // onAppear
             .onChange(of: displayModel) {
                 if case .nbaGameStats = searchStore.poppedView {

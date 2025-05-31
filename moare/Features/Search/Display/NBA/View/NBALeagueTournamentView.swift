@@ -18,7 +18,7 @@ struct NBALeagueTournamentView: View {
     /* ---------------------
        data
        --------------------- */
-    let displayModel: NBALeagueScheduleDisplayModel
+    let displayModel: NBATournamentDisplayModel
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
