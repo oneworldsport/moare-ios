@@ -67,7 +67,6 @@ struct SearchView: View {
                         
                         VStack(alignment: .trailing, spacing: 0) {
                             NoticeBox(noticeList: searchStore.noticeList)
-                                .padding(.trailing, 12)
                                 .opacity(isNoticeOpened ? 1 : 0)
                             
                             Button(action: {
@@ -78,10 +77,10 @@ struct SearchView: View {
                                 Image(systemName: "info.circle")
                                     .tint(.secondary)
                                     .padding(.leading, 8)
-                                    .padding(.trailing, 12)
                                     .padding(.top, 4)
                             }
                         }
+                        .padding(.trailing, 12)
                     }
                     .offset(x: 0, y: -113)
                     .zIndex(1)
