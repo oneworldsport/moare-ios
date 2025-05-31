@@ -20,19 +20,36 @@ struct FBLeaugeScheduleView: View {
        --------------------- */
     let displayModel: FBLeagueScheduleDisplayModel
     
-    /* ---------------------
-       ui state
-       --------------------- */
-    @State var shouldScrollCalendar = true
-    
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            VStack(spacing: 0) {
+            ScheduleViewContainer(
+                state: ScheduleContainerState(
+                    shouldShowCalendar: searchStore.fbGameStatsData == nil,
+                    shouldShowAllResultToggleButton: searchStore.fbGameStatsData == nil,
+                    displayDataState: fbLeagueScheduleStore?.displayDataState ?? .idle,
+                    calendarUiState: CalendarUiState(
+                        yearMonthList: fbLeagueScheduleStore?.yearMonthList ?? [],
+                        days: fbLeagueScheduleStore?.days ?? [],
+                        selectedYearMonthIndex: fbLeagueScheduleStore?.selectedYearMonthIndex ?? 0,
+                        selectedDayIndex: fbLeagueScheduleStore?.selectedDayIndex ?? 0
+                    ),
+                    isAllResultOpened: fbLeagueScheduleStore?.isAllResultOpened ?? false
+                ),
+                actions: ScheduleContainerActions(
+                    calendarUiActions: CalendarUiActions(
+                        onSelectYearMonth: { yearMonth, index in
+                            fbLeagueScheduleStore?.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
+                        },
+                        onSelectDay: { day, index in
+                            fbLeagueScheduleStore?.send(.selectDay(day, index))
+                        }
+                    ),
+                    allResultButtonAction: {
+                        fbLeagueScheduleStore?.send(.toggleAllResult)
+                    }
+                )
+            ) {
                 if let fbLeagueScheduleStore {
-                    /* ---------------------
-                       game title, info
-                       - shows when game selected
-                       --------------------- */
                     if let gameStatsData = searchStore.fbGameStatsData {
                         HStack {
                             HStack(spacing: 0) {
@@ -51,83 +68,15 @@ struct FBLeaugeScheduleView: View {
                         }
                         .padding(.leading, UIConstants.Padding.defaultHPadding)
                     }
-                    
-                    /* ---------------------
-                       calendar
-                       - hides when game selected
-                       --------------------- */
-                    if searchStore.fbGameStatsData == nil {
-                        CalendarList(
-                            dateList: fbLeagueScheduleStore.yearMonthList,
-                            calendarType: .yearmonth,
-                            selectedIndex: fbLeagueScheduleStore.selectedYearMonthIndex
-                        ) { yearMonth, index in
-                            shouldScrollCalendar = true
-                            fbLeagueScheduleStore.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
-                        }
-                        .padding(.bottom, 10)
-                        
-                        CalendarList(
-                            dateList: fbLeagueScheduleStore.days,
-                            calendarType: .day,
-                            selectedIndex: fbLeagueScheduleStore.selectedDayIndex,
-                            shouldScroll: $shouldScrollCalendar
-                        ) { day, index in
-                            shouldScrollCalendar = false
-                            fbLeagueScheduleStore.send(.selectDay(day, index))
-                        }
-                        .padding(.bottom, 6)
-                    }
-
-                    /* ---------------------
-                       all result open button
-                       - hides when game selected
-                       --------------------- */
-                    if searchStore.fbGameStatsData == nil {
-                        HStack {
-                            Spacer()
-                            
-                            CapsuleButton(
-                                text: fbLeagueScheduleStore.isAllResultOpened ? StringConstants.resultHide : StringConstants.resultOpen,
-                                color: .secondary
-                            ) {
-                                fbLeagueScheduleStore.send(.toggleAllResult)
-                            }
-                            .padding(.trailing)
-                        }
-                    }
-                    
-                    ZStack {
-                        /* ---------------------
-                           loading
-                           --------------------- */
-                        if fbLeagueScheduleStore.displayDataState == .fetching {
-                            ProgressView()
-                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                                .padding(.top, 8)
-                        }
-                        
-                        /* ---------------------
-                           schedule
-                           --------------------- */
-                        if fbLeagueScheduleStore.displayDataState == .success {
-                            FBLeagueScheduleList(
-                                searchStore: searchStore,
-                                fbLeagueScheduleStore: fbLeagueScheduleStore
-                            )
-                        }
-                        
-                        /* ---------------------
-                           error
-                           --------------------- */
-                        if case .failure(let message) = fbLeagueScheduleStore.displayDataState {
-                            Text(message)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                                .padding(.top, 8)
-                        }
-                    }
-                } // if let fbLeagueScheduleStore
-            } // VStack
+                }
+            } gameListContent: {
+                if let fbLeagueScheduleStore {
+                    FBLeagueScheduleList(
+                        searchStore: searchStore,
+                        fbLeagueScheduleStore: fbLeagueScheduleStore
+                    )
+                }
+            }
             .onAppear {
                 // init FBLeagueScheduleStore
                 let fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.fbLeagueScheduleStore) ?? {
