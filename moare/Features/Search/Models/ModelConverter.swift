@@ -282,7 +282,31 @@ struct ModelConverter {
         return NBAGameStatsDisplayModel(game: response.game!)
     }
     
-    func nbaLeagueTournamentConverter(response: NBAGameScheduleResponseModel) -> NBALeagueScheduleDisplayModel {
-        return NBALeagueScheduleDisplayModel(yearMonthList: [], games: response.schedule, entityInfo: entityInfo)
+    func nbaLeagueTournamentConverter(response: NBAGameListResponseModel) -> NBATournamentDisplayModel {
+        return NBATournamentDisplayModel(yearMonthList: [], games: response.schedule, entityInfo: entityInfo)
+    }
+    
+    // Not used in DataModel
+    func nbaGameToGameScheduleConverter(gameList: [NBAGame]) -> [NBAGameForSchedule] {
+        return gameList.compactMap { game in
+            guard let gameSummary = game.gameSummary else {
+                return nil
+            }
+            
+            let homeTeamId = gameSummary.homeTeamId
+            let awayTeamId = gameSummary.visitorTeamId
+            let homeTeamScore = game.lineScore.first { $0.teamId == homeTeamId }?.pts ?? 0
+            let awayTeamScore = game.lineScore.first { $0.teamId == awayTeamId }?.pts ?? 0
+            
+            return NBAGameForSchedule(
+                itemKey: "\(gameSummary.date)#\(gameSummary.gameCode)",
+                homeTeamId: homeTeamId,
+                awayTeamId: awayTeamId,
+                homeTeamScore: homeTeamScore,
+                awayTeamScore: awayTeamScore,
+                gameStatus: String(gameSummary.gameStatusId),
+                gameInfo: gameSummary
+            )
+        }
     }
 }

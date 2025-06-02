@@ -523,3 +523,6 @@ struct NBASeasonSeries: Decodable, Equatable {
         case _visitorTeamId = "visitorTeamId"
     }
 }
+
+typealias NBAGameForSchedule = GameForSchedule<NBAGameSummary>
+

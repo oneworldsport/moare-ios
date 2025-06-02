@@ -47,7 +47,7 @@ struct SearchStore {
         var nbaTeamScheduleData: NBATeamScheduleDisplayModel? = nil
         var nbaLeagueScheduleData: NBALeagueScheduleDisplayModel? = nil
         var nbaGameStatsData: NBAGameStatsDisplayModel? = nil
-        var nbaLeagueTournamentData: NBALeagueScheduleDisplayModel? = nil
+        var nbaLeagueTournamentData: NBATournamentDisplayModel? = nil
         
         var autoCompleteList: [String] = []
         var trendingKeywordList: [String] = []
@@ -92,7 +92,7 @@ struct SearchStore {
         case updateTextFieldVisibleState(Bool)
         case performSearch(searchType: SearchType = .query, aniDuration: CGFloat = 0)
         case selectFBGame(game: FBGame, leagueId: Int?)
-        case selectNBAGame(game: NBAGame)
+        case selectNBAGame(game: NBAGameForSchedule)
         case showPlayerStats(category: String? = nil, playerId: Int)
         case showTeamStats(teamId: Int)
         case showGameStats(gameType: String)
@@ -519,17 +519,18 @@ struct SearchStore {
                 return .none
                 
             case .selectNBAGame(let game):
-                let dataMdoel = SportDecodableModel.nbaGameStats(
-                    NBAGameStatsReponseModel(game: game),
-                    NBAGameStatsDisplayModel(game: game)
-                )
-                
-                state.viewStack.append(dataMdoel)
-                state.poppedView = nil
-                
-                state.nbaGameStatsData = NBAGameStatsDisplayModel(game: game)
-                
-                return .none
+                return .run { send in
+                    let result = try await searchClient.fetchById(
+                        category: "basketball",
+                        date: game.date,
+                        dataType: "basketball_game_stats",
+                        leagueId: 90001,
+                        id: game.gameId
+                    )
+                    
+                    await send(.addViewStack(data: result.data))
+                    await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+                }
                 
             case .updateIsFocused(let bool):
                 state.isFocused = bool
@@ -769,7 +770,7 @@ struct SearchStore {
                 
                 switch state.viewStack.last {
                 case .nbaLeagueTournament(let responseModel, let displayModel):
-                    let teamScheduleResponseModel = NBAGameScheduleResponseModel(scheduledMonths: nil, schedule: gameList)
+                    let teamScheduleResponseModel = NBAGameScheduleResponseModel(scheduledMonths: nil, schedule: modelConverter.nbaGameToGameScheduleConverter(gameList: gameList))
                     
                     dataModel = .nbaTeamSchedule(
                         teamScheduleResponseModel,

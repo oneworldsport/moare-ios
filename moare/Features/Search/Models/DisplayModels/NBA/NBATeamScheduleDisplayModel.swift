@@ -8,5 +8,5 @@
 import Foundation
 
 struct NBATeamScheduleDisplayModel: Equatable {
-    let games: [NBAGame]
+    let games: [NBAGameForSchedule]
 }
