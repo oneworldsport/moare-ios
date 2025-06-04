@@ -26,6 +26,8 @@ struct Constants {
         static let bundesliga = 78
         static let ligue1 = 61
         static let nba = 90001
+        static let kbo = 90101
+        static let mlb = 90102
         
         // nba team
         static let atl = 1610612737

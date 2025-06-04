@@ -8,7 +8,7 @@
 import Foundation
 
 struct KBOPlayer: Decodable, Equatable {
-    let playerInfo: KBOPlayerInfo
+    let player: KBOPlayerInfo
     let statistics: [KBOPlayerStats]
 }
 
