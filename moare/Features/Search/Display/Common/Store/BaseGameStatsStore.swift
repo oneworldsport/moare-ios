@@ -75,6 +75,12 @@ struct BaseGameStatsStore<T> {
                     case Constants.Ids.nba:
                         state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaPlayerDic)
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
+                    case Constants.Ids.kbo:
+                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.kboPlayerDic)
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.kboTeamDic)
+                    case Constants.Ids.mlb:
+                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlbPlayerDic)
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlbTeamDic)
                     default: break
                     }
                 }

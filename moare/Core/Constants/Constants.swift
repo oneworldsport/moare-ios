@@ -17,6 +17,10 @@ struct Constants {
         static let ligue1TeamDic = "ligue1_team"
         static let nbaPlayerDic = "nba_player"
         static let nbaTeamDic = "nba_team"
+        static let kboPlayerDic = "kbo_player"
+        static let kboTeamDic = "kbo_team"
+        static let mlbPlayerDic = "mlb_player"
+        static let mlbTeamDic = "mlb_team"
     }
     
     struct Ids {

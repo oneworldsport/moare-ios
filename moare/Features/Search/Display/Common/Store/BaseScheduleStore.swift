@@ -75,6 +75,10 @@ struct BaseScheduleStore<T> {
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.ligue1TeamDic)
                     case Constants.Ids.nba:
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
+                    case Constants.Ids.kbo:
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.kboTeamDic)
+                    case Constants.Ids.mlb:
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlbTeamDic)
                     default: break
                     }
                 }
