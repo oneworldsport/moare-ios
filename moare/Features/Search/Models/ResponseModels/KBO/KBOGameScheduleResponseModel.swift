@@ -9,5 +9,5 @@ import Foundation
 
 struct KBOGameScheduleResponseModel: Decodable, Equatable {
     let scheduledMonths: [String]?
-    let schedule: [KBOGame]
+    let schedule: [KBOGameForSchedule]
 }

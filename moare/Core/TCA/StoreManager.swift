@@ -34,6 +34,26 @@ struct StoreKeys {
     static let nbaLeagueScheduleStore = "NBALeagueScheduleStore"
     static let nbaGameStatsStore = "NBAGameStatsStore"
     static let nbaLeagueTournamentStore = "NBALeagueTournamentStore"
+    
+    // kbo
+    static let kboPlayerInfoStore = "KBOPlayerInfoStore"
+    static let kboPlayerStatsStore = "KBOPlayerStatsStore"
+    static let kboPlayerStandingsStore = "KBOPlayerStandingsStore"
+    static let kboTeamInfoStore = "KBOTeamInfoStore"
+    static let kboTeamStatsStore = "KBOTeamStatsStore"
+    static let kboTeamStandingsStore = "KBOTeamStandingsStore"
+    static let kboLeagueScheduleStore = "KBOLeagueScheduleStore"
+    static let kboGameStatsStore = "KBOGameStatsStore"
+    
+    // mlb
+    static let mlbPlayerInfoStore = "MLBPlayerInfoStore"
+    static let mlbPlayerStatsStore = "MLBPlayerStatsStore"
+    static let mlbPlayerStandingsStore = "MLBPlayerStandingsStore"
+    static let mlbTeamInfoStore = "MLBTeamInfoStore"
+    static let mlbTeamStatsStore = "MLBTeamStatsStore"
+    static let mlbTeamStandingsStore = "MLBTeamStandingsStore"
+    static let mlbLeagueScheduleStore = "MLBLeagueScheduleStore"
+    static let mlbGameStatsStore = "MLBGameStatsStore"
 }
 
 class StoreManager: ObservableObject {

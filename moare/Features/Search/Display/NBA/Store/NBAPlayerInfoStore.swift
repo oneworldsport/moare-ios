@@ -29,8 +29,6 @@ struct NBAPlayerInfoStore {
         case baseInfo(BaseInfo.Action)
     }
     
-    @Dependency(\.translatedNameProvider) var nameProvider
-    
     var body: some Reducer<State, Action> {
         Scope(state: \.baseInfo, action: \.baseInfo) {
             BaseInfo()

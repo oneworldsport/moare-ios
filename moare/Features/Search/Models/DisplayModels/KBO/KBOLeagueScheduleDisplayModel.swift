@@ -12,5 +12,5 @@ struct KBOLeagueScheduleDisplayModel: DisplayModelBase {
     let keywords: [Keyword]
     let entityInfo: [EntityInfo]
     let yearMonthList: [String]
-    let games: [KBOGame]
+    var games: [KBOGameForSchedule]
 }

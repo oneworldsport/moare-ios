@@ -19,12 +19,14 @@ struct KBOGameInfo: Decodable, Equatable {
     private let _gameId: String?
     private let _homeTeamId: String?
     private let _remark: String?
+    private let _gameStatus: String?
 
     var awayTeamId: String { _awayTeamId ?? "" }
     var date: String { _date ?? "" }
     var gameId: String { _gameId ?? "" }
     var homeTeamId: String { _homeTeamId ?? "" }
     var remark: String { _remark ?? "" }
+    var gameStatus: String { _gameStatus ?? "" }
 
     private enum CodingKeys: String, CodingKey {
         case _awayTeamId = "awayTeamId"
@@ -32,6 +34,7 @@ struct KBOGameInfo: Decodable, Equatable {
         case _gameId = "gameId"
         case _homeTeamId = "homeTeamId"
         case _remark = "remark"
+        case _gameStatus = "gameStatus"
     }
 }
 
@@ -202,3 +205,5 @@ struct KBOGamePitcherStats: Decodable, Equatable {
         case _tbf = "tbf"
     }
 }
+
+typealias KBOGameForSchedule = GameForSchedule<String>

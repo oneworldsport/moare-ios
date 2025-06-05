@@ -343,6 +343,58 @@ struct SearchView: View {
         if let data = searchStore?.nbaLeagueTournamentData {
             views.append(AnyView(NBALeagueTournamentView(displayModel: data)))
         }
+        
+        // kbo
+//        if let data = searchStore?.kboPlayerInfoData {
+//            views.append(AnyView(KBOPlayerInfoView(displayModel: data)))
+//        }
+//        if let data = searchStore?.kboPlayerStatsData {
+//            views.append(AnyView(KBOPlayerStatsView(displayModel: data)))
+//        }
+//        if let data = searchStore?.kboPlayerStandingsData {
+//            views.append(AnyView(KBOPlayerStandingsView(displayModel: data)))
+//        }
+//        if let data = searchStore?.kboTeamInfoData {
+//            views.append(AnyView(KBOTeamInfoView(displayModel: data)))
+//        }
+//        if let data = searchStore?.kboTeamStatsData {
+//            views.append(AnyView(KBOTeamStatsView(displayModel: data)))
+//        }
+//        if let data = searchStore?.kboTeamStandingsData {
+//            views.append(AnyView(KBOTeamStandingsView(displayModel: data)))
+//        }
+        if let data = searchStore?.kboLeagueScheduleData {
+            views.append(AnyView(KBOLeagueScheduleView(displayModel: data)))
+        }
+//        if let data = searchStore?.kboGameStatsData {
+//            views.append(AnyView(KBOGameStatsView(displayModel: data)))
+//        }
+//        
+//        // mlb
+//        if let data = searchStore?.mlbPlayerInfoData {
+//            views.append(AnyView(MLBPlayerInfoView(displayModel: data)))
+//        }
+//        if let data = searchStore?.mlbPlayerStatsData {
+//            views.append(AnyView(MLBPlayerStatsView(displayModel: data)))
+//        }
+//        if let data = searchStore?.mlbPlayerStandingsData {
+//            views.append(AnyView(MLBPlayerStandingsView(displayModel: data)))
+//        }
+//        if let data = searchStore?.mlbTeamInfoData {
+//            views.append(AnyView(MLBTeamInfoView(displayModel: data)))
+//        }
+//        if let data = searchStore?.mlbTeamStatsData {
+//            views.append(AnyView(MLBTeamStatsView(displayModel: data)))
+//        }
+//        if let data = searchStore?.mlbTeamStandingsData {
+//            views.append(AnyView(MLBTeamStandingsView(displayModel: data)))
+//        }
+//        if let data = searchStore?.mlbLeagueScheduleData {
+//            views.append(AnyView(MLBLeagueScheduleView(displayModel: data)))
+//        }
+//        if let data = searchStore?.mlbGameStatsData {
+//            views.append(AnyView(MLBGameStatsView(displayModel: data)))
+//        }
 
         return views
     }
