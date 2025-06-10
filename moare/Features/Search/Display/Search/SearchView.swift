@@ -380,9 +380,9 @@ struct SearchView: View {
 //        if let data = searchStore?.mlbPlayerStandingsData {
 //            views.append(AnyView(MLBPlayerStandingsView(displayModel: data)))
 //        }
-//        if let data = searchStore?.mlbTeamInfoData {
-//            views.append(AnyView(MLBTeamInfoView(displayModel: data)))
-//        }
+        if let data = searchStore?.mlbTeamInfoData {
+            views.append(AnyView(MLBTeamInfoView(displayModel: data)))
+        }
 //        if let data = searchStore?.mlbTeamStatsData {
 //            views.append(AnyView(MLBTeamStatsView(displayModel: data)))
 //        }
