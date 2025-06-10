@@ -1,17 +1,16 @@
 //
-//  FBTeamInfoStore.swift
-//  SportSearchEngine_iOS
+//  KBOPlayerInfoStore.swift
+//  moare
 //
-//  Created by Mohwa Yoon on 1/1/25.
+//  Created by Mohwa Yoon on 6/10/25.
 //
 
-import Foundation
 import SwiftUI
 import ComposableArchitecture
 
 @Reducer
-struct FBTeamInfoStore {
-    typealias BaseInfo = BaseInfoStore<FBTeamInfoDisplayModel>
+struct KBOPlayerInfoStore {
+    typealias BaseInfo = BaseInfoStore<KBOPlayerInfoDisplayModel>
     
     @ObservableState
     struct State {

@@ -345,9 +345,9 @@ struct SearchView: View {
         }
         
         // kbo
-//        if let data = searchStore?.kboPlayerInfoData {
-//            views.append(AnyView(KBOPlayerInfoView(displayModel: data)))
-//        }
+        if let data = searchStore?.kboPlayerInfoData {
+            views.append(AnyView(KBOPlayerInfoView(displayModel: data)))
+        }
 //        if let data = searchStore?.kboPlayerStatsData {
 //            views.append(AnyView(KBOPlayerStatsView(displayModel: data)))
 //        }
