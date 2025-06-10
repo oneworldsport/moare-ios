@@ -64,6 +64,16 @@ struct Constants {
         static let was = 1610612764
         static let det = 1610612765
         static let cha = 1610612766
+        
+        // mlb league, division
+        static let americanLeague = 103
+        static let nationalLeague = 104
+        static let americanLeagueWest = 200
+        static let americanLeagueEast = 201
+        static let americanLeagueCentral = 202
+        static let nationalLeagueWest = 203
+        static let nationalLeagueEast = 204
+        static let nationalLeagueCentral = 205
     }
     
     struct NBAGameStatus {

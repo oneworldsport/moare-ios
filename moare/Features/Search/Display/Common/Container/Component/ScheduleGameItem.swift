@@ -1,5 +1,5 @@
 //
-//  ScheduleGameItemContainer.swift
+//  ScheduleGameItem.swift
 //  moare
 //
 //  Created by Mohwa Yoon on 6/5/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ScheduleGameItemContainer: View {
+struct ScheduleGameItem: View {
     let state: ScheduleGameItemState
     let actions: ScheduleGameItemActions
     
@@ -24,7 +24,7 @@ struct ScheduleGameItemContainer: View {
 //                searchStore.send(.performSearch())
             }) {
                 VStack(spacing: 2) {
-                    URLImage(url: state.homeTeamLogo, size: .small)
+                    URLImage(url: state.homeTeamLogo, size: .small, isSvg: state.isSvgLogo)
                     
                     Text(state.homeTeamName)
                         .font(.system(size: 13))
@@ -133,7 +133,7 @@ struct ScheduleGameItemContainer: View {
 //                searchStore.send(.performSearch())
             }) {
                 VStack(spacing: 2) {
-                    URLImage(url: state.awayTeamLogo, size: .small)
+                    URLImage(url: state.awayTeamLogo, size: .small, isSvg: state.isSvgLogo)
                     
                     Text(state.awayTeamName)
                         .font(.system(size: 13))

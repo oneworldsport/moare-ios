@@ -29,6 +29,7 @@ struct ScheduleGameItemState {
     var shouldShowReferee: Bool = false
     var shouldShowHomeLabel: Bool = false
     var shouldShowAwayLabel: Bool = false
+    var isSvgLogo: Bool = false
     // TODO: GameForSchedule 모델 사용?
 }
 

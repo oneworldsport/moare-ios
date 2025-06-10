@@ -21,7 +21,7 @@ struct BaseTeamStandingsStore<T> {
         /* ---------------------
            ui state
            --------------------- */
-        var selectedCategoryIndex = 0
+        var secondCategorySelectedIndex = 0
         
         /* ---------------------
            etc
@@ -31,7 +31,7 @@ struct BaseTeamStandingsStore<T> {
     
     enum Action {
         case initData(displayModel: T)
-        case selectCategory(Int)
+        case selectSecondCategory(Int)
     }
     
     @Dependency(\.translatedNameProvider) var nameProvider
@@ -41,7 +41,7 @@ struct BaseTeamStandingsStore<T> {
             switch action {
             case .initData(let displayModel):
                 // init with default value
-                state.selectedCategoryIndex = 0
+                state.secondCategorySelectedIndex = 0
                 
                 // init data
                 state.displayModel = displayModel
@@ -73,15 +73,15 @@ struct BaseTeamStandingsStore<T> {
                         }
                         
                         if let index {
-                            state.selectedCategoryIndex = index
+                            state.secondCategorySelectedIndex = index
                         }
                     }
                 }
                 
                 return .none
                 
-            case .selectCategory(let index):
-                state.selectedCategoryIndex = index
+            case .selectSecondCategory(let index):
+                state.secondCategorySelectedIndex = index
                 
                 return .none
             }

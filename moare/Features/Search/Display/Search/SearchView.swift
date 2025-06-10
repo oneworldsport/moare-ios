@@ -360,9 +360,9 @@ struct SearchView: View {
 //        if let data = searchStore?.kboTeamStatsData {
 //            views.append(AnyView(KBOTeamStatsView(displayModel: data)))
 //        }
-//        if let data = searchStore?.kboTeamStandingsData {
-//            views.append(AnyView(KBOTeamStandingsView(displayModel: data)))
-//        }
+        if let data = searchStore?.kboTeamStandingsData {
+            views.append(AnyView(KBOTeamStandingsView(displayModel: data)))
+        }
         if let data = searchStore?.kboLeagueScheduleData {
             views.append(AnyView(KBOLeagueScheduleView(displayModel: data)))
         }
@@ -386,12 +386,12 @@ struct SearchView: View {
 //        if let data = searchStore?.mlbTeamStatsData {
 //            views.append(AnyView(MLBTeamStatsView(displayModel: data)))
 //        }
-//        if let data = searchStore?.mlbTeamStandingsData {
-//            views.append(AnyView(MLBTeamStandingsView(displayModel: data)))
-//        }
-//        if let data = searchStore?.mlbLeagueScheduleData {
-//            views.append(AnyView(MLBLeagueScheduleView(displayModel: data)))
-//        }
+        if let data = searchStore?.mlbTeamStandingsData {
+            views.append(AnyView(MLBTeamStandingsView(displayModel: data)))
+        }
+        if let data = searchStore?.mlbLeagueScheduleData {
+            views.append(AnyView(MLBLeagueScheduleView(displayModel: data)))
+        }
 //        if let data = searchStore?.mlbGameStatsData {
 //            views.append(AnyView(MLBGameStatsView(displayModel: data)))
 //        }
