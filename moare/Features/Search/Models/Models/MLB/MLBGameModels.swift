@@ -535,3 +535,5 @@ struct MLBGameWeather: Decodable, Equatable {
         case _wind = "wind"
     }
 }
+
+typealias MLBGameForSchedule = GameForSchedule<String>

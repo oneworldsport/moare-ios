@@ -1,5 +1,5 @@
 //
-//  KBOLeagueScheduleView.swift
+//  MLBLeagueScheduleView.swift
 //  moare
 //
 //  Created by Mohwa Yoon on 6/4/25.
@@ -8,91 +8,91 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct KBOLeagueScheduleView: View {
+struct MLBLeagueScheduleView: View {
     /* ---------------------
        store
        --------------------- */
     @EnvironmentObject var storeManager: StoreManager
-    @State var kboLeagueScheduleStore: StoreOf<KBOLeagueScheduleStore>? = nil
+    @State var mlbLeagueScheduleStore: StoreOf<MLBLeagueScheduleStore>? = nil
     
     /* ---------------------
        data
        --------------------- */
-    let displayModel: KBOLeagueScheduleDisplayModel
+    let displayModel: MLBLeagueScheduleDisplayModel
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             ScheduleViewContainer(
                 state: ScheduleContainerState(
-                    shouldShowCalendar: searchStore.kboGameStatsData == nil,
-                    shouldShowAllResultToggleButton: searchStore.kboGameStatsData == nil,
-                    displayDataState: kboLeagueScheduleStore?.baseSchedule.displayDataState ?? .idle,
+                    shouldShowCalendar: searchStore.mlbGameStatsData == nil,
+                    shouldShowAllResultToggleButton: searchStore.mlbGameStatsData == nil,
+                    displayDataState: mlbLeagueScheduleStore?.baseSchedule.displayDataState ?? .idle,
                     calendarUiState: CalendarUiState(
-                        yearMonthList: kboLeagueScheduleStore?.baseSchedule.yearMonthList ?? [],
-                        days: kboLeagueScheduleStore?.baseSchedule.days ?? [],
-                        selectedYearMonthIndex: kboLeagueScheduleStore?.baseSchedule.selectedYearMonthIndex ?? 0,
-                        selectedDayIndex: kboLeagueScheduleStore?.baseSchedule.selectedDayIndex ?? 0
+                        yearMonthList: mlbLeagueScheduleStore?.baseSchedule.yearMonthList ?? [],
+                        days: mlbLeagueScheduleStore?.baseSchedule.days ?? [],
+                        selectedYearMonthIndex: mlbLeagueScheduleStore?.baseSchedule.selectedYearMonthIndex ?? 0,
+                        selectedDayIndex: mlbLeagueScheduleStore?.baseSchedule.selectedDayIndex ?? 0
                     ),
-                    isAllResultOpened: kboLeagueScheduleStore?.baseSchedule.isAllResultOpened ?? false
+                    isAllResultOpened: mlbLeagueScheduleStore?.baseSchedule.isAllResultOpened ?? false
                 ),
                 actions: ScheduleContainerActions(
                     calendarUiActions: CalendarUiActions(
                         onSelectYearMonth: { yearMonth, index in
-                            kboLeagueScheduleStore?.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
+                            mlbLeagueScheduleStore?.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
                         },
                         onSelectDay: { day, index in
-                            kboLeagueScheduleStore?.send(.baseSchedule(.selectDay(day, index)))
+                            mlbLeagueScheduleStore?.send(.baseSchedule(.selectDay(day, index)))
                         }
                     ),
                     allResultButtonAction: {
-                        kboLeagueScheduleStore?.send(.toggleAllResult)
+                        mlbLeagueScheduleStore?.send(.toggleAllResult)
                     }
                 ),
                 titleContent: {},
                 gameListContent: {
-                    if let kboLeagueScheduleStore {
-                        KBOLeagueScheduleList(
+                    if let mlbLeagueScheduleStore {
+                        MLBLeagueScheduleList(
                             searchStore: searchStore,
-                            kboLeagueScheduleStore: kboLeagueScheduleStore
+                            mlbLeagueScheduleStore: mlbLeagueScheduleStore
                         )
                     }
                 }
             )
             .onAppear {
-                // init KBOLeagueScheduleStore
-                let kboLeagueScheduleStore: StoreOf<KBOLeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.kboLeagueScheduleStore) ?? {
-                    let newStore = Store(initialState: KBOLeagueScheduleStore.State()) { KBOLeagueScheduleStore() }
+                // init MLBLeagueScheduleStore
+                let mlbLeagueScheduleStore: StoreOf<MLBLeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.mlbLeagueScheduleStore) ?? {
+                    let newStore = Store(initialState: MLBLeagueScheduleStore.State()) { MLBLeagueScheduleStore() }
                     
-                    storeManager.setStore(newStore, forKey: StoreKeys.kboLeagueScheduleStore)
+                    storeManager.setStore(newStore, forKey: StoreKeys.mlbLeagueScheduleStore)
                     
                     return newStore
                 }()
                 
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.kboLeagueScheduleStore = kboLeagueScheduleStore
+                    self.mlbLeagueScheduleStore = mlbLeagueScheduleStore
                 }
                 
                 if searchStore.poppedView == nil {
-                    kboLeagueScheduleStore.send(.baseSchedule(.initData(displayModel: displayModel)))
+                    mlbLeagueScheduleStore.send(.baseSchedule(.initData(displayModel: displayModel)))
                 }
             }
             .onChange(of: displayModel) {
-                if case .kboLeagueSchedule = searchStore.poppedView {
-                    kboLeagueScheduleStore?.send(.baseSchedule(.initData(displayModel: displayModel)))
+                if case .mlbLeagueSchedule = searchStore.poppedView {
+                    mlbLeagueScheduleStore?.send(.baseSchedule(.initData(displayModel: displayModel)))
                 }
             }
             .onChange(of: searchStore.viewStack) {
                 guard let lastItem = searchStore.viewStack.last,
-                      case .kboLeagueSchedule = lastItem,
+                      case .mlbLeagueSchedule = lastItem,
                       let poppedView = searchStore.poppedView,
-                      case .kboGameStats = searchStore.poppedView else {
+                      case .mlbGameStats = searchStore.poppedView else {
                     return
                 }
                 
-                kboLeagueScheduleStore?.send(.updateGamesData(kboLeagueScheduleData: lastItem, kboGameStatsData: poppedView))
+                mlbLeagueScheduleStore?.send(.updateGamesData(mlbLeagueScheduleData: lastItem, mlbGameStatsData: poppedView))
             }
-            .onChange(of: kboLeagueScheduleStore?.dataForViewStack) {
-                if let data = kboLeagueScheduleStore?.dataForViewStack {
+            .onChange(of: mlbLeagueScheduleStore?.dataForViewStack) {
+                if let data = mlbLeagueScheduleStore?.dataForViewStack {
                     searchStore.send(.updateLastViewStack(data: data))
                 }
             }
@@ -100,19 +100,19 @@ struct KBOLeagueScheduleView: View {
     }
 }
 
-struct KBOLeagueScheduleList: View {
+struct MLBLeagueScheduleList: View {
     @Bindable var searchStore: StoreOf<SearchStore>
-    @Bindable var kboLeagueScheduleStore: StoreOf<KBOLeagueScheduleStore>
+    @Bindable var mlbLeagueScheduleStore: StoreOf<MLBLeagueScheduleStore>
     
-    @State var gameListToDisplay: [KBOGameForSchedule] = []
+    @State var gameListToDisplay: [MLBGameForSchedule] = []
     
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 8) {
                 ForEach(gameListToDisplay, id: \.gameId) { item in
-                    KBOLeagueScheduleListItem(
+                    MLBLeagueScheduleListItem(
                         searchStore: searchStore,
-                        kboLeagueScheduleStore: kboLeagueScheduleStore,
+                        mlbLeagueScheduleStore: mlbLeagueScheduleStore,
                         data: item
                     )
                     .padding(.vertical, 8)
@@ -121,24 +121,24 @@ struct KBOLeagueScheduleList: View {
         }
         .frame(maxHeight: .infinity)
         .onAppear {
-            gameListToDisplay = kboLeagueScheduleStore.filteredGames[kboLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+            gameListToDisplay = mlbLeagueScheduleStore.filteredGames[mlbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
         }
-        .onChange(of: kboLeagueScheduleStore.baseSchedule.selectedDayIndex) { newValue in
-            gameListToDisplay = kboLeagueScheduleStore.filteredGames[newValue] ?? []
+        .onChange(of: mlbLeagueScheduleStore.baseSchedule.selectedDayIndex) {
+            gameListToDisplay = mlbLeagueScheduleStore.filteredGames[mlbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
         }
-        .onChange(of: kboLeagueScheduleStore.filteredGames) {
+        .onChange(of: mlbLeagueScheduleStore.filteredGames) {
             // TODO: Has to think about better structure, because 'gameListToDisplay' could be set multiple times.
             // Has to find if there are cases like here from other .onChange()
-            gameListToDisplay = kboLeagueScheduleStore.filteredGames[kboLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+            gameListToDisplay = mlbLeagueScheduleStore.filteredGames[mlbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
         }
     }
 }
 
-struct KBOLeagueScheduleListItem: View {
+struct MLBLeagueScheduleListItem: View {
     @Bindable var searchStore: StoreOf<SearchStore>
-    @Bindable var kboLeagueScheduleStore: StoreOf<KBOLeagueScheduleStore>
+    @Bindable var mlbLeagueScheduleStore: StoreOf<MLBLeagueScheduleStore>
     
-    let data: KBOGameForSchedule
+    let data: MLBGameForSchedule
     
     /* ---------------------
        ui state
@@ -148,17 +148,17 @@ struct KBOLeagueScheduleListItem: View {
     var body: some View {
         let homeTeamId = data.homeTeamId
         let awayTeamId = data.awayTeamId
-        let gameStatus = Int(data.gameStatus)
-        let teamNameDic = kboLeagueScheduleStore.baseSchedule.teamNameDictionary
-        let kboGameStatsData = searchStore.kboGameStatsData
+        let gameStatus = data.gameStatus
+        let teamNameDic = mlbLeagueScheduleStore.baseSchedule.teamNameDictionary
+        let mlbGameStatsData = searchStore.mlbGameStatsData
         
         let gameStatusText: String = {
             guard isResultOpened else { return StringConstants.resultOpen }
 
             switch gameStatus {
-            case 1:
+            case "1":
                 return StringConstants.gameNotStartedStr
-            case 2:
+            case "2":
                 return "경기중"
 //                guard let first = data.lineScore.first else { return "" }
 //                if first.ptsOt3 != nil {
@@ -178,7 +178,7 @@ struct KBOLeagueScheduleListItem: View {
 //                } else {
 //                    return ""
 //                }
-            case 3:
+            case "3":
                 return StringConstants.gameFinishedStr
             default:
                 return ""
@@ -188,7 +188,7 @@ struct KBOLeagueScheduleListItem: View {
         let gameStatusColor: Color = {
             guard isResultOpened else { return .secondary }
             
-            if gameStatus == 2 {
+            if gameStatus == "2" {
                 return .moare
             } else {
                 return .secondary
@@ -197,47 +197,48 @@ struct KBOLeagueScheduleListItem: View {
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
-                homeTeamLogo: KBOUtil.teamLogoURL(id: data.homeTeamId),
+                homeTeamLogo: MLBUtil.teamLogoURL(id: data.homeTeamId),
                 homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
                 homeTeamScore: data.homeTeamScore,
-                awayTeamLogo: KBOUtil.teamLogoURL(id: data.awayTeamId),
+                awayTeamLogo: MLBUtil.teamLogoURL(id: data.awayTeamId),
                 awayTeamName: teamNameDic["short_\(awayTeamId)"] ?? "",
                 awayTeamScore: data.awayTeamScore,
                 isResultOpened: isResultOpened,
                 gameStatusText: gameStatusText,
                 gameStatusColor: gameStatusColor,
-                isCapsuleButtonDisabled: gameStatus != 3,
+                isCapsuleButtonDisabled: gameStatus != "3",
                 date: data.date,
                 venue: teamNameDic["venue\(homeTeamId)"] ?? "",
+                isSvgLogo: true
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
 //                    searchStore.send(.selectKBOGame(game: data))
                     
                     // set selected game's isOpened true
-                    kboLeagueScheduleStore.send(.updateResultOpenedState(gameId: data.gameId, isOpened: true))
+                    mlbLeagueScheduleStore.send(.updateResultOpenedState(gameId: data.gameId, isOpened: true))
                 },
                 onCapsuleButtonClick: {
-                    kboLeagueScheduleStore.send(.updateResultOpenedState(gameId: data.gameId, isOpened: !isResultOpened))
+                    mlbLeagueScheduleStore.send(.updateResultOpenedState(gameId: data.gameId, isOpened: !isResultOpened))
                 }
             )
         )
         .onAppear {
-            if gameStatus == 3 {
-                isResultOpened = kboLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
+            if gameStatus == "3" {
+                isResultOpened = mlbLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
             } else {
                 isResultOpened = true
             }
         }
-        .onChange(of: kboLeagueScheduleStore.gameResultOpenedStateList) {
-            if gameStatus == 3 {
+        .onChange(of: mlbLeagueScheduleStore.gameResultOpenedStateList) {
+            if gameStatus == "3" {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    isResultOpened = kboLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
+                    isResultOpened = mlbLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
                 }
             }
         }
-        .onChange(of: searchStore.kboGameStatsData) {
-            if let _ = searchStore.kboGameStatsData {
+        .onChange(of: searchStore.mlbGameStatsData) {
+            if let _ = searchStore.mlbGameStatsData {
                 isResultOpened = true
             }
         }

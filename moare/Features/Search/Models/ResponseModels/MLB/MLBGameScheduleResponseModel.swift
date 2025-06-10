@@ -9,5 +9,5 @@ import Foundation
 
 struct MLBGameScheduleResponseModel: Decodable, Equatable {
     let scheduledMonths: [String]?
-    let schedule: [MLBGame]
+    let schedule: [MLBGameForSchedule]
 }
