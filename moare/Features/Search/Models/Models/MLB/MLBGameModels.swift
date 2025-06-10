@@ -8,7 +8,7 @@
 import Foundation
 
 struct MLBGame: Decodable, Equatable {
-    let boxScore: MLBGameBoxScore?
+    let boxscore: MLBGameBoxScore?
     let decisions: MLBGameDecisions?
     let game: MLBGameData
     let gameInfo: MLBGameInfo
@@ -50,18 +50,16 @@ struct MLBGameBoxscoreTeamData: Decodable, Equatable {
     private let _bench: [Int]?
     private let _bullpen: [Int]?
     private let _info: [MLBGameBoxscoreTeamInfo]?
-//    private let _note: [String]?
     private let _pitchers: [Int]?
     private let _players: [String: MLBGameBoxscoreTeamPlayer]?
-    let team: MLBGameBoxsocreTeamInfo
-    let teamStats: MLBGameBoxscoreStats
+    let team: MLBGameBoxsocreTeamInfo?
+//    let teamStats: MLBGameBoxscoreStats? // NOTE: EXC_BAD_ACCESS 발생
 
     var batters: [Int] { _batters ?? [] }
     var battingOrder: [Int] { _battingOrder ?? [] }
     var bench: [Int] { _bench ?? [] }
     var bullpen: [Int] { _bullpen ?? [] }
     var info: [MLBGameBoxscoreTeamInfo] { _info ?? [] }
-//    var note: [String] { _note ?? [] }
     var pitchers: [Int] { _pitchers ?? [] }
     var players: [String: MLBGameBoxscoreTeamPlayer] { _players ?? [:] }
 
@@ -71,10 +69,10 @@ struct MLBGameBoxscoreTeamData: Decodable, Equatable {
         case _bench = "bench"
         case _bullpen = "bullpen"
         case _info = "info"
-//        case _note = "note"
         case _pitchers = "pitchers"
         case _players = "players"
-        case team, teamStats
+//        case team, teamStats
+        case team
     }
 }
 
@@ -92,14 +90,14 @@ struct MLBGameBoxscoreTeamInfo: Decodable, Equatable {
 }
 
 struct MLBGameBoxscoreTeamPlayer: Decodable, Equatable {
-    let gameStatus: MLBGameBoxscorePlayerStatus
+    let gameStatus: MLBGameBoxscorePlayerStatus?
     private let _jerseyNumber: String?
     private let _parentTeamId: Int?
-    let person: MLBFullNameObj
-    let position: MLBAbbreviationCodeObj
-    let seasonStats: MLBGameBoxscoreStats
-    let stats: MLBGameBoxscoreStats
-    let status: MLBCodeObj
+    let person: MLBFullNameObj?
+    let position: MLBAbbreviationCodeObj?
+    let seasonStats: MLBGameBoxscoreStats?
+    let stats: MLBGameBoxscoreStats?
+    let status: MLBCodeObj?
     private let _battingOrder: String?
     private let _allPositions: [MLBAbbreviationCodeObj]?
 
@@ -138,7 +136,7 @@ struct MLBGameBoxscorePlayerStatus: Decodable, Equatable {
 
 struct MLBGameBoxscoreStats: Decodable, Equatable {
     let batting: MLBPlayerHittingStats?
-    let fielding: MLBPlayerFieldingStats?
+//    let fielding: MLBPlayerFieldingStats?
     let pitching: MLBPlayerPitchingStats?
 }
 

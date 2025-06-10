@@ -369,11 +369,11 @@ struct SearchView: View {
 //        if let data = searchStore?.kboGameStatsData {
 //            views.append(AnyView(KBOGameStatsView(displayModel: data)))
 //        }
-//        
-//        // mlb
-//        if let data = searchStore?.mlbPlayerInfoData {
-//            views.append(AnyView(MLBPlayerInfoView(displayModel: data)))
-//        }
+        
+        // mlb
+        if let data = searchStore?.mlbPlayerInfoData {
+            views.append(AnyView(MLBPlayerInfoView(displayModel: data)))
+        }
 //        if let data = searchStore?.mlbPlayerStatsData {
 //            views.append(AnyView(MLBPlayerStatsView(displayModel: data)))
 //        }

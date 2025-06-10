@@ -180,7 +180,7 @@ struct MLBPlayerFieldingStats: Decodable, Equatable {
     private let _gamesPlayed: Int?
     private let _gamesStarted: Int?
     private let _innings: String?
-    let position: MLBPlayerPosition
+    let position: MLBPlayerPosition?
     private let _putOuts: Int?
     private let _rangeFactorPer9Inn: String?
     private let _rangeFactorPerGame: String?

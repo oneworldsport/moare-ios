@@ -469,7 +469,7 @@ struct ModelConverter {
         let info = response.info!
         
         let stats = info.statistics.first { $0.type == "season" }
-        var teamId: Int? {
+        let teamId: Int? = {
             if let id = stats?.hitting?.team.id {
                 return id
             } else if let id = stats?.fielding?.team.id {
@@ -481,14 +481,13 @@ struct ModelConverter {
             } else {
                 return nil
             }
-        }
-        
-        let lastGamePlayerStats: MLBGameBoxscoreTeamPlayer? = if response.lastGame?.teams.home.id == teamId {
-            response.lastGame?.boxScore?.teams.home.players["ID\(info.player.id)"]
+        }()
+  
+        var lastGamePlayerStats: MLBGameBoxscoreTeamPlayer? = nil
+        if response.lastGame?.teams.home.id == teamId {
+            lastGamePlayerStats = response.lastGame?.boxscore?.teams.home.players["ID\(info.player.id)"]
         } else if response.lastGame?.teams.away.id == teamId {
-            response.lastGame?.boxScore?.teams.away.players["ID\(info.player.id)"]
-        } else {
-            nil
+            lastGamePlayerStats = response.lastGame?.boxscore?.teams.away.players["ID\(info.player.id)"]
         }
         
         return MLBPlayerInfoDisplayModel(

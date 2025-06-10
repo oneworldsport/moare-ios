@@ -45,7 +45,7 @@ struct MLBUtil {
         return positionCodeMap[input] ?? "타자"
     }
 
-    func changeToCm(input: String) -> Int {
+    static func changeToCm(input: String) -> Int {
         let pattern = #"(\d+)'\s*(\d+)""#
         let regex = try? NSRegularExpression(pattern: pattern)
         let nsrange = NSRange(input.startIndex..<input.endIndex, in: input)
