@@ -107,4 +107,8 @@ struct StringConstants {
         static let gameStatsRunningCategories = [""]
         static let gameStatsSecondCategories = gameStatsHittingCategories + gameStatsPitchingCategories + gameStatsRunningCategories
     }
+    
+    static func viewPreparingAdviseText(type: String) -> String {
+        return "\(type) 화면은 더 나은 서비스 제공을 위해 현재 개선 작업 중입니다. 이용에 불편을 드려 죄송합니다."
+    }
 }
