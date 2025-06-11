@@ -747,7 +747,7 @@ struct SearchStore {
                 let dataModel: SportDecodableModel
                 
                 switch state.viewStack.last {
-                case .fbTeamStandings(let responseModel, let displayModel):
+                case .fbTeamStandings(let responseModel, _):
                     let team = responseModel.standings.first { $0.team.id == teamId }
                     
                     let teamInfoResponseModel = FBTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
@@ -756,13 +756,13 @@ struct SearchStore {
                         modelConverter.fbTeamStatsConverter(response: teamInfoResponseModel)
                     )
                     
-                case .fbTeamInfo(let responseModel, let displayModel):
+                case .fbTeamInfo(let responseModel, _):
                     dataModel = .fbTeamStats(
                         responseModel,
                         modelConverter.fbTeamStatsConverter(response: responseModel)
                     )
                     
-                case .nbaTeamStandings(let responseModel, let displayModel):
+                case .nbaTeamStandings(let responseModel, _):
                     let team = responseModel.standings.first { $0.team.id == teamId }
                     
                     let teamInfoResponseModel = NBATeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
@@ -771,10 +771,22 @@ struct SearchStore {
                         modelConverter.nbaTeamStatsConverter(response: teamInfoResponseModel)
                     )
                     
-                case .nbaTeamInfo(let responseModel, let displayModel):
+                case .nbaTeamInfo(let responseModel, _):
                     dataModel = .nbaTeamStats(
                         responseModel,
                         modelConverter.nbaTeamStatsConverter(response: responseModel)
+                    )
+                    
+                case .kboTeamInfo(let responseModel, _):
+                    dataModel = .kboTeamStats(
+                        responseModel,
+                        modelConverter.kboTeamStatsConverter(response: responseModel)
+                    )
+                    
+                case .mlbTeamInfo(let responseModel, _):
+                    dataModel = .mlbTeamStats(
+                        responseModel,
+                        modelConverter.mlbTeamStatsConverter(response: responseModel)
                     )
                     
                 default: return .none // Make it do nothing

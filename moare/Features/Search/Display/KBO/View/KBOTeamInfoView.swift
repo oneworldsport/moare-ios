@@ -422,37 +422,33 @@ struct KBOTeamInfoFourthItem: View {
                     FBStatDataItem(
                         category: "순위",
                         data: stats.rankData.rank,
-                        customCategoryFontSize: 11,
-                        customWidth: .infinity
+                        customCategoryFontSize: 11
                     )
-                    
+                    .frame(maxWidth: .infinity)
                     FBStatDataItem(
                         category: "승",
                         data: stats.rankData.wins,
-                        customCategoryFontSize: 11,
-                        customWidth: .infinity
+                        customCategoryFontSize: 11
                     )
-                    
+                    .frame(maxWidth: .infinity)
                     FBStatDataItem(
                         category: "패",
                         data: stats.rankData.losses,
-                        customCategoryFontSize: 11,
-                        customWidth: .infinity
+                        customCategoryFontSize: 11
                     )
-                    
+                    .frame(maxWidth: .infinity)
                     FBStatDataItem(
                         category: "무",
                         data: stats.rankData.draws,
-                        customCategoryFontSize: 11,
-                        customWidth: .infinity
+                        customCategoryFontSize: 11
                     )
-                    
+                    .frame(maxWidth: .infinity)
                     FBStatDataItem(
                         category: "타율",
                         data: stats.hitterData.avg,
-                        customCategoryFontSize: 11,
-                        customWidth: .infinity
+                        customCategoryFontSize: 11
                     )
+                    .frame(maxWidth: .infinity)
                 }
                 .opacity(showContents ? 1 : 0)
             }

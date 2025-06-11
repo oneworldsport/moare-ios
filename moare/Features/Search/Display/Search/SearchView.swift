@@ -357,9 +357,9 @@ struct SearchView: View {
         if let data = searchStore?.kboTeamInfoData {
             views.append(AnyView(KBOTeamInfoView(displayModel: data)))
         }
-//        if let data = searchStore?.kboTeamStatsData {
-//            views.append(AnyView(KBOTeamStatsView(displayModel: data)))
-//        }
+        if let data = searchStore?.kboTeamStatsData {
+            views.append(AnyView(KBOTeamStatsView(displayModel: data)))
+        }
         if let data = searchStore?.kboTeamStandingsData {
             views.append(AnyView(KBOTeamStandingsView(displayModel: data)))
         }
@@ -383,9 +383,9 @@ struct SearchView: View {
         if let data = searchStore?.mlbTeamInfoData {
             views.append(AnyView(MLBTeamInfoView(displayModel: data)))
         }
-//        if let data = searchStore?.mlbTeamStatsData {
-//            views.append(AnyView(MLBTeamStatsView(displayModel: data)))
-//        }
+        if let data = searchStore?.mlbTeamStatsData {
+            views.append(AnyView(MLBTeamStatsView(displayModel: data)))
+        }
         if let data = searchStore?.mlbTeamStandingsData {
             views.append(AnyView(MLBTeamStandingsView(displayModel: data)))
         }

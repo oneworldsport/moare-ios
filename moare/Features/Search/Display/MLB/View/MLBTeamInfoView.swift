@@ -406,37 +406,33 @@ struct MLBTeamInfoFourthItem: View {
                     FBStatDataItem(
                         category: "디비전 순위",
                         data: recordData.divisionRank,
-                        customCategoryFontSize: 11,
-                        customWidth: .infinity
+                        customCategoryFontSize: 11
                     )
-                    
+                    .frame(maxWidth: .infinity)
                     FBStatDataItem(
                         category: "승",
                         data: String(recordData.wins),
-                        customCategoryFontSize: 11,
-                        customWidth: .infinity
+                        customCategoryFontSize: 11
                     )
-                    
+                    .frame(maxWidth: .infinity)
                     FBStatDataItem(
                         category: "패",
                         data: String(recordData.losses),
-                        customCategoryFontSize: 11,
-                        customWidth: .infinity
+                        customCategoryFontSize: 11
                     )
-                    
+                    .frame(maxWidth: .infinity)
                     FBStatDataItem(
                         category: "무",
                         data: String(recordData.leagueRecord.ties),
-                        customCategoryFontSize: 11,
-                        customWidth: .infinity
+                        customCategoryFontSize: 11
                     )
-                    
+                    .frame(maxWidth: .infinity)
                     FBStatDataItem(
                         category: "타율",
                         data: stats?.hitting?.avg ?? "0.0",
-                        customCategoryFontSize: 11,
-                        customWidth: .infinity
+                        customCategoryFontSize: 11
                     )
+                    .frame(maxWidth: .infinity)
                 }
                 .opacity(showContents ? 1 : 0)
             }

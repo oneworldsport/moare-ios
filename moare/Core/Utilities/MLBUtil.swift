@@ -14,7 +14,7 @@ struct MLBUtil {
         "P": "투수"
     ]
     
-    static let codeMap: [Int: String] = [
+    static let leagueDivisionMap: [Int: String] = [
         Constants.Ids.americanLeague: "아메리칸리그",
         Constants.Ids.nationalLeague: "내셔널리그",
         Constants.Ids.americanLeagueWest: "아메리칸 서부",
