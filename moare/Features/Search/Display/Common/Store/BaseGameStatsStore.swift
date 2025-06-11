@@ -22,8 +22,8 @@ struct BaseGameStatsStore<T> {
         /* ---------------------
            ui state
            --------------------- */
-        var firstSelectedIndex = 0
-        var secondSelectedIndex = 0
+        var firstCategorySelectedIndex = 0
+        var secondCategorySelectedIndex = 0
         var selectedTeamIndex = 0
         var shouldScrollCategory = false
         
@@ -50,8 +50,8 @@ struct BaseGameStatsStore<T> {
                 // init with default value
                 state.displayDataState = .idle
                 
-                state.firstSelectedIndex = 0
-                state.secondSelectedIndex = 0
+                state.firstCategorySelectedIndex = 0
+                state.secondCategorySelectedIndex = 0
                 state.selectedTeamIndex = 0
                 state.shouldScrollCategory = false
                 
@@ -89,12 +89,13 @@ struct BaseGameStatsStore<T> {
                 
             case .selectFirstCategory(let index):
                 state.shouldScrollCategory =  true
+                state.firstCategorySelectedIndex = index
                 
                 return .none
                 
             case .selectSecondCategory(let index):
                 state.shouldScrollCategory = false
-                state.secondSelectedIndex = index
+                state.secondCategorySelectedIndex = index
                 
                 return .none
                 

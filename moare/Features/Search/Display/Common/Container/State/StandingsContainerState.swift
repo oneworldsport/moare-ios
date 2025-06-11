@@ -6,6 +6,7 @@
 //
 
 struct StandingsContainerState {
+    var firstCategoryText: String = StringConstants.standingsFirstCategory
     var headerCategories: [String]? = nil
     var firstCategories: [String]? = nil
     let secondCategories: [String]
@@ -17,9 +18,12 @@ struct StandingsContainerState {
 }
 
 struct StandingsItemState {
+    var isGameStats: Bool = false
     var imageUrl: String?
     var name: String
     var subName: String? = nil
+    var extraInfo: String? = nil
+    var extraSubInfo: String? = nil
     var isSvgLogo: Bool = false
     var dataList: [String]
 }

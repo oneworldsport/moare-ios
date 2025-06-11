@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct StandingsFirstCategoryItem: View {
+    var text: String = StringConstants.standingsFirstCategory
     
     var body: some View {
         HStack(spacing: 0) {
-            Text(StringConstants.standingsFirstCategory)
+            Text(text)
                 .font(.system(size: 15, weight: .medium))
                 .frame(minWidth: 130)
             

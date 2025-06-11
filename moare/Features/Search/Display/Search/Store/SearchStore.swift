@@ -113,6 +113,8 @@ struct SearchStore {
         case performSearch(searchType: SearchType = .query, aniDuration: CGFloat = 0)
         case selectFBGame(game: FBGame, leagueId: Int?)
         case selectNBAGame(game: NBAGameForSchedule)
+//        case selectKBOGame(game: NBAGameForSchedule)
+        case selectMLBGame(game: MLBGameForSchedule)
         case showPlayerStats(category: String? = nil, playerId: Int)
         case showTeamStats(teamId: Int)
         case showGameStats(gameType: String)
@@ -599,6 +601,20 @@ struct SearchStore {
                         date: game.date,
                         dataType: "basketball_game_stats",
                         leagueId: 90001,
+                        id: game.gameId
+                    )
+                    
+                    await send(.addViewStack(data: result.data))
+                    await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+                }
+                
+            case .selectMLBGame(let game):
+                return .run { send in
+                    let result = try await searchClient.fetchById(
+                        category: "baseball",
+                        date: game.date,
+                        dataType: "baseball_game_stats",
+                        leagueId: 90102,
                         id: game.gameId
                     )
                     

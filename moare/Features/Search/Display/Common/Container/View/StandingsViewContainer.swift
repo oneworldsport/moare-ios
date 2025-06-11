@@ -87,7 +87,7 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
                 VStack(spacing: 0) {
                     // categories
                     HStack(spacing: 0) {
-                        StandingsFirstCategoryItem()
+                        StandingsFirstCategoryItem(text: state.firstCategoryText)
                             .frame(height: 40)
                             .background(.white)
                             .zIndex(1)
@@ -175,11 +175,14 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
                                         }
                                         
                                         StandingsRankItem(
+                                            isGameStats: data.isGameStats,
                                             rank: index + 1,
                                             imageUrl: data.imageUrl,
                                             isSvgLogo: data.isSvgLogo,
                                             name: data.name,
                                             subName: data.subName,
+                                            extraInfo: data.extraInfo,
+                                            extraSubInfo: data.extraSubInfo,
                                             action: actions.itemButtonAction
                                         )
                                         
