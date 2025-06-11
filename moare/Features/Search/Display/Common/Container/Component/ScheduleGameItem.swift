@@ -45,19 +45,19 @@ struct ScheduleGameItem: View {
             .foregroundStyle(.primary)
             .disabled(true) // TODO: modify when api added
             
-            Spacer()
-                .frame(maxHeight: 80)
-                .contentShape(Rectangle())
+//            Spacer()
+//                .frame(maxHeight: 80)
+//                .contentShape(Rectangle())
             
             // score
             Text("\(homeTeamScore)")
-                .frame(maxWidth: 20)
-                .opacity(state.isResultOpened ? 1 : 0)
+                .frame(maxWidth: .infinity)
+                .opacity(state.isResultOpened ? 1 : 0) // TODO: onTapGesture is not triggered when opacity is 0
                 .foregroundStyle(homeTeamScore >= awayTeamScore ? .moare : .primary)
             
-            Spacer()
-                .frame(maxHeight: 80)
-                .contentShape(Rectangle())
+//            Spacer()
+//                .frame(maxHeight: 80)
+//                .contentShape(Rectangle())
             
             /* ---------------------
                game info
@@ -111,22 +111,22 @@ struct ScheduleGameItem: View {
             }
             .frame(width: 110)
             
-            Spacer()
-                .frame(maxHeight: 80)
-                .contentShape(Rectangle())
+//            Spacer()
+//                .frame(maxHeight: 80)
+//                .contentShape(Rectangle())
             
             /* ---------------------
                away
                --------------------- */
             // socre
             Text("\(awayTeamScore)")
-                .frame(maxWidth: 20)
+                .frame(maxWidth: .infinity)
                 .opacity(state.isResultOpened ? 1 : 0)
                 .foregroundStyle(awayTeamScore >= homeTeamScore ? .moare : .primary)
             
-            Spacer()
-                .frame(maxHeight: 80)
-                .contentShape(Rectangle())
+//            Spacer()
+//                .frame(maxHeight: 80)
+//                .contentShape(Rectangle())
             
             Button(action: {
 //                searchStore.send(.updateTextField("토트넘"))

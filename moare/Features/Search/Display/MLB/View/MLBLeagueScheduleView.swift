@@ -157,12 +157,12 @@ struct MLBLeagueScheduleListItem: View {
         let mlbGameStatsData = searchStore.mlbGameStatsData
         
         let gameStatusText: String = {
-            guard isResultOpened else { return StringConstants.resultOpen }
+//            guard isResultOpened else { return StringConstants.resultOpen }
 
             switch gameStatus {
-            case "1":
+            case "S":
                 return StringConstants.gameNotStartedStr
-            case "2":
+            case "I":
                 return "경기중"
 //                guard let first = data.lineScore.first else { return "" }
 //                if first.ptsOt3 != nil {
@@ -182,8 +182,8 @@ struct MLBLeagueScheduleListItem: View {
 //                } else {
 //                    return ""
 //                }
-            case "3":
-                return StringConstants.gameFinishedStr
+            case "F":
+                return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
             default:
                 return ""
             }
@@ -192,7 +192,7 @@ struct MLBLeagueScheduleListItem: View {
         let gameStatusColor: Color = {
             guard isResultOpened else { return .secondary }
             
-            if gameStatus == "2" {
+            if gameStatus == "I" {
                 return .moare
             } else {
                 return .secondary
@@ -210,7 +210,7 @@ struct MLBLeagueScheduleListItem: View {
                 isResultOpened: isResultOpened,
                 gameStatusText: gameStatusText,
                 gameStatusColor: gameStatusColor,
-                isCapsuleButtonDisabled: gameStatus != "3",
+                isCapsuleButtonDisabled: gameStatus != "F",
                 date: data.date,
                 venue: teamNameDic["venue\(homeTeamId)"] ?? "",
                 isSvgLogo: true
@@ -228,14 +228,16 @@ struct MLBLeagueScheduleListItem: View {
             )
         )
         .onAppear {
-            if gameStatus == "3" {
+            if gameStatus == "F" {
                 isResultOpened = mlbLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
+            } else if gameStatus == "S" {
+                isResultOpened = false
             } else {
                 isResultOpened = true
             }
         }
         .onChange(of: mlbLeagueScheduleStore.gameResultOpenedStateList) {
-            if gameStatus == "3" {
+            if gameStatus == "F" {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                     isResultOpened = mlbLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
                 }

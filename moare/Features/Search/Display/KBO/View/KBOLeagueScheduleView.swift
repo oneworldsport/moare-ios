@@ -157,7 +157,7 @@ struct KBOLeagueScheduleListItem: View {
         let kboGameStatsData = searchStore.kboGameStatsData
         
         let gameStatusText: String = {
-            guard isResultOpened else { return StringConstants.resultOpen }
+//            guard isResultOpened else { return StringConstants.resultOpen }
 
             switch gameStatus {
             case 1:
@@ -183,7 +183,9 @@ struct KBOLeagueScheduleListItem: View {
 //                    return ""
 //                }
             case 3:
-                return StringConstants.gameFinishedStr
+                return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
+            case 4:
+                return "경기 취소"
             default:
                 return ""
             }
@@ -229,6 +231,8 @@ struct KBOLeagueScheduleListItem: View {
         .onAppear {
             if gameStatus == 3 {
                 isResultOpened = kboLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
+            } else if gameStatus == 1 || gameStatus == 4 {
+                isResultOpened = false
             } else {
                 isResultOpened = true
             }
