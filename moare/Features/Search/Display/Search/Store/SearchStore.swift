@@ -717,6 +717,12 @@ struct SearchStore {
                             modelConverter.nbaPlayerStatsConverter(response: responseModel)
                         )
                         
+                    case .kboPlayerInfo(let responseModel, _):
+                        dataModel = .kboPlayerStats(
+                            responseModel,
+                            modelConverter.kboPlayerStatsConverter(response: responseModel)
+                        )
+                        
                     case .mlbPlayerInfo(let responseModel, _):
                         dataModel = .mlbPlayerStats(
                             responseModel,
