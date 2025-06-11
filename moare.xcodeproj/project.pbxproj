@@ -71,6 +71,8 @@
 		DA252B3E2DEF790100006AB8 /* MLBTeamInfoDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA252B362DEF790100006AB8 /* MLBTeamInfoDisplayModel.swift */; };
 		DA252B3F2DEF790100006AB8 /* MLBPlayerStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA252B352DEF790100006AB8 /* MLBPlayerStatsDisplayModel.swift */; };
 		DA252B402DEF790100006AB8 /* MLBPlayerStandingsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA252B342DEF790100006AB8 /* MLBPlayerStandingsDisplayModel.swift */; };
+		DA2A892D2DF93340002AC4E5 /* KBOGameStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2A892C2DF93340002AC4E5 /* KBOGameStatsView.swift */; };
+		DA2A892F2DF93358002AC4E5 /* KBOGameStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2A892E2DF93358002AC4E5 /* KBOGameStatsStore.swift */; };
 		DA2ABC282DB8EB720088CB2C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2ABC272DB8EB720088CB2C /* Constants.swift */; };
 		DA30E70F2DF7BDBC000639AD /* KBOPlayerInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA30E70E2DF7BDB0000639AD /* KBOPlayerInfoView.swift */; };
 		DA30E7112DF7BDCC000639AD /* MLBTeamInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA30E7102DF7BDC4000639AD /* MLBTeamInfoView.swift */; };
@@ -317,6 +319,8 @@
 		DA252B362DEF790100006AB8 /* MLBTeamInfoDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLBTeamInfoDisplayModel.swift; sourceTree = "<group>"; };
 		DA252B372DEF790100006AB8 /* MLBTeamStandingsDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLBTeamStandingsDisplayModel.swift; sourceTree = "<group>"; };
 		DA252B382DEF790100006AB8 /* MLBTeamStatsDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLBTeamStatsDisplayModel.swift; sourceTree = "<group>"; };
+		DA2A892C2DF93340002AC4E5 /* KBOGameStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOGameStatsView.swift; sourceTree = "<group>"; };
+		DA2A892E2DF93358002AC4E5 /* KBOGameStatsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOGameStatsStore.swift; sourceTree = "<group>"; };
 		DA2ABC272DB8EB720088CB2C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		DA30E70E2DF7BDB0000639AD /* KBOPlayerInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOPlayerInfoView.swift; sourceTree = "<group>"; };
 		DA30E7102DF7BDC4000639AD /* MLBTeamInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLBTeamInfoView.swift; sourceTree = "<group>"; };
@@ -1279,6 +1283,7 @@
 				DA30E7252DF7BFBB000639AD /* KBOTeamStatsStore.swift */,
 				DADE29582DF051900099A0DD /* KBOLeagueScheduleStore.swift */,
 				DAD3FAF22DF56A7A009B367D /* KBOTeamStandingsStore.swift */,
+				DA2A892E2DF93358002AC4E5 /* KBOGameStatsStore.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -1290,6 +1295,7 @@
 				DA30E72A2DF814AB000639AD /* KBOTeamInfoView.swift */,
 				DADE295A2DF051AD0099A0DD /* KBOLeagueScheduleView.swift */,
 				DAD3FAF02DF56930009B367D /* KBOTeamStandingsView.swift */,
+				DA2A892C2DF93340002AC4E5 /* KBOGameStatsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1311,13 +1317,13 @@
 		DADE29572DF0517D0099A0DD /* View */ = {
 			isa = PBXGroup;
 			children = (
-				DA774F0C2DF87E1E00CAC8AF /* MLBGameStatsView.swift */,
 				DA30E7282DF7EB77000639AD /* MLBPlayerInfoView.swift */,
 				DA30E7142DF7BDE1000639AD /* MLBPlayerStatsView.swift */,
 				DA30E7102DF7BDC4000639AD /* MLBTeamInfoView.swift */,
 				DA30E7162DF7BDEA000639AD /* MLBTeamStatsView.swift */,
 				DA1C10E22DF6250200EDA1FF /* MLBTeamStandingsView.swift */,
 				DADE295C2DF051C40099A0DD /* MLBLeagueScheduleView.swift */,
+				DA774F0C2DF87E1E00CAC8AF /* MLBGameStatsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1500,6 +1506,7 @@
 				DA4777382DA7B7EF00F3459C /* NBATeamInfoDisplayModel.swift in Sources */,
 				DABF24BC2DE9D3400098A504 /* ScheduleContainerState.swift in Sources */,
 				DA252B102DEF73C600006AB8 /* KBOTeamInfoResponseModel.swift in Sources */,
+				DA2A892F2DF93358002AC4E5 /* KBOGameStatsStore.swift in Sources */,
 				DA4777392DA7B7EF00F3459C /* NBATeamStandingsDisplayModel.swift in Sources */,
 				DA252B262DEF787A00006AB8 /* KBOPlayerInfoDisplayModel.swift in Sources */,
 				DA47773A2DA7B7EF00F3459C /* NBAPlayerInfoDisplayModel.swift in Sources */,
@@ -1631,6 +1638,7 @@
 				DA2ABC282DB8EB720088CB2C /* Constants.swift in Sources */,
 				DA531BC32D64A8CA00DB87CB /* FootballTeamGameStatsResponseModel.swift in Sources */,
 				DABF24C42DEB0D500098A504 /* NBAGameListResponseModel.swift in Sources */,
+				DA2A892D2DF93340002AC4E5 /* KBOGameStatsView.swift in Sources */,
 				DA1C10E12DF624FC00EDA1FF /* MLBTeamStandingsStore.swift in Sources */,
 				DA531BA72D64A8CA00DB87CB /* FBTeamStatsView.swift in Sources */,
 				DA531C082D64A91900DB87CB /* CapsuleBar.swift in Sources */,

@@ -86,10 +86,10 @@ struct StringConstants {
         static let playerStandingsRunningCategories = [""]
         static let playerStandingsSecondCategories = playerStandingsHittingCategories + playerStandingsPitchingCategories + playerStandingsRunningCategories
 
-//        static let gameStatsAttackCategories = ["득점", "도움", "공격리바운드", "야투 시도", "야투 성공", "야투 성공률", "3점 시도", "3점 성공", "3점 성공률", "자유투 시도", "자유투 성공", "자유투 성공률"]
-//        static let gameStatsDefendCategories = ["수비리바운드", "블록", "스틸"]
-//        static let gameStatsCommonCategories = ["리바운드", "턴오버", "파울", "득실마진", "출전시간"]
-//        static let gameStatsSecondCategories = gameStatsAttackCategories + gameStatsDefendCategories + gameStatsCommonCategories
+        static let gameStatsHittingCategories = ["타수", "안타", "홈런", "타점", "득점", "도루", "볼넷", "삼진"]
+        static let gameStatsPitchingCategories = ["이닝", "실점", "자책", "볼넷", "삼진", "피안타"]
+        static let gameStatsRunningCategories = [""]
+        static let gameStatsSecondCategories = gameStatsHittingCategories + gameStatsPitchingCategories + gameStatsRunningCategories
     }
     
     struct MLB {

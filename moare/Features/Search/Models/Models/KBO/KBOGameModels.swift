@@ -85,6 +85,13 @@ struct KBOGameLineScore: Decodable, Equatable {
     var h: String { _h ?? "" }
     var r: String { _r ?? "" }
     var teamName: String { _teamName ?? "" }
+    var innings: [String] {
+        [
+            inning1, inning2, inning3, inning4, inning5,
+            inning6, inning7, inning8, inning9, inning10,
+            inning11, inning12, inning13, inning14, inning15
+        ]
+    }
 
     private enum CodingKeys: String, CodingKey {
         case _inning1 = "1"

@@ -1,5 +1,5 @@
 //
-//  MLBGameStatsView.swift
+//  KBOGameStatsView.swift
 //  moare
 //
 //  Created by Mohwa Yoon on 6/10/25.
@@ -8,68 +8,52 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct MLBGameStatsView: View {
+struct KBOGameStatsView: View {
     /* ---------------------
        store
        --------------------- */
     @EnvironmentObject var storeManager: StoreManager
-    @State var mlbGameStatsStore: StoreOf<MLBGameStatsStore>? = nil
+    @State var kboGameStatsStore: StoreOf<KBOGameStatsStore>? = nil
     
     /* ---------------------
        data
        --------------------- */
-    let displayModel: MLBGameStatsDisplayModel
+    let displayModel: KBOGameStatsDisplayModel
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack(spacing: 10) {
-                if let mlbGameStatsStore {
-                    let playerNameDic = mlbGameStatsStore.baseGameStats.playerNameDictionary
-                    let hitterStandings: [StandingsItemState] = mlbGameStatsStore.teamBoxScore?.players.filter {
-                        $0.value.position?.abbreviation != "P" && !$0.value.battingOrder.isEmpty
-                    }.map {
-                        let playerData = $0.value
-                        let playerBatting = playerData.stats?.batting
-                        let playerSeasonBatting = playerData.seasonStats?.batting
-                        
-                        return StandingsItemState(
+                if let kboGameStatsStore {
+                    let playerNameDic = kboGameStatsStore.baseGameStats.playerNameDictionary
+                    let hitterStandings: [StandingsItemState] = kboGameStatsStore.teamLineup?.hitters.map {
+                        StandingsItemState(
                             isGameStats: true,
-                            imageUrl: MLBUtil.playerPhotoURL(id: Int($0.key.trimmingPrefix("ID"))),
-                            name: playerNameDic["\(playerData.person?.id ?? 0)"] ?? (playerData.person?.fullName ?? ""),
-                            extraInfo: playerData.position?.abbreviation,
+                            imageUrl: nil,
+                            name: $0.playerName,
                             dataList: [
-                                String(playerBatting?.atBats ?? 0),
-                                String(playerBatting?.hits ?? 0),
-                                String(playerBatting?.homeRuns ?? 0),
-                                String(playerBatting?.rbi ?? 0),
-                                String(playerBatting?.runs ?? 0),
-                                String(playerBatting?.stolenBases ?? 0),
-                                String(playerBatting?.baseOnBalls ?? 0),
-                                String(playerBatting?.strikeOuts ?? 0),
-                                playerSeasonBatting?.avg ?? "0.0"
+                                $0.ab,
+                                $0.h,
+                                $0.hr,
+                                $0.rbi,
+                                $0.r,
+                                $0.sb,
+                                $0.bb,
+                                $0.so
                             ]
                         )
                     } ?? []
-                    let pitcherStandings: [StandingsItemState] = mlbGameStatsStore.teamBoxScore?.players.filter {
-                        $0.value.position?.abbreviation == "P" && !$0.value.allPositions.isEmpty
-                    }.map {
-                        let playerData = $0.value
-                        let playerPitching = playerData.stats?.pitching
-                        let playerSeasonPitching = playerData.seasonStats?.pitching
-                        
-                        return StandingsItemState(
+                    let pitcherStandings: [StandingsItemState] = kboGameStatsStore.teamLineup?.pitchers.map {
+                        StandingsItemState(
                             isGameStats: true,
-                            imageUrl: MLBUtil.playerPhotoURL(id: Int($0.key.trimmingPrefix("ID"))),
-                            name: playerNameDic["\(playerData.person?.id ?? 0)"] ?? (playerData.person?.fullName ?? ""),
-                            extraInfo: playerData.position?.abbreviation,
+                            imageUrl: nil,
+                            name: $0.playerName,
                             dataList: [
-                                playerPitching?.inningsPitched ?? "0.0",
-                                String(playerPitching?.runs ?? 0),
-                                String(playerPitching?.earnedRuns ?? 0),
-                                String(playerPitching?.baseOnBalls ?? 0),
-                                String(playerPitching?.strikeOuts ?? 0),
-                                String(playerPitching?.hits ?? 0),
-                                playerSeasonPitching?.era ?? "0.0"
+                                $0.ip,
+                                $0.r,
+                                $0.er,
+                                $0.bb,
+                                $0.so,
+                                $0.h
                             ]
                         )
                     } ?? []
@@ -79,17 +63,17 @@ struct MLBGameStatsView: View {
                        --------------------- */
                     HStack {
                         BaseballLeagueTitle(
-                            logoUrl: MLBUtil.mlbLogoUrl,
-                            name: "MLB",
-                            season: Int(mlbGameStatsStore.baseGameStats.displayModel?.game.game.season ?? "2025") ?? 2025
+                            logoUrl: KBOUtil.kboLogoUrl,
+                            name: "KBO",
+                            season: 2025
                         )
                         
                         Spacer()
                     }
                     .padding(.horizontal, UIConstants.Padding.defaultHPadding)
                     
-                    MLBGameStatsScoreInfoItem(
-                        mlbGameStatsStore: mlbGameStatsStore
+                    KBOGameStatsScoreInfoItem(
+                        kboGameStatsStore: kboGameStatsStore
                     )
                     
                     Capsule()
@@ -97,13 +81,13 @@ struct MLBGameStatsView: View {
                         .frame(height: 1)
                         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
                     
-                    if mlbGameStatsStore.baseGameStats.displayModel?.game.status.statusCode != "S" {
+                    if kboGameStatsStore.baseGameStats.displayModel?.game.gameInfo?.gameStatus != "1" {
                         /* ---------------------
                            team select button
                            --------------------- */
-                        MLBGameStatsTeamButtonAdditionalInfoContainer(
+                        KBOGameStatsTeamButtonAdditionalInfoContainer(
                             searchStore: searchStore,
-                            mlbGameStatsStore: mlbGameStatsStore
+                            kboGameStatsStore: kboGameStatsStore
                         )
                         
                         /* ---------------------
@@ -125,13 +109,13 @@ struct MLBGameStatsView: View {
                         StandingsViewContainer(
                             state: StandingsContainerState(
                                 firstCategoryText: StringConstants.gameStatsFirstCategory,
-                                secondCategories: StringConstants.MLB.gameStatsHittingCategories,
+                                secondCategories: StringConstants.KBO.gameStatsHittingCategories,
                                 standings: hitterStandings,
-                                secondCategorySelectedIndex: mlbGameStatsStore.baseGameStats.firstCategorySelectedIndex
+                                secondCategorySelectedIndex: kboGameStatsStore.baseGameStats.firstCategorySelectedIndex
                             ),
                             actions: StandingsContainerActions(
                                 secondCategoryButtonAction: { index in
-                                    mlbGameStatsStore.send(.baseGameStats(.selectFirstCategory(index)))
+                                    kboGameStatsStore.send(.baseGameStats(.selectFirstCategory(index)))
                                 },
                                 itemButtonAction: {
                                     
@@ -157,13 +141,13 @@ struct MLBGameStatsView: View {
                         StandingsViewContainer(
                             state: StandingsContainerState(
                                 firstCategoryText: StringConstants.gameStatsFirstCategory,
-                                secondCategories: StringConstants.MLB.gameStatsPitchingCategories,
+                                secondCategories: StringConstants.KBO.gameStatsPitchingCategories,
                                 standings: pitcherStandings,
-                                secondCategorySelectedIndex: mlbGameStatsStore.baseGameStats.secondCategorySelectedIndex
+                                secondCategorySelectedIndex: kboGameStatsStore.baseGameStats.secondCategorySelectedIndex
                             ),
                             actions: StandingsContainerActions(
                                 secondCategoryButtonAction: { index in
-                                    mlbGameStatsStore.send(.baseGameStats(.selectSecondCategory(index)))
+                                    kboGameStatsStore.send(.baseGameStats(.selectSecondCategory(index)))
                                 },
                                 itemButtonAction: {
                                     
@@ -181,52 +165,52 @@ struct MLBGameStatsView: View {
                             .frame(maxWidth: .infinity)
                             .contentShape(Rectangle())
                     }
-                } // if let mlbGameStatsStore
+                } // if let kboGameStatsStore
             } // VStack
             .onAppear {
-                // init MLBGameStatsStore
-                let mlbGameStatsStore: StoreOf<MLBGameStatsStore> = storeManager.getStore(forKey: StoreKeys.mlbGameStatsStore) ?? {
-                    let newStore = Store(initialState: MLBGameStatsStore.State()) { MLBGameStatsStore() }
+                // init KBOGameStatsStore
+                let kboGameStatsStore: StoreOf<KBOGameStatsStore> = storeManager.getStore(forKey: StoreKeys.kboGameStatsStore) ?? {
+                    let newStore = Store(initialState: KBOGameStatsStore.State()) { KBOGameStatsStore() }
                     
-                    storeManager.setStore(newStore, forKey: StoreKeys.mlbGameStatsStore)
+                    storeManager.setStore(newStore, forKey: StoreKeys.kboGameStatsStore)
                     
                     return newStore
                 }()
                 
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.mlbGameStatsStore = mlbGameStatsStore
+                    self.kboGameStatsStore = kboGameStatsStore
                 }
                 
                 if searchStore.poppedView == nil {
-                    mlbGameStatsStore.send(.baseGameStats(.initData(displayModel: displayModel)))
+                    kboGameStatsStore.send(.baseGameStats(.initData(displayModel: displayModel)))
                 }
             } // onAppear
             .onChange(of: displayModel) {
-                if case .mlbGameStats = searchStore.poppedView {
-                    mlbGameStatsStore?.send(.baseGameStats(.initData(displayModel: displayModel)))
+                if case .kboGameStats = searchStore.poppedView {
+                    kboGameStatsStore?.send(.baseGameStats(.initData(displayModel: displayModel)))
                 }
             }
         } // if let searchStore
     }
 }
 
-struct MLBGameStatsScoreInfoItem: View {
-    @Bindable var mlbGameStatsStore: StoreOf<MLBGameStatsStore>
+struct KBOGameStatsScoreInfoItem: View {
+    @Bindable var kboGameStatsStore: StoreOf<KBOGameStatsStore>
     
     var body: some View {
-        let displayModel = mlbGameStatsStore.baseGameStats.displayModel
+        let displayModel = kboGameStatsStore.baseGameStats.displayModel
         let game = displayModel?.game
-        let homeTeamId = game?.teams.home.id
-        let awayTeamId = game?.teams.away.id
-        let teamNameDic = mlbGameStatsStore.baseGameStats.teamNameDictionary
+        let homeTeamId: Int? = game?.gameInfo?.homeTeamId == nil ? nil : Int(game?.gameInfo?.homeTeamId ?? "0")
+        let awayTeamId: Int? = game?.gameInfo?.awayTeamId == nil ? nil : Int(game?.gameInfo?.awayTeamId ?? "0")
+        let teamNameDic = kboGameStatsStore.baseGameStats.teamNameDictionary
         
         let gameStatusText: String = {
-            switch game?.status.statusCode {
-            case "S":
+            switch game?.gameInfo?.gameStatus {
+            case "1":
                 return StringConstants.gameNotStartedStr
-            case "I":
-                return "\(game?.linescore.currentInning ?? 1)회\((game?.linescore.isTopInning ?? true) ? "초" : "말")"
-            case "F":
+            case "2":
+                return "경기 중"
+            case "3":
                 return StringConstants.gameFinishedStr
             default:
                 return ""
@@ -234,7 +218,7 @@ struct MLBGameStatsScoreInfoItem: View {
         }()
         
         let gameStatusColor: Color = {
-            if game?.status.statusCode == "I" {
+            if game?.gameInfo?.gameStatus == "2" {
                 return .moare
             } else {
                 return .secondary
@@ -244,7 +228,7 @@ struct MLBGameStatsScoreInfoItem: View {
         HStack {
             VStack {
                 URLImage(
-                    url: MLBUtil.teamLogoURL(id: homeTeamId),
+                    url: KBOUtil.teamLogoURL(id: homeTeamId),
                     size: .small,
                     isSvg: true
                 )
@@ -288,14 +272,14 @@ struct MLBGameStatsScoreInfoItem: View {
                 }
                 
                 URLImage(
-                    url: MLBUtil.teamLogoURL(id: awayTeamId),
+                    url: KBOUtil.teamLogoURL(id: awayTeamId),
                     size: .small,
                     isSvg: true
                 )
             } // VStack
             .padding(.top, 26)
             
-            MLBGameStatsLineScoreContainer(mlbGameStatsStore: mlbGameStatsStore)
+            KBOGameStatsLineScoreContainer(kboGameStatsStore: kboGameStatsStore)
                 .frame(height: 127)
         }
         .frame(maxWidth: .infinity)
@@ -303,13 +287,13 @@ struct MLBGameStatsScoreInfoItem: View {
     }
 }
 
-struct MLBGameStatsLineScoreContainer: View {
-    @Bindable var mlbGameStatsStore: StoreOf<MLBGameStatsStore>
+struct KBOGameStatsLineScoreContainer: View {
+    @Bindable var kboGameStatsStore: StoreOf<KBOGameStatsStore>
     
     var body: some View {
-        if let lineScore = mlbGameStatsStore.baseGameStats.displayModel?.game.linescore {
-            let homeTeamLineScore = lineScore.teams.home.runs
-            let awayTeamLineScore = lineScore.teams.away.runs
+        if let lineScore = kboGameStatsStore.baseGameStats.displayModel?.game.lineScore {
+            let homeTeamLineScore = Int(lineScore.home.r) ?? 0
+            let awayTeamLineScore = Int(lineScore.away.r) ?? 0
             
             VStack(spacing: 0) {
                 HStack {
@@ -319,7 +303,7 @@ struct MLBGameStatsLineScoreContainer: View {
                         
 //                        if let homeTeamPts = homeTeamLineScore.pts, let awayTeamPts = awayTeamLineScore.pts {
                             Text("\(homeTeamLineScore)")
-                                .frame(width: 30, height: mlbGameStatsStore.lineScoreItemHeight)
+                                .frame(width: 30, height: kboGameStatsStore.lineScoreItemHeight)
                                 .fontWeight(.medium)
                                 .padding(.leading, 4)
                                 .padding(.trailing, 8)
@@ -336,7 +320,7 @@ struct MLBGameStatsLineScoreContainer: View {
                     }
                     
                     VStack(spacing: 0) {
-                        MLBGameStatsLineScoreTitle(lineScoreInnings: lineScore.innings)
+                        KBOGameStatsLineScoreTitle(lineScore: lineScore.home)
                             .frame(height: 25)
                         
                         Capsule()
@@ -344,12 +328,11 @@ struct MLBGameStatsLineScoreContainer: View {
                             .frame(height: 1)
                             .opacity(0.5)
                         
-                        MLBGameStatsLineScoreItem(
-                            mlbGameStatsStore: mlbGameStatsStore,
-                            isHome: true,
-                            lineScoreInnings: lineScore.innings
+                        KBOGameStatsLineScoreItem(
+                            kboGameStatsStore: kboGameStatsStore,
+                            lineScore: lineScore.home
                         )
-                        .frame(height: mlbGameStatsStore.lineScoreItemHeight)
+                        .frame(height: kboGameStatsStore.lineScoreItemHeight)
                     }
                 }
                 
@@ -361,7 +344,7 @@ struct MLBGameStatsLineScoreContainer: View {
                 HStack {
 //                    if let homeTeamPts = homeTeamLineScore.pts, let awayTeamPts = awayTeamLineScore.pts {
                         Text("\(awayTeamLineScore)")
-                            .frame(width: 30, height: mlbGameStatsStore.lineScoreItemHeight)
+                            .frame(width: 30, height: kboGameStatsStore.lineScoreItemHeight)
                             .fontWeight(.medium)
                             .padding(.leading, 4)
                             .padding(.trailing, 8)
@@ -375,12 +358,11 @@ struct MLBGameStatsLineScoreContainer: View {
 //                            .foregroundStyle(.primary)
 //                    }
                     
-                    MLBGameStatsLineScoreItem(
-                        mlbGameStatsStore: mlbGameStatsStore,
-                        isHome: false,
-                        lineScoreInnings: lineScore.innings
+                    KBOGameStatsLineScoreItem(
+                        kboGameStatsStore: kboGameStatsStore,
+                        lineScore: lineScore.away
                     )
-                    .frame(height: mlbGameStatsStore.lineScoreItemHeight)
+                    .frame(height: kboGameStatsStore.lineScoreItemHeight)
                 }
             }
         }
@@ -388,80 +370,83 @@ struct MLBGameStatsLineScoreContainer: View {
     }
 }
 
-struct MLBGameStatsLineScoreTitle: View {
-    let lineScoreInnings: [MLBGameLineScoreInning]
+struct KBOGameStatsLineScoreTitle: View {
+    let lineScore: KBOGameLineScore
     
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(lineScoreInnings.indices, id: \.self) { index in
-                let data = lineScoreInnings[index]
-                
-                Rectangle()
-                    .frame(width: 1)
-                    .foregroundStyle(.secondary)
-                    .opacity(0.5)
-                Text("\(data.num)회")
-                    .font(.system(size: 15))
-                    .frame(maxWidth: .infinity)
+            ForEach(0..<11, id: \.self) { index in
+                if (index < 9) ||
+                    (index == 9 && lineScore.inning10 != "-") ||
+                    (index == 10 && lineScore.inning11 != "-") {
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundStyle(.secondary)
+                        .opacity(0.5)
+                    Text("\(index + 1)")
+                        .font(.system(size: 15))
+                        .frame(maxWidth: .infinity)
+                }
             }
         }
     }
 }
 
-struct MLBGameStatsLineScoreItem: View {
-    @Bindable var mlbGameStatsStore: StoreOf<MLBGameStatsStore>
+struct KBOGameStatsLineScoreItem: View {
+    @Bindable var kboGameStatsStore: StoreOf<KBOGameStatsStore>
     
-    let isHome: Bool
-    let lineScoreInnings: [MLBGameLineScoreInning]
+    let lineScore: KBOGameLineScore
     
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(lineScoreInnings.indices, id: \.self) { index in
-                let data = lineScoreInnings[index]
-                
-                Rectangle()
-                    .frame(width: 1)
-                    .foregroundStyle(.secondary)
-                    .opacity(0.5)
-                Text("\(isHome ? data.home.runs : data.away.runs)")
-                    .fontWeight(.medium)
-                    .frame(maxWidth: .infinity)
+            ForEach(0..<11, id: \.self) { index in
+                if (index < 9) ||
+                    (index == 9 && lineScore.inning10 != "-") ||
+                    (index == 10 && lineScore.inning11 != "-") {
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundStyle(.secondary)
+                        .opacity(0.5)
+                    Text(lineScore.innings[index + 1])
+                        .fontWeight(.medium)
+                        .frame(maxWidth: .infinity)
+                }
             }
         }
     }
 }
 
-struct MLBGameStatsTeamButtonAdditionalInfoContainer: View {
+struct KBOGameStatsTeamButtonAdditionalInfoContainer: View {
     @Bindable var searchStore: StoreOf<SearchStore>
-    @Bindable var mlbGameStatsStore: StoreOf<MLBGameStatsStore>
+    @Bindable var kboGameStatsStore: StoreOf<KBOGameStatsStore>
     
     @State private var barOffset: CGSize = .zero
     
     var body: some View {
-        let displayModel = mlbGameStatsStore.baseGameStats.displayModel
-        let teamNameDic = mlbGameStatsStore.baseGameStats.teamNameDictionary
+        let displayModel = kboGameStatsStore.baseGameStats.displayModel
+        let teamNameDic = kboGameStatsStore.baseGameStats.teamNameDictionary
         
         HStack {
             VStack(alignment: .leading) {
                 HStack(spacing: 0) {
                     // home
-                    MLBGameStatsTeamButton(
-                        mlbGameStatsStore: mlbGameStatsStore,
-                        team: teamNameDic["short_\(displayModel?.game.teams.home.id ?? 0)"] ?? "",
+                    KBOGameStatsTeamButton(
+                        kboGameStatsStore: kboGameStatsStore,
+                        team: teamNameDic["short_\(displayModel?.game.gameInfo?.homeTeamId ?? "0")"] ?? "",
                         index: 0
                     )
-                    .frame(maxWidth: mlbGameStatsStore.teamButtonWidth)
+                    .frame(maxWidth: kboGameStatsStore.teamButtonWidth)
                     
                     VCapsuleBar()
                         .opacity(0.5)
                     
                     // away
-                    MLBGameStatsTeamButton(
-                        mlbGameStatsStore: mlbGameStatsStore,
-                        team: teamNameDic["short_\(displayModel?.game.teams.away.id ?? 0)"] ?? "",
+                    KBOGameStatsTeamButton(
+                        kboGameStatsStore: kboGameStatsStore,
+                        team: teamNameDic["short_\(displayModel?.game.gameInfo?.awayTeamId ?? "0")"] ?? "",
                         index: 1
                     )
-                    .frame(maxWidth: mlbGameStatsStore.teamButtonWidth)
+                    .frame(maxWidth: kboGameStatsStore.teamButtonWidth)
                 }
                 .frame(height: 40)
                 
@@ -472,7 +457,7 @@ struct MLBGameStatsTeamButtonAdditionalInfoContainer: View {
             
             HStack(alignment: .top) {
                 // refresh button
-                if displayModel?.game.status.statusCode == "I" {
+                if displayModel?.game.gameInfo?.gameStatus == "2" {
                     Button(action: {
                         searchStore.send(.refreshGame(category: "baseball"))
                     }) {
@@ -489,38 +474,22 @@ struct MLBGameStatsTeamButtonAdditionalInfoContainer: View {
                 }
                 
                 VStack(alignment: .leading) {
-                    Text("날짜: \(CalendarUtil.formatDate(date: displayModel?.game.gameInfo.gameDate).split(separator: " ").first ?? "")")
+                    Text("날짜: \(CalendarUtil.formatDate(date: displayModel?.game.gameInfo?.date).split(separator: " ").first ?? "")")
                         .font(.system(size: 12))
                     
-                    Text("\(CalendarUtil.formatDate(date: displayModel?.game.gameInfo.gameDate, formatType: .ampm))")
+                    Text("\(CalendarUtil.formatDate(date: displayModel?.game.gameInfo?.date, formatType: .ampm))")
                         .font(.system(size: 12))
                     
-                    Text("장소: \(teamNameDic["venue_\(displayModel?.game.teams.home.id ?? 0)"] ?? "")")
+                    Text("장소: \(teamNameDic["venue_\(displayModel?.game.gameInfo?.homeTeamId ?? "0")"] ?? "")")
                         .font(.system(size: 12))
-                    
-                    Text("관중수: \(displayModel?.game.gameInfo.attendance ?? 0)")
-                        .font(.system(size: 12))
-                    
-                    Text("심판:")
-                        .font(.system(size: 12))
-                    
-                    if let officials = displayModel?.game.boxscore?.officials {
-                        ForEach(officials.indices, id: \.self) { index in
-                            let item = officials[index]
-//
-                            Text("• \(item.official.fullName)")
-                                .font(.system(size: 12))
-                                .lineLimit(1)
-                        }
-                    }
                 }
             }
         }
         .onAppear {
             moveBar(index: 0)
         }
-        .onChange(of: mlbGameStatsStore.baseGameStats.selectedTeamIndex) {
-            moveBar(index: mlbGameStatsStore.baseGameStats.selectedTeamIndex)
+        .onChange(of: kboGameStatsStore.baseGameStats.selectedTeamIndex) {
+            moveBar(index: kboGameStatsStore.baseGameStats.selectedTeamIndex)
         }
     }
     
@@ -528,29 +497,29 @@ struct MLBGameStatsTeamButtonAdditionalInfoContainer: View {
         withAnimation(.spring(duration: 0.5)) {
             switch index {
             case 0:
-                barOffset = CGSize(width:getOffsetOfAniCapsuleBar(itemWidth: mlbGameStatsStore.teamButtonWidth, barWidth: 50), height:0)
+                barOffset = CGSize(width:getOffsetOfAniCapsuleBar(itemWidth: kboGameStatsStore.teamButtonWidth, barWidth: 50), height:0)
             default:
-                barOffset = CGSize(width: 2 + getOffsetOfAniCapsuleBar(itemWidth: mlbGameStatsStore.teamButtonWidth, barWidth: 50, index: index), height: 0)
+                barOffset = CGSize(width: 2 + getOffsetOfAniCapsuleBar(itemWidth: kboGameStatsStore.teamButtonWidth, barWidth: 50, index: index), height: 0)
             }
         }
     }
 }
 
-struct MLBGameStatsTeamButton: View {
-    @Bindable var mlbGameStatsStore: StoreOf<MLBGameStatsStore>
+struct KBOGameStatsTeamButton: View {
+    @Bindable var kboGameStatsStore: StoreOf<KBOGameStatsStore>
     
     let team: String
     let index: Int
     
-    init(mlbGameStatsStore: StoreOf<MLBGameStatsStore>, team: String, index: Int) {
-        self.mlbGameStatsStore = mlbGameStatsStore
+    init(kboGameStatsStore: StoreOf<KBOGameStatsStore>, team: String, index: Int) {
+        self.kboGameStatsStore = kboGameStatsStore
         self.team = team
         self.index = index
     }
     
     var body: some View {
         Button(action: {
-            mlbGameStatsStore.send(.baseGameStats(.selectTeam(index)))
+            kboGameStatsStore.send(.baseGameStats(.selectTeam(index)))
         }) {
             Text(team)
                 .lineLimit(2)

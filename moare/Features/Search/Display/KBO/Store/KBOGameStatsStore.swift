@@ -1,5 +1,5 @@
 //
-//  MLBGameStatsStore.swift
+//  KBOGameStatsStore.swift
 //  moare
 //
 //  Created by Mohwa Yoon on 6/10/25.
@@ -9,8 +9,8 @@ import SwiftUI
 import ComposableArchitecture
 
 @Reducer
-struct MLBGameStatsStore {
-    typealias BaseGameStats = BaseGameStatsStore<MLBGameStatsDisplayModel>
+struct KBOGameStatsStore {
+    typealias BaseGameStats = BaseGameStatsStore<KBOGameStatsDisplayModel>
     
     @ObservableState
     struct State {
@@ -24,7 +24,7 @@ struct MLBGameStatsStore {
            data state
            --------------------- */
         var baseGameStats = BaseGameStats.State()
-        var teamBoxScore: MLBGameBoxscoreTeamData? = nil
+        var teamLineup: KBOGameLineup? = nil
 //        var playersTotalStats: NBAGameBoxScoreStats? = nil
         
         /* ---------------------
@@ -52,17 +52,17 @@ struct MLBGameStatsStore {
             switch action {
             case .baseGameStats(.initData):
                 // init with default value
-                state.teamBoxScore = nil
+                state.teamLineup = nil
 //                state.playersTotalStats = nil
                 
                 return .send(.baseGameStats(.selectTeam(0)))
                 
             case .baseGameStats(.selectTeam(let index)):
                 // set selected team's boxscore
-                state.teamBoxScore = if index == 0 {
-                    state.baseGameStats.displayModel?.game.boxscore?.teams.home
+                state.teamLineup = if index == 0 {
+                    state.baseGameStats.displayModel?.game.lineup.home
                 } else {
-                    state.baseGameStats.displayModel?.game.boxscore?.teams.away
+                    state.baseGameStats.displayModel?.game.lineup.away
                 }
                 
                 return .run { send in
