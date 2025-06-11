@@ -668,7 +668,7 @@ struct SearchStore {
                     let dataModel: SportDecodableModel
                     
                     switch viewStack.last {
-                    case .fbPlayerStandings(let responseModel, let displayModel):
+                    case .fbPlayerStandings(let responseModel, _):
                         if let category = category {
                             let leagueId = responseModel.standings.first?.statistics.first?.league.id ?? 39
                             
@@ -695,13 +695,13 @@ struct SearchStore {
                             )
                         }
                         
-                    case .fbPlayerInfo(let responseModel, let displayModel):
+                    case .fbPlayerInfo(let responseModel, _):
                         dataModel = .fbPlayerStats(
                             responseModel,
                             modelConverter.fbPlayerStatsConverter(response: responseModel)
                         )
                         
-                    case .nbaPlayerStandings(let responseModel, let displayModel):
+                    case .nbaPlayerStandings(let responseModel, _):
                         // NOTE: nba player stats data in standings has all the stats for now, so doesn't has to fetchById like football above.
                         let player = responseModel.standings.first { $0.player.personId == playerId }
                         
@@ -711,10 +711,16 @@ struct SearchStore {
                             modelConverter.nbaPlayerStatsConverter(response: playerInfoResponseModel)
                         )
                         
-                    case .nbaPlayerInfo(let responseModel, let displayModel):
+                    case .nbaPlayerInfo(let responseModel, _):
                         dataModel = .nbaPlayerStats(
                             responseModel,
                             modelConverter.nbaPlayerStatsConverter(response: responseModel)
+                        )
+                        
+                    case .mlbPlayerInfo(let responseModel, _):
+                        dataModel = .mlbPlayerStats(
+                            responseModel,
+                            modelConverter.mlbPlayerStatsConverter(response: responseModel)
                         )
                         
                     default: return // Make it do nothing
