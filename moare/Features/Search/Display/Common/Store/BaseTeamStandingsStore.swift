@@ -56,6 +56,8 @@ struct BaseTeamStandingsStore<T> {
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
                     case Constants.Ids.ligue1:
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.ligue1TeamDic)
+                    case Constants.Ids.seriea:
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaTeamDic)
                     case Constants.Ids.nba:
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
                     case Constants.Ids.kbo:

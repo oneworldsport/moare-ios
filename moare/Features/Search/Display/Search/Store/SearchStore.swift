@@ -190,6 +190,7 @@ struct SearchStore {
                     // NOTE: 아직 완전 병렬은 아님. 완벽하게 병렬로 처리하고 싶으면 각각 따로 .run{}을 실행해 줘야함(.onAppear에서 따로 실행).
                     // 위처럼 완전 병렬로 처리하면 UI에서 각각 따로 반영 되겠지만, 한 UI의 높이가 변경될때 동시에 해당 UI에 영향을 미치는 다른 UI가 그려지면 충돌 가능성이 있을수도 있음.
                     // 하지만 해당 충돌은 이전에 xcode, iOS 버전 업데이트 하기 전에 이상하게(원인불명) 발생했던 오류로 인해 겪었던 것이고, 지금은 발생할지 미지수임.
+                    // - 셋중 하나만 exception 발생하면 셋다 초기화 안되는 문제 있음.
                     let trendingKeyowrdsResult = try await trendingKeywords
                     let trieTupleResult = try await trieTuple
                     let noticeListResult = try await noticeList

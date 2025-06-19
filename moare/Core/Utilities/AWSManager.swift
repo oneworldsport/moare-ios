@@ -76,6 +76,8 @@ class AWSManager {
         async let bundesligaTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/bundesliga_team_name_dictionary.json", eTagKey: "bundesligaTeamNameDictionaryETag")
         async let lique1PlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/lique1_player_name_dictionary.json", eTagKey: "lique1PlayerNameDictionaryETag")
         async let lique1TeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/lique1_team_name_dictionary.json", eTagKey: "lique1TeamNameDictionaryETag")
+        async let serieaPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/seriea_player_name_dictionary.json", eTagKey: "serieaPlayerNameDictionaryETag")
+        async let serieaTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/seriea_team_name_dictionary.json", eTagKey: "serieaTeamNameDictionaryETag")
         
         self.trendingKeywords = try? await trendingKeywords
         if let trendingKeywords = self.trendingKeywords {
@@ -83,7 +85,9 @@ class AWSManager {
             await trendingKeywordsPromise.fulfill(with: trendingKeywords)
         }
         
-        if let autoCompleteData = try? await autoCompleteData {
+        do {
+            let autoCompleteData = try await autoCompleteData
+            
             let trie = Trie() // Singleton Instance
             autoCompleteData.forEach {
                 let keyword = $0.keyword
@@ -92,6 +96,8 @@ class AWSManager {
             }
             
             await triePromise.fulfill(with: (trie, autoCompleteData))
+        } catch {
+            print("🚨 autoCompleteData fetch error: \(error)")
         }
         
         self.noticeList = try? await noticeList
@@ -153,6 +159,14 @@ class AWSManager {
         
         if let lique1TeamNameDictionary = try? await lique1TeamNameDictionary {
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.ligue1TeamDic, nameMap: lique1TeamNameDictionary)
+        }
+        
+        if let serieaPlayerNameDictionary = try? await serieaPlayerNameDictionary {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.serieaPlayerDic, nameMap: serieaPlayerNameDictionary)
+        }
+        
+        if let serieaTeamNameDictionary = try? await serieaTeamNameDictionary {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.serieaTeamDic, nameMap: serieaTeamNameDictionary)
         }
     }
     

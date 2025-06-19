@@ -194,8 +194,8 @@
 		DA8DED912DF6AB3700AAB34B /* StandingsRankItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8DED902DF6AB3700AAB34B /* StandingsRankItem.swift */; };
 		DA911BB02DF9B8DF0055B982 /* KBOTeamStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA911BAF2DF9B8DF0055B982 /* KBOTeamStatsView.swift */; };
 		DA9202192DA8E10000BB6B15 /* NBAUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9202182DA8E10000BB6B15 /* NBAUtil.swift */; };
+		DAA08A4E2E03EDD600602693 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA08A4D2E03EDD500602693 /* TestView.swift */; };
 		DABE3D6B2D7E977F0048DCAA /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABE3D6A2D7E977F0048DCAA /* Utilities.swift */; };
-		DABE3D6D2D7E9C210048DCAA /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABE3D6C2D7E9C210048DCAA /* TestView.swift */; };
 		DABE3D6F2D7ECF8F0048DCAA /* CommonTextComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABE3D6E2D7ECF8F0048DCAA /* CommonTextComponents.swift */; };
 		DABE3D722D7EF19D0048DCAA /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = DABE3D712D7EF19D0048DCAA /* Collections */; };
 		DABF24B32DE99EB60098A504 /* InfoViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABF24B22DE99E9C0098A504 /* InfoViewContainer.swift */; };
@@ -444,8 +444,8 @@
 		DA8DED902DF6AB3700AAB34B /* StandingsRankItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandingsRankItem.swift; sourceTree = "<group>"; };
 		DA911BAF2DF9B8DF0055B982 /* KBOTeamStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOTeamStatsView.swift; sourceTree = "<group>"; };
 		DA9202182DA8E10000BB6B15 /* NBAUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAUtil.swift; sourceTree = "<group>"; };
+		DAA08A4D2E03EDD500602693 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		DABE3D6A2D7E977F0048DCAA /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
-		DABE3D6C2D7E9C210048DCAA /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		DABE3D6E2D7ECF8F0048DCAA /* CommonTextComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonTextComponents.swift; sourceTree = "<group>"; };
 		DABF24B22DE99E9C0098A504 /* InfoViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewContainer.swift; sourceTree = "<group>"; };
 		DABF24B52DE9AEA70098A504 /* InfoViewScope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewScope.swift; sourceTree = "<group>"; };
@@ -1221,9 +1221,9 @@
 		DADA39532D3A1AC8000D15E0 /* moare */ = {
 			isa = PBXGroup;
 			children = (
+				DAA08A4D2E03EDD500602693 /* TestView.swift */,
 				DAD3FAEA2DF52596009B367D /* TestView3.swift */,
 				DA6C1EE42DB63F5100D63246 /* TestView2.swift */,
-				DABE3D6C2D7E9C210048DCAA /* TestView.swift */,
 				DA531B3E2D64A8A400DB87CB /* App */,
 				DA531BDE2D64A8F200DB87CB /* Core */,
 				DA531B932D64A8CA00DB87CB /* Features */,
@@ -1495,6 +1495,7 @@
 			files = (
 				DA531BAA2D64A8CA00DB87CB /* AutoCompleteList.swift in Sources */,
 				DADE29652DF178B20099A0DD /* ScheduleGameItemState.swift in Sources */,
+				DAA08A4E2E03EDD600602693 /* TestView.swift in Sources */,
 				DA30E71F2DF7BE42000639AD /* MLBTeamStatsStore.swift in Sources */,
 				DA531BB32D64A8CA00DB87CB /* FBTeamStandingsDisplayModel.swift in Sources */,
 				DA531B402D64A8A400DB87CB /* SplashView.swift in Sources */,
@@ -1691,7 +1692,6 @@
 				DA531BE12D64A8F200DB87CB /* BaseDisplayModel.swift in Sources */,
 				DADE29612DF175D30099A0DD /* KBOUtil.swift in Sources */,
 				DABF24B62DE9AEA70098A504 /* InfoViewScope.swift in Sources */,
-				DABE3D6D2D7E9C210048DCAA /* TestView.swift in Sources */,
 				DA081BCA2DDF2C3000034589 /* BaseInfoStore.swift in Sources */,
 				DA531BA82D64A8CA00DB87CB /* SearchStore.swift in Sources */,
 				DAD3FAF12DF56930009B367D /* KBOTeamStandingsView.swift in Sources */,

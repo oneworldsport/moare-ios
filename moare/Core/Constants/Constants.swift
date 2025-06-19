@@ -15,6 +15,8 @@ struct Constants {
         static let bundesligaTeamDic = "bundesliga_team"
         static let ligue1PlayerDic = "ligue1_player"
         static let ligue1TeamDic = "ligue1_team"
+        static let serieaPlayerDic = "seriea_player"
+        static let serieaTeamDic = "seriea_team"
         static let nbaPlayerDic = "nba_player"
         static let nbaTeamDic = "nba_team"
         static let kboPlayerDic = "kbo_player"
@@ -29,6 +31,7 @@ struct Constants {
         static let laliga = 140
         static let bundesliga = 78
         static let ligue1 = 61
+        static let seriea = 135
         static let nba = 90001
         static let kbo = 90101
         static let mlb = 90102

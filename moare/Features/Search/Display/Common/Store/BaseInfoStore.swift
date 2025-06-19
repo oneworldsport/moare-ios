@@ -51,6 +51,9 @@ struct BaseInfoStore<T> {
                     case Constants.Ids.ligue1:
                         state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.ligue1PlayerDic)
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.ligue1TeamDic)
+                    case Constants.Ids.seriea:
+                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaPlayerDic)
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaTeamDic)
                     case Constants.Ids.nba:
                         state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaPlayerDic)
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
