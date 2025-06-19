@@ -297,17 +297,7 @@ struct SearchStore {
 //                result.formUnion(state.trie.search(prefix: getChosung(from: state.query)))
                 
                 if let trie = state.trie {
-                    var result: [String] = []
-                 
-                    result.append(contentsOf: trie.search(prefix: getChosung(from: state.query)))
-                    
-                    let additionalResult = trie.search(prefix: state.query)
-                    
-                    for word in additionalResult {
-                        if !result.contains(word) {
-                            result.append(word)
-                        }
-                    }
+                    let result = trie.search(prefix: state.query)
                     
                     withAnimation {
                         state.autoCompleteList = result
