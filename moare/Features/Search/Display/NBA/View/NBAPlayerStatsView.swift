@@ -145,7 +145,7 @@ struct NBAPlayerStatsPlayerInfoItem: View {
                     
                     // name
                     VStack(alignment: .leading) {
-                        Text(nbaPlayerStatsStore.playerNameDictionary[player.displayFirstLast.lowercased()] ?? player.displayFirstLast)
+                        Text(nbaPlayerStatsStore.playerNameDictionary["\(player.personId)"] ?? player.displayFirstLast)
                             .font(.system(size: 16))
                             .fontWeight(.medium)
                         
@@ -512,13 +512,13 @@ struct NBAPlayerStatsItem: View {
                 
                 FBStatDataItem(
                     category: "",
-                    data: "\(stats.orebPG)"
+                    data: ""
                 )
                 .frame(maxWidth: .infinity)
                 
                 FBStatDataItem(
                     category: "",
-                    data: "\(stats.astPG)"
+                    data: ""
                 )
                 .frame(maxWidth: .infinity)
             }

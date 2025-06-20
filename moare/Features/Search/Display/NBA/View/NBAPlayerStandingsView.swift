@@ -449,7 +449,7 @@ struct NBAPlayerStandingsFirstDataListItem: View {
                 .padding(.trailing, 6)
 
             VStack(spacing: 2) {
-                Text(nbaPlayerStandingsStore.playerNameDictionary[data.player.displayFirstLast.lowercased()] ?? data.player.displayFirstLast)
+                Text(nbaPlayerStandingsStore.playerNameDictionary["\(data.player.personId)"] ?? data.player.displayFirstLast)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.system(size: 12))
                     .lineLimit(1)

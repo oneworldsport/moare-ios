@@ -314,7 +314,7 @@ struct NBAPlayerInfoFirstItem: View {
                 URLImage(url: NBAUtil.playerPhotoURL(id: player.personId))
                     .opacity(showContents ? 1 : 0)
                 
-                Text(nbaPlayerInfoStore.baseInfo.playerNameDictionary[player.displayFirstLast.lowercased()] ?? player.displayFirstLast)
+                Text(nbaPlayerInfoStore.baseInfo.playerNameDictionary["\(player.personId)"] ?? player.displayFirstLast)
                     .font(.system(size: 16))
                     .fontWeight(.medium)
                     .opacity(showContents ? 1 : 0)
