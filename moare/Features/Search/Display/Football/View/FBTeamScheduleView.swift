@@ -128,38 +128,14 @@ struct FBTeamScheduleList: View {
         .onAppear {
             // TODO: init에서 해도 상관없다. 어디서 하는게 나을까?
             if let game = searchStore.fbGameStatsData?.game {
-                let gameInfo = FBGameInfoForSchedule(round: game.league.round, elapsed: game.fixture.status.elapsed)
-                
-                let fbGameForSchedule = FBGameForSchedule(
-                    itemKey: "\(game.fixture.date)#\(game.fixture.id)",
-                    homeTeamId: game.teams.home.id,
-                    awayTeamId: game.teams.away.id,
-                    homeTeamScore: game.goals.home,
-                    awayTeamScore: game.goals.away,
-                    gameStatus: game.fixture.status.short,
-                    gameInfo: gameInfo
-                )
-                
-                gameListToDisplay = [fbGameForSchedule]
+                gameListToDisplay = [ModelConverter.fbGameToGameScheduleConverter(game: game)]
             } else {
                 gameListToDisplay = fbTeamScheduleStore.games
             }
         }
         .onChange(of: searchStore.fbGameStatsData) {
             if let game = searchStore.fbGameStatsData?.game {
-                let gameInfo = FBGameInfoForSchedule(round: game.league.round, elapsed: game.fixture.status.elapsed)
-                
-                let fbGameForSchedule = FBGameForSchedule(
-                    itemKey: "\(game.fixture.date)#\(game.fixture.id)",
-                    homeTeamId: game.teams.home.id,
-                    awayTeamId: game.teams.away.id,
-                    homeTeamScore: game.goals.home,
-                    awayTeamScore: game.goals.away,
-                    gameStatus: game.fixture.status.short,
-                    gameInfo: gameInfo
-                )
-                
-                gameListToDisplay = [fbGameForSchedule]
+                gameListToDisplay = [ModelConverter.fbGameToGameScheduleConverter(game: game)]
             } else {
                 gameListToDisplay = fbTeamScheduleStore.games
             }
@@ -228,7 +204,7 @@ struct FBTeamScheduleListItem: View {
                 venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
                 gameType: MatchDescriptionConverter.convert(input: data.gameInfo?.round ?? ""),
                 referee: fbGameStatsData?.game.fixture.referee,
-                shouldShowOnlyDateTime: fbGameStatsData == nil,
+                shouldShowOnlyDateTime: false,
                 shouldShowVenue: fbGameStatsData != nil,
                 shouldShowGameType: fbGameStatsData == nil,
                 shouldShowReferee: fbGameStatsData != nil,

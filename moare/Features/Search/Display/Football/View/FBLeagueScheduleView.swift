@@ -156,20 +156,8 @@ struct FBLeagueScheduleList: View {
         .onAppear {
             // TODO: init에서 해도 상관없다. 어디서 하는게 나을까?
             if let game = searchStore.fbGameStatsData?.game {
-                let gameInfo = FBGameInfoForSchedule(round: game.league.round, elapsed: game.fixture.status.elapsed)
-                
-                let fbGameForSchedule = FBGameForSchedule(
-                    itemKey: "\(game.fixture.date)#\(game.fixture.id)",
-                    homeTeamId: game.teams.home.id,
-                    awayTeamId: game.teams.away.id,
-                    homeTeamScore: game.goals.home,
-                    awayTeamScore: game.goals.away,
-                    gameStatus: game.fixture.status.short,
-                    gameInfo: gameInfo
-                )
-                
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    gameListToDisplay = [fbGameForSchedule]
+                    gameListToDisplay = [ModelConverter.fbGameToGameScheduleConverter(game: game)]
                 }
             } else {
                 gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
@@ -177,20 +165,8 @@ struct FBLeagueScheduleList: View {
         }
         .onChange(of: searchStore.fbGameStatsData) {
             if let game = searchStore.fbGameStatsData?.game {
-                let gameInfo = FBGameInfoForSchedule(round: game.league.round, elapsed: game.fixture.status.elapsed)
-                
-                let fbGameForSchedule = FBGameForSchedule(
-                    itemKey: "\(game.fixture.date)#\(game.fixture.id)",
-                    homeTeamId: game.teams.home.id,
-                    awayTeamId: game.teams.away.id,
-                    homeTeamScore: game.goals.home,
-                    awayTeamScore: game.goals.away,
-                    gameStatus: game.fixture.status.short,
-                    gameInfo: gameInfo
-                )
-                
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    gameListToDisplay = [fbGameForSchedule]
+                    gameListToDisplay = [ModelConverter.fbGameToGameScheduleConverter(game: game)]
                 }
             } else {
                 gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []

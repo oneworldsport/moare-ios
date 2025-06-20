@@ -232,22 +232,8 @@ struct FBLeagueScheduleStore {
                 }
                 
                 let game = gameStatsDisplayModel.game
-                let homeTeamId = game.teams.home.id
-                let awayTeamId = game.teams.away.id
-                let homeTeamScore = game.goals.home
-                let awayTeamScore = game.goals.away
-                let gameInfo = FBGameInfoForSchedule(round: game.league.round, elapsed: game.fixture.status.elapsed)
-                
                 let newGames = leagueScheduleDisplayModel.games.map {
-                    $0.gameId == String(game.fixture.id) ? FBGameForSchedule(
-                        itemKey: "\(game.fixture.date)#\(game.fixture.id)",
-                        homeTeamId: homeTeamId,
-                        awayTeamId: awayTeamId,
-                        homeTeamScore: homeTeamScore,
-                        awayTeamScore: awayTeamScore,
-                        gameStatus: game.fixture.status.short,
-                        gameInfo: gameInfo
-                    ) : $0
+                    $0.gameId == String(game.fixture.id) ? ModelConverter.fbGameToGameScheduleConverter(game: game) : $0
                 }
                 
                 var newDisplayModel = leagueScheduleDisplayModel

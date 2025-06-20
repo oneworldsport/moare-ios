@@ -97,10 +97,10 @@ struct ScheduleGameItem: View {
                 }
                 
                 // game type
+                // TODO: 나중에 작업
                 if state.shouldShowGameType {
                     
                 }
-                
                 
                 // referee
                 if state.shouldShowReferee {

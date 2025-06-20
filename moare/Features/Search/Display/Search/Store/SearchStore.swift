@@ -890,7 +890,7 @@ struct SearchStore {
                 
                 switch state.viewStack.last {
                 case .nbaLeagueTournament(let responseModel, let displayModel):
-                    let teamScheduleResponseModel = NBAGameScheduleResponseModel(scheduledMonths: nil, schedule: modelConverter.nbaGameToGameScheduleConverter(gameList: gameList))
+                    let teamScheduleResponseModel = NBAGameScheduleResponseModel(scheduledMonths: nil, schedule: ModelConverter.nbaGameListToGameScheduleListConverter(gameList: gameList))
                     
                     dataModel = .nbaTeamSchedule(
                         teamScheduleResponseModel,

@@ -289,30 +289,6 @@ struct ModelConverter {
         return NBATournamentDisplayModel(yearMonthList: [], games: response.schedule, entityInfo: entityInfo)
     }
     
-    // Not used in DataModel
-    func nbaGameToGameScheduleConverter(gameList: [NBAGame]) -> [NBAGameForSchedule] {
-        return gameList.compactMap { game in
-            guard let gameSummary = game.gameSummary else {
-                return nil
-            }
-            
-            let homeTeamId = gameSummary.homeTeamId
-            let awayTeamId = gameSummary.visitorTeamId
-            let homeTeamScore = game.lineScore.first { $0.teamId == homeTeamId }?.pts ?? 0
-            let awayTeamScore = game.lineScore.first { $0.teamId == awayTeamId }?.pts ?? 0
-            
-            return NBAGameForSchedule(
-                itemKey: "\(gameSummary.date)#\(gameSummary.gameCode)",
-                homeTeamId: homeTeamId,
-                awayTeamId: awayTeamId,
-                homeTeamScore: homeTeamScore,
-                awayTeamScore: awayTeamScore,
-                gameStatus: String(gameSummary.gameStatusId),
-                gameInfo: gameSummary
-            )
-        }
-    }
-    
     /* ---------------------
        kbo
        --------------------- */
@@ -632,6 +608,87 @@ struct ModelConverter {
             keywords: keywords,
             entityInfo: entityInfo,
             game: response.game!
+        )
+    }
+    
+    // Not used in DataModel
+    static func fbGameToGameScheduleConverter(game: FBGame) -> FBGameForSchedule {
+        let date = game.fixture.date.split(separator: "+").first
+        let homeTeamId = game.teams.home.id
+        let awayTeamId = game.teams.away.id
+        let homeTeamScore = game.goals.home
+        let awayTeamScore = game.goals.away
+        let gameInfo = FBGameInfoForSchedule(round: game.league.round, elapsed: game.fixture.status.elapsed)
+        
+        return FBGameForSchedule(
+            itemKey: date != nil ? "\(date!)#\(game.fixture.id)" : "",
+            homeTeamId: homeTeamId,
+            awayTeamId: awayTeamId,
+            homeTeamScore: homeTeamScore,
+            awayTeamScore: awayTeamScore,
+            gameStatus: game.fixture.status.short,
+            gameInfo: gameInfo
+        )
+    }
+    
+    static func nbaGameListToGameScheduleListConverter(gameList: [NBAGame]) -> [NBAGameForSchedule] {
+        return gameList.compactMap { game in
+            return nbaGameToGameScheduleConverter(game: game)
+        }
+    }
+    
+    static func nbaGameToGameScheduleConverter(game: NBAGame) -> NBAGameForSchedule {
+        let gameSummary = game.gameSummary
+        let date = gameSummary?.date.split(separator: "+").first
+        let homeTeamId = gameSummary?.homeTeamId
+        let awayTeamId = gameSummary?.visitorTeamId
+        let homeTeamScore = game.lineScore.first { $0.teamId == homeTeamId }?.pts ?? 0
+        let awayTeamScore = game.lineScore.first { $0.teamId == awayTeamId }?.pts ?? 0
+        
+        return NBAGameForSchedule(
+            itemKey: date != nil ? "\(date!)#\(gameSummary?.gameCode ?? "")" : "",
+            homeTeamId: homeTeamId,
+            awayTeamId: awayTeamId,
+            homeTeamScore: homeTeamScore,
+            awayTeamScore: awayTeamScore,
+            gameStatus: gameSummary != nil ? String(gameSummary!.gameStatusId) : nil,
+            gameInfo: gameSummary
+        )
+    }
+    
+    static func mlbGameToGameScheduleConverter(game: MLBGame) -> MLBGameForSchedule {
+        let date = game.gameInfo.gameDate.split(separator: "+").first
+        let homeTeamId = game.teams.home.id
+        let awayTeamId = game.teams.away.id
+        let homeTeamScore = game.linescore.teams.home.runs
+        let awayTeamScore = game.linescore.teams.away.runs
+        
+        return MLBGameForSchedule(
+            itemKey: date != nil ? "\(date!)#\(game.game.id)" : "",
+            homeTeamId: homeTeamId,
+            awayTeamId: awayTeamId,
+            homeTeamScore: homeTeamScore,
+            awayTeamScore: awayTeamScore,
+            gameStatus: game.status.statusCode,
+            gameInfo: nil
+        )
+    }
+    
+    static func kboGameToGameScheduleConverter(game: KBOGame) -> KBOGameForSchedule {
+        let date = game.gameInfo?.date.split(separator: "+").first
+        let homeTeamId = game.gameInfo?.homeTeamId
+        let awayTeamId = game.gameInfo?.awayTeamId
+        let homeTeamScore = game.lineScore.home.r
+        let awayTeamScore = game.lineScore.away.r
+        
+        return KBOGameForSchedule(
+            itemKey: date != nil ? "\(date!)#\(game.gameInfo?.gameId ?? "")" : "",
+            homeTeamId: Int(homeTeamId ?? "0"),
+            awayTeamId: Int(awayTeamId ?? "0"),
+            homeTeamScore: Int(homeTeamScore),
+            awayTeamScore: Int(awayTeamScore),
+            gameStatus: game.gameInfo?.gameStatus,
+            gameInfo: nil
         )
     }
 }

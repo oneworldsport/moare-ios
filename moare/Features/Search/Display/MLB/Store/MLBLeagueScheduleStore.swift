@@ -220,21 +220,8 @@ struct MLBLeagueScheduleStore {
                 }
                 
                 let game = gameStatsDisplayModel.game
-                let homeTeamId = game.teams.home.id
-                let awayTeamId = game.teams.away.id
-                let homeTeamScore = game.linescore.teams.home.runs
-                let awayTeamScore = game.linescore.teams.away.runs
-                
                 let newGames = leagueScheduleDisplayModel.games.map {
-                    $0.gameId == game.game.id ? MLBGameForSchedule(
-                        itemKey: "\(game.gameInfo.gameDate)#\(game.game.id)",
-                        homeTeamId: homeTeamId,
-                        awayTeamId: awayTeamId,
-                        homeTeamScore: homeTeamScore,
-                        awayTeamScore: awayTeamScore,
-                        gameStatus: game.status.statusCode,
-                        gameInfo: nil
-                    ) : $0
+                    $0.gameId == game.game.id ? ModelConverter.mlbGameToGameScheduleConverter(game: game) : $0
                 }
                 
                 var newDisplayModel = leagueScheduleDisplayModel

@@ -219,21 +219,8 @@ struct KBOLeagueScheduleStore {
                 }
                 
                 let game = gameStatsDisplayModel.game
-                let homeTeamId = game.gameInfo?.homeTeamId
-                let awayTeamId = game.gameInfo?.awayTeamId
-                let homeTeamScore = game.lineScore.home.r
-                let awayTeamScore = game.lineScore.away.r
-                
                 let newGames = leagueScheduleDisplayModel.games.map {
-                    $0.gameId == game.gameInfo?.gameId ? KBOGameForSchedule(
-                        itemKey: "\(game.gameInfo?.date ?? "")#\(game.gameInfo?.gameId ?? "")",
-                        homeTeamId: Int(homeTeamId ?? "0"),
-                        awayTeamId: Int(awayTeamId ?? "0"),
-                        homeTeamScore: Int(homeTeamScore),
-                        awayTeamScore: Int(awayTeamScore),
-                        gameStatus: game.gameInfo?.gameStatus,
-                        gameInfo: nil
-                    ) : $0
+                    $0.gameId == game.gameInfo?.gameId ? ModelConverter.kboGameToGameScheduleConverter(game: game) : $0
                 }
                 
                 var newDisplayModel = leagueScheduleDisplayModel

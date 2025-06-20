@@ -30,17 +30,6 @@ struct FBGameStatsView: View {
     var body: some View {
         let game = displayModel.game
         
-        let gameInfo = FBGameInfoForSchedule(round: game.league.round, elapsed: game.fixture.status.elapsed)
-        let fbGameForSchedule = FBGameForSchedule(
-            itemKey: "\(game.fixture.date)#\(game.fixture.id)",
-            homeTeamId: game.teams.home.id,
-            awayTeamId: game.teams.away.id,
-            homeTeamScore: game.goals.home,
-            awayTeamScore: game.goals.away,
-            gameStatus: game.fixture.status.short,
-            gameInfo: gameInfo
-        )
-        
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack(spacing: 10) {
                 if let fbGameStatsStore, let fbLeagueScheduleStore {
@@ -69,7 +58,7 @@ struct FBGameStatsView: View {
                         FBLeagueScheduleListItem(
                             searchStore: searchStore,
                             fbLeagueScheduleStore: fbLeagueScheduleStore,
-                            data: fbGameForSchedule
+                            data: ModelConverter.fbGameToGameScheduleConverter(game: game)
                         )
                     }
                     
