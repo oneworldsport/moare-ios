@@ -71,6 +71,7 @@ struct MLBLeagueScheduleStore {
                 // init with default value
                 state.filteredGames = [:]
                 state.gameResultOpenedStateList = [:]
+                state.dataForViewStack = nil
                 
                 // init data
                 if let yearMonthList = state.baseSchedule.displayModel?.yearMonthList {

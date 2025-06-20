@@ -154,7 +154,6 @@ struct MLBLeagueScheduleListItem: View {
         let awayTeamId = data.awayTeamId
         let gameStatus = data.gameStatus
         let teamNameDic = mlbLeagueScheduleStore.baseSchedule.teamNameDictionary
-        let mlbGameStatsData = searchStore.mlbGameStatsData
         
         let gameStatusText: String = {
 //            guard isResultOpened else { return StringConstants.resultOpen }
@@ -190,8 +189,6 @@ struct MLBLeagueScheduleListItem: View {
         }()
         
         let gameStatusColor: Color = {
-            guard isResultOpened else { return .secondary }
-            
             if gameStatus == "I" {
                 return .moare
             } else {
@@ -201,10 +198,10 @@ struct MLBLeagueScheduleListItem: View {
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
-                homeTeamLogo: MLBUtil.teamLogoURL(id: data.homeTeamId),
+                homeTeamLogo: MLBUtil.teamLogoURL(id: homeTeamId),
                 homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
                 homeTeamScore: data.homeTeamScore,
-                awayTeamLogo: MLBUtil.teamLogoURL(id: data.awayTeamId),
+                awayTeamLogo: MLBUtil.teamLogoURL(id: awayTeamId),
                 awayTeamName: teamNameDic["short_\(awayTeamId)"] ?? "",
                 awayTeamScore: data.awayTeamScore,
                 isResultOpened: isResultOpened,
@@ -212,7 +209,7 @@ struct MLBLeagueScheduleListItem: View {
                 gameStatusColor: gameStatusColor,
                 isCapsuleButtonDisabled: gameStatus != "F",
                 date: data.date,
-                venue: teamNameDic["venue\(homeTeamId)"] ?? "",
+                venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
                 isSvgLogo: true
             ),
             actions: ScheduleGameItemActions(

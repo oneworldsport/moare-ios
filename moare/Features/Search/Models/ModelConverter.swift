@@ -140,8 +140,10 @@ struct ModelConverter {
     
     func fbTeamScheduleConverter(response: FBGameScheduleResponseModel) -> FBTeamScheduleDisplayModel {
         return FBTeamScheduleDisplayModel(
-            games: response.schedule,
-            leagueId: leagueId
+            leagueId: leagueId ?? Constants.Ids.epl,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            games: response.schedule
         )
     }
     
@@ -154,10 +156,11 @@ struct ModelConverter {
         } ?? []
         
         return FBLeagueScheduleDisplayModel(
-            yearMonthList: yearMonthList,
-            games: response.schedule,
+            leagueId: leagueId ?? Constants.Ids.epl,
+            keywords: keywords,
             entityInfo: entityInfo,
-            leagueId: leagueId
+            yearMonthList: yearMonthList,
+            games: response.schedule
         )
     }
     

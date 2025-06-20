@@ -30,6 +30,17 @@ struct FBGameStatsView: View {
     var body: some View {
         let game = displayModel.game
         
+        let gameInfo = FBGameInfoForSchedule(round: game.league.round, elapsed: game.fixture.status.elapsed)
+        let fbGameForSchedule = FBGameForSchedule(
+            itemKey: "\(game.fixture.date)#\(game.fixture.id)",
+            homeTeamId: game.teams.home.id,
+            awayTeamId: game.teams.away.id,
+            homeTeamScore: game.goals.home,
+            awayTeamScore: game.goals.away,
+            gameStatus: game.fixture.status.short,
+            gameInfo: gameInfo
+        )
+        
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack(spacing: 10) {
                 if let fbGameStatsStore, let fbLeagueScheduleStore {
@@ -58,7 +69,7 @@ struct FBGameStatsView: View {
                         FBLeagueScheduleListItem(
                             searchStore: searchStore,
                             fbLeagueScheduleStore: fbLeagueScheduleStore,
-                            data: game
+                            data: fbGameForSchedule
                         )
                     }
                     
@@ -160,9 +171,7 @@ struct FBGameStatsView: View {
                 // TODO: has to figure out better structure
                 // when game_stats show at first(meaning ScheduleView never showed)
                 let scheduleStore: StoreOf<FBLeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.fbLeagueScheduleStore) ?? {
-                    let newStore = Store(initialState: FBLeagueScheduleStore.State(
-                        displayModel: nil, yearMonthList: []
-                    )) { FBLeagueScheduleStore() }
+                    let newStore = Store(initialState: FBLeagueScheduleStore.State()) { FBLeagueScheduleStore() }
                     
                     storeManager.setStore(newStore, forKey: StoreKeys.fbLeagueScheduleStore)
                     
@@ -175,9 +184,9 @@ struct FBGameStatsView: View {
                 
                 translate()
                 
-                if displayModel.game.fixture.status.short != "NS" && displayModel.game.fixture.status.short != "FT" {
-                    searchStore.send(.refreshGame(category: "football"))
-                }
+//                if displayModel.game.fixture.status.short != "NS" && displayModel.game.fixture.status.short != "FT" {
+//                    searchStore.send(.refreshGame(category: "football"))
+//                }
             } // onAppear
             .onChange(of: displayModel) {
                 if case .fbGameStats = searchStore.poppedView {

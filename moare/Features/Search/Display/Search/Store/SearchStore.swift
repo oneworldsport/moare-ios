@@ -111,7 +111,7 @@ struct SearchStore {
         case updateTextField(String, Bool = true)
         case updateTextFieldVisibleState(Bool)
         case performSearch(searchType: SearchType = .query, aniDuration: CGFloat = 0)
-        case selectFBGame(game: FBGame, leagueId: Int?)
+        case selectFBGame(game: FBGameForSchedule, leagueId: Int?)
         case selectNBAGame(game: NBAGameForSchedule)
         case selectKBOGame(game: KBOGameForSchedule)
         case selectMLBGame(game: MLBGameForSchedule)
@@ -573,17 +573,18 @@ struct SearchStore {
                 return .none
                 
             case .selectFBGame(let game, let leagueId):
-                let dataMdoel = SportDecodableModel.fbGameStats(
-                    FBGameStatsResponseModel(game: game),
-                    FBGameStatsDisplayModel(game: game, leagueId: leagueId)
-                )
-                
-                state.viewStack.append(dataMdoel)
-                state.poppedView = nil
-                
-                state.fbGameStatsData = FBGameStatsDisplayModel(game: game, leagueId: leagueId)
-                
-                return .none
+                return .run { send in
+                    let result = try await searchClient.fetchById(
+                        category: "football",
+                        date: game.date,
+                        dataType: "football_game_stats",
+                        leagueId: leagueId ?? Constants.Ids.epl,
+                        id: game.gameId
+                    )
+                    
+                    await send(.addViewStack(data: result.data))
+                    await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+                }
                 
             case .selectNBAGame(let game):
                 return .run { send in
@@ -591,7 +592,7 @@ struct SearchStore {
                         category: "basketball",
                         date: game.date,
                         dataType: "basketball_game_stats",
-                        leagueId: 90001,
+                        leagueId: Constants.Ids.nba,
                         id: game.gameId
                     )
                     
@@ -605,7 +606,7 @@ struct SearchStore {
                         category: "baseball",
                         date: game.date,
                         dataType: "baseball_game_stats",
-                        leagueId: 90101,
+                        leagueId: Constants.Ids.kbo,
                         id: game.gameId
                     )
                     
@@ -619,7 +620,7 @@ struct SearchStore {
                         category: "baseball",
                         date: game.date,
                         dataType: "baseball_game_stats",
-                        leagueId: 90102,
+                        leagueId: Constants.Ids.mlb,
                         id: game.gameId
                     )
                     
