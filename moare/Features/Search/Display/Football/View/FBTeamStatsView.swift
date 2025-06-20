@@ -360,7 +360,7 @@ struct FBTeamStatsItem: View {
                 
                 FBStatDataItem(
                     category: "클린시트",
-                    data: "\(stats.cleanSheet.total)",
+                    data: "\(stats.cleanSheet?.total ?? 0)",
                     customWidth: 80
                 )
                 

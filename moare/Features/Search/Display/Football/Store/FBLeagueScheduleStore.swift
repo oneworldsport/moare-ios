@@ -20,7 +20,7 @@ struct FBLeagueScheduleStore {
         /* ---------------------
            constants
            --------------------- */
-        let itemHeight: CGFloat = 100
+        let itemHeight: CGFloat = 110
         
         /* ---------------------
            data state

@@ -19,9 +19,9 @@ struct FBTeamStats: Decodable, Equatable {
     private let _form: String?
     let fixtures: FBTeamStatsFixtures
     let goals: FBTeamStatsGoals
-    let biggest: FBTeamStatsBiggest
-    let cleanSheet: FBHomeAwayIntStats
-    let failedToScore: FBHomeAwayIntStats
+    let biggest: FBTeamStatsBiggest?
+    let cleanSheet: FBHomeAwayIntStats?
+    let failedToScore: FBHomeAwayIntStats?
     let penalty: FBTeamStatsPenalty
     
     var form: String {
