@@ -159,29 +159,13 @@ struct MLBLeagueScheduleListItem: View {
 //            guard isResultOpened else { return StringConstants.resultOpen }
 
             switch gameStatus {
-            case "S":
+            case StringConstants.MLB.gameScheduled:
                 return StringConstants.gameNotStartedStr
-            case "I":
-                return "경기중"
-//                guard let first = data.lineScore.first else { return "" }
-//                if first.ptsOt3 != nil {
-//                    return StringConstants.NBA.gameOt3
-//                } else if first.ptsOt2 != nil {
-//                    return StringConstants.NBA.gameOt2
-//                } else if first.ptsOt1 != nil {
-//                    return StringConstants.NBA.gameOt1
-//                } else if first.ptsQtr4 != nil {
-//                    return StringConstants.NBA.gameQtr4
-//                } else if first.ptsQtr3 != nil {
-//                    return StringConstants.NBA.gameQtr3
-//                } else if first.ptsQtr2 != nil {
-//                    return StringConstants.NBA.gameQtr2
-//                } else if first.ptsQtr1 != nil {
-//                    return StringConstants.NBA.gameQtr1
-//                } else {
-//                    return ""
-//                }
-            case "F":
+            case StringConstants.MLB.gameLive:
+                return StringConstants.gameLiveStr
+            case StringConstants.MLB.gamePostponed:
+                return StringConstants.gamePostponedStr
+            case let status where StringConstants.MLB.gameFinishedList.contains(status):
                 return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
             default:
                 return ""
@@ -207,7 +191,7 @@ struct MLBLeagueScheduleListItem: View {
                 isResultOpened: isResultOpened,
                 gameStatusText: gameStatusText,
                 gameStatusColor: gameStatusColor,
-                isCapsuleButtonDisabled: gameStatus != "F",
+                isCapsuleButtonDisabled: !StringConstants.MLB.gameFinishedList.contains(gameStatus),
                 date: data.date,
                 venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
                 isSvgLogo: true
@@ -225,16 +209,16 @@ struct MLBLeagueScheduleListItem: View {
             )
         )
         .onAppear {
-            if gameStatus == "F" {
+            if StringConstants.MLB.gameFinishedList.contains(gameStatus) {
                 isResultOpened = mlbLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
-            } else if gameStatus == "S" {
+            } else if gameStatus == StringConstants.MLB.gameScheduled || gameStatus == StringConstants.MLB.gamePostponed {
                 isResultOpened = false
             } else {
                 isResultOpened = true
             }
         }
         .onChange(of: mlbLeagueScheduleStore.gameResultOpenedStateList) {
-            if gameStatus == "F" {
+            if StringConstants.MLB.gameFinishedList.contains(gameStatus) {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                     isResultOpened = mlbLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
                 }

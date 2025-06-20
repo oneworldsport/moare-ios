@@ -22,7 +22,7 @@ struct MLBGame: Decodable, Equatable {
 }
 
 struct MLBGameBoxScore: Decodable, Equatable {
-    let info: [MLBLabelObj]
+    let info: [MLBLabelObj]?
     let officials: [MLBGameBoxScoreOfficial]
     let teams: MLBGameBoxscoreTeams
 }
@@ -145,7 +145,7 @@ struct MLBGameBoxsocreTeamInfo: Decodable, Equatable {
     private let _id: Int?
     private let _link: String?
     private let _name: String?
-    let springLeague: MLBAbbreviationIdObj
+    let springLeague: MLBAbbreviationIdObj?
 
     var allStarStatus: String { _allStarStatus ?? "" }
     var id: Int { _id ?? 0 }
@@ -227,12 +227,12 @@ struct MLBGameLineScore: Decodable, Equatable {
     private let _balls: Int?
     private let _currentInning: Int?
     private let _currentInningOrdinal: String?
-    let defense: MLBGameLineScoreDefense
+    let defense: MLBGameLineScoreDefense?
     private let _inningHalf: String?
     let innings: [MLBGameLineScoreInning]
     private let _inningState: String?
     private let _isTopInning: Bool?
-    let offense: MLBGameLineScoreDefense
+    let offense: MLBGameLineScoreDefense?
     private let _outs: Int?
     private let _scheduledInnings: Int?
     private let _strikes: Int?
@@ -418,7 +418,7 @@ struct MLBGameTeamDetail: Decodable, Equatable {
     let league: MLBNameObj
     private let _locationName: String?
     private let _name: String?
-    let record: MLBGameTeamRecord
+    let record: MLBGameTeamRecord?
     private let _season: Int?
     private let _shortName: String?
     private let _teamCode: String?
@@ -534,4 +534,22 @@ struct MLBGameWeather: Decodable, Equatable {
     }
 }
 
-typealias MLBGameForSchedule = GameForSchedule<String>
+struct MLBGameInfoForSchedule: Decodable, Equatable {
+    private let _currentInning: Int?
+
+    var currentInning: Int {
+        return _currentInning ?? 0
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case _currentInning = "round"
+    }
+    
+    init(
+        currentInning: Int?
+    ) {
+        self._currentInning = currentInning
+    }
+}
+
+typealias MLBGameForSchedule = GameForSchedule<MLBGameInfoForSchedule>

@@ -12,6 +12,8 @@ struct StringConstants {
     static let resultHide = "결과 숨기기"
     static let gameNotStartedStr = "경기 전"
     static let gameFinishedStr = "경기 종료"
+    static let gamePostponedStr = "경기 연기"
+    static let gameLiveStr = "경기중"
     
     static let standingsFirstCategory = "순위"
     static let statsFirstCategories = ["공격 지표", "수비 지표", "공통 지표"]
@@ -93,6 +95,13 @@ struct StringConstants {
     }
     
     struct MLB {
+        static let gameScheduled = "Scheduled"
+        static let gameLive = "In Progress"
+        static let gamePostponed = "Postponed"
+        static let gameRain = "Completed Early: Rain"
+        static let gameFinal = "Final"
+        static let gameFinishedList = [gameRain, gameFinal]
+        
         static let conferenceCategory = ["내셔널리그", "아메리칸리그"]
         
         static let teamStandingsCategories = ["승률", "게임차", "승", "패", "경기수", "연속", "타율", "안타", "홈런", "장타율", "득점", "평균자책", "피안타율", "피안타", "피홈런", "실점", "도루성공률"]

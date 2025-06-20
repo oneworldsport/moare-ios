@@ -25,16 +25,14 @@ struct MLBGameStatsView: View {
             VStack(spacing: 10) {
                 if let mlbGameStatsStore {
                     let playerNameDic = mlbGameStatsStore.baseGameStats.playerNameDictionary
-                    let hitterStandings: [StandingsItemState] = mlbGameStatsStore.teamBoxScore?.players.filter {
-                        $0.value.position?.abbreviation != "P" && !$0.value.battingOrder.isEmpty
-                    }.map {
-                        let playerData = $0.value
+                    let hitterStandings: [StandingsItemState] = mlbGameStatsStore.teamHitters.map {
+                        let playerData = $0.1
                         let playerBatting = playerData.stats?.batting
                         let playerSeasonBatting = playerData.seasonStats?.batting
                         
                         return StandingsItemState(
                             isGameStats: true,
-                            imageUrl: MLBUtil.playerPhotoURL(id: Int($0.key.trimmingPrefix("ID"))),
+                            imageUrl: MLBUtil.playerPhotoURL(id: Int($0.0.trimmingPrefix("ID"))),
                             name: playerNameDic["\(playerData.person?.id ?? 0)"] ?? (playerData.person?.fullName ?? ""),
                             extraInfo: playerData.position?.abbreviation,
                             dataList: [
@@ -49,17 +47,15 @@ struct MLBGameStatsView: View {
                                 playerSeasonBatting?.avg ?? "0.0"
                             ]
                         )
-                    } ?? []
-                    let pitcherStandings: [StandingsItemState] = mlbGameStatsStore.teamBoxScore?.players.filter {
-                        $0.value.position?.abbreviation == "P" && !$0.value.allPositions.isEmpty
-                    }.map {
-                        let playerData = $0.value
+                    }
+                    let pitcherStandings: [StandingsItemState] = mlbGameStatsStore.teamPitchers.map {
+                        let playerData = $0.1
                         let playerPitching = playerData.stats?.pitching
                         let playerSeasonPitching = playerData.seasonStats?.pitching
                         
                         return StandingsItemState(
                             isGameStats: true,
-                            imageUrl: MLBUtil.playerPhotoURL(id: Int($0.key.trimmingPrefix("ID"))),
+                            imageUrl: MLBUtil.playerPhotoURL(id: Int($0.0.trimmingPrefix("ID"))),
                             name: playerNameDic["\(playerData.person?.id ?? 0)"] ?? (playerData.person?.fullName ?? ""),
                             extraInfo: playerData.position?.abbreviation,
                             dataList: [
@@ -72,7 +68,7 @@ struct MLBGameStatsView: View {
                                 playerSeasonPitching?.era ?? "0.0"
                             ]
                         )
-                    } ?? []
+                    }
                     
                     /* ---------------------
                        game title
@@ -307,7 +303,9 @@ struct MLBGameStatsLineScoreContainer: View {
     @Bindable var mlbGameStatsStore: StoreOf<MLBGameStatsStore>
     
     var body: some View {
-        if let lineScore = mlbGameStatsStore.baseGameStats.displayModel?.game.linescore {
+        if let game = mlbGameStatsStore.baseGameStats.displayModel?.game {
+            let isGameScheduled = game.status.detailedState == StringConstants.MLB.gameScheduled
+            let lineScore = game.linescore
             let homeTeamLineScore = lineScore.teams.home.runs
             let awayTeamLineScore = lineScore.teams.away.runs
             
@@ -317,21 +315,23 @@ struct MLBGameStatsLineScoreContainer: View {
                         Spacer()
                             .frame(height: 26)
                         
-//                        if let homeTeamPts = homeTeamLineScore.pts, let awayTeamPts = awayTeamLineScore.pts {
+                        if !isGameScheduled {
                             Text("\(homeTeamLineScore)")
                                 .frame(width: 30, height: mlbGameStatsStore.lineScoreItemHeight)
                                 .fontWeight(.medium)
                                 .padding(.leading, 4)
                                 .padding(.trailing, 8)
-                                .foregroundStyle(homeTeamLineScore >= awayTeamLineScore ? .moare : .primary)
-//                        } else {
-//                            Text("-")
-//                                .frame(width: 30, height: nbaGameStatsStore.lineScoreItemHeight)
-//                                .fontWeight(.medium)
-//                                .padding(.leading, 4)
-//                                .padding(.trailing, 8)
-//                                .foregroundStyle(.primary)
-//                        }
+                                .foregroundStyle(
+                                    homeTeamLineScore >= awayTeamLineScore ? .moare : .primary
+                                )
+                        } else {
+                            Text("-")
+                                .frame(width: 30, height: mlbGameStatsStore.lineScoreItemHeight)
+                                .fontWeight(.medium)
+                                .padding(.leading, 4)
+                                .padding(.trailing, 8)
+                                .foregroundStyle(.primary)
+                        }
                         
                     }
                     
@@ -359,21 +359,21 @@ struct MLBGameStatsLineScoreContainer: View {
                     .opacity(0.5)
                 
                 HStack {
-//                    if let homeTeamPts = homeTeamLineScore.pts, let awayTeamPts = awayTeamLineScore.pts {
+                    if !isGameScheduled {
                         Text("\(awayTeamLineScore)")
                             .frame(width: 30, height: mlbGameStatsStore.lineScoreItemHeight)
                             .fontWeight(.medium)
                             .padding(.leading, 4)
                             .padding(.trailing, 8)
                             .foregroundStyle(awayTeamLineScore >= homeTeamLineScore ? .moare : .primary)
-//                    } else {
-//                        Text("-")
-//                            .frame(width: 30, height: nbaGameStatsStore.lineScoreItemHeight)
-//                            .fontWeight(.medium)
-//                            .padding(.leading, 4)
-//                            .padding(.trailing, 8)
-//                            .foregroundStyle(.primary)
-//                    }
+                    } else {
+                        Text("-")
+                            .frame(width: 30, height: mlbGameStatsStore.lineScoreItemHeight)
+                            .fontWeight(.medium)
+                            .padding(.leading, 4)
+                            .padding(.trailing, 8)
+                            .foregroundStyle(.primary)
+                    }
                     
                     MLBGameStatsLineScoreItem(
                         mlbGameStatsStore: mlbGameStatsStore,
@@ -392,15 +392,17 @@ struct MLBGameStatsLineScoreTitle: View {
     let lineScoreInnings: [MLBGameLineScoreInning]
     
     var body: some View {
+        let inningsCount = lineScoreInnings.isEmpty ? 9 : lineScoreInnings.count
+        
         HStack(spacing: 0) {
-            ForEach(lineScoreInnings.indices, id: \.self) { index in
-                let data = lineScoreInnings[index]
+            ForEach(1...inningsCount, id: \.self) { index in
+//                let data = lineScoreInnings[index]
                 
                 Rectangle()
                     .frame(width: 1)
                     .foregroundStyle(.secondary)
                     .opacity(0.5)
-                Text("\(data.num)회")
+                Text("\(index)회")
                     .font(.system(size: 15))
                     .frame(maxWidth: .infinity)
             }
@@ -416,16 +418,28 @@ struct MLBGameStatsLineScoreItem: View {
     
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(lineScoreInnings.indices, id: \.self) { index in
-                let data = lineScoreInnings[index]
-                
-                Rectangle()
-                    .frame(width: 1)
-                    .foregroundStyle(.secondary)
-                    .opacity(0.5)
-                Text("\(isHome ? data.home.runs : data.away.runs)")
-                    .fontWeight(.medium)
-                    .frame(maxWidth: .infinity)
+            if !lineScoreInnings.isEmpty {
+                ForEach(lineScoreInnings.indices, id: \.self) { index in
+                    let data = lineScoreInnings[index]
+                    
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundStyle(.secondary)
+                        .opacity(0.5)
+                    Text("\(isHome ? data.home.runs : data.away.runs)")
+                        .fontWeight(.medium)
+                        .frame(maxWidth: .infinity)
+                }
+            } else {
+                ForEach(0..<9, id: \.self) { index in
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundStyle(.secondary)
+                        .opacity(0.5)
+                    Text("-")
+                        .fontWeight(.medium)
+                        .frame(maxWidth: .infinity)
+                }
             }
         }
     }
