@@ -42,3 +42,23 @@ struct NBATitle: View {
         }
     }
 }
+
+struct BaseballLeagueTitle: View {
+    let logoUrl: String
+    let name: String
+    let season: Int
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            URLImage(
+                url: logoUrl,
+                size: .small,
+                isSvg: logoUrl.contains(".svg")
+            )
+                .padding(.trailing, 6)
+            
+            Text("\(name) " + String(season))
+                .fontWeight(.medium)
+        }
+    }
+}

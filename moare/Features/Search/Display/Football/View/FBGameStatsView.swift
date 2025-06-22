@@ -58,7 +58,7 @@ struct FBGameStatsView: View {
                         FBLeagueScheduleListItem(
                             searchStore: searchStore,
                             fbLeagueScheduleStore: fbLeagueScheduleStore,
-                            data: game
+                            data: ModelConverter.fbGameToGameScheduleConverter(game: game)
                         )
                     }
                     
@@ -160,9 +160,7 @@ struct FBGameStatsView: View {
                 // TODO: has to figure out better structure
                 // when game_stats show at first(meaning ScheduleView never showed)
                 let scheduleStore: StoreOf<FBLeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.fbLeagueScheduleStore) ?? {
-                    let newStore = Store(initialState: FBLeagueScheduleStore.State(
-                        displayModel: nil, yearMonthList: []
-                    )) { FBLeagueScheduleStore() }
+                    let newStore = Store(initialState: FBLeagueScheduleStore.State()) { FBLeagueScheduleStore() }
                     
                     storeManager.setStore(newStore, forKey: StoreKeys.fbLeagueScheduleStore)
                     
@@ -175,9 +173,9 @@ struct FBGameStatsView: View {
                 
                 translate()
                 
-                if displayModel.game.fixture.status.short != "NS" && displayModel.game.fixture.status.short != "FT" {
-                    searchStore.send(.refreshGame(category: "football"))
-                }
+//                if displayModel.game.fixture.status.short != "NS" && displayModel.game.fixture.status.short != "FT" {
+//                    searchStore.send(.refreshGame(category: "football"))
+//                }
             } // onAppear
             .onChange(of: displayModel) {
                 if case .fbGameStats = searchStore.poppedView {

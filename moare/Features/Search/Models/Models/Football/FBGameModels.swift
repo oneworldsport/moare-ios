@@ -400,3 +400,32 @@ enum StatValue: Decodable, Equatable {
         }
     }
 }
+
+struct FBGameInfoForSchedule: Decodable, Equatable {
+    private let _round: String?
+    private let _elapsed: Int?
+
+    var round: String {
+        return _round ?? ""
+    }
+    var elapsed: Int {
+        return _elapsed ?? 0
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case _round = "round"
+        case _elapsed = "elapsed"
+    }
+    
+    init(
+        round: String?,
+        elapsed: Int?
+    ) {
+        self._round = round
+        self._elapsed = elapsed
+    }
+}
+
+typealias FBGameForSchedule = GameForSchedule<FBGameInfoForSchedule>
+
+

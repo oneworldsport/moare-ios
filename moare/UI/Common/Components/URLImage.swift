@@ -12,7 +12,7 @@ import SDWebImageSwiftUI
 struct URLImage: View {
     let url: String?
     let size: URLImageSize
-    let isSvg: Bool
+    let isSvg: Bool // TODO: contains(".svg") 사용하는걸로 변경
     
     private let imageSize: CGSize
     

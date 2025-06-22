@@ -29,35 +29,5 @@ struct FBTeamInfoStore {
         Scope(state: \.baseInfo, action: \.baseInfo) {
             BaseInfo()
         }
-        
-//        Reduce { state, action in
-//            switch action {
-//            case .initData(let displayModel):
-//                state.displayModel = displayModel
-//                
-//                if let leagueId = displayModel.leagueId {
-//                    switch leagueId {
-//                    case Constants.Ids.epl:
-//                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplTeamDic)
-//                    case Constants.Ids.laliga:
-//                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaTeamDic)
-//                    case Constants.Ids.bundesliga:
-//                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
-//                    case Constants.Ids.ligue1:
-//                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
-//                    default: break
-//                    }
-//                }
-//                
-//                state.team = displayModel.team
-//                state.venue = displayModel.venue
-//                state.league = displayModel.stats?.league
-//                state.stats = displayModel.stats
-//                state.lastGame = displayModel.lastGame
-//                state.nextGame = displayModel.nextGame
-//                
-//                return .none
-//            }
-//        }
     }
 }

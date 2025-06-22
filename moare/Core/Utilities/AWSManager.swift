@@ -66,12 +66,18 @@ class AWSManager {
         async let eplTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/epl_team_name_dictionary.json", eTagKey: "eplTeamNameDictionaryETag")
         async let nbaPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/nba_player_name_dictionary.json", eTagKey: "nbaPlayerNameDictionaryETag")
         async let nbaTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/nba_team_name_dictionary.json", eTagKey: "nbaTeamNameDictionaryETag")
+        async let kboPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/kbo_player_name_dictionary.json", eTagKey: "kboPlayerNameDictionaryETag")
+        async let kboTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/kbo_team_name_dictionary.json", eTagKey: "kboTeamNameDictionaryETag")
+        async let mlbPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/mlb_player_name_dictionary.json", eTagKey: "mlbPlayerNameDictionaryETag")
+        async let mlbTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/mlb_team_name_dictionary.json", eTagKey: "mlbTeamNameDictionaryETag")
         async let laligaPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/laliga_player_name_dictionary.json", eTagKey: "laligaPlayerNameDictionaryETag")
         async let laligaTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/laliga_team_name_dictionary.json", eTagKey: "laligaTeamNameDictionaryETag")
         async let bundesligaPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/bundesliga_player_name_dictionary.json", eTagKey: "bundesligaPlayerNameDictionaryETag")
         async let bundesligaTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/bundesliga_team_name_dictionary.json", eTagKey: "bundesligaTeamNameDictionaryETag")
         async let lique1PlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/lique1_player_name_dictionary.json", eTagKey: "lique1PlayerNameDictionaryETag")
         async let lique1TeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/lique1_team_name_dictionary.json", eTagKey: "lique1TeamNameDictionaryETag")
+        async let serieaPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/seriea_player_name_dictionary.json", eTagKey: "serieaPlayerNameDictionaryETag")
+        async let serieaTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/seriea_team_name_dictionary.json", eTagKey: "serieaTeamNameDictionaryETag")
         
         self.trendingKeywords = try? await trendingKeywords
         if let trendingKeywords = self.trendingKeywords {
@@ -79,7 +85,9 @@ class AWSManager {
             await trendingKeywordsPromise.fulfill(with: trendingKeywords)
         }
         
-        if let autoCompleteData = try? await autoCompleteData {
+        do {
+            let autoCompleteData = try await autoCompleteData
+            
             let trie = Trie() // Singleton Instance
             autoCompleteData.forEach {
                 let keyword = $0.keyword
@@ -88,6 +96,8 @@ class AWSManager {
             }
             
             await triePromise.fulfill(with: (trie, autoCompleteData))
+        } catch {
+            print("🚨 autoCompleteData fetch error: \(error)")
         }
         
         self.noticeList = try? await noticeList
@@ -109,6 +119,22 @@ class AWSManager {
         
         if let nbaTeamNameDictionary = try? await nbaTeamNameDictionary {
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.nbaTeamDic, nameMap: nbaTeamNameDictionary)
+        }
+        
+        if let kboPlayerNameDictionary = try? await kboPlayerNameDictionary {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.kboPlayerDic, nameMap: kboPlayerNameDictionary)
+        }
+        
+        if let kboTeamNameDictionary = try? await kboTeamNameDictionary {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.kboTeamDic, nameMap: kboTeamNameDictionary)
+        }
+        
+        if let mlbPlayerNameDictionary = try? await mlbPlayerNameDictionary {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlbPlayerDic, nameMap: mlbPlayerNameDictionary)
+        }
+        
+        if let mlbTeamNameDictionary = try? await mlbTeamNameDictionary {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlbTeamDic, nameMap: mlbTeamNameDictionary)
         }
         
         if let laligaPlayerNameDictionary = try? await laligaPlayerNameDictionary {
@@ -133,6 +159,14 @@ class AWSManager {
         
         if let lique1TeamNameDictionary = try? await lique1TeamNameDictionary {
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.ligue1TeamDic, nameMap: lique1TeamNameDictionary)
+        }
+        
+        if let serieaPlayerNameDictionary = try? await serieaPlayerNameDictionary {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.serieaPlayerDic, nameMap: serieaPlayerNameDictionary)
+        }
+        
+        if let serieaTeamNameDictionary = try? await serieaTeamNameDictionary {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.serieaTeamDic, nameMap: serieaTeamNameDictionary)
         }
     }
     

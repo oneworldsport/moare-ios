@@ -21,7 +21,7 @@ struct BaseTeamStandingsStore<T> {
         /* ---------------------
            ui state
            --------------------- */
-        var selectedCategoryIndex = 0
+        var secondCategorySelectedIndex = 0
         
         /* ---------------------
            etc
@@ -31,7 +31,7 @@ struct BaseTeamStandingsStore<T> {
     
     enum Action {
         case initData(displayModel: T)
-        case selectCategory(Int)
+        case selectSecondCategory(Int)
     }
     
     @Dependency(\.translatedNameProvider) var nameProvider
@@ -41,7 +41,7 @@ struct BaseTeamStandingsStore<T> {
             switch action {
             case .initData(let displayModel):
                 // init with default value
-                state.selectedCategoryIndex = 0
+                state.secondCategorySelectedIndex = 0
                 
                 // init data
                 state.displayModel = displayModel
@@ -56,8 +56,14 @@ struct BaseTeamStandingsStore<T> {
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
                     case Constants.Ids.ligue1:
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.ligue1TeamDic)
+                    case Constants.Ids.seriea:
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaTeamDic)
                     case Constants.Ids.nba:
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
+                    case Constants.Ids.kbo:
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.kboTeamDic)
+                    case Constants.Ids.mlb:
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlbTeamDic)
                     default: break
                     }
                     
@@ -69,15 +75,15 @@ struct BaseTeamStandingsStore<T> {
                         }
                         
                         if let index {
-                            state.selectedCategoryIndex = index
+                            state.secondCategorySelectedIndex = index
                         }
                     }
                 }
                 
                 return .none
                 
-            case .selectCategory(let index):
-                state.selectedCategoryIndex = index
+            case .selectSecondCategory(let index):
+                state.secondCategorySelectedIndex = index
                 
                 return .none
             }

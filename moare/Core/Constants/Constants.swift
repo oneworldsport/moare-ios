@@ -15,8 +15,14 @@ struct Constants {
         static let bundesligaTeamDic = "bundesliga_team"
         static let ligue1PlayerDic = "ligue1_player"
         static let ligue1TeamDic = "ligue1_team"
+        static let serieaPlayerDic = "seriea_player"
+        static let serieaTeamDic = "seriea_team"
         static let nbaPlayerDic = "nba_player"
         static let nbaTeamDic = "nba_team"
+        static let kboPlayerDic = "kbo_player"
+        static let kboTeamDic = "kbo_team"
+        static let mlbPlayerDic = "mlb_player"
+        static let mlbTeamDic = "mlb_team"
     }
     
     struct Ids {
@@ -25,7 +31,10 @@ struct Constants {
         static let laliga = 140
         static let bundesliga = 78
         static let ligue1 = 61
+        static let seriea = 135
         static let nba = 90001
+        static let kbo = 90101
+        static let mlb = 90102
         
         // nba team
         static let atl = 1610612737
@@ -58,6 +67,16 @@ struct Constants {
         static let was = 1610612764
         static let det = 1610612765
         static let cha = 1610612766
+        
+        // mlb league, division
+        static let americanLeague = 103
+        static let nationalLeague = 104
+        static let americanLeagueWest = 200
+        static let americanLeagueEast = 201
+        static let americanLeagueCentral = 202
+        static let nationalLeagueWest = 203
+        static let nationalLeagueEast = 204
+        static let nationalLeagueCentral = 205
     }
     
     struct NBAGameStatus {

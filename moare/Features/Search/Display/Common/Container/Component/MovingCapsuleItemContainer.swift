@@ -41,7 +41,7 @@ struct MovingCapsuleItemContainer<Content: View>: View {
 
     var body: some View {
         Button(action: {
-            
+            onClick?()
         }) {
             VStack(alignment: horizontalAlignment) {
                 content()

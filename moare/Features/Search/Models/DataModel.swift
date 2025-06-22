@@ -41,7 +41,7 @@ indirect enum SportDecodableModel: Equatable {
     case fbTeamStandings(FBTeamStandingsResponseModel, FBTeamStandingsDisplayModel)
     case fbTeamSchedule(FBGameScheduleResponseModel, FBTeamScheduleDisplayModel)
     case fbLeagueSchedule(FBGameScheduleResponseModel, FBLeagueScheduleDisplayModel)
-    case fbGameStats(FBGameStatsReponseModel, FBGameStatsDisplayModel)
+    case fbGameStats(FBGameStatsResponseModel, FBGameStatsDisplayModel)
     
     // nba
     case nbaPlayerInfo(NBAPlayerInfoResponseModel, NBAPlayerInfoDisplayModel)
@@ -52,8 +52,30 @@ indirect enum SportDecodableModel: Equatable {
     case nbaTeamStandings(NBATeamStandingsResponseModel, NBATeamStandingsDisplayModel)
     case nbaTeamSchedule(NBAGameScheduleResponseModel, NBATeamScheduleDisplayModel)
     case nbaLeagueSchedule(NBAGameScheduleResponseModel, NBALeagueScheduleDisplayModel)
-    case nbaGameStats(NBAGameStatsReponseModel, NBAGameStatsDisplayModel)
+    case nbaGameStats(NBAGameStatsResponseModel, NBAGameStatsDisplayModel)
     case nbaLeagueTournament(NBAGameListResponseModel, NBATournamentDisplayModel) // TODO: Should change models to use NBAGameForSchedule(Which is used in NBAGameScheduleResponsModel)
+    
+    // kbo
+    case kboPlayerInfo(KBOPlayerInfoResponseModel, KBOPlayerInfoDisplayModel)
+    case kboPlayerStats(KBOPlayerInfoResponseModel, KBOPlayerStatsDisplayModel)
+    case kboPlayerStandings(KBOPlayerStandingsResponseModel, KBOPlayerStandingsDisplayModel)
+    case kboTeamInfo(KBOTeamInfoResponseModel, KBOTeamInfoDisplayModel)
+    case kboTeamStats(KBOTeamInfoResponseModel, KBOTeamStatsDisplayModel)
+    case kboTeamStandings(KBOTeamStandingsResponseModel, KBOTeamStandingsDisplayModel)
+    case kboTeamSchedule(KBOGameScheduleResponseModel, KBOTeamScheduleDisplayModel)
+    case kboLeagueSchedule(KBOGameScheduleResponseModel, KBOLeagueScheduleDisplayModel)
+    case kboGameStats(KBOGameStatsResponseModel, KBOGameStatsDisplayModel)
+    
+    // mlb
+    case mlbPlayerInfo(MLBPlayerInfoResponseModel, MLBPlayerInfoDisplayModel)
+    case mlbPlayerStats(MLBPlayerInfoResponseModel, MLBPlayerStatsDisplayModel)
+    case mlbPlayerStandings(MLBPlayerStandingsResponseModel, MLBPlayerStandingsDisplayModel)
+    case mlbTeamInfo(MLBTeamInfoResponseModel, MLBTeamInfoDisplayModel)
+    case mlbTeamStats(MLBTeamInfoResponseModel, MLBTeamStatsDisplayModel)
+    case mlbTeamStandings(MLBTeamStandingsResponseModel, MLBTeamStandingsDisplayModel)
+    case mlbTeamSchedule(MLBGameScheduleResponseModel, MLBTeamScheduleDisplayModel)
+    case mlbLeagueSchedule(MLBGameScheduleResponseModel, MLBLeagueScheduleDisplayModel)
+    case mlbGameStats(MLBGameStatsResponseModel, MLBGameStatsDisplayModel)
     
     case unknown
     
@@ -77,6 +99,23 @@ indirect enum SportDecodableModel: Equatable {
             (.nbaTeamSchedule, .nbaTeamSchedule),
             (.nbaLeagueSchedule, .nbaLeagueSchedule),
             (.nbaGameStats, .nbaGameStats),
+            (.nbaLeagueTournament, .nbaLeagueTournament),
+            (.kboPlayerInfo, .kboPlayerInfo),
+            (.kboPlayerStats, .kboPlayerStats),
+            (.kboPlayerStandings, .kboPlayerStandings),
+            (.kboTeamInfo, .kboTeamInfo),
+            (.kboTeamStats, .kboTeamStats),
+            (.kboTeamStandings, .kboTeamStandings),
+            (.kboLeagueSchedule, .kboLeagueSchedule),
+            (.kboGameStats, .kboGameStats),
+            (.mlbPlayerInfo, .mlbPlayerInfo),
+            (.mlbPlayerStats, .mlbPlayerStats),
+            (.mlbPlayerStandings, .mlbPlayerStandings),
+            (.mlbTeamInfo, .mlbTeamInfo),
+            (.mlbTeamStats, .mlbTeamStats),
+            (.mlbTeamStandings, .mlbTeamStandings),
+            (.mlbLeagueSchedule, .mlbLeagueSchedule),
+            (.mlbGameStats, .mlbGameStats),
             (.unknown, .unknown):
             return true
         default:
@@ -92,6 +131,8 @@ extension DataModel {
         self.dataType = try container.decode(String.self, forKey: .dataType)
         self.keywords = try container.decode([Keyword].self, forKey: .keywords)
         self.entityInfo = try container.decode([EntityInfo].self, forKey: .entityInfo)
+        
+        let leagueId = self.entityInfo.first?.leagueId
         
         let modelConverter = ModelConverter(keywords: keywords, entityInfo: entityInfo)
         
@@ -168,7 +209,7 @@ extension DataModel {
             self.data = .fbLeagueSchedule(responseModel, displayModel)
             
         case let dataType where dataType == "football_game_stats":
-            let responseModel = try container.decode(FBGameStatsReponseModel.self, forKey: .data)
+            let responseModel = try container.decode(FBGameStatsResponseModel.self, forKey: .data)
             
             if responseModel.game == nil {
                 self.data = .unknown
@@ -249,7 +290,7 @@ extension DataModel {
             self.data = .nbaLeagueSchedule(responseModel, displayModel)
             
         case let dataType where dataType == "basketball_game_stats":
-            let responseModel = try container.decode(NBAGameStatsReponseModel.self, forKey: .data)
+            let responseModel = try container.decode(NBAGameStatsResponseModel.self, forKey: .data)
             
             if responseModel.game == nil {
                 self.data = .unknown
@@ -263,8 +304,196 @@ extension DataModel {
             let displayModel = modelConverter.nbaLeagueTournamentConverter(response: responseModel)
             self.data = .nbaLeagueTournament(responseModel, displayModel)
             
+        // baseball
+        case let dataType where dataType == "baseball_player_info":
+            if leagueId == Constants.Ids.kbo {
+                let responseModel = try container.decode(KBOPlayerInfoResponseModel.self, forKey: .data)
+                
+                if responseModel.info == nil {
+                    self.data = .unknown
+                } else {
+                    let displayModel = modelConverter.kboPlayerInfoConverter(response: responseModel)
+                    self.data = .kboPlayerInfo(responseModel, displayModel)
+                }
+            } else if leagueId == Constants.Ids.mlb {
+                let responseModel = try container.decode(MLBPlayerInfoResponseModel.self, forKey: .data)
+                
+                if responseModel.info == nil {
+                    self.data = .unknown
+                } else {
+                    let displayModel = modelConverter.mlbPlayerInfoConverter(response: responseModel)
+                    self.data = .mlbPlayerInfo(responseModel, displayModel)
+                }
+            } else {
+                self.data = .unknown
+            }
+            
+        case let dataType where dataType == "baseball_player_stats":
+            if leagueId == Constants.Ids.kbo {
+                let responseModel = try container.decode(KBOPlayerInfoResponseModel.self, forKey: .data)
+                
+                if responseModel.info == nil {
+                    self.data = .unknown
+                } else {
+                    let displayModel = modelConverter.kboPlayerStatsConverter(response: responseModel)
+                    self.data = .kboPlayerStats(responseModel, displayModel)
+                }
+            } else if leagueId == Constants.Ids.mlb {
+                let responseModel = try container.decode(MLBPlayerInfoResponseModel.self, forKey: .data)
+                
+                if responseModel.info == nil {
+                    self.data = .unknown
+                } else {
+                    let displayModel = modelConverter.mlbPlayerStatsConverter(response: responseModel)
+                    self.data = .mlbPlayerStats(responseModel, displayModel)
+                }
+            } else {
+                self.data = .unknown
+            }
+            
+        case let dataType where dataType == "baseball_player_standings":
+            if leagueId == Constants.Ids.kbo {
+                let responseModel = try container.decode(KBOPlayerStandingsResponseModel.self, forKey: .data)
+                
+//                if responseModel.info == nil {
+//                    self.data = .unknown
+//                } else {
+                    let displayModel = modelConverter.kboPlayerStandingsConverter(response: responseModel)
+                    self.data = .kboPlayerStandings(responseModel, displayModel)
+//                }
+            } else if leagueId == Constants.Ids.mlb {
+                let responseModel = try container.decode(MLBPlayerStandingsResponseModel.self, forKey: .data)
+                
+//                if responseModel.info == nil {
+//                    self.data = .unknown
+//                } else {
+                    let displayModel = modelConverter.mlbPlayerStandingsConverter(response: responseModel)
+                    self.data = .mlbPlayerStandings(responseModel, displayModel)
+//                }
+            } else {
+                self.data = .unknown
+            }
+            
+        case let dataType where dataType == "baseball_team_info":
+            if leagueId == Constants.Ids.kbo {
+                let responseModel = try container.decode(KBOTeamInfoResponseModel.self, forKey: .data)
+                
+                if responseModel.info == nil {
+                    self.data = .unknown
+                } else {
+                    let displayModel = modelConverter.kboTeamInfoConverter(response: responseModel)
+                    self.data = .kboTeamInfo(responseModel, displayModel)
+                }
+            } else if leagueId == Constants.Ids.mlb {
+                let responseModel = try container.decode(MLBTeamInfoResponseModel.self, forKey: .data)
+                
+                if responseModel.info == nil {
+                    self.data = .unknown
+                } else {
+                    let displayModel = modelConverter.mlbTeamInfoConverter(response: responseModel)
+                    self.data = .mlbTeamInfo(responseModel, displayModel)
+                }
+            } else {
+                self.data = .unknown
+            }
+            
+        case let dataType where dataType == "baseball_team_stats":
+            if leagueId == Constants.Ids.kbo {
+                let responseModel = try container.decode(KBOTeamInfoResponseModel.self, forKey: .data)
+                
+                if responseModel.info == nil {
+                    self.data = .unknown
+                } else {
+                    let displayModel = modelConverter.kboTeamStatsConverter(response: responseModel)
+                    self.data = .kboTeamStats(responseModel, displayModel)
+                }
+            } else if leagueId == Constants.Ids.mlb {
+                let responseModel = try container.decode(MLBTeamInfoResponseModel.self, forKey: .data)
+                
+                if responseModel.info == nil {
+                    self.data = .unknown
+                } else {
+                    let displayModel = modelConverter.mlbTeamStatsConverter(response: responseModel)
+                    self.data = .mlbTeamStats(responseModel, displayModel)
+                }
+            } else {
+                self.data = .unknown
+            }
+            
+        case let dataType where dataType == "baseball_team_standings":
+            if leagueId == Constants.Ids.kbo {
+                let responseModel = try container.decode(KBOTeamStandingsResponseModel.self, forKey: .data)
+                
+                if responseModel.standings.isEmpty {
+                    self.data = .unknown
+                } else {
+                    let displayModel = modelConverter.kboTeamStandingsConverter(response: responseModel)
+                    self.data = .kboTeamStandings(responseModel, displayModel)
+                }
+            } else if leagueId == Constants.Ids.mlb {
+                let responseModel = try container.decode(MLBTeamStandingsResponseModel.self, forKey: .data)
+                
+                if responseModel.standings.isEmpty {
+                    self.data = .unknown
+                } else {
+                    let displayModel = modelConverter.mlbTeamStandingsConverter(response: responseModel)
+                    self.data = .mlbTeamStandings(responseModel, displayModel)
+                }
+            } else {
+                self.data = .unknown
+            }
+            
+        case let dataType where dataType == "baseball_team_schedule":
+            if leagueId == Constants.Ids.kbo {
+                let responseModel = try container.decode(KBOGameScheduleResponseModel.self, forKey: .data)
+                let displayModel = modelConverter.kboTeamScheduleConverter(response: responseModel)
+                self.data = .kboTeamSchedule(responseModel, displayModel)
+            } else if leagueId == Constants.Ids.mlb {
+                let responseModel = try container.decode(MLBGameScheduleResponseModel.self, forKey: .data)
+                let displayModel = modelConverter.mlbTeamScheduleConverter(response: responseModel)
+                self.data = .mlbTeamSchedule(responseModel, displayModel)
+            } else {
+                self.data = .unknown
+            }
+            
+        case let dataType where dataType == "baseball_league_schedule":
+            if leagueId == Constants.Ids.kbo {
+                let responseModel = try container.decode(KBOGameScheduleResponseModel.self, forKey: .data)
+                let displayModel = modelConverter.kboLeagueScheduleConverter(response: responseModel)
+                self.data = .kboLeagueSchedule(responseModel, displayModel)
+            } else if leagueId == Constants.Ids.mlb {
+                let responseModel = try container.decode(MLBGameScheduleResponseModel.self, forKey: .data)
+                let displayModel = modelConverter.mlbLeagueScheduleConverter(response: responseModel)
+                self.data = .mlbLeagueSchedule(responseModel, displayModel)
+            } else {
+                self.data = .unknown
+            }
+            
+        case let dataType where dataType == "baseball_game_stats":
+            if leagueId == Constants.Ids.kbo {
+                let responseModel = try container.decode(KBOGameStatsResponseModel.self, forKey: .data)
+                
+                if responseModel.game == nil {
+                    self.data = .unknown
+                } else {
+                    let displayModel = modelConverter.kboGameStatsConverter(response: responseModel)
+                    self.data = .kboGameStats(responseModel, displayModel)
+                }
+            } else if leagueId == Constants.Ids.mlb {
+                let responseModel = try container.decode(MLBGameStatsResponseModel.self, forKey: .data)
+                
+                if responseModel.game == nil {
+                    self.data = .unknown
+                } else {
+                    let displayModel = modelConverter.mlbGameStatsConverter(response: responseModel)
+                    self.data = .mlbGameStats(responseModel, displayModel)
+                }
+            } else {
+                self.data = .unknown
+            }
+            
         default:
-            data = .unknown
+            self.data = .unknown
         }
     }
     

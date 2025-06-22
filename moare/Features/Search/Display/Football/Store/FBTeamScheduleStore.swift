@@ -11,6 +11,7 @@ import ComposableArchitecture
 
 @Reducer
 struct FBTeamScheduleStore {
+    typealias BaseSchedule = BaseScheduleStore<FBTeamScheduleDisplayModel>
     
     @ObservableState
     struct State {
@@ -22,75 +23,53 @@ struct FBTeamScheduleStore {
         /* ---------------------
            data state
            --------------------- */
-        var displayModel: FBTeamScheduleDisplayModel? = nil
-        var games: [FBGame] = []
+        var baseSchedule = BaseSchedule.State()
+        var games: [FBGameForSchedule] = []
         
         /* ---------------------
            ui state
            --------------------- */
-        var isAllResultOpened = false
-        var gameResultOpenedStateList: [Int: Bool] = [:]
-        
-        /* ---------------------
-           etc
-           --------------------- */
-        var teamNameDictionary: [String: String] = [:]
+        var gameResultOpenedStateList: [String: Bool] = [:]
     }
     
     enum Action {
-        /* ---------------------
-           init
-           --------------------- */
-        case initData(displayModel: FBTeamScheduleDisplayModel)
+        case baseSchedule(BaseSchedule.Action)
         
         /* ---------------------
            view action
            --------------------- */
         case toggleAllResult
-        case updateResultOpenedState(fixtureId: Int, isOpened: Bool)
+        case updateResultOpenedState(gameId: String, isOpened: Bool)
     }
     
-    @Dependency(\.translatedNameProvider) var nameProvider
-    
     var body: some Reducer<State, Action> {
+        Scope(state: \.baseSchedule, action: \.baseSchedule) {
+            BaseSchedule()
+        }
+        
         Reduce { state, action in
             switch action {
-            case .initData(let displayModel):
-                // init with default value
-                state.isAllResultOpened = false
-                
+            case .baseSchedule(.initData):
                 // init data
-                state.displayModel = displayModel
-                state.games = displayModel.games
+                state.games = state.baseSchedule.displayModel?.games ?? []
                 
-                if let leagueId = displayModel.leagueId {
-                    switch leagueId {
-                    case Constants.Ids.epl:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplTeamDic)
-                    case Constants.Ids.laliga:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaTeamDic)
-                    case Constants.Ids.bundesliga:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
-                    case Constants.Ids.ligue1:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
-                    default: break
-                    }
-                }
-                
-                let gameResultOpenedStateList = (state.games).reduce(into: [:]) { $0[$1.fixture.id] = false }
+                let gameResultOpenedStateList = (state.games).reduce(into: [:]) { $0[$1.gameId] = false }
                 state.gameResultOpenedStateList = gameResultOpenedStateList
                 
                 return .none
                 
+            case .baseSchedule(_):
+                return .none
+                
             case .toggleAllResult:
-                let newState = !state.isAllResultOpened
-                state.isAllResultOpened = newState
+                let newState = !state.baseSchedule.isAllResultOpened
+                state.baseSchedule.isAllResultOpened = newState
                 state.gameResultOpenedStateList = state.gameResultOpenedStateList.mapValues { _ in newState }
                 
                 return .none
                 
-            case .updateResultOpenedState(let fixtureId, let isOpened):
-                state.gameResultOpenedStateList[fixtureId] = isOpened
+            case .updateResultOpenedState(let gameId, let isOpened):
+                state.gameResultOpenedStateList[gameId] = isOpened
                 
                 return .none
             } // switch action

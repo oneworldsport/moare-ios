@@ -241,22 +241,9 @@ struct NBALeagueScheduleStore {
                     return .none
                 }
                 
-                let gameSummary = gameStatsDisplayModel.game.gameSummary
-                let homeTeamId = gameSummary?.homeTeamId
-                let awayTeamId = gameSummary?.visitorTeamId
-                let homeTeamScore = gameStatsDisplayModel.game.lineScore.first { $0.teamId == homeTeamId }?.pts ?? 0
-                let awayTeamScore = gameStatsDisplayModel.game.lineScore.first { $0.teamId == awayTeamId }?.pts ?? 0
-                
+                let game = gameStatsDisplayModel.game
                 let newGames = leagueScheduleDisplayModel.games.map {
-                    $0.gameId == gameSummary?.gameCode ? NBAGameForSchedule(
-                        itemKey: "\(gameSummary?.date ?? "")#\(gameSummary?.gameCode ?? "")",
-                        homeTeamId: homeTeamId,
-                        awayTeamId: awayTeamId,
-                        homeTeamScore: homeTeamScore,
-                        awayTeamScore: awayTeamScore,
-                        gameStatus: String(gameSummary?.gameStatusId ?? 0),
-                        gameInfo: gameSummary
-                    ) : $0
+                    $0.gameId == game.gameSummary?.gameCode ? ModelConverter.nbaGameToGameScheduleConverter(game: game) : $0
                 }
                 
                 var newDisplayModel = leagueScheduleDisplayModel

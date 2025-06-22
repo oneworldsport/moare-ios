@@ -12,11 +12,14 @@ struct StringConstants {
     static let resultHide = "결과 숨기기"
     static let gameNotStartedStr = "경기 전"
     static let gameFinishedStr = "경기 종료"
+    static let gamePostponedStr = "경기 연기"
+    static let gameLiveStr = "경기중"
+    static let gameCanceledStr = "경기 취소"
     
     static let standingsFirstCategory = "순위"
     static let statsFirstCategories = ["공격 지표", "수비 지표", "공통 지표"]
     
-    static let gameStatsFirstCategory = "선수 이름"
+    static let gameStatsFirstCategory = "선수"
     
     struct Football {
         static let gameFirstHalfStr = "전반전"
@@ -76,5 +79,51 @@ struct StringConstants {
         static let gameStatsDefendCategories = ["수비리바운드", "블록", "스틸"]
         static let gameStatsCommonCategories = ["리바운드", "턴오버", "파울", "득실마진", "출전시간"]
         static let gameStatsSecondCategories = gameStatsAttackCategories + gameStatsDefendCategories + gameStatsCommonCategories
+    }
+    
+    struct KBO {
+        static let gameScheduled = 1
+        static let gameLive = 2
+        static let gameFinal = 3
+        static let gameCanceled = 4
+        
+        static let teamStandingsCategories = ["승률", "게임차", "승", "패", "경기수", "연속", "타율", "안타", "홈런", "장타율", "득점", "평균자책", "피안타율", "피안타", "피홈런", "실점", "도루성공률"]
+        
+        static let playerStandingsHittingCategories = [""]
+        static let playerStandingsPitchingCategories = [""]
+        static let playerStandingsRunningCategories = [""]
+        static let playerStandingsSecondCategories = playerStandingsHittingCategories + playerStandingsPitchingCategories + playerStandingsRunningCategories
+
+        static let gameStatsHittingCategories = ["타수", "안타", "홈런", "타점", "득점", "도루", "볼넷", "삼진"]
+        static let gameStatsPitchingCategories = ["이닝", "실점", "자책", "볼넷", "삼진", "피안타"]
+        static let gameStatsRunningCategories = [""]
+        static let gameStatsSecondCategories = gameStatsHittingCategories + gameStatsPitchingCategories + gameStatsRunningCategories
+    }
+    
+    struct MLB {
+        static let gameScheduled = "Scheduled"
+        static let gameLive = "In Progress"
+        static let gamePostponed = "Postponed"
+        static let gameRain = "Completed Early: Rain"
+        static let gameFinal = "Final"
+        static let gameFinishedList = [gameRain, gameFinal]
+        
+        static let conferenceCategory = ["내셔널리그", "아메리칸리그"]
+        
+        static let teamStandingsCategories = ["승률", "게임차", "승", "패", "경기수", "연속", "타율", "안타", "홈런", "장타율", "득점", "평균자책", "피안타율", "피안타", "피홈런", "실점", "도루성공률"]
+        
+        static let playerStandingsHittingCategories = [""]
+        static let playerStandingsPitchingCategories = [""]
+        static let playerStandingsRunningCategories = [""]
+        static let playerStandingsSecondCategories = playerStandingsHittingCategories + playerStandingsPitchingCategories + playerStandingsRunningCategories
+
+        static let gameStatsHittingCategories = ["타수", "안타", "홈런", "타점", "득점", "도루", "볼넷", "삼진", "타율"]
+        static let gameStatsPitchingCategories = ["이닝", "실점", "자책", "볼넷", "삼진", "피안타", "평균자책"]
+        static let gameStatsRunningCategories = [""]
+        static let gameStatsSecondCategories = gameStatsHittingCategories + gameStatsPitchingCategories + gameStatsRunningCategories
+    }
+    
+    static func viewPreparingAdviseText(type: String) -> String {
+        return "\(type) 화면은 더 나은 서비스 제공을 위해 현재 개선 작업 중입니다. 이용에 불편을 드려 죄송합니다."
     }
 }
