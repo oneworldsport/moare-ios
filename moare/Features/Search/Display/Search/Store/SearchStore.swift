@@ -56,6 +56,7 @@ struct SearchStore {
         var kboTeamInfoData: KBOTeamInfoDisplayModel? = nil
         var kboTeamStatsData: KBOTeamStatsDisplayModel? = nil
         var kboTeamStandingsData: KBOTeamStandingsDisplayModel? = nil
+        var kboTeamScheduleData: KBOTeamScheduleDisplayModel? = nil
         var kboLeagueScheduleData: KBOLeagueScheduleDisplayModel? = nil
         var kboGameStatsData: KBOGameStatsDisplayModel? = nil
         
@@ -66,6 +67,7 @@ struct SearchStore {
         var mlbTeamInfoData: MLBTeamInfoDisplayModel? = nil
         var mlbTeamStatsData: MLBTeamStatsDisplayModel? = nil
         var mlbTeamStandingsData: MLBTeamStandingsDisplayModel? = nil
+        var mlbTeamScheduleData: MLBTeamScheduleDisplayModel? = nil
         var mlbLeagueScheduleData: MLBLeagueScheduleDisplayModel? = nil
         var mlbGameStatsData: MLBGameStatsDisplayModel? = nil
         
@@ -412,6 +414,7 @@ struct SearchStore {
                 state.kboTeamInfoData = nil
                 state.kboTeamStatsData = nil
                 state.kboTeamStandingsData = nil
+                state.kboTeamScheduleData = nil
                 state.kboLeagueScheduleData = nil
                 state.kboGameStatsData = nil
                 
@@ -421,6 +424,7 @@ struct SearchStore {
                 state.mlbTeamInfoData = nil
                 state.mlbTeamStatsData = nil
                 state.mlbTeamStandingsData = nil
+                state.mlbTeamScheduleData = nil
                 state.mlbLeagueScheduleData = nil
                 state.mlbGameStatsData = nil
                 
@@ -479,6 +483,8 @@ struct SearchStore {
                     state.kboTeamStatsData = displayModel
                 case .kboTeamStandings(_, let displayModel):
                     state.kboTeamStandingsData = displayModel
+                case .kboTeamSchedule(_, let displayModel):
+                    state.kboTeamScheduleData = displayModel
                 case .kboLeagueSchedule(_, let displayModel):
                     state.kboLeagueScheduleData = displayModel
 //                    state.initialNBALeagueScheduleData = displayModel
@@ -497,6 +503,8 @@ struct SearchStore {
                     state.mlbTeamStatsData = displayModel
                 case .mlbTeamStandings(_, let displayModel):
                     state.mlbTeamStandingsData = displayModel
+                case .mlbTeamSchedule(_, let displayModel):
+                    state.mlbTeamScheduleData = displayModel
                 case .mlbLeagueSchedule(_, let displayModel):
                     state.mlbLeagueScheduleData = displayModel
 //                    state.initialNBALeagueScheduleData = displayModel
@@ -597,7 +605,7 @@ struct SearchStore {
                     )
                     
                     await send(.addViewStack(data: result.data))
-                    await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+                    await send(.updateMainDisplayModel(data: result.data))
                 }
                 
             case .selectKBOGame(let game):
@@ -611,7 +619,7 @@ struct SearchStore {
                     )
                     
                     await send(.addViewStack(data: result.data))
-                    await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+                    await send(.updateMainDisplayModel(data: result.data))
                 }
                 
             case .selectMLBGame(let game):
@@ -625,7 +633,7 @@ struct SearchStore {
                     )
                     
                     await send(.addViewStack(data: result.data))
-                    await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+                    await send(.updateMainDisplayModel(data: result.data))
                 }
                 
             case .updateIsFocused(let bool):
@@ -974,6 +982,7 @@ struct SearchStore {
                     state.kboTeamInfoData = nil
                     state.kboTeamStatsData = nil
                     state.kboTeamStandingsData = nil
+                    state.kboTeamScheduleData = nil
                     state.kboLeagueScheduleData = nil
                     state.kboGameStatsData = nil
                     
@@ -983,6 +992,7 @@ struct SearchStore {
                     state.mlbTeamInfoData = nil
                     state.mlbTeamStatsData = nil
                     state.mlbTeamStandingsData = nil
+                    state.mlbTeamScheduleData = nil
                     state.mlbLeagueScheduleData = nil
                     state.mlbGameStatsData = nil
                 }
@@ -1040,6 +1050,8 @@ struct SearchStore {
                     state.kboTeamStatsData = displayModel
                 case .kboTeamStandings(_, let displayModel):
                     state.kboTeamStandingsData = displayModel
+                case .kboTeamSchedule(_, let displayModel):
+                    state.kboTeamScheduleData = displayModel
                 case .kboLeagueSchedule(_, let displayModel):
                     state.kboLeagueScheduleData = displayModel
                 case .kboGameStats(_, let displayModel):
@@ -1057,6 +1069,8 @@ struct SearchStore {
                     state.mlbTeamStatsData = displayModel
                 case .mlbTeamStandings(_, let displayModel):
                     state.mlbTeamStandingsData = displayModel
+                case .mlbTeamSchedule(_, let displayModel):
+                    state.mlbTeamScheduleData = displayModel
                 case .mlbLeagueSchedule(_, let displayModel):
                     state.mlbLeagueScheduleData = displayModel
                 case .mlbGameStats(_, let displayModel):

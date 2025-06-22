@@ -154,6 +154,7 @@ struct MLBLeagueScheduleListItem: View {
         let awayTeamId = data.awayTeamId
         let gameStatus = data.gameStatus
         let teamNameDic = mlbLeagueScheduleStore.baseSchedule.teamNameDictionary
+        let mlbGameStatsData = searchStore.mlbGameStatsData
         
         let gameStatusText: String = {
             switch gameStatus {
@@ -222,8 +223,8 @@ struct MLBLeagueScheduleListItem: View {
                 }
             }
         }
-        .onChange(of: searchStore.mlbGameStatsData) {
-            if let _ = searchStore.mlbGameStatsData {
+        .onChange(of: mlbGameStatsData) {
+            if let mlbGameStatsData {
                 isResultOpened = true
             }
         }

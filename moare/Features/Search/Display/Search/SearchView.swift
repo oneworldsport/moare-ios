@@ -364,6 +364,9 @@ struct SearchView: View {
         if let data = searchStore?.kboTeamStandingsData {
             views.append(AnyView(KBOTeamStandingsView(displayModel: data)))
         }
+        if let data = searchStore?.kboTeamScheduleData {
+            views.append(AnyView(KBOTeamScheduleView(displayModel: data)))
+        }
         if let data = searchStore?.kboLeagueScheduleData {
             views.append(AnyView(KBOLeagueScheduleView(displayModel: data)))
         }
@@ -390,6 +393,9 @@ struct SearchView: View {
         }
         if let data = searchStore?.mlbTeamStandingsData {
             views.append(AnyView(MLBTeamStandingsView(displayModel: data)))
+        }
+        if let data = searchStore?.mlbTeamScheduleData {
+            views.append(AnyView(MLBTeamScheduleView(displayModel: data)))
         }
         if let data = searchStore?.mlbLeagueScheduleData {
             views.append(AnyView(MLBLeagueScheduleView(displayModel: data)))
