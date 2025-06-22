@@ -156,8 +156,6 @@ struct MLBLeagueScheduleListItem: View {
         let teamNameDic = mlbLeagueScheduleStore.baseSchedule.teamNameDictionary
         
         let gameStatusText: String = {
-//            guard isResultOpened else { return StringConstants.resultOpen }
-
             switch gameStatus {
             case StringConstants.MLB.gameScheduled:
                 return StringConstants.gameNotStartedStr
@@ -173,7 +171,7 @@ struct MLBLeagueScheduleListItem: View {
         }()
         
         let gameStatusColor: Color = {
-            if gameStatus == "I" {
+            if gameStatus == StringConstants.MLB.gameLive {
                 return .moare
             } else {
                 return .secondary

@@ -289,7 +289,7 @@ struct KBOPlayerInfoSecondItem: View {
             URLImage(url: KBOUtil.teamLogoURL(id: player?.teamId))
                 .opacity(showContents ? 1 : 0)
             
-            Text(teamNameDic["full_\(player?.teamId)"] ?? "")
+            Text(teamNameDic["full_\(player?.teamId ?? 0)"] ?? "")
                 .font(.system(size: 16))
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
@@ -676,12 +676,12 @@ struct KBOPlayerInfoSeventhItem: View {
             
             HStack {
                 if let lastGame = kboPlayerInfoStore.baseInfo.displayModel?.lastGame {
-                    let homeTeamScore = Int(lastGame.lineScore.home.r) ?? 0
-                    let awayTeamScore = Int(lastGame.lineScore.away.r) ?? 0
+                    let homeTeamScore = Int(lastGame.lineScore?.home.r ?? "0") ?? 0
+                    let awayTeamScore = Int(lastGame.lineScore?.away.r ?? "0") ?? 0
                     
                     VStack {
                         HStack {
-                            Text(teamNameDic["short_\(lastGame.gameInfo?.homeTeamId)"] ?? "")
+                            Text(teamNameDic["short_\(lastGame.gameInfo?.homeTeamId ?? 0)"] ?? "")
                                 .font(.system(size: 14))
                                 .fontWeight(.light)
                                 .lineLimit(1)
@@ -700,7 +700,7 @@ struct KBOPlayerInfoSeventhItem: View {
                                 .fontWeight(.medium)
                                 .foregroundStyle((awayTeamScore >= homeTeamScore) ? .moare : .primary)
                             
-                            Text(teamNameDic["short_\(lastGame.gameInfo?.awayTeamId)"] ?? "")
+                            Text(teamNameDic["short_\(lastGame.gameInfo?.awayTeamId ?? 0)"] ?? "")
                                 .font(.system(size: 14))
                                 .fontWeight(.light)
                                 .lineLimit(1)
@@ -822,7 +822,7 @@ struct KBOPlayerInfoEigthItem: View {
             
             if let nextGame = kboPlayerInfoStore.baseInfo.displayModel?.nextGame {
                 HStack {
-                    Text(teamNameDic["short_\(nextGame.gameInfo?.homeTeamId)"] ?? "")
+                    Text(teamNameDic["short_\(nextGame.gameInfo?.homeTeamId ?? 0)"] ?? "")
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -830,7 +830,7 @@ struct KBOPlayerInfoEigthItem: View {
                     Text(" vs ")
                         .fontWeight(.semibold)
                     
-                    Text(teamNameDic["short_\(nextGame.gameInfo?.awayTeamId)"] ?? "")
+                    Text(teamNameDic["short_\(nextGame.gameInfo?.awayTeamId ?? 0)"] ?? "")
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .leading)

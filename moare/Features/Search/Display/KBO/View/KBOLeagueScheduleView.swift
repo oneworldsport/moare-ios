@@ -113,7 +113,7 @@ struct KBOLeagueScheduleList: View {
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 8) {
-                ForEach(gameListToDisplay, id: \.gameId) { item in
+                ForEach(gameListToDisplay, id: \.itemKey) { item in
                     KBOLeagueScheduleListItem(
                         searchStore: searchStore,
                         kboLeagueScheduleStore: kboLeagueScheduleStore,
@@ -157,44 +157,22 @@ struct KBOLeagueScheduleListItem: View {
         let kboGameStatsData = searchStore.kboGameStatsData
         
         let gameStatusText: String = {
-//            guard isResultOpened else { return StringConstants.resultOpen }
-
             switch gameStatus {
-            case 1:
+            case StringConstants.KBO.gameScheduled:
                 return StringConstants.gameNotStartedStr
-            case 2:
-                return "경기중"
-//                guard let first = data.lineScore.first else { return "" }
-//                if first.ptsOt3 != nil {
-//                    return StringConstants.NBA.gameOt3
-//                } else if first.ptsOt2 != nil {
-//                    return StringConstants.NBA.gameOt2
-//                } else if first.ptsOt1 != nil {
-//                    return StringConstants.NBA.gameOt1
-//                } else if first.ptsQtr4 != nil {
-//                    return StringConstants.NBA.gameQtr4
-//                } else if first.ptsQtr3 != nil {
-//                    return StringConstants.NBA.gameQtr3
-//                } else if first.ptsQtr2 != nil {
-//                    return StringConstants.NBA.gameQtr2
-//                } else if first.ptsQtr1 != nil {
-//                    return StringConstants.NBA.gameQtr1
-//                } else {
-//                    return ""
-//                }
-            case 3:
+            case StringConstants.KBO.gameLive:
+                return StringConstants.gameLiveStr
+            case StringConstants.KBO.gameFinal:
                 return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
-            case 4:
-                return "경기 취소"
+            case StringConstants.KBO.gameCanceled:
+                return StringConstants.gameCanceledStr
             default:
                 return ""
             }
         }()
         
         let gameStatusColor: Color = {
-            guard isResultOpened else { return .secondary }
-            
-            if gameStatus == 2 {
+            if gameStatus == StringConstants.KBO.gameLive {
                 return .moare
             } else {
                 return .secondary
@@ -212,35 +190,35 @@ struct KBOLeagueScheduleListItem: View {
                 isResultOpened: isResultOpened,
                 gameStatusText: gameStatusText,
                 gameStatusColor: gameStatusColor,
-                isCapsuleButtonDisabled: gameStatus != 3,
+                isCapsuleButtonDisabled: gameStatus != StringConstants.KBO.gameFinal,
                 date: data.date,
-                venue: teamNameDic["venue\(homeTeamId)"] ?? "",
+                venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
                     searchStore.send(.selectKBOGame(game: data))
                     
                     // set selected game's isOpened true
-                    kboLeagueScheduleStore.send(.updateResultOpenedState(gameId: data.gameId, isOpened: true))
+                    kboLeagueScheduleStore.send(.updateResultOpenedState(itemKey: data.itemKey, isOpened: true))
                 },
                 onCapsuleButtonClick: {
-                    kboLeagueScheduleStore.send(.updateResultOpenedState(gameId: data.gameId, isOpened: !isResultOpened))
+                    kboLeagueScheduleStore.send(.updateResultOpenedState(itemKey: data.itemKey, isOpened: !isResultOpened))
                 }
             )
         )
         .onAppear {
-            if gameStatus == 3 {
-                isResultOpened = kboLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
-            } else if gameStatus == 1 || gameStatus == 4 {
+            if gameStatus == StringConstants.KBO.gameFinal {
+                isResultOpened = kboLeagueScheduleStore.gameResultOpenedStateList[data.itemKey] ?? false
+            } else if gameStatus == StringConstants.KBO.gameScheduled || gameStatus == StringConstants.KBO.gameCanceled {
                 isResultOpened = false
             } else {
                 isResultOpened = true
             }
         }
         .onChange(of: kboLeagueScheduleStore.gameResultOpenedStateList) {
-            if gameStatus == 3 {
+            if gameStatus == StringConstants.KBO.gameFinal {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    isResultOpened = kboLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
+                    isResultOpened = kboLeagueScheduleStore.gameResultOpenedStateList[data.itemKey] ?? false
                 }
             }
         }

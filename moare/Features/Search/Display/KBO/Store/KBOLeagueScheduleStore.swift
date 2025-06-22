@@ -41,7 +41,7 @@ struct KBOLeagueScheduleStore {
            --------------------- */
         case selectYearMonth(yearMonth: String, selectedIndex: Int)
         case toggleAllResult
-        case updateResultOpenedState(gameId: String, isOpened: Bool)
+        case updateResultOpenedState(itemKey: String, isOpened: Bool) // NOTE: 더블헤더가 있는 날에 취소된 경기가 있으면 gameId가 같은 경우가 있어 gameId 대신에 itemKey를 사용
         case updateGamesData(
             kboLeagueScheduleData: SportDecodableModel,
             kboGameStatsData: SportDecodableModel
@@ -107,8 +107,8 @@ struct KBOLeagueScheduleStore {
                 
                 return .none
                 
-            case .updateResultOpenedState(let gameId, let isOpened):
-                state.gameResultOpenedStateList[gameId] = isOpened
+            case .updateResultOpenedState(let itemKey, let isOpened):
+                state.gameResultOpenedStateList[itemKey] = isOpened
                 
                 return .none
                 
@@ -131,7 +131,7 @@ struct KBOLeagueScheduleStore {
                             CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: day.day)
                         }
                         
-                        gameResultOpenedStateList.merge((games ?? []).reduce(into: [:]) { $0[$1.gameId] = state.baseSchedule.isAllResultOpened }) { _, new in new }
+                        gameResultOpenedStateList.merge((games ?? []).reduce(into: [:]) { $0[$1.itemKey] = state.baseSchedule.isAllResultOpened }) { _, new in new }
                         
                         // NOTE: games는 optional인데 왜 컴파일 에러가 안나지..?
                         newFilteredGame[index] = games ?? []
@@ -219,8 +219,9 @@ struct KBOLeagueScheduleStore {
                 }
                 
                 let game = gameStatsDisplayModel.game
+                let itemKey = "\(game.gameInfo?.date.split(separator: "+").first ?? "")#\(game.gameInfo?.gameId ?? "")"
                 let newGames = leagueScheduleDisplayModel.games.map {
-                    $0.gameId == game.gameInfo?.gameId ? ModelConverter.kboGameToGameScheduleConverter(game: game) : $0
+                    $0.itemKey == itemKey ? ModelConverter.kboGameToGameScheduleConverter(game: game) : $0
                 }
                 
                 var newDisplayModel = leagueScheduleDisplayModel

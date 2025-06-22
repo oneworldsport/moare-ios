@@ -502,12 +502,12 @@ struct KBOTeamInfoFifthItem: View {
             
             HStack {
                 if let lastGame = kboTeamInfoStore.baseInfo.displayModel?.lastGame {
-                    let homeTeamScore = lastGame.lineScore.home.r
-                    let awayTeamScore = lastGame.lineScore.away.r
+                    let homeTeamScore = Int(lastGame.lineScore?.home.r ?? "0") ?? 0
+                    let awayTeamScore = Int(lastGame.lineScore?.away.r ?? "0") ?? 0
                     
                     VStack {
                         HStack {
-                            Text(teamNameDic["short_\(lastGame.gameInfo?.homeTeamId ?? "")"] ?? "")
+                            Text(teamNameDic["short_\(lastGame.gameInfo?.homeTeamId ?? 0)"] ?? "")
                                 .font(.system(size: 14))
                                 .fontWeight(.light)
                                 .lineLimit(1)
@@ -526,7 +526,7 @@ struct KBOTeamInfoFifthItem: View {
                                 .fontWeight(.medium)
                                 .foregroundStyle((awayTeamScore >= homeTeamScore) ? .moare : .primary)
                             
-                            Text(teamNameDic["short_\(lastGame.gameInfo?.awayTeamId ?? "")"] ?? "")
+                            Text(teamNameDic["short_\(lastGame.gameInfo?.awayTeamId ?? 0)"] ?? "")
                                 .font(.system(size: 14))
                                 .fontWeight(.light)
                                 .lineLimit(1)
@@ -590,7 +590,7 @@ struct KBOTeamInfoSixthItem: View {
             
             if let nextGame = kboTeamInfoStore.baseInfo.displayModel?.nextGame {
                 HStack {
-                    Text(teamNameDic["short_\(nextGame.gameInfo?.homeTeamId ?? "")"] ?? "")
+                    Text(teamNameDic["short_\(nextGame.gameInfo?.homeTeamId ?? 0)"] ?? "")
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -598,7 +598,7 @@ struct KBOTeamInfoSixthItem: View {
                     Text(" vs ")
                         .fontWeight(.semibold)
                     
-                    Text(teamNameDic["short_\(nextGame.gameInfo?.awayTeamId ?? "")"] ?? "")
+                    Text(teamNameDic["short_\(nextGame.gameInfo?.awayTeamId ?? 0)"] ?? "")
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .leading)

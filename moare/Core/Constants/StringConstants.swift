@@ -14,6 +14,7 @@ struct StringConstants {
     static let gameFinishedStr = "경기 종료"
     static let gamePostponedStr = "경기 연기"
     static let gameLiveStr = "경기중"
+    static let gameCanceledStr = "경기 취소"
     
     static let standingsFirstCategory = "순위"
     static let statsFirstCategories = ["공격 지표", "수비 지표", "공통 지표"]
@@ -81,6 +82,11 @@ struct StringConstants {
     }
     
     struct KBO {
+        static let gameScheduled = 1
+        static let gameLive = 2
+        static let gameFinal = 3
+        static let gameCanceled = 4
+        
         static let teamStandingsCategories = ["승률", "게임차", "승", "패", "경기수", "연속", "타율", "안타", "홈런", "장타율", "득점", "평균자책", "피안타율", "피안타", "피홈런", "실점", "도루성공률"]
         
         static let playerStandingsHittingCategories = [""]

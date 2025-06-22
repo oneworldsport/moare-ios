@@ -9,22 +9,22 @@ import Foundation
 
 struct KBOGame: Decodable, Equatable {
     let gameInfo: KBOGameInfo?
-    let lineScore: KBOGameLineScoreInfo
-    let lineup: KBOGameLineupInfo
+    let lineScore: KBOGameLineScoreInfo?
+    let lineup: KBOGameLineupInfo?
 }
 
 struct KBOGameInfo: Decodable, Equatable {
-    private let _awayTeamId: String?
+    private let _awayTeamId: Int?
     private let _date: String?
     private let _gameId: String?
-    private let _homeTeamId: String?
+    private let _homeTeamId: Int?
     private let _remark: String?
     private let _gameStatus: String?
 
-    var awayTeamId: String { _awayTeamId ?? "" }
+    var awayTeamId: Int { _awayTeamId ?? 0 }
     var date: String { _date ?? "" }
     var gameId: String { _gameId ?? "" }
-    var homeTeamId: String { _homeTeamId ?? "" }
+    var homeTeamId: Int { _homeTeamId ?? 0 }
     var remark: String { _remark ?? "" }
     var gameStatus: String { _gameStatus ?? "" }
 
@@ -77,9 +77,6 @@ struct KBOGameLineScore: Decodable, Equatable {
     var inning10: String { _inning10 ?? "" }
     var inning11: String { _inning11 ?? "" }
     var inning12: String { _inning12 ?? "" }
-    var inning13: String { _inning13 ?? "" }
-    var inning14: String { _inning14 ?? "" }
-    var inning15: String { _inning15 ?? "" }
     var b: String { _b ?? "" }
     var e: String { _e ?? "" }
     var h: String { _h ?? "" }
@@ -89,7 +86,7 @@ struct KBOGameLineScore: Decodable, Equatable {
         [
             inning1, inning2, inning3, inning4, inning5,
             inning6, inning7, inning8, inning9, inning10,
-            inning11, inning12, inning13, inning14, inning15
+            inning11, inning12
         ]
     }
 
@@ -128,49 +125,77 @@ struct KBOGameLineup: Decodable, Equatable {
 }
 
 struct KBOGameHitterStats: Decodable, Equatable {
+    private let _id: Int?
     private let _ab: String?
     private let _bb: String?
     private let _e: String?
     private let _gdp: String?
     private let _h: String?
     private let _hr: String?
-    private let _playerName: String?
+    private let _name: String?
     private let _r: String?
     private let _rbi: String?
     private let _sb: String?
     private let _sf: String?
     private let _so: String?
+    private let _avg: String?
+    private let _battingNumber: Int?
+    private let _position: String?
+    let inningStats: [KBOGameHitterInningStat]?
 
-    var ab: String { _ab ?? "" }         // 타수
-    var bb: String { _bb ?? "" }         // 볼넷
-    var e: String { _e ?? "" }           // 실책
-    var gdp: String { _gdp ?? "" }       // 병살타
-    var h: String { _h ?? "" }           // 안타
-    var hr: String { _hr ?? "" }         // 홈런
-    var playerName: String { _playerName ?? "" }
-    var r: String { _r ?? "" }           // 득점
-    var rbi: String { _rbi ?? "" }       // 타점
-    var sb: String { _sb ?? "" }         // 도루
-    var sf: String { _sf ?? "" }         // 희생플라이
-    var so: String { _so ?? "" }         // 삼진
+    var id: Int { _id ?? 0 }
+    var ab: String { _ab ?? "0" }         // 타수
+    var bb: String { _bb ?? "0" }         // 볼넷
+    var e: String { _e ?? "0" }           // 실책
+    var gdp: String { _gdp ?? "0" }       // 병살타
+    var h: String { _h ?? "0" }           // 안타
+    var hr: String { _hr ?? "0" }         // 홈런
+    var name: String { _name ?? "" }
+    var r: String { _r ?? "0" }           // 득점
+    var rbi: String { _rbi ?? "0" }       // 타점
+    var sb: String { _sb ?? "0" }         // 도루
+    var sf: String { _sf ?? "0" }         // 희생플라이
+    var so: String { _so ?? "0" }         // 삼진
+    var avg: String { _avg ?? "0.000" }       // 타율
+    var battingNumber: Int { _battingNumber ?? 0 }
+    var position: String { _position ?? "" }
 
     private enum CodingKeys: String, CodingKey {
+        case _id = "id"
         case _ab = "ab"
         case _bb = "bb"
         case _e = "e"
         case _gdp = "gdp"
         case _h = "h"
         case _hr = "hr"
-        case _playerName = "playerName"
+        case _name = "name"
         case _r = "r"
         case _rbi = "rbi"
         case _sb = "sb"
         case _sf = "sf"
         case _so = "so"
+        case _avg = "avg"
+        case _battingNumber = "batting_number"
+        case _position = "position"
+        case inningStats = "inningStats"
+    }
+}
+
+struct KBOGameHitterInningStat: Decodable, Equatable {
+    private let _num: Int?
+    private let _info: String?
+
+    var num: Int { _num ?? 0 }
+    var info: String { _info ?? "" }
+
+    private enum CodingKeys: String, CodingKey {
+        case _num = "num"
+        case _info = "info"
     }
 }
 
 struct KBOGamePitcherStats: Decodable, Equatable {
+    private let _id: Int?
     private let _ab: String?
     private let _bb: String?
     private let _er: String?
@@ -178,26 +203,38 @@ struct KBOGamePitcherStats: Decodable, Equatable {
     private let _hr: String?
     private let _ip: String?
     private let _np: String?
-    private let _playerName: String?
+    private let _name: String?
     private let _r: String?
-    private let _sf: String?
     private let _so: String?
     private let _tbf: String?
+    private let _appearance: String?
+    private let _result: String?
+    private let _w: String?
+    private let _l: String?
+    private let _sv: String?
+    private let _era: String?
 
-    var ab: String { _ab ?? "" }           // 타수
-    var bb: String { _bb ?? "" }           // 볼넷
-    var er: String { _er ?? "" }           // 자책
-    var h: String { _h ?? "" }             // 피안타
-    var hr: String { _hr ?? "" }           // 피홈런
-    var ip: String { _ip ?? "" }           // 이닝
-    var np: String { _np ?? "" }           // 투구수
-    var playerName: String { _playerName ?? "" }
-    var r: String { _r ?? "" }             // 실점
-    var sf: String { _sf ?? "" }           // 희생타
-    var so: String { _so ?? "" }           // 삼진
-    var tbf: String { _tbf ?? "" }         // 타자수
+    var id: Int { _id ?? 0 }
+    var ab: String { _ab ?? "0" }           // 타수
+    var bb: String { _bb ?? "0" }           // 볼넷
+    var er: String { _er ?? "0" }           // 자책
+    var h: String { _h ?? "0" }             // 피안타
+    var hr: String { _hr ?? "0" }           // 피홈런
+    var ip: String { _ip ?? "0.0" }           // 이닝
+    var np: String { _np ?? "0" }           // 투구수
+    var name: String { _name ?? "" }
+    var r: String { _r ?? "0" }             // 실점
+    var so: String { _so ?? "0" }           // 삼진
+    var tbf: String { _tbf ?? "0" }         // 타자수
+    var appearance: String { _appearance ?? "" } // 등판
+    var result: String { _result ?? "" } // 결과
+    var w: String { _w ?? "0" } // 승
+    var l: String { _l ?? "0" } // 패
+    var sv: String { _sv ?? "0" } // 세이브
+    var era: String { _era ?? "0.0" } // 평균자책점
 
     private enum CodingKeys: String, CodingKey {
+        case _id = "id"
         case _ab = "ab"
         case _bb = "bb"
         case _er = "er"
@@ -205,11 +242,16 @@ struct KBOGamePitcherStats: Decodable, Equatable {
         case _hr = "hr"
         case _ip = "ip"
         case _np = "np"
-        case _playerName = "playerName"
+        case _name = "name"
         case _r = "r"
-        case _sf = "sf"
         case _so = "so"
         case _tbf = "tbf"
+        case _appearance = "appearance"
+        case _result = "result"
+        case _w = "w"
+        case _l = "l"
+        case _sv = "sv"
+        case _era = "era"
     }
 }
 

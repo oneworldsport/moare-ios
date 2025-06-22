@@ -25,6 +25,8 @@ struct KBOGameStatsStore {
            --------------------- */
         var baseGameStats = BaseGameStats.State()
         var teamLineup: KBOGameLineup? = nil
+        var teamHitters: [KBOGameHitterStats] = []
+        var teamPitchers: [KBOGamePitcherStats] = []
 //        var playersTotalStats: NBAGameBoxScoreStats? = nil
         
         /* ---------------------
@@ -60,10 +62,13 @@ struct KBOGameStatsStore {
             case .baseGameStats(.selectTeam(let index)):
                 // set selected team's boxscore
                 state.teamLineup = if index == 0 {
-                    state.baseGameStats.displayModel?.game.lineup.home
+                    state.baseGameStats.displayModel?.game.lineup?.home
                 } else {
-                    state.baseGameStats.displayModel?.game.lineup.away
+                    state.baseGameStats.displayModel?.game.lineup?.away
                 }
+                
+                state.teamHitters = state.teamLineup?.hitters ?? []
+                state.teamPitchers = state.teamLineup?.pitchers ?? []
                 
                 return .run { send in
                     await send(.sortHitters)
@@ -81,53 +86,45 @@ struct KBOGameStatsStore {
                 return .none
                 
             case .sortHitters:
-//                switch state.secondSelectedIndex {
-//                case 0:
-//                    state.playerStats.sort { $0.statistics.points > $1.statistics.points }
-//                case 1:
-//                    state.playerStats.sort { $0.statistics.assists > $1.statistics.assists }
-//                case 2:
-//                    state.playerStats.sort { $0.statistics.reboundsOffensive > $1.statistics.reboundsOffensive }
-//                case 3:
-//                    state.playerStats.sort { $0.statistics.fieldGoalsAttempted > $1.statistics.fieldGoalsAttempted }
-//                case 4:
-//                    state.playerStats.sort { $0.statistics.fieldGoalsMade > $1.statistics.fieldGoalsMade }
-//                case 5:
-//                    state.playerStats.sort { $0.statistics.fieldGoalsPercentage > $1.statistics.fieldGoalsPercentage }
-//                case 6:
-//                    state.playerStats.sort { $0.statistics.threePointersAttempted > $1.statistics.threePointersAttempted }
-//                case 7:
-//                    state.playerStats.sort { $0.statistics.threePointersMade > $1.statistics.threePointersMade }
-//                case 8:
-//                    state.playerStats.sort { $0.statistics.threePointersPercentage > $1.statistics.threePointersPercentage }
-//                case 9:
-//                    state.playerStats.sort { $0.statistics.freeThrowsAttempted > $1.statistics.freeThrowsAttempted }
-//                case 10:
-//                    state.playerStats.sort { $0.statistics.freeThrowsMade > $1.statistics.freeThrowsMade }
-//                case 11:
-//                    state.playerStats.sort { $0.statistics.freeThrowsPercentage > $1.statistics.freeThrowsPercentage }
-//                case 12:
-//                    state.playerStats.sort { $0.statistics.reboundsDefensive > $1.statistics.reboundsDefensive }
-//                case 13:
-//                    state.playerStats.sort { $0.statistics.blocks > $1.statistics.blocks }
-//                case 14:
-//                    state.playerStats.sort { $0.statistics.steals > $1.statistics.steals }
-//                case 15:
-//                    state.playerStats.sort { $0.statistics.reboundsTotal > $1.statistics.reboundsTotal }
-//                case 16:
-//                    state.playerStats.sort { $0.statistics.turnovers > $1.statistics.turnovers }
-//                case 17:
-//                    state.playerStats.sort { $0.statistics.foulsPersonal > $1.statistics.foulsPersonal }
-//                case 18:
-//                    state.playerStats.sort { $0.statistics.plusMinusPoints > $1.statistics.plusMinusPoints }
-//                case 19:
-//                    state.playerStats.sort { CalendarUtil.formatHourMinuteToMinutes(time: $0.statistics.minutes) > CalendarUtil.formatHourMinuteToMinutes(time: $1.statistics.minutes) }
-//                default: break
-//                }
+                switch state.baseGameStats.firstCategorySelectedIndex {
+                case 0:
+                    state.teamHitters.sort { (Double($0.ab) ?? 0) > Double($1.ab) ?? 0 }
+                case 1:
+                    state.teamHitters.sort { (Double($0.h) ?? 0) > Double($1.h) ?? 0 }
+                case 2:
+                    state.teamHitters.sort { (Double($0.hr) ?? 0) > Double($1.hr) ?? 0 }
+                case 3:
+                    state.teamHitters.sort { (Double($0.rbi) ?? 0) > Double($1.rbi) ?? 0 }
+                case 4:
+                    state.teamHitters.sort { (Double($0.r) ?? 0) > Double($1.r) ?? 0 }
+                case 5:
+                    state.teamHitters.sort { (Double($0.sb) ?? 0) > Double($1.sb) ?? 0 }
+                case 6:
+                    state.teamHitters.sort { (Double($0.bb) ?? 0) > Double($1.bb) ?? 0 }
+                case 7:
+                    state.teamHitters.sort { (Double($0.so) ?? 0) > Double($1.so) ?? 0 }
+                default: break
+                }
                 
                 return .none
                 
             case .sortPitchers:
+                switch state.baseGameStats.secondCategorySelectedIndex {
+                case 0:
+                    state.teamPitchers.sort { (Double($0.ip) ?? 0) > (Double($1.ip) ?? 0) }
+                case 1:
+                    state.teamPitchers.sort { (Double($0.r) ?? 0) > (Double($1.r) ?? 0) }
+                case 2:
+                    state.teamPitchers.sort { (Double($0.er) ?? 0) > (Double($1.er) ?? 0) }
+                case 3:
+                    state.teamPitchers.sort { (Double($0.bb) ?? 0) > (Double($1.bb) ?? 0) }
+                case 4:
+                    state.teamPitchers.sort { (Double($0.so) ?? 0) > (Double($1.so) ?? 0) }
+                case 5:
+                    state.teamPitchers.sort { (Double($0.h) ?? 0) > (Double($1.h) ?? 0) }
+                default: break
+                }
+                
                 return .none
                 
             case .setPlayersTotalStats:

@@ -24,12 +24,11 @@ struct KBOGameStatsView: View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack(spacing: 10) {
                 if let kboGameStatsStore {
-                    let playerNameDic = kboGameStatsStore.baseGameStats.playerNameDictionary
-                    let hitterStandings: [StandingsItemState] = kboGameStatsStore.teamLineup?.hitters.map {
+                    let hitterStandings: [StandingsItemState] = kboGameStatsStore.teamHitters.map {
                         StandingsItemState(
                             isGameStats: true,
-                            imageUrl: nil,
-                            name: $0.playerName,
+                            imageUrl: KBOUtil.playerPhotoURL(id: $0.id),
+                            name: $0.name,
                             dataList: [
                                 $0.ab,
                                 $0.h,
@@ -41,12 +40,12 @@ struct KBOGameStatsView: View {
                                 $0.so
                             ]
                         )
-                    } ?? []
-                    let pitcherStandings: [StandingsItemState] = kboGameStatsStore.teamLineup?.pitchers.map {
+                    }
+                    let pitcherStandings: [StandingsItemState] = kboGameStatsStore.teamPitchers.map {
                         StandingsItemState(
                             isGameStats: true,
-                            imageUrl: nil,
-                            name: $0.playerName,
+                            imageUrl: KBOUtil.playerPhotoURL(id: $0.id),
+                            name: $0.name,
                             dataList: [
                                 $0.ip,
                                 $0.r,
@@ -56,7 +55,7 @@ struct KBOGameStatsView: View {
                                 $0.h
                             ]
                         )
-                    } ?? []
+                    }
                     
                     /* ---------------------
                        game title
@@ -200,25 +199,28 @@ struct KBOGameStatsScoreInfoItem: View {
     var body: some View {
         let displayModel = kboGameStatsStore.baseGameStats.displayModel
         let game = displayModel?.game
-        let homeTeamId: Int? = game?.gameInfo?.homeTeamId == nil ? nil : Int(game?.gameInfo?.homeTeamId ?? "0")
-        let awayTeamId: Int? = game?.gameInfo?.awayTeamId == nil ? nil : Int(game?.gameInfo?.awayTeamId ?? "0")
+        let homeTeamId: Int? = game?.gameInfo?.homeTeamId == nil ? nil : Int(game?.gameInfo?.homeTeamId ?? 0)
+        let awayTeamId: Int? = game?.gameInfo?.awayTeamId == nil ? nil : Int(game?.gameInfo?.awayTeamId ?? 0)
         let teamNameDic = kboGameStatsStore.baseGameStats.teamNameDictionary
+        let gameStatus = Int(game?.gameInfo?.gameStatus ?? "0") ?? 0
         
         let gameStatusText: String = {
-            switch game?.gameInfo?.gameStatus {
-            case "1":
+            switch gameStatus {
+            case StringConstants.KBO.gameScheduled:
                 return StringConstants.gameNotStartedStr
-            case "2":
-                return "경기 중"
-            case "3":
+            case StringConstants.KBO.gameLive:
+                return StringConstants.gameLiveStr
+            case StringConstants.KBO.gameFinal:
                 return StringConstants.gameFinishedStr
+            case StringConstants.KBO.gameCanceled:
+                return StringConstants.gameCanceledStr
             default:
                 return ""
             }
         }()
         
         let gameStatusColor: Color = {
-            if game?.gameInfo?.gameStatus == "2" {
+            if gameStatus == StringConstants.KBO.gameLive {
                 return .moare
             } else {
                 return .secondary
@@ -320,7 +322,7 @@ struct KBOGameStatsLineScoreContainer: View {
                     }
                     
                     VStack(spacing: 0) {
-                        KBOGameStatsLineScoreTitle(lineScore: lineScore.home)
+                        KBOGameStatsLineScoreTitle(lineScore: lineScore.away)
                             .frame(height: 25)
                         
                         Capsule()
@@ -375,15 +377,15 @@ struct KBOGameStatsLineScoreTitle: View {
     
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(0..<11, id: \.self) { index in
-                if (index < 9) ||
-                    (index == 9 && lineScore.inning10 != "-") ||
-                    (index == 10 && lineScore.inning11 != "-") {
+            ForEach(1...12, id: \.self) { index in
+                if (index < 10) ||
+                    (index == 10 && lineScore.inning10 != "-") ||
+                    (index == 11 && lineScore.inning11 != "-") {
                     Rectangle()
                         .frame(width: 1)
                         .foregroundStyle(.secondary)
                         .opacity(0.5)
-                    Text("\(index + 1)")
+                    Text("\(index)회")
                         .font(.system(size: 15))
                         .frame(maxWidth: .infinity)
                 }
@@ -407,7 +409,7 @@ struct KBOGameStatsLineScoreItem: View {
                         .frame(width: 1)
                         .foregroundStyle(.secondary)
                         .opacity(0.5)
-                    Text(lineScore.innings[index + 1])
+                    Text(lineScore.innings[index])
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
                 }
@@ -432,7 +434,7 @@ struct KBOGameStatsTeamButtonAdditionalInfoContainer: View {
                     // home
                     KBOGameStatsTeamButton(
                         kboGameStatsStore: kboGameStatsStore,
-                        team: teamNameDic["short_\(displayModel?.game.gameInfo?.homeTeamId ?? "0")"] ?? "",
+                        team: teamNameDic["short_\(displayModel?.game.gameInfo?.homeTeamId ?? 0)"] ?? "",
                         index: 0
                     )
                     .frame(maxWidth: kboGameStatsStore.teamButtonWidth)
@@ -443,7 +445,7 @@ struct KBOGameStatsTeamButtonAdditionalInfoContainer: View {
                     // away
                     KBOGameStatsTeamButton(
                         kboGameStatsStore: kboGameStatsStore,
-                        team: teamNameDic["short_\(displayModel?.game.gameInfo?.awayTeamId ?? "0")"] ?? "",
+                        team: teamNameDic["short_\(displayModel?.game.gameInfo?.awayTeamId ?? 0)"] ?? "",
                         index: 1
                     )
                     .frame(maxWidth: kboGameStatsStore.teamButtonWidth)
@@ -480,7 +482,7 @@ struct KBOGameStatsTeamButtonAdditionalInfoContainer: View {
                     Text("\(CalendarUtil.formatDate(date: displayModel?.game.gameInfo?.date, formatType: .ampm))")
                         .font(.system(size: 12))
                     
-                    Text("장소: \(teamNameDic["venue_\(displayModel?.game.gameInfo?.homeTeamId ?? "0")"] ?? "")")
+                    Text("장소: \(teamNameDic["venue_\(displayModel?.game.gameInfo?.homeTeamId ?? 0)"] ?? "")")
                         .font(.system(size: 12))
                 }
             }

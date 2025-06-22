@@ -215,14 +215,17 @@ struct MLBGameStatsScoreInfoItem: View {
         let homeTeamId = game?.teams.home.id
         let awayTeamId = game?.teams.away.id
         let teamNameDic = mlbGameStatsStore.baseGameStats.teamNameDictionary
+        let gameStatus = game?.status.detailedState
         
         let gameStatusText: String = {
-            switch game?.status.statusCode {
-            case "S":
+            switch gameStatus {
+            case StringConstants.MLB.gameScheduled:
                 return StringConstants.gameNotStartedStr
-            case "I":
+            case StringConstants.MLB.gameLive:
                 return "\(game?.linescore.currentInning ?? 1)회\((game?.linescore.isTopInning ?? true) ? "초" : "말")"
-            case "F":
+            case StringConstants.MLB.gamePostponed:
+                return StringConstants.gamePostponedStr
+            case let status? where StringConstants.MLB.gameFinishedList.contains(status):
                 return StringConstants.gameFinishedStr
             default:
                 return ""
@@ -230,7 +233,7 @@ struct MLBGameStatsScoreInfoItem: View {
         }()
         
         let gameStatusColor: Color = {
-            if game?.status.statusCode == "I" {
+            if gameStatus == StringConstants.MLB.gameLive {
                 return .moare
             } else {
                 return .secondary
