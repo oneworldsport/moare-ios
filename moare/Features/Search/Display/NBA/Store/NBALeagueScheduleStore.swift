@@ -21,7 +21,7 @@ struct NBALeagueScheduleStore {
         var displayDataState: ApiFetchState = ApiFetchState.idle
         var yearMonthList: [String] = []
         var days: [DayInfo] = []
-        var filteredGames: [Int: [NBAGame]] = [:]
+        var filteredGames: [Int: [NBAGameForSchedule]] = [:]
         
         /* ---------------------
            ui state
@@ -98,7 +98,7 @@ struct NBALeagueScheduleStore {
                 state.teamNameDictionary = nameProvider.getDictionary(category: "nba_team")
                 
                 // select default yearMonth
-                if let date = displayModel.games.first?.gameSummary?.date {
+                if let date = displayModel.games.first?.date {
                     let defaultYearMonth = CalendarUtil.formatDate(date: date, formatType: .yearMonth)
                     let defaultYearMonthIndex = state.yearMonthList.enumerated().first { $0.element == defaultYearMonth }
                     
@@ -151,14 +151,10 @@ struct NBALeagueScheduleStore {
                         var newDay = day
                         
                         let games = state.displayModel?.games.filter { game in
-                            if let gameSummary = game.gameSummary {
-                                CalendarUtil.isSameDate(stringDate: gameSummary.date, selectedYearMonth: state.selectedYearMonth, selectedDay: day.day)
-                            } else {
-                                false
-                            }
+                            CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.selectedYearMonth, selectedDay: day.day)
                         }
                         
-                        gameResultOpenedStateList.merge((games ?? []).reduce(into: [:]) { $0[$1.gameSummary?.gameCode ?? ""] = state.isAllResultOpened }) { _, new in new }
+                        gameResultOpenedStateList.merge((games ?? []).reduce(into: [:]) { $0[$1.gameId] = state.isAllResultOpened }) { _, new in new }
                         
                         // NOTE: games는 optional인데 왜 컴파일 에러가 안나지..?
                         newFilteredGame[index] = games ?? []
@@ -245,8 +241,9 @@ struct NBALeagueScheduleStore {
                     return .none
                 }
                 
+                let game = gameStatsDisplayModel.game
                 let newGames = leagueScheduleDisplayModel.games.map {
-                    $0.gameSummary?.gameCode == gameStatsDisplayModel.game.gameSummary?.gameCode ? gameStatsDisplayModel.game : $0
+                    $0.gameId == game.gameSummary?.gameCode ? ModelConverter.nbaGameToGameScheduleConverter(game: game) : $0
                 }
                 
                 var newDisplayModel = leagueScheduleDisplayModel
@@ -255,11 +252,7 @@ struct NBALeagueScheduleStore {
                 
                 var newFilteredGames = state.filteredGames
                 newFilteredGames[state.selectedDayIndex] = newDisplayModel.games.filter { game in
-                    if let gameSummary = game.gameSummary {
-                        CalendarUtil.isSameDate(stringDate: gameSummary.date, selectedYearMonth: state.selectedYearMonth, selectedDay: state.selectedDayIndex + 1)
-                    } else {
-                        false
-                    }
+                    CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.selectedYearMonth, selectedDay: state.selectedDayIndex + 1)
                 }
                 
                 state.filteredGames = newFilteredGames

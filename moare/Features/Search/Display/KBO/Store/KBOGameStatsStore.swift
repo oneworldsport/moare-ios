@@ -1,0 +1,135 @@
+//
+//  KBOGameStatsStore.swift
+//  moare
+//
+//  Created by Mohwa Yoon on 6/10/25.
+//
+
+import SwiftUI
+import ComposableArchitecture
+
+@Reducer
+struct KBOGameStatsStore {
+    typealias BaseGameStats = BaseGameStatsStore<KBOGameStatsDisplayModel>
+    
+    @ObservableState
+    struct State {
+        /* ---------------------
+           constants
+           --------------------- */
+        let lineScoreItemHeight: CGFloat = 50
+        let teamButtonWidth: CGFloat = 120
+        
+        /* ---------------------
+           data state
+           --------------------- */
+        var baseGameStats = BaseGameStats.State()
+        var teamLineup: KBOGameLineup? = nil
+        var teamHitters: [KBOGameHitterStats] = []
+        var teamPitchers: [KBOGamePitcherStats] = []
+//        var playersTotalStats: NBAGameBoxScoreStats? = nil
+        
+        /* ---------------------
+           ui state
+           --------------------- */
+    }
+    
+    enum Action {
+        case baseGameStats(BaseGameStats.Action)
+        
+        /* ---------------------
+           private
+           --------------------- */
+        case sortHitters
+        case sortPitchers
+        case setPlayersTotalStats
+    }
+    
+    var body: some Reducer<State, Action> {
+        Scope(state: \.baseGameStats, action: \.baseGameStats) {
+            BaseGameStats()
+        }
+        
+        Reduce { state, action in
+            switch action {
+            case .baseGameStats(.initData):
+                // init with default value
+                state.teamLineup = nil
+//                state.playersTotalStats = nil
+                
+                return .send(.baseGameStats(.selectTeam(0)))
+                
+            case .baseGameStats(.selectTeam(let index)):
+                // set selected team's boxscore
+                state.teamLineup = if index == 0 {
+                    state.baseGameStats.displayModel?.game.lineup?.home
+                } else {
+                    state.baseGameStats.displayModel?.game.lineup?.away
+                }
+                
+                state.teamHitters = state.teamLineup?.hitters ?? []
+                state.teamPitchers = state.teamLineup?.pitchers ?? []
+                
+                return .run { send in
+                    await send(.sortHitters)
+                    await send(.sortPitchers)
+                    await send(.setPlayersTotalStats)
+                }
+                
+            case .baseGameStats(.selectFirstCategory):
+                return .send(.sortHitters)
+                
+            case .baseGameStats(.selectSecondCategory):
+                return .send(.sortPitchers)
+                
+            case .baseGameStats(_):
+                return .none
+                
+            case .sortHitters:
+                switch state.baseGameStats.firstCategorySelectedIndex {
+                case 0:
+                    state.teamHitters.sort { (Double($0.ab) ?? 0) > Double($1.ab) ?? 0 }
+                case 1:
+                    state.teamHitters.sort { (Double($0.h) ?? 0) > Double($1.h) ?? 0 }
+                case 2:
+                    state.teamHitters.sort { (Double($0.hr) ?? 0) > Double($1.hr) ?? 0 }
+                case 3:
+                    state.teamHitters.sort { (Double($0.rbi) ?? 0) > Double($1.rbi) ?? 0 }
+                case 4:
+                    state.teamHitters.sort { (Double($0.r) ?? 0) > Double($1.r) ?? 0 }
+                case 5:
+                    state.teamHitters.sort { (Double($0.sb) ?? 0) > Double($1.sb) ?? 0 }
+                case 6:
+                    state.teamHitters.sort { (Double($0.bb) ?? 0) > Double($1.bb) ?? 0 }
+                case 7:
+                    state.teamHitters.sort { (Double($0.so) ?? 0) > Double($1.so) ?? 0 }
+                default: break
+                }
+                
+                return .none
+                
+            case .sortPitchers:
+                switch state.baseGameStats.secondCategorySelectedIndex {
+                case 0:
+                    state.teamPitchers.sort { (Double($0.ip) ?? 0) > (Double($1.ip) ?? 0) }
+                case 1:
+                    state.teamPitchers.sort { (Double($0.r) ?? 0) > (Double($1.r) ?? 0) }
+                case 2:
+                    state.teamPitchers.sort { (Double($0.er) ?? 0) > (Double($1.er) ?? 0) }
+                case 3:
+                    state.teamPitchers.sort { (Double($0.bb) ?? 0) > (Double($1.bb) ?? 0) }
+                case 4:
+                    state.teamPitchers.sort { (Double($0.so) ?? 0) > (Double($1.so) ?? 0) }
+                case 5:
+                    state.teamPitchers.sort { (Double($0.h) ?? 0) > (Double($1.h) ?? 0) }
+                default: break
+                }
+                
+                return .none
+                
+            case .setPlayersTotalStats:
+                return .none
+            }
+        }
+    }
+}

@@ -7,14 +7,10 @@
 
 import Foundation
 
-struct FBLeagueScheduleDisplayModel: Equatable {
-    let yearMonthList: [String]
-    var games: [FBGame]
+struct FBLeagueScheduleDisplayModel: SportDisplayModel {
+    let leagueId: Int
+    let keywords: [Keyword]
     let entityInfo: [EntityInfo]
-    let leagueId: Int?
-}
-
-struct FBLeagueScheduleCalendarDisplay: Equatable {
-    let month: String
-    let days: [String]
+    let yearMonthList: [String]
+    var games: [FBGameForSchedule]
 }

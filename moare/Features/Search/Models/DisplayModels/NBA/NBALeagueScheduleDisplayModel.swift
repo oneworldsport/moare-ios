@@ -7,8 +7,10 @@
 
 import Foundation
 
-struct NBALeagueScheduleDisplayModel: Equatable {
-    let yearMonthList: [String]
-    var games: [NBAGame]
+struct NBALeagueScheduleDisplayModel: SportDisplayModel {
+    let leagueId: Int
+    let keywords: [Keyword]
     let entityInfo: [EntityInfo]
+    let yearMonthList: [String]
+    var games: [NBAGameForSchedule]
 }

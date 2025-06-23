@@ -11,6 +11,8 @@ import ComposableArchitecture
 
 @Reducer
 struct FBLeagueScheduleStore {
+    typealias BaseSchedule = BaseScheduleStore<FBLeagueScheduleDisplayModel>
+    
     let searchClient = SearchClient()
     
     @ObservableState
@@ -18,48 +20,34 @@ struct FBLeagueScheduleStore {
         /* ---------------------
            constants
            --------------------- */
-        let itemHeight: CGFloat = 100
+        let itemHeight: CGFloat = 110
         
         /* ---------------------
            data state
            --------------------- */
-        var displayModel: FBLeagueScheduleDisplayModel? = nil
-        var displayDataState: ApiFetchState = ApiFetchState.idle
-        var yearMonthList: [String] = []
-        var days: [DayInfo] = []
-        var filteredGames: [Int: [FBGame]] = [:]
+        var baseSchedule = BaseSchedule.State()
+        var filteredGames: [Int: [FBGameForSchedule]] = [:]
         
         /* ---------------------
            ui state
            --------------------- */
-        var selectedYearMonth = ""
-        var selectedDay: DayInfo? = nil
-        var selectedYearMonthIndex = 0
-        var selectedDayIndex = 0
-        var isAllResultOpened = false
-        var scrollCalendar = true
-        var gameResultOpenedStateList: [Int: Bool] = [:]
+        var gameResultOpenedStateList: [String: Bool] = [:]
         
         /* ---------------------
            etc
            --------------------- */
         var dataForViewStack: SportDecodableModel? = nil
-        var teamNameDictionary: [String: String] = [:]
     }
     
     enum Action {
-        /* ---------------------
-           init
-           --------------------- */
-        case initData(displayModel: FBLeagueScheduleDisplayModel)
+        case baseSchedule(BaseSchedule.Action)
         
         /* ---------------------
            view action
            --------------------- */
         case selectYearMonth(yearMonth: String, selectedIndex: Int)
-        case selectDay(DayInfo, Int)
         case toggleAllResult
-        case updateResultOpenedState(fixtureId: Int, isOpened: Bool)
+        case updateResultOpenedState(gameId: String, isOpened: Bool)
         case updateGamesData(
             fbLeagueScheduleData: SportDecodableModel,
             fbGameStatsData: SportDecodableModel
@@ -70,60 +58,41 @@ struct FBLeagueScheduleStore {
            --------------------- */
         case setDays(isInit: Bool = false)
         case fetchGames
-        case setDisplayModel(FBLeagueScheduleDisplayModel)
+        
         case updateViewStack(data: SportDecodableModel)
         case resetDataForViewStack
+        
         case updateDisplayDataState(fetchState: ApiFetchState)
+        case setDisplayModel(FBLeagueScheduleDisplayModel)
     }
     
-    @Dependency(\.translatedNameProvider) var nameProvider
-    
     var body: some Reducer<State, Action> {
+        Scope(state: \.baseSchedule, action: \.baseSchedule) {
+            BaseSchedule()
+        }
+        
         Reduce { state, action in
             switch action {
-            case .initData(let displayModel):
+            case .baseSchedule(.initData):
                 // init with default value
-                state.displayModel = nil
-                state.displayDataState = .idle
-                state.yearMonthList = []
-                state.days = []
                 state.filteredGames = [:]
-                state.selectedYearMonth = ""
-                state.selectedDay = nil
-                state.selectedYearMonthIndex = 0
-                state.selectedDayIndex = 0
-                state.isAllResultOpened = false
-                state.scrollCalendar = true
                 state.gameResultOpenedStateList = [:]
                 state.dataForViewStack = nil
                 
                 // init data
-                state.displayModel = displayModel
-                state.yearMonthList = displayModel.yearMonthList
-                
-                if let leagueId = displayModel.leagueId {
-                    switch leagueId {
-                    case Constants.Ids.epl:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplTeamDic)
-                    case Constants.Ids.laliga:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaTeamDic)
-                    case Constants.Ids.bundesliga:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
-                    case Constants.Ids.ligue1:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
-                    default: break
-                    }
+                if let yearMonthList = state.baseSchedule.displayModel?.yearMonthList {
+                    state.baseSchedule.yearMonthList = yearMonthList
                 }
                 
                 // select default yearMonth
-                if let date = displayModel.games.first?.fixture.date {
+                if let date = state.baseSchedule.displayModel?.games.first?.date {
                     let defaultYearMonth = CalendarUtil.formatDate(date: date, formatType: .yearMonth)
-                    let defaultYearMonthIndex = state.yearMonthList.enumerated().first { $0.element == defaultYearMonth }
+                    let defaultYearMonthIndex = state.baseSchedule.yearMonthList.enumerated().first { $0.element == defaultYearMonth }
                     
-                    state.selectedYearMonth = defaultYearMonth
+                    state.baseSchedule.selectedYearMonth = defaultYearMonth
                     
-                    if let index = defaultYearMonthIndex {
-                        state.selectedYearMonthIndex = index.offset
+                    if let defaultYearMonthIndex {
+                        state.baseSchedule.selectedYearMonthIndex = defaultYearMonthIndex.offset
                     }
                 }
                 
@@ -131,53 +100,48 @@ struct FBLeagueScheduleStore {
                     await send(.setDays(isInit: true))
                 }
                 
-            case .selectYearMonth(let yearMonth, let selectedIndex):
-                state.selectedYearMonth = yearMonth
-                state.selectedYearMonthIndex = selectedIndex
-                
-                return .run { send in
-                    await send(.fetchGames)
-                }
-                
-            case .selectDay(let day, let index):
-                state.selectedDay = day
-                state.selectedDayIndex = index
-
+            case .baseSchedule(_):
                 return .none
                 
+            case .selectYearMonth(let yearMonth, let selectedIndex):
+                state.baseSchedule.selectedYearMonth = yearMonth
+                state.baseSchedule.selectedYearMonthIndex = selectedIndex
+                
+                return .send(.fetchGames)
+                
             case .toggleAllResult:
-                let newState = !state.isAllResultOpened
-                state.isAllResultOpened = newState
+                let newState = !state.baseSchedule.isAllResultOpened
+                state.baseSchedule.isAllResultOpened = newState
                 state.gameResultOpenedStateList = state.gameResultOpenedStateList.mapValues { _ in newState }
                 
                 return .none
                 
-            case .updateResultOpenedState(let fixtureId, let isOpened):
-                state.gameResultOpenedStateList[fixtureId] = isOpened
+            case .updateResultOpenedState(let gameId, let isOpened):
+                state.gameResultOpenedStateList[gameId] = isOpened
                 
                 return .none
                 
             case .setDays(let isInit):
                 // set filtered games to each day
-                let components = state.selectedYearMonth.split(separator: "/")
+                let components = state.baseSchedule.selectedYearMonth.split(separator: "/")
                 
                 if components.count == 2,
                    let year = Int(components[0]),
                    let month = Int(components[1]) {
                     var days = CalendarUtil.getDaysInMonth(year: Int("20\(year)") ?? 2025, month: month)
-                    var gameResultOpenedStateList: [Int: Bool] = [:]
+                    var gameResultOpenedStateList: [String: Bool] = [:]
                     var newFilteredGame = state.filteredGames
                     
                     days = days.enumerated().compactMap { index, day in
                         var newDay = day
                         
-                        let games = state.displayModel?.games.filter { game in
-                            CalendarUtil.isSameDate(stringDate: game.fixture.date, selectedYearMonth: state.selectedYearMonth, selectedDay: day.day)
+                        let games = state.baseSchedule.displayModel?.games.filter { game in
+                            CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: day.day)
                         }
+
+                        gameResultOpenedStateList.merge((games ?? []).reduce(into: [:]) { $0[$1.gameId] = state.baseSchedule.isAllResultOpened }) { _, new in new }
                         
-                        gameResultOpenedStateList.merge((games ?? []).reduce(into: [:]) { $0[$1.fixture.id] = state.isAllResultOpened }) { _, new in new }
-                        
-                        newFilteredGame[index] = games
+                        newFilteredGame[index] = games ?? []
                         
                         if games?.isEmpty == true {
                             newDay.isDataEmpty = true
@@ -191,23 +155,23 @@ struct FBLeagueScheduleStore {
                     state.gameResultOpenedStateList = gameResultOpenedStateList
                     
                     // 2. Set days to days calendar.
-                    state.days = days
+                    state.baseSchedule.days = days
                     
                     // 3. Move bar and scroll the days calendar.
                     if isInit {
                         // select default day
-                        let defaultDay = CalendarUtil.getDefaultDay(yearMonth: state.selectedYearMonth, dayList: state.days)
+                        let defaultDay = CalendarUtil.getDefaultDay(yearMonth: state.baseSchedule.selectedYearMonth, dayList: state.baseSchedule.days)
                         
                         if let defaultDay = defaultDay {
-                            state.selectedDay = defaultDay.1
-                            state.selectedDayIndex = defaultDay.0
+                            state.baseSchedule.selectedDay = defaultDay.1
+                            state.baseSchedule.selectedDayIndex = defaultDay.0
                         }
                     } else {
                         // select first day that has games
-                        for (index, day) in state.days.enumerated() {
+                        for (index, day) in state.baseSchedule.days.enumerated() {
                             if !day.isDataEmpty {
-                                state.selectedDay = day
-                                state.selectedDayIndex = index
+                                state.baseSchedule.selectedDay = day
+                                state.baseSchedule.selectedDayIndex = index
                                 break
                             }
                         }
@@ -219,9 +183,7 @@ struct FBLeagueScheduleStore {
                     // 5. Show 'filteredGames'
                     state.filteredGames = newFilteredGame
                     
-                    return .run { send in
-                        await send(.updateDisplayDataState(fetchState: .success))
-                    }
+                    return .send(.updateDisplayDataState(fetchState: .success), animation: AnimationConstants.AnimationType.defaultAnimation)
                 }
                 
                 // added to prevent any gaps
@@ -233,8 +195,8 @@ struct FBLeagueScheduleStore {
                 return .none
                 
             case .fetchGames:
-                return .run { [selectedYearMonth = state.selectedYearMonth, displayModel = state.displayModel] send in
-                    await send(.updateDisplayDataState(fetchState: .fetching))
+                return .run { [selectedYearMonth = state.baseSchedule.selectedYearMonth, displayModel = state.baseSchedule.displayModel] send in
+                    await send(.updateDisplayDataState(fetchState: .fetching), animation: AnimationConstants.AnimationType.defaultAnimation)
                     
                     do {
                         let selectedYearMonth = selectedYearMonth.split(separator: "/")
@@ -258,33 +220,29 @@ struct FBLeagueScheduleStore {
                             await send(.setDays())
                         }
                     } catch {
-                        await send(.updateDisplayDataState(fetchState: .failure("데이터를 불러오는데 실패하였습니다.")))
+                        await send(.updateDisplayDataState(fetchState: .failure("데이터를 불러오는데 실패하였습니다.")), animation: AnimationConstants.AnimationType.defaultAnimation)
                         print("\(error)")
                     }
                 }
                 
-            case .setDisplayModel(let displayModel):
-                state.displayModel = displayModel
-                
-                return .none
-                
             case .updateGamesData(let fbLeagueScheduleData, let fbGameStatsData):
-                guard case .fbLeagueSchedule(let leagueScheduleResponseModel, let leagueScheduleDisplayModel) = fbLeagueScheduleData,
-                        case .fbGameStats(_, let gameStatsDisplayModel) = fbGameStatsData else {
+                guard case let .fbLeagueSchedule(leagueScheduleResponseModel, leagueScheduleDisplayModel) = fbLeagueScheduleData,
+                        case let .fbGameStats(_, gameStatsDisplayModel) = fbGameStatsData else {
                     return .none
                 }
                 
+                let game = gameStatsDisplayModel.game
                 let newGames = leagueScheduleDisplayModel.games.map {
-                    $0.fixture.id == gameStatsDisplayModel.game.fixture.id ? gameStatsDisplayModel.game : $0
+                    $0.gameId == String(game.fixture.id) ? ModelConverter.fbGameToGameScheduleConverter(game: game) : $0
                 }
                 
                 var newDisplayModel = leagueScheduleDisplayModel
                 newDisplayModel.games = newGames
-                state.displayModel = newDisplayModel
+                state.baseSchedule.displayModel = newDisplayModel
                 
                 var newFilteredGames = state.filteredGames
-                newFilteredGames[state.selectedDayIndex] = newDisplayModel.games.filter {
-                    CalendarUtil.isSameDate(stringDate: $0.fixture.date, selectedYearMonth: state.selectedYearMonth, selectedDay: state.selectedDayIndex + 1)
+                newFilteredGames[state.baseSchedule.selectedDayIndex] = newDisplayModel.games.filter { game in
+                    CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: state.baseSchedule.selectedDayIndex + 1)
                 }
                 
                 state.filteredGames = newFilteredGames
@@ -306,9 +264,12 @@ struct FBLeagueScheduleStore {
                 return .none
                 
             case .updateDisplayDataState(let fetchState):
-                withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
-                    state.displayDataState = fetchState
-                }
+                state.baseSchedule.displayDataState = fetchState
+                
+                return .none
+                
+            case .setDisplayModel(let displayModel):
+                state.baseSchedule.displayModel = displayModel
                 
                 return .none
             } // switch action

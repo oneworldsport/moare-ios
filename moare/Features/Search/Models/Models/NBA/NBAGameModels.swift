@@ -15,7 +15,7 @@ struct NBAGame: Decodable, Equatable {
     let lastMeeting: NBALastMeeting?
     let lineScore: [NBALineScore]
     let officials: [NBAOfficial]
-    let otherStats: [NBAOtherStats]
+    let otherStats: [NBAOtherStats]?
     let seasonSeries: NBASeasonSeries?
 }
 
@@ -523,3 +523,6 @@ struct NBASeasonSeries: Decodable, Equatable {
         case _visitorTeamId = "visitorTeamId"
     }
 }
+
+typealias NBAGameForSchedule = GameForSchedule<NBAGameSummary>
+

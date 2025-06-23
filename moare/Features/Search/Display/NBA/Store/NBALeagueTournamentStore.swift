@@ -10,18 +10,20 @@ import ComposableArchitecture
 
 @Reducer
 struct NBALeagueTournamentStore {
-    let searchClient = SearchClient()
     
     @ObservableState
     struct State {
         /* ---------------------
            constants
            --------------------- */
+        let infoContainerWidth: CGFloat = 130
+        let hBarWidth: CGFloat = 30
+        let barThickness: CGFloat = 1
         
         /* ---------------------
            data state
            --------------------- */
-        var displayModel: NBALeagueScheduleDisplayModel? = nil
+        var displayModel: NBATournamentDisplayModel? = nil
         
         var westFirstRoundFirstGameList: [NBAGame]? = nil
         var westFirstRoundFirstGameFirstTeamId: Int = Constants.Ids.okc
@@ -97,7 +99,7 @@ struct NBALeagueTournamentStore {
         /* ---------------------
            init
            --------------------- */
-        case initData(displayModel: NBALeagueScheduleDisplayModel)
+        case initData(displayModel: NBATournamentDisplayModel)
         
         /* ---------------------
            view action
@@ -122,7 +124,7 @@ struct NBALeagueTournamentStore {
                 // western first round
                 state.westFirstRoundFirstGameList = displayModel.games.filter {
                     ($0.gameSummary?.homeTeamId == Constants.Ids.okc && $0.gameSummary?.visitorTeamId == Constants.Ids.mem) ||
-                    ($0.gameSummary?.visitorTeamId == Constants.Ids.mem && $0.gameSummary?.homeTeamId == Constants.Ids.okc)
+                    ($0.gameSummary?.homeTeamId == Constants.Ids.mem && $0.gameSummary?.visitorTeamId == Constants.Ids.okc)
                 }
                 state.westFirstRoundSecondGameList = displayModel.games.filter {
                     ($0.gameSummary?.homeTeamId == Constants.Ids.den && $0.gameSummary?.visitorTeamId == Constants.Ids.lac) ||

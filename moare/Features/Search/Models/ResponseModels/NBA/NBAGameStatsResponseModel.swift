@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct NBAGameStatsReponseModel: Decodable, Equatable {
+struct NBAGameStatsResponseModel: Decodable, Equatable {
     let game: NBAGame?
 }

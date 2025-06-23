@@ -9,5 +9,5 @@ import Foundation
 
 struct FBGameScheduleResponseModel: Decodable, Equatable {
     let scheduledMonths: [String]?
-    let schedule: [FBGame]
+    let schedule: [FBGameForSchedule]
 }

@@ -31,13 +31,16 @@ struct FBGameStatsView: View {
         let game = displayModel.game
         
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
+            let fbLeagueScheduleModel = searchStore.displayModels[.fbLeagueSchedule] as? FBLeagueScheduleDisplayModel
+            let fbTeamScheduleModel = searchStore.displayModels[.fbTeamSchedule] as? FBTeamScheduleDisplayModel
+            
             VStack(spacing: 10) {
                 if let fbGameStatsStore, let fbLeagueScheduleStore {
                     /* ---------------------
                        game title, info
                        - hides when game selected by schedule
                        --------------------- */
-                    if searchStore.fbLeagueScheduleData == nil && searchStore.fbTeamScheduleData == nil {
+                    if fbLeagueScheduleModel == nil && fbTeamScheduleModel == nil {
                         HStack {
                             HStack(spacing: 0) {
                                 URLImage(url: game.league.logo, customSize: CGSize(width: 23, height: 23))
@@ -58,7 +61,7 @@ struct FBGameStatsView: View {
                         FBLeagueScheduleListItem(
                             searchStore: searchStore,
                             fbLeagueScheduleStore: fbLeagueScheduleStore,
-                            data: game
+                            data: ModelConverter.fbGameToGameScheduleConverter(game: game)
                         )
                     }
                     
@@ -160,9 +163,7 @@ struct FBGameStatsView: View {
                 // TODO: has to figure out better structure
                 // when game_stats show at first(meaning ScheduleView never showed)
                 let scheduleStore: StoreOf<FBLeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.fbLeagueScheduleStore) ?? {
-                    let newStore = Store(initialState: FBLeagueScheduleStore.State(
-                        displayModel: nil, yearMonthList: []
-                    )) { FBLeagueScheduleStore() }
+                    let newStore = Store(initialState: FBLeagueScheduleStore.State()) { FBLeagueScheduleStore() }
                     
                     storeManager.setStore(newStore, forKey: StoreKeys.fbLeagueScheduleStore)
                     
@@ -175,9 +176,9 @@ struct FBGameStatsView: View {
                 
                 translate()
                 
-                if displayModel.game.fixture.status.short != "NS" && displayModel.game.fixture.status.short != "FT" {
-                    searchStore.send(.refreshGame(category: "football"))
-                }
+//                if displayModel.game.fixture.status.short != "NS" && displayModel.game.fixture.status.short != "FT" {
+//                    searchStore.send(.refreshGame(category: "football"))
+//                }
             } // onAppear
             .onChange(of: displayModel) {
                 if case .fbGameStats = searchStore.poppedView {
@@ -245,10 +246,10 @@ struct FBGameStatsTeamButtonContainer: View {
             } // VStack
             
             // refresh button
-            HStack {
-                Spacer()
-                
-                if fbGameStatsStore.displayModel?.game.fixture.status.short != "NS" && fbGameStatsStore.displayModel?.game.fixture.status.short != "FT" {
+            if fbGameStatsStore.displayModel?.game.fixture.status.short != "NS" && fbGameStatsStore.displayModel?.game.fixture.status.short != "FT" {
+                HStack {
+                    Spacer()
+                    
                     Button(action: {
                         searchStore.send(.refreshGame(category: "football"))
                     }) {

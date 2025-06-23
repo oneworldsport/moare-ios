@@ -7,7 +7,9 @@
 
 import Foundation
 
-struct FBTeamScheduleDisplayModel: Equatable {
-    let games: [FBGame]
-    let leagueId: Int?
+struct FBTeamScheduleDisplayModel: SportDisplayModel {
+    let leagueId: Int
+    let keywords: [Keyword]
+    let entityInfo: [EntityInfo]
+    let games: [FBGameForSchedule]
 }

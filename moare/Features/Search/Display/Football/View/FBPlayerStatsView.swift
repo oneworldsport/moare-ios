@@ -130,10 +130,19 @@ struct FBPlayerStatsView: View {
 struct FBPlayerStatsPlayerInfoItem: View {
     @Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
+    let isAniItem: Bool
+    let itemOffset: CGSize?
     let showContents: Bool
 
-    init(fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>, showContents: Bool = true) {
+    init(
+        fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>,
+        isAniItem: Bool = false,
+        itemOffset: CGSize? = nil,
+        showContents: Bool = true
+    ) {
         self.fbPlayerStatsStore = fbPlayerStatsStore
+        self.isAniItem = isAniItem
+        self.itemOffset = itemOffset
         self.showContents = showContents
     }
     
@@ -142,7 +151,10 @@ struct FBPlayerStatsPlayerInfoItem: View {
         let playerNameDic = fbPlayerStatsStore.playerNameDictionary
         let teamNameDic = fbPlayerStatsStore.teamNameDictionary
         
-        VStack(spacing: UIConstants.Padding.defaultHPadding) {
+        MovingCapsuleItemContainer(
+            isAniItem: isAniItem,
+            itemOffset: itemOffset
+        ) {
             HCapsuleBar()
             
             HStack {
@@ -185,7 +197,7 @@ struct FBPlayerStatsPlayerInfoItem: View {
                 }
             }
             .opacity(showContents ? 1 : 0)
-        } // VStack
+        }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
     }
@@ -245,24 +257,22 @@ struct FBPlayerStatsListItem: View {
     var centerPosition = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
     
     var body: some View {
-        FBPlayerStatsItem(
-            fbPlayerStatsStore: fbPlayerStatsStore,
-            stats: stats,
-            showContents: showContents
-        )
-        .background(
-            GeometryReader { proxy in
-                if !isAniList {
-                    Color.clear.onAppear {
-                        itemPositions[index] = proxy.frame(in: .named("FBPlayerStatsView")).origin
-                    }
-                }
+        MovingCapsuleItemContainer(
+            isAniItem: isAniList,
+            itemOffset: (animatePositions ? (CGSize(width: 0, height: itemPositions[index]?.y ?? 0)) : centerPosition),
+            updateItemPosition: { geometry in
+                itemPositions[index] = geometry.frame(in: .named("FBPlayerStatsView")).origin
             }
-        )
-        .offset(
-            x: 0,
-            y: isAniList ? (animatePositions ? (itemPositions[index]?.y ?? 0) : centerPosition.height) : 0
-        )
+        ) {
+            FBPlayerStatsItem(
+                fbPlayerStatsStore: fbPlayerStatsStore,
+                stats: stats,
+                showContents: showContents
+            )
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, UIConstants.Padding.defaultHPadding)
+        .padding(.bottom, UIConstants.Padding.defalutVPadding)
     }
 }
 
@@ -280,129 +290,124 @@ struct FBPlayerStatsItem: View {
     
     var body: some View {
         let teamNameDic = fbPlayerStatsStore.teamNameDictionary
+
+        HCapsuleBar()
         
-        VStack {
-            HCapsuleBar()
+        // league / team
+        HStack {
+            LeagueTitle(
+                url: stats.league.logo,
+                leagueName: stats.league.name,
+                leagueSeason: stats.league.season
+            )
             
-            // league / team
-            HStack {
-                LeagueTitle(
-                    url: stats.league.logo,
-                    leagueName: stats.league.name,
-                    leagueSeason: stats.league.season
-                )
-                
-                Text(" - ")
-                    .fontWeight(.medium)
-                
-                URLImage(url: stats.team.logo, customSize: CGSize(width: 24, height: 24))
-                
-                Text(teamNameDic["short_\(stats.team.id)"] ?? stats.team.name)
-                    .font(.system(size: 16))
-                    .fontWeight(.medium)
-            }
-            .padding(.bottom, UIConstants.Padding.defalutVPadding)
-            .opacity(showContents ? 1 : 0)
+            Text(" - ")
+                .fontWeight(.medium)
             
-            // stats
-            HStack {
-                FBStatDataItem(
-                    category: "출전 경기수",
-                    data: "\(stats.games.appearences)",
-                    customWidth: 70
-                )
-                
-                FBStatDataItem(
-                    category: "평균 평점",
-                    data: "\(stats.games.rating.prefix(3))",
-                    customWidth: 70
-                )
-                
-                FBStatDataItem(
-                    category: "골",
-                    data: "\(stats.goals.total)"
-                )
-                
-                FBStatDataItem(
-                    category: "패널티 골",
-                    data: "\(stats.penalty.scored)",
-                    customWidth: 70
-                )
-                
-                FBStatDataItem(
-                    category: "도움",
-                    data: "\(stats.goals.assists)",
-                    customWidth: 70
-                )
-            }
-            .opacity(showContents ? 1 : 0)
+            URLImage(url: stats.team.logo, customSize: CGSize(width: 24, height: 24))
             
-            HStack {
-                FBStatDataItem(
-                    category: "슈팅",
-                    data: "\(stats.shots.total)",
-                    customWidth: 70
-                )
-                
-                FBStatDataItem(
-                    category: "유효 슈팅",
-                    data: "\(stats.shots.on)",
-                    customWidth: 70
-                )
-                
-                FBStatDataItem(
-                    category: "패스",
-                    data: "\(stats.passes.total)"
-                )
-                
-                FBStatDataItem(
-                    category: "태클",
-                    data: "\(stats.tackles.total)",
-                    customWidth: 70
-                )
-                
-                FBStatDataItem(
-                    category: "드리블",
-                    data: "\(stats.dribbles.attempts)",
-                    customWidth: 70
-                )
-            }
-            .opacity(showContents ? 1 : 0)
-            
-            HStack {
-                FBStatDataItem(
-                    category: "파울",
-                    data: "\(stats.fouls.committed)",
-                    customWidth: 70
-                )
-                
-                FBStatDataItem(
-                    category: "경고",
-                    data: "\(stats.cards.yellow)",
-                    customWidth: 70
-                )
-                
-                FBStatDataItem(
-                    category: "퇴장",
-                    data: "\(stats.cards.red)"
-                )
-                
-                FBStatDataItem(
-                    category: "",
-                    data: "",
-                    customWidth: 70
-                )
-                
-                FBStatDataItem(
-                    category: "",
-                    data: "",
-                    customWidth: 70
-                )
-            }
-            .opacity(showContents ? 1 : 0)
-        } // VStack
-        .frame(maxWidth: .infinity)
-        .padding(.horizontal, UIConstants.Padding.defaultHPadding)
+            Text(teamNameDic["short_\(stats.team.id)"] ?? stats.team.name)
+                .font(.system(size: 16))
+                .fontWeight(.medium)
+        }
         .padding(.bottom, UIConstants.Padding.defalutVPadding)
+        .opacity(showContents ? 1 : 0)
+        
+        // stats
+        HStack {
+            FBStatDataItem(
+                category: "출전 경기수",
+                data: "\(stats.games.appearences)",
+                customWidth: 70
+            )
+            
+            FBStatDataItem(
+                category: "평균 평점",
+                data: "\(stats.games.rating.prefix(3))",
+                customWidth: 70
+            )
+            
+            FBStatDataItem(
+                category: "골",
+                data: "\(stats.goals.total)"
+            )
+            
+            FBStatDataItem(
+                category: "패널티 골",
+                data: "\(stats.penalty.scored)",
+                customWidth: 70
+            )
+            
+            FBStatDataItem(
+                category: "도움",
+                data: "\(stats.goals.assists)",
+                customWidth: 70
+            )
+        }
+        .opacity(showContents ? 1 : 0)
+        
+        HStack {
+            FBStatDataItem(
+                category: "슈팅",
+                data: "\(stats.shots.total)",
+                customWidth: 70
+            )
+            
+            FBStatDataItem(
+                category: "유효 슈팅",
+                data: "\(stats.shots.on)",
+                customWidth: 70
+            )
+            
+            FBStatDataItem(
+                category: "패스",
+                data: "\(stats.passes.total)"
+            )
+            
+            FBStatDataItem(
+                category: "태클",
+                data: "\(stats.tackles.total)",
+                customWidth: 70
+            )
+            
+            FBStatDataItem(
+                category: "드리블",
+                data: "\(stats.dribbles.attempts)",
+                customWidth: 70
+            )
+        }
+        .opacity(showContents ? 1 : 0)
+        
+        HStack {
+            FBStatDataItem(
+                category: "파울",
+                data: "\(stats.fouls.committed)",
+                customWidth: 70
+            )
+            
+            FBStatDataItem(
+                category: "경고",
+                data: "\(stats.cards.yellow)",
+                customWidth: 70
+            )
+            
+            FBStatDataItem(
+                category: "퇴장",
+                data: "\(stats.cards.red)"
+            )
+            
+            FBStatDataItem(
+                category: "",
+                data: "",
+                customWidth: 70
+            )
+            
+            FBStatDataItem(
+                category: "",
+                data: "",
+                customWidth: 70
+            )
+        }
+        .opacity(showContents ? 1 : 0)
     }
 }

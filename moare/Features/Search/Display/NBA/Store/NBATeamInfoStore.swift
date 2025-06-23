@@ -10,36 +10,23 @@ import ComposableArchitecture
 
 @Reducer
 struct NBATeamInfoStore {
+    typealias BaseInfo = BaseInfoStore<NBATeamInfoDisplayModel>
     
     @ObservableState
     struct State {
         /* ---------------------
            data state
            --------------------- */
-        var displayModel: NBATeamInfoDisplayModel? = nil
-        
-        /* ---------------------
-           etc
-           --------------------- */
-        var teamNameDictionary: [String: String] = [:]
+        var baseInfo = BaseInfo.State()
     }
     
     enum Action {
-        case initData(displayModel: NBATeamInfoDisplayModel)
+        case baseInfo(BaseInfo.Action)
     }
     
-    @Dependency(\.translatedNameProvider) var nameProvider
-    
     var body: some Reducer<State, Action> {
-        Reduce { state, action in
-            switch action {
-            case .initData(let displayModel):
-                state.displayModel = displayModel
-                
-                state.teamNameDictionary = nameProvider.getDictionary(category: "nba_team")
-                
-                return .none
-            }
+        Scope(state: \.baseInfo, action: \.baseInfo) {
+            BaseInfo()
         }
     }
 }

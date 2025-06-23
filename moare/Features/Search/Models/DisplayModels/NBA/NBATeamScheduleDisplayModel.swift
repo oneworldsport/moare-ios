@@ -7,6 +7,9 @@
 
 import Foundation
 
-struct NBATeamScheduleDisplayModel: Equatable {
-    let games: [NBAGame]
+struct NBATeamScheduleDisplayModel: SportDisplayModel {
+    let leagueId: Int
+    let keywords: [Keyword]
+    let entityInfo: [EntityInfo]
+    let games: [NBAGameForSchedule]
 }

@@ -46,7 +46,7 @@ struct NBAGameStatsView: View {
                         
                         Spacer()
                     }
-                    .padding(.leading, UIConstants.Padding.defaultHPadding)
+                    .padding(.horizontal, UIConstants.Padding.defaultHPadding)
                     
                     /* ---------------------
                        playoffs series text
@@ -138,9 +138,9 @@ struct NBAGameStatsView: View {
                     nbaGameStatsStore.send(.initData(displayModel: displayModel))
                 }
                 
-                if displayModel.game.gameSummary?.gameStatusId == 2 {
-                    searchStore.send(.refreshGame(category: "basketball"))
-                }
+//                if displayModel.game.gameSummary?.gameStatusId == 2 {
+//                    searchStore.send(.refreshGame(category: "basketball"))
+//                }
             } // onAppear
             .onChange(of: displayModel) {
                 if case .nbaGameStats = searchStore.poppedView {
@@ -673,7 +673,6 @@ struct NBAGameStatsFirstDataListItem: View {
     
     var body: some View {
         let playerNameDic = nbaGameStatsStore.playerNameDictionary
-        let playerKrName = playerNameDic[(data.firstName + " " + data.familyName).lowercased()] ?? (data.firstName + " " + data.familyName)
         
         HStack(spacing: 0) {
             URLImage(
@@ -683,7 +682,7 @@ struct NBAGameStatsFirstDataListItem: View {
                 .padding(.leading, 8)
                 .padding(.trailing, 3)
 
-            Text(playerKrName)
+            Text(playerNameDic["\(data.personId)"] ?? data.nameI)
                 .font(.system(size: 12))
                 .lineLimit(2)
                 .frame(maxWidth: 80, alignment: .leading)
