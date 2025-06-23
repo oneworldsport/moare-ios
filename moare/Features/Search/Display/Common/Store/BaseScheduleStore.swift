@@ -63,7 +63,7 @@ struct BaseScheduleStore<T> {
                 // init data
                 state.displayModel = displayModel
                 
-                if let displayModel = displayModel as? DisplayModelBase {
+                if let displayModel = displayModel as? SportDisplayModel {
                     switch displayModel.leagueId {
                     case Constants.Ids.epl:
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplTeamDic)

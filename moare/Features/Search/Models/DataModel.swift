@@ -31,6 +31,19 @@ struct Keyword: Codable, Equatable {
     let priority: Int
 }
 
+// Used as keys in DisplayModels dictionary in SearchStore State
+enum SportDisplayType: Hashable, CaseIterable {
+    // football
+    case fbPlayerInfo, fbPlayerStats, fbPlayerStandings, fbTeamInfo, fbTeamStats, fbTeamStandings, fbTeamSchedule, fbLeagueSchedule, fbGameStats
+    // nba
+    case nbaPlayerInfo, nbaPlayerStats, nbaPlayerStandings, nbaTeamInfo, nbaTeamStats, nbaTeamStandings, nbaTeamSchedule, nbaLeagueSchedule, nbaGameStats, nbaLeagueTournament
+    // kbo
+    case kboPlayerInfo, kboPlayerStats, kboPlayerStandings, kboTeamInfo, kboTeamStats, kboTeamStandings, kboTeamSchedule, kboLeagueSchedule, kboGameStats
+    // mlb
+    case mlbPlayerInfo, mlbPlayerStats, mlbPlayerStandings, mlbTeamInfo, mlbTeamStats, mlbTeamStandings, mlbTeamSchedule, mlbLeagueSchedule, mlbGameStats
+    case unknown
+}
+
 indirect enum SportDecodableModel: Equatable {
     // football
     case fbPlayerInfo(FBPlayerInfoResponseModel, FBPlayerInfoDisplayModel)

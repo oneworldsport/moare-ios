@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MLBPlayerInfoDisplayModel: DisplayModelBase {
+struct MLBPlayerInfoDisplayModel: SportDisplayModel {
     let leagueId: Int
     let keywords: [Keyword]
     let entityInfo: [EntityInfo]

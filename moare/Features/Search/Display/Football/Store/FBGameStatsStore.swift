@@ -91,22 +91,20 @@ struct FBGameStatsStore {
                 // init data
                 state.displayModel = displayModel
                 
-                if let leagueId = displayModel.leagueId {
-                    switch leagueId {
-                    case Constants.Ids.epl:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplPlayerDic)
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplTeamDic)
-                    case Constants.Ids.laliga:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaPlayerDic)
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaTeamDic)
-                    case Constants.Ids.bundesliga:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
-                    case Constants.Ids.ligue1:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
-                    default: break
-                    }
+                switch displayModel.leagueId {
+                case Constants.Ids.epl:
+                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplPlayerDic)
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplTeamDic)
+                case Constants.Ids.laliga:
+                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaPlayerDic)
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaTeamDic)
+                case Constants.Ids.bundesliga:
+                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
+                case Constants.Ids.ligue1:
+                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
+                default: break
                 }
                 
                 // set current(home) team's players stats

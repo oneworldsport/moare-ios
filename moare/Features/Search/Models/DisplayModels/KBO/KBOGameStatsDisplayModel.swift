@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct KBOGameStatsDisplayModel: DisplayModelBase {
+struct KBOGameStatsDisplayModel: SportDisplayModel {
     let leagueId: Int
     let keywords: [Keyword]
     let entityInfo: [EntityInfo]
