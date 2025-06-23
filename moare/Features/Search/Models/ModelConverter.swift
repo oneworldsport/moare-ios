@@ -49,10 +49,12 @@ struct ModelConverter {
         let stats = info.statistics.first { $0.league.id == leagueId }
         
         return FBPlayerStatsDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.epl,
+            keywords: keywords,
+            entityInfo: entityInfo,
             player: info.player,
             team: stats?.team,
-            stats: info.statistics,
-            leagueId: leagueId
+            stats: info.statistics
         )
     }
     
@@ -71,10 +73,10 @@ struct ModelConverter {
         }
         
         return FBPlayerStandingsDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
-            standings: standings,
-            leagueId: leagueId
+            standings: standings
         )
     }
     
@@ -99,10 +101,12 @@ struct ModelConverter {
         let info = response.info!
         
         return FBTeamStatsDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.epl,
+            keywords: keywords,
+            entityInfo: entityInfo,
             team: info.team,
             venue: info.venue,
-            stats: info.statistics,
-            leagueId: leagueId
+            stats: info.statistics
         )
     }
     
@@ -131,10 +135,11 @@ struct ModelConverter {
         }
         
         return FBTeamStandingsDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
+            entityInfo: entityInfo,
             league: league,
-            standings: standings,
-            leagueId: leagueId
+            standings: standings
         )
     }
     
@@ -167,8 +172,10 @@ struct ModelConverter {
     func fbGameStatsConverter(response: FBGameStatsResponseModel) -> FBGameStatsDisplayModel {
         let game = response.game!
         return FBGameStatsDisplayModel(
-            game: game,
-            leagueId: game.league.id
+            leagueId: game.league.id,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            game: game
         )
     }
     
@@ -205,7 +212,13 @@ struct ModelConverter {
     func nbaPlayerStatsConverter(response: NBAPlayerInfoResponseModel) -> NBAPlayerStatsDisplayModel {
         let info = response.info!
         
-        return NBAPlayerStatsDisplayModel(player: info.player, stats: info.statistics)
+        return NBAPlayerStatsDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.nba,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            player: info.player,
+            stats: info.statistics
+        )
     }
     
     func nbaPlayerStandingsConverter(response: NBAPlayerStandingsResponseModel) -> NBAPlayerStandingsDisplayModel {
@@ -222,7 +235,12 @@ struct ModelConverter {
             return nil
         }
         
-        return NBAPlayerStandingsDisplayModel(keywords: keywords, entityInfo: entityInfo, standings: standings)
+        return NBAPlayerStandingsDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.nba,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            standings: standings
+        )
     }
     
     func nbaTeamInfoConverter(response: NBATeamInfoResponseModel) -> NBATeamInfoDisplayModel {
@@ -245,7 +263,14 @@ struct ModelConverter {
     func nbaTeamStatsConverter(response: NBATeamInfoResponseModel) -> NBATeamStatsDisplayModel {
         let info = response.info!
         
-        return NBATeamStatsDisplayModel(team: info.team, venue: info.venue, stats: info.statistics)
+        return NBATeamStatsDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.nba,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            team: info.team,
+            venue: info.venue,
+            stats: info.statistics
+        )
     }
     
     func nbaTeamStandingsConverter(response: NBATeamStandingsResponseModel) -> NBATeamStandingsDisplayModel {
@@ -264,11 +289,21 @@ struct ModelConverter {
             return nil
         }
         
-        return NBATeamStandingsDisplayModel(keywords: keywords, entityInfo: entityInfo, standings: standings)
+        return NBATeamStandingsDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.nba,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            standings: standings
+        )
     }
     
     func nbaTeamScheduleConverter(response: NBAGameScheduleResponseModel) -> NBATeamScheduleDisplayModel {
-        return NBATeamScheduleDisplayModel(games: response.schedule)
+        return NBATeamScheduleDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.nba,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            games: response.schedule
+        )
     }
     
     func nbaLeagueScheduleConverter(response: NBAGameScheduleResponseModel) -> NBALeagueScheduleDisplayModel {
@@ -279,15 +314,32 @@ struct ModelConverter {
             return "\(components[0].suffix(2))/\(components[1])"
         } ?? []
         
-        return NBALeagueScheduleDisplayModel(yearMonthList: yearMonthList, games: response.schedule, entityInfo: entityInfo)
+        return NBALeagueScheduleDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.nba,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            yearMonthList: yearMonthList,
+            games: response.schedule
+        )
     }
     
     func nbaGameStatsConverter(response: NBAGameStatsResponseModel) -> NBAGameStatsDisplayModel {
-        return NBAGameStatsDisplayModel(game: response.game!)
+        return NBAGameStatsDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.nba,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            game: response.game!
+        )
     }
     
     func nbaLeagueTournamentConverter(response: NBAGameListResponseModel) -> NBATournamentDisplayModel {
-        return NBATournamentDisplayModel(yearMonthList: [], games: response.schedule, entityInfo: entityInfo)
+        return NBATournamentDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.nba,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            yearMonthList: [],
+            games: response.schedule
+        )
     }
     
     /* ---------------------

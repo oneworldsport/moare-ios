@@ -22,13 +22,15 @@ struct MLBLeagueScheduleView: View {
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
+            let mlbGameStatsModel = searchStore.displayModels[.mlbGameStats] as? MLBGameStatsDisplayModel
+            
             VStack(spacing: 0) {
                 if let mlbLeagueScheduleStore {
-                    if searchStore.mlbGameStatsData == nil {
+                    if mlbGameStatsModel == nil {
                         ScheduleViewContainer(
                             state: ScheduleContainerState(
-                                shouldShowCalendar: searchStore.mlbGameStatsData == nil,
-                                shouldShowAllResultToggleButton: searchStore.mlbGameStatsData == nil,
+                                shouldShowCalendar: mlbGameStatsModel == nil,
+                                shouldShowAllResultToggleButton: mlbGameStatsModel == nil,
                                 displayDataState: mlbLeagueScheduleStore.baseSchedule.displayDataState,
                                 calendarUiState: CalendarUiState(
                                     yearMonthList: mlbLeagueScheduleStore.baseSchedule.yearMonthList,
@@ -154,7 +156,7 @@ struct MLBLeagueScheduleListItem: View {
         let awayTeamId = data.awayTeamId
         let gameStatus = data.gameStatus
         let teamNameDic = mlbLeagueScheduleStore.baseSchedule.teamNameDictionary
-        let mlbGameStatsData = searchStore.mlbGameStatsData
+        let mlbGameStatsModel = searchStore.displayModels[.mlbGameStats] as? MLBGameStatsDisplayModel
         
         let gameStatusText: String = {
             switch gameStatus {
@@ -223,8 +225,8 @@ struct MLBLeagueScheduleListItem: View {
                 }
             }
         }
-        .onChange(of: mlbGameStatsData) {
-            if let mlbGameStatsData {
+        .onChange(of: mlbGameStatsModel) {
+            if let mlbGameStatsModel {
                 isResultOpened = true
             }
         }

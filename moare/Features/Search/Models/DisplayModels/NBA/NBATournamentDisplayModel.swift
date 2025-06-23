@@ -5,8 +5,10 @@
 //  Created by Mohwa Yoon on 5/31/25.
 //
 
-struct NBATournamentDisplayModel: Equatable {
+struct NBATournamentDisplayModel: SportDisplayModel {
+    let leagueId: Int
+    let keywords: [Keyword]
+    let entityInfo: [EntityInfo]
     let yearMonthList: [String]
     var games: [NBAGame]
-    let entityInfo: [EntityInfo]
 }

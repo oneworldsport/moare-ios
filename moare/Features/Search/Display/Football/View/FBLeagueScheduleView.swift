@@ -22,12 +22,14 @@ struct FBLeaugeScheduleView: View {
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
+            let fbGameStatsModel = searchStore.displayModels[.fbGameStats] as? FBGameStatsDisplayModel
+            
             VStack(spacing: 0) {
                 if let fbLeagueScheduleStore {
                     ScheduleViewContainer(
                         state: ScheduleContainerState(
-                            shouldShowCalendar: searchStore.fbGameStatsData == nil,
-                            shouldShowAllResultToggleButton: searchStore.fbGameStatsData == nil,
+                            shouldShowCalendar: fbGameStatsModel == nil,
+                            shouldShowAllResultToggleButton: fbGameStatsModel == nil,
                             displayDataState: fbLeagueScheduleStore.baseSchedule.displayDataState,
                             calendarUiState: CalendarUiState(
                                 yearMonthList: fbLeagueScheduleStore.baseSchedule.yearMonthList,
@@ -51,18 +53,18 @@ struct FBLeaugeScheduleView: View {
                             }
                         ),
                         titleContent: {
-                            if let gameStatsData = searchStore.fbGameStatsData {
+                            if let fbGameStatsModel {
                                 HStack {
                                     HStack(spacing: 0) {
-                                        URLImage(url: gameStatsData.game.league.logo, customSize: CGSize(width: 23, height: 23))
+                                        URLImage(url: fbGameStatsModel.game.league.logo, customSize: CGSize(width: 23, height: 23))
                                             .padding(.trailing, 4)
                                         
                                         // TODO: make season text to use util
-                                        Text("\(gameStatsData.game.league.name) \(String(gameStatsData.game.league.season).suffix(2))/25")
+                                        Text("\(fbGameStatsModel.game.league.name) \(String(fbGameStatsModel.game.league.season).suffix(2))/25")
                                             .font(.system(size: 14))
                                     }
                                     
-                                    Text(" - \(MatchDescriptionConverter.convert(descriptionType: .roundWithoutDash, input: gameStatsData.game.league.round))")
+                                    Text(" - \(MatchDescriptionConverter.convert(descriptionType: .roundWithoutDash, input: fbGameStatsModel.game.league.round))")
                                         .font(.system(size: 14))
                                     
                                     Spacer()
@@ -128,6 +130,8 @@ struct FBLeagueScheduleList: View {
     @State var gameListToDisplay: [FBGameForSchedule] = []
     
     var body: some View {
+        let fbGameStatsModel = searchStore.displayModels[.fbGameStats] as? FBGameStatsDisplayModel
+        
         ScrollView {
 //            HStack {
 //                Spacer()
@@ -151,11 +155,11 @@ struct FBLeagueScheduleList: View {
                 }
             }
         }
-        .frame(maxHeight: searchStore.fbGameStatsData == nil ? .infinity : fbLeagueScheduleStore.itemHeight)
-        .scrollDisabled(searchStore.fbGameStatsData != nil)
+        .frame(maxHeight: fbGameStatsModel == nil ? .infinity : fbLeagueScheduleStore.itemHeight)
+        .scrollDisabled(fbGameStatsModel != nil)
         .onAppear {
             // TODO: init에서 해도 상관없다. 어디서 하는게 나을까?
-            if let game = searchStore.fbGameStatsData?.game {
+            if let game = fbGameStatsModel?.game {
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     gameListToDisplay = [ModelConverter.fbGameToGameScheduleConverter(game: game)]
                 }
@@ -163,8 +167,8 @@ struct FBLeagueScheduleList: View {
                 gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
             }
         }
-        .onChange(of: searchStore.fbGameStatsData) {
-            if let game = searchStore.fbGameStatsData?.game {
+        .onChange(of: fbGameStatsModel) {
+            if let game = fbGameStatsModel?.game {
                 withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     gameListToDisplay = [ModelConverter.fbGameToGameScheduleConverter(game: game)]
                 }
@@ -200,7 +204,7 @@ struct FBLeagueScheduleListItem: View {
         let awayTeamId = data.awayTeamId
         let gameStatus = data.gameStatus
         let teamNameDic = fbLeagueScheduleStore.baseSchedule.teamNameDictionary
-        let fbGameStatsData = searchStore.fbGameStatsData
+        let fbGameStatsModel = searchStore.displayModels[.fbGameStats] as? FBGameStatsDisplayModel
         
         let gameStatusText: String = {
             switch gameStatus {
@@ -239,17 +243,17 @@ struct FBLeagueScheduleListItem: View {
                 isResultOpened: isResultOpened,
                 gameStatusText: gameStatusText,
                 gameStatusColor: gameStatusColor,
-                isCapsuleButtonDisabled: fbGameStatsData != nil || !StringConstants.Football.gameFinishedList.contains(gameStatus),
+                isCapsuleButtonDisabled: fbGameStatsModel != nil || !StringConstants.Football.gameFinishedList.contains(gameStatus),
                 date: data.date,
                 venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
                 gameType: MatchDescriptionConverter.convert(input: data.gameInfo?.round ?? ""),
-                referee: fbGameStatsData?.game.fixture.referee,
-                shouldShowOnlyDateTime: fbGameStatsData == nil,
-                shouldShowVenue: fbGameStatsData != nil,
-                shouldShowGameType: fbGameStatsData == nil,
-                shouldShowReferee: fbGameStatsData != nil,
-                shouldShowHomeLabel: fbGameStatsData != nil,
-                shouldShowAwayLabel: fbGameStatsData != nil,
+                referee: fbGameStatsModel?.game.fixture.referee,
+                shouldShowOnlyDateTime: fbGameStatsModel == nil,
+                shouldShowVenue: fbGameStatsModel != nil,
+                shouldShowGameType: fbGameStatsModel == nil,
+                shouldShowReferee: fbGameStatsModel != nil,
+                shouldShowHomeLabel: fbGameStatsModel != nil,
+                shouldShowAwayLabel: fbGameStatsModel != nil,
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
@@ -277,8 +281,8 @@ struct FBLeagueScheduleListItem: View {
                 }
             }
         }
-        .onChange(of: fbGameStatsData) {
-            if fbGameStatsData != nil {
+        .onChange(of: fbGameStatsModel) {
+            if fbGameStatsModel != nil {
                 isResultOpened = true
             }
         }

@@ -37,7 +37,7 @@ struct BaseStatsStore<T> {
             case .initData(let displayModel):
                 state.displayModel = displayModel
                 
-                if let displayModel = displayModel as? DisplayModelBase {
+                if let displayModel = displayModel as? SportDisplayModel {
                     switch displayModel.leagueId {
                     case Constants.Ids.epl:
                         state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplPlayerDic)
