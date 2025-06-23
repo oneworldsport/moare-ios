@@ -115,7 +115,7 @@ struct KBOTeamScheduleListItem: View {
         let awayTeamId = data.awayTeamId
         let gameStatus = Int(data.gameStatus)
         let teamNameDic = kboTeamScheduleStore.baseSchedule.teamNameDictionary
-        let kboGameStatsData = searchStore.kboGameStatsData
+        let kboGameStatsModel = searchStore.displayModels[.kboGameStats] as? KBOGameStatsDisplayModel
         
         let gameStatusText: String = {
             switch gameStatus {
@@ -185,8 +185,8 @@ struct KBOTeamScheduleListItem: View {
                 }
             }
         }
-        .onChange(of: kboGameStatsData) {
-            if let kboGameStatsData {
+        .onChange(of: kboGameStatsModel) {
+            if let kboGameStatsModel {
                 isResultOpened = true
             }
         }

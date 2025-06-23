@@ -27,9 +27,11 @@ struct NBALeagueScheduleView: View {
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
+            let nbaGameStatsModel = searchStore.displayModels[.nbaGameStats] as? NBAGameStatsDisplayModel
+            
             VStack(spacing: 0) {
                 if let nbaLeagueScheduleStore {
-                    if searchStore.nbaGameStatsData == nil {
+                    if nbaGameStatsModel == nil {
                         /* ---------------------
                            calendar
                            - hides when game selected
@@ -100,7 +102,7 @@ struct NBALeagueScheduleView: View {
                                     .padding(.top, 8)
                             }
                         }
-                    } // if searchStore.nbaGameStatsData == nil
+                    } // if nbaGameStatsModel == nil
                 } // if let nbaLeagueScheduleStore
             } // VStack
             .onAppear {
@@ -197,6 +199,7 @@ struct NBALeagueScheduleListItem: View {
         let awayTeamScore = data.awayTeamScore
         let gameStatus = Int(data.gameStatus)
         let teamNameDic = nbaLeagueScheduleStore.teamNameDictionary
+        let nbaGameStatsModel = searchStore.displayModels[.nbaGameStats] as? NBAGameStatsDisplayModel
         
         let gameStatusText: String = {
             guard isResultOpened else { return StringConstants.resultOpen }
@@ -385,8 +388,8 @@ struct NBALeagueScheduleListItem: View {
                 }
             }
         }
-        .onChange(of: searchStore.nbaGameStatsData) {
-            if let _ = searchStore.nbaGameStatsData {
+        .onChange(of: nbaGameStatsModel) {
+            if let nbaGameStatsModel {
                 isResultOpened = true
             }
         }

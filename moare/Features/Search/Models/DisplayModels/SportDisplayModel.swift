@@ -1,5 +1,5 @@
 //
-//  DisplayModelBase.swift
+//  SportDisplayModel.swift
 //  moare
 //
 //  Created by Mohwa Yoon on 5/22/25.

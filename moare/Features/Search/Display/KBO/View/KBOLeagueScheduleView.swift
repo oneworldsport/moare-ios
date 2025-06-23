@@ -22,13 +22,15 @@ struct KBOLeagueScheduleView: View {
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
+            let kboGameStatsModel = searchStore.displayModels[.kboGameStats] as? KBOGameStatsDisplayModel
+            
             VStack(spacing: 0) {
                 if let kboLeagueScheduleStore {
-                    if searchStore.kboGameStatsData == nil {
+                    if kboGameStatsModel == nil {
                         ScheduleViewContainer(
                             state: ScheduleContainerState(
-                                shouldShowCalendar: searchStore.kboGameStatsData == nil,
-                                shouldShowAllResultToggleButton: searchStore.kboGameStatsData == nil,
+                                shouldShowCalendar: kboGameStatsModel == nil,
+                                shouldShowAllResultToggleButton: kboGameStatsModel == nil,
                                 displayDataState: kboLeagueScheduleStore.baseSchedule.displayDataState,
                                 calendarUiState: CalendarUiState(
                                     yearMonthList: kboLeagueScheduleStore.baseSchedule.yearMonthList,
@@ -154,7 +156,7 @@ struct KBOLeagueScheduleListItem: View {
         let awayTeamId = data.awayTeamId
         let gameStatus = Int(data.gameStatus)
         let teamNameDic = kboLeagueScheduleStore.baseSchedule.teamNameDictionary
-        let kboGameStatsData = searchStore.kboGameStatsData
+        let kboGameStatsModel = searchStore.displayModels[.kboGameStats] as? KBOGameStatsDisplayModel
         
         let gameStatusText: String = {
             switch gameStatus {
@@ -222,8 +224,8 @@ struct KBOLeagueScheduleListItem: View {
                 }
             }
         }
-        .onChange(of: searchStore.kboGameStatsData) {
-            if let _ = searchStore.kboGameStatsData {
+        .onChange(of: kboGameStatsModel) {
+            if let kboGameStatsModel {
                 isResultOpened = true
             }
         }
