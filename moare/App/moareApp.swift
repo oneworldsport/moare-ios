@@ -16,6 +16,8 @@ struct SportSearchEngine_iOSApp: App {
     
     @State var isSplashFinished = false
     
+    @State var viewForTest: SportDisplayType? = SportDisplayType.fbPlayerInfo
+    
     init() {
         Task {
             await AWSManager.shared.loadInitialData()
@@ -27,9 +29,15 @@ struct SportSearchEngine_iOSApp: App {
     var body: some Scene {
         WindowGroup {
             if isSplashFinished {
-                SearchView()
-                    .environmentObject(storeManager)
-                    .preferredColorScheme(.light) // force light mode
+                if viewForTest != nil {
+                    SearchView(viewForTest: viewForTest)
+                        .environmentObject(storeManager)
+                        .preferredColorScheme(.light) // force light mode
+                } else {
+                    SearchView()
+                        .environmentObject(storeManager)
+                        .preferredColorScheme(.light) // force light mode
+                }
             } else {
                 SplashView(isSplashFinished: $isSplashFinished)
                     .preferredColorScheme(.light) // force light mode

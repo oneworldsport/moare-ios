@@ -1,0 +1,168 @@
+{
+  "keywords": [],
+  "entityInfo": [
+    {
+      "entityId": 6,
+      "entityName": "기아 타이거즈",
+      "category": "baseball",
+      "entityType": "team",
+      "leagueId": 90101,
+      "playerId": null,
+      "teamId": 6
+    }
+  ],
+  "dataType": "baseball_team_info",
+  "data": {
+    "info": {
+      "venue": {
+        "name": "광주-기아 챔피언스 필드",
+        "opened": 2014,
+        "capacity": 20500
+      },
+      "team": {
+        "teamName": "KIA",
+        "teamCode": "HT",
+        "id": 6,
+        "yearFounded": 2001,
+        "city": "광주광역시",
+        "coach": "이범호"
+      },
+      "statistics": [
+        {
+          "runnerData": {
+            "cs": "10",
+            "sba": "51",
+            "oob": "22",
+            "pko": "2",
+            "g": "68",
+            "sb%": "80.4",
+            "rank": "8",
+            "teamname": "KIA",
+            "sb": "41"
+          },
+          "seasonType": "Regular Season",
+          "season": 2025,
+          "hitterData": {
+            "bb": "271",
+            "hr": "60",
+            "3b": "5",
+            "avg": "0.252",
+            "sf": "17",
+            "sac": "21",
+            "rank": "8",
+            "mh": "66",
+            "so": "534",
+            "ab": "2305",
+            "risp": "0.246",
+            "g": "68",
+            "h": "580",
+            "ibb": "9",
+            "tb": "898",
+            "ph-ba": "0.235",
+            "slg": "0.390",
+            "2b": "128",
+            "pa": "2641",
+            "r": "312",
+            "gdp": "45",
+            "ops": "0.725",
+            "hbp": "27",
+            "rbi": "286",
+            "obp": "0.335",
+            "teamname": "KIA"
+          },
+          "pitcherData": {
+            "bb": "247",
+            "np": "10123",
+            "bsv": "10",
+            "bk": "1",
+            "hr": "44",
+            "whip": "1.42",
+            "3b": "8",
+            "avg": "0.264",
+            "sf": "26",
+            "sac": "26",
+            "era": "4.26",
+            "rank": "7",
+            "wp": "28",
+            "so": "520",
+            "hld": "42",
+            "qs": "31",
+            "sv": "17",
+            "cg": "1",
+            "g": "68",
+            "ip": "599 2/3",
+            "h": "607",
+            "ibb": "10",
+            "l": "33",
+            "er": "284",
+            "2b": "122",
+            "r": "317",
+            "w": "34",
+            "hbp": "38",
+            "tbf": "2637",
+            "sho": "1",
+            "wpct": "0.507",
+            "teamname": "KIA"
+          },
+          "rankData": {
+            "wins": "34",
+            "last10game": "5승0무5패",
+            "awayrecord": "15-0-19",
+            "rank": "7",
+            "gp": "68",
+            "draws": "1",
+            "winpct": "0.507",
+            "gb": "6.5",
+            "streak": "2승",
+            "losses": "33",
+            "homerecord": "19-1-14",
+            "teamname": "KIA"
+          },
+          "defenseData": {
+            "a": "664",
+            "e": "52",
+            "g": "68",
+            "fpct": "0.979",
+            "dp": "54",
+            "sb": "59",
+            "cs": "19",
+            "pb": "4",
+            "cs%": "24.4",
+            "pko": "4",
+            "rank": "9",
+            "teamname": "KIA",
+            "po": "1799"
+          }
+        }
+      ]
+    },
+    "lastGame": {
+      "lineup": null,
+      "gameInfo": {
+        "gameId": "20250629HTLG0",
+        "date": "2025-06-29T17:00:00+09:00",
+        "homeTeamScore": null,
+        "gameStatus": "1",
+        "awayTeamScore": null,
+        "remark": "-",
+        "homeTeamId": 5,
+        "awayTeamId": 6
+      },
+      "lineScore": null
+    },
+    "nextGame": {
+      "lineup": null,
+      "gameInfo": {
+        "gameId": "20250701SKHT0",
+        "date": "2025-07-01T18:30:00+09:00",
+        "homeTeamScore": null,
+        "gameStatus": "1",
+        "awayTeamScore": null,
+        "remark": "-",
+        "homeTeamId": 6,
+        "awayTeamId": 10
+      },
+      "lineScore": null
+    }
+  }
+}
