@@ -1,0 +1,482 @@
+{
+  "dataType": "football_player_stats",
+  "keywords": [],
+  "entityInfo": [
+    {
+      "entityName": "손흥민",
+      "entityId": 186,
+      "category": "football",
+      "entityType": "player",
+      "leagueId": 39,
+      "playerId": 186,
+      "teamId": 47
+    }
+  ],
+  "data": {
+    "info": {
+      "player": {
+        "age": 33,
+        "birth": {
+          "country": "Korea Republic",
+          "date": "1992-07-08",
+          "place": "Chuncheon"
+        },
+        "firstname": "Heung-Min",
+        "height": "183 cm",
+        "id": 186,
+        "injured": false,
+        "lastname": "Son",
+        "name": "Son Heung-Min",
+        "nationality": "Korea Republic",
+        "photo": "https://media.api-sports.io/football/players/186.png",
+        "weight": "78 kg"
+      },
+      "statistics": [
+        {
+          "cards": {
+            "red": 0,
+            "yellow": 1,
+            "yellowred": 0
+          },
+          "dribbles": {
+            "attempts": 70,
+            "past": null,
+            "success": 29
+          },
+          "duels": {
+            "total": 193,
+            "won": 80
+          },
+          "fouls": {
+            "committed": 6,
+            "drawn": 28
+          },
+          "games": {
+            "appearences": 30,
+            "captain": false,
+            "lineups": 24,
+            "minutes": 2116,
+            "number": null,
+            "position": "Attacker",
+            "rating": "7.263333"
+          },
+          "goals": {
+            "assists": 9,
+            "conceded": 0,
+            "saves": null,
+            "total": 7
+          },
+          "league": {
+            "country": "England",
+            "flag": "https://media.api-sports.io/flags/gb-eng.svg",
+            "id": 39,
+            "logo": "https://media.api-sports.io/football/leagues/39.png",
+            "name": "Premier League",
+            "season": 2024
+          },
+          "passes": {
+            "accuracy": null,
+            "key": 50,
+            "total": 833
+          },
+          "penalty": {
+            "commited": null,
+            "missed": 1,
+            "saved": null,
+            "scored": 1,
+            "won": null
+          },
+          "shots": {
+            "on": 26,
+            "total": 39
+          },
+          "substitutes": {
+            "bench": 6,
+            "in": 6,
+            "out": 13
+          },
+          "tackles": {
+            "blocks": null,
+            "interceptions": 5,
+            "total": 17
+          },
+          "team": {
+            "id": 47,
+            "logo": "https://media.api-sports.io/football/teams/47.png",
+            "name": "Tottenham"
+          }
+        },
+        {
+          "cards": {
+            "red": 0,
+            "yellow": 0,
+            "yellowred": 0
+          },
+          "dribbles": {
+            "attempts": 8,
+            "past": null,
+            "success": 1
+          },
+          "duels": {
+            "total": 22,
+            "won": 7
+          },
+          "fouls": {
+            "committed": 2,
+            "drawn": null
+          },
+          "games": {
+            "appearences": 4,
+            "captain": false,
+            "lineups": 3,
+            "minutes": 280,
+            "number": null,
+            "position": "Attacker",
+            "rating": "6.750000"
+          },
+          "goals": {
+            "assists": 0,
+            "conceded": 0,
+            "saves": null,
+            "total": 1
+          },
+          "league": {
+            "country": "England",
+            "flag": "https://media.api-sports.io/flags/gb-eng.svg",
+            "id": 48,
+            "logo": "https://media.api-sports.io/football/leagues/48.png",
+            "name": "League Cup",
+            "season": 2024
+          },
+          "passes": {
+            "accuracy": null,
+            "key": 3,
+            "total": 66
+          },
+          "penalty": {
+            "commited": null,
+            "missed": 0,
+            "saved": null,
+            "scored": 0,
+            "won": null
+          },
+          "shots": {
+            "on": 1,
+            "total": 5
+          },
+          "substitutes": {
+            "bench": 1,
+            "in": 1,
+            "out": 1
+          },
+          "tackles": {
+            "blocks": null,
+            "interceptions": null,
+            "total": 5
+          },
+          "team": {
+            "id": 47,
+            "logo": "https://media.api-sports.io/football/teams/47.png",
+            "name": "Tottenham"
+          }
+        },
+        {
+          "cards": {
+            "red": 0,
+            "yellow": 0,
+            "yellowred": 0
+          },
+          "dribbles": {
+            "attempts": 4,
+            "past": null,
+            "success": 1
+          },
+          "duels": {
+            "total": 12,
+            "won": 3
+          },
+          "fouls": {
+            "committed": null,
+            "drawn": 2
+          },
+          "games": {
+            "appearences": 2,
+            "captain": false,
+            "lineups": 1,
+            "minutes": 120,
+            "number": null,
+            "position": "Attacker",
+            "rating": "6.700000"
+          },
+          "goals": {
+            "assists": 1,
+            "conceded": 0,
+            "saves": null,
+            "total": 0
+          },
+          "league": {
+            "country": "England",
+            "flag": "https://media.api-sports.io/flags/gb-eng.svg",
+            "id": 45,
+            "logo": "https://media.api-sports.io/football/leagues/45.png",
+            "name": "FA Cup",
+            "season": 2024
+          },
+          "passes": {
+            "accuracy": null,
+            "key": 3,
+            "total": 28
+          },
+          "penalty": {
+            "commited": null,
+            "missed": 0,
+            "saved": null,
+            "scored": 0,
+            "won": null
+          },
+          "shots": {
+            "on": 1,
+            "total": 1
+          },
+          "substitutes": {
+            "bench": 1,
+            "in": 1,
+            "out": 0
+          },
+          "tackles": {
+            "blocks": null,
+            "interceptions": null,
+            "total": null
+          },
+          "team": {
+            "id": 47,
+            "logo": "https://media.api-sports.io/football/teams/47.png",
+            "name": "Tottenham"
+          }
+        },
+        {
+          "cards": {
+            "red": 0,
+            "yellow": 0,
+            "yellowred": 0
+          },
+          "dribbles": {
+            "attempts": 38,
+            "past": null,
+            "success": 20
+          },
+          "duels": {
+            "total": 63,
+            "won": 30
+          },
+          "fouls": {
+            "committed": 2,
+            "drawn": 8
+          },
+          "games": {
+            "appearences": 10,
+            "captain": false,
+            "lineups": 9,
+            "minutes": 675,
+            "number": null,
+            "position": "Attacker",
+            "rating": "7.220000"
+          },
+          "goals": {
+            "assists": 1,
+            "conceded": 0,
+            "saves": null,
+            "total": 3
+          },
+          "league": {
+            "country": "World",
+            "flag": null,
+            "id": 3,
+            "logo": "https://media.api-sports.io/football/leagues/3.png",
+            "name": "UEFA Europa League",
+            "season": 2024
+          },
+          "passes": {
+            "accuracy": null,
+            "key": 12,
+            "total": 293
+          },
+          "penalty": {
+            "commited": null,
+            "missed": 0,
+            "saved": null,
+            "scored": 1,
+            "won": null
+          },
+          "shots": {
+            "on": 9,
+            "total": 14
+          },
+          "substitutes": {
+            "bench": 1,
+            "in": 1,
+            "out": 7
+          },
+          "tackles": {
+            "blocks": 1,
+            "interceptions": 2,
+            "total": 2
+          },
+          "team": {
+            "id": 47,
+            "logo": "https://media.api-sports.io/football/teams/47.png",
+            "name": "Tottenham"
+          }
+        },
+        {
+          "cards": {
+            "red": 0,
+            "yellow": 0,
+            "yellowred": 0
+          },
+          "dribbles": {
+            "attempts": null,
+            "past": null,
+            "success": null
+          },
+          "duels": {
+            "total": null,
+            "won": null
+          },
+          "fouls": {
+            "committed": null,
+            "drawn": null
+          },
+          "games": {
+            "appearences": 0,
+            "captain": false,
+            "lineups": 0,
+            "minutes": 0,
+            "number": null,
+            "position": "Attacker",
+            "rating": null
+          },
+          "goals": {
+            "assists": null,
+            "conceded": null,
+            "saves": null,
+            "total": 0
+          },
+          "league": {
+            "country": "World",
+            "flag": null,
+            "id": 667,
+            "logo": "https://media.api-sports.io/football/leagues/667.png",
+            "name": "Friendlies Clubs",
+            "season": 2024
+          },
+          "passes": {
+            "accuracy": null,
+            "key": null,
+            "total": null
+          },
+          "penalty": {
+            "commited": null,
+            "missed": null,
+            "saved": null,
+            "scored": null,
+            "won": null
+          },
+          "shots": {
+            "on": null,
+            "total": null
+          },
+          "substitutes": {
+            "bench": 0,
+            "in": 0,
+            "out": 0
+          },
+          "tackles": {
+            "blocks": null,
+            "interceptions": null,
+            "total": null
+          },
+          "team": {
+            "id": 47,
+            "logo": "https://media.api-sports.io/football/teams/47.png",
+            "name": "Tottenham"
+          }
+        },
+        {
+          "cards": {
+            "red": 0,
+            "yellow": 0,
+            "yellowred": 0
+          },
+          "dribbles": {
+            "attempts": null,
+            "past": null,
+            "success": null
+          },
+          "duels": {
+            "total": null,
+            "won": null
+          },
+          "fouls": {
+            "committed": null,
+            "drawn": null
+          },
+          "games": {
+            "appearences": 1,
+            "captain": false,
+            "lineups": 0,
+            "minutes": 44,
+            "number": null,
+            "position": "Attacker",
+            "rating": null
+          },
+          "goals": {
+            "assists": null,
+            "conceded": null,
+            "saves": null,
+            "total": 0
+          },
+          "league": {
+            "country": "World",
+            "flag": null,
+            "id": 10,
+            "logo": "https://media.api-sports.io/football/leagues/10.png",
+            "name": "Friendlies",
+            "season": 2024
+          },
+          "passes": {
+            "accuracy": null,
+            "key": null,
+            "total": null
+          },
+          "penalty": {
+            "commited": null,
+            "missed": null,
+            "saved": null,
+            "scored": null,
+            "won": null
+          },
+          "shots": {
+            "on": null,
+            "total": null
+          },
+          "substitutes": {
+            "bench": 1,
+            "in": 1,
+            "out": 0
+          },
+          "tackles": {
+            "blocks": null,
+            "interceptions": null,
+            "total": null
+          },
+          "team": {
+            "id": 17,
+            "logo": "https://media.api-sports.io/football/teams/17.png",
+            "name": "South Korea"
+          }
+        }
+      ]
+    }
+  }
+}

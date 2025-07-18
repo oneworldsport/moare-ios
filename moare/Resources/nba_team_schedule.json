@@ -1,0 +1,1652 @@
+{
+  "keywords": [
+    {
+      "keyword": "경기",
+      "id": "game",
+      "priority": 1
+    }
+  ],
+  "entityInfo": [
+    {
+      "entityId": 1610612744,
+      "entityName": "골든스테이트 워리어스",
+      "category": "basketball",
+      "entityType": "team",
+      "leagueId": 90001,
+      "playerId": null,
+      "teamId": 1610612744
+    }
+  ],
+  "dataType": "basketball_league_schedule",
+  "data": {
+    "scheduleType": "team",
+    "scheduledMonths": [
+      "2024-10",
+      "2024-11",
+      "2024-12",
+      "2025-01",
+      "2025-02",
+      "2025-03",
+      "2025-04",
+      "2025-05",
+      "2025-06"
+    ],
+    "schedule": [
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 104,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612757,
+        "itemKey": "2024-10-24T11:00:00#0022400072",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 140,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 1",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 1
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 86,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612762,
+        "itemKey": "2024-10-26T10:30:00#0022400084",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 127,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 1",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 1
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 104,
+        "awayTeamId": 1610612746,
+        "homeTeamId": 1610612744,
+        "itemKey": "2024-10-28T09:30:00#0022400101",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 112,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 1",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 1
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 124,
+        "awayTeamId": 1610612740,
+        "homeTeamId": 1610612744,
+        "itemKey": "2024-10-30T11:00:00#0022400116",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 106,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 2",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 2
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 104,
+        "awayTeamId": 1610612740,
+        "homeTeamId": 1610612744,
+        "itemKey": "2024-10-31T11:00:00#0022400126",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 89,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 2",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 2
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 121,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612745,
+        "itemKey": "2024-11-03T09:00:00#0022400144",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 127,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 2",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 2
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 112,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612764,
+        "itemKey": "2024-11-05T09:15:00#0022400155",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 125,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 3",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 3
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 112,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612738,
+        "itemKey": "2024-11-07T09:30:00#0022400172",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 118,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 3",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 3
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 136,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612739,
+        "itemKey": "2024-11-09T09:30:00#0022400188",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 117,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 3",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 3
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 116,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612760,
+        "itemKey": "2024-11-11T09:00:00#0022400207",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 127,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 3",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 3
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 120,
+        "awayTeamId": 1610612742,
+        "homeTeamId": 1610612744,
+        "itemKey": "2024-11-13T12:00:00#0022400007",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 117,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 4",
+          "gameLabel": "Emirates NBA Cup",
+          "gameSubLabel": "West Group C",
+          "weekNumber": 4
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 123,
+        "awayTeamId": 1610612763,
+        "homeTeamId": 1610612744,
+        "itemKey": "2024-11-16T12:00:00#0022400019",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 118,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 4",
+          "gameLabel": "Emirates NBA Cup",
+          "gameSubLabel": "West Group C",
+          "weekNumber": 4
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 102,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612746,
+        "itemKey": "2024-11-19T12:30:00#0022400251",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 99,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 5",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 5
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 120,
+        "awayTeamId": 1610612737,
+        "homeTeamId": 1610612744,
+        "itemKey": "2024-11-21T12:00:00#0022400258",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 97,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 5",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 5
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 108,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612740,
+        "itemKey": "2024-11-23T09:30:00#0022400032",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 112,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 5",
+          "gameLabel": "Emirates NBA Cup",
+          "gameSubLabel": "West Group C",
+          "weekNumber": 5
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 104,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612759,
+        "itemKey": "2024-11-24T10:30:00#0022400269",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 94,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 5",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 5
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 120,
+        "awayTeamId": 1610612751,
+        "homeTeamId": 1610612744,
+        "itemKey": "2024-11-26T12:00:00#0022400284",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 128,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 6",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 6
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 101,
+        "awayTeamId": 1610612760,
+        "homeTeamId": 1610612744,
+        "itemKey": "2024-11-28T12:00:00#0022400299",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 105,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 6",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 6
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 113,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612756,
+        "itemKey": "2024-12-01T11:00:00#0022400303",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 105,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 6",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 6
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 119,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612743,
+        "itemKey": "2024-12-04T12:00:00#0022400058",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 115,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 7",
+          "gameLabel": "Emirates NBA Cup",
+          "gameSubLabel": "West Group C",
+          "weekNumber": 7
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 99,
+        "awayTeamId": 1610612745,
+        "homeTeamId": 1610612744,
+        "itemKey": "2024-12-06T12:00:00#0022400332",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 93,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 7",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 7
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 90,
+        "awayTeamId": 1610612750,
+        "homeTeamId": 1610612744,
+        "itemKey": "2024-12-07T12:00:00#0022400338",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 107,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 7",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 7
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 114,
+        "awayTeamId": 1610612750,
+        "homeTeamId": 1610612744,
+        "itemKey": "2024-12-09T10:30:00#0022400355",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 106,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 7",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 7
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 91,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612745,
+        "itemKey": "2024-12-12T11:30:00#0022401204",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 90,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 8",
+          "gameLabel": "Emirates NBA Cup",
+          "gameSubLabel": "West Quarterfinal",
+          "weekNumber": 8
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 133,
+        "awayTeamId": 1610612742,
+        "homeTeamId": 1610612744,
+        "itemKey": "2024-12-16T10:30:00#0022401228",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 143,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 8",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 8
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 144,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612763,
+        "itemKey": "2024-12-20T10:00:00#0022400366",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 93,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 9",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 9
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 103,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612750,
+        "itemKey": "2024-12-22T10:00:00#0022400383",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 113,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 9",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 9
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 105,
+        "awayTeamId": 1610612754,
+        "homeTeamId": 1610612744,
+        "itemKey": "2024-12-24T12:00:00#0022400403",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 111,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 10",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 10
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 113,
+        "awayTeamId": 1610612747,
+        "homeTeamId": 1610612744,
+        "itemKey": "2024-12-26T10:00:00#0022400408",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 115,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 10",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 10
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 102,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612746,
+        "itemKey": "2024-12-28T12:00:00#0022400426",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 92,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 10",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 10
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 109,
+        "awayTeamId": 1610612756,
+        "homeTeamId": 1610612744,
+        "itemKey": "2024-12-29T10:30:00#0022400431",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 105,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 10",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 10
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 95,
+        "awayTeamId": 1610612739,
+        "homeTeamId": 1610612744,
+        "itemKey": "2024-12-31T12:00:00#0022400446",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 113,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 11",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 11
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 139,
+        "awayTeamId": 1610612755,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-01-03T12:00:00#0022400467",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 105,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 11",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 11
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 121,
+        "awayTeamId": 1610612763,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-01-05T10:30:00#0022400485",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 113,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 11",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 11
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 99,
+        "awayTeamId": 1610612758,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-01-06T10:30:00#0022400492",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 129,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 11",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 11
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 98,
+        "awayTeamId": 1610612748,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-01-08T12:00:00#0022400508",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 114,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 12",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 12
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 104,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612765,
+        "itemKey": "2025-01-10T09:00:00#0022400518",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 107,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 12",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 12
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 108,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612754,
+        "itemKey": "2025-01-11T09:00:00#0022400525",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 96,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 12",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 12
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 104,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612761,
+        "itemKey": "2025-01-14T09:30:00#0022400550",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 101,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 13",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 13
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 115,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612750,
+        "itemKey": "2025-01-16T11:30:00#0022400565",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 116,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 13",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 13
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 122,
+        "awayTeamId": 1610612764,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-01-19T10:30:00#0022400589",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 114,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 13",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 13
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 85,
+        "awayTeamId": 1610612738,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-01-21T07:00:00#0022400604",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 125,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 14",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 14
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 123,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612758,
+        "itemKey": "2025-01-23T12:00:00#0022400619",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 117,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 14",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 14
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 131,
+        "awayTeamId": 1610612741,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-01-24T12:00:00#0022400628",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 106,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 14",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 14
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 108,
+        "awayTeamId": 1610612747,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-01-26T10:30:00#0022400644",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 118,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 14",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 14
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 114,
+        "awayTeamId": 1610612762,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-01-29T12:00:00#0022400661",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 103,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 15",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 15
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 116,
+        "awayTeamId": 1610612760,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-01-30T12:00:00#0022400673",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 109,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 15",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 15
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 105,
+        "awayTeamId": 1610612756,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-02-01T12:00:00#0022400685",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 130,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 15",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 15
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 104,
+        "awayTeamId": 1610612753,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-02-04T12:00:00#0022400708",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 99,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 16",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 16
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 131,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612762,
+        "itemKey": "2025-02-06T11:00:00#0022400725",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 128,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 16",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 16
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 120,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612747,
+        "itemKey": "2025-02-07T12:00:00#0022400731",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 112,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 16",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 16
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 111,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612741,
+        "itemKey": "2025-02-09T10:00:00#0022400745",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 132,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 16",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 16
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 111,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612749,
+        "itemKey": "2025-02-11T10:00:00#0022400760",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 125,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 17",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 17
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 111,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612742,
+        "itemKey": "2025-02-13T11:30:00#0022400782",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 107,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 17",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 17
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 98,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612745,
+        "itemKey": "2025-02-14T10:00:00#0022400784",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 105,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 17",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 17
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 108,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612758,
+        "itemKey": "2025-02-22T12:00:00#0022400805",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 132,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 18",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 18
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 126,
+        "awayTeamId": 1610612742,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-02-24T05:30:00#0022400812",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 102,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 18",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 18
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 128,
+        "awayTeamId": 1610612766,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-02-26T12:00:00#0022400834",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 92,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 19",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 19
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 115,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612753,
+        "itemKey": "2025-02-28T09:00:00#0022400845",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 121,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 19",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 19
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 126,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612755,
+        "itemKey": "2025-03-02T10:30:00#0022400864",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 119,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 19",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 19
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 101,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612766,
+        "itemKey": "2025-03-04T09:00:00#0022400875",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 119,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 20",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 20
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 102,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612752,
+        "itemKey": "2025-03-05T09:30:00#0022400885",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 114,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 20",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 20
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 119,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612751,
+        "itemKey": "2025-03-07T09:30:00#0022400901",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 121,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 20",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 20
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 115,
+        "awayTeamId": 1610612765,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-03-09T10:30:00#0022400919",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 110,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 20",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 20
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 130,
+        "awayTeamId": 1610612757,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-03-11T11:00:00#0022400938",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 120,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 21",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 21
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 130,
+        "awayTeamId": 1610612758,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-03-14T11:00:00#0022400957",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 104,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 21",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 21
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 97,
+        "awayTeamId": 1610612752,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-03-16T09:30:00#0022400974",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 94,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 21",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 21
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 105,
+        "awayTeamId": 1610612743,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-03-18T11:00:00#0022400990",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 114,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 22",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 22
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 104,
+        "awayTeamId": 1610612749,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-03-19T11:00:00#0022401012",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 93,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 22",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 22
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 117,
+        "awayTeamId": 1610612761,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-03-21T11:00:00#0022401005",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 114,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 22",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 22
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 124,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612737,
+        "itemKey": "2025-03-23T08:00:00#0022401025",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 115,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 22",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 22
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 112,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612748,
+        "itemKey": "2025-03-26T08:30:00#0022401047",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 86,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 23",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 23
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 95,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612740,
+        "itemKey": "2025-03-29T09:00:00#0022401072",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 111,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 23",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 23
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 106,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612759,
+        "itemKey": "2025-03-31T08:00:00#0022401086",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 148,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 23",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 23
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 125,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612763,
+        "itemKey": "2025-04-02T09:00:00#0022401100",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 134,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 24",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 24
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 116,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612747,
+        "itemKey": "2025-04-04T11:00:00#0022401117",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 123,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 24",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 24
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 118,
+        "awayTeamId": 1610612743,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-04-05T11:00:00#0022401125",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 104,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 24",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 24
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 96,
+        "awayTeamId": 1610612745,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-04-07T09:30:00#0022401143",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 106,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 24",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 24
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 95,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612756,
+        "itemKey": "2025-04-09T11:00:00#0022401154",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 133,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 25",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 25
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 111,
+        "awayTeamId": 1610612759,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-04-10T11:00:00#0022401163",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 114,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 25",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 25
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 86,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612757,
+        "itemKey": "2025-04-12T11:00:00#0022401183",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 103,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 25",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 25
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 119,
+        "awayTeamId": 1610612746,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-04-14T04:30:00#0022401198",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 124,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "",
+          "weekName": "Week 25",
+          "gameLabel": "",
+          "gameSubLabel": "",
+          "weekNumber": 25
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 121,
+        "awayTeamId": 1610612763,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-04-16T11:00:00#0052400121",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 116,
+        "gameInfo": {
+          "seriesGameNumber": "",
+          "seriesText": "GSW clinch 7 seed",
+          "weekName": "Week 26",
+          "gameLabel": "SoFi Play-In Tournament",
+          "gameSubLabel": "West",
+          "weekNumber": 26
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 85,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612745,
+        "itemKey": "2025-04-21T10:30:00#0042400151",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 95,
+        "gameInfo": {
+          "seriesGameNumber": "Game 1",
+          "seriesText": "GSW leads 1-0",
+          "weekName": "Week 26",
+          "gameLabel": "West First Round",
+          "gameSubLabel": "Game 1",
+          "weekNumber": 26
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 109,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612745,
+        "itemKey": "2025-04-24T10:30:00#0042400152",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 94,
+        "gameInfo": {
+          "seriesGameNumber": "Game 2",
+          "seriesText": "Series tied 1-1",
+          "weekName": "Week 27",
+          "gameLabel": "West First Round",
+          "gameSubLabel": "Game 2",
+          "weekNumber": 27
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 104,
+        "awayTeamId": 1610612745,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-04-27T09:30:00#0042400153",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 93,
+        "gameInfo": {
+          "seriesGameNumber": "Game 3",
+          "seriesText": "GSW leads 2-1",
+          "weekName": "Week 27",
+          "gameLabel": "West First Round",
+          "gameSubLabel": "Game 3",
+          "weekNumber": 27
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 109,
+        "awayTeamId": 1610612745,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-04-29T11:00:00#0042400154",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 106,
+        "gameInfo": {
+          "seriesGameNumber": "Game 4",
+          "seriesText": "GSW leads 3-1",
+          "weekName": "Week 28",
+          "gameLabel": "West First Round",
+          "gameSubLabel": "Game 4",
+          "weekNumber": 28
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 131,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612745,
+        "itemKey": "2025-05-01T08:30:00#0042400155",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 116,
+        "gameInfo": {
+          "seriesGameNumber": "Game 5",
+          "seriesText": "GSW leads 3-2",
+          "weekName": "Week 28",
+          "gameLabel": "West First Round",
+          "gameSubLabel": "Game 5",
+          "weekNumber": 28
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 107,
+        "awayTeamId": 1610612745,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-05-03T10:00:00#0042400156",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 115,
+        "gameInfo": {
+          "seriesGameNumber": "Game 6",
+          "seriesText": "Series tied 3-3",
+          "weekName": "Week 28",
+          "gameLabel": "West First Round",
+          "gameSubLabel": "Game 6",
+          "weekNumber": 28
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 89,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612745,
+        "itemKey": "2025-05-05T09:30:00#0042400157",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 103,
+        "gameInfo": {
+          "seriesGameNumber": "Game 7",
+          "seriesText": "GSW wins 4-3",
+          "weekName": "Week 28",
+          "gameLabel": "West First Round",
+          "gameSubLabel": "Game 7",
+          "weekNumber": 28
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 88,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612750,
+        "itemKey": "2025-05-07T10:30:00#0042400231",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 99,
+        "gameInfo": {
+          "seriesGameNumber": "Game 1",
+          "seriesText": "GSW leads 1-0",
+          "weekName": "Week 29",
+          "gameLabel": "West Conf. Semifinals",
+          "gameSubLabel": "Game 1",
+          "weekNumber": 29
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 117,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612750,
+        "itemKey": "2025-05-09T09:30:00#0042400232",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 93,
+        "gameInfo": {
+          "seriesGameNumber": "Game 2",
+          "seriesText": "Series tied 1-1",
+          "weekName": "Week 29",
+          "gameLabel": "West Conf. Semifinals",
+          "gameSubLabel": "Game 2",
+          "weekNumber": 29
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 97,
+        "awayTeamId": 1610612750,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-05-11T09:30:00#0042400233",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 102,
+        "gameInfo": {
+          "seriesGameNumber": "Game 3",
+          "seriesText": "MIN leads 2-1",
+          "weekName": "Week 29",
+          "gameLabel": "West Conf. Semifinals",
+          "gameSubLabel": "Game 3",
+          "weekNumber": 29
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 110,
+        "awayTeamId": 1610612750,
+        "homeTeamId": 1610612744,
+        "itemKey": "2025-05-13T11:00:00#0042400234",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 117,
+        "gameInfo": {
+          "seriesGameNumber": "Game 4",
+          "seriesText": "MIN leads 3-1",
+          "weekName": "Week 30",
+          "gameLabel": "West Conf. Semifinals",
+          "gameSubLabel": "Game 4",
+          "weekNumber": 30
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 121,
+        "awayTeamId": 1610612744,
+        "homeTeamId": 1610612750,
+        "itemKey": "2025-05-15T10:30:00#0042400235",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 110,
+        "gameInfo": {
+          "seriesGameNumber": "Game 5",
+          "seriesText": "MIN wins 4-1",
+          "weekName": "Week 30",
+          "gameLabel": "West Conf. Semifinals",
+          "gameSubLabel": "Game 5",
+          "weekNumber": 30
+        }
+      }
+    ]
+  }
+}

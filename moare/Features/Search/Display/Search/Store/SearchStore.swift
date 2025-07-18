@@ -109,6 +109,7 @@ struct SearchStore {
            test
            --------------------- */
         case initForTest
+        case testSearch(viewForTest: SportDisplayType)
     }
     
     @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
@@ -940,6 +941,13 @@ struct SearchStore {
                 state.poppedView = nil
                 
                 return .none
+                
+            case .testSearch(let viewForTest):
+                return .run { send in
+                    let result = try await searchClient.fetchFromJson(viewForTest: viewForTest)
+                    
+                    await send(.searchResultsReceived(result))
+                }
             }
         }
     }

@@ -32,6 +32,8 @@ struct SearchView: View {
     @State private var isNoticeIconVisible = false
     @State private var isNoticeOpened = false
     
+    @State var viewForTest: SportDisplayType? = nil
+    
     var body: some View {
         ZStack {
             if let searchStore = searchStore {
@@ -276,6 +278,10 @@ struct SearchView: View {
             
             // test
 //            searchStore?.send(.initForTest)
+            
+            if let viewForTest = viewForTest {
+                self.searchStore?.send(.testSearch(viewForTest: viewForTest))
+            }
         }
     }
     
