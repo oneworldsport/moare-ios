@@ -98,10 +98,9 @@ struct SearchClient {
             filePath = "mlb_team_stats"
         case .mlbTeamStandings:
             filePath = "mlb_team_standings"
-        case .mlbTeamSchedule:
-            filePath = "mlb_team_schedule"
         case .mlbLeagueSchedule:
             filePath = "mlb_league_schedule"
+//            filePath = "mlb_team_schedule"
         case .mlbGameStats:
             filePath = "mlb_game_stats"
         default:

@@ -160,7 +160,7 @@ struct MLBTeamScheduleListItem: View {
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
-                    searchStore.send(.selectMLBGame(game: data))
+//                    searchStore.send(.selectMLBGame(game: data))
                     
                     // set selected game's isOpened true
                     mlbTeamScheduleStore.send(.updateResultOpenedState(gameId: data.gameId, isOpened: true))

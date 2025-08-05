@@ -491,7 +491,9 @@ struct MLBGameStatsTeamButtonAdditionalInfoContainer: View {
                 // refresh button
                 if displayModel?.game.status.statusCode == "I" {
                     Button(action: {
-                        searchStore.send(.refreshGame(category: "baseball"))
+                        if let displayModel = mlbGameStatsStore.baseGameStats.displayModel {
+                            searchStore.send(.refreshGame(season: displayModel.season, category: "baseball"))
+                        }
                     }) {
                         Image(systemName: "arrow.clockwise")
                             .tint(.secondary)
