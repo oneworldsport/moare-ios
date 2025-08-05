@@ -251,7 +251,9 @@ struct FBGameStatsTeamButtonContainer: View {
                     Spacer()
                     
                     Button(action: {
-                        searchStore.send(.refreshGame(category: "football"))
+                        if let displayModel = fbGameStatsStore.displayModel {
+                            searchStore.send(.refreshGame(season: displayModel.season, category: "football"))
+                        }
                     }) {
                         Image(systemName: "arrow.clockwise")
                             .tint(.secondary)

@@ -217,7 +217,7 @@ struct FBTeamScheduleListItem: View {
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
-                    searchStore.send(.selectFBGame(game: data, leagueId: fbTeamScheduleStore.baseSchedule.displayModel?.leagueId))
+//                    searchStore.send(.selectFBGame(game: data, leagueId: fbTeamScheduleStore.baseSchedule.displayModel?.leagueId))
                     
                     // set selected game's isOpened true
                     fbTeamScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: true))
