@@ -109,9 +109,6 @@ struct FBLeagueScheduleStore {
                     
                     return .send(.setDays(isInit: true))
                     
-                case .teamFlat:
-                    return .none
-                    
                 default:
                     return .none
                 }
