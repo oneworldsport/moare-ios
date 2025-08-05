@@ -66,15 +66,15 @@ struct SearchStore {
         case updateTextField(String, Bool = true)
         case updateTextFieldVisibleState(Bool)
         case performSearch(searchType: SearchType = .query, aniDuration: CGFloat = 0)
-        case selectFBGame(game: FBGameForSchedule, leagueId: Int?)
-        case selectNBAGame(game: NBAGameForSchedule)
-        case selectKBOGame(game: KBOGameForSchedule)
-        case selectMLBGame(game: MLBGameForSchedule)
-        case showPlayerStats(category: String? = nil, playerId: Int)
+        case selectFBGame(game: FBGameForSchedule, season: Int, leagueId: Int?)
+        case selectNBAGame(game: NBAGameForSchedule, season: Int)
+        case selectKBOGame(game: KBOGameForSchedule, season: Int)
+        case selectMLBGame(game: MLBGameForSchedule, season: Int)
+        case showPlayerStats(season: Int? = nil, category: String? = nil, playerId: Int)
         case showTeamStats(teamId: Int)
         case showGameStats(gameType: String)
         case updateTrendingKeywordsVisibleState(Bool)
-        case refreshGame(category: String)
+        case refreshGame(season: Int, category: String)
         case selectNBATournamentRound(gameList: [NBAGame])
         
         /* ---------------------
@@ -453,9 +453,10 @@ struct SearchStore {
                 }
                 return .none
                 
-            case .selectFBGame(let game, let leagueId):
+            case .selectFBGame(let game, let season, let leagueId):
                 return .run { send in
                     let result = try await searchClient.fetchById(
+                        season: season,
                         category: "football",
                         date: game.date,
                         dataType: "football_game_stats",
@@ -467,9 +468,10 @@ struct SearchStore {
                     await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
                 }
                 
-            case .selectNBAGame(let game):
+            case .selectNBAGame(let game, let season):
                 return .run { send in
                     let result = try await searchClient.fetchById(
+                        season: season,
                         category: "basketball",
                         date: game.date,
                         dataType: "basketball_game_stats",
@@ -481,9 +483,10 @@ struct SearchStore {
                     await send(.updateMainDisplayModel(data: result.data))
                 }
                 
-            case .selectKBOGame(let game):
+            case .selectKBOGame(let game, let season):
                 return .run { send in
                     let result = try await searchClient.fetchById(
+                        season: season,
                         category: "baseball",
                         date: game.date,
                         dataType: "baseball_game_stats",
@@ -495,9 +498,10 @@ struct SearchStore {
                     await send(.updateMainDisplayModel(data: result.data))
                 }
                 
-            case .selectMLBGame(let game):
+            case .selectMLBGame(let game, let season):
                 return .run { send in
                     let result = try await searchClient.fetchById(
+                        season: season,
                         category: "baseball",
                         date: game.date,
                         dataType: "baseball_game_stats",
@@ -534,7 +538,7 @@ struct SearchStore {
                 
                 return .none
                 
-            case .showPlayerStats(let category, let playerId):
+            case .showPlayerStats(let season, let category, let playerId):
                 state.resultVisibleState = false
                 
                 return .run { [viewStack = state.viewStack] send in
@@ -547,6 +551,7 @@ struct SearchStore {
                             
                             // TODO: Has to add loading
                             let result = try await searchClient.fetchById(
+                                season: season,
                                 category: category,
                                 dataType: "\(category)_player_stats",
                                 leagueId: leagueId,
@@ -762,12 +767,13 @@ struct SearchStore {
                     await send(.updateResultVisibleState(bool: true))
                 }
                 
-            case .refreshGame(let category):
+            case .refreshGame(let season, let category):
                 return .run { [viewStack = state.viewStack, displayModels = state.displayModels] send in
                     switch viewStack.last {
                     case .fbGameStats(let responseModel, let displayModel):
                         if let game = (displayModels[.fbGameStats] as? FBGameStatsDisplayModel)?.game {
                             let result = try await searchClient.fetchById(
+                                season: season,
                                 category: category,
                                 date: game.fixture.date,
                                 dataType: "\(category)_game_stats",
@@ -784,6 +790,7 @@ struct SearchStore {
                            let gameSummary = game.gameSummary,
                            let boxScoreTraditional = game.boxScoreTraditional {
                             let result = try await searchClient.fetchById(
+                                season: season,
                                 category: category,
                                 date: gameSummary.date,
                                 dataType: "\(category)_game_stats",

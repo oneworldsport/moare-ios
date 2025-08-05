@@ -20,12 +20,12 @@ struct SearchClient {
         return try await apiClient.fetchData(endpoint: .searchByKeyword(keyword: keyword))
     }
     
-    func fetchLeagueSchedule(entity: EntityInfo, season: Int, yearMonth: String) async throws -> DataModel {
-        return try await apiClient.fetchData(endpoint: .getLeagueSchedule(entity: entity, season: CalendarUtil.currentYear, yearMonth: yearMonth))
+    func fetchLeagueSchedule(entity: EntityInfo, season: Int?, yearMonth: String) async throws -> DataModel {
+        return try await apiClient.fetchData(endpoint: .getLeagueSchedule(entity: entity, season: season ?? CalendarUtil.currentYear, yearMonth: yearMonth))
     }
     
-    func fetchById(category: String, date: String? = nil, dataType:String, leagueId: Int, id: String) async throws -> DataModel {
-        return try await apiClient.fetchData(endpoint: .searchById(category: category, date: date, dataType: dataType, leagueId: leagueId, id: id))
+    func fetchById(season: Int?, category: String, date: String? = nil, dataType:String, leagueId: Int, id: String) async throws -> DataModel {
+        return try await apiClient.fetchData(endpoint: .searchById(season: season ?? CalendarUtil.currentYear, category: category, date: date, dataType: dataType, leagueId: leagueId, id: id))
     }
     
     func fetchFromJson(viewForTest: SportDisplayType) async throws -> DataModel {
@@ -45,8 +45,8 @@ struct SearchClient {
         case .fbTeamStandings:
             filePath = "football_team_standings"
         case .fbLeagueSchedule:
-//            filePath = "football_league_schedule"
-            filePath = "football_team_schedule"
+            filePath = "football_league_schedule"
+//            filePath = "football_team_schedule"
         case .fbGameStats:
             filePath = "football_game_stats"
         case .nbaPlayerInfo:

@@ -12,7 +12,7 @@ enum APIEndpoint {
     case getLeagueSchedule(entity: EntityInfo, season: Int, yearMonth: String)
     case searchByKeyword(keyword: KeywordInfo)
     case searchByEndpoint(endpoint: String)
-    case searchById(category: String, date: String?, dataType: String, leagueId: Int, id: String)
+    case searchById(season: Int, category: String, date: String?, dataType: String, leagueId: Int, id: String)
     
     case fetchTrendingKeywords
     
@@ -56,10 +56,11 @@ enum APIEndpoint {
                 URLQueryItem(name: "endpoint", value: endpoint)
             ]
             
-        case .searchById(let category, let date, let dataType, let leagueId, let id):
+        case .searchById(let season, let category, let date, let dataType, let leagueId, let id):
             components.path = "/search/id"
             
             var queryItems = [
+                URLQueryItem(name: "season", value: String(season)),
                 URLQueryItem(name: "category", value: category),
                 URLQueryItem(name: "dataType", value: dataType),
                 URLQueryItem(name: "leagueId", value: String(leagueId)),
