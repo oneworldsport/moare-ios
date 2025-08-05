@@ -458,19 +458,6 @@ extension DataModel {
                 self.data = .unknown
             }
             
-        case let dataType where dataType == "baseball_team_schedule":
-            if leagueId == Constants.Ids.kbo {
-                let responseModel = try container.decode(KBOGameScheduleResponseModel.self, forKey: .data)
-                let displayModel = modelConverter.kboTeamScheduleConverter(response: responseModel)
-                self.data = .kboTeamSchedule(responseModel, displayModel)
-            } else if leagueId == Constants.Ids.mlb {
-                let responseModel = try container.decode(MLBGameScheduleResponseModel.self, forKey: .data)
-                let displayModel = modelConverter.mlbTeamScheduleConverter(response: responseModel)
-                self.data = .mlbTeamSchedule(responseModel, displayModel)
-            } else {
-                self.data = .unknown
-            }
-            
         case let dataType where dataType == "baseball_league_schedule":
             if leagueId == Constants.Ids.kbo {
                 let responseModel = try container.decode(KBOGameScheduleResponseModel.self, forKey: .data)

@@ -159,7 +159,7 @@ struct KBOTeamScheduleListItem: View {
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
-                    searchStore.send(.selectKBOGame(game: data))
+//                    searchStore.send(.selectKBOGame(game: data))
                     
                     // set selected game's isOpened true
                     kboTeamScheduleStore.send(.updateResultOpenedState(itemKey: data.itemKey, isOpened: true))

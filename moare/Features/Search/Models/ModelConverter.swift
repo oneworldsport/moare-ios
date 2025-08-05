@@ -488,16 +488,6 @@ struct ModelConverter {
         )
     }
     
-    func kboTeamScheduleConverter(response: KBOGameScheduleResponseModel) -> KBOTeamScheduleDisplayModel {
-        return KBOTeamScheduleDisplayModel(
-            leagueId: leagueId ?? Constants.Ids.kbo,
-            keywords: keywords,
-            entityInfo: entityInfo,
-            season: season,
-            games: response.schedule
-        )
-    }
-    
     func kboLeagueScheduleConverter(response: KBOGameScheduleResponseModel) -> KBOLeagueScheduleDisplayModel {
         let yearMonthList: [String] = response.scheduledMonths?.map {
             let components = $0.split(separator: "-")
@@ -511,6 +501,7 @@ struct ModelConverter {
             keywords: keywords,
             entityInfo: entityInfo,
             season: season,
+            scheduleType: response.scheduleType ?? .league,
             yearMonthList: yearMonthList,
             games: response.schedule
         )
