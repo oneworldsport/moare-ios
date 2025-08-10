@@ -87,9 +87,9 @@ struct FBTeamScheduleView: View {
                 }
             }
             .onChange(of: displayModel) {
-                if case .fbTeamSchedule = searchStore.poppedView {
-                    fbTeamScheduleStore?.send(.baseSchedule(.initData(displayModel: displayModel)))
-                }
+//                if case .fbTeamSchedule = searchStore.poppedView {
+//                    fbTeamScheduleStore?.send(.baseSchedule(.initData(displayModel: displayModel)))
+//                }
             }
         } // if let searchStore
     }

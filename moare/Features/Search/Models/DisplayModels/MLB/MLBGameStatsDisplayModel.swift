@@ -11,5 +11,6 @@ struct MLBGameStatsDisplayModel: SportDisplayModel {
     let leagueId: Int
     let keywords: [Keyword]
     let entityInfo: [EntityInfo]
+    let season: Int
     let game: MLBGame
 }

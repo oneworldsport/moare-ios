@@ -11,6 +11,7 @@ struct FBPlayerInfoDisplayModel: SportDisplayModel {
     let leagueId: Int
     let keywords: [Keyword]
     let entityInfo: [EntityInfo]
+    let season: Int
     let info: FBPlayerInfo
     let stats: FBPlayerStats?
     let lastGame: FBGame?

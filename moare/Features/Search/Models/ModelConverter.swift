@@ -11,11 +11,13 @@ struct ModelConverter {
     let keywords: [Keyword]
     let entityInfo: [EntityInfo]
     let leagueId: Int?
+    let season: Int
     
     init(keywords: [Keyword] = [], entityInfo: [EntityInfo] = []) {
         self.keywords = keywords
         self.entityInfo = entityInfo
         self.leagueId = entityInfo.first?.leagueId
+        self.season = Calendar.current.component(.year, from: Date())
     }
     
     /* ---------------------
@@ -35,6 +37,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             info: info.player,
             stats: stats,
             lastGame: response.lastGame,
@@ -52,6 +55,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             player: info.player,
             team: stats?.team,
             stats: info.statistics
@@ -76,6 +80,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             standings: standings
         )
     }
@@ -89,6 +94,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             team: info.team,
             venue: info.venue,
             stats: stats,
@@ -104,6 +110,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             team: info.team,
             venue: info.venue,
             stats: info.statistics
@@ -138,19 +145,20 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             league: league,
             standings: standings
         )
     }
     
-    func fbTeamScheduleConverter(response: FBGameScheduleResponseModel) -> FBTeamScheduleDisplayModel {
-        return FBTeamScheduleDisplayModel(
-            leagueId: leagueId ?? Constants.Ids.epl,
-            keywords: keywords,
-            entityInfo: entityInfo,
-            games: response.schedule
-        )
-    }
+//    func fbTeamScheduleConverter(response: FBGameScheduleResponseModel) -> FBTeamScheduleDisplayModel {
+//        return FBTeamScheduleDisplayModel(
+//            leagueId: leagueId ?? Constants.Ids.epl,
+//            keywords: keywords,
+//            entityInfo: entityInfo,
+//            games: response.schedule
+//        )
+//    }
     
     func fbLeagueScheduleConverter(response: FBGameScheduleResponseModel) -> FBLeagueScheduleDisplayModel {
         let yearMonthList: [String] = response.scheduledMonths?.map {
@@ -164,6 +172,8 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
+            scheduleType: response.scheduleType ?? .league,
             yearMonthList: yearMonthList,
             games: response.schedule
         )
@@ -175,6 +185,7 @@ struct ModelConverter {
             leagueId: game.league.id,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             game: game
         )
     }
@@ -201,6 +212,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             info: info.player,
             stats: stats,
             lastGame: response.lastGame,
@@ -216,6 +228,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             player: info.player,
             stats: info.statistics
         )
@@ -239,6 +252,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             standings: standings
         )
     }
@@ -252,6 +266,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             team: info.team,
             venue: info.venue,
             stats: stats,
@@ -267,6 +282,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             team: info.team,
             venue: info.venue,
             stats: info.statistics
@@ -293,6 +309,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             standings: standings
         )
     }
@@ -302,6 +319,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             games: response.schedule
         )
     }
@@ -318,6 +336,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             yearMonthList: yearMonthList,
             games: response.schedule
         )
@@ -328,6 +347,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             game: response.game!
         )
     }
@@ -337,6 +357,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             yearMonthList: [],
             games: response.schedule
         )
@@ -372,6 +393,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             info: info.player,
             stats: stats,
             lastGame: response.lastGame,
@@ -388,6 +410,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.kbo,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             player: info.player,
             stats: info.statistics
         )
@@ -411,6 +434,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.kbo,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             standings: standings
         )
     }
@@ -425,6 +449,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.kbo,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             team: info.team,
             venue: info.venue,
             stats: info.statistics.first,
@@ -440,6 +465,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.kbo,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             team: info.team,
             venue: info.venue,
             stats: info.statistics
@@ -457,6 +483,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.kbo,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             standings: standings
         )
     }
@@ -466,6 +493,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.kbo,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             games: response.schedule
         )
     }
@@ -482,6 +510,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.kbo,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             yearMonthList: yearMonthList,
             games: response.schedule
         )
@@ -492,6 +521,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.kbo,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             game: response.game!
         )
     }
@@ -528,6 +558,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             info: info.player,
             teamId: teamId,
             stats: stats,
@@ -559,6 +590,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             player: info.player,
             teamId: teamId,
             stats: info.statistics
@@ -583,6 +615,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             standings: standings
         )
     }
@@ -597,6 +630,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             team: info.team,
             venue: info.venue,
             stats: info.statistics.first,
@@ -612,6 +646,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             team: info.team,
             venue: info.venue,
             stats: info.statistics
@@ -629,6 +664,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             standings: standings
         )
     }
@@ -638,6 +674,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             games: response.schedule
         )
     }
@@ -654,6 +691,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             yearMonthList: yearMonthList,
             games: response.schedule
         )
@@ -664,6 +702,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             game: response.game!
         )
     }

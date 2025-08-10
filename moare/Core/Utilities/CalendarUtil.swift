@@ -15,10 +15,12 @@ struct DayInfo {
 }
 
 enum TimeFormatType {
-    case ampm, ampmWithDate, yearMonth
+    case ampm, ampmWithDate, ampmWithDayOfWeekDate, yearMonth
 }
 
 class CalendarUtil {
+    static let currentYear = Calendar.current.component(.year, from: Date())
+    
     enum DefaultYearMonthType {
         case nextYearMonth, currentYearMonth, previousYearMonth
     }
@@ -95,6 +97,7 @@ class CalendarUtil {
         switch formatType {
         case .ampm: outputFormatter.dateFormat = "a hh:mm"
         case .ampmWithDate: outputFormatter.dateFormat = "yyyy.MM.dd a hh:mm"
+        case .ampmWithDayOfWeekDate: outputFormatter.dateFormat = "yyyy.MM.dd (E) a hh:mm"
         case .yearMonth: outputFormatter.dateFormat = "yy/MM"
         }
         
@@ -207,5 +210,18 @@ class CalendarUtil {
         } else {
             return 0
         }
+    }
+    
+    static func isUpcomingDay(date: String) -> Bool {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        
+        guard let gameDate = dateFormatter.date(from: date) else {
+                return false
+        }
+        
+        let today = Date()
+        
+        return gameDate >= today
     }
 }

@@ -12,6 +12,7 @@ struct DataModel: Decodable {
     let dataType: String
     let keywords: [Keyword]
     let entityInfo: [EntityInfo]
+    let season: Int
     let data: SportDecodableModel
 }
 
@@ -52,7 +53,7 @@ indirect enum SportDecodableModel: Equatable {
     case fbTeamInfo(FBTeamInfoResponseModel, FBTeamInfoDisplayModel)
     case fbTeamStats(FBTeamInfoResponseModel, FBTeamStatsDisplayModel)
     case fbTeamStandings(FBTeamStandingsResponseModel, FBTeamStandingsDisplayModel)
-    case fbTeamSchedule(FBGameScheduleResponseModel, FBTeamScheduleDisplayModel)
+//    case fbTeamSchedule(FBGameScheduleResponseModel, FBTeamScheduleDisplayModel)
     case fbLeagueSchedule(FBGameScheduleResponseModel, FBLeagueScheduleDisplayModel)
     case fbGameStats(FBGameStatsResponseModel, FBGameStatsDisplayModel)
     
@@ -100,7 +101,7 @@ indirect enum SportDecodableModel: Equatable {
             (.fbTeamInfo, .fbTeamInfo),
             (.fbTeamStats, .fbTeamStats),
             (.fbTeamStandings, .fbTeamStandings),
-            (.fbTeamSchedule, .fbTeamSchedule),
+//            (.fbTeamSchedule, .fbTeamSchedule),
             (.fbLeagueSchedule, .fbLeagueSchedule),
             (.fbGameStats, .fbGameStats),
             (.nbaPlayerInfo, .nbaPlayerInfo),
@@ -144,6 +145,7 @@ extension DataModel {
         self.dataType = try container.decode(String.self, forKey: .dataType)
         self.keywords = try container.decode([Keyword].self, forKey: .keywords)
         self.entityInfo = try container.decode([EntityInfo].self, forKey: .entityInfo)
+        self.season = try container.decode(Int.self, forKey: .season)
         
         let leagueId = self.entityInfo.first?.leagueId
         
@@ -211,10 +213,10 @@ extension DataModel {
                 self.data = .fbTeamStandings(responseModel, displayModel)
             }
             
-        case let dataType where dataType == "football_team_schedule":
-            let responseModel = try container.decode(FBGameScheduleResponseModel.self, forKey: .data)
-            let displayModel = modelConverter.fbTeamScheduleConverter(response: responseModel)
-            self.data = .fbTeamSchedule(responseModel, displayModel)
+//        case let dataType where dataType == "football_team_schedule":
+//            let responseModel = try container.decode(FBGameScheduleResponseModel.self, forKey: .data)
+//            let displayModel = modelConverter.fbTeamScheduleConverter(response: responseModel)
+//            self.data = .fbTeamSchedule(responseModel, displayModel)
             
         case let dataType where dataType == "football_league_schedule":
             let responseModel = try container.decode(FBGameScheduleResponseModel.self, forKey: .data)
@@ -511,7 +513,7 @@ extension DataModel {
     }
     
     private enum CodingKeys: String, CodingKey {
-        case dataType, keywords, entityInfo, data
+        case dataType, keywords, entityInfo, data, season
     }
 }
 

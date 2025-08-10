@@ -320,8 +320,6 @@ struct SearchStore {
                     state.displayModels[.fbTeamStats] = displayModel
                 case .fbTeamStandings(_, let displayModel):
                     state.displayModels[.fbTeamStandings] = displayModel
-                case .fbTeamSchedule(_, let displayModel):
-                    state.displayModels[.fbTeamSchedule] = displayModel
                 case .fbLeagueSchedule(_, let displayModel):
                     state.displayModels[.fbLeagueSchedule] = displayModel
                 case .fbGameStats(_, let displayModel):
@@ -849,8 +847,6 @@ struct SearchStore {
                     state.displayModels[.fbTeamStats] = displayModel
                 case .fbTeamStandings(_, let displayModel):
                     state.displayModels[.fbTeamStandings] = displayModel
-                case .fbTeamSchedule(_, let displayModel):
-                    state.displayModels[.fbTeamSchedule] = displayModel
                 case .fbLeagueSchedule(_, let displayModel):
                     state.displayModels[.fbLeagueSchedule] = displayModel
                 case .fbGameStats(_, let displayModel):
