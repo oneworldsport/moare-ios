@@ -294,11 +294,6 @@ extension DataModel {
                 self.data = .nbaTeamStandings(responseModel, displayModel)
             }
             
-        case let dataType where dataType == "basketball_team_schedule":
-            let responseModel = try container.decode(NBAGameScheduleResponseModel.self, forKey: .data)
-            let displayModel = modelConverter.nbaTeamScheduleConverter(response: responseModel)
-            self.data = .nbaTeamSchedule(responseModel, displayModel)
-            
         case let dataType where dataType == "basketball_league_schedule":
             let responseModel = try container.decode(NBAGameScheduleResponseModel.self, forKey: .data)
             let displayModel = modelConverter.nbaLeagueScheduleConverter(response: responseModel)

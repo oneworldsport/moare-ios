@@ -74,7 +74,7 @@ struct SearchStore {
         case showTeamStats(teamId: Int)
         case showGameStats(gameType: String)
         case updateTrendingKeywordsVisibleState(Bool)
-        case refreshGame(season: Int, category: String)
+        case refreshGame(season: Int?, category: String)
         case selectNBATournamentRound(gameList: [NBAGame])
         
         /* ---------------------
@@ -337,8 +337,6 @@ struct SearchStore {
                     state.displayModels[.nbaTeamStats] = displayModel
                 case .nbaTeamStandings(_, let displayModel):
                     state.displayModels[.nbaTeamStandings] = displayModel
-                case .nbaTeamSchedule(_, let displayModel):
-                    state.displayModels[.nbaTeamSchedule] = displayModel
                 case .nbaLeagueSchedule(_, let displayModel):
                     state.displayModels[.nbaLeagueSchedule] = displayModel
                 case .nbaGameStats(_, let displayModel):
@@ -811,11 +809,11 @@ struct SearchStore {
                 
                 switch state.viewStack.last {
                 case .nbaLeagueTournament(let responseModel, let displayModel):
-                    let teamScheduleResponseModel = NBAGameScheduleResponseModel(scheduledMonths: nil, schedule: ModelConverter.nbaGameListToGameScheduleListConverter(gameList: gameList))
+                    let teamScheduleResponseModel = NBAGameScheduleResponseModel(scheduleType: ScheduleType.teamFlat, scheduledMonths: nil, schedule: ModelConverter.nbaGameListToGameScheduleListConverter(gameList: gameList))
                     
-                    dataModel = .nbaTeamSchedule(
+                    dataModel = .nbaLeagueSchedule(
                         teamScheduleResponseModel,
-                        modelConverter.nbaTeamScheduleConverter(response: teamScheduleResponseModel)
+                        modelConverter.nbaLeagueScheduleConverter(response: teamScheduleResponseModel)
                     )
                     
                 default: return .none // Make it do nothing
@@ -871,8 +869,6 @@ struct SearchStore {
                     state.displayModels[.nbaTeamStats] = displayModel
                 case .nbaTeamStandings(_, let displayModel):
                     state.displayModels[.nbaTeamStandings] = displayModel
-                case .nbaTeamSchedule(_, let displayModel):
-                    state.displayModels[.nbaTeamSchedule] = displayModel
                 case .nbaLeagueSchedule(_, let displayModel):
                     state.displayModels[.nbaLeagueSchedule] = displayModel
                 case .nbaGameStats(_, let displayModel):

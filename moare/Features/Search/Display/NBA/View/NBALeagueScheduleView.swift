@@ -30,80 +30,40 @@ struct NBALeagueScheduleView: View {
             let nbaGameStatsModel = searchStore.displayModels[.nbaGameStats] as? NBAGameStatsDisplayModel
             
             VStack(spacing: 0) {
-                if let nbaLeagueScheduleStore {
-                    if nbaGameStatsModel == nil {
-                        /* ---------------------
-                           calendar
-                           - hides when game selected
-                           --------------------- */
-                        CalendarList(
-                            dateList: nbaLeagueScheduleStore.yearMonthList,
-                            calendarType: .yearmonth,
-                            selectedIndex: nbaLeagueScheduleStore.selectedYearMonthIndex
-                        ) { yearMonth, index in
-                            shouldScrollCalendar = true
-                            nbaLeagueScheduleStore.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
-                        }
-                        .padding(.bottom, 10)
-                        
-                        CalendarList(
-                            dateList: nbaLeagueScheduleStore.days,
-                            calendarType: .day,
-                            selectedIndex: nbaLeagueScheduleStore.selectedDayIndex,
-                            shouldScroll: $shouldScrollCalendar
-                        ) { day, index in
-                            shouldScrollCalendar = false
-                            nbaLeagueScheduleStore.send(.selectDay(day: day, selectedIndex: index))
-                        }
-                        .padding(.bottom, 6)
-                        
-                        /* ---------------------
-                           all result open button
-                           - hides when game selected
-                           --------------------- */
-                        HStack {
-                            Spacer()
-                            
-                            CapsuleButton(
-                                text: nbaLeagueScheduleStore.isAllResultOpened ? StringConstants.resultHide : StringConstants.resultOpen,
-                                color: .secondary
-                            ) {
+                if let nbaLeagueScheduleStore,
+                   let nbaDisplayModel = nbaLeagueScheduleStore.baseSchedule.displayModel as? NBALeagueScheduleDisplayModel {
+                    ScheduleViewContainer(
+                        state: ScheduleContainerState(
+                            shouldShowCalendar: nbaDisplayModel.scheduleType != ScheduleType.teamFlat,
+                            shouldFetchSchedule:  nbaDisplayModel.scheduleType == ScheduleType.league,
+                            displayDataState: nbaLeagueScheduleStore.baseSchedule.displayDataState,
+                            calendarUiState: CalendarUiState(
+                                yearMonthList: nbaLeagueScheduleStore.baseSchedule.yearMonthList, days: nbaLeagueScheduleStore.baseSchedule.days, selectedYearMonthIndex: nbaLeagueScheduleStore.baseSchedule.selectedYearMonthIndex, selectedDayIndex: nbaLeagueScheduleStore.baseSchedule.selectedDayIndex
+                            ),
+                            isAllResultOpened: nbaLeagueScheduleStore.baseSchedule.isAllResultOpened
+                        ),
+                        actions: ScheduleContainerActions(
+                            calendarUiActions: CalendarUiActions(
+                                onSelectYearMonth: { yearMonth, index in
+                                    nbaLeagueScheduleStore.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
+                                },
+                                onSelectDay: { day, index in
+                                    nbaLeagueScheduleStore.send(.baseSchedule(.selectDay(day, index)))
+                                    
+                                }
+                            ),
+                            allResultButtonAction: {
                                 nbaLeagueScheduleStore.send(.toggleAllResult)
                             }
-                            .padding(.trailing)
+                        ),
+                        titleContent: { },
+                        gameListContent: {
+                            NBALeagueScheduleList(
+                                searchStore: searchStore, nbaLeagueScheduleStore: nbaLeagueScheduleStore
+                            )
                         }
-                        
-                        ZStack {
-                            /* ---------------------
-                               loading
-                               --------------------- */
-                            if nbaLeagueScheduleStore.displayDataState == .fetching {
-                                ProgressView()
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                                    .padding(.top, 8)
-                            }
-                            
-                            /* ---------------------
-                               schedule
-                               --------------------- */
-                            if nbaLeagueScheduleStore.displayDataState == .success {
-                                NBALeagueScheduleList(
-                                    searchStore: searchStore,
-                                    nbaLeagueScheduleStore: nbaLeagueScheduleStore
-                                )
-                            }
-                            
-                            /* ---------------------
-                               error
-                               --------------------- */
-                            if case .failure(let message) = nbaLeagueScheduleStore.displayDataState {
-                                Text(message)
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                                    .padding(.top, 8)
-                            }
-                        }
-                    } // if nbaGameStatsModel == nil
-                } // if let nbaLeagueScheduleStore
+                    )
+                }
             } // VStack
             .onAppear {
                 // init NBALeagueScheduleStore
@@ -120,12 +80,12 @@ struct NBALeagueScheduleView: View {
                 }
                 
                 if searchStore.poppedView == nil {
-                    nbaLeagueScheduleStore.send(.initData(displayModel: displayModel))
+                    nbaLeagueScheduleStore.send(.baseSchedule(.initData(displayModel: displayModel)))
                 }
             }
             .onChange(of: displayModel) {
                 if case .nbaLeagueSchedule = searchStore.poppedView {
-                    nbaLeagueScheduleStore?.send(.initData(displayModel: displayModel))
+                    nbaLeagueScheduleStore?.send(.baseSchedule(.initData(displayModel: displayModel)))
                 }
             }
             .onChange(of: searchStore.viewStack) {
@@ -168,15 +128,16 @@ struct NBALeagueScheduleList: View {
         }
         .frame(maxHeight: .infinity)
         .onAppear {
-            gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.selectedDayIndex] ?? []
+            gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
         }
-        .onChange(of: nbaLeagueScheduleStore.selectedDayIndex) { newValue in
+        .onChange(of: nbaLeagueScheduleStore.baseSchedule.selectedDayIndex) { newValue in
+            
             gameListToDisplay = nbaLeagueScheduleStore.filteredGames[newValue] ?? []
         }
         .onChange(of: nbaLeagueScheduleStore.filteredGames) {
             // TODO: Has to think about better structure, because 'gameListToDisplay' could be set multiple times.
             // Has to find if there are cases like here from other .onChange()
-            gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.selectedDayIndex] ?? []
+            gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
         }
     }
 }
@@ -365,11 +326,14 @@ struct NBALeagueScheduleListItem: View {
             }
             .frame(width: 90)
             .foregroundStyle(.primary)
-            .disabled(true) // TODO: modify when api added
+//            .disabled(true) // TODO: modify when api added
         } // HStack
         .background(Color.clear) // added for tapGesture on Spacer()
         .onTapGesture {
-            searchStore.send(.selectNBAGame(game: data))
+            
+            if let displayModel = nbaLeagueScheduleStore.baseSchedule.displayModel {
+                searchStore.send(.selectNBAGame(game: data, season: displayModel.season))
+            }
             
             // set selected game's isOpened true
             nbaLeagueScheduleStore.send(.updateResultOpenedState(gameCode: data.gameId, isOpened: true))

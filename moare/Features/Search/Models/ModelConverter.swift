@@ -337,6 +337,7 @@ struct ModelConverter {
             keywords: keywords,
             entityInfo: entityInfo,
             season: season,
+            scheduleType: response.scheduleType ?? .league,
             yearMonthList: yearMonthList,
             games: response.schedule
         )
@@ -724,7 +725,7 @@ struct ModelConverter {
         let awayTeamScore = game.lineScore.first { $0.teamId == awayTeamId }?.pts ?? 0
         
         return NBAGameForSchedule(
-            itemKey: date != nil ? "\(date!)#\(gameSummary?.gameCode ?? "")" : "",
+            itemKey: date != nil ? "\(date!)#\(gameSummary?.gameId ?? "")" : "",
             homeTeamId: homeTeamId,
             awayTeamId: awayTeamId,
             homeTeamScore: homeTeamScore,
