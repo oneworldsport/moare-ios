@@ -524,7 +524,7 @@ struct NBAGameStatsTeamButtonAdditionalInfoContainer: View {
                 // refresh button
                 if displayModel?.game.gameSummary?.gameStatusId == 2 {
                     Button(action: {
-                        searchStore.send(.refreshGame(category: "basketball"))
+                        searchStore.send(.refreshGame(season: displayModel?.season, category: "basketball"))
                     }) {
                         Image(systemName: "arrow.clockwise")
                             .tint(.secondary)

@@ -199,7 +199,9 @@ struct MLBLeagueScheduleListItem: View {
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
-                    searchStore.send(.selectMLBGame(game: data))
+                    if let displayModel = mlbLeagueScheduleStore.baseSchedule.displayModel {
+                        searchStore.send(.selectMLBGame(game: data, season: displayModel.season))
+                    }
                     
                     // set selected game's isOpened true
                     mlbLeagueScheduleStore.send(.updateResultOpenedState(gameId: data.gameId, isOpened: true))

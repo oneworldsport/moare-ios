@@ -18,6 +18,7 @@
     }
   ],
   "dataType": "baseball_league_schedule",
+  "season": 2025,
   "data": {
     "scheduleType": "league",
     "scheduledMonths": [

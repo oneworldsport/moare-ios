@@ -461,7 +461,9 @@ struct KBOGameStatsTeamButtonAdditionalInfoContainer: View {
                 // refresh button
                 if displayModel?.game.gameInfo?.gameStatus == "2" {
                     Button(action: {
-                        searchStore.send(.refreshGame(category: "baseball"))
+                        if let displayModel = kboGameStatsStore.displayModel {
+                            searchStore.send(.refreshGame(season: displayModel.season, category: "baseball"))
+                        }
                     }) {
                         Image(systemName: "arrow.clockwise")
                             .tint(.secondary)

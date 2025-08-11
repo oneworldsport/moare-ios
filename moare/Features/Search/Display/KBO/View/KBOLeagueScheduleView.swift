@@ -198,7 +198,9 @@ struct KBOLeagueScheduleListItem: View {
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
-                    searchStore.send(.selectKBOGame(game: data))
+                    if let displayModel = kboLeagueScheduleStore.baseSchedule.displayModel {
+                        searchStore.send(.selectKBOGame(game: data, season: displayModel.season))
+                    }
                     
                     // set selected game's isOpened true
                     kboLeagueScheduleStore.send(.updateResultOpenedState(itemKey: data.itemKey, isOpened: true))

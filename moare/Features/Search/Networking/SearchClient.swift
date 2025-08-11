@@ -20,12 +20,12 @@ struct SearchClient {
         return try await apiClient.fetchData(endpoint: .searchByKeyword(keyword: keyword))
     }
     
-    func fetchLeagueSchedule(entity: EntityInfo, season: Int, yearMonth: String) async throws -> DataModel {
-        return try await apiClient.fetchData(endpoint: .getLeagueSchedule(entity: entity, season: CalendarUtil.currentYear, yearMonth: yearMonth))
+    func fetchLeagueSchedule(entity: EntityInfo, season: Int?, yearMonth: String) async throws -> DataModel {
+        return try await apiClient.fetchData(endpoint: .getLeagueSchedule(entity: entity, season: season ?? CalendarUtil.currentYear, yearMonth: yearMonth))
     }
     
-    func fetchById(category: String, date: String? = nil, dataType:String, leagueId: Int, id: String) async throws -> DataModel {
-        return try await apiClient.fetchData(endpoint: .searchById(category: category, date: date, dataType: dataType, leagueId: leagueId, id: id))
+    func fetchById(season: Int?, category: String, date: String? = nil, dataType:String, leagueId: Int, id: String) async throws -> DataModel {
+        return try await apiClient.fetchData(endpoint: .searchById(season: season ?? CalendarUtil.currentYear, category: category, date: date, dataType: dataType, leagueId: leagueId, id: id))
     }
     
     func fetchFromJson(viewForTest: SportDisplayType) async throws -> DataModel {
@@ -61,10 +61,9 @@ struct SearchClient {
             filePath = "nba_team_stats"
         case .nbaTeamStandings:
             filePath = "nba_team_standings"
-        case .nbaTeamSchedule:
-            filePath = "nba_team_schedule"
         case .nbaLeagueSchedule:
             filePath = "nba_league_schedule"
+//            filePath = "nba_team_schedule"
         case .nbaGameStats:
             filePath = "nba_game_stats"
         case .nbaLeagueTournament:
@@ -81,10 +80,9 @@ struct SearchClient {
             filePath = "kbo_team_stats"
         case .kboTeamStandings:
             filePath = "kbo_team_standings"
-        case .kboTeamSchedule:
-            filePath = "kbo_team_schedule"
         case .kboLeagueSchedule:
             filePath = "kbo_league_schedule"
+//            filePath = "kbo_team_schedule"
         case .kboGameStats:
             filePath = "kbo_game_stats"
         case .mlbPlayerInfo:
@@ -99,10 +97,9 @@ struct SearchClient {
             filePath = "mlb_team_stats"
         case .mlbTeamStandings:
             filePath = "mlb_team_standings"
-        case .mlbTeamSchedule:
-            filePath = "mlb_team_schedule"
         case .mlbLeagueSchedule:
             filePath = "mlb_league_schedule"
+//            filePath = "mlb_team_schedule"
         case .mlbGameStats:
             filePath = "mlb_game_stats"
         default:

@@ -23,6 +23,7 @@ struct KBOGameStatsStore {
         /* ---------------------
            data state
            --------------------- */
+        var displayModel: KBOGameStatsDisplayModel? = nil
         var baseGameStats = BaseGameStats.State()
         var teamLineup: KBOGameLineup? = nil
         var teamHitters: [KBOGameHitterStats] = []

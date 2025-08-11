@@ -4,6 +4,7 @@
   "entityInfo": [
     {"entityId":137,"entityName":"샌프란시스코 자이언츠","category":"baseball","entityType":"team","leagueId":90102,"playerId":null,"teamId":137}],
   "dataType":"baseball_league_schedule",
+  "season": 2025,
   "data": {
     "scheduleType": "team",
     "scheduledMonths":["2025-03","2025-04","2025-05","2025-06","2025-07","2025-08"],

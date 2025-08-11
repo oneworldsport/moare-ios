@@ -12,6 +12,7 @@ struct MLBLeagueScheduleDisplayModel: SportDisplayModel {
     let keywords: [Keyword]
     let entityInfo: [EntityInfo]
     let season: Int
+    let scheduleType: ScheduleType
     let yearMonthList: [String]
     var games: [MLBGameForSchedule]
 }
