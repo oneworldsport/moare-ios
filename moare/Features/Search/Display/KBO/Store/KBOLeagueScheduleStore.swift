@@ -224,7 +224,7 @@ struct KBOLeagueScheduleStore {
                             playerId: nil
                         )
                         
-                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel!.season, yearMonth: String(yearMonth))
+                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel?.season, yearMonth: String(yearMonth))
                         
                         if case let .kboLeagueSchedule(_, displayModel) = result.data {
                             await send(.setDisplayModel(displayModel: displayModel))

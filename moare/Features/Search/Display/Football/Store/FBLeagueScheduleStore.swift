@@ -235,7 +235,7 @@ struct FBLeagueScheduleStore {
                             playerId: nil
                         )
                         
-                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel!.season, yearMonth: String(yearMonth))
+                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel?.season, yearMonth: String(yearMonth))
                         
                         
                         if case .fbLeagueSchedule(_, let displayModel) = result.data {
