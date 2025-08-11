@@ -151,15 +151,6 @@ struct ModelConverter {
         )
     }
     
-//    func fbTeamScheduleConverter(response: FBGameScheduleResponseModel) -> FBTeamScheduleDisplayModel {
-//        return FBTeamScheduleDisplayModel(
-//            leagueId: leagueId ?? Constants.Ids.epl,
-//            keywords: keywords,
-//            entityInfo: entityInfo,
-//            games: response.schedule
-//        )
-//    }
-    
     func fbLeagueScheduleConverter(response: FBGameScheduleResponseModel) -> FBLeagueScheduleDisplayModel {
         let yearMonthList: [String] = response.scheduledMonths?.map {
             let components = $0.split(separator: "-")
@@ -311,16 +302,6 @@ struct ModelConverter {
             entityInfo: entityInfo,
             season: season,
             standings: standings
-        )
-    }
-    
-    func nbaTeamScheduleConverter(response: NBAGameScheduleResponseModel) -> NBATeamScheduleDisplayModel {
-        return NBATeamScheduleDisplayModel(
-            leagueId: leagueId ?? Constants.Ids.nba,
-            keywords: keywords,
-            entityInfo: entityInfo,
-            season: season,
-            games: response.schedule
         )
     }
     

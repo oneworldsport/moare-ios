@@ -32,7 +32,6 @@ struct FBGameStatsView: View {
         
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             let fbLeagueScheduleModel = searchStore.displayModels[.fbLeagueSchedule] as? FBLeagueScheduleDisplayModel
-            let fbTeamScheduleModel = searchStore.displayModels[.fbTeamSchedule] as? FBTeamScheduleDisplayModel
             
             VStack(spacing: 10) {
                 if let fbGameStatsStore, let fbLeagueScheduleStore {
@@ -40,7 +39,7 @@ struct FBGameStatsView: View {
                        game title, info
                        - hides when game selected by schedule
                        --------------------- */
-                    if fbLeagueScheduleModel == nil && fbTeamScheduleModel == nil {
+                    if fbLeagueScheduleModel == nil {
                         HStack {
                             HStack(spacing: 0) {
                                 URLImage(url: game.league.logo, customSize: CGSize(width: 23, height: 23))

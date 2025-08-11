@@ -356,8 +356,6 @@ struct SearchStore {
                     state.displayModels[.kboTeamStats] = displayModel
                 case .kboTeamStandings(_, let displayModel):
                     state.displayModels[.kboTeamStandings] = displayModel
-                case .kboTeamSchedule(_, let displayModel):
-                    state.displayModels[.kboTeamSchedule] = displayModel
                 case .kboLeagueSchedule(_, let displayModel):
                     state.displayModels[.kboLeagueSchedule] = displayModel
                 case .kboGameStats(_, let displayModel):
@@ -375,8 +373,6 @@ struct SearchStore {
                     state.displayModels[.mlbTeamStats] = displayModel
                 case .mlbTeamStandings(_, let displayModel):
                     state.displayModels[.mlbTeamStandings] = displayModel
-                case .mlbTeamSchedule(_, let displayModel):
-                    state.displayModels[.mlbTeamSchedule] = displayModel
                 case .mlbLeagueSchedule(_, let displayModel):
                     state.displayModels[.mlbLeagueSchedule] = displayModel
                 case .mlbGameStats(_, let displayModel):
@@ -888,8 +884,6 @@ struct SearchStore {
                     state.displayModels[.kboTeamStats] = displayModel
                 case .kboTeamStandings(_, let displayModel):
                     state.displayModels[.kboTeamStandings] = displayModel
-                case .kboTeamSchedule(_, let displayModel):
-                    state.displayModels[.kboTeamSchedule] = displayModel
                 case .kboLeagueSchedule(_, let displayModel):
                     state.displayModels[.kboLeagueSchedule] = displayModel
                 case .kboGameStats(_, let displayModel):
@@ -907,8 +901,6 @@ struct SearchStore {
                     state.displayModels[.mlbTeamStats] = displayModel
                 case .mlbTeamStandings(_, let displayModel):
                     state.displayModels[.mlbTeamStandings] = displayModel
-                case .mlbTeamSchedule(_, let displayModel):
-                    state.displayModels[.mlbTeamSchedule] = displayModel
                 case .mlbLeagueSchedule(_, let displayModel):
                     state.displayModels[.mlbLeagueSchedule] = displayModel
                 case .mlbGameStats(_, let displayModel):

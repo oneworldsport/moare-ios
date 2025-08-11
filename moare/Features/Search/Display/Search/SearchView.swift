@@ -321,7 +321,6 @@ struct SearchView: View {
         .nbaTeamInfo: { AnyView(NBATeamInfoView(displayModel: $0 as! NBATeamInfoDisplayModel)) },
         .nbaTeamStats: { AnyView(NBATeamStatsView(displayModel: $0 as! NBATeamStatsDisplayModel)) },
         .nbaTeamStandings: { AnyView(NBATeamStandingsView(displayModel: $0 as! NBATeamStandingsDisplayModel)) },
-        .nbaTeamSchedule: { AnyView(NBATeamScheduleView(displayModel: $0 as! NBATeamScheduleDisplayModel)) },
         .nbaLeagueSchedule: { AnyView(NBALeagueScheduleView(displayModel: $0 as! NBALeagueScheduleDisplayModel)) },
         .nbaGameStats: { AnyView(NBAGameStatsView(displayModel: $0 as! NBAGameStatsDisplayModel)) },
         .nbaLeagueTournament: { AnyView(NBALeagueTournamentView(displayModel: $0 as! NBATournamentDisplayModel)) },
@@ -331,7 +330,6 @@ struct SearchView: View {
         .kboTeamInfo: { AnyView(KBOTeamInfoView(displayModel: $0 as! KBOTeamInfoDisplayModel)) },
         .kboTeamStats: { AnyView(KBOTeamStatsView(displayModel: $0 as! KBOTeamStatsDisplayModel)) },
         .kboTeamStandings: { AnyView(KBOTeamStandingsView(displayModel: $0 as! KBOTeamStandingsDisplayModel)) },
-        .kboTeamSchedule: { AnyView(KBOTeamScheduleView(displayModel: $0 as! KBOTeamScheduleDisplayModel)) },
         .kboLeagueSchedule: { AnyView(KBOLeagueScheduleView(displayModel: $0 as! KBOLeagueScheduleDisplayModel)) },
         .kboGameStats: { AnyView(KBOGameStatsView(displayModel: $0 as! KBOGameStatsDisplayModel)) },
         
@@ -340,7 +338,6 @@ struct SearchView: View {
         .mlbTeamInfo: { AnyView(MLBTeamInfoView(displayModel: $0 as! MLBTeamInfoDisplayModel)) },
         .mlbTeamStats: { AnyView(MLBTeamStatsView(displayModel: $0 as! MLBTeamStatsDisplayModel)) },
         .mlbTeamStandings: { AnyView(MLBTeamStandingsView(displayModel: $0 as! MLBTeamStandingsDisplayModel)) },
-        .mlbTeamSchedule: { AnyView(MLBTeamScheduleView(displayModel: $0 as! MLBTeamScheduleDisplayModel)) },
         .mlbLeagueSchedule: { AnyView(MLBLeagueScheduleView(displayModel: $0 as! MLBLeagueScheduleDisplayModel)) },
         .mlbGameStats: { AnyView(MLBGameStatsView(displayModel: $0 as! MLBGameStatsDisplayModel)) },
     ]
