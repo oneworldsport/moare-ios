@@ -56,9 +56,6 @@ struct KBOGameLineScore: Decodable, Equatable {
     private let _inning10: String?
     private let _inning11: String?
     private let _inning12: String?
-    private let _inning13: String?
-    private let _inning14: String?
-    private let _inning15: String?
     private let _b: String?
     private let _e: String?
     private let _h: String?
@@ -103,9 +100,6 @@ struct KBOGameLineScore: Decodable, Equatable {
         case _inning10 = "10"
         case _inning11 = "11"
         case _inning12 = "12"
-        case _inning13 = "13"
-        case _inning14 = "14"
-        case _inning15 = "15"
         case _b = "b"
         case _e = "e"
         case _h = "h"

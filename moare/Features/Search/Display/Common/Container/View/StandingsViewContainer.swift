@@ -208,7 +208,7 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
                                                 
                                                 Text(data)
                                                     .font(.system(size: 15))
-                                                    .frame(width: 100)
+                                                    .frame(width: secondCategoryItemWidth)
                                             }
                                         }
                                         .frame(height: 40)

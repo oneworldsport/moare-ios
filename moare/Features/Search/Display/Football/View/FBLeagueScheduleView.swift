@@ -234,6 +234,7 @@ struct FBLeagueScheduleListItem: View {
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
+                isClickEnabled: fbGameStatsModel == nil,
                 homeTeamLogo: FBUtil.teamLogoURL(id: homeTeamId),
                 homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
                 homeTeamScore: data.homeTeamScore,

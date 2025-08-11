@@ -542,7 +542,7 @@ struct MLBGameInfoForSchedule: Decodable, Equatable {
     }
 
     private enum CodingKeys: String, CodingKey {
-        case _currentInning = "round"
+        case _currentInning = "currentInning"
     }
     
     init(

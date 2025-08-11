@@ -56,6 +56,8 @@ struct KBOGameStatsStore {
             case .baseGameStats(.initData):
                 // init with default value
                 state.teamLineup = nil
+                state.teamHitters = []
+                state.teamPitchers = []
 //                state.playersTotalStats = nil
                 
                 return .send(.baseGameStats(.selectTeam(0)))

@@ -199,8 +199,8 @@ struct KBOGameStatsScoreInfoItem: View {
     var body: some View {
         let displayModel = kboGameStatsStore.baseGameStats.displayModel
         let game = displayModel?.game
-        let homeTeamId: Int? = game?.gameInfo?.homeTeamId == nil ? nil : Int(game?.gameInfo?.homeTeamId ?? 0)
-        let awayTeamId: Int? = game?.gameInfo?.awayTeamId == nil ? nil : Int(game?.gameInfo?.awayTeamId ?? 0)
+        let homeTeamId = game?.gameInfo?.homeTeamId
+        let awayTeamId = game?.gameInfo?.awayTeamId
         let teamNameDic = kboGameStatsStore.baseGameStats.teamNameDictionary
         let gameStatus = Int(game?.gameInfo?.gameStatus ?? "0") ?? 0
         

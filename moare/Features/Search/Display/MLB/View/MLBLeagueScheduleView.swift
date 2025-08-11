@@ -152,11 +152,11 @@ struct MLBLeagueScheduleListItem: View {
     @State private var isResultOpened = false
     
     var body: some View {
+        let gameId = data.gameId
         let homeTeamId = data.homeTeamId
         let awayTeamId = data.awayTeamId
         let gameStatus = data.gameStatus
         let teamNameDic = mlbLeagueScheduleStore.baseSchedule.teamNameDictionary
-        let mlbGameStatsModel = searchStore.displayModels[.mlbGameStats] as? MLBGameStatsDisplayModel
         
         let gameStatusText: String = {
             switch gameStatus {
@@ -204,16 +204,16 @@ struct MLBLeagueScheduleListItem: View {
                     }
                     
                     // set selected game's isOpened true
-                    mlbLeagueScheduleStore.send(.updateResultOpenedState(gameId: data.gameId, isOpened: true))
+                    mlbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: true))
                 },
                 onCapsuleButtonClick: {
-                    mlbLeagueScheduleStore.send(.updateResultOpenedState(gameId: data.gameId, isOpened: !isResultOpened))
+                    mlbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: !isResultOpened))
                 }
             )
         )
         .onAppear {
             if StringConstants.MLB.gameFinishedList.contains(gameStatus) {
-                isResultOpened = mlbLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
+                isResultOpened = mlbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
             } else if gameStatus == StringConstants.MLB.gameScheduled || gameStatus == StringConstants.MLB.gamePostponed {
                 isResultOpened = false
             } else {
@@ -223,13 +223,8 @@ struct MLBLeagueScheduleListItem: View {
         .onChange(of: mlbLeagueScheduleStore.gameResultOpenedStateList) {
             if StringConstants.MLB.gameFinishedList.contains(gameStatus) {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    isResultOpened = mlbLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
+                    isResultOpened = mlbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
                 }
-            }
-        }
-        .onChange(of: mlbGameStatsModel) {
-            if let mlbGameStatsModel {
-                isResultOpened = true
             }
         }
     }

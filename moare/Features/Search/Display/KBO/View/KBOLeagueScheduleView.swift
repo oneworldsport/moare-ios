@@ -152,11 +152,11 @@ struct KBOLeagueScheduleListItem: View {
     @State private var isResultOpened = false
     
     var body: some View {
+        let itemKey = data.itemKey
         let homeTeamId = data.homeTeamId
         let awayTeamId = data.awayTeamId
         let gameStatus = Int(data.gameStatus)
         let teamNameDic = kboLeagueScheduleStore.baseSchedule.teamNameDictionary
-        let kboGameStatsModel = searchStore.displayModels[.kboGameStats] as? KBOGameStatsDisplayModel
         
         let gameStatusText: String = {
             switch gameStatus {
@@ -203,16 +203,16 @@ struct KBOLeagueScheduleListItem: View {
                     }
                     
                     // set selected game's isOpened true
-                    kboLeagueScheduleStore.send(.updateResultOpenedState(itemKey: data.itemKey, isOpened: true))
+                    kboLeagueScheduleStore.send(.updateResultOpenedState(itemKey: itemKey, isOpened: true))
                 },
                 onCapsuleButtonClick: {
-                    kboLeagueScheduleStore.send(.updateResultOpenedState(itemKey: data.itemKey, isOpened: !isResultOpened))
+                    kboLeagueScheduleStore.send(.updateResultOpenedState(itemKey: itemKey, isOpened: !isResultOpened))
                 }
             )
         )
         .onAppear {
             if gameStatus == StringConstants.KBO.gameFinal {
-                isResultOpened = kboLeagueScheduleStore.gameResultOpenedStateList[data.itemKey] ?? false
+                isResultOpened = kboLeagueScheduleStore.gameResultOpenedStateList[itemKey] ?? false
             } else if gameStatus == StringConstants.KBO.gameScheduled || gameStatus == StringConstants.KBO.gameCanceled {
                 isResultOpened = false
             } else {
@@ -222,13 +222,8 @@ struct KBOLeagueScheduleListItem: View {
         .onChange(of: kboLeagueScheduleStore.gameResultOpenedStateList) {
             if gameStatus == StringConstants.KBO.gameFinal {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    isResultOpened = kboLeagueScheduleStore.gameResultOpenedStateList[data.itemKey] ?? false
+                    isResultOpened = kboLeagueScheduleStore.gameResultOpenedStateList[itemKey] ?? false
                 }
-            }
-        }
-        .onChange(of: kboGameStatsModel) {
-            if let kboGameStatsModel {
-                isResultOpened = true
             }
         }
     }

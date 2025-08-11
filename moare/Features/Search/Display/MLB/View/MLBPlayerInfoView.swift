@@ -415,7 +415,7 @@ struct MLBPlayerInfoFourthItem: View {
             
             if let player = mlbPlayerInfoStore.baseInfo.displayModel?.info {
                 HStack(spacing: 0) {
-                    Text("국젖: ")
+                    Text("국적: ")
                         .font(.system(size: 15))
                     
                     Text(player.birthCountry)

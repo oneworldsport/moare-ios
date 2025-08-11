@@ -160,7 +160,6 @@ struct NBALeagueScheduleListItem: View {
         let awayTeamScore = data.awayTeamScore
         let gameStatus = Int(data.gameStatus)
         let teamNameDic = nbaLeagueScheduleStore.teamNameDictionary
-        let nbaGameStatsModel = searchStore.displayModels[.nbaGameStats] as? NBAGameStatsDisplayModel
         
         let gameStatusText: String = {
             guard isResultOpened else { return StringConstants.resultOpen }
@@ -350,11 +349,6 @@ struct NBALeagueScheduleListItem: View {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                     isResultOpened = nbaLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
                 }
-            }
-        }
-        .onChange(of: nbaGameStatsModel) {
-            if let nbaGameStatsModel {
-                isResultOpened = true
             }
         }
     }
