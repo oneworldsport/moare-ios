@@ -29,6 +29,11 @@ struct NBATitle: View {
     let leagueName: String
     let leagueSeason: Int
     
+    init(leagueName: String, leagueSeason: Int?) {
+        self.leagueName = leagueName
+        self.leagueSeason = leagueSeason ?? CalendarUtil.currentYear
+    }
+    
     var body: some View {
         HStack(spacing: 0) {
             Image("nba_logo")

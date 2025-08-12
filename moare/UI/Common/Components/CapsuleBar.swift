@@ -41,7 +41,7 @@ struct HCapsuleBar: View {
 
 struct VCapsuleBar: View {
     let customHeight: CGFloat?
-    let customWidth: CGFloat?
+    let customWidth: CGFloat
     let color: Color
     
     init(

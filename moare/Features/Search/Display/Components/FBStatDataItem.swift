@@ -34,7 +34,7 @@ struct FBStatDataItem: View {
     var body: some View {
         // customWidth가 있을때는 customWidth로 너비 고정. 없을때는 maxWidth: 50으로 너비 자동 조정.
         if let customWidth {
-            VStack {
+            VStack(spacing: 0) {
                 Text(category)
                     .font(.system(size: customCategoryFontSize ?? 15))
                     .frame(height: customCategoryHeight ?? 30)
@@ -44,9 +44,9 @@ struct FBStatDataItem: View {
                     .fontWeight(.medium)
                     .frame(height: 30)
             }
-            .frame(width: customWidth, height: 60)
+            .frame(width: customWidth)
         } else {
-            VStack {
+            VStack(spacing: 0) {
                 Text(category)
                     .font(.system(size: customCategoryFontSize ?? 15))
                     .frame(height: customCategoryHeight ?? 30)
@@ -56,7 +56,7 @@ struct FBStatDataItem: View {
                     .fontWeight(.medium)
                     .frame(height: 30)
             }
-            .frame(maxWidth: 50, maxHeight: 60)
+            .frame(maxWidth: 50)
         }
     }
 }

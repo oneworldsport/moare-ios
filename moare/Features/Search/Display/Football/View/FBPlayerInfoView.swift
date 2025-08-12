@@ -22,7 +22,7 @@ struct FBPlayerInfoView: View {
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            InfoViewContainer(itemCount: 6) { scope in
+            InfoViewContainer(itemCount: 6, measureContent: { scope in
                 if let fbPlayerInfoStore {
                     HStack(alignment: .top) {
                         FBPlayerInfoFirstItem(fbPlayerInfoStore: fbPlayerInfoStore)
@@ -93,7 +93,7 @@ struct FBPlayerInfoView: View {
                         }
                     )
                 } // if let fbPlayerInfoStore
-            } displayContent: { scope in
+            }, displayContent: { scope in
                 if let fbPlayerInfoStore {
                     // photo, name
                     FBPlayerInfoFirstItem(
@@ -152,7 +152,7 @@ struct FBPlayerInfoView: View {
                         showContents: scope.showContents
                     )
                 }
-            }
+            })
             .onAppear {
                 // init FBPlayerInfoStore
                 let fbPlayerInfoStore: StoreOf<FBPlayerInfoStore> = storeManager.getStore(forKey: StoreKeys.fbPlayerInfoStore) ?? {
@@ -530,7 +530,7 @@ struct FBPlayerInfoFifthItem: View {
                 }
             }
             .opacity(showContents ? 1 : 0)
-        } // VStack
+        }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
     }
