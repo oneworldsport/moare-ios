@@ -528,7 +528,7 @@ struct ModelConverter {
         }
         
         return MLBPlayerInfoDisplayModel(
-            leagueId: leagueId ?? Constants.Ids.epl,
+            leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
             season: season,

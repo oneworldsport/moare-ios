@@ -53,6 +53,12 @@ struct BaseballLeagueTitle: View {
     let name: String
     let season: Int
     
+    init(logoUrl: String, name: String, season: Int?) {
+        self.logoUrl = logoUrl
+        self.name = name
+        self.season = season ?? 2025
+    }
+    
     var body: some View {
         HStack(spacing: 0) {
             URLImage(

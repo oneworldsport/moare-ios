@@ -46,9 +46,6 @@ struct NBATeamInfoView: View {
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             ZStack(alignment: .topLeading) {
-                Spacer() // empty space for smooth animation effect
-                    .frame(maxWidth: .infinity, maxHeight: 0)
-                
                 if let nbaTeamInfoStore {
                     /* ---------------------
                        invisible ui

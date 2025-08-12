@@ -38,9 +38,6 @@ struct FBTeamStatsView: View {
             ScrollView {
                 if let fbTeamStatsStore {
                     ZStack(alignment: .topLeading) {
-//                        Spacer() // empty space for smooth animation effect
-//                            .frame(maxWidth: .infinity, maxHeight: 0)
-                        
                         /* ---------------------
                            invisible ui
                            - for position

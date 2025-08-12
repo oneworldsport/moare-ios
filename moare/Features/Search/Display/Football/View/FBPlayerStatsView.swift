@@ -39,9 +39,6 @@ struct FBPlayerStatsView: View {
                 if let fbPlayerStatsStore {
                     // NOTE: Item's position is based on top left corner
                     ZStack(alignment: .topLeading) {
-//                        Spacer() // empty space for smooth animation effect
-//                            .frame(maxWidth: .infinity, maxHeight: 0)
-                        
                         /* ---------------------
                            invisible ui
                            - for position

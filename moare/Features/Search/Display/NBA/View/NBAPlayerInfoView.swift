@@ -24,8 +24,6 @@ struct NBAPlayerInfoView: View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             InfoViewContainer(itemCount: 6, measureContent: { scope in
                 if let nbaPlayerInfoStore {
-//                    Spacer() // empty space for smooth animation effect
-//                        .frame(maxWidth: .infinity, maxHeight: 0)
                     HStack(alignment: .top) {
                         NBAPlayerInfoFirstItem(nbaPlayerInfoStore: nbaPlayerInfoStore)
                             .frame(maxWidth: .infinity)
@@ -265,14 +263,13 @@ struct NBAPlayerInfoFirstItem: View {
     
     var body: some View {
         let playerNameDic = nbaPlayerInfoStore.baseInfo.playerNameDictionary
-        let player = nbaPlayerInfoStore.baseInfo.displayModel?.info
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
         ) {
-            if let player {
+            if let player = nbaPlayerInfoStore.baseInfo.displayModel?.info {
                 URLImage(url: NBAUtil.playerPhotoURL(id: player.personId))
                     .opacity(showContents ? 1 : 0)
                 
@@ -315,14 +312,13 @@ struct NBAPlayerInfoSecondItem: View {
     
     var body: some View {
         let teamNameDic = nbaPlayerInfoStore.baseInfo.teamNameDictionary
-        let player = nbaPlayerInfoStore.baseInfo.displayModel?.info
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
         ) {
-            if let player {
+            if let player = nbaPlayerInfoStore.baseInfo.displayModel?.info {
                 URLImage(url: NBAUtil.teamLogoURL(id: player.teamId), isSvg: true)
                     .opacity(showContents ? 1 : 0)
                 
@@ -358,15 +354,13 @@ struct NBAPlayerInfoThirdItem: View {
     }
     
     var body: some View {
-        let player = nbaPlayerInfoStore.baseInfo.displayModel?.info
-        
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            if let player {
+            if let player = nbaPlayerInfoStore.baseInfo.displayModel?.info {
                 HStack(spacing: 0) {
                     Text("등번호: ")
                         .font(.system(size: 15))
@@ -414,15 +408,13 @@ struct NBAPlayerInfoFourthItem: View {
     }
     
     var body: some View {
-        let player = nbaPlayerInfoStore.baseInfo.displayModel?.info
-        
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            if let player {
+            if let player = nbaPlayerInfoStore.baseInfo.displayModel?.info {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("출신(학교 또는 팀): ")
                         .font(.system(size: 15))
@@ -482,15 +474,13 @@ struct NBAPlayerInfoFifthItem: View {
     }
     
     var body: some View {
-        let player = nbaPlayerInfoStore.baseInfo.displayModel?.info
-        
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            if let player {
+            if let player = nbaPlayerInfoStore.baseInfo.displayModel?.info {
                 HStack(spacing: 0) {
                     Text("국적: ")
                         .font(.system(size: 15))
@@ -548,15 +538,13 @@ struct NBAPlayerInfoSixthItem: View {
     }
     
     var body: some View {
-        let player = nbaPlayerInfoStore.baseInfo.displayModel?.info
-        
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            if let player {
+            if let player = nbaPlayerInfoStore.baseInfo.displayModel?.info {
                 let components = player.height.split(separator: "-")
                 let playerCmHeight = Int(NBAUtil.toCm(feet: Int(components.first ?? "0")!, inches: Int(components.last ?? "0")!))
                 let playerKgWeight = Int((Double(player.weight) ?? 0).toKg())
@@ -821,7 +809,6 @@ struct NBAPlayerInfoNinthItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaPlayerInfoStore.baseInfo.displayModel
         let teamNameDic = nbaPlayerInfoStore.baseInfo.teamNameDictionary
         
         MovingCapsuleItemContainer(
@@ -836,7 +823,7 @@ struct NBAPlayerInfoNinthItem: View {
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
             
-            if let nextGame = displayModel?.nextGame {
+            if let nextGame = nbaPlayerInfoStore.baseInfo.displayModel?.nextGame {
                 let lastMeeting = nextGame.lastMeeting
                 
                 HStack {
