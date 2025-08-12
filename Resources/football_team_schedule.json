@@ -1,0 +1,533 @@
+{
+  "dataType": "football_league_schedule",
+  "keywords": [
+    {
+      "keyword": "경기",
+      "id": "game",
+      "priority": 1
+    }
+  ],
+  "entityInfo": [
+    {
+      "entityId": 47,
+      "entityName": "토트넘",
+      "category": "football",
+      "entityType": "team",
+      "leagueId": 39,
+      "playerId": null,
+      "teamId": 47
+    }
+  ],
+  "season": 2024,
+  "data": {
+    "scheduleType": "team",
+    "scheduledMonths": [
+      "2024-08",
+      "2024-09",
+      "2024-10",
+      "2024-11",
+      "2024-12",
+      "2025-01",
+      "2025-02",
+      "2025-03",
+      "2025-04",
+      "2025-05"
+    ],
+    "schedule": [
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 1,
+        "awayTeamId": 47,
+        "homeTeamId": 46,
+        "itemKey": "2024-08-20T04:00:00#1208030",
+        "categoryKey": "football#39",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "round": "Regular Season - 1",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 4,
+        "awayTeamId": 45,
+        "homeTeamId": 47,
+        "itemKey": "2024-08-24T23:00:00#1208039",
+        "categoryKey": "football#39",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "round": "Regular Season - 2",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 2,
+        "awayTeamId": 47,
+        "homeTeamId": 34,
+        "itemKey": "2024-09-01T21:30:00#1208048",
+        "categoryKey": "football#39",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "round": "Regular Season - 3",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 0,
+        "awayTeamId": 42,
+        "homeTeamId": 47,
+        "itemKey": "2024-09-15T22:00:00#1208059",
+        "categoryKey": "football#39",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "round": "Regular Season - 4",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 3,
+        "awayTeamId": 55,
+        "homeTeamId": 47,
+        "itemKey": "2024-09-21T23:00:00#1208069",
+        "categoryKey": "football#39",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "round": "Regular Season - 5",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 0,
+        "awayTeamId": 47,
+        "homeTeamId": 33,
+        "itemKey": "2024-09-30T00:30:00#1208077",
+        "categoryKey": "football#39",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "round": "Regular Season - 6",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 3,
+        "awayTeamId": 47,
+        "homeTeamId": 51,
+        "itemKey": "2024-10-07T00:30:00#1208084",
+        "categoryKey": "football#39",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "round": "Regular Season - 7",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 4,
+        "awayTeamId": 48,
+        "homeTeamId": 47,
+        "itemKey": "2024-10-19T20:30:00#1208099",
+        "categoryKey": "football#39",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "round": "Regular Season - 8",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 1,
+        "awayTeamId": 47,
+        "homeTeamId": 52,
+        "itemKey": "2024-10-27T22:00:00#1208108",
+        "categoryKey": "football#39",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "round": "Regular Season - 9",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 4,
+        "awayTeamId": 66,
+        "homeTeamId": 47,
+        "itemKey": "2024-11-03T23:00:00#1208121",
+        "categoryKey": "football#39",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "round": "Regular Season - 10",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 1,
+        "awayTeamId": 57,
+        "homeTeamId": 47,
+        "itemKey": "2024-11-10T23:00:00#1208130",
+        "categoryKey": "football#39",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "round": "Regular Season - 11",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 0,
+        "awayTeamId": 47,
+        "homeTeamId": 50,
+        "itemKey": "2024-11-24T02:30:00#1208140",
+        "categoryKey": "football#39",
+        "awayTeamScore": 4,
+        "gameInfo": {
+          "round": "Regular Season - 12",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 1,
+        "awayTeamId": 36,
+        "homeTeamId": 47,
+        "itemKey": "2024-12-01T22:30:00#1208150",
+        "categoryKey": "football#39",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "round": "Regular Season - 13",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 1,
+        "awayTeamId": 47,
+        "homeTeamId": 35,
+        "itemKey": "2024-12-06T05:15:00#1208153",
+        "categoryKey": "football#39",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "round": "Regular Season - 14",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 3,
+        "awayTeamId": 49,
+        "homeTeamId": 47,
+        "itemKey": "2024-12-09T01:30:00#1208171",
+        "categoryKey": "football#39",
+        "awayTeamScore": 4,
+        "gameInfo": {
+          "round": "Regular Season - 15",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 0,
+        "awayTeamId": 47,
+        "homeTeamId": 41,
+        "itemKey": "2024-12-16T04:00:00#1208181",
+        "categoryKey": "football#39",
+        "awayTeamScore": 5,
+        "gameInfo": {
+          "round": "Regular Season - 16",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 3,
+        "awayTeamId": 40,
+        "homeTeamId": 47,
+        "itemKey": "2024-12-23T01:30:00#1208191",
+        "categoryKey": "football#39",
+        "awayTeamScore": 6,
+        "gameInfo": {
+          "round": "Regular Season - 17",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 1,
+        "awayTeamId": 47,
+        "homeTeamId": 65,
+        "itemKey": "2024-12-27T00:00:00#1208200",
+        "categoryKey": "football#39",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "round": "Regular Season - 18",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 2,
+        "awayTeamId": 39,
+        "homeTeamId": 47,
+        "itemKey": "2024-12-30T00:00:00#1208211",
+        "categoryKey": "football#39",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "round": "Regular Season - 19",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 1,
+        "awayTeamId": 34,
+        "homeTeamId": 47,
+        "itemKey": "2025-01-04T21:30:00#1208221",
+        "categoryKey": "football#39",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "round": "Regular Season - 20",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 2,
+        "awayTeamId": 47,
+        "homeTeamId": 42,
+        "itemKey": "2025-01-16T05:00:00#1208223",
+        "categoryKey": "football#39",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "round": "Regular Season - 21",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 3,
+        "awayTeamId": 47,
+        "homeTeamId": 45,
+        "itemKey": "2025-01-19T23:00:00#1208236",
+        "categoryKey": "football#39",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "round": "Regular Season - 22",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 1,
+        "awayTeamId": 46,
+        "homeTeamId": 47,
+        "itemKey": "2025-01-26T23:00:00#1208251",
+        "categoryKey": "football#39",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "round": "Regular Season - 23",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 0,
+        "awayTeamId": 47,
+        "homeTeamId": 55,
+        "itemKey": "2025-02-02T23:00:00#1208255",
+        "categoryKey": "football#39",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "round": "Regular Season - 24",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 1,
+        "awayTeamId": 33,
+        "homeTeamId": 47,
+        "itemKey": "2025-02-17T01:30:00#1208271",
+        "categoryKey": "football#39",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "round": "Regular Season - 25",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 1,
+        "awayTeamId": 47,
+        "homeTeamId": 57,
+        "itemKey": "2025-02-23T00:00:00#1208278",
+        "categoryKey": "football#39",
+        "awayTeamScore": 4,
+        "gameInfo": {
+          "round": "Regular Season - 26",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 0,
+        "awayTeamId": 50,
+        "homeTeamId": 47,
+        "itemKey": "2025-02-27T04:30:00#1208286",
+        "categoryKey": "football#39",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "round": "Regular Season - 27",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 2,
+        "awayTeamId": 35,
+        "homeTeamId": 47,
+        "itemKey": "2025-03-09T23:00:00#1208300",
+        "categoryKey": "football#39",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "round": "Regular Season - 28",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 2,
+        "awayTeamId": 47,
+        "homeTeamId": 36,
+        "itemKey": "2025-03-16T22:30:00#1208307",
+        "categoryKey": "football#39",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "round": "Regular Season - 29",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 1,
+        "awayTeamId": 47,
+        "homeTeamId": 49,
+        "itemKey": "2025-04-04T04:00:00#1208318",
+        "categoryKey": "football#39",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "round": "Regular Season - 30",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 3,
+        "awayTeamId": 41,
+        "homeTeamId": 47,
+        "itemKey": "2025-04-06T22:00:00#1208331",
+        "categoryKey": "football#39",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "round": "Regular Season - 31",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 4,
+        "awayTeamId": 47,
+        "homeTeamId": 39,
+        "itemKey": "2025-04-13T22:00:00#1208342",
+        "categoryKey": "football#39",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "round": "Regular Season - 32",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 1,
+        "awayTeamId": 65,
+        "homeTeamId": 47,
+        "itemKey": "2025-04-22T04:00:00#1208351",
+        "categoryKey": "football#39",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "round": "Regular Season - 33",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 5,
+        "awayTeamId": 47,
+        "homeTeamId": 40,
+        "itemKey": "2025-04-28T00:30:00#1208357",
+        "categoryKey": "football#39",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "round": "Regular Season - 34",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 1,
+        "awayTeamId": 47,
+        "homeTeamId": 48,
+        "itemKey": "2025-05-04T22:00:00#1208372",
+        "categoryKey": "football#39",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "round": "Regular Season - 35",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 0,
+        "awayTeamId": 52,
+        "homeTeamId": 47,
+        "itemKey": "2025-05-11T22:15:00#1208381",
+        "categoryKey": "football#39",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "round": "Regular Season - 36",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 2,
+        "awayTeamId": 47,
+        "homeTeamId": 66,
+        "itemKey": "2025-05-17T03:30:00#1208384",
+        "categoryKey": "football#39",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "round": "Regular Season - 37",
+          "elapsed": 90
+        }
+      },
+      {
+        "gameStatus": "FT",
+        "homeTeamScore": 1,
+        "awayTeamId": 51,
+        "homeTeamId": 47,
+        "itemKey": "2025-05-26T00:00:00#1208401",
+        "categoryKey": "football#39",
+        "awayTeamScore": 4,
+        "gameInfo": {
+          "round": "Regular Season - 38",
+          "elapsed": 90
+        }
+      }
+    ]
+  }
+}

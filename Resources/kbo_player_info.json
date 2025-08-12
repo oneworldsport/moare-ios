@@ -1,0 +1,1888 @@
+{
+  "keywords": [],
+  "entityInfo": [
+    {
+      "entityId": 52605,
+      "entityName": "김도영",
+      "category": "baseball",
+      "entityType": "player",
+      "leagueId": 90101,
+      "playerId": 52605,
+      "teamId": 6
+    }
+  ],
+  "season": 2025,
+  "dataType": "baseball_player_info",
+  "data": {
+    "info": {
+      "player": {
+        "career": "광주대성초-광주동성중-광주동성고",
+        "birthdate": "2003-10-02",
+        "weight": "85kg",
+        "signingBonus": "40000만원",
+        "salary": "50000만원",
+        "draftRound": "22 KIA 1차",
+        "fromYear": "22KIA",
+        "jersey": "5",
+        "teamId": 6,
+        "name": "김도영",
+        "id": 52605,
+        "position": "내야수(우투우타)",
+        "height": "183cm"
+      },
+      "statistics": [
+        {
+          "hitter": {
+            "bb": "9",
+            "hr": "7",
+            "3b": "0",
+            "sb": "3",
+            "avg": "0.330",
+            "sf": "2",
+            "sac": "0",
+            "mh": "10",
+            "so": "18",
+            "ab": "100",
+            "risp": "0.333",
+            "e": "3",
+            "g": "27",
+            "h": "33",
+            "ibb": "1",
+            "tb": "63",
+            "ph-ba": "1.000",
+            "slg": "0.630",
+            "2b": "9",
+            "cs": "0",
+            "pa": "111",
+            "r": "19",
+            "gdp": "3",
+            "ops": "1.008",
+            "hbp": "0",
+            "sb%": "100.0",
+            "rbi": "26",
+            "obp": "0.378"
+          },
+          "season": 2025,
+          "seasonType": "Regular Season",
+          "pitcher": null
+        }
+      ]
+    },
+    "lastGame": {
+      "lineup": {
+        "home": {
+          "hitters": [
+            {
+              "ab": "4",
+              "groundOuts": 2,
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": "2땅"
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": "1파"
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": "3땅"
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": "4구/ 우비"
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "1",
+              "avg": "0.000",
+              "battinNumber": 1,
+              "h": "0",
+              "rbi": "0",
+              "name": "박찬호",
+              "id": 64646,
+              "position": "유격수"
+            },
+            {
+              "ab": "2",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": "좌비"
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": "좌안"
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "0",
+              "avg": "0.500",
+              "battinNumber": 2,
+              "h": "1",
+              "rbi": "0",
+              "name": "김도영",
+              "airOuts": 1,
+              "id": 52605,
+              "position": "3루수"
+            },
+            {
+              "ab": "1",
+              "groundOuts": 1,
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": "3땅"
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "0",
+              "avg": "0.000",
+              "battinNumber": 2,
+              "h": "0",
+              "rbi": "0",
+              "name": "윤도현",
+              "id": 52667,
+              "position": "대주자#3루수"
+            },
+            {
+              "ab": "2",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": "좌파/ 유땅"
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "0",
+              "avg": "0.000",
+              "battinNumber": 2,
+              "h": "0",
+              "rbi": "0",
+              "name": "홍종표",
+              "id": 50600,
+              "position": "대타#2루수"
+            },
+            {
+              "ab": "4",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": "삼진"
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": "유병"
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": "삼진"
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": "우중안"
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "1",
+              "avg": "0.250",
+              "battinNumber": 3,
+              "h": "1",
+              "rbi": "1",
+              "strikeOuts": 2,
+              "name": "나성범",
+              "id": 62947,
+              "position": "우익수",
+              "groundIntoDoublePlay": 1
+            },
+            {
+              "ab": "0",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "0",
+              "avg": "0.000",
+              "battinNumber": 3,
+              "h": "0",
+              "rbi": "0",
+              "name": "황동하",
+              "id": 52641,
+              "position": "투수"
+            },
+            {
+              "ab": "3",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": "유비"
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": "포파"
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": "삼진"
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": "4구"
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "1",
+              "baseOnBalls": 1,
+              "avg": "0.000",
+              "battinNumber": 4,
+              "h": "0",
+              "rbi": "0",
+              "strikeOuts": 1,
+              "name": "위즈덤",
+              "id": 55645,
+              "position": "1루수"
+            },
+            {
+              "ab": "4",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": "삼진"
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": "유비"
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": "중비"
+                },
+                {
+                  "num": 8,
+                  "info": "중2"
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "0",
+              "avg": "0.250",
+              "battinNumber": 5,
+              "h": "1",
+              "rbi": "2",
+              "strikeOuts": 1,
+              "name": "최형우",
+              "airOuts": 1,
+              "id": 72443,
+              "position": "지명타자"
+            },
+            {
+              "ab": "0",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "1",
+              "avg": "0.000",
+              "battinNumber": 5,
+              "h": "0",
+              "rbi": "0",
+              "name": "박재현",
+              "id": 55636,
+              "position": "대주자#중견수"
+            },
+            {
+              "ab": "3",
+              "groundOuts": 1,
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": "중안"
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": "4구"
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": "유땅"
+                },
+                {
+                  "num": 8,
+                  "info": "좌안"
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "1",
+              "baseOnBalls": 1,
+              "avg": "0.667",
+              "battinNumber": 6,
+              "h": "2",
+              "rbi": "2",
+              "name": "김선빈",
+              "id": 78603,
+              "position": "2루수"
+            },
+            {
+              "ab": "0",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "1",
+              "avg": "0.000",
+              "battinNumber": 6,
+              "h": "0",
+              "rbi": "0",
+              "name": "김규성",
+              "id": 66614,
+              "position": "대주자#3루수"
+            },
+            {
+              "ab": "3",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": "중안"
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": "우비"
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": "중2"
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "0",
+              "avg": "0.667",
+              "battinNumber": 7,
+              "h": "2",
+              "rbi": "0",
+              "name": "이우성",
+              "airOuts": 1,
+              "id": 63260,
+              "position": "좌익수"
+            },
+            {
+              "ab": "1",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": "우2"
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "1",
+              "avg": "1.000",
+              "battinNumber": 7,
+              "doubles": 1,
+              "h": "1",
+              "rbi": "0",
+              "name": "박정우",
+              "id": 67609,
+              "position": "대주자#좌익수"
+            },
+            {
+              "ab": "2",
+              "groundOuts": 1,
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": "좌안"
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": "유땅"
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "0",
+              "avg": "0.500",
+              "battinNumber": 8,
+              "h": "1",
+              "rbi": "1",
+              "name": "김태군",
+              "id": 78122,
+              "position": "포수"
+            },
+            {
+              "ab": "2",
+              "groundOuts": 1,
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": "2땅"
+                },
+                {
+                  "num": 8,
+                  "info": "우홈"
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "1",
+              "avg": "0.500",
+              "homeRuns": 1,
+              "battinNumber": 8,
+              "h": "1",
+              "rbi": "3",
+              "name": "한준수",
+              "id": 68646,
+              "position": "대타#포수"
+            },
+            {
+              "ab": "4",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": "삼진"
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": "우비"
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": "우안/ 투안"
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "1",
+              "avg": "0.500",
+              "battinNumber": 9,
+              "h": "2",
+              "rbi": "0",
+              "strikeOuts": 1,
+              "name": "최원준",
+              "airOuts": 1,
+              "id": 66606,
+              "position": "중견수#우익수"
+            }
+          ],
+          "pitchers": [
+            {
+              "bb": "1",
+              "ab": "17",
+              "np": "66",
+              "sv": "0",
+              "ip": "5",
+              "h": "2",
+              "hr": "0",
+              "l": "0",
+              "er": "0",
+              "result": "",
+              "r": "0",
+              "appearance": "선발",
+              "era": "0.00",
+              "w": "0",
+              "name": "네일",
+              "tbf": "18",
+              "id": 54640,
+              "so": "5"
+            },
+            {
+              "bb": "1",
+              "ab": "2",
+              "np": "12",
+              "sv": "0",
+              "ip": "1/3",
+              "h": "1",
+              "hr": "0",
+              "l": "0",
+              "er": "2",
+              "result": "",
+              "r": "2",
+              "appearance": "6.1",
+              "era": "54.00",
+              "w": "0",
+              "name": "곽도규",
+              "tbf": "3",
+              "id": 53609,
+              "so": "1"
+            },
+            {
+              "bb": "2",
+              "ab": "1",
+              "np": "15",
+              "sv": "0",
+              "ip": "0",
+              "h": "1",
+              "hr": "0",
+              "l": "0",
+              "er": "0",
+              "result": "",
+              "r": "0",
+              "appearance": "6.4",
+              "era": "-",
+              "w": "0",
+              "name": "조상우",
+              "tbf": "3",
+              "id": 63342,
+              "so": "0"
+            },
+            {
+              "bb": "0",
+              "ab": "6",
+              "np": "21",
+              "sv": "0",
+              "ip": "1 2/3",
+              "h": "1",
+              "hr": "0",
+              "l": "0",
+              "er": "0",
+              "result": "",
+              "r": "0",
+              "appearance": "6.7",
+              "era": "0.00",
+              "w": "0",
+              "name": "최지민",
+              "tbf": "6",
+              "id": 52639,
+              "so": "2"
+            },
+            {
+              "bb": "0",
+              "ab": "3",
+              "np": "8",
+              "sv": "0",
+              "ip": "1",
+              "h": "0",
+              "hr": "0",
+              "l": "0",
+              "er": "0",
+              "result": "승",
+              "r": "0",
+              "appearance": "8.4",
+              "era": "0.00",
+              "w": "1",
+              "name": "전상현",
+              "tbf": "3",
+              "id": 66609,
+              "so": "0"
+            },
+            {
+              "bb": "0",
+              "ab": "5",
+              "np": "23",
+              "sv": "0",
+              "ip": "1",
+              "h": "2",
+              "hr": "0",
+              "l": "0",
+              "er": "0",
+              "result": "",
+              "r": "0",
+              "appearance": "9.7",
+              "era": "0.00",
+              "w": "0",
+              "name": "황동하",
+              "tbf": "5",
+              "id": 52641,
+              "so": "3"
+            }
+          ]
+        },
+        "away": {
+          "hitters": [
+            {
+              "ab": "5",
+              "h": "1",
+              "strikeOuts": 1,
+              "groundOuts": 1,
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": "중비"
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": "2비"
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": "삼진"
+                },
+                {
+                  "num": 7,
+                  "info": "2땅"
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": "좌중2"
+                }
+              ],
+              "r": "0",
+              "avg": "0.200",
+              "battinNumber": 1,
+              "doubles": 1,
+              "rbi": "0",
+              "name": "박민우",
+              "airOuts": 2,
+              "id": 62907,
+              "position": "2루수"
+            },
+            {
+              "ab": "5",
+              "groundOuts": 1,
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": "삼진"
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": "1땅"
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": "중안"
+                },
+                {
+                  "num": 7,
+                  "info": "2안"
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": "삼진"
+                }
+              ],
+              "r": "1",
+              "avg": "0.400",
+              "battinNumber": 2,
+              "h": "2",
+              "rbi": "0",
+              "strikeOuts": 2,
+              "name": "김주원",
+              "id": 51907,
+              "position": "유격수"
+            },
+            {
+              "ab": "3",
+              "groundOuts": 1,
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": "3땅"
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": "좌안"
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": "4구"
+                },
+                {
+                  "num": 7,
+                  "info": "유비"
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "1",
+              "baseOnBalls": 1,
+              "avg": "0.333",
+              "battinNumber": 3,
+              "h": "1",
+              "rbi": "0",
+              "name": "손아섭",
+              "id": 77532,
+              "position": "우익수"
+            },
+            {
+              "ab": "0",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "0",
+              "avg": "0.000",
+              "battinNumber": 3,
+              "h": "0",
+              "rbi": "0",
+              "name": "김성욱",
+              "id": null,
+              "position": "중견수"
+            },
+            {
+              "ab": "3",
+              "baseOnBalls": 1,
+              "h": "0",
+              "strikeOuts": 1,
+              "groundOuts": 1,
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": "중비"
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": "삼진"
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": "4구"
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": "3땅"
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "0",
+              "avg": "0.000",
+              "battinNumber": 4,
+              "rbi": "0",
+              "name": "데이비슨",
+              "airOuts": 1,
+              "id": 54944,
+              "position": "지명타자"
+            },
+            {
+              "ab": "4",
+              "groundOuts": 3,
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": "유땅"
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": "2땅"
+                },
+                {
+                  "num": 6,
+                  "info": "좌2"
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": "2땅"
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "0",
+              "avg": "0.250",
+              "battinNumber": 5,
+              "doubles": 1,
+              "h": "1",
+              "rbi": "2",
+              "name": "박건우",
+              "id": 79215,
+              "position": "중견수#우익수"
+            },
+            {
+              "ab": "2",
+              "baseOnBalls": 1,
+              "h": "0",
+              "strikeOuts": 1,
+              "hitByPitch": 1,
+              "groundOuts": 1,
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": "삼진"
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": "사구"
+                },
+                {
+                  "num": 6,
+                  "info": "4구"
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": "투땅"
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "0",
+              "avg": "0.000",
+              "battinNumber": 6,
+              "rbi": "0",
+              "name": "권희동",
+              "id": 63963,
+              "position": "좌익수"
+            },
+            {
+              "ab": "2",
+              "groundOuts": 1,
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": "유땅"
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": "우비"
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "0",
+              "avg": "0.000",
+              "battinNumber": 7,
+              "h": "0",
+              "rbi": "0",
+              "name": "도태훈",
+              "airOuts": 1,
+              "id": 66965,
+              "position": "1루수"
+            },
+            {
+              "ab": "1",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": "삼진"
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "0",
+              "avg": "0.000",
+              "battinNumber": 7,
+              "h": "0",
+              "rbi": "0",
+              "strikeOuts": 1,
+              "name": "천재환",
+              "id": 67905,
+              "position": "대타"
+            },
+            {
+              "ab": "1",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": "좌안"
+                }
+              ],
+              "r": "0",
+              "avg": "1.000",
+              "battinNumber": 7,
+              "h": "1",
+              "rbi": "0",
+              "name": "서호철",
+              "id": 69995,
+              "position": "1루수"
+            },
+            {
+              "ab": "3",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": "삼진"
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": "중안"
+                },
+                {
+                  "num": 6,
+                  "info": "삼진"
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "0",
+              "avg": "0.333",
+              "battinNumber": 8,
+              "h": "1",
+              "rbi": "0",
+              "strikeOuts": 2,
+              "name": "김형준",
+              "id": 68912,
+              "position": "포수"
+            },
+            {
+              "ab": "1",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": "삼진"
+                }
+              ],
+              "r": "0",
+              "avg": "0.000",
+              "battinNumber": 8,
+              "h": "0",
+              "rbi": "0",
+              "strikeOuts": 1,
+              "name": "박세혁",
+              "id": 62244,
+              "position": "대타"
+            },
+            {
+              "ab": "3",
+              "groundOuts": 2,
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": "삼진"
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": "3땅"
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": "유땅"
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": ""
+                }
+              ],
+              "r": "0",
+              "avg": "0.000",
+              "battinNumber": 9,
+              "h": "0",
+              "rbi": "0",
+              "strikeOuts": 1,
+              "name": "김휘집",
+              "id": 51344,
+              "position": "3루수"
+            },
+            {
+              "ab": "1",
+              "inningStats": [
+                {
+                  "num": 1,
+                  "info": ""
+                },
+                {
+                  "num": 2,
+                  "info": ""
+                },
+                {
+                  "num": 3,
+                  "info": ""
+                },
+                {
+                  "num": 4,
+                  "info": ""
+                },
+                {
+                  "num": 5,
+                  "info": ""
+                },
+                {
+                  "num": 6,
+                  "info": ""
+                },
+                {
+                  "num": 7,
+                  "info": ""
+                },
+                {
+                  "num": 8,
+                  "info": ""
+                },
+                {
+                  "num": 9,
+                  "info": "삼진"
+                }
+              ],
+              "r": "0",
+              "avg": "0.000",
+              "battinNumber": 9,
+              "h": "0",
+              "rbi": "0",
+              "strikeOuts": 1,
+              "name": "한재환",
+              "id": 50903,
+              "position": "대타"
+            }
+          ],
+          "pitchers": [
+            {
+              "bb": "1",
+              "ab": "21",
+              "np": "94",
+              "sv": "0",
+              "ip": "6",
+              "h": "4",
+              "hr": "0",
+              "l": "0",
+              "er": "1",
+              "result": "",
+              "r": "1",
+              "appearance": "선발",
+              "era": "1.50",
+              "w": "0",
+              "name": "로건",
+              "tbf": "22",
+              "id": 55912,
+              "so": "5"
+            },
+            {
+              "bb": "0",
+              "ab": "4",
+              "np": "19",
+              "sv": "0",
+              "ip": "1",
+              "h": "1",
+              "hr": "0",
+              "l": "0",
+              "er": "0",
+              "result": "홀드",
+              "r": "0",
+              "appearance": "7.5",
+              "era": "0.00",
+              "w": "0",
+              "name": "김태경",
+              "tbf": "4",
+              "id": 50992,
+              "so": "0"
+            },
+            {
+              "bb": "2",
+              "ab": "3",
+              "np": "22",
+              "sv": "0",
+              "ip": "1/3",
+              "h": "2",
+              "hr": "0",
+              "l": "1",
+              "er": "4",
+              "result": "패",
+              "r": "4",
+              "appearance": "8.9",
+              "era": "108.00",
+              "w": "0",
+              "name": "전사민",
+              "tbf": "5",
+              "id": 69969,
+              "so": "0"
+            },
+            {
+              "bb": "0",
+              "ab": "4",
+              "np": "13",
+              "sv": "0",
+              "ip": "0",
+              "h": "4",
+              "hr": "1",
+              "l": "0",
+              "er": "4",
+              "result": "",
+              "r": "4",
+              "appearance": "8.5",
+              "era": "-",
+              "w": "0",
+              "name": "김재열",
+              "tbf": "4",
+              "id": 64580,
+              "so": "0"
+            },
+            {
+              "bb": "0",
+              "ab": "3",
+              "np": "8",
+              "sv": "0",
+              "ip": "2/3",
+              "h": "1",
+              "hr": "0",
+              "l": "0",
+              "er": "0",
+              "result": "",
+              "r": "0",
+              "appearance": "8.9",
+              "era": "0.00",
+              "w": "0",
+              "name": "최우석",
+              "tbf": "3",
+              "id": 54903,
+              "so": "0"
+            }
+          ]
+        }
+      },
+      "gameInfo": {
+        "gameId": "20250322NCHT0",
+        "date": "2025-03-22T14:00:00+09:00",
+        "homeTeamScore": "9",
+        "gameStatus": "3",
+        "awayTeamScore": "2",
+        "remark": "-",
+        "startTime": "14:00",
+        "endTime": "17:06",
+        "runTime": "3:06",
+        "homeTeamId": 6,
+        "awayTeamId": 8,
+        "attendance": "20,500"
+      },
+      "lineScore": {
+        "home": {
+          "11": "-",
+          "12": "-",
+          "b": "3",
+          "e": "0",
+          "h": "12",
+          "1": "0",
+          "2": "1",
+          "r": "9",
+          "3": "0",
+          "4": "0",
+          "5": "0",
+          "6": "0",
+          "7": "0",
+          "8": "8",
+          "9": "-",
+          "10": "-"
+        },
+        "away": {
+          "11": "-",
+          "12": "-",
+          "b": "4",
+          "e": "0",
+          "h": "7",
+          "1": "0",
+          "2": "0",
+          "r": "2",
+          "3": "0",
+          "4": "0",
+          "5": "0",
+          "6": "2",
+          "7": "0",
+          "8": "0",
+          "9": "0",
+          "10": "-"
+        }
+      }
+    },
+    "nextGame": {
+      "lineup": null,
+      "gameInfo": {
+        "gameId": "20250701SKHT0",
+        "date": "2025-07-01T18:30:00+09:00",
+        "homeTeamScore": null,
+        "gameStatus": "1",
+        "awayTeamScore": null,
+        "remark": "-",
+        "homeTeamId": 6,
+        "awayTeamId": 10
+      },
+      "lineScore": null
+    }
+  }
+}
