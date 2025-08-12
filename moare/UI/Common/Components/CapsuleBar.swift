@@ -41,20 +41,36 @@ struct HCapsuleBar: View {
 
 struct VCapsuleBar: View {
     let customHeight: CGFloat?
+    let customWidth: CGFloat?
     let color: Color
     
-    init(customHeight: CGFloat? = nil, color: Color = .secondary) {
+    init(
+        customHeight: CGFloat? = nil,
+        customWidth: CGFloat? = nil,
+        color: Color = .secondary
+    ) {
         self.customHeight = customHeight
+        self.customWidth = customWidth ?? 2
         self.color = color
     }
     
     var body: some View {
         Capsule()
-            .frame(maxWidth: 2, maxHeight: customHeight ?? .infinity)
+            .frame(width: customWidth)
+            .frame(maxHeight: customHeight ?? .infinity)
             .foregroundColor(color)
     }
 }
 
-//#Preview {
+struct StatsDivder: View {
+    
+    var body: some View {
+        VCapsuleBar(customHeight: 40, customWidth: 1)
+            .opacity(0.5)
+    }
+}
+
+#Preview {
+    StatsDivder()
 //    HCapsuleBar()
-//}
+}

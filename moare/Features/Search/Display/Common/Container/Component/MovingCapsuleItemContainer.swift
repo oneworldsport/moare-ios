@@ -43,8 +43,12 @@ struct MovingCapsuleItemContainer<Content: View>: View {
         Button(action: {
             onClick?()
         }) {
-            VStack(alignment: horizontalAlignment) {
-                content()
+            VStack {
+                HCapsuleBar()
+                
+                VStack(alignment: horizontalAlignment) {
+                    content()
+                }
             }
         }
         .foregroundStyle(.primary)

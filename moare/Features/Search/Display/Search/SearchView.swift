@@ -32,7 +32,7 @@ struct SearchView: View {
     @State private var isNoticeIconVisible = false
     @State private var isNoticeOpened = false
     
-    @State var viewForTest: SportDisplayType? = nil
+    var viewForTest: SportDisplayType? = nil
     
     var body: some View {
         ZStack {

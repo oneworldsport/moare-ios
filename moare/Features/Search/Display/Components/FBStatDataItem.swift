@@ -32,17 +32,32 @@ struct FBStatDataItem: View {
     }
     
     var body: some View {
-        VStack {
-            Text(category)
-                .font(.system(size: customCategoryFontSize ?? 15))
-                .frame(height: customCategoryHeight ?? 30)
-            
-            Text(data)
-                .font(.system(size: customDataFontSize ?? 16))
-                .fontWeight(.medium)
-                .frame(maxHeight: 30) // make it constant
+        // customWidth가 있을때는 customWidth로 너비 고정. 없을때는 maxWidth: 50으로 너비 자동 조정.
+        if let customWidth {
+            VStack {
+                Text(category)
+                    .font(.system(size: customCategoryFontSize ?? 15))
+                    .frame(height: customCategoryHeight ?? 30)
+                
+                Text(data)
+                    .font(.system(size: customDataFontSize ?? 16))
+                    .fontWeight(.medium)
+                    .frame(height: 30)
+            }
+            .frame(width: customWidth, height: 60)
+        } else {
+            VStack {
+                Text(category)
+                    .font(.system(size: customCategoryFontSize ?? 15))
+                    .frame(height: customCategoryHeight ?? 30)
+                
+                Text(data)
+                    .font(.system(size: customDataFontSize ?? 16))
+                    .fontWeight(.medium)
+                    .frame(height: 30)
+            }
+            .frame(maxWidth: 50, maxHeight: 60)
         }
-        .frame(width: customWidth ?? 50, height: 60)
     }
 }
 

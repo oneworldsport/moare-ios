@@ -211,8 +211,6 @@ struct FBPlayerInfoFirstItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
         ) {
-            HCapsuleBar()
-            
             URLImage(url: player?.photo)
                 .opacity(showContents ? 1 : 0)
             
@@ -259,12 +257,6 @@ struct FBPlayerInfoSecondItem: View {
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            // added HStack to position Capsule at center
-            HStack {
-                HCapsuleBar()
-            }
-            .frame(maxWidth: .infinity)
-            
             if let player = fbPlayerInfoStore.baseInfo.displayModel?.info {
                 HStack(spacing: 0) {
                     Text("국적: ")
@@ -330,12 +322,6 @@ struct FBPlayerInfoThirdItem: View {
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            // added HStack to position Capsule at center
-            HStack {
-                HCapsuleBar()
-            }
-            .frame(maxWidth: .infinity)
-            
             if let player = fbPlayerInfoStore.baseInfo.displayModel?.info {
                 HStack(spacing: 0) {
                     Text("키: ")
@@ -402,8 +388,6 @@ struct FBPlayerInfoFourthItem: View {
                 }
             }
         ) {
-            HCapsuleBar()
-            
             if let league = stats?.league {
                 LeagueTitle(
                     url: league.logo,
@@ -417,6 +401,7 @@ struct FBPlayerInfoFourthItem: View {
                 VStack {
                     Text("소속팀")
                         .font(.system(size: 15))
+                        .frame(height: fbPlayerInfoStore.itemHeight)
                     
                     if let team {
                         HStack {
@@ -426,18 +411,22 @@ struct FBPlayerInfoFourthItem: View {
                                 .font(.system(size: 16))
                                 .fontWeight(.medium)
                         }
-                        .frame(maxHeight: fbPlayerInfoStore.itemHeight)
+                        .frame(height: fbPlayerInfoStore.itemHeight)
                     }
                 }
                 
                 if let stats {
+                    StatsDivder()
                     FBStatDataItem(category: "경기수", data: "\(stats.games.appearences)")
+                    StatsDivder()
                     FBStatDataItem(category: "골", data: "\(stats.goals.total)")
+                    StatsDivder()
                     FBStatDataItem(category: "도움", data: "\(stats.goals.assists)")
                 }
             }
             .opacity(showContents ? 1 : 0)
         }
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
     }
 }
@@ -478,8 +467,6 @@ struct FBPlayerInfoFifthItem: View {
                 searchStore.send(.showGameStats(gameType: "previous"))
             }
         ) {
-            HCapsuleBar()
-            
             Text("최근경기")
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
@@ -487,52 +474,64 @@ struct FBPlayerInfoFifthItem: View {
             HStack {
                 if let lastGame = fbPlayerInfoStore.baseInfo.displayModel?.lastGame {
                     VStack {
-                        HStack {
-                            Text(teamNameDic["short_\(lastGame.teams.home.id)"] ?? lastGame.teams.home.name)
-                                .font(.system(size: 14))
-                                .fontWeight(.light)
-                                .lineLimit(1)
+                        HStack(spacing: 0) {
+                            HStack(spacing: 0) {
+                                Text(teamNameDic["short_\(lastGame.teams.home.id)"] ?? lastGame.teams.home.name)
+                                    .font(.system(size: 14))
+                                    .fontWeight(.light)
+                                    .lineLimit(1)
+                                
+                                Text(" \(lastGame.goals.home)")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.medium)
+                                    .foregroundStyle((lastGame.goals.home >= lastGame.goals.away) ? .moare : .primary)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .trailing)
                             
-                            Text("\(lastGame.goals.home)")
+                            Text(" - ")
                                 .font(.system(size: 15))
                                 .fontWeight(.medium)
-                                .foregroundStyle((lastGame.goals.home >= lastGame.goals.away) ? .moare : .primary)
                             
-                            Text(" vs ")
-                                .font(.system(size: 15))
-                                .fontWeight(.medium)
                             
-                            Text("\(lastGame.goals.away)")
-                                .font(.system(size: 15))
-                                .fontWeight(.medium)
-                                .foregroundStyle((lastGame.goals.away >= lastGame.goals.home) ? .moare : .primary)
-                            
-                            Text(teamNameDic["short_\(lastGame.teams.away.id)"] ?? lastGame.teams.away.name)
-                                .font(.system(size: 14))
-                                .fontWeight(.light)
-                                .lineLimit(1)
+                            HStack(spacing: 0) {
+                                Text("\(lastGame.goals.away) ")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.medium)
+                                    .foregroundStyle((lastGame.goals.away >= lastGame.goals.home) ? .moare : .primary)
+                                
+                                Text(teamNameDic["short_\(lastGame.teams.away.id)"] ?? lastGame.teams.away.name)
+                                    .font(.system(size: 14))
+                                    .fontWeight(.light)
+                                    .lineLimit(1)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         
-                        Text(CalendarUtil.formatDate(date: lastGame.fixture.date))
+                        Text(CalendarUtil.formatDate(date: lastGame.fixture.date, formatType: .ampmWithDayOfWeekDate))
                             .font(.system(size: 15))
-                            .frame(maxHeight: fbPlayerInfoStore.itemHeight)
                     }
-                    .padding(.top, 4)
+                    .frame(width: UIScreen.main.bounds.width * 0.45) // NOTE: 너비를 화면 전체 너비중 45%로 고정
                 }
                 
                 if let lastGamePlayerStats = fbPlayerInfoStore.baseInfo.displayModel?.lastGamePlayerStats {
-                    FBStatDataItem(
-                        category: "출전시간",
-                        data: (lastGamePlayerStats.games.substitute ? "후보" : "선발") + " / \(lastGamePlayerStats.games.minutes)분",
-                        customWidth: 80
-                    )
-                    
-                    FBStatDataItem(category: "골", data: "\(lastGamePlayerStats.goals.total)")
-                    FBStatDataItem(category: "도움", data: "\(lastGamePlayerStats.goals.assists)")
+                    HStack {
+                        StatsDivder()
+                        FBStatDataItem(
+                            category: "출전시간",
+                            data: (lastGamePlayerStats.games.substitute ? "후보" : "선발") + " / \(lastGamePlayerStats.games.minutes)분",
+                            customWidth: 80
+                        )
+                        StatsDivder()
+                        FBStatDataItem(category: "골", data: "\(lastGamePlayerStats.goals.total)")
+                        StatsDivder()
+                        FBStatDataItem(category: "도움", data: "\(lastGamePlayerStats.goals.assists)")
+                    }
+                    .frame(maxWidth: .infinity)
                 }
             }
             .opacity(showContents ? 1 : 0)
         } // VStack
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
     }
 }
@@ -573,8 +572,6 @@ struct FBPlayerInfoSixthItem: View {
                 searchStore.send(.showGameStats(gameType: "next"))
             }
         ) {
-            HCapsuleBar()
-            
             Text("다음경기")
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
@@ -594,14 +591,14 @@ struct FBPlayerInfoSixthItem: View {
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .padding(.vertical, 4)
                 .opacity(showContents ? 1 : 0)
                 
-                Text(CalendarUtil.formatDate(date: nextGame.fixture.date))
+                Text(CalendarUtil.formatDate(date: nextGame.fixture.date, formatType: .ampmWithDayOfWeekDate))
                     .font(.system(size: 15))
                     .opacity(showContents ? 1 : 0)
             }
         } // VStack
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
     }
 }
