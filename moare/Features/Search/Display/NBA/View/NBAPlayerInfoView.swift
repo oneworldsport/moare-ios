@@ -435,16 +435,14 @@ struct NBAPlayerInfoFourthItem: View {
                 }
                 .opacity(showContents ? 1 : 0)
                 
-                VStack {
-                    (
-                        Text("경력: ")
-                            .font(.system(size: 15))
-                        + Text("\(player.fromYear)~현재 (\(player.seasonExp + 1))년차")
-                            .font(.system(size: 16))
-                            .fontWeight(.medium)
-                    )
-                    .multilineTextAlignment(.leading)
-                }
+                (
+                    Text("경력: ")
+                        .font(.system(size: 15))
+                    + Text("\(player.fromYear)~현재 (\(player.seasonExp + 1))년차")
+                        .font(.system(size: 16))
+                        .fontWeight(.medium)
+                )
+                .multilineTextAlignment(.leading)
                 .opacity(showContents ? 1 : 0)
             }
         }

@@ -783,7 +783,7 @@ struct MLBPlayerInfoSeventhItem: View {
                 }
             }
             .opacity(showContents ? 1 : 0)
-        } // VStack
+        }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
     }
