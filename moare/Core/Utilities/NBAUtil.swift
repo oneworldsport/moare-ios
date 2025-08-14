@@ -8,7 +8,7 @@
 import Foundation
 
 struct NBAUtil {
-    static func translateEastWest(input: String) -> String {
+    static func translateEastWest(_ input: String) -> String {
         return if input.lowercased() == "east" {
             "동부"
         } else if input.lowercased() == "west" {

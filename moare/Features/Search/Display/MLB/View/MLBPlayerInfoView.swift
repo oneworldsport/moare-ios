@@ -543,21 +543,21 @@ struct MLBPlayerInfoSixthItem: View {
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "타율",
                         data: hitting.avg,
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "홈런",
                         data: String(hitting.homeRuns),
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "ops",
                         data: hitting.ops,
@@ -565,7 +565,7 @@ struct MLBPlayerInfoSixthItem: View {
                         customWidth: .infinity
                     )
                     .frame(maxWidth: .infinity)
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "도루",
                         data: String(hitting.stolenBases),
@@ -584,28 +584,28 @@ struct MLBPlayerInfoSixthItem: View {
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "평균자책점",
                         data: pitching.era,
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "피안타율",
                         data: pitching.avg,
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "승",
                         data: String(pitching.wins),
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "이닝당 평균 투구수",
                         data: pitching.pitchesPerInning,
@@ -711,28 +711,28 @@ struct MLBPlayerInfoSeventhItem: View {
                 // NOTE: lastGamePlayerHitterStats, lastGamePlayerPitcherStats가 null인 경우는 없어서 안에 있는 기본 데이터로 해당 선수 기록 보여줘야할지 판단
                 if lastGamePlayerHitterStats?._atBats != nil && lastGamePlayerPitcherStats?._numberOfPitches == nil {
                     HStack {
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "타수",
                             data: String(lastGamePlayerHitterStats!.atBats),
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "안타",
                             data: String(lastGamePlayerHitterStats!.hits),
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "득점",
                             data: String(lastGamePlayerHitterStats!.runs),
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "타점",
                             data: String(lastGamePlayerHitterStats!.rbi),
@@ -743,35 +743,35 @@ struct MLBPlayerInfoSeventhItem: View {
                     .frame(maxWidth: .infinity)
                 } else if lastGamePlayerPitcherStats?._numberOfPitches != nil && lastGamePlayerHitterStats?._atBats == nil {
                     HStack {
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "이낭",
                             data: lastGamePlayerPitcherStats!.inningsPitched,
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "삼진",
                             data: String(lastGamePlayerPitcherStats!.strikeOuts),
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "볼넷",
                             data: String(lastGamePlayerPitcherStats!.baseOnBalls),
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "실점",
                             data: String(lastGamePlayerPitcherStats!.runs),
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "자책점",
                             data: String(lastGamePlayerPitcherStats!.earnedRuns),

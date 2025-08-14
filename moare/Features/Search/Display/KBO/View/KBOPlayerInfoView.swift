@@ -543,28 +543,28 @@ struct KBOPlayerInfoSixthItem: View {
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "타율",
                         data: hitter.avg,
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "홈런",
                         data: hitter.hr,
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "ops",
                         data: hitter.ops,
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "도루",
                         data: hitter.sb,
@@ -583,21 +583,21 @@ struct KBOPlayerInfoSixthItem: View {
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "평균자책점",
                         data: pitcher.era,
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "승",
                         data: pitcher.w,
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "패",
                         data: pitcher.l,
@@ -702,28 +702,28 @@ struct KBOPlayerInfoSeventhItem: View {
                 
                 if lastGamePlayerHitterStats != nil && lastGamePlayerPitcherStats == nil {
                     HStack {
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "타수",
                             data: lastGamePlayerHitterStats!.ab,
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "안타",
                             data: lastGamePlayerHitterStats!.h,
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "득점",
                             data: lastGamePlayerHitterStats!.r,
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "타점",
                             data: lastGamePlayerHitterStats!.rbi,
@@ -734,35 +734,35 @@ struct KBOPlayerInfoSeventhItem: View {
                     .frame(maxWidth: .infinity)
                 } else if lastGamePlayerPitcherStats != nil && lastGamePlayerHitterStats == nil {
                     HStack {
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "이낭",
                             data: lastGamePlayerPitcherStats!.ip,
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "삼진",
                             data: lastGamePlayerPitcherStats!.so,
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "볼넷",
                             data: lastGamePlayerPitcherStats!.bb,
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "실점",
                             data: lastGamePlayerPitcherStats!.r,
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "자책점",
                             data: lastGamePlayerPitcherStats!.er,

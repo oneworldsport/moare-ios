@@ -172,7 +172,7 @@ struct NBATeamStatsTeamInfoItem: View {
                             Text("컨퍼런스: ")
                                 .font(.system(size: 15))
                             
-                            Text(NBAUtil.translateEastWest(input: team.teamConference))
+                            Text(NBAUtil.translateEastWest(team.teamConference))
                                 .font(.system(size: 16))
                                 .fontWeight(.medium)
                         }
@@ -301,7 +301,7 @@ struct NBATeamStatsItem: View {
             // stats
             HStack {
                 FBStatDataItem(
-                    category: "\(NBAUtil.translateEastWest(input: team?.teamConference ?? ""))컨퍼런스 순위",
+                    category: "\(NBAUtil.translateEastWest(team?.teamConference ?? ""))컨퍼런스 순위",
                     data: "\(team?.confRank ?? 0)",
                     customCategoryFontSize: 11
                 )

@@ -204,26 +204,27 @@ struct FBPlayerInfoFirstItem: View {
     
     var body: some View {
         let playerNameDic = fbPlayerInfoStore.baseInfo.playerNameDictionary
-        let player = fbPlayerInfoStore.baseInfo.displayModel?.info
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
         ) {
-            URLImage(url: player?.photo)
-                .opacity(showContents ? 1 : 0)
-            
-            Text(playerNameDic["\(player?.id ?? 0)"] ?? (player?.name ?? ""))
-                .font(.system(size: 16))
-                .fontWeight(.medium)
-                .opacity(showContents ? 1 : 0)
-            
-            Text(player?.name ?? "")
-                .font(.system(size: 12))
-                .fontWeight(.light)
-                .lineLimit(2)
-                .opacity(showContents ? 1 : 0)
+            if let player = fbPlayerInfoStore.baseInfo.displayModel?.info {
+                URLImage(url: player.photo)
+                    .opacity(showContents ? 1 : 0)
+                
+                Text(playerNameDic["\(player.id)"] ?? (player.name))
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+                    .opacity(showContents ? 1 : 0)
+                
+                Text(player.name)
+                    .font(.system(size: 12))
+                    .fontWeight(.light)
+                    .lineLimit(2)
+                    .opacity(showContents ? 1 : 0)
+            }
         }
     }
 }
@@ -258,25 +259,24 @@ struct FBPlayerInfoSecondItem: View {
             horizontalAlignment: .leading
         ) {
             if let player = fbPlayerInfoStore.baseInfo.displayModel?.info {
-                HStack(spacing: 0) {
+                (
                     Text("국적: ")
                         .font(.system(size: 15))
-                    
-                    Text(player.nationality)
+                    + Text(player.nationality)
                         .font(.system(size: 16))
                         .fontWeight(.medium)
-                }
+                )
+                .multilineTextAlignment(.leading)
                 .opacity(showContents ? 1 : 0)
                 
-                HStack(spacing: 0) {
+                (
                     Text("출생: ")
                         .font(.system(size: 15))
-                    
-                    Text(player.birth.date)
+                    + Text(player.birth.date)
                         .font(.system(size: 16))
                         .fontWeight(.medium)
-                }
-                .padding(.vertical, UIConstants.Padding.defalutVPadding)
+                )
+                .multilineTextAlignment(.leading)
                 .opacity(showContents ? 1 : 0)
                 
                 HStack(spacing: 0) {
@@ -341,7 +341,6 @@ struct FBPlayerInfoThirdItem: View {
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                 }
-                //            .padding(.top, UIConstants.Padding.defalutVPadding)
                 .opacity(showContents ? 1 : 0)
             }
         }
@@ -398,7 +397,7 @@ struct FBPlayerInfoFourthItem: View {
             }
             
             HStack {
-                VStack {
+                VStack(spacing: 0) {
                     Text("소속팀")
                         .font(.system(size: 15))
                         .frame(height: fbPlayerInfoStore.itemHeight)
@@ -416,11 +415,11 @@ struct FBPlayerInfoFourthItem: View {
                 }
                 
                 if let stats {
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(category: "경기수", data: "\(stats.games.appearences)")
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(category: "골", data: "\(stats.goals.total)")
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(category: "도움", data: "\(stats.goals.assists)")
                 }
             }
@@ -515,15 +514,15 @@ struct FBPlayerInfoFifthItem: View {
                 
                 if let lastGamePlayerStats = fbPlayerInfoStore.baseInfo.displayModel?.lastGamePlayerStats {
                     HStack {
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(
                             category: "출전시간",
                             data: (lastGamePlayerStats.games.substitute ? "후보" : "선발") + " / \(lastGamePlayerStats.games.minutes)분",
                             customWidth: 80
                         )
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(category: "골", data: "\(lastGamePlayerStats.goals.total)")
-                        StatsDivder()
+                        StatsDivider()
                         FBStatDataItem(category: "도움", data: "\(lastGamePlayerStats.goals.assists)")
                     }
                     .frame(maxWidth: .infinity)
@@ -596,6 +595,11 @@ struct FBPlayerInfoSixthItem: View {
                 Text(CalendarUtil.formatDate(date: nextGame.fixture.date, formatType: .ampmWithDayOfWeekDate))
                     .font(.system(size: 15))
                     .opacity(showContents ? 1 : 0)
+            } else {
+                Text("예정된 경기가 없습니다.")
+                    .font(.system(size: 15))
+                    .opacity(showContents ? 1 : 0)
+                    .padding(.top, 4)
             }
         } // VStack
         .frame(maxWidth: .infinity)

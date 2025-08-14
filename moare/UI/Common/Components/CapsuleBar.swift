@@ -62,7 +62,7 @@ struct VCapsuleBar: View {
     }
 }
 
-struct StatsDivder: View {
+struct StatsDivider: View {
     
     var body: some View {
         VCapsuleBar(customHeight: 40, customWidth: 1)
@@ -71,6 +71,6 @@ struct StatsDivder: View {
 }
 
 #Preview {
-    StatsDivder()
+    StatsDivider()
 //    HCapsuleBar()
 }

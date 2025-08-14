@@ -622,25 +622,25 @@ struct NBAPlayerInfoSeventhItem: View {
                         data: "\(stats.gp)",
                         customCategoryFontSize: 11
                     )
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "경기당 득점",
                         data: "\(stats.ptsPG)",
                         customCategoryFontSize: 11
                     )
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "경기당 리바운드",
                         data: "\(stats.rebPG)",
                         customCategoryFontSize: 11
                     )
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "경기당 어시스트",
                         data: "\(stats.astPG)",
                         customCategoryFontSize: 11
                     )
-                    StatsDivder()
+                    StatsDivider()
                     FBStatDataItem(
                         category: "출전 경기 승률",
                         data: "\(stats.winsPct)",
@@ -743,7 +743,7 @@ struct NBAPlayerInfoEighthItem: View {
                     
                     if let lastGamePlayerStats = displayModel?.lastGamePlayerStats {
                         HStack {
-                            StatsDivder()
+                            StatsDivider()
                             FBStatDataItem(
                                 category: "출전시간",
                                 data: "\(lastGamePlayerStats.position.isEmpty ? "후보" : "선발") / \(lastGamePlayerStats.statistics.minutes)",
@@ -751,19 +751,19 @@ struct NBAPlayerInfoEighthItem: View {
                                 customDataFontSize: 15,
                                 customWidth: 70
                             )
-                            StatsDivder()
+                            StatsDivider()
                             FBStatDataItem(
                                 category: "득점",
                                 data: "\(lastGamePlayerStats.statistics.points)",
                                 customCategoryFontSize: 12
                             )
-                            StatsDivder()
+                            StatsDivider()
                             FBStatDataItem(
                                 category: "리바운드",
                                 data: "\(lastGamePlayerStats.statistics.reboundsTotal)",
                                 customCategoryFontSize: 12
                             )
-                            StatsDivder()
+                            StatsDivider()
                             FBStatDataItem(
                                 category: "어시스트",
                                 data: "\(lastGamePlayerStats.statistics.assists)",

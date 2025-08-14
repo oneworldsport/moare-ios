@@ -20,67 +20,47 @@ struct FBPlayerStatsView: View {
        --------------------- */
     let displayModel: FBPlayerStatsDisplayModel
     
-    /* ---------------------
-       animation
-       --------------------- */
-    let coordinateSpaceName = "FBPlayerStatsView"
-    
-    @State private var firstItemPosition: CGPoint = .zero
-    @State private var itemPositions: [Int: CGPoint] = [:]
-    
-    @State private var animatePositions = false
-    @State private var showContents = false
-    
-    var centerPosition = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
+    var startOffset = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             ScrollView {
-                if let fbPlayerStatsStore {
-                    // NOTE: Item's position is based on top left corner
-                    ZStack(alignment: .topLeading) {
-                        /* ---------------------
-                           invisible ui
-                           - for position
-                           --------------------- */
-                        VStack {
-                            // player info
-                            FBPlayerStatsPlayerInfoItem(fbPlayerStatsStore: fbPlayerStatsStore)
-                                .background(
-                                    GeometryReader { proxy in
-                                        Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
-                                            firstItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
-                                        }
+                InfoViewContainer(itemCount: 0, shouldShowMeasureContent: true, measureContent: { scope in
+                    if let fbPlayerStatsStore {
+                        FBPlayerStatsPlayerInfoItem(fbPlayerStatsStore: fbPlayerStatsStore)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onAppear {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
                                     }
-                                )
-                            
-                            // stats list
-                            FBPlayerStatsList(fbPlayerStatsStore: fbPlayerStatsStore, itemPositions: $itemPositions)
-                        }
-                        .opacity(0)
-                        
-                        /* ---------------------
-                           visible ui
-                           - with animation effect
-                           --------------------- */
-                        FBPlayerStatsPlayerInfoItem(fbPlayerStatsStore: fbPlayerStatsStore, showContents: showContents)
-                            .offset(
-                                x: 0,
-                                y: animatePositions ? firstItemPosition.y : centerPosition.height
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
+                                    }
+                                }
                             )
                         
+                        FBPlayerStatsList(fbPlayerStatsStore: fbPlayerStatsStore, scope: scope)
+                    }
+                }, displayContent: { scope in
+                    if let fbPlayerStatsStore {
+                        // player info
+                        FBPlayerStatsPlayerInfoItem(
+                            fbPlayerStatsStore: fbPlayerStatsStore,
+                            isAniItem: true,
+//                            itemSize: scope.itemSizes[0],
+                            itemOffset: scope.computedOffset(for: 0, startOffset: startOffset),
+                            showContents: scope.showContents
+                        )
+                        
+                        // stats list
                         FBPlayerStatsList(
                             fbPlayerStatsStore: fbPlayerStatsStore,
-                            animatePositions: animatePositions,
-                            showContents: showContents,
-                            isAniList: true,
-                            itemPositions: $itemPositions
+                            isAniItem: true,
+                            scope: scope
                         )
-                    } // ZStack
-                    .coordinateSpace(name: coordinateSpaceName)
-                } // if let fbPlayerStatsStore
+                    }
+                })
             } // ScrollView
-            .padding(.top, 6)
             .onAppear {
                 // init FBPlayerStatsStore
                 let fbPlayerStatsStore: StoreOf<FBPlayerStatsStore> = storeManager.getStore(forKey: StoreKeys.fbPlayerStatsStore) ?? {
@@ -98,27 +78,11 @@ struct FBPlayerStatsView: View {
                 if searchStore.poppedView == nil {
                     fbPlayerStatsStore.send(.initData(displayModel: displayModel))
                 }
-                
-                triggerAnimation()
             }
             .onChange(of: displayModel) {
                 if case .fbPlayerStats = searchStore.poppedView {
                     fbPlayerStatsStore?.send(.initData(displayModel: displayModel))
                 }
-            }
-        }
-    }
-    
-    private func triggerAnimation() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short) {
-            withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                animatePositions = true
-            }
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short + AnimationConstants.Duration.medium) {
-            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
-                showContents = true
             }
         }
     }
@@ -128,23 +92,25 @@ struct FBPlayerStatsPlayerInfoItem: View {
     @Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
     let isAniItem: Bool
+//    let itemSize: CGSize?
     let itemOffset: CGSize?
     let showContents: Bool
 
     init(
         fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>,
         isAniItem: Bool = false,
+//        itemSize: CGSize? = nil,
         itemOffset: CGSize? = nil,
         showContents: Bool = true
     ) {
         self.fbPlayerStatsStore = fbPlayerStatsStore
+//        self.itemSize = itemSize
         self.isAniItem = isAniItem
         self.itemOffset = itemOffset
         self.showContents = showContents
     }
     
     var body: some View {
-        let player = fbPlayerStatsStore.player
         let playerNameDic = fbPlayerStatsStore.playerNameDictionary
         let teamNameDic = fbPlayerStatsStore.teamNameDictionary
         
@@ -152,48 +118,48 @@ struct FBPlayerStatsPlayerInfoItem: View {
             isAniItem: isAniItem,
             itemOffset: itemOffset
         ) {
-            HCapsuleBar()
-            
-            HStack {
-                URLImage(url: player?.photo)
-                
-                VStack(alignment: .leading) {
-                    Text(playerNameDic["\(player?.id ?? 0)"] ?? (player?.name ?? ""))
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
+            if let player = fbPlayerStatsStore.player {
+                HStack {
+                    URLImage(url: player.photo)
                     
-                    Text("\(player?.name ?? "")")
-                        .font(.system(size: 15))
-                        .fontWeight(.light)
-                        .lineLimit(2)
-                }
-                
-                VStack(alignment: .leading) {
-                    HStack(spacing: 0) {
-                        Text("국적: ")
-                            .font(.system(size: 15))
-                            
-                        Text(fbPlayerStatsStore.nationalityKrName)
+                    VStack(alignment: .leading) {
+                        Text(playerNameDic["\(player.id)"] ?? (player.name))
                             .font(.system(size: 16))
                             .fontWeight(.medium)
+                        
+                        Text("\(player.name)")
+                            .font(.system(size: 15))
+                            .fontWeight(.light)
+                            .lineLimit(2)
                     }
                     
-                    if let team = fbPlayerStatsStore.team {
+                    VStack(alignment: .leading) {
                         HStack(spacing: 0) {
-                            Text("소속팀: ")
+                            Text("국적: ")
                                 .font(.system(size: 15))
-                            
-                            URLImage(url: team.logo, customSize: CGSize(width: 24, height: 24))
-                                .padding(.trailing, 6)
-                            
-                            Text(teamNameDic["full_\(team.id)"] ?? team.name)
+                                
+                            Text(fbPlayerStatsStore.nationalityKrName)
                                 .font(.system(size: 16))
                                 .fontWeight(.medium)
                         }
+                        
+                        if let team = fbPlayerStatsStore.team {
+                            HStack(spacing: 0) {
+                                Text("소속팀: ")
+                                    .font(.system(size: 15))
+                                
+                                URLImage(url: team.logo, customSize: CGSize(width: 24, height: 24))
+                                    .padding(.trailing, 6)
+                                
+                                Text(teamNameDic["full_\(team.id)"] ?? team.name)
+                                    .font(.system(size: 16))
+                                    .fontWeight(.medium)
+                            }
+                        }
                     }
                 }
+                .opacity(showContents ? 1 : 0)
             }
-            .opacity(showContents ? 1 : 0)
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
@@ -203,38 +169,55 @@ struct FBPlayerStatsPlayerInfoItem: View {
 struct FBPlayerStatsList: View {
     @Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
-    let animatePositions: Bool
-    let showContents: Bool
-    let isAniList: Bool
+    let isAniItem: Bool
+    let scope: InfoViewScope
     
-    @Binding var itemPositions: [Int : CGPoint]
+//    let updateItemPosition: (Int, GeometryProxy) -> Void
+    var startOffset = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
     
     init(
         fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>,
-        animatePositions: Bool = true,
-        showContents: Bool = true,
-        isAniList: Bool = false,
-        itemPositions: Binding<[Int: CGPoint]>
+        isAniItem: Bool = false,
+        scope: InfoViewScope,
+//        updateItemPosition: @escaping (Int, GeometryProxy) -> Void = { _, _ in }
     ) {
         self.fbPlayerStatsStore = fbPlayerStatsStore
-        self.animatePositions = animatePositions
-        self.showContents = showContents
-        self.isAniList = isAniList
-        self._itemPositions = itemPositions
+        self.isAniItem = isAniItem
+        self.scope = scope
+//        self.updateItemPosition = updateItemPosition
     }
     
     var body: some View {
         ForEach(fbPlayerStatsStore.statsList.indices, id: \.self) { index in
             let stats = fbPlayerStatsStore.statsList[index]
+            let itemIndex = index + 1
             
             FBPlayerStatsListItem(
                 fbPlayerStatsStore: fbPlayerStatsStore,
                 stats: stats,
-                index: index,
-                animatePositions: animatePositions,
-                showContents: showContents,
-                isAniList: isAniList,
-                itemPositions: $itemPositions
+                isAniItem: isAniItem,
+                itemSize: scope.itemSizes[itemIndex],
+                itemOffset: scope.computedOffset(for: itemIndex, startOffset: startOffset),
+                showContents: scope.showContents
+            )
+            .background(
+                GeometryReader { geometry in
+                    if !isAniItem {
+                        // 1) 최초 한 번은 무조건 측정 - gpt
+                        // NOTE: Color.clear.onChange()만 했을때는 update가 안돼서 Color.clear.onAppear 추가해줌
+                        Color.clear.onAppear {
+                            scope.updateItemFrame(index: itemIndex, geometry: geometry)
+                        }
+                        // 2) 위치 변하면 - gpt
+                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                            scope.updateItemFrame(index: itemIndex, geometry: geometry)
+                        }
+                        // 3) 사이즈 변하면 - gpt
+//                        Color.clear.onChange(of: geometry.size) { _ in
+//                            scope.updateItemFrame(index: itemIndex, geometry: geometry)
+//                        }
+                    }
+                }
             )
         }
     }
@@ -244,28 +227,46 @@ struct FBPlayerStatsListItem: View {
     @Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
     let stats: FBPlayerStats
-    let index: Int
-    let animatePositions: Bool
+    let isAniItem: Bool
+    let itemSize: CGSize?
+    let itemOffset: CGSize?
     let showContents: Bool
-    let isAniList: Bool
     
-    @Binding var itemPositions: [Int : CGPoint]
-    
-    var centerPosition = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
+    init(
+        fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>,
+        stats: FBPlayerStats,
+        isAniItem: Bool = false,
+        itemSize: CGSize? = nil,
+        itemOffset: CGSize? = nil,
+        showContents: Bool = true
+    ) {
+        self.fbPlayerStatsStore = fbPlayerStatsStore
+        self.stats = stats
+        self.isAniItem = isAniItem
+        
+        if isAniItem {
+            self.itemSize = itemSize
+            self.itemOffset = itemOffset
+            self.showContents = showContents
+        } else {
+            self.itemSize = nil
+            self.itemOffset = nil
+            self.showContents = true
+        }
+    }
     
     var body: some View {
         MovingCapsuleItemContainer(
-            isAniItem: isAniList,
-            itemOffset: (animatePositions ? (CGSize(width: 0, height: itemPositions[index]?.y ?? 0)) : centerPosition),
-            updateItemPosition: { geometry in
-                itemPositions[index] = geometry.frame(in: .named("FBPlayerStatsView")).origin
-            }
+            isButton: false,
+            isAniItem: isAniItem,
+//            itemSize: itemSize,
+            itemOffset: itemOffset,
         ) {
             FBPlayerStatsItem(
                 fbPlayerStatsStore: fbPlayerStatsStore,
-                stats: stats,
-                showContents: showContents
+                stats: stats
             )
+            .opacity(showContents ? 1 : 0)
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
@@ -277,18 +278,18 @@ struct FBPlayerStatsItem: View {
     @Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
     let stats: FBPlayerStats
-    let showContents: Bool
+    
+    @State private var isAttackStatsOpened = true
+    @State private var isDefendStatsOpened = false
+    @State private var isCommonStatsOpened = false
 
-    init(fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>, stats: FBPlayerStats, showContents: Bool = true) {
+    init(fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>, stats: FBPlayerStats) {
         self.fbPlayerStatsStore = fbPlayerStatsStore
         self.stats = stats
-        self.showContents = showContents
     }
     
     var body: some View {
         let teamNameDic = fbPlayerStatsStore.teamNameDictionary
-
-        HCapsuleBar()
         
         // league / team
         HStack {
@@ -308,103 +309,141 @@ struct FBPlayerStatsItem: View {
                 .fontWeight(.medium)
         }
         .padding(.bottom, UIConstants.Padding.defalutVPadding)
-        .opacity(showContents ? 1 : 0)
         
         // stats
-        HStack {
-            FBStatDataItem(
-                category: "출전 경기수",
-                data: "\(stats.games.appearences)",
-                customWidth: 70
-            )
+        // TODO: 수비수, 골기퍼, 공격수 별로 데이터 노출 다르게
+        Button(action: {
+            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                isAttackStatsOpened.toggle()
+            }
+        }) {
+            Text("공격 기록")
             
-            FBStatDataItem(
-                category: "평균 평점",
-                data: "\(stats.games.rating.prefix(3))",
-                customWidth: 70
-            )
-            
-            FBStatDataItem(
-                category: "골",
-                data: "\(stats.goals.total)"
-            )
-            
-            FBStatDataItem(
-                category: "패널티 골",
-                data: "\(stats.penalty.scored)",
-                customWidth: 70
-            )
-            
-            FBStatDataItem(
-                category: "도움",
-                data: "\(stats.goals.assists)",
-                customWidth: 70
-            )
+            Image(systemName: "chevron.\(isAttackStatsOpened ? "up" : "down")")
+                .font(.system(size: 14))
+                .foregroundStyle(.secondary)
         }
-        .opacity(showContents ? 1 : 0)
+        .foregroundStyle(.primary)
         
-        HStack {
-            FBStatDataItem(
-                category: "슈팅",
-                data: "\(stats.shots.total)",
-                customWidth: 70
-            )
-            
-            FBStatDataItem(
-                category: "유효 슈팅",
-                data: "\(stats.shots.on)",
-                customWidth: 70
-            )
-            
-            FBStatDataItem(
-                category: "패스",
-                data: "\(stats.passes.total)"
-            )
-            
-            FBStatDataItem(
-                category: "태클",
-                data: "\(stats.tackles.total)",
-                customWidth: 70
-            )
-            
-            FBStatDataItem(
-                category: "드리블",
-                data: "\(stats.dribbles.attempts)",
-                customWidth: 70
-            )
+        if isAttackStatsOpened {
+            HStack {
+                FBStatDataItem(
+                    category: "골",
+                    data: "\(stats.goals.total)"
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "도움",
+                    data: "\(stats.goals.assists)"
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "패널티 골",
+                    data: "\(stats.penalty.scored)",
+                    customWidth: 70
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "슈팅",
+                    data: "\(stats.shots.total)"
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "유효 슈팅",
+                    data: "\(stats.shots.on)",
+                    customWidth: 70
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "드리블",
+                    data: "\(stats.dribbles.attempts)",
+                    customWidth: 60
+                )
+                .frame(maxWidth: .infinity)
+            }
         }
-        .opacity(showContents ? 1 : 0)
         
-        HStack {
-            FBStatDataItem(
-                category: "파울",
-                data: "\(stats.fouls.committed)",
-                customWidth: 70
-            )
+        Button(action: {
+            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                isDefendStatsOpened.toggle()
+            }
+        }) {
+            Text("수비 기록")
             
-            FBStatDataItem(
-                category: "경고",
-                data: "\(stats.cards.yellow)",
-                customWidth: 70
-            )
-            
-            FBStatDataItem(
-                category: "퇴장",
-                data: "\(stats.cards.red)"
-            )
-            
-            FBStatDataItem(
-                category: "",
-                data: "",
-                customWidth: 70
-            )
-            
-            FBStatDataItem(
-                category: "",
-                data: "",
-                customWidth: 70
-            )
+            Image(systemName: "chevron.\(isDefendStatsOpened ? "up" : "down")")
+                .font(.system(size: 14))
+                .foregroundStyle(.secondary)
         }
-        .opacity(showContents ? 1 : 0)
+        .foregroundStyle(.primary)
+        
+        if isDefendStatsOpened {
+            HStack {
+                FBStatDataItem(
+                    category: "태클",
+                    data: "\(stats.tackles.total)"
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "파울",
+                    data: "\(stats.fouls.committed)"
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "경고",
+                    data: "\(stats.cards.yellow)"
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "퇴장",
+                    data: "\(stats.cards.red)"
+                )
+                .frame(maxWidth: .infinity)
+            }
+        }
+        
+        Button(action: {
+            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                isCommonStatsOpened.toggle()
+            }
+        }) {
+            Text("공통 기록")
+            
+            Image(systemName: "chevron.\(isCommonStatsOpened ? "up" : "down")")
+                .font(.system(size: 14))
+                .foregroundStyle(.secondary)
+        }
+        .foregroundStyle(.primary)
+        
+        if isCommonStatsOpened {
+            HStack {
+                FBStatDataItem(
+                    category: "출전 경기수",
+                    data: "\(stats.games.appearences)",
+                    customWidth: 70
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "패스",
+                    data: "\(stats.passes.total)"
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "평균 평점",
+                    data: "\(stats.games.rating.prefix(3))",
+                    customWidth: 70
+                )
+                .frame(maxWidth: .infinity)
+            }
+        }
     }
 }
