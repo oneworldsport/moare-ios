@@ -25,41 +25,44 @@ struct NBAPlayerStatsView: View {
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             ScrollView {
-                InfoViewContainer(itemCount: 0, shouldShowMeasureContent: true, measureContent: { scope in
-                    if let nbaPlayerStatsStore {
-                        NBAPlayerStatsPlayerInfoItem(nbaPlayerStatsStore: nbaPlayerStatsStore)
-                            .background(
-                                GeometryReader { geometry in
-                                    Color.clear.onAppear {
-                                        scope.updateItemFrame(index: 0, geometry: geometry)
+                InfoViewContainer(
+                    itemCount: (nbaPlayerStatsStore?.displayModel?.stats.count ?? 0) + 1,
+                    shouldShowMeasureContent: true,
+                    measureContent: { scope in
+                        if let nbaPlayerStatsStore {
+                            NBAPlayerStatsPlayerInfoItem(nbaPlayerStatsStore: nbaPlayerStatsStore)
+                                .background(
+                                    GeometryReader { geometry in
+                                        Color.clear.onAppear {
+                                            scope.updateItemFrame(index: 0, geometry: geometry)
+                                        }
+                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                            scope.updateItemFrame(index: 0, geometry: geometry)
+                                        }
                                     }
-                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                        scope.updateItemFrame(index: 0, geometry: geometry)
-                                    }
-                                }
+                                )
+                            
+                            NBAPlayerStatsList(nbaPlayerStatsStore: nbaPlayerStatsStore, scope: scope)
+                        }
+                    }, displayContent: { scope in
+                        if let nbaPlayerStatsStore {
+                            // player info
+                            NBAPlayerStatsPlayerInfoItem(
+                                nbaPlayerStatsStore: nbaPlayerStatsStore,
+                                isAniItem: true,
+                                itemOffset: scope.computedOffset(for: 0),
+                                showContents: scope.showContents
                             )
-                        
-                        NBAPlayerStatsList(nbaPlayerStatsStore: nbaPlayerStatsStore, scope: scope)
+                            
+                            // stats list
+                            NBAPlayerStatsList(
+                                nbaPlayerStatsStore: nbaPlayerStatsStore,
+                                isAniItem: true,
+                                scope: scope
+                            )
+                        }
                     }
-                }, displayContent: { scope in
-                    if let nbaPlayerStatsStore {
-                        // player info
-                        NBAPlayerStatsPlayerInfoItem(
-                            nbaPlayerStatsStore: nbaPlayerStatsStore,
-                            isAniItem: true,
-    //                            itemSize: scope.itemSizes[0],
-                            itemOffset: scope.computedOffset(for: 0),
-                            showContents: scope.showContents
-                        )
-                        
-                        // stats list
-                        NBAPlayerStatsList(
-                            nbaPlayerStatsStore: nbaPlayerStatsStore,
-                            isAniItem: true,
-                            scope: scope
-                        )
-                    }
-                })
+                )
             } // ScrollView
             .onAppear {
                 // init NBAPlayerStatsStore
@@ -121,7 +124,7 @@ struct NBAPlayerStatsPlayerInfoItem: View {
                     
                     // name
                     VStack(alignment: .leading) {
-                        Text(nbaPlayerStatsStore.playerNameDictionary["\(player.personId)"] ?? player.displayFirstLast)
+                        Text(playerNameDic["\(player.personId)"] ?? player.displayFirstLast)
                             .font(.system(size: 16))
                             .fontWeight(.medium)
                         
@@ -144,7 +147,7 @@ struct NBAPlayerStatsPlayerInfoItem: View {
                     
                     // nationality, team, jersey, position
                     VStack(alignment: .leading) {
-                        Text(nbaPlayerStatsStore.teamNameDictionary["full_\(player.teamId)"] ?? "\(player.teamCity) \(player.teamName)")
+                        Text(teamNameDic["full_\(player.teamId)"] ?? "\(player.teamCity) \(player.teamName)")
                             .font(.system(size: 16))
                             .fontWeight(.medium)
                         
@@ -286,8 +289,6 @@ struct NBAPlayerStatsItem: View {
     @State private var isEtcStatsOpened = false
     
     var body: some View {
-        let teamNameDic = nbaPlayerStatsStore.teamNameDictionary
-        
         // league
         NBATitle(
             leagueName: "NBA 정규시즌",
@@ -310,100 +311,98 @@ struct NBAPlayerStatsItem: View {
         .foregroundStyle(.primary)
         
         if isAttackStatsOpened {
-            VStack {
-                HStack(spacing: 0) {
-                    FBStatDataItem(
-                        category: "경기당 득점",
-                        data: "\(stats.ptsPG)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "경기당 공격 리바운드",
-                        data: "\(stats.orebPG)",
-                        customCategoryFontSize: 11,
-                        customWidth: 60
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "경기당 어시스트",
-                        data: "\(stats.astPG)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "경기당 야투 시도",
-                        data: "\(stats.fgaPG)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "경기당 야투 성공",
-                        data: "\(stats.fgmPG)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "야투 성공률",
-                        data: "\(stats.fgPct)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                }
-                
-                HDivider(color: .secondary)
-                    .opacity(0.5)
-                
-                HStack(spacing: 0) {
-                    FBStatDataItem(
-                        category: "경기당 3점 시도",
-                        data: "\(stats.fg3aPG)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "경기당 3점 성공",
-                        data: "\(stats.fg3mPG)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "3점 성공률",
-                        data: "\(stats.fg3Pct)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "경기당 자유투 시도",
-                        data: "\(stats.ftaPG)",
-                        customCategoryFontSize: 11,
-                        customWidth: 60
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "경기당 자유투 성공",
-                        data: "\(stats.ftmPG)",
-                        customCategoryFontSize: 11,
-                        customWidth: 60
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "자유투 성공률",
-                        data: "\(stats.ftPct)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                }
+            HStack(spacing: 0) {
+                FBStatDataItem(
+                    category: "경기당 득점",
+                    data: "\(stats.ptsPG)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "경기당 공격 리바운드",
+                    data: "\(stats.orebPG)",
+                    customCategoryFontSize: 11,
+                    customWidth: 60
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "경기당 어시스트",
+                    data: "\(stats.astPG)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "경기당 야투 시도",
+                    data: "\(stats.fgaPG)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "경기당 야투 성공",
+                    data: "\(stats.fgmPG)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "야투 성공률",
+                    data: "\(stats.fgPct)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+            }
+            
+            HDivider(color: .secondary)
+                .opacity(0.5)
+            
+            HStack(spacing: 0) {
+                FBStatDataItem(
+                    category: "경기당 3점 시도",
+                    data: "\(stats.fg3aPG)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "경기당 3점 성공",
+                    data: "\(stats.fg3mPG)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "3점 성공률",
+                    data: "\(stats.fg3Pct)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "경기당 자유투 시도",
+                    data: "\(stats.ftaPG)",
+                    customCategoryFontSize: 11,
+                    customWidth: 60
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "경기당 자유투 성공",
+                    data: "\(stats.ftmPG)",
+                    customCategoryFontSize: 11,
+                    customWidth: 60
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "자유투 성공률",
+                    data: "\(stats.ftPct)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
             }
         }
         
@@ -503,91 +502,89 @@ struct NBAPlayerStatsItem: View {
         .foregroundStyle(.primary)
         
         if isEtcStatsOpened {
-            VStack {
-                HStack(spacing: 0) {
-                    FBStatDataItem(
-                        category: "경기수",
-                        data: "\(stats.gp)",
-                        customCategoryFontSize: 11
-                    )
+            HStack(spacing: 0) {
+                FBStatDataItem(
+                    category: "경기수",
+                    data: "\(stats.gp)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "경기당 출전시간",
+                    data: stats.minPG,
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "경기당 리바운드",
+                    data: "\(stats.rebPG)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "(출전 경기)승",
+                    data: "\(stats.wins)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "(출전 경기)패",
+                    data: "\(stats.losses)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "(출전 경기)승률",
+                    data: "\(stats.winsPct)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+            }
+            
+            HDivider(color: .secondary)
+                .opacity(0.5)
+            
+            HStack(spacing: 0) {
+                FBStatDataItem(
+                    category: "경기당 파울 유도",
+                    data: "\(stats.pfdPG)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "경기당 득실마진",
+                    data: "\(stats.plusMinusPG)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "더블더블",
+                    data: "\(stats.dd2)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                FBStatDataItem(
+                    category: "트리플더블",
+                    data: "\(stats.td3)",
+                    customCategoryFontSize: 11
+                )
+                .frame(maxWidth: .infinity)
+                StatsDivider()
+                    .opacity(0)
+                EmptyStatDataItem()
                     .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "경기당 출전시간",
-                        data: stats.minPG,
-                        customCategoryFontSize: 11
-                    )
+                StatsDivider()
+                    .opacity(0)
+                EmptyStatDataItem()
                     .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "경기당 리바운드",
-                        data: "\(stats.rebPG)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "(출전 경기)승",
-                        data: "\(stats.wins)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "(출전 경기)패",
-                        data: "\(stats.losses)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "(출전 경기)승률",
-                        data: "\(stats.winsPct)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                }
-                
-                HDivider(color: .secondary)
-                    .opacity(0.5)
-                
-                HStack(spacing: 0) {
-                    FBStatDataItem(
-                        category: "경기당 파울 유도",
-                        data: "\(stats.pfdPG)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "경기당 득실마진",
-                        data: "\(stats.plusMinusPG)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "더블더블",
-                        data: "\(stats.dd2)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                    FBStatDataItem(
-                        category: "트리플더블",
-                        data: "\(stats.td3)",
-                        customCategoryFontSize: 11
-                    )
-                    .frame(maxWidth: .infinity)
-                    StatsDivider()
-                        .opacity(0)
-                    EmptyStatDataItem()
-                        .frame(maxWidth: .infinity)
-                    StatsDivider()
-                        .opacity(0)
-                    EmptyStatDataItem()
-                        .frame(maxWidth: .infinity)
-                }
             }
         }
     }

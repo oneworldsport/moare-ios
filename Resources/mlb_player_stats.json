@@ -2,6 +2,7 @@
   "keywords":[],
   "entityInfo":[{"entityId":808982,"entityName":"이정후","category":"baseball","entityType":"player","leagueId":90102,"playerId":808982,"teamId":137}],
   "dataType":"baseball_player_stats",
+  "season": 2025,
   "data": {
     "info": {
       "player": {

@@ -25,41 +25,49 @@ struct FBPlayerStatsView: View {
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             ScrollView {
-                InfoViewContainer(itemCount: 0, shouldShowMeasureContent: true, measureContent: { scope in
-                    if let fbPlayerStatsStore {
-                        FBPlayerStatsPlayerInfoItem(fbPlayerStatsStore: fbPlayerStatsStore)
-                            .background(
-                                GeometryReader { geometry in
-                                    Color.clear.onAppear {
-                                        scope.updateItemFrame(index: 0, geometry: geometry)
+                InfoViewContainer(
+                    itemCount: (fbPlayerStatsStore?.displayModel?.stats.count ?? 0) + 1,
+                    shouldShowMeasureContent: true,
+                    measureContent: { scope in
+                        // NOTE: if let fbPlayerStatsStore {} 를 InfoViewContainer 바깥에서 선언하는 것보다 안에서 선언하는게 초기 에니메이션이 더 자연스러움.
+                        if let fbPlayerStatsStore {
+                            FBPlayerStatsPlayerInfoItem(fbPlayerStatsStore: fbPlayerStatsStore)
+                                .background(
+                                    GeometryReader { geometry in
+                                        Color.clear.onAppear {
+                                            scope.updateItemFrame(index: 0, geometry: geometry)
+                                        }
+                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                            scope.updateItemFrame(index: 0, geometry: geometry)
+                                        }
                                     }
-                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                        scope.updateItemFrame(index: 0, geometry: geometry)
-                                    }
-                                }
+                                )
+                            
+                            FBPlayerStatsList(fbPlayerStatsStore: fbPlayerStatsStore, scope: scope)
+                        }
+                    }, displayContent: { scope in
+                        if let fbPlayerStatsStore {
+                            // player info
+                            FBPlayerStatsPlayerInfoItem(
+                                fbPlayerStatsStore: fbPlayerStatsStore,
+                                isAniItem: true,
+                                //                            itemSize: scope.itemSizes[0],
+                                itemOffset: scope.computedOffset(for: 0, startOffset: startOffset),
+                                showContents: scope.showContents
                             )
-                        
-                        FBPlayerStatsList(fbPlayerStatsStore: fbPlayerStatsStore, scope: scope)
+                            
+                            // stats list
+                            FBPlayerStatsList(
+                                fbPlayerStatsStore: fbPlayerStatsStore,
+                                isAniItem: true,
+                                scope: scope
+                            )
+                        }
                     }
-                }, displayContent: { scope in
-                    if let fbPlayerStatsStore {
-                        // player info
-                        FBPlayerStatsPlayerInfoItem(
-                            fbPlayerStatsStore: fbPlayerStatsStore,
-                            isAniItem: true,
-//                            itemSize: scope.itemSizes[0],
-                            itemOffset: scope.computedOffset(for: 0, startOffset: startOffset),
-                            showContents: scope.showContents
-                        )
-                        
-                        // stats list
-                        FBPlayerStatsList(
-                            fbPlayerStatsStore: fbPlayerStatsStore,
-                            isAniItem: true,
-                            scope: scope
-                        )
-                    }
-                })
+                )
+//                if let fbPlayerStatsStore {
+//                    
+//                }
             } // ScrollView
             .onAppear {
                 // init FBPlayerStatsStore
