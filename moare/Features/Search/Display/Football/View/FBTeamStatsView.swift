@@ -29,7 +29,6 @@ struct FBTeamStatsView: View {
                     itemCount: (fbTeamStatsStore?.displayModel?.stats.count ?? 0) + 1,
                     shouldShowMeasureContent: true,
                     measureContent: { scope in
-                        // NOTE: if let fbPlayerStatsStore {} 를 InfoViewContainer 바깥에서 선언하는 것보다 안에서 선언하는게 초기 에니메이션이 더 자연스러움.
                         if let fbTeamStatsStore {
                             FBTeamStatsTeamInfoItem(fbTeamStatsStore: fbTeamStatsStore)
                                 .background(

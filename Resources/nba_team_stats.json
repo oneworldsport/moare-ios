@@ -12,6 +12,7 @@
     }
   ],
   "dataType": "basketball_team_stats",
+  "season": 2024,
   "data": {
     "info": {
       "venue": {
