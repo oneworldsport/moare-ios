@@ -12,6 +12,7 @@
     }
   ],
   "dataType": "baseball_player_stats",
+  "season": 2025,
   "data": {
     "info": {
       "player": {

@@ -299,7 +299,6 @@ struct MLBPlayerStatsItem: View {
                 Text(" - [타자]")
                     .fontWeight(.medium)
             }
-            .padding(.bottom, UIConstants.Padding.defalutVPadding)
             
             // stats
             HStack {
@@ -496,7 +495,6 @@ struct MLBPlayerStatsItem: View {
                 Text(" - [투수]")
                     .fontWeight(.medium)
             }
-            .padding(.bottom, UIConstants.Padding.defalutVPadding)
             
             // stats
             HStack {
