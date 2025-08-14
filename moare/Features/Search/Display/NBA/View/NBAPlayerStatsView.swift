@@ -294,7 +294,6 @@ struct NBAPlayerStatsItem: View {
             leagueName: "NBA 정규시즌",
             leagueSeason: Int(stats.groupValue.split(separator: "-").first ?? "\(CalendarUtil.currentYear)")!
         )
-        .padding(.bottom, UIConstants.Padding.defalutVPadding)
         
         // stats
         Button(action: {

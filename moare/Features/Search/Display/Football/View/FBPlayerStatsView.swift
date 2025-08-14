@@ -65,9 +65,6 @@ struct FBPlayerStatsView: View {
                         }
                     }
                 )
-//                if let fbPlayerStatsStore {
-//                    
-//                }
             } // ScrollView
             .onAppear {
                 // init FBPlayerStatsStore
@@ -100,19 +97,16 @@ struct FBPlayerStatsPlayerInfoItem: View {
     @Bindable var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>
     
     let isAniItem: Bool
-//    let itemSize: CGSize?
     let itemOffset: CGSize?
     let showContents: Bool
 
     init(
         fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>,
         isAniItem: Bool = false,
-//        itemSize: CGSize? = nil,
         itemOffset: CGSize? = nil,
         showContents: Bool = true
     ) {
         self.fbPlayerStatsStore = fbPlayerStatsStore
-//        self.itemSize = itemSize
         self.isAniItem = isAniItem
         self.itemOffset = itemOffset
         self.showContents = showContents
@@ -307,7 +301,6 @@ struct FBPlayerStatsItem: View {
                 .font(.system(size: 16))
                 .fontWeight(.medium)
         }
-        .padding(.bottom, UIConstants.Padding.defalutVPadding)
         
         // stats
         // TODO: 수비수, 골기퍼, 공격수 별로 데이터 노출 다르게
