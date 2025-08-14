@@ -55,10 +55,16 @@ struct VCapsuleBar: View {
     }
     
     var body: some View {
-        Capsule()
-            .frame(width: customWidth)
-            .frame(maxHeight: customHeight ?? .infinity)
-            .foregroundColor(color)
+        if let customHeight {
+            Capsule()
+                .frame(width: customWidth, height: customHeight)
+                .foregroundColor(color)
+        } else {
+            Capsule()
+                .frame(width: customWidth)
+                .frame(maxHeight: .infinity)
+                .foregroundColor(color)
+        }
     }
 }
 
@@ -67,6 +73,24 @@ struct StatsDivider: View {
     var body: some View {
         VCapsuleBar(customHeight: 40, customWidth: 1)
             .opacity(0.5)
+    }
+}
+
+struct HDivider: View {
+    let height: CGFloat
+    let color: Color
+    
+    init(height: CGFloat = 1, color: Color = .moare) {
+        self.height = height
+        self.color = color
+    }
+    
+    var body: some View {
+        Capsule()
+            .frame(maxWidth: .infinity)
+            .frame(height: height)
+            .padding(.horizontal, 8)
+            .foregroundColor(color)
     }
 }
 

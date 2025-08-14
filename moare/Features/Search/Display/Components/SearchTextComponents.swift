@@ -18,8 +18,8 @@ struct LeagueTitle: View {
             URLImage(url: url, size: .small)
                 .padding(.trailing, 6)
             
-            // TODO: make season text to use util
-            Text("\(leagueName) \(String(leagueSeason).suffix(2))/25")
+//            Text("\(leagueName) \(String(leagueSeason).suffix(2))/25")
+            Text("\(leagueName) \(String(leagueSeason))-\(String(leagueSeason + 1).suffix(2))")
                 .fontWeight(.medium)
         }
     }

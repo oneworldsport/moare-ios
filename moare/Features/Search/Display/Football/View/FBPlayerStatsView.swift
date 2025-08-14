@@ -172,19 +172,16 @@ struct FBPlayerStatsList: View {
     let isAniItem: Bool
     let scope: InfoViewScope
     
-//    let updateItemPosition: (Int, GeometryProxy) -> Void
     var startOffset = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
     
     init(
         fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>,
         isAniItem: Bool = false,
         scope: InfoViewScope,
-//        updateItemPosition: @escaping (Int, GeometryProxy) -> Void = { _, _ in }
     ) {
         self.fbPlayerStatsStore = fbPlayerStatsStore
         self.isAniItem = isAniItem
         self.scope = scope
-//        self.updateItemPosition = updateItemPosition
     }
     
     var body: some View {
@@ -259,7 +256,6 @@ struct FBPlayerStatsListItem: View {
         MovingCapsuleItemContainer(
             isButton: false,
             isAniItem: isAniItem,
-//            itemSize: itemSize,
             itemOffset: itemOffset,
         ) {
             FBPlayerStatsItem(
@@ -282,11 +278,6 @@ struct FBPlayerStatsItem: View {
     @State private var isAttackStatsOpened = true
     @State private var isDefendStatsOpened = false
     @State private var isCommonStatsOpened = false
-
-    init(fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>, stats: FBPlayerStats) {
-        self.fbPlayerStatsStore = fbPlayerStatsStore
-        self.stats = stats
-    }
     
     var body: some View {
         let teamNameDic = fbPlayerStatsStore.teamNameDictionary

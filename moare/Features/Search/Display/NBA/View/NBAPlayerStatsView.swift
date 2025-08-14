@@ -20,66 +20,47 @@ struct NBAPlayerStatsView: View {
        --------------------- */
     let displayModel: NBAPlayerStatsDisplayModel
     
-    /* ---------------------
-       animation
-       --------------------- */
-    let coordinateSpaceName = "NBAPlayerStatsView"
-    
-    @State private var firstItemPosition: CGPoint = .zero
-    @State private var itemPositions: [Int: CGPoint] = [:]
-    
-    @State private var animatePositions = false
-    @State private var showContents = false
-    
-    var centerPosition = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
+//    var startOffset = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             ScrollView {
-                if let nbaPlayerStatsStore {
-                    ZStack(alignment: .topLeading) {
-                        /* ---------------------
-                           invisible ui
-                           - for position
-                           --------------------- */
-                        VStack {
-                            // player info
-                            NBAPlayerStatsPlayerInfoItem(nbaPlayerStatsStore: nbaPlayerStatsStore)
-                                .background(
-                                    GeometryReader { proxy in
-                                        Color.clear.onChange(of: proxy.frame(in: .named(coordinateSpaceName)).origin) {
-                                            firstItemPosition = proxy.frame(in: .named(coordinateSpaceName)).origin
-                                        }
+                InfoViewContainer(itemCount: 0, shouldShowMeasureContent: true, measureContent: { scope in
+                    if let nbaPlayerStatsStore {
+                        NBAPlayerStatsPlayerInfoItem(nbaPlayerStatsStore: nbaPlayerStatsStore)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onAppear {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
                                     }
-                                )
-                            
-                            // stats list
-                            NBAPlayerStatsList(nbaPlayerStatsStore: nbaPlayerStatsStore, itemPositions: $itemPositions)
-                        }
-                        .opacity(0)
-                        
-                        /* ---------------------
-                           visible ui
-                           - with animation effect
-                           --------------------- */
-                        NBAPlayerStatsPlayerInfoItem(nbaPlayerStatsStore: nbaPlayerStatsStore, showContents: showContents)
-                            .offset(
-                                x: 0,
-                                y: animatePositions ? firstItemPosition.y : centerPosition.height
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
+                                    }
+                                }
                             )
                         
+                        NBAPlayerStatsList(nbaPlayerStatsStore: nbaPlayerStatsStore, scope: scope)
+                    }
+                }, displayContent: { scope in
+                    if let nbaPlayerStatsStore {
+                        // player info
+                        NBAPlayerStatsPlayerInfoItem(
+                            nbaPlayerStatsStore: nbaPlayerStatsStore,
+                            isAniItem: true,
+    //                            itemSize: scope.itemSizes[0],
+                            itemOffset: scope.computedOffset(for: 0),
+                            showContents: scope.showContents
+                        )
+                        
+                        // stats list
                         NBAPlayerStatsList(
                             nbaPlayerStatsStore: nbaPlayerStatsStore,
-                            animatePositions: animatePositions,
-                            showContents: showContents,
-                            isAniList: true,
-                            itemPositions: $itemPositions
+                            isAniItem: true,
+                            scope: scope
                         )
-                    } // ZStack
-                    .coordinateSpace(name: coordinateSpaceName)
-                } // if let nbaPlayerStatsStore
+                    }
+                })
             } // ScrollView
-            .padding(.top, 6)
             .onAppear {
                 // init NBAPlayerStatsStore
                 let nbaPlayerStatsStore: StoreOf<NBAPlayerStatsStore> = storeManager.getStore(forKey: StoreKeys.nbaPlayerStatsStore) ?? {
@@ -97,8 +78,6 @@ struct NBAPlayerStatsView: View {
                 if searchStore.poppedView == nil {
                     nbaPlayerStatsStore.send(.initData(displayModel: displayModel))
                 }
-                
-                triggerAnimation()
             }
             .onChange(of: displayModel) {
                 if case .nbaPlayerStats = searchStore.poppedView {
@@ -107,39 +86,36 @@ struct NBAPlayerStatsView: View {
             }
         }
     }
-    
-    private func triggerAnimation() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short) {
-            withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                animatePositions = true
-            }
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short + AnimationConstants.Duration.medium) {
-            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
-                showContents = true
-            }
-        }
-    }
 }
 
 struct NBAPlayerStatsPlayerInfoItem: View {
     @Bindable var nbaPlayerStatsStore: StoreOf<NBAPlayerStatsStore>
     
+    let isAniItem: Bool
+    let itemOffset: CGSize?
     let showContents: Bool
 
-    init(nbaPlayerStatsStore: StoreOf<NBAPlayerStatsStore>, showContents: Bool = true) {
+    init(
+        nbaPlayerStatsStore: StoreOf<NBAPlayerStatsStore>,
+        isAniItem: Bool = false,
+        itemOffset: CGSize? = nil,
+        showContents: Bool = true
+    ) {
         self.nbaPlayerStatsStore = nbaPlayerStatsStore
+        self.isAniItem = isAniItem
+        self.itemOffset = itemOffset
         self.showContents = showContents
     }
     
     var body: some View {
-        let displayModel = nbaPlayerStatsStore.displayModel
+        let playerNameDic = nbaPlayerStatsStore.playerNameDictionary
+        let teamNameDic = nbaPlayerStatsStore.teamNameDictionary
         
-        if let player = displayModel?.player {
-            VStack(spacing: UIConstants.Padding.defaultHPadding) {
-                HCapsuleBar()
-                
+        MovingCapsuleItemContainer(
+            isAniItem: isAniItem,
+            itemOffset: itemOffset
+        ) {
+            if let player = nbaPlayerStatsStore.displayModel?.player {
                 HStack {
                     URLImage(url: NBAUtil.playerPhotoURL(id: player.personId))
                     
@@ -192,49 +168,57 @@ struct NBAPlayerStatsPlayerInfoItem: View {
                     }
                 }
                 .opacity(showContents ? 1 : 0)
-            } // VStack
-            .frame(maxWidth: .infinity)
-            .padding(.horizontal, UIConstants.Padding.defaultHPadding)
-        } // if let player
+            } // if let player
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, UIConstants.Padding.defaultHPadding)
     }
 }
 
 struct NBAPlayerStatsList: View {
     @Bindable var nbaPlayerStatsStore: StoreOf<NBAPlayerStatsStore>
     
-    let animatePositions: Bool
-    let showContents: Bool
-    let isAniList: Bool
-    
-    @Binding var itemPositions: [Int : CGPoint]
+    let isAniItem: Bool
+    let scope: InfoViewScope
     
     init(
         nbaPlayerStatsStore: StoreOf<NBAPlayerStatsStore>,
-        animatePositions: Bool = true,
-        showContents: Bool = true,
-        isAniList: Bool = false,
-        itemPositions: Binding<[Int: CGPoint]>
+        isAniItem: Bool = false,
+        scope: InfoViewScope,
     ) {
         self.nbaPlayerStatsStore = nbaPlayerStatsStore
-        self.animatePositions = animatePositions
-        self.showContents = showContents
-        self.isAniList = isAniList
-        self._itemPositions = itemPositions
+        self.isAniItem = isAniItem
+        self.scope = scope
     }
     
     var body: some View {
         if let statsList = nbaPlayerStatsStore.displayModel?.stats {
             ForEach(statsList.indices, id: \.self) { index in
                 let stats = statsList[index]
+                let itemIndex = index + 1
                 
                 NBAPlayerStatsListItem(
                     nbaPlayerStatsStore: nbaPlayerStatsStore,
                     stats: stats,
-                    index: index,
-                    animatePositions: animatePositions,
-                    showContents: showContents,
-                    isAniList: isAniList,
-                    itemPositions: $itemPositions
+                    isAniItem: isAniItem,
+                    itemSize: scope.itemSizes[itemIndex],
+                    itemOffset: scope.computedOffset(for: itemIndex),
+                    showContents: scope.showContents
+                )
+                .background(
+                    GeometryReader { geometry in
+                        if !isAniItem {
+                            // 1) 최초 한 번은 무조건 측정 - gpt
+                            // NOTE: Color.clear.onChange()만 했을때는 update가 안돼서 Color.clear.onAppear 추가해줌
+                            Color.clear.onAppear {
+                                scope.updateItemFrame(index: itemIndex, geometry: geometry)
+                            }
+                            // 2) 위치 변하면 - gpt
+                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                scope.updateItemFrame(index: itemIndex, geometry: geometry)
+                            }
+                        }
+                    }
                 )
             }
         }
@@ -245,34 +229,49 @@ struct NBAPlayerStatsListItem: View {
     @Bindable var nbaPlayerStatsStore: StoreOf<NBAPlayerStatsStore>
     
     let stats: NBAPlayerStats
-    let index: Int
-    let animatePositions: Bool
+    let isAniItem: Bool
+    let itemSize: CGSize?
+    let itemOffset: CGSize?
     let showContents: Bool
-    let isAniList: Bool
     
-    @Binding var itemPositions: [Int : CGPoint]
-    
-    var centerPosition = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
+    init(
+        nbaPlayerStatsStore: StoreOf<NBAPlayerStatsStore>,
+        stats: NBAPlayerStats,
+        isAniItem: Bool = false,
+        itemSize: CGSize? = nil,
+        itemOffset: CGSize? = nil,
+        showContents: Bool = true
+    ) {
+        self.nbaPlayerStatsStore = nbaPlayerStatsStore
+        self.stats = stats
+        self.isAniItem = isAniItem
+        
+        if isAniItem {
+            self.itemSize = itemSize
+            self.itemOffset = itemOffset
+            self.showContents = showContents
+        } else {
+            self.itemSize = nil
+            self.itemOffset = nil
+            self.showContents = true
+        }
+    }
     
     var body: some View {
-        NBAPlayerStatsItem(
-            nbaPlayerStatsStore: nbaPlayerStatsStore,
-            stats: stats,
-            showContents: showContents
-        )
-        .background(
-            GeometryReader { proxy in
-                if !isAniList {
-                    Color.clear.onAppear {
-                        itemPositions[index] = proxy.frame(in: .named("NBAPlayerStatsView")).origin
-                    }
-                }
-            }
-        )
-        .offset(
-            x: 0,
-            y: isAniList ? (animatePositions ? (itemPositions[index]?.y ?? 0) : centerPosition.height) : 0
-        )
+        MovingCapsuleItemContainer(
+            isButton: false,
+            isAniItem: isAniItem,
+            itemOffset: itemOffset,
+        ) {
+            NBAPlayerStatsItem(
+                nbaPlayerStatsStore: nbaPlayerStatsStore,
+                stats: stats
+            )
+            .opacity(showContents ? 1 : 0)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, UIConstants.Padding.defaultHPadding)
+        .padding(.bottom, UIConstants.Padding.defalutVPadding)
     }
 }
 
@@ -280,252 +279,316 @@ struct NBAPlayerStatsItem: View {
     @Bindable var nbaPlayerStatsStore: StoreOf<NBAPlayerStatsStore>
     
     let stats: NBAPlayerStats
-    let showContents: Bool
-
-    init(nbaPlayerStatsStore: StoreOf<NBAPlayerStatsStore>, stats: NBAPlayerStats, showContents: Bool = true) {
-        self.nbaPlayerStatsStore = nbaPlayerStatsStore
-        self.stats = stats
-        self.showContents = showContents
-    }
+    
+    @State private var isAttackStatsOpened = true
+    @State private var isDefendStatsOpened = false
+    @State private var isPenaltyStatsOpened = false
+    @State private var isEtcStatsOpened = false
     
     var body: some View {
-        VStack {
-            HCapsuleBar()
+        let teamNameDic = nbaPlayerStatsStore.teamNameDictionary
+        
+        // league
+        NBATitle(
+            leagueName: "NBA 정규시즌",
+            leagueSeason: Int(stats.groupValue.split(separator: "-").first ?? "\(CalendarUtil.currentYear)")!
+        )
+        .padding(.bottom, UIConstants.Padding.defalutVPadding)
+        
+        // stats
+        Button(action: {
+            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                isAttackStatsOpened.toggle()
+            }
+        }) {
+            Text("공격 기록")
             
-            // league
-            NBATitle(
-                leagueName: "NBA 정규시즌",
-                leagueSeason: Int(stats.groupValue.split(separator: "-").first ?? "2024")!
-            )
-            .padding(.bottom, UIConstants.Padding.defalutVPadding)
-            .opacity(showContents ? 1 : 0)
+            Image(systemName: "chevron.\(isAttackStatsOpened ? "up" : "down")")
+                .font(.system(size: 14))
+                .foregroundStyle(.secondary)
+        }
+        .foregroundStyle(.primary)
+        
+        if isAttackStatsOpened {
+            VStack {
+                HStack(spacing: 0) {
+                    FBStatDataItem(
+                        category: "경기당 득점",
+                        data: "\(stats.ptsPG)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "경기당 공격 리바운드",
+                        data: "\(stats.orebPG)",
+                        customCategoryFontSize: 11,
+                        customWidth: 60
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "경기당 어시스트",
+                        data: "\(stats.astPG)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "경기당 야투 시도",
+                        data: "\(stats.fgaPG)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "경기당 야투 성공",
+                        data: "\(stats.fgmPG)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "야투 성공률",
+                        data: "\(stats.fgPct)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                }
+                
+                HDivider(color: .secondary)
+                    .opacity(0.5)
+                
+                HStack(spacing: 0) {
+                    FBStatDataItem(
+                        category: "경기당 3점 시도",
+                        data: "\(stats.fg3aPG)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "경기당 3점 성공",
+                        data: "\(stats.fg3mPG)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "3점 성공률",
+                        data: "\(stats.fg3Pct)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "경기당 자유투 시도",
+                        data: "\(stats.ftaPG)",
+                        customCategoryFontSize: 11,
+                        customWidth: 60
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "경기당 자유투 성공",
+                        data: "\(stats.ftmPG)",
+                        customCategoryFontSize: 11,
+                        customWidth: 60
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "자유투 성공률",
+                        data: "\(stats.ftPct)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                }
+            }
+        }
+        
+        Button(action: {
+            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                isDefendStatsOpened.toggle()
+            }
+        }) {
+            Text("수비 기록")
             
-            // stats
-            HStack {
-                FBStatDataItem(
-                    category: "경기수",
-                    data: "\(stats.gp)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "경기당 득점",
-                    data: "\(stats.ptsPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "경기당 리바운드",
-                    data: "\(stats.rebPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
+            Image(systemName: "chevron.\(isDefendStatsOpened ? "up" : "down")")
+                .font(.system(size: 14))
+                .foregroundStyle(.secondary)
+        }
+        .foregroundStyle(.primary)
+        
+        if isDefendStatsOpened {
+            HStack(spacing: 0) {
                 FBStatDataItem(
                     category: "경기당 수비 리바운드",
                     data: "\(stats.drebPG)",
-                    customCategoryFontSize: 11
+                    customCategoryFontSize: 11,
+                    customWidth: 80
                 )
                 .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "경기당 공격 리바운드",
-                    data: "\(stats.orebPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "경기당 어시스트",
-                    data: "\(stats.astPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-            }
-            .opacity(showContents ? 1 : 0)
-            
-            HStack {
+                StatsDivider()
                 FBStatDataItem(
                     category: "경기당 블록",
-                    data: "\(stats.gp)",
-                    customCategoryFontSize: 11
+                    data: "\(stats.blkPG)",
+                    customCategoryFontSize: 11,
+                    customWidth: 80
                 )
                 .frame(maxWidth: .infinity)
-                
+                StatsDivider()
                 FBStatDataItem(
                     category: "경기당 스틸",
-                    data: "\(stats.ptsPG)",
-                    customCategoryFontSize: 11
+                    data: "\(stats.stlPG)",
+                    customCategoryFontSize: 11,
+                    customWidth: 80
                 )
                 .frame(maxWidth: .infinity)
-                
+            }
+        }
+        
+        Button(action: {
+            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                isPenaltyStatsOpened.toggle()
+            }
+        }) {
+            Text("패널티 기록")
+            
+            Image(systemName: "chevron.\(isPenaltyStatsOpened ? "up" : "down")")
+                .font(.system(size: 14))
+                .foregroundStyle(.secondary)
+        }
+        .foregroundStyle(.primary)
+        
+        if isPenaltyStatsOpened {
+            HStack(spacing: 0) {
                 FBStatDataItem(
                     category: "경기당 턴오버",
-                    data: "\(stats.rebPG)",
-                    customCategoryFontSize: 11
+                    data: "\(stats.tovPG)",
+                    customCategoryFontSize: 11,
+                    customWidth: 80
                 )
                 .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "경기당 야투 시도",
-                    data: "\(stats.drebPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "경기당 야투 성공",
-                    data: "\(stats.orebPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "야투 성공률",
-                    data: "\(stats.astPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-            }
-            .opacity(showContents ? 1 : 0)
-            
-            HStack {
-                FBStatDataItem(
-                    category: "경기당 3점 시도",
-                    data: "\(stats.gp)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "경기당 3점 성공",
-                    data: "\(stats.ptsPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "3점 성공률",
-                    data: "\(stats.rebPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "경기당 자유투 시도",
-                    data: "\(stats.drebPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "경기당 자유투 성공",
-                    data: "\(stats.orebPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "자유투 성공률",
-                    data: "\(stats.astPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-            }
-            .opacity(showContents ? 1 : 0)
-            
-            HStack {
+                StatsDivider()
                 FBStatDataItem(
                     category: "경기당 파울",
-                    data: "\(stats.gp)",
-                    customCategoryFontSize: 11
+                    data: "\(stats.pfPG)",
+                    customCategoryFontSize: 11,
+                    customWidth: 80
                 )
                 .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "경기당 파울 유도",
-                    data: "\(stats.ptsPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "경기당 득실마진",
-                    data: "\(stats.rebPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
+                StatsDivider()
                 FBStatDataItem(
                     category: "경기당 피블록",
-                    data: "\(stats.drebPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "더블더블",
-                    data: "\(stats.orebPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "트리플더블",
-                    data: "\(stats.astPG)",
-                    customCategoryFontSize: 11
+                    data: "\(stats.blkaPG)",
+                    customCategoryFontSize: 11,
+                    customWidth: 80
                 )
                 .frame(maxWidth: .infinity)
             }
-            .opacity(showContents ? 1 : 0)
+        }
+        
+        Button(action: {
+            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                isEtcStatsOpened.toggle()
+            }
+        }) {
+            Text("공통/기타 기록")
             
-            HStack {
-                FBStatDataItem(
-                    category: "(출전 경기)승",
-                    data: "\(stats.gp)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
+            Image(systemName: "chevron.\(isEtcStatsOpened ? "up" : "down")")
+                .font(.system(size: 14))
+                .foregroundStyle(.secondary)
+        }
+        .foregroundStyle(.primary)
+        
+        if isEtcStatsOpened {
+            VStack {
+                HStack(spacing: 0) {
+                    FBStatDataItem(
+                        category: "경기수",
+                        data: "\(stats.gp)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "경기당 출전시간",
+                        data: stats.minPG,
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "경기당 리바운드",
+                        data: "\(stats.rebPG)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "(출전 경기)승",
+                        data: "\(stats.wins)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "(출전 경기)패",
+                        data: "\(stats.losses)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "(출전 경기)승률",
+                        data: "\(stats.winsPct)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                }
                 
-                FBStatDataItem(
-                    category: "(출전 경기)패",
-                    data: "\(stats.ptsPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
+                HDivider(color: .secondary)
+                    .opacity(0.5)
                 
-                FBStatDataItem(
-                    category: "경기당 출전시간",
-                    data: "\(stats.rebPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "(출전 경기)승률",
-                    data: "\(stats.drebPG)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "",
-                    data: ""
-                )
-                .frame(maxWidth: .infinity)
-                
-                FBStatDataItem(
-                    category: "",
-                    data: ""
-                )
-                .frame(maxWidth: .infinity)
+                HStack(spacing: 0) {
+                    FBStatDataItem(
+                        category: "경기당 파울 유도",
+                        data: "\(stats.pfdPG)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "경기당 득실마진",
+                        data: "\(stats.plusMinusPG)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "더블더블",
+                        data: "\(stats.dd2)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "트리플더블",
+                        data: "\(stats.td3)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                        .opacity(0)
+                    EmptyStatDataItem()
+                        .frame(maxWidth: .infinity)
+                    StatsDivider()
+                        .opacity(0)
+                    EmptyStatDataItem()
+                        .frame(maxWidth: .infinity)
+                }
             }
-            .opacity(showContents ? 1 : 0)
-        } // VStack
-        .frame(maxWidth: .infinity)
-        .padding(.horizontal, UIConstants.Padding.defaultHPadding)
-        .padding(.bottom, UIConstants.Padding.defalutVPadding)
+        }
     }
 }

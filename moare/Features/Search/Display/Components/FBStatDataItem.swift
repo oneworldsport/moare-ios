@@ -61,6 +61,36 @@ struct FBStatDataItem: View {
     }
 }
 
+struct EmptyStatDataItem: View {
+    let customCategoryFontSize: CGFloat?
+    let customDataFontSize: CGFloat?
+    let customWidth: CGFloat?
+    let customCategoryHeight: CGFloat?
+    
+    init(
+        customCategoryFontSize: CGFloat? = nil,
+        customDataFontSize: CGFloat? = nil,
+        customWidth: CGFloat? = nil,
+        customCategoryHeight: CGFloat? = nil
+    ) {
+        self.customCategoryFontSize = customCategoryFontSize
+        self.customDataFontSize = customDataFontSize
+        self.customWidth = customWidth
+        self.customCategoryHeight = customCategoryHeight
+    }
+    
+    var body: some View {
+        FBStatDataItem(
+            category: "",
+            data: "",
+            customCategoryFontSize: customCategoryFontSize,
+            customDataFontSize: customDataFontSize,
+            customWidth: customWidth,
+            customCategoryHeight: customCategoryHeight
+        )
+    }
+}
+
 //#Preview {
 //    FBStatDataItem()
 //}
