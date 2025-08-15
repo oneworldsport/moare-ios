@@ -12,6 +12,7 @@
     }
   ],
   "dataType": "baseball_team_stats",
+  "season": 2025,
   "data": {
     "info": {
       "venue": {
