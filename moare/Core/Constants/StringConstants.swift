@@ -56,6 +56,10 @@ struct StringConstants {
     }
     
     struct NBA {
+        static let gameScheduled = 1
+        static let gameLive = 2
+        static let gameFinal = 3
+        
         static let gameQtr1 = "1쿼터"
         static let gameQtr2 = "2쿼터"
         static let gameQtr3 = "3쿼터"

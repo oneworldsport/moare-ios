@@ -27,18 +27,18 @@ struct NBALeagueScheduleView: View {
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            let nbaGameStatsModel = searchStore.displayModels[.nbaGameStats] as? NBAGameStatsDisplayModel
-            
             VStack(spacing: 0) {
-                if let nbaLeagueScheduleStore,
-                   let nbaDisplayModel = nbaLeagueScheduleStore.baseSchedule.displayModel as? NBALeagueScheduleDisplayModel {
+                if let nbaLeagueScheduleStore {
                     ScheduleViewContainer(
                         state: ScheduleContainerState(
-                            shouldShowCalendar: nbaDisplayModel.scheduleType != ScheduleType.teamFlat,
-                            shouldFetchSchedule:  nbaDisplayModel.scheduleType == ScheduleType.league,
+                            shouldShowCalendar: displayModel.scheduleType != ScheduleType.teamFlat,
+                            shouldFetchSchedule:  displayModel.scheduleType == ScheduleType.league,
                             displayDataState: nbaLeagueScheduleStore.baseSchedule.displayDataState,
                             calendarUiState: CalendarUiState(
-                                yearMonthList: nbaLeagueScheduleStore.baseSchedule.yearMonthList, days: nbaLeagueScheduleStore.baseSchedule.days, selectedYearMonthIndex: nbaLeagueScheduleStore.baseSchedule.selectedYearMonthIndex, selectedDayIndex: nbaLeagueScheduleStore.baseSchedule.selectedDayIndex
+                                yearMonthList: nbaLeagueScheduleStore.baseSchedule.yearMonthList,
+                                days: nbaLeagueScheduleStore.baseSchedule.days,
+                                selectedYearMonthIndex: nbaLeagueScheduleStore.baseSchedule.selectedYearMonthIndex,
+                                selectedDayIndex: nbaLeagueScheduleStore.baseSchedule.selectedDayIndex
                             ),
                             isAllResultOpened: nbaLeagueScheduleStore.baseSchedule.isAllResultOpened
                         ),
@@ -49,17 +49,17 @@ struct NBALeagueScheduleView: View {
                                 },
                                 onSelectDay: { day, index in
                                     nbaLeagueScheduleStore.send(.baseSchedule(.selectDay(day, index)))
-                                    
                                 }
                             ),
                             allResultButtonAction: {
                                 nbaLeagueScheduleStore.send(.toggleAllResult)
                             }
                         ),
-                        titleContent: { },
+                        titleContent: {},
                         gameListContent: {
                             NBALeagueScheduleList(
-                                searchStore: searchStore, nbaLeagueScheduleStore: nbaLeagueScheduleStore
+                                searchStore: searchStore,
+                                nbaLeagueScheduleStore: nbaLeagueScheduleStore
                             )
                         }
                     )
@@ -130,9 +130,8 @@ struct NBALeagueScheduleList: View {
         .onAppear {
             gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
         }
-        .onChange(of: nbaLeagueScheduleStore.baseSchedule.selectedDayIndex) { newValue in
-            
-            gameListToDisplay = nbaLeagueScheduleStore.filteredGames[newValue] ?? []
+        .onChange(of: nbaLeagueScheduleStore.baseSchedule.selectedDayIndex) {
+            gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
         }
         .onChange(of: nbaLeagueScheduleStore.filteredGames) {
             // TODO: Has to think about better structure, because 'gameListToDisplay' could be set multiple times.
@@ -154,10 +153,9 @@ struct NBALeagueScheduleListItem: View {
     @State private var isResultOpened = false
     
     var body: some View {
+        let displayModel = nbaLeagueScheduleStore.baseSchedule.displayModel
         let homeTeamId = data.homeTeamId
         let awayTeamId = data.awayTeamId
-        let homeTeamScore = data.homeTeamScore
-        let awayTeamScore = data.awayTeamScore
         let gameStatus = Int(data.gameStatus)
         let teamNameDic = nbaLeagueScheduleStore.teamNameDictionary
         
@@ -165,10 +163,10 @@ struct NBALeagueScheduleListItem: View {
             guard isResultOpened else { return StringConstants.resultOpen }
 
             switch gameStatus {
-            case 1:
+            case StringConstants.NBA.gameScheduled:
                 return StringConstants.gameNotStartedStr
-            case 2:
-                return "경기중"
+            case StringConstants.NBA.gameLive:
+                return StringConstants.gameLiveStr
 //                guard let first = data.lineScore.first else { return "" }
 //                if first.ptsOt3 != nil {
 //                    return StringConstants.NBA.gameOt3
@@ -187,165 +185,63 @@ struct NBALeagueScheduleListItem: View {
 //                } else {
 //                    return ""
 //                }
-            case 3:
-                return StringConstants.gameFinishedStr
+            case StringConstants.NBA.gameFinal:
+                return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
             default:
                 return ""
             }
         }()
         
         let gameStatusColor: Color = {
-            guard isResultOpened else { return .secondary }
-            
-            if gameStatus == 2 {
+            if gameStatus == StringConstants.NBA.gameLive {
                 return .moare
             } else {
                 return .secondary
             }
         }()
         
-        HStack {
-            /* ---------------------
-               home
-               --------------------- */
-            Button(action: {
-//                searchStore.send(.updateTextField("토트넘"))
-//                searchStore.send(.performSearch())
-            }) {
-                VStack(spacing: 2) {
-                    URLImage(
-                        url: NBAUtil.teamLogoURL(id: homeTeamId),
-                        size: .small,
-                        isSvg: true
-                    )
+        ScheduleGameItem(
+            state:ScheduleGameItemState(
+                homeTeamLogo: NBAUtil.teamLogoURL(id: homeTeamId),
+                homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
+                homeTeamScore: data.homeTeamScore,
+                awayTeamLogo: NBAUtil.teamLogoURL(id: awayTeamId),
+                awayTeamName: teamNameDic["short_\(awayTeamId)"] ?? "",
+                awayTeamScore: data.awayTeamScore,
+                isResultOpened: isResultOpened,
+                gameStatusText: gameStatusText,
+                gameStatusColor: gameStatusColor,
+                isCapsuleButtonDisabled: gameStatus != StringConstants.NBA.gameFinal,
+                date: data.date,
+                venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
+                shouldShowOnlyDateTime: displayModel?.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
+                isSvgLogo: true
+            ),
+            actions: ScheduleGameItemActions(
+                onGameItemClick: {
+                    if let displayModel {
+                        searchStore.send(.selectNBAGame(game: data, season: displayModel.season))
+                    }
                     
-                    Text(teamNameDic["short_\(homeTeamId ?? 0)"] ?? "")
-                        .font(.system(size: 13))
-                        .lineLimit(2)
-                }
-            }
-            .frame(width: 90)
-            .foregroundStyle(.primary)
-            .disabled(true) // TODO: modify when api added
-            
-            Spacer()
-                .frame(maxHeight: 80)
-                .contentShape(Rectangle())
-            
-            // score
-            if gameStatus == 2 ||
-                (gameStatus == 3 && isResultOpened) {
-                Text("\(homeTeamScore)")
-                    .frame(maxWidth: .infinity)
-                    .foregroundStyle(homeTeamScore >= awayTeamScore ? .moare : .primary)
-            }
-            
-            Spacer()
-                .frame(maxHeight: 80)
-                .contentShape(Rectangle())
-            
-            /* ---------------------
-               game info
-               --------------------- */
-            VStack {
-                // game status
-                CapsuleButton(
-                    text: gameStatusText,
-                    color: gameStatusColor
-                ) {
+                    // set selected game's isOpened true
+                    nbaLeagueScheduleStore.send(.updateResultOpenedState(gameCode: data.gameId, isOpened: true))
+                },
+                onCapsuleButtonClick: {
                     nbaLeagueScheduleStore.send(.updateResultOpenedState(gameCode: data.gameId, isOpened: !isResultOpened))
                 }
-                .disabled(gameStatus != 3)
-                
-                // game date
-                Text(CalendarUtil.formatDate(date: data.date, formatType: .ampm))
-                    .font(.system(size: 12))
-                    .padding(.vertical, 2)
-                
-                // playoffs info
-                if let gameInfo = data.gameInfo, gameInfo.weekName.isEmpty {
-                    Text(NBAUtil.gameType(gameSummary: gameInfo, isShort: true))
-                        .font(.system(size: 11))
-                    
-//                    if let series = data.seasonSeries, !gameInfo.seriesGameNumber.isEmpty {
-//                        HStack(spacing: 0) {
-//                            Text("시리즈 스코어: ")
-//                                .font(.system(size: 11))
-//                            
-//                            Text("\(series.homeTeamWins)")
-//                                .font(.system(size: 11))
-//                                .foregroundStyle(series.homeTeamWins >= series.homeTeamLosses ? .moare : .primary)
-//                            
-//                            Text(" - ")
-//                                .font(.system(size: 11))
-//                            
-//                            Text("\(series.homeTeamLosses)")
-//                                .font(.system(size: 11))
-//                                .foregroundStyle(series.homeTeamLosses >= series.homeTeamWins ? .moare : .primary)
-//                        }
-//                    }
-                }
-            }
-            .frame(width: 100)
-            
-            Spacer()
-                .frame(maxHeight: 80)
-                .contentShape(Rectangle())
-            
-            /* ---------------------
-               away
-               --------------------- */
-            // socre
-            if gameStatus == 2 ||
-                (gameStatus == 3 && isResultOpened) {
-                Text("\(awayTeamScore)")
-                    .frame(maxWidth: .infinity)
-                    .foregroundStyle(awayTeamScore >= homeTeamScore ? .moare : .primary)
-            }
-            
-            Spacer()
-                .frame(maxHeight: 80)
-                .contentShape(Rectangle())
-            
-            Button(action: {
-//                searchStore.send(.updateTextField("토트넘"))
-//                searchStore.send(.performSearch())
-            }) {
-                VStack(spacing: 2) {
-                    URLImage(
-                        url: NBAUtil.teamLogoURL(id: awayTeamId),
-                        size: .small,
-                        isSvg: true
-                    )
-                    
-                    Text(teamNameDic["short_\(awayTeamId ?? 0)"] ?? "")
-                        .font(.system(size: 13))
-                        .lineLimit(2)
-                }
-            }
-            .frame(width: 90)
-            .foregroundStyle(.primary)
-//            .disabled(true) // TODO: modify when api added
-        } // HStack
-        .background(Color.clear) // added for tapGesture on Spacer()
-        .onTapGesture {
-            
-            if let displayModel = nbaLeagueScheduleStore.baseSchedule.displayModel {
-                searchStore.send(.selectNBAGame(game: data, season: displayModel.season))
-            }
-            
-            // set selected game's isOpened true
-            nbaLeagueScheduleStore.send(.updateResultOpenedState(gameCode: data.gameId, isOpened: true))
-        }
+            )
+        )
         .onAppear {
-            if gameStatus == 3 {
+            if gameStatus == StringConstants.NBA.gameFinal {
                 isResultOpened = nbaLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
+            } else if gameStatus == StringConstants.NBA.gameScheduled {
+                isResultOpened = false
             } else {
                 isResultOpened = true
             }
         }
         .onChange(of: nbaLeagueScheduleStore.gameResultOpenedStateList) {
-            if gameStatus == 3 {
+            if gameStatus == StringConstants.NBA.gameFinal {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                     isResultOpened = nbaLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
                 }
@@ -353,3 +249,27 @@ struct NBALeagueScheduleListItem: View {
         }
     }
 }
+
+// playoffs info
+//if let gameInfo = data.gameInfo, gameInfo.weekName.isEmpty {
+//    Text(NBAUtil.gameType(gameSummary: gameInfo, isShort: true))
+//        .font(.system(size: 11))
+//    
+//    if let series = data.seasonSeries, !gameInfo.seriesGameNumber.isEmpty {
+//        HStack(spacing: 0) {
+//            Text("시리즈 스코어: ")
+//                .font(.system(size: 11))
+//            
+//            Text("\(series.homeTeamWins)")
+//                .font(.system(size: 11))
+//                .foregroundStyle(series.homeTeamWins >= series.homeTeamLosses ? .moare : .primary)
+//            
+//            Text(" - ")
+//                .font(.system(size: 11))
+//            
+//            Text("\(series.homeTeamLosses)")
+//                .font(.system(size: 11))
+//                .foregroundStyle(series.homeTeamLosses >= series.homeTeamWins ? .moare : .primary)
+//        }
+//    }
+//}

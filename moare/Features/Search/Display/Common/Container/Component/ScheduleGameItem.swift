@@ -155,6 +155,7 @@ struct ScheduleGameItem: View {
             .foregroundStyle(.primary)
             .disabled(true) // TODO: modify when api added
         } // HStack
+        .padding(.horizontal, 4)
         .background(Color.clear) // added for tapGesture on Spacer()
         .onTapGesture {
             // TODO: Should change to Button
