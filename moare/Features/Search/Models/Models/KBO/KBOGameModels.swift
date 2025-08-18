@@ -41,6 +41,14 @@ struct KBOGameInfo: Decodable, Equatable {
 struct KBOGameLineScoreInfo: Decodable, Equatable {
     let away: KBOGameLineScore
     let home: KBOGameLineScore
+    private let _currentInning: String?
+    
+    var currentInning: String { _currentInning ?? "" }
+
+    private enum CodingKeys: String, CodingKey {
+        case away, home
+        case _currentInning = "currentInning"
+    }
 }
 
 struct KBOGameLineScore: Decodable, Equatable {
@@ -249,4 +257,20 @@ struct KBOGamePitcherStats: Decodable, Equatable {
     }
 }
 
-typealias KBOGameForSchedule = GameForSchedule<String>
+struct KBOGameInfoForSchedule: Decodable, Equatable {
+    private let _currentInning: String?
+
+    var currentInning: String { _currentInning ?? StringConstants.gameLiveStr }
+
+    private enum CodingKeys: String, CodingKey {
+        case _currentInning = "currentInning"
+    }
+    
+    init(
+        currentInning: String?
+    ) {
+        self._currentInning = currentInning
+    }
+}
+
+typealias KBOGameForSchedule = GameForSchedule<KBOGameInfoForSchedule>

@@ -741,6 +741,7 @@ struct ModelConverter {
         let awayTeamId = game.gameInfo?.awayTeamId ?? 0
         let homeTeamScore = game.lineScore?.home.r ?? "0"
         let awayTeamScore = game.lineScore?.away.r ?? "0"
+        let gameInfo = KBOGameInfoForSchedule(currentInning: game.lineScore?.currentInning)
         
         return KBOGameForSchedule(
             itemKey: date != nil ? "\(date!)#\(game.gameInfo?.gameId ?? "")" : "",
@@ -749,7 +750,7 @@ struct ModelConverter {
             homeTeamScore: Int(homeTeamScore),
             awayTeamScore: Int(awayTeamScore),
             gameStatus: game.gameInfo?.gameStatus,
-            gameInfo: nil
+            gameInfo: gameInfo
         )
     }
 }
