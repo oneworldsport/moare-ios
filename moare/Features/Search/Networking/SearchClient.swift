@@ -45,8 +45,8 @@ struct SearchClient {
         case .fbTeamStandings:
             filePath = "football_team_standings"
         case .fbLeagueSchedule:
-            filePath = "football_league_schedule"
-//            filePath = "football_team_schedule"
+//            filePath = "football_league_schedule"
+            filePath = "football_team_schedule"
         case .fbGameStats:
             filePath = "football_game_stats"
         case .nbaPlayerInfo:
@@ -62,8 +62,8 @@ struct SearchClient {
         case .nbaTeamStandings:
             filePath = "nba_team_standings"
         case .nbaLeagueSchedule:
-            filePath = "nba_league_schedule"
-//            filePath = "nba_team_schedule"
+//            filePath = "nba_league_schedule"
+            filePath = "nba_team_schedule"
         case .nbaGameStats:
             filePath = "nba_game_stats"
         case .nbaLeagueTournament:
@@ -98,8 +98,8 @@ struct SearchClient {
         case .mlbTeamStandings:
             filePath = "mlb_team_standings"
         case .mlbLeagueSchedule:
-            filePath = "mlb_league_schedule"
-//            filePath = "mlb_team_schedule"
+//            filePath = "mlb_league_schedule"
+            filePath = "mlb_team_schedule"
         case .mlbGameStats:
             filePath = "mlb_game_stats"
         default:
