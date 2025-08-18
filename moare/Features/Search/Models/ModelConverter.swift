@@ -722,7 +722,7 @@ struct ModelConverter {
         let awayTeamId = game.teams.away.id
         let homeTeamScore = game.linescore.teams.home.runs
         let awayTeamScore = game.linescore.teams.away.runs
-        let gameInfo = MLBGameInfoForSchedule(currentInning: game.linescore.currentInning)
+        let gameInfo = MLBGameInfoForSchedule(currentInning: "\(game.linescore.currentInning)회\(game.linescore.isTopInning ? "초" : "말")")
         
         return MLBGameForSchedule(
             itemKey: date != nil ? "\(date!)#\(game.game.id)" : "",

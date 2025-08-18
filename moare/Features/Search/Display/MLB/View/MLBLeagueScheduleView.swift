@@ -22,46 +22,40 @@ struct MLBLeagueScheduleView: View {
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            let mlbGameStatsModel = searchStore.displayModels[.mlbGameStats] as? MLBGameStatsDisplayModel
-            
             VStack(spacing: 0) {
                 if let mlbLeagueScheduleStore {
-                    if mlbGameStatsModel == nil {
-                        ScheduleViewContainer(
-                            state: ScheduleContainerState(
-                                shouldShowCalendar: mlbGameStatsModel == nil,
-                                shouldShowAllResultToggleButton: mlbGameStatsModel == nil,
-                                displayDataState: mlbLeagueScheduleStore.baseSchedule.displayDataState,
-                                calendarUiState: CalendarUiState(
-                                    yearMonthList: mlbLeagueScheduleStore.baseSchedule.yearMonthList,
-                                    days: mlbLeagueScheduleStore.baseSchedule.days,
-                                    selectedYearMonthIndex: mlbLeagueScheduleStore.baseSchedule.selectedYearMonthIndex,
-                                    selectedDayIndex: mlbLeagueScheduleStore.baseSchedule.selectedDayIndex
-                                ),
-                                isAllResultOpened: mlbLeagueScheduleStore.baseSchedule.isAllResultOpened
+                    ScheduleViewContainer(
+                        state: ScheduleContainerState(
+                            displayDataState: mlbLeagueScheduleStore.baseSchedule.displayDataState,
+                            calendarUiState: CalendarUiState(
+                                yearMonthList: mlbLeagueScheduleStore.baseSchedule.yearMonthList,
+                                days: mlbLeagueScheduleStore.baseSchedule.days,
+                                selectedYearMonthIndex: mlbLeagueScheduleStore.baseSchedule.selectedYearMonthIndex,
+                                selectedDayIndex: mlbLeagueScheduleStore.baseSchedule.selectedDayIndex
                             ),
-                            actions: ScheduleContainerActions(
-                                calendarUiActions: CalendarUiActions(
-                                    onSelectYearMonth: { yearMonth, index in
-                                        mlbLeagueScheduleStore.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
-                                    },
-                                    onSelectDay: { day, index in
-                                        mlbLeagueScheduleStore.send(.baseSchedule(.selectDay(day, index)))
-                                    }
-                                ),
-                                allResultButtonAction: {
-                                    mlbLeagueScheduleStore.send(.toggleAllResult)
+                            isAllResultOpened: mlbLeagueScheduleStore.baseSchedule.isAllResultOpened
+                        ),
+                        actions: ScheduleContainerActions(
+                            calendarUiActions: CalendarUiActions(
+                                onSelectYearMonth: { yearMonth, index in
+                                    mlbLeagueScheduleStore.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
+                                },
+                                onSelectDay: { day, index in
+                                    mlbLeagueScheduleStore.send(.baseSchedule(.selectDay(day, index)))
                                 }
                             ),
-                            titleContent: {},
-                            gameListContent: {
-                                MLBLeagueScheduleList(
-                                    searchStore: searchStore,
-                                    mlbLeagueScheduleStore: mlbLeagueScheduleStore
-                                )
+                            allResultButtonAction: {
+                                mlbLeagueScheduleStore.send(.toggleAllResult)
                             }
-                        )
-                    }
+                        ),
+                        titleContent: {},
+                        gameListContent: {
+                            MLBLeagueScheduleList(
+                                searchStore: searchStore,
+                                mlbLeagueScheduleStore: mlbLeagueScheduleStore
+                            )
+                        }
+                    )
                 }
             }
             .onAppear {
@@ -163,7 +157,7 @@ struct MLBLeagueScheduleListItem: View {
             case StringConstants.MLB.gameScheduled:
                 return StringConstants.gameNotStartedStr
             case StringConstants.MLB.gameLive:
-                return StringConstants.gameLiveStr
+                return data.gameInfo?.currentInning ?? StringConstants.gameLiveStr
             case StringConstants.MLB.gamePostponed:
                 return StringConstants.gamePostponedStr
             case let status where StringConstants.MLB.gameFinishedList.contains(status):
