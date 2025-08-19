@@ -113,10 +113,10 @@ struct KBOGameStatsView: View {
                                 secondCategorySelectedIndex: kboGameStatsStore.baseGameStats.firstCategorySelectedIndex
                             ),
                             actions: StandingsContainerActions(
-                                secondCategoryButtonAction: { index in
+                                secondCategoryButtonAction: { index, _ in
                                     kboGameStatsStore.send(.baseGameStats(.selectFirstCategory(index)))
                                 },
-                                itemButtonAction: {
+                                itemButtonAction: { id in
                                     
                                 }
                             ),
@@ -145,10 +145,10 @@ struct KBOGameStatsView: View {
                                 secondCategorySelectedIndex: kboGameStatsStore.baseGameStats.secondCategorySelectedIndex
                             ),
                             actions: StandingsContainerActions(
-                                secondCategoryButtonAction: { index in
+                                secondCategoryButtonAction: { index, _ in
                                     kboGameStatsStore.send(.baseGameStats(.selectSecondCategory(index)))
                                 },
-                                itemButtonAction: {
+                                itemButtonAction: { id in
                                     
                                 }
                             ),

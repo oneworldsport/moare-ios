@@ -5,6 +5,8 @@
 //  Created by Mohwa Yoon on 6/8/25.
 //
 
+import Foundation
+
 struct StandingsContainerState {
     var firstCategoryText: String = StringConstants.standingsFirstCategory
     var headerCategories: [String]? = nil
@@ -15,9 +17,14 @@ struct StandingsContainerState {
     var firstCategorySelectedIndex: Int = 0
     var secondCategorySelectedIndex: Int = 0
     var highlightState: StandingsHighlightItemState? = nil
+    var displayDataState: ApiFetchState? = nil
+    var firstColumnWidth: CGFloat? = nil
+    var columnWidthList: [CGFloat] = []
+    var isGameStats: Bool = false
 }
 
 struct StandingsItemState {
+    var id: Int = 0
     var isGameStats: Bool = false
     var imageUrl: String?
     var name: String
@@ -36,6 +43,6 @@ struct StandingsHighlightItemState {
 struct StandingsContainerActions {
     var headerCategoryButtonAction: ((Int) -> Void)? = nil
     var firstCategoryButtonAction: ((Int) -> Void)? = nil
-    let secondCategoryButtonAction: (Int) -> Void
-    let itemButtonAction: () -> Void
+    let secondCategoryButtonAction: (_ index: Int, _ category: String) -> Void
+    let itemButtonAction: (Int) -> Void
 }

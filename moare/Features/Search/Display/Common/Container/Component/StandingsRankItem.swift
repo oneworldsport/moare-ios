@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct StandingsRankItem: View {
+    let id: Int = 0
     let isGameStats: Bool
     let rank: Int
     let imageUrl: String?
@@ -16,7 +17,7 @@ struct StandingsRankItem: View {
     let subName: String?
     let extraInfo: String?
     let extraSubInfo: String?
-    let action: () -> Void
+    let action: (Int) -> Void
     
     init(
         isGameStats: Bool = false,
@@ -27,7 +28,7 @@ struct StandingsRankItem: View {
         subName: String? = nil,
         extraInfo: String? = nil,
         extraSubInfo: String? = nil,
-        action: @escaping () -> Void
+        action: @escaping (Int) -> Void
     ) {
         self.isGameStats = isGameStats
         self.rank = rank
@@ -41,7 +42,11 @@ struct StandingsRankItem: View {
     }
     
     var body: some View {
-        Button(action: action) {
+        Button(action: {
+            if id != 0 {
+                action(id)
+            }
+        }) {
             HStack(spacing: 0) {
                 if !isGameStats {
                     Text("\(rank)")

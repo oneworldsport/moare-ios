@@ -14,7 +14,7 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
     @ViewBuilder let titleContent: () -> TitleContent
     @ViewBuilder let customListContent: (_ totalHScrollDistance: CGFloat) -> CustomListContent
     
-    private let secondCategoryItemWidth: CGFloat = 100
+    private let defaultColumnWidth: CGFloat = 100
     
     @State private var oldOffset: CGFloat = 0
     @State private var totalHScrollDistance: CGFloat = 0
@@ -38,6 +38,8 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
     }
 
     var body: some View {
+        let columnWidthList = state.columnWidthList
+        
         VStack(spacing: 0) {
             // league title
             titleContent()
@@ -120,11 +122,11 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
                                         let category = state.secondCategories[index]
                                         
                                         Button(action: {
-                                            actions.secondCategoryButtonAction(index)
+                                            actions.secondCategoryButtonAction(index, category)
                                         }) {
                                             Text(category)
                                                 .font(.system(size: 15, weight: .medium))
-                                                .frame(width: secondCategoryItemWidth)
+                                                .frame(width: columnWidthList[safe: index] ?? defaultColumnWidth)
                                         }
                                         .foregroundStyle(.primary)
                                         .id(index)
@@ -147,12 +149,20 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
                         }
                         .onAppear {
                             withAnimation(.spring(duration: 0.5)) {
-                                secondCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: secondCategoryItemWidth, index: 0)
+                                if !columnWidthList.isEmpty {
+                                    secondCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: columnWidthList[0], index: 0)
+                                } else {
+                                    secondCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: 0)
+                                }
                             }
                         }
                         .onChange(of: state.secondCategorySelectedIndex) {
                             withAnimation(.spring(duration: 0.5)) {
-                                secondCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: secondCategoryItemWidth, index: state.secondCategorySelectedIndex)
+                                if !columnWidthList.isEmpty {
+                                    secondCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: columnWidthList, index: state.secondCategorySelectedIndex)
+                                } else {
+                                    secondCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.secondCategorySelectedIndex)
+                                }
                             }
                         }
                     }
@@ -208,7 +218,7 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
                                                 
                                                 Text(data)
                                                     .font(.system(size: 15))
-                                                    .frame(width: secondCategoryItemWidth)
+                                                    .frame(width: columnWidthList[safe: index] ?? defaultColumnWidth)
                                             }
                                         }
                                         .frame(height: 40)

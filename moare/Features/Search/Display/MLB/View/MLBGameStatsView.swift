@@ -126,10 +126,10 @@ struct MLBGameStatsView: View {
                                 secondCategorySelectedIndex: mlbGameStatsStore.baseGameStats.firstCategorySelectedIndex
                             ),
                             actions: StandingsContainerActions(
-                                secondCategoryButtonAction: { index in
+                                secondCategoryButtonAction: { index, _ in
                                     mlbGameStatsStore.send(.baseGameStats(.selectFirstCategory(index)))
                                 },
-                                itemButtonAction: {
+                                itemButtonAction: { id in
                                     
                                 }
                             ),
@@ -158,10 +158,10 @@ struct MLBGameStatsView: View {
                                 secondCategorySelectedIndex: mlbGameStatsStore.baseGameStats.secondCategorySelectedIndex
                             ),
                             actions: StandingsContainerActions(
-                                secondCategoryButtonAction: { index in
+                                secondCategoryButtonAction: { index, _ in
                                     mlbGameStatsStore.send(.baseGameStats(.selectSecondCategory(index)))
                                 },
-                                itemButtonAction: {
+                                itemButtonAction: { id in
                                     
                                 }
                             ),

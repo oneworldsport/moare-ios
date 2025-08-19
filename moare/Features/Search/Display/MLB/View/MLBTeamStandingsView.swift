@@ -67,10 +67,10 @@ struct MLBTeamStandingsView: View {
                             headerCategoryButtonAction: { index in
                                 mlbTeamStandingsStore.send(.selectHeaderCategory(index: index))
                             },
-                            secondCategoryButtonAction: { index in
+                            secondCategoryButtonAction: { index, _ in
                                 mlbTeamStandingsStore.send(.baseTeamStandings(.selectSecondCategory(index)))
                             },
-                            itemButtonAction: {
+                            itemButtonAction: { id in
                                 
                             }
                         ),
@@ -174,7 +174,7 @@ struct MLBTeamStandingsDataList: View {
                             imageUrl: MLBUtil.teamLogoURL(id: data.team.id),
                             isSvgLogo: true,
                             name: teamNameDic["short_\(data.team.id)"] ?? data.team.shortName,
-                            action: {
+                            action: { id in
                                 
                             }
                         )

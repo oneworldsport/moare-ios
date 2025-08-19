@@ -63,10 +63,10 @@ struct KBOTeamStandingsView: View {
                             secondCategorySelectedIndex: kboTeamStandingsStore.baseTeamStandings.secondCategorySelectedIndex
                         ),
                         actions: StandingsContainerActions(
-                            secondCategoryButtonAction: { index in
+                            secondCategoryButtonAction: { index, _ in
                                 kboTeamStandingsStore.send(.baseTeamStandings(.selectSecondCategory(index)))
                             },
-                            itemButtonAction: {
+                            itemButtonAction: { id in
                                 
                             }
                         ),
