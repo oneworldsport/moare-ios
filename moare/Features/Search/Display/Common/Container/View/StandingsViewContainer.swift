@@ -91,8 +91,7 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
                 VStack(spacing: 0) {
                     // categories
                     HStack(spacing: 0) {
-                        StandingsFirstCategoryItem(text: state.firstCategoryText)
-                            .frame(height: 40)
+                        StandingsFirstCategoryItem(text: state.firstCategoryText, width: state.firstColumnWidth)
                             .background(.white)
                             .zIndex(1)
                             .offset(x: totalHScrollDistance < 0 ? 0 : totalHScrollDistance)
@@ -187,6 +186,8 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
                                         }
                                         
                                         StandingsRankItem(
+                                            id: data.id,
+                                            width: state.firstColumnWidth,
                                             isGameStats: data.isGameStats,
                                             rank: index + 1,
                                             imageUrl: data.imageUrl,

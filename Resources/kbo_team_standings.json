@@ -18,6 +18,7 @@
     }
   ],
   "dataType": "baseball_team_standings",
+  "season": 2025,
   "data": {
     "standings": [
       {

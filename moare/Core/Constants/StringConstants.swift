@@ -91,7 +91,7 @@ struct StringConstants {
         static let gameFinal = 3
         static let gameCanceled = 4
         
-        static let teamStandingsCategories = ["승률", "게임차", "승", "패", "경기수", "연속", "타율", "안타", "홈런", "장타율", "득점", "평균자책", "피안타율", "피안타", "피홈런", "실점", "도루성공률"]
+        static let teamStandingsCategories = ["게임차", "승률", "승", "패", "경기수", "연속", "타율", "안타", "홈런", "장타율", "득점", "평균자책", "피안타율", "피안타", "피홈런", "실점", "도루성공률"]
         
         static let playerStandingsHittingCategories = [""]
         static let playerStandingsPitchingCategories = [""]

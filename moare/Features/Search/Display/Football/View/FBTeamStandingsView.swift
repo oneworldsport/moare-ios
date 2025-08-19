@@ -20,7 +20,7 @@ struct FBTeamStandingsView: View {
        --------------------- */
     let displayModel: FBTeamStandingsDisplayModel
     
-    let columnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50, 50, 50, 100, 100]
+    private let columnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50, 50, 50, 100, 100]
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {

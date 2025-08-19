@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct StandingsRankItem: View {
-    let id: Int = 0
+    let id: Int
+    let width: CGFloat
     let isGameStats: Bool
     let rank: Int
     let imageUrl: String?
@@ -20,6 +21,8 @@ struct StandingsRankItem: View {
     let action: (Int) -> Void
     
     init(
+        id: Int = 0,
+        width: CGFloat? = nil,
         isGameStats: Bool = false,
         rank: Int = 0,
         imageUrl: String?,
@@ -30,6 +33,8 @@ struct StandingsRankItem: View {
         extraSubInfo: String? = nil,
         action: @escaping (Int) -> Void
     ) {
+        self.id = id
+        self.width = width ?? 132
         self.isGameStats = isGameStats
         self.rank = rank
         self.imageUrl = imageUrl
@@ -51,7 +56,7 @@ struct StandingsRankItem: View {
                 if !isGameStats {
                     Text("\(rank)")
                         .font(.system(size: 15, weight: .medium))
-                        .frame(width: 28)
+                        .frame(width: rank >= 100 ? 30 : 22)
                 }
 
                 URLImage(url: imageUrl, customSize: CGSize(width: 25, height: 25), isSvg: isSvgLogo)
@@ -105,6 +110,6 @@ struct StandingsRankItem: View {
             .padding(.leading, 10)
         }
         .foregroundStyle(.primary)
-        .frame(width: 132)
+        .frame(width: width)
     }
 }

@@ -20,7 +20,7 @@ struct NBATeamStandingsView: View {
        --------------------- */
     let displayModel: NBATeamStandingsDisplayModel
     
-    let columnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80]
+    private let columnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80]
     
     private let headerCategories = ["서부 컨퍼런스", "동부 컨퍼런스"]
     
