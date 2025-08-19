@@ -75,11 +75,13 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
                 }
                 .onAppear {
                     withAnimation(.spring(duration: 0.5)) {
-                        headerCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: UIConstants.Width.screenWidth / CGFloat(categoryCount), index: 0)
+                        headerCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: UIConstants.Width.screenWidth / CGFloat(categoryCount), index: state.headerCategorySelectedIndex)
                     }
                 }
                 .onChange(of: state.headerCategorySelectedIndex) {
                     withAnimation(.spring(duration: 0.5)) {
+                        // CGFloat((state.headerCategorySelectedIndex * 2))는 카테고리 사이에 HCapsuleBar() widths
+                        // TODO: 더 정확히 하려면 screenWidth에서 먼저 HCapsuleBar() widths를 뺴야함..
                         headerCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: UIConstants.Width.screenWidth / CGFloat(categoryCount), index: state.headerCategorySelectedIndex) + CGFloat((state.headerCategorySelectedIndex * 2))
                     }
                 }
@@ -150,9 +152,9 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
                         .onAppear {
                             withAnimation(.spring(duration: 0.5)) {
                                 if !columnWidthList.isEmpty {
-                                    secondCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: columnWidthList[0], index: 0)
+                                    secondCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: columnWidthList[0], index: state.secondCategorySelectedIndex)
                                 } else {
-                                    secondCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: 0)
+                                    secondCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.secondCategorySelectedIndex)
                                 }
                             }
                         }

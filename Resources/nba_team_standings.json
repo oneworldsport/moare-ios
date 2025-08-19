@@ -18,6 +18,7 @@
     }
   ],
   "dataType":"basketball_team_standings",
+  "season": 2024,
   "data": {
     "standings": [
       {
