@@ -36,8 +36,9 @@ struct StandingsItemState {
 }
 
 struct StandingsHighlightItemState {
-    let itemIndex: Int
+    let itemIndex: Int?
     let standingsStartIndex: Int
+    let allStandingsCount: Int // filtered된 Standings말고 전체 Standings의 count. 아래로 showMoreStandings 하기 위한 분기문에서 사용.
 }
 
 struct StandingsContainerActions {
@@ -45,4 +46,5 @@ struct StandingsContainerActions {
     var firstCategoryButtonAction: ((Int) -> Void)? = nil
     let secondCategoryButtonAction: (_ index: Int, _ category: String) -> Void
     let itemButtonAction: (Int) -> Void
+    var showMoreStandingsAction: ((Bool) -> Void)? = nil
 }
