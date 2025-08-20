@@ -74,13 +74,13 @@ struct StringConstants {
         //        static let teamStandingsCategories = ["게임차", "승률", "승", "패", "경기수", "홈성적", "원정성적", "경기당 득점", "경기당 득실마진", "경기당 도움", "경기당 리바운드", "야투 성공률", "3점 성공률", "자유투 성공률", "경기당 블록", "경기당 스틸", "경기당 턴오버", "경기당 파울")
         static let teamStandingsCategories = ["게임차", "승률", "승", "패", "경기수", "경기당 득점", "경기당 득실마진", "경기당 도움", "경기당 리바운드", "야투 성공률", "3점 성공률", "자유투 성공률", "경기당 블록", "경기당 스틸", "경기당 턴오버", "경기당 파울"]
         
-        static let playerStandingsAttackCategories = ["경기당 득점", "경기당 도움", "경기당 공격리바운드", "경기당 야투 시도", "경기당 야투 성공", "야투 성공률", "경기당 3점 시도", "경기당 3점 성공", "3점 성공률", "경기당 자유투 시도", "경기당 자유투 성공", "자유투 성공률"]
-        static let playerStandingsDefendCategories = ["경기당 수비리바운드", "경기당 블록", "경기당 스틸"]
+        static let playerStandingsAttackCategories = ["경기당 득점", "경기당 도움", "경기당 공격 리바운드", "경기당 야투 시도", "경기당 야투 성공", "야투 성공률", "경기당 3점 시도", "경기당 3점 성공", "3점 성공률", "경기당 자유투 시도", "경기당 자유투 성공", "자유투 성공률"]
+        static let playerStandingsDefendCategories = ["경기당 수비 리바운드", "경기당 블록", "경기당 스틸"]
         static let playerStandingsCommonCategories = ["경기당 리바운드", "경기당 턴오버", "경기당 파울", "경기당 파울 유도", "경기당 피블록", "경기당 득실마진", "경기수", "경기당 출전시간", "출전 경기 승", "출전 경기 패", "출전 경기 승률", "트리플더블", "더블더블"]
         static let playerStandingsSecondCategories = playerStandingsAttackCategories + playerStandingsDefendCategories + playerStandingsCommonCategories
         
-        static let gameStatsAttackCategories = ["득점", "도움", "공격리바운드", "야투 시도", "야투 성공", "야투 성공률", "3점 시도", "3점 성공", "3점 성공률", "자유투 시도", "자유투 성공", "자유투 성공률"]
-        static let gameStatsDefendCategories = ["수비리바운드", "블록", "스틸"]
+        static let gameStatsAttackCategories = ["득점", "도움", "공격 리바운드", "야투 시도", "야투 성공", "야투 성공률", "3점 시도", "3점 성공", "3점 성공률", "자유투 시도", "자유투 성공", "자유투 성공률"]
+        static let gameStatsDefendCategories = ["수비 리바운드", "블록", "스틸"]
         static let gameStatsCommonCategories = ["리바운드", "턴오버", "파울", "득실마진", "출전시간"]
         static let gameStatsSecondCategories = gameStatsAttackCategories + gameStatsDefendCategories + gameStatsCommonCategories
     }

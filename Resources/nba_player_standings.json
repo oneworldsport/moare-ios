@@ -18,6 +18,7 @@
     }
   ],
   "dataType": "basketball_player_standings",
+  "season": 2024,
   "data": {
     "standings": [
       {

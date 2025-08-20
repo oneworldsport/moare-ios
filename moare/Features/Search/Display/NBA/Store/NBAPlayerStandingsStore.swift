@@ -226,14 +226,10 @@ struct NBAPlayerStandingsStore {
                     return entity != nil
                 }
                 
-                guard let index else {
-                    return .none
-                }
-                
                 state.entityIndex = index
                 
                 let rangeSize = 20
-                let startIndex = max(0, index - (rangeSize / 2) + 1) // previous 9 players from entity player
+                let startIndex = max(0, (index ?? 0) - (rangeSize / 2) + 1) // previous 9 players from entity player
                 let endIndex = min(state.standings.count, startIndex + rangeSize - 1) // next 10 players from entity player
                 
                 let newStandings = Array(state.standings[startIndex...endIndex])
