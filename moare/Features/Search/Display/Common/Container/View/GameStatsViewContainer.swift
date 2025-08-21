@@ -55,7 +55,7 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
             ZStack {
                 if state.shouldShowStats {
                     ScrollView {
-                        VStack {
+                        VStack(spacing: 0) {
                             HStack {
                                 // team button
                                 VStack(alignment: .leading, spacing: 0) {
@@ -274,9 +274,132 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                             .frame(height: defaultDataItemHeight)
                                         }
                                     }
+                                } // ScrollView(.horizontal)
+                            }
+                            
+                            // 보여줄 Stats list가 두개인 경우의 두번째 Stats list. ex) KBO, MLB의 투수 기록
+                            if let title = state.secondStatsTitle {
+                                HStack {
+                                    VStack {
+                                        Text(title)
+                                            .font(.system(size: 15, weight: .medium))
+                                        
+                                        HCapsuleBar()
+                                    }
+                                    .frame(width: 132)
+                                    
+                                    Spacer()
+                                }
+//                                .frame(maxWidth: .infinity, alignment: .leading)
+                                // TODO: firstStats의 StickyHeader부분이 해당 뷰에 가려져서 .zIndex(-1)를 추가했는데, StandingsFirstCategoryItem()는 해결됐으나 firstStatsCategories는 여전히 가려짐.
+                                // 테스트 하려면 MLBGameStatsView에서 secondStatsPlayerList: pitcherList + pitcherList
+                                .zIndex(-1)
+                            }
+                            
+                            if let secondStatsCategories = state.secondStatsCategories,
+                                let secondStatsPlayerList = state.secondStatsPlayerList {
+                                HStack(spacing: 0) {
+                                    VStack(spacing: 0) {
+                                        StickyHeader(coordinateSpaceName: coordinateSpaceName) {
+                                            StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory, width: state.firstColumnWidth)
+                                        }
+                                        .frame(width: state.firstColumnWidth ?? 132)
+                                        
+                                        ForEach(secondStatsPlayerList.indices, id:\.self) { index in
+                                            let data = secondStatsPlayerList[index]
+                                            
+                                            StandingsRankItem(
+                                                id: data.id,
+                                                width: state.firstColumnWidth,
+                                                shouldShowRank: data.numInfo != nil,
+                                                shouldShowExtraInfo: true,
+                                                rank: data.numInfo ?? 0,
+                                                imageUrl: data.imageUrl,
+                                                name: data.name,
+                                                subName: data.subName,
+                                                extraInfo: data.extraInfo,
+                                                extraSubInfo: data.extraSubInfo,
+                                                action: { _ in }
+                                            )
+                                        }
+                                    }
+                                    
+                                    ScrollView(.horizontal) {
+                                        VStack(spacing: 0) {
+                                            StickyHeader(coordinateSpaceName: coordinateSpaceName) {
+                                                VStack(alignment: .leading, spacing: 0) {
+                                                    ScrollViewReader { proxy in
+                                                        // second category
+                                                        HStack(spacing: 0) {
+                                                            ForEach(secondStatsCategories.indices, id:\.self) { index in
+                                                                let category = secondStatsCategories[index]
+
+                                                                Button(action: {
+                                                                    actions.secondStatsCategoryButtonAction?(index)
+                                                                }) {
+                                                                    Text(category)
+                                                                        .font(.system(size: 15, weight: .medium))
+                                                                        .frame(width: secondStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
+                                                                }
+                                                                .foregroundStyle(.primary)
+                                                                .id(index)
+                                                            }
+                                                        }
+                                                        .frame(height: 38)
+                                                        .onAppear {
+                                                            // TODO: should decide animation type
+                                                            // scroll and move bar to category that matches with the keyword
+                                                            //                                moveBar(index: fbTeamStandingsStore.selectedIndex)
+                                                            //
+                                                            //                                withAnimation {
+                                                            //                                    proxy.scrollTo(fbTeamStandingsStore.selectedIndex, anchor: .leading)
+                                                            //                                }
+                                                        }
+                                                    } // ScrollViewReader
+
+                                                    HCapsuleBar()
+                                                        .offset(x: secondStatsCategoryBarXOffset)
+                                                }
+                                                .onAppear {
+                                                    withAnimation(.spring(duration: 0.5)) {
+                                                        if !secondStatsColumnWidthList.isEmpty {
+                                                            secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: secondStatsColumnWidthList, index: state.secondStatsCategorySelectedIndex)
+                                                        } else {
+                                                            secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.secondStatsCategorySelectedIndex)
+                                                        }
+                                                    }
+                                                }
+                                                .onChange(of: state.firstStatsCategorySelectedIndex) {
+                                                    withAnimation(.spring(duration: 0.5)) {
+                                                        if !firstStatsColumnWidthList.isEmpty {
+                                                            secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: secondStatsColumnWidthList, index: state.secondStatsCategorySelectedIndex)
+                                                        } else {
+                                                            secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.secondStatsCategorySelectedIndex)
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            
+                                            // data items
+                                            ForEach(secondStatsPlayerList.indices, id:\.self) { index in
+                                                let item = secondStatsPlayerList[index]
+                                                
+                                                HStack(spacing: 0) {
+                                                    ForEach(item.dataList.indices, id:\.self) { index in
+                                                        let data = item.dataList[index]
+                                                        
+                                                        Text(data)
+                                                            .font(.system(size: 15))
+                                                            .frame(width: secondStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
+                                                    }
+                                                }
+                                                .frame(height: defaultDataItemHeight)
+                                            }
+                                        }
+                                    }
                                 }
                             }
-                        }
+                        } // VStack
                     } // ScrollView
                     .coordinateSpace(name: coordinateSpaceName)
                 } else {

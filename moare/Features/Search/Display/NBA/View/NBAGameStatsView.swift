@@ -24,7 +24,9 @@ struct NBAGameStatsView: View {
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            let teamIds = [displayModel.game.gameSummary?.homeTeamId, displayModel.game.gameSummary?.visitorTeamId]
+            let game = displayModel.game
+            
+            let teamIds = [game.gameSummary?.homeTeamId, game.gameSummary?.visitorTeamId]
             let teamCategories: [GameStatsTeamState] = teamIds.map {
                 return GameStatsTeamState(
                     name: nbaGameStatsStore?.teamNameDictionary["short_\($0 ?? 0)"] ?? "",
@@ -32,7 +34,7 @@ struct NBAGameStatsView: View {
                 )
             }
             
-            let playerList: [StandingsItemState] = nbaGameStatsStore?.playerStats.compactMap {
+            let playerList: [StandingsItemState] = nbaGameStatsStore?.playerStats.map {
                 let stats = $0.statistics
                 let playerId = $0.personId
                 
@@ -68,13 +70,13 @@ struct NBAGameStatsView: View {
             } ?? []
             
             let gameDetailTitle = "날짜: \n\n장소: \n관중수: \n심판: "
-            let officials = displayModel.game.officials
             let gameDetailContent: String = {
+                let officials = game.officials
                 var result = ""
-                result += "\(CalendarUtil.formatDate(date: displayModel.game.gameSummary?.date).split(separator: " ").first ?? "")\n"
-                result += "\(CalendarUtil.formatDate(date: displayModel.game.gameSummary?.date, formatType: .ampm))\n"
-                result += "\(nbaGameStatsStore?.teamNameDictionary["venue_\(displayModel.game.gameSummary?.homeTeamId ?? 0)"] ?? "")\n"
-                result += "\(displayModel.game.gameInfo?.attendance ?? 0)\n"
+                result += "\(CalendarUtil.formatDate(date: game.gameSummary?.date).split(separator: " ").first ?? "")\n"
+                result += "\(CalendarUtil.formatDate(date: game.gameSummary?.date, formatType: .ampm))\n"
+                result += "\(nbaGameStatsStore?.teamNameDictionary["venue_\(game.gameSummary?.homeTeamId ?? 0)"] ?? "")\n"
+                result += "\(game.gameInfo?.attendance ?? 0)\n"
                 result += officials.map { "• \($0.firstName + $0.lastName)" }.joined(separator: "\n")
                 return result
             }()
@@ -83,7 +85,7 @@ struct NBAGameStatsView: View {
                 if let nbaGameStatsStore {
                     GameStatsViewContainer(
                         state: GameStatsContainerState(
-                            shouldShowStats: displayModel.game.gameSummary?.gameStatusId != Constants.NBAGameStatus.notStarted,
+                            shouldShowStats: game.gameSummary?.gameStatusId != Constants.NBAGameStatus.notStarted,
                             teamCategories: teamCategories,
                             teamCategorySelectedIndex: nbaGameStatsStore.selectedTeamIndex,
                             gameDetailTitle: gameDetailTitle,
@@ -108,13 +110,13 @@ struct NBAGameStatsView: View {
                             HStack(spacing: 0) {
                                 NBATitle(
                                     leagueName: "NBA",
-                                    leagueSeason: Int(displayModel.game.gameSummary?.season.split(separator: "-").first ?? "\(CalendarUtil.currentYear)")
+                                    leagueSeason: Int(game.gameSummary?.season.split(separator: "-").first ?? "\(CalendarUtil.currentYear)")
                                 )
                                 
                                 Text(" | ")
                                     .font(.system(size: 14))
                                 
-                                Text(NBAUtil.gameType(gameSummary: displayModel.game.gameSummary))
+                                Text(NBAUtil.gameType(gameSummary: game.gameSummary))
                                     .font(.system(size: 14))
                                 
                                 Spacer()
@@ -124,12 +126,12 @@ struct NBAGameStatsView: View {
                             /* ---------------------
                                playoffs series text
                                --------------------- */
-                            if displayModel.game.gameSummary?.seriesGameNumber.isEmpty == false {
+                            if game.gameSummary?.seriesGameNumber.isEmpty == false {
                                 NBAGameStatsPlayoffsSeriesTextContainer(nbaGameStatsStore: nbaGameStatsStore)
                             }
                         },
                         gameContent: {
-                            if displayModel.game.gameSummary?.gameStatusId == StringConstants.NBA.gameScheduled {
+                            if game.gameSummary?.gameStatusId == StringConstants.NBA.gameScheduled {
                                 
                             } else {
                                 NBAGameStatsScoreInfoItem(nbaGameStatsStore: nbaGameStatsStore)
@@ -156,7 +158,7 @@ struct NBAGameStatsView: View {
                     nbaGameStatsStore.send(.initData(displayModel: displayModel))
                 }
                 
-//                if displayModel.game.gameSummary?.gameStatusId == 2 {
+//                if game.gameSummary?.gameStatusId == 2 {
 //                    searchStore.send(.refreshGame(category: "basketball"))
 //                }
             } // onAppear
@@ -234,8 +236,7 @@ struct NBAGameStatsScoreInfoItem: View {
                     
                     URLImage(
                         url: NBAUtil.teamLogoURL(id: homeTeamId),
-                        size: .small,
-                        isSvg: true
+                        size: .small
                     )
                     
                     Text(teamNameDic["short_\(homeTeamId)"] ?? "")
@@ -266,8 +267,7 @@ struct NBAGameStatsScoreInfoItem: View {
                     
                     URLImage(
                         url: NBAUtil.teamLogoURL(id: awayTeamId),
-                        size: .small,
-                        isSvg: true
+                        size: .small
                     )
                     
                     Text(teamNameDic["short_\(awayTeamId)"] ?? "")

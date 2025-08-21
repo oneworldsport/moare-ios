@@ -87,7 +87,7 @@ struct StandingsRankItem: View {
                                 .opacity(0.7)
                         }
                     }
-                    .frame(width: width - 102)
+                    .frame(width: (extraInfo != nil || extraSubInfo != nil) ? (width - 102) : 0)
                     .padding(.leading, 2)
 
                     Spacer()
