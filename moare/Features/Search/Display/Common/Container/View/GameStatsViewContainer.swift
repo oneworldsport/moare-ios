@@ -313,7 +313,7 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                         }
                         .foregroundStyle(.secondary)
                         
-                        HStack(spacing: 0) {
+                        HStack(alignment: .top, spacing: 0) {
                             Text(state.gameDetailTitle)
                                 .font(.system(size: 12))
                                 .foregroundStyle(.secondary)

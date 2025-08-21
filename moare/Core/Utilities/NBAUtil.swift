@@ -37,11 +37,11 @@ struct NBAUtil {
     static func gameType(gameSummary: NBAGameSummary?, isShort: Bool = false) -> String {
         guard let gameSummary else { return "" }
         
-        if gameSummary.weekName.lowercased().contains("week") && gameSummary.seriesGameNumber.isEmpty {
+        if gameSummary.seriesGameNumber.isEmpty {
             return "정규시즌"
-        } else if gameSummary.weekName.isEmpty && gameSummary.gameLabel.lowercased().contains("play-in") {
+        } else if gameSummary.gameLabel.lowercased().contains("play-in") {
             return "플레이인 토너먼트"
-        } else if gameSummary.weekName.isEmpty && !gameSummary.seriesGameNumber.isEmpty {
+        } else if !gameSummary.seriesGameNumber.isEmpty {
             let label = gameSummary.gameLabel.lowercased()
             let subLabel = gameSummary.gameSubLabel
             let conference = label.contains("west") ? "서부" : "동부"

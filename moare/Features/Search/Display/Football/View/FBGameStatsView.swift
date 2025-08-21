@@ -18,15 +18,6 @@ struct FBGameStatsView: View {
     
     let displayModel: FBGameStatsDisplayModel
     
-    /* ---------------------
-       ui state
-       --------------------- */
-    @State private var totalScrollDistance: CGFloat = 0
-    @State private var oldOffset: CGFloat = 0
-    @State private var coachKrName = ""
-    
-    let coordinateSpaceName = "PlayerStats"
-    
     private let columnWidthList: [CGFloat] = [50, 50, 50, 50, 60, 50, 80, 70, 70, 80, 60, 60, 60, 50, 50, 50, 80, 50]
     
     var body: some View {

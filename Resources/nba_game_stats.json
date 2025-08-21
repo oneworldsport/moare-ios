@@ -12,7 +12,7 @@
     }
   ],
   "dataType": "basketball_game_stats",
-  "season": "2024",
+  "season": 2024,
   "data": {
     "game": {
       "gameSummary": {
