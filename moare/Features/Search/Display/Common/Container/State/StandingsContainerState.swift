@@ -26,6 +26,7 @@ struct StandingsContainerState {
 struct StandingsItemState {
     var id: Int = 0
     var isGameStats: Bool = false
+    var numInfo: Int? = nil
     var imageUrl: String?
     var name: String
     var subName: String? = nil

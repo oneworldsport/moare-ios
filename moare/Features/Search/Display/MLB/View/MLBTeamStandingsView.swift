@@ -136,7 +136,6 @@ struct MLBTeamStandingsDataList: View {
                         StandingsRankItem(
                             rank: index,
                             imageUrl: MLBUtil.teamLogoURL(id: data.team.id),
-                            isSvgLogo: true,
                             name: teamNameDic["short_\(data.team.id)"] ?? data.team.shortName,
                             action: { id in
                                 

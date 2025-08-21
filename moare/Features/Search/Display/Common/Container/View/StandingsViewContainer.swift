@@ -162,7 +162,7 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
                         .onAppear {
                             withAnimation(.spring(duration: 0.5)) {
                                 if !columnWidthList.isEmpty {
-                                    secondCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: columnWidthList[0], index: state.secondCategorySelectedIndex)
+                                    secondCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: columnWidthList, index: state.secondCategorySelectedIndex)
                                 } else {
                                     secondCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.secondCategorySelectedIndex)
                                 }
@@ -200,10 +200,8 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
                                             StandingsRankItem(
                                                 id: data.id,
                                                 width: state.firstColumnWidth,
-                                                isGameStats: data.isGameStats,
                                                 rank: state.highlightState != nil ? (state.highlightState!.standingsStartIndex + index + 1) : (index + 1),
                                                 imageUrl: data.imageUrl,
-                                                isSvgLogo: data.isSvgLogo,
                                                 name: data.name,
                                                 subName: data.subName,
                                                 extraInfo: data.extraInfo,
@@ -335,9 +333,5 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
             }
             .coordinateSpace(name: coordinateSpaceName)
         }
-    }
-    
-    private func moveBar() {
-        
     }
 }

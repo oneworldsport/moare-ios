@@ -39,6 +39,7 @@ struct HCapsuleBar: View {
     }
 }
 
+// TODO: corner 별로 round 적용할 수 있게 해야함.
 struct VCapsuleBar: View {
     let customHeight: CGFloat?
     let customWidth: CGFloat

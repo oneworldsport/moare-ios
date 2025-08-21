@@ -19,7 +19,7 @@ struct StringConstants {
     static let standingsFirstCategory = "순위"
     static let statsFirstCategories = ["공격 지표", "수비 지표", "공통 지표"]
     
-    static let gameStatsFirstCategory = "선수"
+    static let gameStatsFirstCategory = "선수 이름"
     
     struct Football {
         static let gameFirstHalfStr = "전반전"
