@@ -52,3 +52,10 @@ extension Array {
         return indices.contains(index) ? self[index] : nil
     }
 }
+
+/// Returns nil when String is Optional
+extension StringProtocol {
+    func toIntOrNil() -> Int? {
+        Int(self)
+    }
+}

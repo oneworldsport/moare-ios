@@ -47,6 +47,16 @@ struct StandingsRankItem: View {
     }
     
     var body: some View {
+        let rankWidth: CGFloat = {
+           if rank >= 100 {
+                return 30
+            } else if rank >= 10 {
+                return 22
+            } else {
+                return 15
+            }
+        }()
+        
         Button(action: {
             if id != 0 {
                 action(id)
@@ -56,7 +66,7 @@ struct StandingsRankItem: View {
                 if shouldShowRank {
                     Text("\(rank)")
                         .font(.system(size: 15, weight: .medium))
-                        .frame(width: rank >= 100 ? 30 : 22)
+                        .frame(width: rankWidth)
                 }
 
                 URLImage(url: imageUrl, customSize: CGSize(width: 25, height: 25))
@@ -110,7 +120,7 @@ struct StandingsRankItem: View {
                 VCapsuleBar()
                     .opacity(0.5)
             }
-            .padding(.leading, 10)
+            .padding(.leading, 8)
         }
         .foregroundStyle(.primary)
         .frame(width: width, height: 40)

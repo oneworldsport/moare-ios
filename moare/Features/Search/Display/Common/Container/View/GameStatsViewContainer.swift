@@ -164,7 +164,7 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                             // player stats
                             if let title = state.firstStatsTitle {
                                 HStack {
-                                    VStack {
+                                    VStack(spacing: 2) {
                                         Text(title)
                                             .font(.system(size: 15, weight: .medium))
                                         
@@ -280,7 +280,7 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                             // 보여줄 Stats list가 두개인 경우의 두번째 Stats list. ex) KBO, MLB의 투수 기록
                             if let title = state.secondStatsTitle {
                                 HStack {
-                                    VStack {
+                                    VStack(spacing: 2) {
                                         Text(title)
                                             .font(.system(size: 15, weight: .medium))
                                         
@@ -301,16 +301,15 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                 HStack(spacing: 0) {
                                     VStack(spacing: 0) {
                                         StickyHeader(coordinateSpaceName: coordinateSpaceName) {
-                                            StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory, width: state.firstColumnWidth)
+                                            StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory)
                                         }
-                                        .frame(width: state.firstColumnWidth ?? 132)
+                                        .frame(width: 132)
                                         
                                         ForEach(secondStatsPlayerList.indices, id:\.self) { index in
                                             let data = secondStatsPlayerList[index]
                                             
                                             StandingsRankItem(
                                                 id: data.id,
-                                                width: state.firstColumnWidth,
                                                 shouldShowRank: data.numInfo != nil,
                                                 shouldShowExtraInfo: true,
                                                 rank: data.numInfo ?? 0,
@@ -369,7 +368,7 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                                         }
                                                     }
                                                 }
-                                                .onChange(of: state.firstStatsCategorySelectedIndex) {
+                                                .onChange(of: state.secondStatsCategorySelectedIndex) {
                                                     withAnimation(.spring(duration: 0.5)) {
                                                         if !firstStatsColumnWidthList.isEmpty {
                                                             secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: secondStatsColumnWidthList, index: state.secondStatsCategorySelectedIndex)

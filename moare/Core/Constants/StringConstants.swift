@@ -98,7 +98,7 @@ struct StringConstants {
         static let playerStandingsRunningCategories = [""]
         static let playerStandingsSecondCategories = playerStandingsHittingCategories + playerStandingsPitchingCategories + playerStandingsRunningCategories
 
-        static let gameStatsHittingCategories = ["타수", "안타", "홈런", "타점", "득점", "도루", "볼넷", "삼진"]
+        static let gameStatsHittingCategories = ["타수", "안타", "홈런", "타점", "득점", "볼넷", "삼진", "병살타"]
         static let gameStatsPitchingCategories = ["이닝", "실점", "자책", "볼넷", "삼진", "피안타"]
         static let gameStatsRunningCategories = [""]
         static let gameStatsSecondCategories = gameStatsHittingCategories + gameStatsPitchingCategories + gameStatsRunningCategories

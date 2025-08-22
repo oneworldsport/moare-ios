@@ -110,7 +110,7 @@ struct NBAGameStatsView: View {
                             HStack(spacing: 0) {
                                 NBATitle(
                                     leagueName: "NBA",
-                                    leagueSeason: Int(game.gameSummary?.season.split(separator: "-").first ?? "\(CalendarUtil.currentYear)")
+                                    leagueSeason: game.gameSummary?.season.split(separator: "-").first.flatMap { Int(String($0)) } // TODO: 이 문법으로 다른 비슷한 코드도 다 바꾸기
                                 )
                                 
                                 Text(" | ")
