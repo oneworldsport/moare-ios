@@ -121,9 +121,9 @@ struct MLBLeagueScheduleStore {
                 case .league:
                     return .send(.fetchGames)
                 case .team:
-                    return .send(.setDays(isInit: true))
+                    return .send(.setDays())
                 default :
-                    return .send(.setDays(isInit: true))
+                    return .none
                 }
                 
             case .toggleAllResult:

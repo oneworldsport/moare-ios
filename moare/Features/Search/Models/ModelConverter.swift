@@ -151,15 +151,6 @@ struct ModelConverter {
         )
     }
     
-//    func fbTeamScheduleConverter(response: FBGameScheduleResponseModel) -> FBTeamScheduleDisplayModel {
-//        return FBTeamScheduleDisplayModel(
-//            leagueId: leagueId ?? Constants.Ids.epl,
-//            keywords: keywords,
-//            entityInfo: entityInfo,
-//            games: response.schedule
-//        )
-//    }
-    
     func fbLeagueScheduleConverter(response: FBGameScheduleResponseModel) -> FBLeagueScheduleDisplayModel {
         let yearMonthList: [String] = response.scheduledMonths?.map {
             let components = $0.split(separator: "-")
@@ -311,16 +302,6 @@ struct ModelConverter {
             entityInfo: entityInfo,
             season: season,
             standings: standings
-        )
-    }
-    
-    func nbaTeamScheduleConverter(response: NBAGameScheduleResponseModel) -> NBATeamScheduleDisplayModel {
-        return NBATeamScheduleDisplayModel(
-            leagueId: leagueId ?? Constants.Ids.nba,
-            keywords: keywords,
-            entityInfo: entityInfo,
-            season: season,
-            games: response.schedule
         )
     }
     
@@ -547,7 +528,7 @@ struct ModelConverter {
         }
         
         return MLBPlayerInfoDisplayModel(
-            leagueId: leagueId ?? Constants.Ids.epl,
+            leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
             season: season,
@@ -741,7 +722,7 @@ struct ModelConverter {
         let awayTeamId = game.teams.away.id
         let homeTeamScore = game.linescore.teams.home.runs
         let awayTeamScore = game.linescore.teams.away.runs
-        let gameInfo = MLBGameInfoForSchedule(currentInning: game.linescore.currentInning)
+        let gameInfo = MLBGameInfoForSchedule(currentInning: "\(game.linescore.currentInning)회\(game.linescore.isTopInning ? "초" : "말")")
         
         return MLBGameForSchedule(
             itemKey: date != nil ? "\(date!)#\(game.game.id)" : "",
@@ -760,6 +741,7 @@ struct ModelConverter {
         let awayTeamId = game.gameInfo?.awayTeamId ?? 0
         let homeTeamScore = game.lineScore?.home.r ?? "0"
         let awayTeamScore = game.lineScore?.away.r ?? "0"
+        let gameInfo = KBOGameInfoForSchedule(currentInning: game.lineScore?.currentInning)
         
         return KBOGameForSchedule(
             itemKey: date != nil ? "\(date!)#\(game.gameInfo?.gameId ?? "")" : "",
@@ -768,7 +750,7 @@ struct ModelConverter {
             homeTeamScore: Int(homeTeamScore),
             awayTeamScore: Int(awayTeamScore),
             gameStatus: game.gameInfo?.gameStatus,
-            gameInfo: nil
+            gameInfo: gameInfo
         )
     }
 }

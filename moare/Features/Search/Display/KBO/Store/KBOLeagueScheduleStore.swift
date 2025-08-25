@@ -120,9 +120,9 @@ struct KBOLeagueScheduleStore {
                 case .league:
                     return .send(.fetchGames)
                 case .team:
-                    return .send(.setDays(isInit: true))
+                    return .send(.setDays())
                 default :
-                    return .send(.setDays(isInit: true))
+                    return .none
                 }
                 
             case .toggleAllResult:
@@ -144,7 +144,7 @@ struct KBOLeagueScheduleStore {
                 if components.count == 2,
                    let year = Int(components[0]),
                    let month = Int(components[1]) {
-                    var days = CalendarUtil.getDaysInMonth(year: Int("20\(year)") ?? 2025, month: month)
+                    var days = CalendarUtil.getDaysInMonth(year: Int("20\(year)") ?? CalendarUtil.currentYear, month: month)
                     
                     var gameResultOpenedStateList: [String: Bool] = [:]
                     var newFilteredGame = state.filteredGames

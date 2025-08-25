@@ -1,0 +1,921 @@
+{
+  "dataType": "football_team_stats",
+  "keywords": [],
+  "entityInfo": [
+    {
+      "entityName": "토트넘",
+      "entityId": 47,
+      "category": "football",
+      "entityType": "team",
+      "leagueId": 39,
+      "teamId": 47
+    }
+  ],
+  "season": 2024,
+  "data": {
+    "info": {
+      "statistics": [
+        {
+          "cards": {
+            "red": {
+              "0-15": {
+                "percentage": null,
+                "total": null
+              },
+              "106-120": {
+                "percentage": null,
+                "total": null
+              },
+              "16-30": {
+                "percentage": null,
+                "total": null
+              },
+              "31-45": {
+                "percentage": null,
+                "total": null
+              },
+              "46-60": {
+                "percentage": null,
+                "total": null
+              },
+              "61-75": {
+                "percentage": null,
+                "total": null
+              },
+              "76-90": {
+                "percentage": null,
+                "total": null
+              },
+              "91-105": {
+                "percentage": null,
+                "total": null
+              }
+            },
+            "yellow": {
+              "0-15": {
+                "percentage": null,
+                "total": null
+              },
+              "106-120": {
+                "percentage": null,
+                "total": null
+              },
+              "16-30": {
+                "percentage": null,
+                "total": null
+              },
+              "31-45": {
+                "percentage": "40.00%",
+                "total": 2
+              },
+              "46-60": {
+                "percentage": "20.00%",
+                "total": 1
+              },
+              "61-75": {
+                "percentage": null,
+                "total": null
+              },
+              "76-90": {
+                "percentage": "40.00%",
+                "total": 2
+              },
+              "91-105": {
+                "percentage": null,
+                "total": null
+              }
+            }
+          },
+          "fixtures": {
+            "draws": {
+              "away": 1,
+              "home": 0,
+              "total": 1
+            },
+            "loses": {
+              "away": 0,
+              "home": 2,
+              "total": 2
+            },
+            "played": {
+              "away": 5,
+              "home": 2,
+              "total": 7
+            },
+            "wins": {
+              "away": 4,
+              "home": 0,
+              "total": 4
+            }
+          },
+          "form": "DWWWWLL",
+          "goals": {
+            "against": {
+              "average": {
+                "away": "1.4",
+                "home": "2.5",
+                "total": "1.7"
+              },
+              "total": {
+                "away": 7,
+                "home": 5,
+                "total": 12
+              }
+            },
+            "for": {
+              "average": {
+                "away": "3.0",
+                "home": "1.5",
+                "total": "2.6"
+              },
+              "total": {
+                "away": 15,
+                "home": 3,
+                "total": 18
+              }
+            }
+          },
+          "league": {
+            "country": "World",
+            "flag": null,
+            "id": 667,
+            "logo": "https://media.api-sports.io/football/leagues/667.png",
+            "name": "Friendlies Clubs",
+            "season": 2024
+          },
+          "penalty": {
+            "missed": {
+              "percentage": "20.00%",
+              "total": 1
+            },
+            "scored": {
+              "percentage": "80.00%",
+              "total": 4
+            },
+            "total": 5
+          },
+          "team": {
+            "id": 47,
+            "logo": "https://media.api-sports.io/football/teams/47.png",
+            "name": "Tottenham"
+          }
+        },
+        {
+          "cards": {
+            "red": {
+              "0-15": {
+                "percentage": null,
+                "total": null
+              },
+              "106-120": {
+                "percentage": null,
+                "total": null
+              },
+              "16-30": {
+                "percentage": null,
+                "total": null
+              },
+              "31-45": {
+                "percentage": null,
+                "total": null
+              },
+              "46-60": {
+                "percentage": null,
+                "total": null
+              },
+              "61-75": {
+                "percentage": null,
+                "total": null
+              },
+              "76-90": {
+                "percentage": null,
+                "total": null
+              },
+              "91-105": {
+                "percentage": "100.00%",
+                "total": 1
+              }
+            },
+            "yellow": {
+              "0-15": {
+                "percentage": "6.94%",
+                "total": 5
+              },
+              "106-120": {
+                "percentage": null,
+                "total": null
+              },
+              "16-30": {
+                "percentage": "8.33%",
+                "total": 6
+              },
+              "31-45": {
+                "percentage": "18.06%",
+                "total": 13
+              },
+              "46-60": {
+                "percentage": "22.22%",
+                "total": 16
+              },
+              "61-75": {
+                "percentage": "16.67%",
+                "total": 12
+              },
+              "76-90": {
+                "percentage": "18.06%",
+                "total": 13
+              },
+              "91-105": {
+                "percentage": "9.72%",
+                "total": 7
+              }
+            }
+          },
+          "fixtures": {
+            "draws": {
+              "away": 2,
+              "home": 3,
+              "total": 5
+            },
+            "loses": {
+              "away": 12,
+              "home": 10,
+              "total": 22
+            },
+            "played": {
+              "away": 19,
+              "home": 19,
+              "total": 38
+            },
+            "wins": {
+              "away": 5,
+              "home": 6,
+              "total": 11
+            }
+          },
+          "form": "DWLLWWLWLWLWDLLWLLDLLLLWWWLDLLWLLLDLLL",
+          "goals": {
+            "against": {
+              "average": {
+                "away": "1.6",
+                "home": "1.8",
+                "total": "1.7"
+              },
+              "total": {
+                "away": 30,
+                "home": 35,
+                "total": 65
+              }
+            },
+            "for": {
+              "average": {
+                "away": "1.5",
+                "home": "1.8",
+                "total": "1.7"
+              },
+              "total": {
+                "away": 29,
+                "home": 35,
+                "total": 64
+              }
+            }
+          },
+          "league": {
+            "country": "England",
+            "flag": "https://media.api-sports.io/flags/gb-eng.svg",
+            "id": 39,
+            "logo": "https://media.api-sports.io/football/leagues/39.png",
+            "name": "Premier League",
+            "season": 2024
+          },
+          "penalty": {
+            "missed": {
+              "percentage": "25.00%",
+              "total": 1
+            },
+            "scored": {
+              "percentage": "75.00%",
+              "total": 3
+            },
+            "total": 4
+          },
+          "team": {
+            "id": 47,
+            "logo": "https://media.api-sports.io/football/teams/47.png",
+            "name": "Tottenham"
+          }
+        },
+        {
+          "cards": {
+            "red": {
+              "0-15": {
+                "percentage": "50.00%",
+                "total": 1
+              },
+              "106-120": {
+                "percentage": null,
+                "total": null
+              },
+              "16-30": {
+                "percentage": null,
+                "total": null
+              },
+              "31-45": {
+                "percentage": null,
+                "total": null
+              },
+              "46-60": {
+                "percentage": "50.00%",
+                "total": 1
+              },
+              "61-75": {
+                "percentage": null,
+                "total": null
+              },
+              "76-90": {
+                "percentage": null,
+                "total": null
+              },
+              "91-105": {
+                "percentage": null,
+                "total": null
+              }
+            },
+            "yellow": {
+              "0-15": {
+                "percentage": null,
+                "total": null
+              },
+              "106-120": {
+                "percentage": null,
+                "total": null
+              },
+              "16-30": {
+                "percentage": "4.35%",
+                "total": 1
+              },
+              "31-45": {
+                "percentage": "8.70%",
+                "total": 2
+              },
+              "46-60": {
+                "percentage": "34.78%",
+                "total": 8
+              },
+              "61-75": {
+                "percentage": "30.43%",
+                "total": 7
+              },
+              "76-90": {
+                "percentage": "13.04%",
+                "total": 3
+              },
+              "91-105": {
+                "percentage": "8.70%",
+                "total": 2
+              }
+            }
+          },
+          "fixtures": {
+            "draws": {
+              "away": 1,
+              "home": 2,
+              "total": 3
+            },
+            "loses": {
+              "away": 2,
+              "home": 0,
+              "total": 2
+            },
+            "played": {
+              "away": 7,
+              "home": 8,
+              "total": 15
+            },
+            "wins": {
+              "away": 4,
+              "home": 6,
+              "total": 10
+            }
+          },
+          "form": "WWWLDDWWLWDWWWW",
+          "goals": {
+            "against": {
+              "average": {
+                "away": "1.1",
+                "home": "0.6",
+                "total": "0.9"
+              },
+              "total": {
+                "away": 8,
+                "home": 5,
+                "total": 13
+              }
+            },
+            "for": {
+              "average": {
+                "away": "1.6",
+                "home": "2.1",
+                "total": "1.9"
+              },
+              "total": {
+                "away": 11,
+                "home": 17,
+                "total": 28
+              }
+            }
+          },
+          "league": {
+            "country": "World",
+            "flag": null,
+            "id": 3,
+            "logo": "https://media.api-sports.io/football/leagues/3.png",
+            "name": "UEFA Europa League",
+            "season": 2024
+          },
+          "penalty": {
+            "missed": {
+              "percentage": "0%",
+              "total": 0
+            },
+            "scored": {
+              "percentage": "100.00%",
+              "total": 4
+            },
+            "total": 4
+          },
+          "team": {
+            "id": 47,
+            "logo": "https://media.api-sports.io/football/teams/47.png",
+            "name": "Tottenham"
+          }
+        },
+        {
+          "cards": {
+            "red": {
+              "0-15": {
+                "percentage": null,
+                "total": null
+              },
+              "106-120": {
+                "percentage": null,
+                "total": null
+              },
+              "16-30": {
+                "percentage": null,
+                "total": null
+              },
+              "31-45": {
+                "percentage": null,
+                "total": null
+              },
+              "46-60": {
+                "percentage": null,
+                "total": null
+              },
+              "61-75": {
+                "percentage": null,
+                "total": null
+              },
+              "76-90": {
+                "percentage": null,
+                "total": null
+              },
+              "91-105": {
+                "percentage": null,
+                "total": null
+              }
+            },
+            "yellow": {
+              "0-15": {
+                "percentage": null,
+                "total": null
+              },
+              "106-120": {
+                "percentage": null,
+                "total": null
+              },
+              "16-30": {
+                "percentage": "22.22%",
+                "total": 2
+              },
+              "31-45": {
+                "percentage": "11.11%",
+                "total": 1
+              },
+              "46-60": {
+                "percentage": "11.11%",
+                "total": 1
+              },
+              "61-75": {
+                "percentage": "11.11%",
+                "total": 1
+              },
+              "76-90": {
+                "percentage": "33.33%",
+                "total": 3
+              },
+              "91-105": {
+                "percentage": "11.11%",
+                "total": 1
+              }
+            }
+          },
+          "fixtures": {
+            "draws": {
+              "away": 0,
+              "home": 0,
+              "total": 0
+            },
+            "loses": {
+              "away": 1,
+              "home": 0,
+              "total": 1
+            },
+            "played": {
+              "away": 2,
+              "home": 3,
+              "total": 5
+            },
+            "wins": {
+              "away": 1,
+              "home": 3,
+              "total": 4
+            }
+          },
+          "form": "WWWWL",
+          "goals": {
+            "against": {
+              "average": {
+                "away": "2.5",
+                "home": "1.3",
+                "total": "1.8"
+              },
+              "total": {
+                "away": 5,
+                "home": 4,
+                "total": 9
+              }
+            },
+            "for": {
+              "average": {
+                "away": "1.0",
+                "home": "2.3",
+                "total": "1.8"
+              },
+              "total": {
+                "away": 2,
+                "home": 7,
+                "total": 9
+              }
+            }
+          },
+          "league": {
+            "country": "England",
+            "flag": "https://media.api-sports.io/flags/gb-eng.svg",
+            "id": 48,
+            "logo": "https://media.api-sports.io/football/leagues/48.png",
+            "name": "League Cup",
+            "season": 2024
+          },
+          "penalty": {
+            "missed": {
+              "percentage": "0%",
+              "total": 0
+            },
+            "scored": {
+              "percentage": "0%",
+              "total": 0
+            },
+            "total": 0
+          },
+          "team": {
+            "id": 47,
+            "logo": "https://media.api-sports.io/football/teams/47.png",
+            "name": "Tottenham"
+          }
+        },
+        {
+          "biggest": {
+            "goals": {
+              "against": {
+                "away": 2,
+                "home": 0
+              },
+              "for": {
+                "away": 3,
+                "home": 0
+              }
+            },
+            "loses": {
+              "away": "2-1",
+              "home": null
+            },
+            "streak": {
+              "draws": 0,
+              "loses": 0,
+              "wins": 1
+            },
+            "wins": {
+              "away": "0-3",
+              "home": null
+            }
+          },
+          "cards": {
+            "red": {
+              "0-15": {
+                "percentage": null,
+                "total": null
+              },
+              "106-120": {
+                "percentage": null,
+                "total": null
+              },
+              "16-30": {
+                "percentage": null,
+                "total": null
+              },
+              "31-45": {
+                "percentage": null,
+                "total": null
+              },
+              "46-60": {
+                "percentage": null,
+                "total": null
+              },
+              "61-75": {
+                "percentage": null,
+                "total": null
+              },
+              "76-90": {
+                "percentage": null,
+                "total": null
+              },
+              "91-105": {
+                "percentage": null,
+                "total": null
+              }
+            },
+            "yellow": {
+              "0-15": {
+                "percentage": null,
+                "total": null
+              },
+              "106-120": {
+                "percentage": null,
+                "total": null
+              },
+              "16-30": {
+                "percentage": null,
+                "total": null
+              },
+              "31-45": {
+                "percentage": null,
+                "total": null
+              },
+              "46-60": {
+                "percentage": "40.00%",
+                "total": 2
+              },
+              "61-75": {
+                "percentage": "20.00%",
+                "total": 1
+              },
+              "76-90": {
+                "percentage": "40.00%",
+                "total": 2
+              },
+              "91-105": {
+                "percentage": null,
+                "total": null
+              }
+            }
+          },
+          "clean_sheet": {
+            "away": 1,
+            "home": 0,
+            "total": 1
+          },
+          "failed_to_score": {
+            "away": 0,
+            "home": 0,
+            "total": 0
+          },
+          "fixtures": {
+            "draws": {
+              "away": 0,
+              "home": 0,
+              "total": 0
+            },
+            "loses": {
+              "away": 1,
+              "home": 0,
+              "total": 1
+            },
+            "played": {
+              "away": 2,
+              "home": 0,
+              "total": 2
+            },
+            "wins": {
+              "away": 1,
+              "home": 0,
+              "total": 1
+            }
+          },
+          "form": "WL",
+          "goals": {
+            "against": {
+              "average": {
+                "away": "1.0",
+                "home": "0.0",
+                "total": "1.0"
+              },
+              "minute": {
+                "0-15": {
+                  "percentage": "33.33%",
+                  "total": 1
+                },
+                "106-120": {
+                  "percentage": null,
+                  "total": null
+                },
+                "16-30": {
+                  "percentage": null,
+                  "total": null
+                },
+                "31-45": {
+                  "percentage": null,
+                  "total": null
+                },
+                "46-60": {
+                  "percentage": null,
+                  "total": null
+                },
+                "61-75": {
+                  "percentage": "33.33%",
+                  "total": 1
+                },
+                "76-90": {
+                  "percentage": null,
+                  "total": null
+                },
+                "91-105": {
+                  "percentage": "33.33%",
+                  "total": 1
+                }
+              },
+              "total": {
+                "away": 2,
+                "home": 0,
+                "total": 2
+              },
+              "under_over": {
+                "0.5": {
+                  "over": 1,
+                  "under": 1
+                },
+                "1.5": {
+                  "over": 1,
+                  "under": 1
+                },
+                "2.5": {
+                  "over": 0,
+                  "under": 2
+                },
+                "3.5": {
+                  "over": 0,
+                  "under": 2
+                },
+                "4.5": {
+                  "over": 0,
+                  "under": 2
+                }
+              }
+            },
+            "for": {
+              "average": {
+                "away": "2.0",
+                "home": "0.0",
+                "total": "2.0"
+              },
+              "minute": {
+                "0-15": {
+                  "percentage": null,
+                  "total": null
+                },
+                "106-120": {
+                  "percentage": "66.67%",
+                  "total": 2
+                },
+                "16-30": {
+                  "percentage": null,
+                  "total": null
+                },
+                "31-45": {
+                  "percentage": null,
+                  "total": null
+                },
+                "46-60": {
+                  "percentage": null,
+                  "total": null
+                },
+                "61-75": {
+                  "percentage": null,
+                  "total": null
+                },
+                "76-90": {
+                  "percentage": null,
+                  "total": null
+                },
+                "91-105": {
+                  "percentage": "33.33%",
+                  "total": 1
+                }
+              },
+              "total": {
+                "away": 4,
+                "home": 0,
+                "total": 4
+              },
+              "under_over": {
+                "0.5": {
+                  "over": 2,
+                  "under": 0
+                },
+                "1.5": {
+                  "over": 1,
+                  "under": 1
+                },
+                "2.5": {
+                  "over": 1,
+                  "under": 1
+                },
+                "3.5": {
+                  "over": 0,
+                  "under": 2
+                },
+                "4.5": {
+                  "over": 0,
+                  "under": 2
+                }
+              }
+            }
+          },
+          "league": {
+            "country": "England",
+            "flag": "https://media.api-sports.io/flags/gb-eng.svg",
+            "id": 45,
+            "logo": "https://media.api-sports.io/football/leagues/45.png",
+            "name": "FA Cup",
+            "season": 2024
+          },
+          "lineups": [
+            {
+              "formation": "4-3-3",
+              "played": 1
+            },
+            {
+              "formation": "4-2-3-1",
+              "played": 1
+            }
+          ],
+          "penalty": {
+            "missed": {
+              "percentage": "0%",
+              "total": 0
+            },
+            "scored": {
+              "percentage": "0%",
+              "total": 0
+            },
+            "total": 0
+          },
+          "team": {
+            "id": 47,
+            "logo": "https://media.api-sports.io/football/teams/47.png",
+            "name": "Tottenham"
+          }
+        }
+      ],
+      "team": {
+        "code": "TOT",
+        "country": "England",
+        "founded": 1882,
+        "id": 47,
+        "logo": "https://media.api-sports.io/football/teams/47.png",
+        "name": "Tottenham",
+        "national": false
+      },
+      "venue": {
+        "address": "Bill Nicholson Way, 748 High Road",
+        "capacity": 62850,
+        "city": "London",
+        "id": 593,
+        "image": "https://media.api-sports.io/football/venues/593.png",
+        "name": "Tottenham Hotspur Stadium",
+        "surface": "grass"
+      }
+    }
+  }
+}

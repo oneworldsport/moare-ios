@@ -66,7 +66,6 @@ class AWSManager {
         async let eplTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/epl_team_name_dictionary.json", eTagKey: "eplTeamNameDictionaryETag")
         async let nbaPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/nba_player_name_dictionary.json", eTagKey: "nbaPlayerNameDictionaryETag")
         async let nbaTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/nba_team_name_dictionary.json", eTagKey: "nbaTeamNameDictionaryETag")
-        async let kboPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/kbo_player_name_dictionary.json", eTagKey: "kboPlayerNameDictionaryETag")
         async let kboTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/kbo_team_name_dictionary.json", eTagKey: "kboTeamNameDictionaryETag")
         async let mlbPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/mlb_player_name_dictionary.json", eTagKey: "mlbPlayerNameDictionaryETag")
         async let mlbTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/mlb_team_name_dictionary.json", eTagKey: "mlbTeamNameDictionaryETag")
@@ -119,10 +118,6 @@ class AWSManager {
         
         if let nbaTeamNameDictionary = try? await nbaTeamNameDictionary {
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.nbaTeamDic, nameMap: nbaTeamNameDictionary)
-        }
-        
-        if let kboPlayerNameDictionary = try? await kboPlayerNameDictionary {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.kboPlayerDic, nameMap: kboPlayerNameDictionary)
         }
         
         if let kboTeamNameDictionary = try? await kboTeamNameDictionary {

@@ -32,7 +32,7 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
                     shouldScrollCalendar = true
                     calendarActions.onSelectYearMonth(yearMonth, index)
                 }
-                .padding(.bottom, 10)
+                .padding(.bottom, 6)
                 
                 CalendarList(
                     dateList: calendarState.days,
@@ -57,7 +57,7 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
                     ) {
                         actions.allResultButtonAction()
                     }
-                    .padding(.trailing)
+                    .padding(.trailing, 8)
                 }
             }
             

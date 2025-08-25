@@ -46,3 +46,16 @@ extension Optional where Wrapped == Int {
         self.map{ "\($0)" } ?? "-"
     }
 }
+
+extension Array {
+    subscript(safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}
+
+/// Returns nil when String is Optional
+extension StringProtocol {
+    func toIntOrNil() -> Int? {
+        Int(self)
+    }
+}

@@ -131,6 +131,7 @@ struct FBLeagueScheduleList: View {
     
     var body: some View {
         let fbGameStatsModel = searchStore.displayModels[.fbGameStats] as? FBGameStatsDisplayModel
+        let teamNameDic = fbLeagueScheduleStore.baseSchedule.teamNameDictionary
         
         ScrollView {
 //            HStack {
@@ -142,7 +143,8 @@ struct FBLeagueScheduleList: View {
                     FBLeagueScheduleListItem(
                         searchStore: searchStore,
                         fbLeagueScheduleStore: fbLeagueScheduleStore,
-                        data: value
+                        data: value,
+                        teamNameDic: teamNameDic
                     )
                     .padding(.vertical, 8)
 //                    .vSequentialListAni(
@@ -192,6 +194,9 @@ struct FBLeagueScheduleListItem: View {
     @Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
     
     let data: FBGameForSchedule
+    // FBLeagueScheduleStore이 한번도 초기화 된적 없이 FBGameStatsView에서 해당 구조체가 호출될때 teamNameDictionary를 fbLeagueScheduleStore에서 가져올수가 없어 추가.
+    // TODO: 그러면 결국 fbLeagueScheduleStore는 Optional이어도 된다는건데..?
+    let teamNameDic: [String: String]
     
     /* ---------------------
        ui state
@@ -203,7 +208,6 @@ struct FBLeagueScheduleListItem: View {
         let homeTeamId = data.homeTeamId
         let awayTeamId = data.awayTeamId
         let gameStatus = data.gameStatus
-        let teamNameDic = fbLeagueScheduleStore.baseSchedule.teamNameDictionary
         let fbGameStatsModel = searchStore.displayModels[.fbGameStats] as? FBGameStatsDisplayModel
         
         let gameStatusText: String = {
@@ -234,6 +238,7 @@ struct FBLeagueScheduleListItem: View {
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
+                isClickEnabled: fbGameStatsModel == nil,
                 homeTeamLogo: FBUtil.teamLogoURL(id: homeTeamId),
                 homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
                 homeTeamScore: data.homeTeamScore,
@@ -251,7 +256,6 @@ struct FBLeagueScheduleListItem: View {
                 shouldShowOnlyDateTime: fbGameStatsModel == nil,
                 shouldShowVenue: fbGameStatsModel != nil,
                 shouldShowGameType: fbGameStatsModel == nil,
-                shouldShowReferee: fbGameStatsModel != nil,
                 shouldShowHomeLabel: fbGameStatsModel != nil,
                 shouldShowAwayLabel: fbGameStatsModel != nil,
             ),
@@ -273,7 +277,15 @@ struct FBLeagueScheduleListItem: View {
             if StringConstants.Football.gameFinishedList.contains(gameStatus) {
                 isResultOpened = fbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
             } else if gameStatus == StringConstants.Football.gameNotStarted {
+                isResultOpened = false
+            } else {
                 isResultOpened = true
+            }
+            
+            if fbGameStatsModel != nil {
+                if gameStatus != StringConstants.Football.gameNotStarted {
+                    isResultOpened = true
+                }
             }
         }
         .onChange(of: fbLeagueScheduleStore.gameResultOpenedStateList) {
@@ -283,10 +295,12 @@ struct FBLeagueScheduleListItem: View {
                 }
             }
         }
-        .onChange(of: fbGameStatsModel) {
-            if fbGameStatsModel != nil {
-                isResultOpened = true
-            }
-        }
+//        .onChange(of: fbGameStatsModel) {
+//            if fbGameStatsModel != nil {
+//                if gameStatus != StringConstants.Football.gameNotStarted {
+//                    isResultOpened = true
+//                }
+//            }
+//        }
     }
 }

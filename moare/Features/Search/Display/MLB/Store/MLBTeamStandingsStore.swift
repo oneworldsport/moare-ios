@@ -14,6 +14,8 @@ struct MLBTeamStandingsStore {
     
     @ObservableState
     struct State {
+        let columnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 60, 60, 50, 50, 50, 70]
+        
         /* ---------------------
            data state
            --------------------- */
@@ -54,6 +56,7 @@ struct MLBTeamStandingsStore {
                 state.westStandings = []
                 state.eastStandings = []
                 state.centralStandings = []
+                state.baseTeamStandings.secondCategorySelectedIndex = 1 // defalue category is "승률"
                 
                 return .send(.selectHeaderCategory(index: 0, isInit: true))
                 
@@ -125,14 +128,14 @@ struct MLBTeamStandingsStore {
                 
             case .sortStandings:
                 switch state.baseTeamStandings.secondCategorySelectedIndex {
-                case 0: // 승률
-                    state.westStandings.sort { Double($0.stats.recordData?.winningPercentage ?? "0") ?? 0 > Double($1.stats.recordData?.winningPercentage ?? "0") ?? 0 }
-                    state.eastStandings.sort { Double($0.stats.recordData?.winningPercentage ?? "0") ?? 0 > Double($1.stats.recordData?.winningPercentage ?? "0") ?? 0 }
-                    state.centralStandings.sort { Double($0.stats.recordData?.winningPercentage ?? "0") ?? 0 > Double($1.stats.recordData?.winningPercentage ?? "0") ?? 0 }
-                case 1: // 게임차
+                case 0: // 게임차
                     state.westStandings.sort { Double($0.stats.recordData?.gamesBack ?? "0") ?? 0 < Double($1.stats.recordData?.gamesBack ?? "0") ?? 0 }
                     state.eastStandings.sort { Double($0.stats.recordData?.gamesBack ?? "0") ?? 0 < Double($1.stats.recordData?.gamesBack ?? "0") ?? 0 }
                     state.centralStandings.sort { Double($0.stats.recordData?.gamesBack ?? "0") ?? 0 < Double($1.stats.recordData?.gamesBack ?? "0") ?? 0 }
+                case 1: // 승률
+                    state.westStandings.sort { Double($0.stats.recordData?.winningPercentage ?? "0") ?? 0 > Double($1.stats.recordData?.winningPercentage ?? "0") ?? 0 }
+                    state.eastStandings.sort { Double($0.stats.recordData?.winningPercentage ?? "0") ?? 0 > Double($1.stats.recordData?.winningPercentage ?? "0") ?? 0 }
+                    state.centralStandings.sort { Double($0.stats.recordData?.winningPercentage ?? "0") ?? 0 > Double($1.stats.recordData?.winningPercentage ?? "0") ?? 0 }
                 case 2: // 승
                     state.westStandings.sort { $0.stats.recordData?.wins ?? 0 > $1.stats.recordData?.wins ?? 0 }
                     state.eastStandings.sort { $0.stats.recordData?.wins ?? 0 > $1.stats.recordData?.wins ?? 0 }

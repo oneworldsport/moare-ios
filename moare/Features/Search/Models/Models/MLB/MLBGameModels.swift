@@ -535,18 +535,16 @@ struct MLBGameWeather: Decodable, Equatable {
 }
 
 struct MLBGameInfoForSchedule: Decodable, Equatable {
-    private let _currentInning: Int?
+    private let _currentInning: String?
 
-    var currentInning: Int {
-        return _currentInning ?? 0
-    }
+    var currentInning: String { _currentInning ?? StringConstants.gameLiveStr }
 
     private enum CodingKeys: String, CodingKey {
-        case _currentInning = "round"
+        case _currentInning = "currentInning"
     }
     
     init(
-        currentInning: Int?
+        currentInning: String?
     ) {
         self._currentInning = currentInning
     }

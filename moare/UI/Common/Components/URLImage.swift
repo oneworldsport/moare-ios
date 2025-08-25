@@ -37,7 +37,7 @@ struct URLImage: View {
     
     var body: some View {
         if let url {
-            if isSvg {
+            if url.contains(".svg") {
                 WebImage(url: URL(string: url))
                     .resizable()
                     .scaledToFit()
