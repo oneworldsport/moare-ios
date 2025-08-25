@@ -17,7 +17,8 @@ struct SportSearchEngine_iOSApp: App {
     @State var isSplashFinished = false
     @State private var didInitialLoad = false
     
-    var viewForTest: SportDisplayType? = SportDisplayType.fbPlayerInfo
+//    var viewForTest: SportDisplayType? = SportDisplayType.kboGameStats
+    var viewForTest: SportDisplayType? = nil
     
     init() {
         Task {
