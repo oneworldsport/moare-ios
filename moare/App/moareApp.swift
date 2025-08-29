@@ -9,9 +9,23 @@ import SwiftUI
 import ComposableArchitecture
 import SDWebImageSwiftUI
 import SDWebImageSVGCoder
+import FirebaseCore
+import FirebaseAnalytics
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+  func application(_ application: UIApplication,
+                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    FirebaseApp.configure()
+
+    return true
+  }
+}
 
 @main
 struct SportSearchEngine_iOSApp: App {
+    // register app delegate for Firebase setup
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
     @StateObject private var storeManager = StoreManager()
     
     @State var isSplashFinished = false
@@ -26,6 +40,10 @@ struct SportSearchEngine_iOSApp: App {
         }
         
         SDImageCodersManager.shared.addCoder(SDImageSVGCoder.shared)
+        
+//        Analytics.logEvent("test_event", parameters: [
+//            "source": "iOS_debug"
+//        ])
     }
  
     var body: some Scene {
