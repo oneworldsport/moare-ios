@@ -242,7 +242,6 @@
 		DAC1EBD52E55BDA70031221C /* GameStatsViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC1EBD42E55BDA70031221C /* GameStatsViewContainer.swift */; };
 		DAC1EBD72E55BDDD0031221C /* GameStatsContainerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC1EBD62E55BDDD0031221C /* GameStatsContainerState.swift */; };
 		DAC1EBD92E561A3B0031221C /* StickyHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC1EBD82E561A3B0031221C /* StickyHeader.swift */; };
-		DAD3FAEB2DF5259A009B367D /* TestView3.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD3FAEA2DF52596009B367D /* TestView3.swift */; };
 		DAD3FAED2DF55BB3009B367D /* StandingsViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD3FAEC2DF55BB3009B367D /* StandingsViewContainer.swift */; };
 		DAD3FAEF2DF561D7009B367D /* StandingsContainerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD3FAEE2DF561CC009B367D /* StandingsContainerState.swift */; };
 		DAD3FAF12DF56930009B367D /* KBOTeamStandingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD3FAF02DF56930009B367D /* KBOTeamStandingsView.swift */; };
@@ -269,11 +268,14 @@
 		DAEEC7422DEDD53C0053E0A6 /* KBOPlayerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEEC7412DEDD53C0053E0A6 /* KBOPlayerModels.swift */; };
 		DAEEC7442DEDD5490053E0A6 /* KBOTeamModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEEC7432DEDD5490053E0A6 /* KBOTeamModels.swift */; };
 		DAEEC7462DEDD5570053E0A6 /* KBOGameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEEC7452DEDD5570053E0A6 /* KBOGameModels.swift */; };
+		DAF974D72E61CF8F0046CE59 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAF974D62E61CF8F0046CE59 /* GoogleService-Info.plist */; };
+		DAF974DA2E61D04F0046CE59 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = DAF974D92E61D04F0046CE59 /* FirebaseAnalytics */; };
 		DAFCB4192DADC8E700839653 /* AWSManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFCB4182DADC8E700839653 /* AWSManager.swift */; };
 		DAFCB41B2DADCEAD00839653 /* AsyncPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFCB41A2DADCEAD00839653 /* AsyncPromise.swift */; };
 		DAFCB41D2DADD36500839653 /* Dependency.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFCB41C2DADD36500839653 /* Dependency.swift */; };
 		DAFCB41F2DAE16C800839653 /* NoticeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFCB41E2DAE16C800839653 /* NoticeModel.swift */; };
 		DAFCB4212DAE3AED00839653 /* SearchTextComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFCB4202DAE3AED00839653 /* SearchTextComponents.swift */; };
+		DAFD72DF2E5C2DCF004304EE /* TestView3.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFD72DE2E5C2DCF004304EE /* TestView3.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -526,7 +528,6 @@
 		DAC1EBD42E55BDA70031221C /* GameStatsViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStatsViewContainer.swift; sourceTree = "<group>"; };
 		DAC1EBD62E55BDDD0031221C /* GameStatsContainerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStatsContainerState.swift; sourceTree = "<group>"; };
 		DAC1EBD82E561A3B0031221C /* StickyHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickyHeader.swift; sourceTree = "<group>"; };
-		DAD3FAEA2DF52596009B367D /* TestView3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView3.swift; sourceTree = "<group>"; };
 		DAD3FAEC2DF55BB3009B367D /* StandingsViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandingsViewContainer.swift; sourceTree = "<group>"; };
 		DAD3FAEE2DF561CC009B367D /* StandingsContainerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandingsContainerState.swift; sourceTree = "<group>"; };
 		DAD3FAF02DF56930009B367D /* KBOTeamStandingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOTeamStandingsView.swift; sourceTree = "<group>"; };
@@ -552,11 +553,13 @@
 		DAEEC7412DEDD53C0053E0A6 /* KBOPlayerModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOPlayerModels.swift; sourceTree = "<group>"; };
 		DAEEC7432DEDD5490053E0A6 /* KBOTeamModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOTeamModels.swift; sourceTree = "<group>"; };
 		DAEEC7452DEDD5570053E0A6 /* KBOGameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOGameModels.swift; sourceTree = "<group>"; };
+		DAF974D62E61CF8F0046CE59 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DAFCB4182DADC8E700839653 /* AWSManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSManager.swift; sourceTree = "<group>"; };
 		DAFCB41A2DADCEAD00839653 /* AsyncPromise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncPromise.swift; sourceTree = "<group>"; };
 		DAFCB41C2DADD36500839653 /* Dependency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependency.swift; sourceTree = "<group>"; };
 		DAFCB41E2DAE16C800839653 /* NoticeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeModel.swift; sourceTree = "<group>"; };
 		DAFCB4202DAE3AED00839653 /* SearchTextComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTextComponents.swift; sourceTree = "<group>"; };
+		DAFD72DE2E5C2DCF004304EE /* TestView3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView3.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -572,6 +575,7 @@
 				DADA39812D3A1CEC000D15E0 /* ComposableArchitecture in Frameworks */,
 				DADA39842D3A2006000D15E0 /* AWSCore in Frameworks */,
 				DA1701FF2DA8BBF60021EF80 /* SDWebImageSVGCoder in Frameworks */,
+				DAF974DA2E61D04F0046CE59 /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1335,7 +1339,7 @@
 			isa = PBXGroup;
 			children = (
 				DAA08A4D2E03EDD500602693 /* TestView.swift */,
-				DAD3FAEA2DF52596009B367D /* TestView3.swift */,
+				DAFD72DE2E5C2DCF004304EE /* TestView3.swift */,
 				DA6C1EE42DB63F5100D63246 /* TestView2.swift */,
 				DA531B3E2D64A8A400DB87CB /* App */,
 				DA531BDE2D64A8F200DB87CB /* Core */,
@@ -1344,6 +1348,7 @@
 				DADA39582D3A1AC9000D15E0 /* Assets.xcassets */,
 				DADA395A2D3A1AC9000D15E0 /* moare.entitlements */,
 				DADA395B2D3A1AC9000D15E0 /* Preview Content */,
+				DAF974D62E61CF8F0046CE59 /* GoogleService-Info.plist */,
 			);
 			path = moare;
 			sourceTree = "<group>";
@@ -1482,6 +1487,7 @@
 				DAE5733D2D80104A009ED74D /* Kingfisher */,
 				DA1701FB2DA8BBB80021EF80 /* SDWebImageSwiftUI */,
 				DA1701FE2DA8BBF60021EF80 /* SDWebImageSVGCoder */,
+				DAF974D92E61D04F0046CE59 /* FirebaseAnalytics */,
 			);
 			productName = moare;
 			productReference = DADA39512D3A1AC8000D15E0 /* moare.app */;
@@ -1562,6 +1568,7 @@
 				DAE5733C2D80104A009ED74D /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				DA1701FA2DA8BBB80021EF80 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				DA1701FD2DA8BBF60021EF80 /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */,
+				DAF974D82E61D04E0046CE59 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = DADA39522D3A1AC8000D15E0 /* Products */;
 			projectDirPath = "";
@@ -1618,6 +1625,7 @@
 				DA9E42402E4AB9430074B1F2 /* football_league_schedule.json in Resources */,
 				DA9E42412E4AB9430074B1F2 /* nba_team_schedule.json in Resources */,
 				DA531C122D64B88F00DB87CB /* .gitignore in Resources */,
+				DAF974D72E61CF8F0046CE59 /* GoogleService-Info.plist in Resources */,
 				DADA39592D3A1AC9000D15E0 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1669,7 +1677,6 @@
 				DA252B262DEF787A00006AB8 /* KBOPlayerInfoDisplayModel.swift in Sources */,
 				DA47773A2DA7B7EF00F3459C /* NBAPlayerInfoDisplayModel.swift in Sources */,
 				DA17023C2DA8C7130021EF80 /* NBATeamStatsStore.swift in Sources */,
-				DAD3FAEB2DF5259A009B367D /* TestView3.swift in Sources */,
 				DA47773B2DA7B7EF00F3459C /* NBAGameStatsDisplayModel.swift in Sources */,
 				DA774F0B2DF87E1200CAC8AF /* MLBGameStatsStore.swift in Sources */,
 				DA47773D2DA7B7EF00F3459C /* NBALeagueScheduleDisplayModel.swift in Sources */,
@@ -1724,6 +1731,7 @@
 				DADE295F2DF051ED0099A0DD /* MLBLeagueScheduleStore.swift in Sources */,
 				DA252B2A2DEF789B00006AB8 /* KBOPlayerStatsDisplayModel.swift in Sources */,
 				DABE3D6B2D7E977F0048DCAA /* Utilities.swift in Sources */,
+				DAFD72DF2E5C2DCF004304EE /* TestView3.swift in Sources */,
 				DA252B0E2DEF73B900006AB8 /* KBOPlayerStandingsResponseModel.swift in Sources */,
 				DA531BDF2D64A8F200DB87CB /* StringConstants.swift in Sources */,
 				DAD3FAED2DF55BB3009B367D /* StandingsViewContainer.swift in Sources */,
@@ -2271,6 +2279,14 @@
 				minimumVersion = 8.3.0;
 			};
 		};
+		DAF974D82E61D04E0046CE59 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.2.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2313,6 +2329,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DAE5733C2D80104A009ED74D /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		DAF974D92E61D04F0046CE59 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DAF974D82E61D04E0046CE59 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
