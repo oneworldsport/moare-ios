@@ -53,6 +53,14 @@ extension Array {
     }
 }
 
+extension String {
+    /// Use when only (possible)last name need
+    var dropFirstWord: String {
+        let components = self.split(separator: " ")
+        return components.count > 1 ? components.dropFirst().joined(separator: " ") : self
+    }
+}
+
 /// Returns nil when String is Optional
 extension StringProtocol {
     func toIntOrNil() -> Int? {

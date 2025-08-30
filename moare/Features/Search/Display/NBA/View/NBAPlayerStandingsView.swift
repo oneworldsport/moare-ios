@@ -47,7 +47,7 @@ struct NBAPlayerStandingsView: View {
                 return StandingsItemState(
                     id: id,
                     imageUrl: NBAUtil.playerPhotoURL(id: id),
-                    name: nbaPlayerStandingsStore?.playerNameDictionary["\(id)"] ?? $0.player.displayFirstLast,
+                    name: nbaPlayerStandingsStore?.playerNameDictionary["\(id)"]?.dropFirstWord ?? $0.player.displayFirstLast.dropFirstWord,
                     subName: nbaPlayerStandingsStore?.teamNameDictionary["short_\($0.player.teamId)"] ?? $0.player.teamCity,
                     dataList: [
                         String(stats.ptsPG),

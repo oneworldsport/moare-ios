@@ -195,7 +195,7 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                             shouldShowExtraInfo: true,
                                             rank: data.numInfo ?? 0,
                                             imageUrl: data.imageUrl,
-                                            name: data.name,
+                                            name: data.name.dropFirstWord,
                                             subName: data.subName,
                                             extraInfo: data.extraInfo,
                                             extraSubInfo: data.extraSubInfo,
@@ -409,8 +409,8 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                             .foregroundStyle(.secondary)
                             .font(.system(size: 18, weight: .semibold))
                         
-//                        Spacer()
-//                            .frame(maxWidth: .infinity)
+                        Spacer()
+                            .frame(maxWidth: .infinity)
 //                            .contentShape(Rectangle())
                     }
                 }
