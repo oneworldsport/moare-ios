@@ -102,6 +102,7 @@ struct FBGameStatsView: View {
                             shouldShowGameItem: fbLeagueScheduleModel == nil,
                             shouldShowStats: displayModel.game.fixture.status.short != StringConstants.Football.gameNotStarted,
                             shouldShowCoach: true,
+                            shouldShowRefreshButton: StringConstants.Football.gameLiveList.contains(displayModel.game.fixture.status.short),
                             teamCategories: teamCategories,
                             coachState: GameStatsCoachState(
                                 name: fbGameStatsStore.coach?.name,

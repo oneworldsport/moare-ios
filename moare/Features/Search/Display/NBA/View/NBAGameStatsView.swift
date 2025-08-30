@@ -86,6 +86,7 @@ struct NBAGameStatsView: View {
                     GameStatsViewContainer(
                         state: GameStatsContainerState(
                             shouldShowStats: game.gameSummary?.gameStatusId != Constants.NBAGameStatus.notStarted,
+                            shouldShowRefreshButton: game.gameSummary?.gameStatusId == Constants.NBAGameStatus.live,
                             teamCategories: teamCategories,
                             teamCategorySelectedIndex: nbaGameStatsStore.selectedTeamIndex,
                             gameDetailTitle: gameDetailTitle,

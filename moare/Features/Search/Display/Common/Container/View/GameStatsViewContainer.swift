@@ -125,21 +125,23 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                     .opacity(isGameDetailVisible ? 0 : 0.6)
                                     
                                     // refresh button
-                                    // TODO: Make it component
-                                    Button(action: {
-                                        actions.refreshButtonAction()
-                                    }) {
-                                        Image(systemName: "arrow.clockwise")
-                                            .font(.system(size: 15))
-                                            .frame(width: 18, height: 18)
-                                            .padding(3)
-                                            .overlay {
-                                                RoundedRectangle(cornerRadius: 10)
-                                                    .stroke(.secondary, lineWidth: 1)
-                                            }
+                                    if state.shouldShowRefreshButton {
+                                        // TODO: Make it component
+                                        Button(action: {
+                                            actions.refreshButtonAction()
+                                        }) {
+                                            Image(systemName: "arrow.clockwise")
+                                                .font(.system(size: 15))
+                                                .frame(width: 18, height: 18)
+                                                .padding(3)
+                                                .overlay {
+                                                    RoundedRectangle(cornerRadius: 10)
+                                                        .stroke(.secondary, lineWidth: 1)
+                                                }
+                                        }
+                                        .foregroundStyle(.secondary)
+                                        .opacity(0.6)                                        
                                     }
-                                    .foregroundStyle(.secondary)
-                                    .opacity(0.6)
                                 }
                             }
                             

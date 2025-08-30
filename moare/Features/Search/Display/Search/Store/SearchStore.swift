@@ -479,17 +479,21 @@ struct SearchStore {
                 
             case .selectKBOGame(let game, let season):
                 return .run { send in
-                    let result = try await searchClient.fetchById(
-                        season: season,
-                        category: "baseball",
-                        date: game.date,
-                        dataType: "baseball_game_stats",
-                        leagueId: Constants.Ids.kbo,
-                        id: game.gameId
-                    )
-                    
-                    await send(.addViewStack(data: result.data))
-                    await send(.updateMainDisplayModel(data: result.data))
+                    do {
+                        let result = try await searchClient.fetchById(
+                            season: season,
+                            category: "baseball",
+                            date: game.date,
+                            dataType: "baseball_game_stats",
+                            leagueId: Constants.Ids.kbo,
+                            id: game.gameId
+                        )
+                        
+                        await send(.addViewStack(data: result.data))
+                        await send(.updateMainDisplayModel(data: result.data))
+                    } catch {
+                        print("\(error)")
+                    }
                 }
                 
             case .selectMLBGame(let game, let season):

@@ -93,6 +93,7 @@ struct MLBGameStatsView: View {
                     GameStatsViewContainer(
                         state: GameStatsContainerState(
                             shouldShowStats: game.status.detailedState != StringConstants.MLB.gameScheduled,
+                            shouldShowRefreshButton: game.status.detailedState == StringConstants.MLB.gameLive,
                             teamCategories: teamCategories,
                             teamCategorySelectedIndex: mlbGameStatsStore.baseGameStats.selectedTeamIndex,
                             gameDetailTitle: gameDetailTitle,

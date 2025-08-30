@@ -45,11 +45,11 @@ struct KBOGameStatsView: View {
                         .replacingOccurrences(of: "#", with: "•")
                         .replacingOccurrences(of: "지명타자", with: "지명"),
                     dataList: [
-                        $0.ab,
-                        $0.h,
+                        String($0.ab),
+                        String($0.h),
                         String($0.homeRuns),
-                        $0.rbi,
-                        $0.r,
+                        String($0.rbi),
+                        String($0.r),
                         String($0.baseOnBalls),
                         String($0.strikeOuts),
                         String($0.groundIntoDoublePlay)
@@ -78,6 +78,7 @@ struct KBOGameStatsView: View {
                     GameStatsViewContainer(
                         state: GameStatsContainerState(
                             shouldShowStats: (game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameLive) || (game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameFinal),
+                            shouldShowRefreshButton: game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameLive,
                             teamCategories: teamCategories,
                             teamCategorySelectedIndex: kboGameStatsStore.baseGameStats.selectedTeamIndex,
                             firstColumnWidth: 150,
