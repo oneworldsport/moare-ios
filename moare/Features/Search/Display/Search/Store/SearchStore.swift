@@ -649,10 +649,28 @@ struct SearchStore {
                         modelConverter.nbaTeamStatsConverter(response: responseModel)
                     )
                     
+                case .kboTeamStandings(let responseModel, _):
+                    let team = responseModel.standings.first { $0.team.id == teamId }
+                    
+                    let teamInfoResponseModel = KBOTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
+                    dataModel = .kboTeamStats(
+                        teamInfoResponseModel,
+                        modelConverter.kboTeamStatsConverter(response: teamInfoResponseModel)
+                    )
+                    
                 case .kboTeamInfo(let responseModel, _):
                     dataModel = .kboTeamStats(
                         responseModel,
                         modelConverter.kboTeamStatsConverter(response: responseModel)
+                    )
+                    
+                case .mlbTeamStandings(let responseModel, _):
+                    let team = responseModel.standings.first { $0.team.id == teamId }
+                    
+                    let teamInfoResponseModel = MLBTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
+                    dataModel = .mlbTeamStats(
+                        teamInfoResponseModel,
+                        modelConverter.mlbTeamStatsConverter(response: teamInfoResponseModel)
                     )
                     
                 case .mlbTeamInfo(let responseModel, _):

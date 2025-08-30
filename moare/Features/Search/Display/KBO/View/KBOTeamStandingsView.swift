@@ -31,6 +31,7 @@ struct KBOTeamStandingsView: View {
                 let runnerData = $0.stats.runnerData
                 
                 return StandingsItemState(
+                    id: $0.team.id,
                     imageUrl: KBOUtil.teamLogoURL(id: $0.team.id),
                     name: kboTeamStandingsStore?.baseTeamStandings.teamNameDictionary["short_\($0.team.id)"] ?? $0.team.teamName,
                     dataList: [

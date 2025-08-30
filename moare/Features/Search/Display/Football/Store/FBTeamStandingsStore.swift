@@ -75,6 +75,10 @@ struct FBTeamStandingsStore {
                     state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
                 case Constants.Ids.ligue1:
                     state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
+                case Constants.Ids.seriea:
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaTeamDic)
+                case Constants.Ids.mls:
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlsTeamDic)
                 default: break
                 }
                 

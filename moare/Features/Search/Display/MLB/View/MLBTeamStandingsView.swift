@@ -56,6 +56,7 @@ struct MLBTeamStandingsView: View {
                             VStack {
                                 // west
                                 MLBTeamStandingsDataList(
+                                    searchStore: searchStore,
                                     mlbTeamStandingsStore: mlbTeamStandingsStore,
                                     divisionTitle: "서부",
                                     standings: mlbTeamStandingsStore.westStandings,
@@ -64,6 +65,7 @@ struct MLBTeamStandingsView: View {
                                 
                                 // east
                                 MLBTeamStandingsDataList(
+                                    searchStore: searchStore,
                                     mlbTeamStandingsStore: mlbTeamStandingsStore,
                                     divisionTitle: "동부",
                                     standings: mlbTeamStandingsStore.eastStandings,
@@ -72,6 +74,7 @@ struct MLBTeamStandingsView: View {
                                 
                                 // central
                                 MLBTeamStandingsDataList(
+                                    searchStore: searchStore,
                                     mlbTeamStandingsStore: mlbTeamStandingsStore,
                                     divisionTitle: "중부",
                                     standings: mlbTeamStandingsStore.centralStandings,
@@ -110,6 +113,7 @@ struct MLBTeamStandingsView: View {
 }
 
 struct MLBTeamStandingsDataList: View {
+    @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var mlbTeamStandingsStore: StoreOf<MLBTeamStandingsStore>
     
     let divisionTitle: String
@@ -134,11 +138,12 @@ struct MLBTeamStandingsDataList: View {
                         let data = standings[index - 1]
                         
                         StandingsRankItem(
+                            id: data.team.id,
                             rank: index,
                             imageUrl: MLBUtil.teamLogoURL(id: data.team.id),
                             name: teamNameDic["short_\(data.team.id)"] ?? data.team.shortName,
                             action: { id in
-                                
+                                searchStore.send(.showTeamStats(teamId: id))
                             }
                         )
                     }

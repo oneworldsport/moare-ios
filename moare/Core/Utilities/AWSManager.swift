@@ -77,6 +77,8 @@ class AWSManager {
         async let lique1TeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/lique1_team_name_dictionary.json", eTagKey: "lique1TeamNameDictionaryETag")
         async let serieaPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/seriea_player_name_dictionary.json", eTagKey: "serieaPlayerNameDictionaryETag")
         async let serieaTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/seriea_team_name_dictionary.json", eTagKey: "serieaTeamNameDictionaryETag")
+        async let mlsPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/mls_player_name_dictionary.json", eTagKey: "mlsPlayerNameDictionaryETag")
+        async let mlsTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/mls_team_name_dictionary.json", eTagKey: "mlsTeamNameDictionaryETag")
         
         self.trendingKeywords = try? await trendingKeywords
         if let trendingKeywords = self.trendingKeywords {
@@ -162,6 +164,14 @@ class AWSManager {
         
         if let serieaTeamNameDictionary = try? await serieaTeamNameDictionary {
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.serieaTeamDic, nameMap: serieaTeamNameDictionary)
+        }
+        
+        if let mlsPlayerNameDictionary = try? await mlsPlayerNameDictionary {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlsPlayerDic, nameMap: mlsPlayerNameDictionary)
+        }
+        
+        if let mlsTeamNameDictionary = try? await mlsTeamNameDictionary {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlsTeamDic, nameMap: mlsTeamNameDictionary)
         }
     }
     
