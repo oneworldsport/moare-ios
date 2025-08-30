@@ -36,6 +36,22 @@ struct KBOGameInfo: Decodable, Equatable {
         case _remark = "remark"
         case _gameStatus = "gameStatus"
     }
+    
+    init(
+        awayTeamId: Int?,
+        date: String?,
+        gameId: String?,
+        homeTeamId: Int?,
+        remark: String?,
+        gameStatus: String?
+    ) {
+        self._awayTeamId = awayTeamId
+        self._date = date
+        self._gameId = gameId
+        self._homeTeamId = homeTeamId
+        self._remark = remark
+        self._gameStatus = gameStatus
+    }
 }
 
 struct KBOGameLineScoreInfo: Decodable, Equatable {

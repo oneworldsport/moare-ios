@@ -720,9 +720,9 @@ struct ModelConverter {
         let date = game.gameInfo.gameDate.split(separator: "+").first
         let homeTeamId = game.teams.home.id
         let awayTeamId = game.teams.away.id
-        let homeTeamScore = game.linescore.teams.home.runs
-        let awayTeamScore = game.linescore.teams.away.runs
-        let gameInfo = MLBGameInfoForSchedule(currentInning: "\(game.linescore.currentInning)회\(game.linescore.isTopInning ? "초" : "말")")
+        let homeTeamScore = game.linescore?.teams.home.runs
+        let awayTeamScore = game.linescore?.teams.away.runs
+        let gameInfo = MLBGameInfoForSchedule(currentInning: "\(game.linescore?.currentInning ?? 1)회\((game.linescore?.isTopInning ?? true) ? "초" : "말")")
         
         return MLBGameForSchedule(
             itemKey: date != nil ? "\(date!)#\(game.game.id)" : "",
@@ -732,6 +732,27 @@ struct ModelConverter {
             awayTeamScore: awayTeamScore,
             gameStatus: game.status.statusCode,
             gameInfo: gameInfo
+        )
+    }
+    
+    static func mlbGameScheduleToGameConverter(game: MLBGameForSchedule) -> MLBGame {
+        let gameData = MLBGameData(id: game.gameId)
+        let gameInfo = MLBGameInfo(gameDate: game.date)
+        let status = MLBGameStatus(detailedState: game.gameStatus)
+        let teams = MLBGameTeams(away: MLBGameTeamDetail(id: game.awayTeamId), home: MLBGameTeamDetail(id: game.homeTeamId))
+        
+        return MLBGame(
+            boxscore: nil,
+            decisions: nil,
+            game: gameData,
+            gameInfo: gameInfo,
+            linescore: nil,
+            moundVisits: nil,
+            probablePitchers: nil,
+            review: nil,
+            status: status,
+            teams: teams,
+            weather: nil
         )
     }
     
@@ -752,5 +773,18 @@ struct ModelConverter {
             gameStatus: game.gameInfo?.gameStatus,
             gameInfo: gameInfo
         )
+    }
+    
+    static func kboGameScheduleToGameConverter(game: KBOGameForSchedule) -> KBOGame {
+        let gameInfo = KBOGameInfo(
+            awayTeamId: game.awayTeamId,
+            date: game.date,
+            gameId: game.gameId,
+            homeTeamId: game.homeTeamId,
+            remark: nil,
+            gameStatus: game.gameStatus
+        )
+        
+        return KBOGame(gameInfo: gameInfo, lineScore: nil, lineup: nil)
     }
 }

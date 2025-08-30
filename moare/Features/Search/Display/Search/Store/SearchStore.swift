@@ -480,17 +480,29 @@ struct SearchStore {
             case .selectKBOGame(let game, let season):
                 return .run { send in
                     do {
-                        let result = try await searchClient.fetchById(
-                            season: season,
-                            category: "baseball",
-                            date: game.date,
-                            dataType: "baseball_game_stats",
-                            leagueId: Constants.Ids.kbo,
-                            id: game.gameId
-                        )
+                        let dataModel: SportDecodableModel
                         
-                        await send(.addViewStack(data: result.data))
-                        await send(.updateMainDisplayModel(data: result.data))
+                        // 취소된 경기는 DB에 데이터 없어서 KBOGameForSchedule을 사용해 KBOGameStatsView를 보여준다.
+                        if Int(game.gameStatus) == StringConstants.KBO.gameCanceled {
+                            let game = ModelConverter.kboGameScheduleToGameConverter(game: game)
+                            
+                            let responseModel = KBOGameStatsResponseModel(game: game)
+                            dataModel = .kboGameStats(responseModel, modelConverter.kboGameStatsConverter(response: responseModel))
+                        } else {
+                            let result = try await searchClient.fetchById(
+                                season: season,
+                                category: "baseball",
+                                date: game.date,
+                                dataType: "baseball_game_stats",
+                                leagueId: Constants.Ids.kbo,
+                                id: game.gameId
+                            )
+                            
+                            dataModel = result.data
+                        }
+                        
+                        await send(.addViewStack(data: dataModel))
+                        await send(.updateMainDisplayModel(data: dataModel))
                     } catch {
                         print("\(error)")
                     }
@@ -498,17 +510,33 @@ struct SearchStore {
                 
             case .selectMLBGame(let game, let season):
                 return .run { send in
-                    let result = try await searchClient.fetchById(
-                        season: season,
-                        category: "baseball",
-                        date: game.date,
-                        dataType: "baseball_game_stats",
-                        leagueId: Constants.Ids.mlb,
-                        id: game.gameId
-                    )
-                    
-                    await send(.addViewStack(data: result.data))
-                    await send(.updateMainDisplayModel(data: result.data))
+                    do {
+                        let dataModel: SportDecodableModel
+                        
+                        // Postponed된 경기는 DB에 데이터 없어서 MLBGameForSchedule을 사용해 MLBGameStatsView를 보여준다.
+                        if game.gameStatus == StringConstants.MLB.gamePostponed {
+                            let game = ModelConverter.mlbGameScheduleToGameConverter(game: game)
+                            
+                            let responseModel = MLBGameStatsResponseModel(game: game)
+                            dataModel = .mlbGameStats(responseModel, modelConverter.mlbGameStatsConverter(response: responseModel))
+                        } else {
+                            let result = try await searchClient.fetchById(
+                                season: season,
+                                category: "baseball",
+                                date: game.date,
+                                dataType: "baseball_game_stats",
+                                leagueId: Constants.Ids.mlb,
+                                id: game.gameId
+                            )
+                            
+                            dataModel = result.data
+                        }
+                        
+                        await send(.addViewStack(data: dataModel))
+                        await send(.updateMainDisplayModel(data: dataModel))
+                    } catch {
+                        print("\(error)")
+                    }
                 }
                 
             case .updateIsFocused(let bool):
