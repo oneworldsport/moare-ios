@@ -146,13 +146,12 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
                                 }
                                 .frame(height: 38)
                                 .onAppear {
-                                    // TODO: should decide animation type
-                                    // scroll and move bar to category that matches with the keyword
-                                    //                                moveBar(index: fbTeamStandingsStore.selectedIndex)
-                                    //
-                                    //                                withAnimation {
-                                    //                                    proxy.scrollTo(fbTeamStandingsStore.selectedIndex, anchor: .leading)
-                                    //                                }
+                                    // scroll to category that matches with the keyword on first open
+                                    withAnimation {
+                                        // NOTE: StandingsFirstCategoryItem 때문에 state.secondCategorySelectedIndex로 scrollTo하면 해당 아이템이 뒤로 숨어서 보이지 않아 -3 index 만큼 덜 스크롤 한다.
+                                        // STUDY: scrollTo에 없는 값이 들어가면 오류나지 않고 그냥 아무 동작 없음(스크롤 안됨).
+                                        proxy.scrollTo(state.secondCategorySelectedIndex - 3, anchor: .leading)
+                                    }
                                 }
                             } // ScrollViewReader
                             

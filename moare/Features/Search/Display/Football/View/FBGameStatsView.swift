@@ -140,14 +140,14 @@ struct FBGameStatsView: View {
                             }
                         },
                         gameContent: {
-                            if let fbLeagueScheduleStore {
-                                FBLeagueScheduleListItem(
-                                    searchStore: searchStore,
-                                    fbLeagueScheduleStore: fbLeagueScheduleStore,
-                                    data: ModelConverter.fbGameToGameScheduleConverter(game: game),
-                                    teamNameDic: fbGameStatsStore.teamNameDictionary
-                                )
-                            }
+//                            if let fbLeagueScheduleStore {
+//                                FBLeagueScheduleListItem(
+//                                    searchStore: searchStore,
+//                                    fbLeagueScheduleStore: fbLeagueScheduleStore,
+//                                    data: ModelConverter.fbGameToGameScheduleConverter(game: game),
+//                                    teamNameDic: fbGameStatsStore.teamNameDictionary
+//                                )
+//                            }
                         }
                     )
                 }
@@ -190,6 +190,11 @@ struct FBGameStatsView: View {
             } // onAppear
             .onChange(of: displayModel) {
                 if case .fbGameStats = searchStore.poppedView {
+                    fbGameStatsStore?.send(.initData(displayModel: displayModel))
+                }
+                
+                // for refreshGame
+                if case .fbGameStats = searchStore.viewStack.last {
                     fbGameStatsStore?.send(.initData(displayModel: displayModel))
                 }
             }

@@ -102,7 +102,7 @@ struct StandingsRankItem: View {
 
                     Spacer()
                 } else {
-                    VStack(spacing: 0) {
+                    VStack(alignment: .leading, spacing: 0) {
                         Text(name)
                             .font(.system(size: 12))
                             .lineLimit(1)

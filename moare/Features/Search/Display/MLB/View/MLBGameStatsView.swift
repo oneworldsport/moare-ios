@@ -136,11 +136,12 @@ struct MLBGameStatsView: View {
                             .padding(.horizontal, UIConstants.Padding.defaultHPadding)
                         },
                         gameContent: {
-                            if game.status.detailedState == StringConstants.MLB.gameScheduled {
-                                
-                            } else {
-                                MLBGameStatsScoreInfoItem(mlbGameStatsStore: mlbGameStatsStore)
-                            }
+//                            if game.status.detailedState == StringConstants.MLB.gameScheduled {
+//                                
+//                            } else {
+//                                MLBGameStatsScoreInfoItem(mlbGameStatsStore: mlbGameStatsStore)
+//                            }
+                            MLBGameStatsScoreInfoItem(mlbGameStatsStore: mlbGameStatsStore)
                         }
                     )
                 }
@@ -165,6 +166,10 @@ struct MLBGameStatsView: View {
             } // onAppear
             .onChange(of: displayModel) {
                 if case .mlbGameStats = searchStore.poppedView {
+                    mlbGameStatsStore?.send(.baseGameStats(.initData(displayModel: displayModel)))
+                }
+                
+                if case .mlbGameStats = searchStore.viewStack.last {
                     mlbGameStatsStore?.send(.baseGameStats(.initData(displayModel: displayModel)))
                 }
             }

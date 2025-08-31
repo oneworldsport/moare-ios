@@ -26,7 +26,6 @@ struct FBTeamStandingsStore {
         let categoryFontSize: CGFloat = 15
         let dataFontSize: CGFloat = 15
         let firstCategory = "팀순위"
-        let categoryList = ["승점", "승", "무", "패", "경기수", "득점", "실점", "득실차", "홈성적", "원정성적"]
         
         /* ---------------------
            data state
@@ -86,7 +85,7 @@ struct FBTeamStandingsStore {
                 
                 // select category that matches with the keyword
                 if !keywords.isEmpty {
-                    let index = state.categoryList.firstIndex { category in
+                    let index = StringConstants.Football.teamStandingsCategories.firstIndex { category in
                         let keyword = keywords.first { $0.keyword == category }
                         return keyword != nil
                     }

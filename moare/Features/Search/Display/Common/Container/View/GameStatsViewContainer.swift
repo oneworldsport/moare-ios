@@ -208,34 +208,23 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                     VStack(spacing: 0) {
                                         StickyHeader(coordinateSpaceName: coordinateSpaceName) {
                                             VStack(alignment: .leading, spacing: 0) {
-                                                ScrollViewReader { proxy in
-                                                    // second category
-                                                    HStack(spacing: 0) {
-                                                        ForEach(state.firstStatsCategories.indices, id:\.self) { index in
-                                                            let category = state.firstStatsCategories[index]
-                                                            
-                                                            Button(action: {
-                                                                actions.firstStatsCategoryButtonAction(index)
-                                                            }) {
-                                                                Text(category)
-                                                                    .font(.system(size: 15, weight: .medium))
-                                                                    .frame(width: firstStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
-                                                            }
-                                                            .foregroundStyle(.primary)
-                                                            .id(index)
+                                                // second category
+                                                HStack(spacing: 0) {
+                                                    ForEach(state.firstStatsCategories.indices, id:\.self) { index in
+                                                        let category = state.firstStatsCategories[index]
+                                                        
+                                                        Button(action: {
+                                                            actions.firstStatsCategoryButtonAction(index)
+                                                        }) {
+                                                            Text(category)
+                                                                .font(.system(size: 15, weight: .medium))
+                                                                .frame(width: firstStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
                                                         }
+                                                        .foregroundStyle(.primary)
+                                                        .id(index)
                                                     }
-                                                    .frame(height: 38)
-                                                    .onAppear {
-                                                        // TODO: should decide animation type
-                                                        // scroll and move bar to category that matches with the keyword
-                                                        //                                moveBar(index: fbTeamStandingsStore.selectedIndex)
-                                                        //
-                                                        //                                withAnimation {
-                                                        //                                    proxy.scrollTo(fbTeamStandingsStore.selectedIndex, anchor: .leading)
-                                                        //                                }
-                                                    }
-                                                } // ScrollViewReader
+                                                }
+                                                .frame(height: 38)
                                                 
                                                 HCapsuleBar()
                                                     .offset(x: firstStatsCategoryBarXOffset)
@@ -329,34 +318,23 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                         VStack(spacing: 0) {
                                             StickyHeader(coordinateSpaceName: coordinateSpaceName) {
                                                 VStack(alignment: .leading, spacing: 0) {
-                                                    ScrollViewReader { proxy in
-                                                        // second category
-                                                        HStack(spacing: 0) {
-                                                            ForEach(secondStatsCategories.indices, id:\.self) { index in
-                                                                let category = secondStatsCategories[index]
+                                                    // second category
+                                                    HStack(spacing: 0) {
+                                                        ForEach(secondStatsCategories.indices, id:\.self) { index in
+                                                            let category = secondStatsCategories[index]
 
-                                                                Button(action: {
-                                                                    actions.secondStatsCategoryButtonAction?(index)
-                                                                }) {
-                                                                    Text(category)
-                                                                        .font(.system(size: 15, weight: .medium))
-                                                                        .frame(width: secondStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
-                                                                }
-                                                                .foregroundStyle(.primary)
-                                                                .id(index)
+                                                            Button(action: {
+                                                                actions.secondStatsCategoryButtonAction?(index)
+                                                            }) {
+                                                                Text(category)
+                                                                    .font(.system(size: 15, weight: .medium))
+                                                                    .frame(width: secondStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
                                                             }
+                                                            .foregroundStyle(.primary)
+                                                            .id(index)
                                                         }
-                                                        .frame(height: 38)
-                                                        .onAppear {
-                                                            // TODO: should decide animation type
-                                                            // scroll and move bar to category that matches with the keyword
-                                                            //                                moveBar(index: fbTeamStandingsStore.selectedIndex)
-                                                            //
-                                                            //                                withAnimation {
-                                                            //                                    proxy.scrollTo(fbTeamStandingsStore.selectedIndex, anchor: .leading)
-                                                            //                                }
-                                                        }
-                                                    } // ScrollViewReader
+                                                    }
+                                                    .frame(height: 38)
 
                                                     HCapsuleBar()
                                                         .offset(x: secondStatsCategoryBarXOffset)

@@ -814,7 +814,7 @@ struct SearchStore {
             case .refreshGame(let season, let category):
                 return .run { [viewStack = state.viewStack, displayModels = state.displayModels] send in
                     switch viewStack.last {
-                    case .fbGameStats(let responseModel, let displayModel):
+                    case .fbGameStats(_, _):
                         if let game = (displayModels[.fbGameStats] as? FBGameStatsDisplayModel)?.game {
                             let result = try await searchClient.fetchById(
                                 season: season,
@@ -829,7 +829,7 @@ struct SearchStore {
                             await send(.updateLastViewStack(data: result.data))
                         }
                         
-                    case .nbaGameStats(let responseModel, let displayModel):
+                    case .nbaGameStats(_, _):
                         if let game = (displayModels[.nbaGameStats] as? NBAGameStatsDisplayModel)?.game,
                            let gameSummary = game.gameSummary,
                            let boxScoreTraditional = game.boxScoreTraditional {
@@ -838,7 +838,7 @@ struct SearchStore {
                                 category: category,
                                 date: gameSummary.date,
                                 dataType: "\(category)_game_stats",
-                                leagueId: 90001,
+                                leagueId: Constants.Ids.nba,
                                 id: boxScoreTraditional.gameId
                             )
                             
@@ -846,7 +846,38 @@ struct SearchStore {
                             await send(.updateLastViewStack(data: result.data))
                         }
                         
-                    default: return // Make it do nothing
+                    case .kboGameStats(_, _):
+                        if let game = (displayModels[.kboGameStats] as? KBOGameStatsDisplayModel)?.game,
+                           let gameInfo = game.gameInfo {
+                            let result = try await searchClient.fetchById(
+                                season: season,
+                                category: category,
+                                date: gameInfo.date,
+                                dataType: "\(category)_game_stats",
+                                leagueId: Constants.Ids.kbo,
+                                id: gameInfo.gameId
+                            )
+                            
+                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+                            await send(.updateLastViewStack(data: result.data))
+                        }
+                        
+                    case .mlbGameStats(_, _):
+                        if let game = (displayModels[.mlbGameStats] as? MLBGameStatsDisplayModel)?.game {
+                            let result = try await searchClient.fetchById(
+                                season: season,
+                                category: category,
+                                date: game.gameInfo.gameDate,
+                                dataType: "\(category)_game_stats",
+                                leagueId: Constants.Ids.mlb,
+                                id: String(game.game.pk)
+                            )
+                            
+                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+                            await send(.updateLastViewStack(data: result.data))
+                        }
+                        
+                    default: return // do nothing
                     }
                 }
                 

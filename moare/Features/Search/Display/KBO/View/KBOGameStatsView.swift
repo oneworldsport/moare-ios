@@ -122,12 +122,14 @@ struct KBOGameStatsView: View {
                             .padding(.horizontal, UIConstants.Padding.defaultHPadding)
                         },
                         gameContent: {
-                            if game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameScheduled ||
-                                game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameCanceled {
-                                
-                            } else {
-                                KBOGameStatsScoreInfoItem(kboGameStatsStore: kboGameStatsStore)
-                            }
+//                            if game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameScheduled ||
+//                                game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameCanceled {
+//                                
+//                            } else {
+//                                KBOGameStatsScoreInfoItem(kboGameStatsStore: kboGameStatsStore)
+//                            }
+                            
+                            KBOGameStatsScoreInfoItem(kboGameStatsStore: kboGameStatsStore)
                         }
                     )
                 }
@@ -152,6 +154,10 @@ struct KBOGameStatsView: View {
             } // onAppear
             .onChange(of: displayModel) {
                 if case .kboGameStats = searchStore.poppedView {
+                    kboGameStatsStore?.send(.baseGameStats(.initData(displayModel: displayModel)))
+                }
+                
+                if case .kboGameStats = searchStore.viewStack.last {
                     kboGameStatsStore?.send(.baseGameStats(.initData(displayModel: displayModel)))
                 }
             }
