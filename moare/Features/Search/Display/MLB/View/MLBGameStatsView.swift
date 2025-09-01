@@ -93,6 +93,7 @@ struct MLBGameStatsView: View {
                     GameStatsViewContainer(
                         state: GameStatsContainerState(
                             shouldShowStats: game.status.detailedState != StringConstants.MLB.gameScheduled,
+                            shouldShowRefreshButton: game.status.detailedState == StringConstants.MLB.gameLive,
                             teamCategories: teamCategories,
                             teamCategorySelectedIndex: mlbGameStatsStore.baseGameStats.selectedTeamIndex,
                             gameDetailTitle: gameDetailTitle,
@@ -135,11 +136,12 @@ struct MLBGameStatsView: View {
                             .padding(.horizontal, UIConstants.Padding.defaultHPadding)
                         },
                         gameContent: {
-                            if game.status.detailedState == StringConstants.MLB.gameScheduled {
-                                
-                            } else {
-                                MLBGameStatsScoreInfoItem(mlbGameStatsStore: mlbGameStatsStore)
-                            }
+//                            if game.status.detailedState == StringConstants.MLB.gameScheduled {
+//                                
+//                            } else {
+//                                MLBGameStatsScoreInfoItem(mlbGameStatsStore: mlbGameStatsStore)
+//                            }
+                            MLBGameStatsScoreInfoItem(mlbGameStatsStore: mlbGameStatsStore)
                         }
                     )
                 }
@@ -166,6 +168,10 @@ struct MLBGameStatsView: View {
                 if case .mlbGameStats = searchStore.poppedView {
                     mlbGameStatsStore?.send(.baseGameStats(.initData(displayModel: displayModel)))
                 }
+                
+                if case .mlbGameStats = searchStore.viewStack.last {
+                    mlbGameStatsStore?.send(.baseGameStats(.initData(displayModel: displayModel)))
+                }
             }
         } // if let searchStore
     }
@@ -189,7 +195,7 @@ struct MLBGameStatsScoreInfoItem: View {
             case StringConstants.MLB.gameScheduled:
                 return StringConstants.gameNotStartedStr
             case StringConstants.MLB.gameLive:
-                return "\(game?.linescore.currentInning ?? 1)회\((game?.linescore.isTopInning ?? true) ? "초" : "말")"
+                return "\(game?.linescore?.currentInning ?? 1)회\((game?.linescore?.isTopInning ?? true) ? "초" : "말")"
             case StringConstants.MLB.gamePostponed:
                 return StringConstants.gamePostponedStr
             case let status? where StringConstants.MLB.gameFinishedList.contains(status):
@@ -277,8 +283,8 @@ struct MLBGameStatsLineScoreContainer: View {
         if let game = mlbGameStatsStore.baseGameStats.displayModel?.game {
             let isGameScheduled = game.status.detailedState == StringConstants.MLB.gameScheduled
             let lineScore = game.linescore
-            let homeTeamLineScore = lineScore.teams.home.runs
-            let awayTeamLineScore = lineScore.teams.away.runs
+            let homeTeamLineScore = lineScore?.teams.home.runs ?? 0
+            let awayTeamLineScore = lineScore?.teams.away.runs ?? 0
             
             HStack(alignment: .bottom, spacing: 0) {
                 VStack(spacing: 0) {
@@ -323,7 +329,7 @@ struct MLBGameStatsLineScoreContainer: View {
                 }
                 
                 VStack(spacing: 0) {
-                    MLBGameStatsLineScoreTitle(lineScoreInnings: lineScore.innings)
+                    MLBGameStatsLineScoreTitle(lineScoreInnings: lineScore?.innings ?? [])
                     
                     Capsule()
                         .fill(.secondary)
@@ -333,7 +339,7 @@ struct MLBGameStatsLineScoreContainer: View {
                     MLBGameStatsLineScoreItem(
                         mlbGameStatsStore: mlbGameStatsStore,
                         isHome: false,
-                        lineScoreInnings: lineScore.innings
+                        lineScoreInnings: lineScore?.innings ?? []
                     )
                     
                     Capsule()
@@ -344,7 +350,7 @@ struct MLBGameStatsLineScoreContainer: View {
                     MLBGameStatsLineScoreItem(
                         mlbGameStatsStore: mlbGameStatsStore,
                         isHome: true,
-                        lineScoreInnings: lineScore.innings
+                        lineScoreInnings: lineScore?.innings ?? []
                     )
                 }
             }

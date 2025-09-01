@@ -17,6 +17,8 @@ struct Constants {
         static let ligue1TeamDic = "ligue1_team"
         static let serieaPlayerDic = "seriea_player"
         static let serieaTeamDic = "seriea_team"
+        static let mlsPlayerDic = "mls_player"
+        static let mlsTeamDic = "mls_team"
         static let nbaPlayerDic = "nba_player"
         static let nbaTeamDic = "nba_team"
         static let kboPlayerDic = "kbo_player"
@@ -32,11 +34,14 @@ struct Constants {
         static let bundesliga = 78
         static let ligue1 = 61
         static let seriea = 135
+        static let mls = 253
         static let nba = 90001
         static let kbo = 90101
         static let mlb = 90102
+        static let footballLeagues = [epl, laliga, bundesliga, ligue1, seriea, mls]
         
         // nba team
+        // TODO: Move to struct NBATeam
         static let atl = 1610612737
         static let bos = 1610612738
         static let cle = 1610612739
@@ -67,6 +72,42 @@ struct Constants {
         static let was = 1610612764
         static let det = 1610612765
         static let cha = 1610612766
+        
+        // mls team
+        struct MLSTeam {
+            static let sea = 1595
+            static let jos = 1596
+            static let dal = 1597
+            static let orl = 1598
+            static let phi = 1599
+            static let hou = 1600
+            static let tor = 1601
+            static let yor = 1602
+            static let van = 1603
+            static let nyk = 1604
+            static let ang = 1605
+            static let sal = 1606
+            static let chi = 1607
+            static let atl = 1608
+            static let eng = 1609
+            static let cor = 1610
+            static let kan = 1611
+            static let min = 1612
+            static let col = 1613
+            static let mon = 1614
+            static let uni = 1615
+            static let laf = 1616
+            static let por = 1617
+            static let cin = 2242
+            static let mia = 9568
+            static let nas = 9569
+            static let aus = 16489
+            static let cha = 18310
+            static let stl = 20787
+            static let san = 25484
+            static let eastConference = [orl, phi, tor, yor, nyk, chi, atl, eng, col, mon, uni, cin, mia, nas, cha]
+            static let westConference = [sea, jos, dal, hou, van, ang, sal, cor, kan, min, laf, por, aus, stl, san]
+        }
         
         // mlb league, division
         static let americanLeague = 103

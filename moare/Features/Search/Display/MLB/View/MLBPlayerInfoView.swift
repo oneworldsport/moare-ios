@@ -666,8 +666,8 @@ struct MLBPlayerInfoSeventhItem: View {
             
             HStack {
                 if let lastGame = mlbPlayerInfoStore.baseInfo.displayModel?.lastGame {
-                    let homeTeamScore = lastGame.linescore.teams.home.runs
-                    let awayTeamScore = lastGame.linescore.teams.away.runs
+                    let homeTeamScore = lastGame.linescore?.teams.home.runs ?? 0
+                    let awayTeamScore = lastGame.linescore?.teams.away.runs ?? 0
                     
                     VStack {
                         HStack(spacing: 0) {

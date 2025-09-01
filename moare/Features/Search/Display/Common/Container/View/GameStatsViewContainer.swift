@@ -125,21 +125,23 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                     .opacity(isGameDetailVisible ? 0 : 0.6)
                                     
                                     // refresh button
-                                    // TODO: Make it component
-                                    Button(action: {
-                                        actions.refreshButtonAction()
-                                    }) {
-                                        Image(systemName: "arrow.clockwise")
-                                            .font(.system(size: 15))
-                                            .frame(width: 18, height: 18)
-                                            .padding(3)
-                                            .overlay {
-                                                RoundedRectangle(cornerRadius: 10)
-                                                    .stroke(.secondary, lineWidth: 1)
-                                            }
+                                    if state.shouldShowRefreshButton {
+                                        // TODO: Make it component
+                                        Button(action: {
+                                            actions.refreshButtonAction()
+                                        }) {
+                                            Image(systemName: "arrow.clockwise")
+                                                .font(.system(size: 15))
+                                                .frame(width: 18, height: 18)
+                                                .padding(3)
+                                                .overlay {
+                                                    RoundedRectangle(cornerRadius: 10)
+                                                        .stroke(.secondary, lineWidth: 1)
+                                                }
+                                        }
+                                        .foregroundStyle(.secondary)
+                                        .opacity(0.6)                                        
                                     }
-                                    .foregroundStyle(.secondary)
-                                    .opacity(0.6)
                                 }
                             }
                             
@@ -193,7 +195,7 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                             shouldShowExtraInfo: true,
                                             rank: data.numInfo ?? 0,
                                             imageUrl: data.imageUrl,
-                                            name: data.name,
+                                            name: data.name.dropFirstWord,
                                             subName: data.subName,
                                             extraInfo: data.extraInfo,
                                             extraSubInfo: data.extraSubInfo,
@@ -206,34 +208,23 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                     VStack(spacing: 0) {
                                         StickyHeader(coordinateSpaceName: coordinateSpaceName) {
                                             VStack(alignment: .leading, spacing: 0) {
-                                                ScrollViewReader { proxy in
-                                                    // second category
-                                                    HStack(spacing: 0) {
-                                                        ForEach(state.firstStatsCategories.indices, id:\.self) { index in
-                                                            let category = state.firstStatsCategories[index]
-                                                            
-                                                            Button(action: {
-                                                                actions.firstStatsCategoryButtonAction(index)
-                                                            }) {
-                                                                Text(category)
-                                                                    .font(.system(size: 15, weight: .medium))
-                                                                    .frame(width: firstStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
-                                                            }
-                                                            .foregroundStyle(.primary)
-                                                            .id(index)
+                                                // second category
+                                                HStack(spacing: 0) {
+                                                    ForEach(state.firstStatsCategories.indices, id:\.self) { index in
+                                                        let category = state.firstStatsCategories[index]
+                                                        
+                                                        Button(action: {
+                                                            actions.firstStatsCategoryButtonAction(index)
+                                                        }) {
+                                                            Text(category)
+                                                                .font(.system(size: 15, weight: .medium))
+                                                                .frame(width: firstStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
                                                         }
+                                                        .foregroundStyle(.primary)
+                                                        .id(index)
                                                     }
-                                                    .frame(height: 38)
-                                                    .onAppear {
-                                                        // TODO: should decide animation type
-                                                        // scroll and move bar to category that matches with the keyword
-                                                        //                                moveBar(index: fbTeamStandingsStore.selectedIndex)
-                                                        //
-                                                        //                                withAnimation {
-                                                        //                                    proxy.scrollTo(fbTeamStandingsStore.selectedIndex, anchor: .leading)
-                                                        //                                }
-                                                    }
-                                                } // ScrollViewReader
+                                                }
+                                                .frame(height: 38)
                                                 
                                                 HCapsuleBar()
                                                     .offset(x: firstStatsCategoryBarXOffset)
@@ -327,34 +318,23 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                         VStack(spacing: 0) {
                                             StickyHeader(coordinateSpaceName: coordinateSpaceName) {
                                                 VStack(alignment: .leading, spacing: 0) {
-                                                    ScrollViewReader { proxy in
-                                                        // second category
-                                                        HStack(spacing: 0) {
-                                                            ForEach(secondStatsCategories.indices, id:\.self) { index in
-                                                                let category = secondStatsCategories[index]
+                                                    // second category
+                                                    HStack(spacing: 0) {
+                                                        ForEach(secondStatsCategories.indices, id:\.self) { index in
+                                                            let category = secondStatsCategories[index]
 
-                                                                Button(action: {
-                                                                    actions.secondStatsCategoryButtonAction?(index)
-                                                                }) {
-                                                                    Text(category)
-                                                                        .font(.system(size: 15, weight: .medium))
-                                                                        .frame(width: secondStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
-                                                                }
-                                                                .foregroundStyle(.primary)
-                                                                .id(index)
+                                                            Button(action: {
+                                                                actions.secondStatsCategoryButtonAction?(index)
+                                                            }) {
+                                                                Text(category)
+                                                                    .font(.system(size: 15, weight: .medium))
+                                                                    .frame(width: secondStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
                                                             }
+                                                            .foregroundStyle(.primary)
+                                                            .id(index)
                                                         }
-                                                        .frame(height: 38)
-                                                        .onAppear {
-                                                            // TODO: should decide animation type
-                                                            // scroll and move bar to category that matches with the keyword
-                                                            //                                moveBar(index: fbTeamStandingsStore.selectedIndex)
-                                                            //
-                                                            //                                withAnimation {
-                                                            //                                    proxy.scrollTo(fbTeamStandingsStore.selectedIndex, anchor: .leading)
-                                                            //                                }
-                                                        }
-                                                    } // ScrollViewReader
+                                                    }
+                                                    .frame(height: 38)
 
                                                     HCapsuleBar()
                                                         .offset(x: secondStatsCategoryBarXOffset)
@@ -407,8 +387,8 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                             .foregroundStyle(.secondary)
                             .font(.system(size: 18, weight: .semibold))
                         
-//                        Spacer()
-//                            .frame(maxWidth: .infinity)
+                        Spacer()
+                            .frame(maxWidth: .infinity)
 //                            .contentShape(Rectangle())
                     }
                 }

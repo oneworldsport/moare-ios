@@ -29,7 +29,7 @@ struct FBPlayerStandingsView: View {
                 return StandingsItemState(
                     id: $0.player.id,
                     imageUrl: $0.player.photo,
-                    name: fbPlayerStandingsStore?.playerNameDictionary["\($0.player.id)"] ?? $0.player.name,
+                    name: fbPlayerStandingsStore?.playerNameDictionary["\($0.player.id)"]?.dropFirstWord ?? $0.player.name.dropFirstWord,
                     subName: fbPlayerStandingsStore?.teamNameDictionary["short_\(stats.team.id)"] ?? stats.team.name,
                     dataList: [
                         String(stats.goals.total),

@@ -22,6 +22,8 @@ struct FBTeamStandingsView: View {
     
     private let columnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50, 50, 50, 100, 100]
     
+    private let headerCategories = ["서부 컨퍼런스", "동부 컨퍼런스"]
+    
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             let teamStandings: [StandingsItemState] = fbTeamStandingsStore?.standings.map {
@@ -48,14 +50,19 @@ struct FBTeamStandingsView: View {
                 if let fbTeamStandingsStore {
                     StandingsViewContainer(
                         state: StandingsContainerState(
+                            headerCategories: fbTeamStandingsStore.isMLS ? headerCategories : nil,
                             secondCategories: StringConstants.Football.teamStandingsCategories,
                             standings: teamStandings,
-                            secondCategorySelectedIndex: fbTeamStandingsStore.selectedIndex,
+                            headerCategorySelectedIndex: fbTeamStandingsStore.selectedConferenceIndex,
+                            secondCategorySelectedIndex: fbTeamStandingsStore.selectedCategoryIndex,
                             columnWidthList: columnWidthList
                         ),
                         actions: StandingsContainerActions(
+                            headerCategoryButtonAction: { index in
+                                fbTeamStandingsStore.send(.selectConference(index: index))
+                            },
                             secondCategoryButtonAction: { index, _ in
-                                fbTeamStandingsStore.send(.selectCategory(index))
+                                fbTeamStandingsStore.send(.selectCategory(index: index))
                             },
                             itemButtonAction: { id in
                                 searchStore.send(.showTeamStats(teamId: id))

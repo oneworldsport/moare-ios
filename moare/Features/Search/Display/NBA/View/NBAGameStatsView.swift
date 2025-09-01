@@ -86,6 +86,7 @@ struct NBAGameStatsView: View {
                     GameStatsViewContainer(
                         state: GameStatsContainerState(
                             shouldShowStats: game.gameSummary?.gameStatusId != Constants.NBAGameStatus.notStarted,
+                            shouldShowRefreshButton: game.gameSummary?.gameStatusId == Constants.NBAGameStatus.live,
                             teamCategories: teamCategories,
                             teamCategorySelectedIndex: nbaGameStatsStore.selectedTeamIndex,
                             gameDetailTitle: gameDetailTitle,
@@ -131,11 +132,13 @@ struct NBAGameStatsView: View {
                             }
                         },
                         gameContent: {
-                            if game.gameSummary?.gameStatusId == StringConstants.NBA.gameScheduled {
-                                
-                            } else {
-                                NBAGameStatsScoreInfoItem(nbaGameStatsStore: nbaGameStatsStore)
-                            }
+//                            if game.gameSummary?.gameStatusId == StringConstants.NBA.gameScheduled {
+//                                
+//                            } else {
+//                                NBAGameStatsScoreInfoItem(nbaGameStatsStore: nbaGameStatsStore)
+//                            }
+                            
+                            NBAGameStatsScoreInfoItem(nbaGameStatsStore: nbaGameStatsStore)
                         }
                     )
                 }
@@ -164,6 +167,10 @@ struct NBAGameStatsView: View {
             } // onAppear
             .onChange(of: displayModel) {
                 if case .nbaGameStats = searchStore.poppedView {
+                    nbaGameStatsStore?.send(.initData(displayModel: displayModel))
+                }
+                
+                if case .nbaGameStats = searchStore.viewStack.last {
                     nbaGameStatsStore?.send(.initData(displayModel: displayModel))
                 }
             }

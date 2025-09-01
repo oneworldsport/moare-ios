@@ -43,6 +43,14 @@ enum SportDisplayType: Hashable, CaseIterable {
     // mlb
     case mlbPlayerInfo, mlbPlayerStats, mlbPlayerStandings, mlbTeamInfo, mlbTeamStats, mlbTeamStandings, mlbLeagueSchedule, mlbGameStats
     case unknown
+    
+    // VStack안에서 view를 그릴때 순서가 필요한 경우에 사용
+    var sortOrder: Int {
+        switch self {
+        case .fbLeagueSchedule: return 0
+        default: return 1
+        }
+    }
 }
 
 indirect enum SportDecodableModel: Equatable {

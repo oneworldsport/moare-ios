@@ -705,28 +705,28 @@ struct KBOPlayerInfoSeventhItem: View {
                         StatsDivider()
                         FBStatDataItem(
                             category: "타수",
-                            data: lastGamePlayerHitterStats!.ab,
+                            data: "\(lastGamePlayerHitterStats!.ab)",
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
                         StatsDivider()
                         FBStatDataItem(
                             category: "안타",
-                            data: lastGamePlayerHitterStats!.h,
+                            data: "\(lastGamePlayerHitterStats!.h)",
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
                         StatsDivider()
                         FBStatDataItem(
                             category: "득점",
-                            data: lastGamePlayerHitterStats!.r,
+                            data: "\(lastGamePlayerHitterStats!.r)",
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)
                         StatsDivider()
                         FBStatDataItem(
                             category: "타점",
-                            data: lastGamePlayerHitterStats!.rbi,
+                            data: "\(lastGamePlayerHitterStats!.rbi)",
                             customCategoryFontSize: 12
                         )
                         .frame(maxWidth: .infinity)

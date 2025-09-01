@@ -36,6 +36,22 @@ struct KBOGameInfo: Decodable, Equatable {
         case _remark = "remark"
         case _gameStatus = "gameStatus"
     }
+    
+    init(
+        awayTeamId: Int?,
+        date: String?,
+        gameId: String?,
+        homeTeamId: Int?,
+        remark: String?,
+        gameStatus: String?
+    ) {
+        self._awayTeamId = awayTeamId
+        self._date = date
+        self._gameId = gameId
+        self._homeTeamId = homeTeamId
+        self._remark = remark
+        self._gameStatus = gameStatus
+    }
 }
 
 struct KBOGameLineScoreInfo: Decodable, Equatable {
@@ -131,10 +147,10 @@ struct KBOGameHitterStats: Decodable, Equatable {
     private let _name: String?
     private let _battingNumber: Int?
     private let _position: String?
-    private let _ab: String?
-    private let _h: String?
-    private let _r: String?
-    private let _rbi: String?
+    private let _ab: Int?
+    private let _h: Int?
+    private let _r: Int?
+    private let _rbi: Int?
     private let _avg: String?
     private let _airOuts: Int?
     private let _groundOuts: Int?
@@ -154,10 +170,10 @@ struct KBOGameHitterStats: Decodable, Equatable {
     var name: String { _name ?? "" }
     var battingNumber: Int { _battingNumber ?? 0 }
     var position: String { _position ?? "" }
-    var ab: String { _ab ?? "0" } // 타수
-    var h: String { _h ?? "0" } // 안타
-    var r: String { _r ?? "0" } // 득점
-    var rbi: String { _rbi ?? "0" } // 타점
+    var ab: Int { _ab ?? 0 } // 타수
+    var h: Int { _h ?? 0 } // 안타
+    var r: Int { _r ?? 0 } // 득점
+    var rbi: Int { _rbi ?? 0 } // 타점
     var avg: String { _avg ?? "0.000" } // 타율
     var airOuts: Int { _airOuts ?? 0 } // 뜬공아웃
     var groundOuts: Int { _groundOuts ?? 0 } // 땅볼아웃
