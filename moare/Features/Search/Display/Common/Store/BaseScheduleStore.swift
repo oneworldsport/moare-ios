@@ -40,6 +40,7 @@ struct BaseScheduleStore<T> {
     enum Action {
         case initData(displayModel: T)
         case selectDay(DayInfo, Int)
+        case setDefaultYearMonth(date: String)
     }
     
     @Dependency(\.translatedNameProvider) var nameProvider
@@ -75,6 +76,8 @@ struct BaseScheduleStore<T> {
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.ligue1TeamDic)
                     case Constants.Ids.seriea:
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaTeamDic)
+                    case Constants.Ids.mls:
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlsTeamDic)
                     case Constants.Ids.nba:
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
                     case Constants.Ids.kbo:
@@ -91,6 +94,17 @@ struct BaseScheduleStore<T> {
                 state.selectedDay = day
                 state.selectedDayIndex = index
                 
+                return .none
+                
+            case .setDefaultYearMonth(let date):
+                let defaultYearMonth = CalendarUtil.formatDate(date:date, formatType: .yearMonth)
+                if let defaultYearMonthIndex = state.yearMonthList.firstIndex(where: { $0 == defaultYearMonth }) {
+                    state.selectedYearMonth = defaultYearMonth
+                    state.selectedYearMonthIndex = defaultYearMonthIndex
+                } else {
+                    print("Index not found.")
+                }
+        
                 return .none
             }
         }

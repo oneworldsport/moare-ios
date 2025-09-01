@@ -239,8 +239,6 @@ struct MLBPlayerInfoFirstItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
         ) {
-            HCapsuleBar()
-            
             if let player = mlbPlayerInfoStore.baseInfo.displayModel?.info {
                 URLImage(url: MLBUtil.playerPhotoURL(id: player.id))
                     .opacity(showContents ? 1 : 0)
@@ -291,8 +289,6 @@ struct MLBPlayerInfoSecondItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset
         ) {
-            HCapsuleBar()
-            
             if let displayModel = mlbPlayerInfoStore.baseInfo.displayModel {
                 URLImage(url: MLBUtil.teamLogoURL(id: displayModel.teamId), isSvg: true)
                     .opacity(showContents ? 1 : 0)
@@ -336,12 +332,6 @@ struct MLBPlayerInfoThirdItem: View {
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            // added HStack to position Capsule at center
-            HStack {
-                HCapsuleBar()
-            }
-            .frame(maxWidth: .infinity)
-            
             if let player = mlbPlayerInfoStore.baseInfo.displayModel?.info {
                 HStack(spacing: 0) {
                     Text("등번호: ")
@@ -407,15 +397,9 @@ struct MLBPlayerInfoFourthItem: View {
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            // added HStack to position Capsule at center
-            HStack {
-                HCapsuleBar()
-            }
-            .frame(maxWidth: .infinity)
-            
             if let player = mlbPlayerInfoStore.baseInfo.displayModel?.info {
                 HStack(spacing: 0) {
-                    Text("국젖: ")
+                    Text("국적: ")
                         .font(.system(size: 15))
                     
                     Text(player.birthCountry)
@@ -478,12 +462,6 @@ struct MLBPlayerInfoFifthItem: View {
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            // added HStack to position Capsule at center
-            HStack {
-                HCapsuleBar()
-            }
-            .frame(maxWidth: .infinity)
-            
             if let player = mlbPlayerInfoStore.baseInfo.displayModel?.info {
                 HStack(spacing: 0) {
                     Text("키(cm/ft): ")
@@ -550,12 +528,10 @@ struct MLBPlayerInfoSixthItem: View {
                 }
             }
         ) {
-            HCapsuleBar()
-            
             BaseballLeagueTitle(
                 logoUrl: MLBUtil.mlbLogoUrl,
                 name: "MLB",
-                season: Int(season) ?? 2025
+                season: Int(season)
             )
             .opacity(showContents ? 1 : 0)
             
@@ -567,18 +543,21 @@ struct MLBPlayerInfoSixthItem: View {
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "타율",
                         data: hitting.avg,
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "홈런",
                         data: String(hitting.homeRuns),
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "ops",
                         data: hitting.ops,
@@ -586,6 +565,7 @@ struct MLBPlayerInfoSixthItem: View {
                         customWidth: .infinity
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "도루",
                         data: String(hitting.stolenBases),
@@ -604,24 +584,28 @@ struct MLBPlayerInfoSixthItem: View {
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "평균자책점",
                         data: pitching.era,
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "피안타율",
                         data: pitching.avg,
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "승",
                         data: String(pitching.wins),
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "이닝당 평균 투구수",
                         data: pitching.pitchesPerInning,
@@ -632,6 +616,7 @@ struct MLBPlayerInfoSixthItem: View {
                 .opacity(showContents ? 1 : 0)
             }
         }
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
     }
 }
@@ -675,111 +660,131 @@ struct MLBPlayerInfoSeventhItem: View {
                 searchStore.send(.showGameStats(gameType: "previous"))
             }
         ) {
-            HCapsuleBar()
-            
             Text("최근경기")
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
             
             HStack {
                 if let lastGame = mlbPlayerInfoStore.baseInfo.displayModel?.lastGame {
-                    let homeTeamScore = lastGame.linescore.teams.home.runs
-                    let awayTeamScore = lastGame.linescore.teams.away.runs
+                    let homeTeamScore = lastGame.linescore?.teams.home.runs ?? 0
+                    let awayTeamScore = lastGame.linescore?.teams.away.runs ?? 0
                     
                     VStack {
-                        HStack {
-                            Text(teamNameDic["short_\(lastGame.teams.home.id)"] ?? "")
-                                .font(.system(size: 14))
-                                .fontWeight(.light)
-                                .lineLimit(1)
+                        HStack(spacing: 0) {
+                            HStack(spacing: 0) {
+                                Text(teamNameDic["short_\(lastGame.teams.home.id)"] ?? "")
+                                    .font(.system(size: 14))
+                                    .fontWeight(.light)
+                                    .lineLimit(1)
+                                
+                                Text(" \(homeTeamScore)")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.medium)
+                                    .foregroundStyle((homeTeamScore >= awayTeamScore) ? .moare : .primary)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .trailing)
                             
-                            Text("\(homeTeamScore)")
+                            Text(" - ")
                                 .font(.system(size: 15))
                                 .fontWeight(.medium)
-                                .foregroundStyle((homeTeamScore >= awayTeamScore) ? .moare : .primary)
                             
-                            Text(" vs ")
-                                .font(.system(size: 15))
-                                .fontWeight(.medium)
-                            
-                            Text("\(awayTeamScore)")
-                                .font(.system(size: 15))
-                                .fontWeight(.medium)
-                                .foregroundStyle((awayTeamScore >= homeTeamScore) ? .moare : .primary)
-                            
-                            Text(teamNameDic["short_\(lastGame.teams.away.id)"] ?? "")
-                                .font(.system(size: 14))
-                                .fontWeight(.light)
-                                .lineLimit(1)
+                            HStack(spacing: 0) {
+                                Text("\(awayTeamScore) ")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.medium)
+                                    .foregroundStyle((awayTeamScore >= homeTeamScore) ? .moare : .primary)
+                                
+                                Text(teamNameDic["short_\(lastGame.teams.away.id)"] ?? "")
+                                    .font(.system(size: 14))
+                                    .fontWeight(.light)
+                                    .lineLimit(1)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         
-                        Text(CalendarUtil.formatDate(date: lastGame.gameInfo.gameDate))
+                        Text(CalendarUtil.formatDate(date: lastGame.gameInfo.gameDate, formatType: .ampmWithDayOfWeekDate))
                             .font(.system(size: 15))
-                            .frame(maxHeight: 30)
                     }
-                    .padding(.top, 4)
+                    .frame(width: UIScreen.main.bounds.width * 0.40) // NOTE: 너비를 화면 전체 너비중 40%로 고정
                 }
                 
-                if lastGamePlayerHitterStats != nil && lastGamePlayerPitcherStats == nil {
-                    FBStatDataItem(
-                        category: "타수",
-                        data: String(lastGamePlayerHitterStats!.atBats),
-                        customCategoryFontSize: 12
-                    )
+                // NOTE: lastGamePlayerHitterStats, lastGamePlayerPitcherStats가 null인 경우는 없어서 안에 있는 기본 데이터로 해당 선수 기록 보여줘야할지 판단
+                if lastGamePlayerHitterStats?._atBats != nil && lastGamePlayerPitcherStats?._numberOfPitches == nil {
+                    HStack {
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "타수",
+                            data: String(lastGamePlayerHitterStats!.atBats),
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "안타",
+                            data: String(lastGamePlayerHitterStats!.hits),
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "득점",
+                            data: String(lastGamePlayerHitterStats!.runs),
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "타점",
+                            data: String(lastGamePlayerHitterStats!.rbi),
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                    }
                     .frame(maxWidth: .infinity)
-                    FBStatDataItem(
-                        category: "안타",
-                        data: String(lastGamePlayerHitterStats!.hits),
-                        customCategoryFontSize: 12
-                    )
-                    .frame(maxWidth: .infinity)
-                    FBStatDataItem(
-                        category: "득점",
-                        data: String(lastGamePlayerHitterStats!.runs),
-                        customCategoryFontSize: 12
-                    )
-                    .frame(maxWidth: .infinity)
-                    FBStatDataItem(
-                        category: "타점",
-                        data: String(lastGamePlayerHitterStats!.rbi),
-                        customCategoryFontSize: 12
-                    )
-                    .frame(maxWidth: .infinity)
-                } else if lastGamePlayerPitcherStats != nil && lastGamePlayerHitterStats == nil {
-                    FBStatDataItem(
-                        category: "이낭",
-                        data: lastGamePlayerPitcherStats!.inningsPitched,
-                        customCategoryFontSize: 12
-                    )
-                    .frame(maxWidth: .infinity)
-                    FBStatDataItem(
-                        category: "삼진",
-                        data: String(lastGamePlayerPitcherStats!.strikeOuts),
-                        customCategoryFontSize: 12
-                    )
-                    .frame(maxWidth: .infinity)
-                    FBStatDataItem(
-                        category: "볼넷",
-                        data: String(lastGamePlayerPitcherStats!.baseOnBalls),
-                        customCategoryFontSize: 12
-                    )
-                    .frame(maxWidth: .infinity)
-                    FBStatDataItem(
-                        category: "실점",
-                        data: String(lastGamePlayerPitcherStats!.runs),
-                        customCategoryFontSize: 12
-                    )
-                    .frame(maxWidth: .infinity)
-                    FBStatDataItem(
-                        category: "자책점",
-                        data: String(lastGamePlayerPitcherStats!.earnedRuns),
-                        customCategoryFontSize: 12
-                    )
+                } else if lastGamePlayerPitcherStats?._numberOfPitches != nil && lastGamePlayerHitterStats?._atBats == nil {
+                    HStack {
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "이낭",
+                            data: lastGamePlayerPitcherStats!.inningsPitched,
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "삼진",
+                            data: String(lastGamePlayerPitcherStats!.strikeOuts),
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "볼넷",
+                            data: String(lastGamePlayerPitcherStats!.baseOnBalls),
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "실점",
+                            data: String(lastGamePlayerPitcherStats!.runs),
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "자책점",
+                            data: String(lastGamePlayerPitcherStats!.earnedRuns),
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                    }
                     .frame(maxWidth: .infinity)
                 }
             }
             .opacity(showContents ? 1 : 0)
-        } // VStack
+        }
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
     }
 }
@@ -821,8 +826,6 @@ struct MLBPlayerInfoEigthItem: View {
                 searchStore.send(.showGameStats(gameType: "next"))
             }
         ) {
-            HCapsuleBar()
-            
             Text("다음경기")
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
@@ -842,14 +845,19 @@ struct MLBPlayerInfoEigthItem: View {
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .padding(.vertical, 4)
                 .opacity(showContents ? 1 : 0)
                 
-                Text(CalendarUtil.formatDate(date: nextGame.gameInfo.gameDate))
+                Text(CalendarUtil.formatDate(date: nextGame.gameInfo.gameDate, formatType: .ampmWithDayOfWeekDate))
                     .font(.system(size: 15))
                     .opacity(showContents ? 1 : 0)
+            } else {
+                Text("예정된 경기가 없습니다.")
+                    .font(.system(size: 15))
+                    .opacity(showContents ? 1 : 0)
+                    .padding(.top, 4)
             }
-        } // VStack
+        }
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
     }
 }

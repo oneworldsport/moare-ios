@@ -8,6 +8,7 @@
 import Foundation
 
 struct NBAGameScheduleResponseModel: Decodable, Equatable {
+    let scheduleType: ScheduleType?
     let scheduledMonths: [String]?
     let schedule: [NBAGameForSchedule]
 }

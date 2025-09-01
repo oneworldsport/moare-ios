@@ -230,7 +230,7 @@ struct KBOPlayerPitcherStats: Decodable, Equatable {
     // 경기당 볼넷
     
     // 경기당 평균 투구수
-//    var npsPG: Double { Int(g) != 0 ? (Double(np) / Double(g)).rounded(to: 1) : 0.0 }
+    var npsPG: Double { Int(g) != 0 ? ((Double(np) ?? 0.0) / (Double(g) ?? 0.0)).rounded(to: 1) : 0.0 }
     
     // 경기당 평균 이닝수
 

@@ -36,11 +36,35 @@ struct KBOGameInfo: Decodable, Equatable {
         case _remark = "remark"
         case _gameStatus = "gameStatus"
     }
+    
+    init(
+        awayTeamId: Int?,
+        date: String?,
+        gameId: String?,
+        homeTeamId: Int?,
+        remark: String?,
+        gameStatus: String?
+    ) {
+        self._awayTeamId = awayTeamId
+        self._date = date
+        self._gameId = gameId
+        self._homeTeamId = homeTeamId
+        self._remark = remark
+        self._gameStatus = gameStatus
+    }
 }
 
 struct KBOGameLineScoreInfo: Decodable, Equatable {
     let away: KBOGameLineScore
     let home: KBOGameLineScore
+    private let _currentInning: String?
+    
+    var currentInning: String { _currentInning ?? "" }
+
+    private enum CodingKeys: String, CodingKey {
+        case away, home
+        case _currentInning = "currentInning"
+    }
 }
 
 struct KBOGameLineScore: Decodable, Equatable {
@@ -56,9 +80,6 @@ struct KBOGameLineScore: Decodable, Equatable {
     private let _inning10: String?
     private let _inning11: String?
     private let _inning12: String?
-    private let _inning13: String?
-    private let _inning14: String?
-    private let _inning15: String?
     private let _b: String?
     private let _e: String?
     private let _h: String?
@@ -103,9 +124,6 @@ struct KBOGameLineScore: Decodable, Equatable {
         case _inning10 = "10"
         case _inning11 = "11"
         case _inning12 = "12"
-        case _inning13 = "13"
-        case _inning14 = "14"
-        case _inning15 = "15"
         case _b = "b"
         case _e = "e"
         case _h = "h"
@@ -126,58 +144,73 @@ struct KBOGameLineup: Decodable, Equatable {
 
 struct KBOGameHitterStats: Decodable, Equatable {
     private let _id: Int?
-    private let _ab: String?
-    private let _bb: String?
-    private let _e: String?
-    private let _gdp: String?
-    private let _h: String?
-    private let _hr: String?
     private let _name: String?
-    private let _r: String?
-    private let _rbi: String?
-    private let _sb: String?
-    private let _sf: String?
-    private let _so: String?
-    private let _avg: String?
     private let _battingNumber: Int?
     private let _position: String?
+    private let _ab: Int?
+    private let _h: Int?
+    private let _r: Int?
+    private let _rbi: Int?
+    private let _avg: String?
+    private let _airOuts: Int?
+    private let _groundOuts: Int?
+    private let _groundIntoDoublePlay: Int?
+    private let _sacBunts: Int?
+    private let _sacFlies: Int?
+    private let _doubles: Int?
+    private let _homeRuns: Int?
+    private let _strikeOuts: Int?
+    private let _baseOnBalls: Int?
+    private let _hitByPitch: Int?
     let inningStats: [KBOGameHitterInningStat]?
-
+    private let _stolenBases: Int?
+    private let _errors: Int?
+    
     var id: Int { _id ?? 0 }
-    var ab: String { _ab ?? "0" }         // 타수
-    var bb: String { _bb ?? "0" }         // 볼넷
-    var e: String { _e ?? "0" }           // 실책
-    var gdp: String { _gdp ?? "0" }       // 병살타
-    var h: String { _h ?? "0" }           // 안타
-    var hr: String { _hr ?? "0" }         // 홈런
     var name: String { _name ?? "" }
-    var r: String { _r ?? "0" }           // 득점
-    var rbi: String { _rbi ?? "0" }       // 타점
-    var sb: String { _sb ?? "0" }         // 도루
-    var sf: String { _sf ?? "0" }         // 희생플라이
-    var so: String { _so ?? "0" }         // 삼진
-    var avg: String { _avg ?? "0.000" }       // 타율
     var battingNumber: Int { _battingNumber ?? 0 }
     var position: String { _position ?? "" }
+    var ab: Int { _ab ?? 0 } // 타수
+    var h: Int { _h ?? 0 } // 안타
+    var r: Int { _r ?? 0 } // 득점
+    var rbi: Int { _rbi ?? 0 } // 타점
+    var avg: String { _avg ?? "0.000" } // 타율
+    var airOuts: Int { _airOuts ?? 0 } // 뜬공아웃
+    var groundOuts: Int { _groundOuts ?? 0 } // 땅볼아웃
+    var groundIntoDoublePlay: Int { _groundIntoDoublePlay ?? 0 } // 병살타
+    var sacBunts: Int { _sacBunts ?? 0 } // 희생번트
+    var sacFlies: Int { _sacFlies ?? 0 } // 희생플라이
+    var doubles: Int { _doubles ?? 0 } // 2루타
+    var homeRuns: Int { _homeRuns ?? 0 } // 홈런
+    var strikeOuts: Int { _strikeOuts ?? 0 } // 삼진
+    var baseOnBalls: Int { _baseOnBalls ?? 0 } // 볼넷
+    var hitByPitch: Int { _hitByPitch ?? 0 } // 사구
+    var stolenBases: Int { _stolenBases ?? 0 } // 도루
+    var errors: Int { _errors ?? 0 } // 실책
 
     private enum CodingKeys: String, CodingKey {
         case _id = "id"
-        case _ab = "ab"
-        case _bb = "bb"
-        case _e = "e"
-        case _gdp = "gdp"
-        case _h = "h"
-        case _hr = "hr"
         case _name = "name"
+        case _battingNumber = "battingNumber"
+        case _position = "position"
+        case _ab = "ab"
+        case _h = "h"
         case _r = "r"
         case _rbi = "rbi"
-        case _sb = "sb"
-        case _sf = "sf"
-        case _so = "so"
         case _avg = "avg"
-        case _battingNumber = "batting_number"
-        case _position = "position"
-        case inningStats = "inningStats"
+        case _airOuts = "airOuts"
+        case _groundOuts = "groundOuts"
+        case _groundIntoDoublePlay = "groundIntoDoublePlay"
+        case _sacBunts = "sacBunts"
+        case _sacFlies = "sacFlies"
+        case _doubles = "doubles"
+        case _homeRuns = "homeRuns"
+        case _strikeOuts = "strikeOuts"
+        case _baseOnBalls = "baseOnBalls"
+        case _hitByPitch = "hitByPitch"
+        case _stolenBases = "stolenBases"
+        case _errors = "errors"
+        case inningStats
     }
 }
 
@@ -255,4 +288,20 @@ struct KBOGamePitcherStats: Decodable, Equatable {
     }
 }
 
-typealias KBOGameForSchedule = GameForSchedule<String>
+struct KBOGameInfoForSchedule: Decodable, Equatable {
+    private let _currentInning: String?
+
+    var currentInning: String { _currentInning ?? StringConstants.gameLiveStr }
+
+    private enum CodingKeys: String, CodingKey {
+        case _currentInning = "currentInning"
+    }
+    
+    init(
+        currentInning: String?
+    ) {
+        self._currentInning = currentInning
+    }
+}
+
+typealias KBOGameForSchedule = GameForSchedule<KBOGameInfoForSchedule>

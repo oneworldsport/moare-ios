@@ -97,8 +97,8 @@ struct CalendarList<T>: View {
                     .padding(.top, barYOffset)
                     .padding(.bottom, 2)
             } // ZStack
+            .padding(.horizontal, 8)
         } // ScrollView
-        .padding(.horizontal, 5)
         .simultaneousGesture(DragGesture())
     }
 }

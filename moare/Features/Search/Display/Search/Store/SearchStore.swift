@@ -66,15 +66,15 @@ struct SearchStore {
         case updateTextField(String, Bool = true)
         case updateTextFieldVisibleState(Bool)
         case performSearch(searchType: SearchType = .query, aniDuration: CGFloat = 0)
-        case selectFBGame(game: FBGameForSchedule, leagueId: Int?)
-        case selectNBAGame(game: NBAGameForSchedule)
-        case selectKBOGame(game: KBOGameForSchedule)
-        case selectMLBGame(game: MLBGameForSchedule)
-        case showPlayerStats(category: String? = nil, playerId: Int)
+        case selectFBGame(game: FBGameForSchedule, season: Int, leagueId: Int?)
+        case selectNBAGame(game: NBAGameForSchedule, season: Int)
+        case selectKBOGame(game: KBOGameForSchedule, season: Int)
+        case selectMLBGame(game: MLBGameForSchedule, season: Int)
+        case showPlayerStats(season: Int? = nil, category: String? = nil, playerId: Int)
         case showTeamStats(teamId: Int)
         case showGameStats(gameType: String)
         case updateTrendingKeywordsVisibleState(Bool)
-        case refreshGame(category: String)
+        case refreshGame(season: Int?, category: String)
         case selectNBATournamentRound(gameList: [NBAGame])
         
         /* ---------------------
@@ -109,6 +109,7 @@ struct SearchStore {
            test
            --------------------- */
         case initForTest
+        case testSearch(viewForTest: SportDisplayType)
     }
     
     @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
@@ -319,8 +320,6 @@ struct SearchStore {
                     state.displayModels[.fbTeamStats] = displayModel
                 case .fbTeamStandings(_, let displayModel):
                     state.displayModels[.fbTeamStandings] = displayModel
-                case .fbTeamSchedule(_, let displayModel):
-                    state.displayModels[.fbTeamSchedule] = displayModel
                 case .fbLeagueSchedule(_, let displayModel):
                     state.displayModels[.fbLeagueSchedule] = displayModel
                 case .fbGameStats(_, let displayModel):
@@ -338,8 +337,6 @@ struct SearchStore {
                     state.displayModels[.nbaTeamStats] = displayModel
                 case .nbaTeamStandings(_, let displayModel):
                     state.displayModels[.nbaTeamStandings] = displayModel
-                case .nbaTeamSchedule(_, let displayModel):
-                    state.displayModels[.nbaTeamSchedule] = displayModel
                 case .nbaLeagueSchedule(_, let displayModel):
                     state.displayModels[.nbaLeagueSchedule] = displayModel
                 case .nbaGameStats(_, let displayModel):
@@ -359,8 +356,6 @@ struct SearchStore {
                     state.displayModels[.kboTeamStats] = displayModel
                 case .kboTeamStandings(_, let displayModel):
                     state.displayModels[.kboTeamStandings] = displayModel
-                case .kboTeamSchedule(_, let displayModel):
-                    state.displayModels[.kboTeamSchedule] = displayModel
                 case .kboLeagueSchedule(_, let displayModel):
                     state.displayModels[.kboLeagueSchedule] = displayModel
                 case .kboGameStats(_, let displayModel):
@@ -378,8 +373,6 @@ struct SearchStore {
                     state.displayModels[.mlbTeamStats] = displayModel
                 case .mlbTeamStandings(_, let displayModel):
                     state.displayModels[.mlbTeamStandings] = displayModel
-                case .mlbTeamSchedule(_, let displayModel):
-                    state.displayModels[.mlbTeamSchedule] = displayModel
                 case .mlbLeagueSchedule(_, let displayModel):
                     state.displayModels[.mlbLeagueSchedule] = displayModel
                 case .mlbGameStats(_, let displayModel):
@@ -454,9 +447,10 @@ struct SearchStore {
                 }
                 return .none
                 
-            case .selectFBGame(let game, let leagueId):
+            case .selectFBGame(let game, let season, let leagueId):
                 return .run { send in
                     let result = try await searchClient.fetchById(
+                        season: season,
                         category: "football",
                         date: game.date,
                         dataType: "football_game_stats",
@@ -468,9 +462,10 @@ struct SearchStore {
                     await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
                 }
                 
-            case .selectNBAGame(let game):
+            case .selectNBAGame(let game, let season):
                 return .run { send in
                     let result = try await searchClient.fetchById(
+                        season: season,
                         category: "basketball",
                         date: game.date,
                         dataType: "basketball_game_stats",
@@ -482,32 +477,66 @@ struct SearchStore {
                     await send(.updateMainDisplayModel(data: result.data))
                 }
                 
-            case .selectKBOGame(let game):
+            case .selectKBOGame(let game, let season):
                 return .run { send in
-                    let result = try await searchClient.fetchById(
-                        category: "baseball",
-                        date: game.date,
-                        dataType: "baseball_game_stats",
-                        leagueId: Constants.Ids.kbo,
-                        id: game.gameId
-                    )
-                    
-                    await send(.addViewStack(data: result.data))
-                    await send(.updateMainDisplayModel(data: result.data))
+                    do {
+                        let dataModel: SportDecodableModel
+                        
+                        // 취소된 경기는 DB에 데이터 없어서 KBOGameForSchedule을 사용해 KBOGameStatsView를 보여준다.
+                        if Int(game.gameStatus) == StringConstants.KBO.gameCanceled {
+                            let game = ModelConverter.kboGameScheduleToGameConverter(game: game)
+                            
+                            let responseModel = KBOGameStatsResponseModel(game: game)
+                            dataModel = .kboGameStats(responseModel, modelConverter.kboGameStatsConverter(response: responseModel))
+                        } else {
+                            let result = try await searchClient.fetchById(
+                                season: season,
+                                category: "baseball",
+                                date: game.date,
+                                dataType: "baseball_game_stats",
+                                leagueId: Constants.Ids.kbo,
+                                id: game.gameId
+                            )
+                            
+                            dataModel = result.data
+                        }
+                        
+                        await send(.addViewStack(data: dataModel))
+                        await send(.updateMainDisplayModel(data: dataModel))
+                    } catch {
+                        print("\(error)")
+                    }
                 }
                 
-            case .selectMLBGame(let game):
+            case .selectMLBGame(let game, let season):
                 return .run { send in
-                    let result = try await searchClient.fetchById(
-                        category: "baseball",
-                        date: game.date,
-                        dataType: "baseball_game_stats",
-                        leagueId: Constants.Ids.mlb,
-                        id: game.gameId
-                    )
-                    
-                    await send(.addViewStack(data: result.data))
-                    await send(.updateMainDisplayModel(data: result.data))
+                    do {
+                        let dataModel: SportDecodableModel
+                        
+                        // Postponed된 경기는 DB에 데이터 없어서 MLBGameForSchedule을 사용해 MLBGameStatsView를 보여준다.
+                        if game.gameStatus == StringConstants.MLB.gamePostponed {
+                            let game = ModelConverter.mlbGameScheduleToGameConverter(game: game)
+                            
+                            let responseModel = MLBGameStatsResponseModel(game: game)
+                            dataModel = .mlbGameStats(responseModel, modelConverter.mlbGameStatsConverter(response: responseModel))
+                        } else {
+                            let result = try await searchClient.fetchById(
+                                season: season,
+                                category: "baseball",
+                                date: game.date,
+                                dataType: "baseball_game_stats",
+                                leagueId: Constants.Ids.mlb,
+                                id: game.gameId
+                            )
+                            
+                            dataModel = result.data
+                        }
+                        
+                        await send(.addViewStack(data: dataModel))
+                        await send(.updateMainDisplayModel(data: dataModel))
+                    } catch {
+                        print("\(error)")
+                    }
                 }
                 
             case .updateIsFocused(let bool):
@@ -535,7 +564,7 @@ struct SearchStore {
                 
                 return .none
                 
-            case .showPlayerStats(let category, let playerId):
+            case .showPlayerStats(let season, let category, let playerId):
                 state.resultVisibleState = false
                 
                 return .run { [viewStack = state.viewStack] send in
@@ -548,6 +577,7 @@ struct SearchStore {
                             
                             // TODO: Has to add loading
                             let result = try await searchClient.fetchById(
+                                season: season,
                                 category: category,
                                 dataType: "\(category)_player_stats",
                                 leagueId: leagueId,
@@ -651,10 +681,28 @@ struct SearchStore {
                         modelConverter.nbaTeamStatsConverter(response: responseModel)
                     )
                     
+                case .kboTeamStandings(let responseModel, _):
+                    let team = responseModel.standings.first { $0.team.id == teamId }
+                    
+                    let teamInfoResponseModel = KBOTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
+                    dataModel = .kboTeamStats(
+                        teamInfoResponseModel,
+                        modelConverter.kboTeamStatsConverter(response: teamInfoResponseModel)
+                    )
+                    
                 case .kboTeamInfo(let responseModel, _):
                     dataModel = .kboTeamStats(
                         responseModel,
                         modelConverter.kboTeamStatsConverter(response: responseModel)
+                    )
+                    
+                case .mlbTeamStandings(let responseModel, _):
+                    let team = responseModel.standings.first { $0.team.id == teamId }
+                    
+                    let teamInfoResponseModel = MLBTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
+                    dataModel = .mlbTeamStats(
+                        teamInfoResponseModel,
+                        modelConverter.mlbTeamStatsConverter(response: teamInfoResponseModel)
                     )
                     
                 case .mlbTeamInfo(let responseModel, _):
@@ -763,12 +811,13 @@ struct SearchStore {
                     await send(.updateResultVisibleState(bool: true))
                 }
                 
-            case .refreshGame(let category):
+            case .refreshGame(let season, let category):
                 return .run { [viewStack = state.viewStack, displayModels = state.displayModels] send in
                     switch viewStack.last {
-                    case .fbGameStats(let responseModel, let displayModel):
+                    case .fbGameStats(_, _):
                         if let game = (displayModels[.fbGameStats] as? FBGameStatsDisplayModel)?.game {
                             let result = try await searchClient.fetchById(
+                                season: season,
                                 category: category,
                                 date: game.fixture.date,
                                 dataType: "\(category)_game_stats",
@@ -780,15 +829,16 @@ struct SearchStore {
                             await send(.updateLastViewStack(data: result.data))
                         }
                         
-                    case .nbaGameStats(let responseModel, let displayModel):
+                    case .nbaGameStats(_, _):
                         if let game = (displayModels[.nbaGameStats] as? NBAGameStatsDisplayModel)?.game,
                            let gameSummary = game.gameSummary,
                            let boxScoreTraditional = game.boxScoreTraditional {
                             let result = try await searchClient.fetchById(
+                                season: season,
                                 category: category,
                                 date: gameSummary.date,
                                 dataType: "\(category)_game_stats",
-                                leagueId: 90001,
+                                leagueId: Constants.Ids.nba,
                                 id: boxScoreTraditional.gameId
                             )
                             
@@ -796,7 +846,38 @@ struct SearchStore {
                             await send(.updateLastViewStack(data: result.data))
                         }
                         
-                    default: return // Make it do nothing
+                    case .kboGameStats(_, _):
+                        if let game = (displayModels[.kboGameStats] as? KBOGameStatsDisplayModel)?.game,
+                           let gameInfo = game.gameInfo {
+                            let result = try await searchClient.fetchById(
+                                season: season,
+                                category: category,
+                                date: gameInfo.date,
+                                dataType: "\(category)_game_stats",
+                                leagueId: Constants.Ids.kbo,
+                                id: gameInfo.gameId
+                            )
+                            
+                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+                            await send(.updateLastViewStack(data: result.data))
+                        }
+                        
+                    case .mlbGameStats(_, _):
+                        if let game = (displayModels[.mlbGameStats] as? MLBGameStatsDisplayModel)?.game {
+                            let result = try await searchClient.fetchById(
+                                season: season,
+                                category: category,
+                                date: game.gameInfo.gameDate,
+                                dataType: "\(category)_game_stats",
+                                leagueId: Constants.Ids.mlb,
+                                id: String(game.game.pk)
+                            )
+                            
+                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+                            await send(.updateLastViewStack(data: result.data))
+                        }
+                        
+                    default: return // do nothing
                     }
                 }
                 
@@ -805,11 +886,11 @@ struct SearchStore {
                 
                 switch state.viewStack.last {
                 case .nbaLeagueTournament(let responseModel, let displayModel):
-                    let teamScheduleResponseModel = NBAGameScheduleResponseModel(scheduledMonths: nil, schedule: ModelConverter.nbaGameListToGameScheduleListConverter(gameList: gameList))
+                    let teamScheduleResponseModel = NBAGameScheduleResponseModel(scheduleType: ScheduleType.teamFlat, scheduledMonths: nil, schedule: ModelConverter.nbaGameListToGameScheduleListConverter(gameList: gameList))
                     
-                    dataModel = .nbaTeamSchedule(
+                    dataModel = .nbaLeagueSchedule(
                         teamScheduleResponseModel,
-                        modelConverter.nbaTeamScheduleConverter(response: teamScheduleResponseModel)
+                        modelConverter.nbaLeagueScheduleConverter(response: teamScheduleResponseModel)
                     )
                     
                 default: return .none // Make it do nothing
@@ -848,8 +929,6 @@ struct SearchStore {
                     state.displayModels[.fbTeamStats] = displayModel
                 case .fbTeamStandings(_, let displayModel):
                     state.displayModels[.fbTeamStandings] = displayModel
-                case .fbTeamSchedule(_, let displayModel):
-                    state.displayModels[.fbTeamSchedule] = displayModel
                 case .fbLeagueSchedule(_, let displayModel):
                     state.displayModels[.fbLeagueSchedule] = displayModel
                 case .fbGameStats(_, let displayModel):
@@ -867,8 +946,6 @@ struct SearchStore {
                     state.displayModels[.nbaTeamStats] = displayModel
                 case .nbaTeamStandings(_, let displayModel):
                     state.displayModels[.nbaTeamStandings] = displayModel
-                case .nbaTeamSchedule(_, let displayModel):
-                    state.displayModels[.nbaTeamSchedule] = displayModel
                 case .nbaLeagueSchedule(_, let displayModel):
                     state.displayModels[.nbaLeagueSchedule] = displayModel
                 case .nbaGameStats(_, let displayModel):
@@ -888,8 +965,6 @@ struct SearchStore {
                     state.displayModels[.kboTeamStats] = displayModel
                 case .kboTeamStandings(_, let displayModel):
                     state.displayModels[.kboTeamStandings] = displayModel
-                case .kboTeamSchedule(_, let displayModel):
-                    state.displayModels[.kboTeamSchedule] = displayModel
                 case .kboLeagueSchedule(_, let displayModel):
                     state.displayModels[.kboLeagueSchedule] = displayModel
                 case .kboGameStats(_, let displayModel):
@@ -907,8 +982,6 @@ struct SearchStore {
                     state.displayModels[.mlbTeamStats] = displayModel
                 case .mlbTeamStandings(_, let displayModel):
                     state.displayModels[.mlbTeamStandings] = displayModel
-                case .mlbTeamSchedule(_, let displayModel):
-                    state.displayModels[.mlbTeamSchedule] = displayModel
                 case .mlbLeagueSchedule(_, let displayModel):
                     state.displayModels[.mlbLeagueSchedule] = displayModel
                 case .mlbGameStats(_, let displayModel):
@@ -940,6 +1013,13 @@ struct SearchStore {
                 state.poppedView = nil
                 
                 return .none
+                
+            case .testSearch(let viewForTest):
+                return .run { send in
+                    let result = try await searchClient.fetchFromJson(viewForTest: viewForTest)
+                    
+                    await send(.searchResultsReceived(result))
+                }
             }
         }
     }

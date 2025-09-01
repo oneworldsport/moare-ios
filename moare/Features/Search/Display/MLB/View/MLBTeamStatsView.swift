@@ -23,43 +23,46 @@ struct MLBTeamStatsView: View {
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             ScrollView {
-                if let mlbTeamStatsStore {
-                    InfoViewContainer(
-                        itemCount: (mlbTeamStatsStore.baseStats.displayModel?.stats.count ?? 0) + 1,
-                        measureContent: { scope in
+                InfoViewContainer(
+                    itemCount: (mlbTeamStatsStore?.baseStats.displayModel?.stats.count ?? 0) + 1,
+                    shouldShowMeasureContent: true,
+                    measureContent: { scope in
+                        if let mlbTeamStatsStore {
                             MLBTeamStatsPlayerInfoItem(mlbTeamStatsStore: mlbTeamStatsStore)
-                                .frame(maxWidth: .infinity)
                                 .background(
                                     GeometryReader { geometry in
+                                        Color.clear.onAppear {
+                                            scope.updateItemFrame(index: 0, geometry: geometry)
+                                        }
                                         Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
                                             scope.updateItemFrame(index: 0, geometry: geometry)
                                         }
                                     }
                                 )
                             
-                            MLBTeamStatsList(mlbTeamStatsStore: mlbTeamStatsStore) { index, geometry in
-                                scope.updateItemFrame(index: index, geometry: geometry)
-                            }
-                            .frame(maxWidth: .infinity)
-                        },
-                        displayContent: { scope in
+                            MLBTeamStatsList(mlbTeamStatsStore: mlbTeamStatsStore, scope: scope)
+                        }
+                    },
+                    displayContent: { scope in
+                        if let mlbTeamStatsStore {
+                            // team info
                             MLBTeamStatsPlayerInfoItem(
                                 mlbTeamStatsStore: mlbTeamStatsStore,
                                 isAniItem: true,
                                 itemOffset: scope.computedOffset(for: 0),
                                 showContents: scope.showContents
                             )
+                            
+                            // stats list
                             MLBTeamStatsList(
                                 mlbTeamStatsStore: mlbTeamStatsStore,
                                 isAniItem: true,
-                                itemOffset: scope.computedOffset(for: 1),
-                                showContents: scope.showContents
+                                scope: scope
                             )
                         }
-                    )
-                }
+                    }
+                )
             } // ScrollView
-            .padding(.top, 6)
             .onAppear {
                 // init MLBTeamStatsStore
                 let mlbTeamStatsStore: StoreOf<MLBTeamStatsStore> = storeManager.getStore(forKey: StoreKeys.mlbTeamStatsStore) ?? {
@@ -108,15 +111,12 @@ struct MLBTeamStatsPlayerInfoItem: View {
     
     var body: some View {
         let displayModel = mlbTeamStatsStore.baseStats.displayModel
-        let playerNameDic = mlbTeamStatsStore.baseStats.playerNameDictionary
         let teamNameDic = mlbTeamStatsStore.baseStats.teamNameDictionary
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemOffset: itemOffset
         ) {
-            HCapsuleBar()
-            
             if let team = displayModel?.team {
                 HStack {
                     URLImage(url: MLBUtil.teamLogoURL(id: team.id), isSvg: true)
@@ -127,49 +127,49 @@ struct MLBTeamStatsPlayerInfoItem: View {
                             .font(.system(size: 16))
                             .fontWeight(.medium)
                         
-                        Text(team.teamName)
+                        Text(team.name)
                             .font(.system(size: 15))
                             .fontWeight(.light)
                             .lineLimit(2)
                         
-                        HStack(spacing: 0) {
+                        (
                             Text("연고지: ")
                                 .font(.system(size: 15))
-                            
-                            Text(team.locationName)
+                            + Text(team.locationName)
                                 .font(.system(size: 16))
                                 .fontWeight(.medium)
-                        }
+                        )
+                        .multilineTextAlignment(.leading)
                     }
                     
                     // venue, conference, division
                     VStack(alignment: .leading) {
-                        HStack(spacing: 0) {
+                        (
                             Text("홈구장: ")
                                 .font(.system(size: 15))
-                            
-                            Text(teamNameDic["venue_\(team.id)"] ?? (displayModel?.venue.name ?? ""))
+                            + Text(teamNameDic["venue_\(team.id)"] ?? (displayModel!.venue.name))
                                 .font(.system(size: 16))
                                 .fontWeight(.medium)
-                        }
+                        )
+                        .multilineTextAlignment(.leading)
                         
-                        HStack(spacing: 0) {
+                        (
                             Text("리그: ")
                                 .font(.system(size: 15))
-                            
-                            Text(team.league.name)
+                            + Text(MLBUtil.leagueDivisionMap[team.league.id] ?? team.league.name)
                                 .font(.system(size: 16))
                                 .fontWeight(.medium)
-                        }
+                        )
+                        .multilineTextAlignment(.leading)
                         
-                        HStack(spacing: 0) {
+                        (
                             Text("디비전: ")
                                 .font(.system(size: 15))
-                            
-                            Text(team.division.name)
+                            + Text(MLBUtil.leagueDivisionMap[team.division.id] ?? team.division.name)
                                 .font(.system(size: 16))
                                 .fontWeight(.medium)
-                        }
+                        )
+                        .multilineTextAlignment(.leading)
                     }
                 }
                 .opacity(showContents ? 1 : 0)
@@ -184,38 +184,46 @@ struct MLBTeamStatsList: View {
     @Bindable var mlbTeamStatsStore: StoreOf<MLBTeamStatsStore>
     
     let isAniItem: Bool
-    let itemOffset: CGSize?
-    let showContents: Bool
-    
-    let updateItemPosition: (Int, GeometryProxy) -> Void
+    let scope: InfoViewScope
     
     init(
         mlbTeamStatsStore: StoreOf<MLBTeamStatsStore>,
         isAniItem: Bool = false,
-        itemOffset: CGSize? = nil,
-        showContents: Bool = true,
-        updateItemPosition: @escaping (Int, GeometryProxy) -> Void = { _, _ in }
+        scope: InfoViewScope,
     ) {
         self.mlbTeamStatsStore = mlbTeamStatsStore
         self.isAniItem = isAniItem
-        self.itemOffset = itemOffset
-        self.showContents = showContents
-        self.updateItemPosition = updateItemPosition
+        self.scope = scope
     }
     
     var body: some View {
         if let stats = mlbTeamStatsStore.baseStats.displayModel?.stats {
             ForEach(stats.indices, id: \.self) { index in
-                let data = stats[index]
+                let stats = stats[index]
+                let itemIndex = index + 1
                 
                 MLBTeamStatsListItem(
                     mlbTeamStatsStore: mlbTeamStatsStore,
-                    data: data,
-                    index: index,
+                    stats: stats,
                     isAniItem: isAniItem,
-                    itemOffset: itemOffset,
-                    showContents: showContents,
-                    updateItemPosition: updateItemPosition
+                    itemSize: scope.itemSizes[itemIndex],
+                    itemOffset: scope.computedOffset(for: itemIndex),
+                    showContents: scope.showContents
+                )
+                .background(
+                    GeometryReader { geometry in
+                        if !isAniItem {
+                            // 1) 최초 한 번은 무조건 측정 - gpt
+                            // NOTE: Color.clear.onChange()만 했을때는 update가 안돼서 Color.clear.onAppear 추가해줌
+                            Color.clear.onAppear {
+                                scope.updateItemFrame(index: itemIndex, geometry: geometry)
+                            }
+                            // 2) 위치 변하면 - gpt
+                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                scope.updateItemFrame(index: itemIndex, geometry: geometry)
+                            }
+                        }
+                    }
                 )
             }
         }
@@ -225,29 +233,46 @@ struct MLBTeamStatsList: View {
 struct MLBTeamStatsListItem: View {
     @Bindable var mlbTeamStatsStore: StoreOf<MLBTeamStatsStore>
     
-    let data: MLBTeamStats
-    let index: Int
+    let stats: MLBTeamStats
     let isAniItem: Bool
+    let itemSize: CGSize?
     let itemOffset: CGSize?
     let showContents: Bool
     
-    let updateItemPosition: (Int, GeometryProxy) -> Void
-    
-    var centerPosition = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
+    init(
+        mlbTeamStatsStore: StoreOf<MLBTeamStatsStore>,
+        stats: MLBTeamStats,
+        isAniItem: Bool = false,
+        itemSize: CGSize? = nil,
+        itemOffset: CGSize? = nil,
+        showContents: Bool = true
+    ) {
+        self.mlbTeamStatsStore = mlbTeamStatsStore
+        self.stats = stats
+        self.isAniItem = isAniItem
+        
+        if isAniItem {
+            self.itemSize = itemSize
+            self.itemOffset = itemOffset
+            self.showContents = showContents
+        } else {
+            self.itemSize = nil
+            self.itemOffset = nil
+            self.showContents = true
+        }
+    }
     
     var body: some View {
         MovingCapsuleItemContainer(
+            isButton: false,
             isAniItem: isAniItem,
             itemOffset: itemOffset,
-            updateItemPosition: { geometry in
-                updateItemPosition(index + 1, geometry)
-            }
         ) {
             MLBTeamStatsItem(
                 mlbTeamStatsStore: mlbTeamStatsStore,
-                data: data,
-                showContents: showContents
+                stats: stats
             )
+            .opacity(showContents ? 1 : 0)
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
@@ -258,235 +283,303 @@ struct MLBTeamStatsListItem: View {
 struct MLBTeamStatsItem: View {
     @Bindable var mlbTeamStatsStore: StoreOf<MLBTeamStatsStore>
     
-    let data: MLBTeamStats
-    let showContents: Bool
-
-    init(
-        mlbTeamStatsStore: StoreOf<MLBTeamStatsStore>,
-        data: MLBTeamStats,
-        showContents: Bool = true
-    ) {
-        self.mlbTeamStatsStore = mlbTeamStatsStore
-        self.data = data
-        self.showContents = showContents
-    }
+    let stats: MLBTeamStats
     
-    var body: some View {
-        let displayModel = mlbTeamStatsStore.baseStats.displayModel
+    @State private var isBasicStatsOpened = true
+    @State private var isHitterStatsOpened = false
+    @State private var isPitcherStatsOpened = false
 
-        HCapsuleBar()
-        
-        if let team = displayModel?.team, let record = data.recordData,
-           let hitting = data.hitting, let pitching = data.pitching,
-           let fielding = data.fielding, let catching = data.catching {
+    var body: some View {
+        if let team = mlbTeamStatsStore.baseStats.displayModel?.team, let record = stats.recordData,
+           let hitting = stats.hitting, let pitching = stats.pitching,
+           let fielding = stats.fielding, let catching = stats.catching {
             BaseballLeagueTitle(
                 logoUrl: MLBUtil.mlbLogoUrl,
                 name: "MLB",
                 season: team.season
             )
-            .padding(.bottom, UIConstants.Padding.defalutVPadding)
-            .opacity(showContents ? 1 : 0)
             
             // stats
-            HStack {
-                FBStatDataItem(
-                    category: "\(MLBUtil.leagueDivisionMap[team.league.id] ?? team.league.name) 순위",
-                    data: record.divisionRank,
-                    customCategoryFontSize: 11,
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "승",
-                    data: "\(record.wins)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "패",
-                    data: "\(record.losses)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "경기수",
-                    data: "\(record.gamesPlayed)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "게임차",
-                    data: record.gamesBack,
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "승률",
-                    data: record.winningPercentage,
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
+            Button(action: {
+                withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                    isBasicStatsOpened.toggle()
+                }
+            }) {
+                Text("기본 기록")
+                
+                Image(systemName: "chevron.\(isBasicStatsOpened ? "up" : "down")")
+                    .font(.system(size: 14))
+                    .foregroundStyle(.secondary)
             }
-            .opacity(showContents ? 1 : 0)
+            .foregroundStyle(.primary)
             
-            HStack {
-                FBStatDataItem(
-                    category: "타율",
-                    data: hitting.avg,
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "안타",
-                    data: "\(hitting.hits)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "홈런",
-                    data: "\(hitting.homeRuns)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "출루율",
-                    data: hitting.obp,
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "장타율",
-                    data: hitting.slg,
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "ops",
-                    data: hitting.ops,
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
+            if isBasicStatsOpened {
+                HStack(spacing: 0) {
+                    FBStatDataItem(
+                        category: "\(MLBUtil.leagueDivisionMap[team.league.id] ?? team.league.name) 순위",
+                        data: record.divisionRank,
+                        customCategoryFontSize: 11,
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "승",
+                        data: "\(record.wins)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "패",
+                        data: "\(record.losses)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "경기수",
+                        data: "\(record.gamesPlayed)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "게임차",
+                        data: record.gamesBack,
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "승률",
+                        data: record.winningPercentage,
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                }
             }
-            .opacity(showContents ? 1 : 0)
             
-            HStack {
-                FBStatDataItem(
-                    category: "사구-[타자]",
-                    data: "\(hitting.hitByPitch)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "병살타",
-                    data: "\(hitting.groundIntoDoublePlay)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "땅볼아웃",
-                    data: "\(hitting.groundOuts)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "득점",
-                    data: "\(hitting.runs)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "타점",
-                    data: "\(hitting.rbi)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "삼진-[타자]",
-                    data: "\(hitting.strikeOuts)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
+            Button(action: {
+                withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                    isHitterStatsOpened.toggle()
+                }
+            }) {
+                Text("타자 기록")
+                
+                Image(systemName: "chevron.\(isHitterStatsOpened ? "up" : "down")")
+                    .font(.system(size: 14))
+                    .foregroundStyle(.secondary)
             }
-            .opacity(showContents ? 1 : 0)
+            .foregroundStyle(.primary)
             
-            HStack {
-                FBStatDataItem(
-                    category: "피안타율",
-                    data: pitching.avg,
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "피안타",
-                    data: "\(pitching.hits)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "피홈런",
-                    data: "\(pitching.homeRuns)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "평균자책점",
-                    data: pitching.era,
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "세이브",
-                    data: "\(pitching.saves)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "블론세이브",
-                    data: "\(pitching.blownSaves)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
+            if isHitterStatsOpened {
+                HStack(spacing: 0) {
+                    FBStatDataItem(
+                        category: "타율",
+                        data: hitting.avg,
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "안타",
+                        data: "\(hitting.hits)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "홈런",
+                        data: "\(hitting.homeRuns)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "출루율",
+                        data: hitting.obp,
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "장타율",
+                        data: hitting.slg,
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                }
+                
+                HDivider(color: .secondary)
+                    .opacity(0.5)
+                
+                HStack(spacing: 0) {
+                    FBStatDataItem(
+                        category: "ops",
+                        data: hitting.ops,
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "득점",
+                        data: "\(hitting.runs)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "타점",
+                        data: "\(hitting.rbi)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "삼진",
+                        data: "\(hitting.strikeOuts)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "사구",
+                        data: "\(hitting.hitByPitch)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                }
+                
+                HDivider(color: .secondary)
+                    .opacity(0.5)
+                
+                HStack(spacing: 0) {
+                    FBStatDataItem(
+                        category: "병살타",
+                        data: "\(hitting.groundIntoDoublePlay)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "땅볼아웃",
+                        data: "\(hitting.groundOuts)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "도루성공",
+                        data: "\(hitting.stolenBases)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "도루실패",
+                        data: "\(hitting.caughtStealing)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                        .opacity(0)
+                    EmptyStatDataItem()
+                        .frame(maxWidth: .infinity)
+                }
             }
-            .opacity(showContents ? 1 : 0)
             
-            HStack {
-                FBStatDataItem(
-                    category: "볼넷-[투수]",
-                    data: "\(pitching.baseOnBalls)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "보크",
-                    data: "\(pitching.balks)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "홀드",
-                    data: "\(pitching.holds)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "이닝당 출루허용률",
-                    data: pitching.whip,
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "도루성공",
-                    data: "\(hitting.stolenBases)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
-                FBStatDataItem(
-                    category: "도루실패",
-                    data: "\(hitting.caughtStealing)",
-                    customCategoryFontSize: 11
-                )
-                .frame(maxWidth: .infinity)
+            Button(action: {
+                withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                    isPitcherStatsOpened.toggle()
+                }
+            }) {
+                Text("투수 기록")
+                
+                Image(systemName: "chevron.\(isPitcherStatsOpened ? "up" : "down")")
+                    .font(.system(size: 14))
+                    .foregroundStyle(.secondary)
             }
-            .opacity(showContents ? 1 : 0)
+            .foregroundStyle(.primary)
+            
+            if isPitcherStatsOpened {
+                HStack(spacing: 0) {
+                    FBStatDataItem(
+                        category: "평균자책점",
+                        data: pitching.era,
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "피안타율",
+                        data: pitching.avg,
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "피안타",
+                        data: "\(pitching.hits)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "피홈런",
+                        data: "\(pitching.homeRuns)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "세이브",
+                        data: "\(pitching.saves)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                }
+                
+                HDivider(color: .secondary)
+                    .opacity(0.5)
+                
+                HStack(spacing: 0) {
+                    FBStatDataItem(
+                        category: "이닝당 출루허용률",
+                        data: pitching.whip,
+                        customCategoryFontSize: 11,
+                        customWidth: 70
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "볼넷",
+                        data: "\(pitching.baseOnBalls)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "보크",
+                        data: "\(pitching.balks)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "홀드",
+                        data: "\(pitching.holds)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                    StatsDivider()
+                    FBStatDataItem(
+                        category: "블론세이브",
+                        data: "\(pitching.blownSaves)",
+                        customCategoryFontSize: 11
+                    )
+                    .frame(maxWidth: .infinity)
+                }
+            }
         }
     }
 }

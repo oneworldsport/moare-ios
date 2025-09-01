@@ -78,17 +78,35 @@ struct KBOLeagueScheduleStore {
                 }
                 
                 // select default yearMonth
-                if let date = state.baseSchedule.displayModel?.games.first?.date {
-                    let defaultYearMonth = CalendarUtil.formatDate(date: date, formatType: .yearMonth)
-                    let defaultYearMonthIndex = state.baseSchedule.yearMonthList.enumerated().first { $0.element == defaultYearMonth }
-                    
-                    state.baseSchedule.selectedYearMonth = defaultYearMonth
-                    
-                    if let defaultYearMonthIndex {
-                        state.baseSchedule.selectedYearMonthIndex = defaultYearMonthIndex.offset
+                switch state.baseSchedule.displayModel?.scheduleType {
+                case .league:
+                    if let date = state.baseSchedule.displayModel?.games.first?.date {
+                        return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
                     }
+                    
+                    return .send(.setDays(isInit: true))
+                    
+                case .team:
+                    let upcomingGame = state.baseSchedule.displayModel?.games.first { game in
+                        CalendarUtil.isUpcomingDay(date: game.date)
+                    }
+                    
+                    
+                    if let upcomingGame {
+                        return .send(.baseSchedule(.setDefaultYearMonth(date: upcomingGame.date)))
+                    } else {
+                        if let date = state.baseSchedule.displayModel?.games.last?.date {
+                            return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
+                        }
+                    }
+                    
+                    return .send(.setDays(isInit: true))
+    
+                default:
+                    return .none
                 }
                 
+            case .baseSchedule(.setDefaultYearMonth(_)):
                 return .send(.setDays(isInit: true))
                 
             case .baseSchedule(_):
@@ -98,7 +116,14 @@ struct KBOLeagueScheduleStore {
                 state.baseSchedule.selectedYearMonth = yearMonth
                 state.baseSchedule.selectedYearMonthIndex = selectedIndex
                 
-                return .send(.fetchGames)
+                switch state.baseSchedule.displayModel?.scheduleType {
+                case .league:
+                    return .send(.fetchGames)
+                case .team:
+                    return .send(.setDays())
+                default :
+                    return .none
+                }
                 
             case .toggleAllResult:
                 let newState = !state.baseSchedule.isAllResultOpened
@@ -119,7 +144,7 @@ struct KBOLeagueScheduleStore {
                 if components.count == 2,
                    let year = Int(components[0]),
                    let month = Int(components[1]) {
-                    var days = CalendarUtil.getDaysInMonth(year: Int("20\(year)") ?? 2025, month: month)
+                    var days = CalendarUtil.getDaysInMonth(year: Int("20\(year)") ?? CalendarUtil.currentYear, month: month)
                     
                     var gameResultOpenedStateList: [String: Bool] = [:]
                     var newFilteredGame = state.filteredGames
@@ -199,7 +224,7 @@ struct KBOLeagueScheduleStore {
                             playerId: nil
                         )
                         
-                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, yearMonth: String(yearMonth))
+                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel?.season, yearMonth: String(yearMonth))
                         
                         if case let .kboLeagueSchedule(_, displayModel) = result.data {
                             await send(.setDisplayModel(displayModel: displayModel))

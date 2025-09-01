@@ -1,0 +1,13 @@
+{
+  "keywords":[],
+  "entityInfo":[{"entityId":808982,"entityName":"이정후","category":"baseball","entityType":"player","leagueId":90102,"playerId":808982,"teamId":137}],
+  "dataType":"baseball_player_stats",
+  "data": {
+    "info": {
+      "player": {
+        "isPlayer":true,"lastName":"Lee","isVerified":false,"pitchHand":{"description":"Right","code":"R"},"mlbDebutDate":"2024-03-28","boxscoreName":"Lee, J.H.","fullName":"Jung Hoo Lee","weight":197,"active":true,"birthCity":"Seoul","strikeZoneTop":3.31,"birthDate":"1998-08-20","primaryNumber":"51","primaryPosition":{"name":"Outfielder","code":"8","type":"Outfielder","abbreviation":"CF"},"firstName":"Jung Hoo","currentAge":26,"firstLastName":"Jung Hoo Lee","birthCountry":"Republic of Korea","id":808982,"strikeZoneBottom":1.4,"batSide":{"description":"Left","code":"L"},"height":"6' 0\""},
+      "statistics": [
+        {
+          "type":"season","fielding":{"gameType":"R","stat":{"rangeFactorPer9Inn":"2.15","fielding":".993","rangeFactorPerGame":"2.03","gamesStarted":65,"doublePlays":2,"chances":139,"gamesPlayed":68,"assists":5,"throwingErrors":1,"innings":"578.2","games":68,"position":{"name":"Outfielder","code":"8","type":"Outfielder","abbreviation":"CF"},"putOuts":133,"errors":1,"triplePlays":0},"league":{"name":"National League","link":"/api/v1/league/104","id":104},"season":"2025","team":{"name":"San Francisco Giants","link":"/api/v1/teams/137","id":137},"position":{"name":"Outfielder","code":"8","type":"Outfielder","abbreviation":"CF"},"sport":{"link":"/api/v1/sports/1","abbreviation":"MLB","id":1}},"hitting":{"season":"2025","gameType":"R","stat":{"triples":5,"homeRuns":6,"catchersInterference":0,"strikeOuts":34,"hitByPitch":2,"sacBunts":0,"totalBases":116,"atBatsPerHomeRun":"44.67","avg":".265","stolenBases":6,"gamesPlayed":70,"atBats":268,"airOuts":85,"sacFlies":3,"caughtStealing":1,"baseOnBalls":24,"numberOfPitches":1128,"slg":".433","hits":71,"plateAppearances":297,"groundOuts":81,"ops":".760","stolenBasePercentage":".857","doubles":17,"leftOnBase":96,"rbi":34,"babip":".281","groundOutsToAirouts":"0.95","intentionalWalks":0,"obp":".327","runs":42,"groundIntoDoublePlay":0},"team":{"name":"San Francisco Giants","link":"/api/v1/teams/137","id":137},"sport":{"link":"/api/v1/sports/1","abbreviation":"MLB","id":1},"league":{"name":"National League","link":"/api/v1/league/104","id":104}}}]}
+  }
+}

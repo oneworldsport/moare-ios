@@ -9,4 +9,5 @@ protocol SportDisplayModel: Equatable {
     var leagueId: Int { get }
     var keywords: [Keyword] { get }
     var entityInfo: [EntityInfo] { get }
+    var season: Int { get }
 }

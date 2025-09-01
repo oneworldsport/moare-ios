@@ -55,6 +55,8 @@ struct MLBGameStatsStore {
             case .baseGameStats(.initData):
                 // init with default value
                 state.teamBoxScore = nil
+                state.teamHitters = []
+                state.teamPitchers = []
 //                state.playersTotalStats = nil
                 
                 return .send(.baseGameStats(.selectTeam(0)))

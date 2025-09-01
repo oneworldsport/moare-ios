@@ -10,6 +10,8 @@ import ComposableArchitecture
 
 @Reducer
 struct NBALeagueScheduleStore {
+    typealias BaseSchedule = BaseScheduleStore<NBALeagueScheduleDisplayModel>
+    
     let searchClient = SearchClient()
     
     @ObservableState
@@ -17,21 +19,12 @@ struct NBALeagueScheduleStore {
         /* ---------------------
            data state
            --------------------- */
-        var displayModel: NBALeagueScheduleDisplayModel? = nil
-        var displayDataState: ApiFetchState = ApiFetchState.idle
-        var yearMonthList: [String] = []
-        var days: [DayInfo] = []
+        var baseSchedule = BaseSchedule.State()
         var filteredGames: [Int: [NBAGameForSchedule]] = [:]
         
         /* ---------------------
            ui state
            --------------------- */
-        var selectedYearMonth = ""
-        var selectedDay: DayInfo? = nil
-        var selectedYearMonthIndex = 0
-        var selectedDayIndex = 0
-        var isAllResultOpened = false
-        var scrollCalendar = true
         var gameResultOpenedStateList: [String: Bool] = [:]
         
         /* ---------------------
@@ -45,13 +38,12 @@ struct NBALeagueScheduleStore {
         /* ---------------------
            init
            --------------------- */
-        case initData(displayModel: NBALeagueScheduleDisplayModel)
+        case baseSchedule(BaseSchedule.Action)
         
         /* ---------------------
            view action
            --------------------- */
         case selectYearMonth(yearMonth: String, selectedIndex: Int)
-        case selectDay(day: DayInfo, selectedIndex: Int)
         case toggleAllResult
         case updateResultOpenedState(gameCode: String, isOpened: Bool)
         case updateGamesData(
@@ -75,57 +67,88 @@ struct NBALeagueScheduleStore {
     @Dependency(\.translatedNameProvider) var nameProvider
     
     var body: some Reducer<State, Action> {
+        Scope(state: \.baseSchedule, action: \.baseSchedule) {
+            BaseSchedule()
+        }
+        
         Reduce { state, action in
             switch action {
-            case .initData(let displayModel):
+            case .baseSchedule(.initData):
                 // init with default value
-                state.displayDataState = .idle
-                state.days = []
                 state.filteredGames = [:]
-                state.selectedYearMonth = ""
-                state.selectedDay = nil
-                state.selectedYearMonthIndex = 0
-                state.selectedDayIndex = 0
-                state.isAllResultOpened = false
-                state.scrollCalendar = true
                 state.gameResultOpenedStateList = [:]
-                state.dataForViewStack = nil
-                
+
                 // init data
-                state.displayModel = displayModel
-                state.yearMonthList = displayModel.yearMonthList
-                
                 state.teamNameDictionary = nameProvider.getDictionary(category: "nba_team")
                 
                 // select default yearMonth
-                if let date = displayModel.games.first?.date {
-                    let defaultYearMonth = CalendarUtil.formatDate(date: date, formatType: .yearMonth)
-                    let defaultYearMonthIndex = state.yearMonthList.enumerated().first { $0.element == defaultYearMonth }
-                    
-                    state.selectedYearMonth = defaultYearMonth
-                    
-                    if let defaultYearMonthIndex {
-                        state.selectedYearMonthIndex = defaultYearMonthIndex.offset
+                if let yearMonthList = state.baseSchedule.displayModel?.yearMonthList {
+                    state.baseSchedule.yearMonthList = yearMonthList
+                }
+
+                switch state.baseSchedule.displayModel?.scheduleType {
+                case .league:
+                    if let date = state.baseSchedule.displayModel?.games.first?.date {
+                        return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
                     }
+                    
+                    return .send(.setDays(isInit: true))
+                    
+                case .team:
+                    let upcomingGame = state.baseSchedule.displayModel?.games.first { game in
+                        CalendarUtil.isUpcomingDay(date: game.date)
+                    }
+                    
+                    
+                    if let upcomingGame {
+                        return .send(.baseSchedule(.setDefaultYearMonth(date: upcomingGame.date)))
+                    } else {
+                        if let date = state.baseSchedule.displayModel?.games.last?.date {
+                            return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
+                        }
+                    }
+                    
+                    return .send(.setDays(isInit: true))
+                    
+                case .teamFlat:
+                    if let displayModel = state.baseSchedule.displayModel as? NBALeagueScheduleDisplayModel {
+                            // filteredGames 초기화
+                            state.filteredGames = [0: displayModel.games]
+                            
+                            // gameResultOpenedStateList 초기화
+                            state.gameResultOpenedStateList = displayModel.games.reduce(into: [String: Bool]()) { dict, game in
+                                dict[game.gameId] = false
+                            }
+                        }
+                    
+                    return .none
+    
+                default:
+                    return .none
                 }
                 
+            case .baseSchedule(.setDefaultYearMonth(_)):
                 return .send(.setDays(isInit: true))
                 
-            case .selectYearMonth(let yearMonth, let selectedIndex):
-                state.selectedYearMonth = yearMonth
-                state.selectedYearMonthIndex = selectedIndex
-                
-                return .send(.fetchGames)
-                
-            case .selectDay(let day, let index):
-                state.selectedDay = day
-                state.selectedDayIndex = index
-
+            case .baseSchedule(_):
                 return .none
                 
+            case .selectYearMonth(let yearMonth, let selectedIndex):
+                state.baseSchedule.selectedYearMonth = yearMonth
+                state.baseSchedule.selectedYearMonthIndex = selectedIndex
+                
+                switch state.baseSchedule.displayModel?.scheduleType {
+                case .league:
+                    return .send(.fetchGames)
+                case .team:
+                    return .send(.setDays())
+                default :
+                    return .none
+                }
+                
             case .toggleAllResult:
-                let newState = !state.isAllResultOpened
-                state.isAllResultOpened = newState
+                let newState = !state.baseSchedule.isAllResultOpened
+                state.baseSchedule.isAllResultOpened = newState
                 state.gameResultOpenedStateList = state.gameResultOpenedStateList.mapValues { _ in newState }
                 
                 return .none
@@ -137,7 +160,7 @@ struct NBALeagueScheduleStore {
                 
             case .setDays(let isInit):
                 // set filtered games to each day
-                let components = state.selectedYearMonth.split(separator: "/")
+                let components = state.baseSchedule.selectedYearMonth.split(separator: "/")
                 
                 if components.count == 2,
                    let year = Int(components[0]),
@@ -150,11 +173,11 @@ struct NBALeagueScheduleStore {
                     days = days.enumerated().compactMap { index, day in
                         var newDay = day
                         
-                        let games = state.displayModel?.games.filter { game in
-                            CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.selectedYearMonth, selectedDay: day.day)
+                        let games = state.baseSchedule.displayModel?.games.filter { game in
+                            CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: day.day)
                         }
                         
-                        gameResultOpenedStateList.merge((games ?? []).reduce(into: [:]) { $0[$1.gameId] = state.isAllResultOpened }) { _, new in new }
+                        gameResultOpenedStateList.merge((games ?? []).reduce(into: [:]) { $0[$1.gameId] = state.baseSchedule.isAllResultOpened }) { _, new in new }
                         
                         // NOTE: games는 optional인데 왜 컴파일 에러가 안나지..?
                         newFilteredGame[index] = games ?? []
@@ -171,23 +194,23 @@ struct NBALeagueScheduleStore {
                     state.gameResultOpenedStateList = gameResultOpenedStateList
                     
                     // 2. Set days to days calendar.
-                    state.days = days
+                    state.baseSchedule.days = days
                     
                     // 3. Move bar and scroll the days calendar.
                     if isInit {
                         // select default day
-                        let defaultDay = CalendarUtil.getDefaultDay(yearMonth: state.selectedYearMonth, dayList: state.days)
+                        let defaultDay = CalendarUtil.getDefaultDay(yearMonth: state.baseSchedule.selectedYearMonth, dayList: state.baseSchedule.days)
                         
                         if let defaultDay = defaultDay {
-                            state.selectedDay = defaultDay.1
-                            state.selectedDayIndex = defaultDay.0
+                            state.baseSchedule.selectedDay = defaultDay.1
+                            state.baseSchedule.selectedDayIndex = defaultDay.0
                         }
                     } else {
                         // select first day that has games
-                        for (index, day) in state.days.enumerated() {
+                        for (index, day) in state.baseSchedule.days.enumerated() {
                             if !day.isDataEmpty {
-                                state.selectedDay = day
-                                state.selectedDayIndex = index
+                                state.baseSchedule.selectedDay = day
+                                state.baseSchedule.selectedDayIndex = index
                                 break
                             }
                         }
@@ -205,7 +228,7 @@ struct NBALeagueScheduleStore {
                 return .none
                 
             case .fetchGames:
-                return .run { [selectedYearMonth = state.selectedYearMonth, displayModel = state.displayModel] send in
+                return .run { [selectedYearMonth = state.baseSchedule.selectedYearMonth, displayModel = state.baseSchedule.displayModel] send in
                     await send(.updateDisplayDataState(fetchState: .fetching), animation: AnimationConstants.AnimationType.defaultAnimation)
                     
                     do {
@@ -222,7 +245,7 @@ struct NBALeagueScheduleStore {
                             playerId: nil
                         )
                         
-                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, yearMonth: String(yearMonth))
+                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel?.season, yearMonth: String(yearMonth))
                         
                         if case let .nbaLeagueSchedule(_, displayModel) = result.data {
                             await send(.setDisplayModel(displayModel: displayModel))
@@ -248,11 +271,11 @@ struct NBALeagueScheduleStore {
                 
                 var newDisplayModel = leagueScheduleDisplayModel
                 newDisplayModel.games = newGames
-                state.displayModel = newDisplayModel
+                state.baseSchedule.displayModel = newDisplayModel
                 
                 var newFilteredGames = state.filteredGames
-                newFilteredGames[state.selectedDayIndex] = newDisplayModel.games.filter { game in
-                    CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.selectedYearMonth, selectedDay: state.selectedDayIndex + 1)
+                newFilteredGames[state.baseSchedule.selectedDayIndex] = newDisplayModel.games.filter { game in
+                    CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: state.baseSchedule.selectedDayIndex + 1)
                 }
                 
                 state.filteredGames = newFilteredGames
@@ -276,12 +299,12 @@ struct NBALeagueScheduleStore {
                 return .none
                 
             case .updateDisplayDataState(let fetchState):
-                state.displayDataState = fetchState
+                state.baseSchedule.displayDataState = fetchState
                 
                 return .none
                 
             case .setDisplayModel(let displayModel):
-                state.displayModel = displayModel
+                state.baseSchedule.displayModel = displayModel
                 
                 return .none
             } // switch action

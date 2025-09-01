@@ -15,7 +15,7 @@ struct ScheduleGameItem: View {
         let homeTeamScore = state.homeTeamScore
         let awayTeamScore = state.awayTeamScore
         
-        HStack {
+        HStack(spacing: 0) {
             /* ---------------------
                home
                --------------------- */
@@ -41,7 +41,7 @@ struct ScheduleGameItem: View {
                     }
                 }
             }
-            .frame(width: 100)
+            .frame(maxWidth: .infinity)
             .foregroundStyle(.primary)
             .disabled(true) // TODO: modify when api added
             
@@ -51,7 +51,7 @@ struct ScheduleGameItem: View {
             
             // score
             Text("\(homeTeamScore)")
-                .frame(maxWidth: .infinity)
+                .frame(width: 60)
                 .opacity(state.isResultOpened ? 1 : 0) // TODO: onTapGesture is not triggered when opacity is 0
                 .foregroundStyle(homeTeamScore >= awayTeamScore ? .moare : .primary)
             
@@ -62,7 +62,7 @@ struct ScheduleGameItem: View {
             /* ---------------------
                game info
                --------------------- */
-            VStack {
+            VStack(spacing: 0) {
                 // game status
                 CapsuleButton(
                     text: state.gameStatusText,
@@ -87,7 +87,6 @@ struct ScheduleGameItem: View {
                         .padding(.bottom, 2)
                 }
                 
-                
                 // venue
                 if state.shouldShowVenue {
                     Text("장소: \(state.venue)")
@@ -98,15 +97,17 @@ struct ScheduleGameItem: View {
                 
                 // game type
                 // TODO: 나중에 작업
-                if state.shouldShowGameType {
-                    
+                if state.gameType != nil && state.shouldShowGameType {
+                    Text(state.gameType!)
+                        .font(.system(size: 12, weight: .light))
+                        .lineLimit(1)
                 }
                 
                 // referee
-                if state.shouldShowReferee {
-                    Text("심판: \(state.referee ?? "")")
-                    .font(.system(size: 12, weight: .light))
-                    .lineLimit(1)
+                if state.referee != nil && state.shouldShowReferee {
+                    Text("심판: \(state.referee!)")
+                        .font(.system(size: 12, weight: .light))
+                        .lineLimit(1)
                 }
             }
             .frame(width: 110)
@@ -120,7 +121,7 @@ struct ScheduleGameItem: View {
                --------------------- */
             // socre
             Text("\(awayTeamScore)")
-                .frame(maxWidth: .infinity)
+                .frame(width: 60)
                 .opacity(state.isResultOpened ? 1 : 0)
                 .foregroundStyle(awayTeamScore >= homeTeamScore ? .moare : .primary)
             
@@ -150,10 +151,11 @@ struct ScheduleGameItem: View {
                     }
                 }
             }
-            .frame(width: 100)
+            .frame(maxWidth: .infinity)
             .foregroundStyle(.primary)
             .disabled(true) // TODO: modify when api added
         } // HStack
+        .padding(.horizontal, 4)
         .background(Color.clear) // added for tapGesture on Spacer()
         .onTapGesture {
             // TODO: Should change to Button

@@ -39,22 +39,63 @@ struct HCapsuleBar: View {
     }
 }
 
+// TODO: corner 별로 round 적용할 수 있게 해야함.
 struct VCapsuleBar: View {
     let customHeight: CGFloat?
+    let customWidth: CGFloat
     let color: Color
     
-    init(customHeight: CGFloat? = nil, color: Color = .secondary) {
+    init(
+        customHeight: CGFloat? = nil,
+        customWidth: CGFloat? = nil,
+        color: Color = .secondary
+    ) {
         self.customHeight = customHeight
+        self.customWidth = customWidth ?? 2
+        self.color = color
+    }
+    
+    var body: some View {
+        if let customHeight {
+            Capsule()
+                .frame(width: customWidth, height: customHeight)
+                .foregroundColor(color)
+        } else {
+            Capsule()
+                .frame(width: customWidth)
+                .frame(maxHeight: .infinity)
+                .foregroundColor(color)
+        }
+    }
+}
+
+struct StatsDivider: View {
+    
+    var body: some View {
+        VCapsuleBar(customHeight: 40, customWidth: 1)
+            .opacity(0.5)
+    }
+}
+
+struct HDivider: View {
+    let height: CGFloat
+    let color: Color
+    
+    init(height: CGFloat = 1, color: Color = .moare) {
+        self.height = height
         self.color = color
     }
     
     var body: some View {
         Capsule()
-            .frame(maxWidth: 2, maxHeight: customHeight ?? .infinity)
+            .frame(maxWidth: .infinity)
+            .frame(height: height)
+            .padding(.horizontal, 8)
             .foregroundColor(color)
     }
 }
 
-//#Preview {
+#Preview {
+    StatsDivider()
 //    HCapsuleBar()
-//}
+}

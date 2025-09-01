@@ -23,6 +23,7 @@ struct KBOGameStatsStore {
         /* ---------------------
            data state
            --------------------- */
+        var displayModel: KBOGameStatsDisplayModel? = nil
         var baseGameStats = BaseGameStats.State()
         var teamLineup: KBOGameLineup? = nil
         var teamHitters: [KBOGameHitterStats] = []
@@ -55,6 +56,8 @@ struct KBOGameStatsStore {
             case .baseGameStats(.initData):
                 // init with default value
                 state.teamLineup = nil
+                state.teamHitters = []
+                state.teamPitchers = []
 //                state.playersTotalStats = nil
                 
                 return .send(.baseGameStats(.selectTeam(0)))
@@ -92,17 +95,17 @@ struct KBOGameStatsStore {
                 case 1:
                     state.teamHitters.sort { (Double($0.h) ?? 0) > Double($1.h) ?? 0 }
                 case 2:
-                    state.teamHitters.sort { (Double($0.hr) ?? 0) > Double($1.hr) ?? 0 }
+                    state.teamHitters.sort { $0.homeRuns > $1.homeRuns }
                 case 3:
                     state.teamHitters.sort { (Double($0.rbi) ?? 0) > Double($1.rbi) ?? 0 }
                 case 4:
                     state.teamHitters.sort { (Double($0.r) ?? 0) > Double($1.r) ?? 0 }
                 case 5:
-                    state.teamHitters.sort { (Double($0.sb) ?? 0) > Double($1.sb) ?? 0 }
+                    state.teamHitters.sort { $0.baseOnBalls > $1.baseOnBalls }
                 case 6:
-                    state.teamHitters.sort { (Double($0.bb) ?? 0) > Double($1.bb) ?? 0 }
+                    state.teamHitters.sort { $0.strikeOuts > $1.strikeOuts }
                 case 7:
-                    state.teamHitters.sort { (Double($0.so) ?? 0) > Double($1.so) ?? 0 }
+                    state.teamHitters.sort { $0.groundIntoDoublePlay > $1.groundIntoDoublePlay }
                 default: break
                 }
                 

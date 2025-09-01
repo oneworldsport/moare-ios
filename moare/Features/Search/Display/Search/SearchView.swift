@@ -32,6 +32,8 @@ struct SearchView: View {
     @State private var isNoticeIconVisible = false
     @State private var isNoticeOpened = false
     
+    var viewForTest: SportDisplayType? = nil
+    
     var body: some View {
         ZStack {
             if let searchStore = searchStore {
@@ -146,13 +148,20 @@ struct SearchView: View {
                            --------------------- */
                         if searchStore.resultVisibleState {
                             VStack {
-                                let views = viewsToRender()
-                                ForEach(views.indices, id: \.self) { index in
-                                    views[index]
+                                // by gpt
+                                // STUDY: searchStore.displayModels의 타입인 Dictionary는 순서가 보장되지 않기 때문에, 배열로 변환후 sortOrder를 사용해 정렬 후 view를 그려준다.
+                                ForEach(Array(searchStore.displayModels).sorted(by: { $0.key.sortOrder < $1.key.sortOrder }), id: \.key) { type, model in
+                                    if type == .kboPlayerStandings {
+                                        Text(StringConstants.viewPreparingAdviseText(type: "KBO 선수 순위"))
+                                    } else if type == .mlbPlayerStandings {
+                                        Text(StringConstants.viewPreparingAdviseText(type: "MLB 선수 순위"))
+                                    } else if let builder = viewBuilderMap[type], let model {
+                                        builder(model)
+                                    }
                                 }
-                            } // VStack
+                            }
                             .padding(.top, UIConstants.Padding.defaultPadding)
-                        } // if searchStore.resultVisibleState
+                        }
                         
                         /* ---------------------
                            error
@@ -276,6 +285,10 @@ struct SearchView: View {
             
             // test
 //            searchStore?.send(.initForTest)
+            
+            if let viewForTest = viewForTest {
+                self.searchStore?.send(.testSearch(viewForTest: viewForTest))
+            }
         }
     }
     
@@ -306,7 +319,6 @@ struct SearchView: View {
         .fbTeamInfo: { AnyView(FBTeamInfoView(displayModel: $0 as! FBTeamInfoDisplayModel)) },
         .fbTeamStats: { AnyView(FBTeamStatsView(displayModel: $0 as! FBTeamStatsDisplayModel)) },
         .fbTeamStandings: { AnyView(FBTeamStandingsView(displayModel: $0 as! FBTeamStandingsDisplayModel)) },
-        .fbTeamSchedule: { AnyView(FBTeamScheduleView(displayModel: $0 as! FBTeamScheduleDisplayModel)) },
         .fbLeagueSchedule: { AnyView(FBLeaugeScheduleView(displayModel: $0 as! FBLeagueScheduleDisplayModel)) },
         .fbGameStats: { AnyView(FBGameStatsView(displayModel: $0 as! FBGameStatsDisplayModel)) },
         
@@ -316,7 +328,6 @@ struct SearchView: View {
         .nbaTeamInfo: { AnyView(NBATeamInfoView(displayModel: $0 as! NBATeamInfoDisplayModel)) },
         .nbaTeamStats: { AnyView(NBATeamStatsView(displayModel: $0 as! NBATeamStatsDisplayModel)) },
         .nbaTeamStandings: { AnyView(NBATeamStandingsView(displayModel: $0 as! NBATeamStandingsDisplayModel)) },
-        .nbaTeamSchedule: { AnyView(NBATeamScheduleView(displayModel: $0 as! NBATeamScheduleDisplayModel)) },
         .nbaLeagueSchedule: { AnyView(NBALeagueScheduleView(displayModel: $0 as! NBALeagueScheduleDisplayModel)) },
         .nbaGameStats: { AnyView(NBAGameStatsView(displayModel: $0 as! NBAGameStatsDisplayModel)) },
         .nbaLeagueTournament: { AnyView(NBALeagueTournamentView(displayModel: $0 as! NBATournamentDisplayModel)) },
@@ -326,7 +337,6 @@ struct SearchView: View {
         .kboTeamInfo: { AnyView(KBOTeamInfoView(displayModel: $0 as! KBOTeamInfoDisplayModel)) },
         .kboTeamStats: { AnyView(KBOTeamStatsView(displayModel: $0 as! KBOTeamStatsDisplayModel)) },
         .kboTeamStandings: { AnyView(KBOTeamStandingsView(displayModel: $0 as! KBOTeamStandingsDisplayModel)) },
-        .kboTeamSchedule: { AnyView(KBOTeamScheduleView(displayModel: $0 as! KBOTeamScheduleDisplayModel)) },
         .kboLeagueSchedule: { AnyView(KBOLeagueScheduleView(displayModel: $0 as! KBOLeagueScheduleDisplayModel)) },
         .kboGameStats: { AnyView(KBOGameStatsView(displayModel: $0 as! KBOGameStatsDisplayModel)) },
         
@@ -335,7 +345,6 @@ struct SearchView: View {
         .mlbTeamInfo: { AnyView(MLBTeamInfoView(displayModel: $0 as! MLBTeamInfoDisplayModel)) },
         .mlbTeamStats: { AnyView(MLBTeamStatsView(displayModel: $0 as! MLBTeamStatsDisplayModel)) },
         .mlbTeamStandings: { AnyView(MLBTeamStandingsView(displayModel: $0 as! MLBTeamStandingsDisplayModel)) },
-        .mlbTeamSchedule: { AnyView(MLBTeamScheduleView(displayModel: $0 as! MLBTeamScheduleDisplayModel)) },
         .mlbLeagueSchedule: { AnyView(MLBLeagueScheduleView(displayModel: $0 as! MLBLeagueScheduleDisplayModel)) },
         .mlbGameStats: { AnyView(MLBGameStatsView(displayModel: $0 as! MLBGameStatsDisplayModel)) },
     ]

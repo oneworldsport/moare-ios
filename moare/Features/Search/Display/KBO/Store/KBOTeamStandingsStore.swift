@@ -44,6 +44,7 @@ struct KBOTeamStandingsStore {
             case .baseTeamStandings(.initData):
                 // init data
                 state.standings = state.baseTeamStandings.displayModel?.standings ?? []
+                state.baseTeamStandings.secondCategorySelectedIndex = 1 // defalue category is "승률"
                 
                 return .send(.sortStandings)
                 

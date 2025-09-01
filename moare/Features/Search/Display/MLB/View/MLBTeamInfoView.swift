@@ -22,133 +22,129 @@ struct MLBTeamInfoView: View {
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            InfoViewContainer(
-                itemCount: 8,
-                measureContent: { scope in
-                    if let mlbTeamInfoStore {
-                        HStack(alignment: .top) {
-                            MLBTeamInfoFirstItem(mlbTeamInfoStore: mlbTeamInfoStore)
-                                .frame(maxWidth: .infinity)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
-                                    }
-                                )
-                            
-                            MLBTeamInfoSecondItem(mlbTeamInfoStore: mlbTeamInfoStore)
-                                .frame(maxWidth: .infinity)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 1, geometry: geometry)
-                                        }
-                                    }
-                                )
-                            
-                            MLBTeamInfoThirdItem(mlbTeamInfoStore: mlbTeamInfoStore)
-                                .frame(maxWidth: .infinity)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 2, geometry: geometry)
-                                        }
-                                    }
-                                )
-                        }
-                        
-                        MLBTeamInfoFourthItem(
-                            searchStore: searchStore,
-                            mlbTeamInfoStore: mlbTeamInfoStore
-                        )
+            InfoViewContainer(itemCount: 8, measureContent: { scope in
+                if let mlbTeamInfoStore {
+                    HStack(alignment: .top) {
+                        MLBTeamInfoFirstItem(mlbTeamInfoStore: mlbTeamInfoStore)
                             .frame(maxWidth: .infinity)
                             .background(
                                 GeometryReader { geometry in
                                     Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                        scope.updateItemFrame(index: 3, geometry: geometry)
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
                                     }
                                 }
                             )
                         
-                        HStack(alignment: .top) {
-                            MLBTeamInfoFifthItem(
-                                searchStore: searchStore,
-                                mlbTeamInfoStore: mlbTeamInfoStore
-                            )
-                                .frame(maxWidth: .infinity)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 4, geometry: geometry)
-                                        }
-                                    }
-                                )
-                            
-                            MLBTeamInfoSixthItem(
-                                searchStore: searchStore,
-                                mlbTeamInfoStore: mlbTeamInfoStore
-                            )
+                        MLBTeamInfoSecondItem(mlbTeamInfoStore: mlbTeamInfoStore)
+                            .frame(maxWidth: .infinity)
                             .background(
                                 GeometryReader { geometry in
                                     Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                        scope.updateItemFrame(index: 5, geometry: geometry)
+                                        scope.updateItemFrame(index: 1, geometry: geometry)
                                     }
                                 }
                             )
-                        }
+                        
+                        MLBTeamInfoThirdItem(mlbTeamInfoStore: mlbTeamInfoStore)
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 2, geometry: geometry)
+                                    }
+                                }
+                            )
                     }
-                },
-                displayContent: { scope in
-                    if let mlbTeamInfoStore {
-                        MLBTeamInfoFirstItem(
-                            mlbTeamInfoStore: mlbTeamInfoStore,
-                            isAniItem: true,
-                            itemSize: scope.itemSizes[0],
-                            itemOffset: scope.computedOffset(for: 0),
-                            showContents: scope.showContents
-                        )
-                        MLBTeamInfoSecondItem(
-                            mlbTeamInfoStore: mlbTeamInfoStore,
-                            isAniItem: true,
-                            itemSize: scope.itemSizes[1],
-                            itemOffset: scope.computedOffset(for: 1),
-                            showContents: scope.showContents
-                        )
-                        MLBTeamInfoThirdItem(
-                            mlbTeamInfoStore: mlbTeamInfoStore,
-                            isAniItem: true,
-                            itemSize: scope.itemSizes[2],
-                            itemOffset: scope.computedOffset(for: 2),
-                            showContents: scope.showContents
-                        )
-                        MLBTeamInfoFourthItem(
-                            searchStore: searchStore,
-                            mlbTeamInfoStore: mlbTeamInfoStore,
-                            isAniItem: true,
-                            itemSize: scope.itemSizes[3],
-                            itemOffset: scope.computedOffset(for: 3),
-                            showContents: scope.showContents
-                        )
+                    
+                    MLBTeamInfoFourthItem(
+                        searchStore: searchStore,
+                        mlbTeamInfoStore: mlbTeamInfoStore
+                    )
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        GeometryReader { geometry in
+                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                scope.updateItemFrame(index: 3, geometry: geometry)
+                            }
+                        }
+                    )
+                    
+                    HStack(alignment: .top) {
                         MLBTeamInfoFifthItem(
                             searchStore: searchStore,
-                            mlbTeamInfoStore: mlbTeamInfoStore,
-                            isAniItem: true,
-                            itemSize: scope.itemSizes[4],
-                            itemOffset: scope.computedOffset(for: 4),
-                            showContents: scope.showContents
+                            mlbTeamInfoStore: mlbTeamInfoStore
                         )
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            GeometryReader { geometry in
+                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                    scope.updateItemFrame(index: 4, geometry: geometry)
+                                }
+                            }
+                        )
+                        
                         MLBTeamInfoSixthItem(
                             searchStore: searchStore,
-                            mlbTeamInfoStore: mlbTeamInfoStore,
-                            isAniItem: true,
-                            itemSize: scope.itemSizes[5],
-                            itemOffset: scope.computedOffset(for: 5),
-                            showContents: scope.showContents
+                            mlbTeamInfoStore: mlbTeamInfoStore
+                        )
+                        .background(
+                            GeometryReader { geometry in
+                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                    scope.updateItemFrame(index: 5, geometry: geometry)
+                                }
+                            }
                         )
                     }
                 }
-            )
+            }, displayContent: { scope in
+                if let mlbTeamInfoStore {
+                    MLBTeamInfoFirstItem(
+                        mlbTeamInfoStore: mlbTeamInfoStore,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[0],
+                        itemOffset: scope.computedOffset(for: 0),
+                        showContents: scope.showContents
+                    )
+                    MLBTeamInfoSecondItem(
+                        mlbTeamInfoStore: mlbTeamInfoStore,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[1],
+                        itemOffset: scope.computedOffset(for: 1),
+                        showContents: scope.showContents
+                    )
+                    MLBTeamInfoThirdItem(
+                        mlbTeamInfoStore: mlbTeamInfoStore,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[2],
+                        itemOffset: scope.computedOffset(for: 2),
+                        showContents: scope.showContents
+                    )
+                    MLBTeamInfoFourthItem(
+                        searchStore: searchStore,
+                        mlbTeamInfoStore: mlbTeamInfoStore,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[3],
+                        itemOffset: scope.computedOffset(for: 3),
+                        showContents: scope.showContents
+                    )
+                    MLBTeamInfoFifthItem(
+                        searchStore: searchStore,
+                        mlbTeamInfoStore: mlbTeamInfoStore,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[4],
+                        itemOffset: scope.computedOffset(for: 4),
+                        showContents: scope.showContents
+                    )
+                    MLBTeamInfoSixthItem(
+                        searchStore: searchStore,
+                        mlbTeamInfoStore: mlbTeamInfoStore,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[5],
+                        itemOffset: scope.computedOffset(for: 5),
+                        showContents: scope.showContents
+                    )
+                }
+            })
             .onAppear {
                 // init MLBTeamInfoStore
                 let mlbTeamInfoStore: StoreOf<MLBTeamInfoStore> = storeManager.getStore(forKey: StoreKeys.mlbTeamInfoStore) ?? {
@@ -207,8 +203,6 @@ struct MLBTeamInfoFirstItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
         ) {
-            HCapsuleBar()
-            
             if let team = mlbTeamInfoStore.baseInfo.displayModel?.team {
                 URLImage(url: MLBUtil.teamLogoURL(id: team.id), isSvg: true)
                     .opacity(showContents ? 1 : 0)
@@ -258,11 +252,6 @@ struct MLBTeamInfoSecondItem: View {
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            HStack {
-                HCapsuleBar()
-            }
-            .frame(maxWidth: .infinity)
-            
             if let team = mlbTeamInfoStore.baseInfo.displayModel?.team {
                 HStack(spacing: 0) {
                     Text("창단연도: ")
@@ -274,24 +263,25 @@ struct MLBTeamInfoSecondItem: View {
                 }
                 .opacity(showContents ? 1 : 0)
                 
-                VStack(alignment: .leading, spacing: 0) {
+                (
                     Text("연고지: ")
                         .font(.system(size: 15))
-                    
-                    Text(team.locationName)
+                    + Text(team.locationName)
                         .font(.system(size: 16))
                         .fontWeight(.medium)
-                }
-                .padding(.vertical, UIConstants.Padding.defalutVPadding)
+                )
+                .multilineTextAlignment(.leading)
                 .opacity(showContents ? 1 : 0)
                 
                 VStack(alignment: .leading, spacing: 0) {
                     Text("컨퍼런스/디비전: ")
                         .font(.system(size: 15))
                     
-                    Text("\(team.league.name) / \(team.division.name)")
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
+                    Text("\(MLBUtil.leagueDivisionMap[team.league.id] ?? team.league.name) / " +
+                         "\(MLBUtil.leagueDivisionMap[team.division.id] ?? team.division.name)")
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+                    .multilineTextAlignment(.leading)
                 }
                 .opacity(showContents ? 1 : 0)
             }
@@ -331,12 +321,6 @@ struct MLBTeamInfoThirdItem: View {
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            // added HStack to position Capsule at center
-            HStack {
-                HCapsuleBar()
-            }
-            .frame(maxWidth: .infinity)
-            
             if let displayModel = mlbTeamInfoStore.baseInfo.displayModel {
                 HStack(spacing: 0) {
                     Text("홈구장: ")
@@ -392,12 +376,10 @@ struct MLBTeamInfoFourthItem: View {
                 }
             }
         ) {
-            HCapsuleBar()
-            
             BaseballLeagueTitle(
                 logoUrl: MLBUtil.mlbLogoUrl,
                 name: "MLB",
-                season: team?.season ?? 2025
+                season: team?.season
             )
             .opacity(showContents ? 1 : 0)
             
@@ -406,27 +388,32 @@ struct MLBTeamInfoFourthItem: View {
                     FBStatDataItem(
                         category: "디비전 순위",
                         data: recordData.divisionRank,
-                        customCategoryFontSize: 11
+                        customCategoryFontSize: 11,
+                        customWidth: 80
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "승",
                         data: String(recordData.wins),
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "패",
                         data: String(recordData.losses),
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "무",
                         data: String(recordData.leagueRecord.ties),
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "타율",
                         data: stats?.hitting?.avg ?? "0.0",
@@ -437,6 +424,7 @@ struct MLBTeamInfoFourthItem: View {
                 .opacity(showContents ? 1 : 0)
             }
         }
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
     }
 }
@@ -478,54 +466,50 @@ struct MLBTeamInfoFifthItem: View {
                 searchStore.send(.showGameStats(gameType: "previous"))
             }
         ) {
-            HCapsuleBar()
-            
             Text("최근경기")
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
             
-            HStack {
-                if let lastGame = mlbTeamInfoStore.baseInfo.displayModel?.lastGame {
-                    let homeTeamScore = lastGame.linescore.teams.home.runs
-                    let awayTeamScore = lastGame.linescore.teams.away.runs
-                    
-                    VStack {
-                        HStack {
-                            Text(teamNameDic["short_\(lastGame.teams.home.id)"] ?? "")
-                                .font(.system(size: 14))
-                                .fontWeight(.light)
-                                .lineLimit(1)
-                            
-                            Text("\(homeTeamScore)")
-                                .font(.system(size: 15))
-                                .fontWeight(.medium)
-                                .foregroundStyle((homeTeamScore >= awayTeamScore) ? .moare : .primary)
-                            
-                            Text(" vs ")
-                                .font(.system(size: 15))
-                                .fontWeight(.medium)
-                            
-                            Text("\(awayTeamScore)")
-                                .font(.system(size: 15))
-                                .fontWeight(.medium)
-                                .foregroundStyle((awayTeamScore >= homeTeamScore) ? .moare : .primary)
-                            
-                            Text(teamNameDic["short_\(lastGame.teams.away.id)"] ?? "")
-                                .font(.system(size: 14))
-                                .fontWeight(.light)
-                                .lineLimit(1)
-                        }
-                        
-                        Text(CalendarUtil.formatDate(date: lastGame.gameInfo.gameDate))
+            if let lastGame = mlbTeamInfoStore.baseInfo.displayModel?.lastGame {
+                let homeTeamScore = lastGame.linescore?.teams.home.runs ?? 0
+                let awayTeamScore = lastGame.linescore?.teams.away.runs ?? 0
+                
+                HStack(spacing: 0) {
+                    HStack(spacing: 0) {
+                        Text(teamNameDic["short_\(lastGame.teams.home.id)"] ?? "")
                             .font(.system(size: 15))
-                            .frame(maxHeight: 30)
+                            .lineLimit(1)
+                        
+                        Text(" \(homeTeamScore)")
+                            .font(.system(size: 15))
+                            .fontWeight(.medium)
+                            .foregroundStyle((homeTeamScore >= awayTeamScore) ? .moare : .primary)
                     }
-                    .padding(.top, 4)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    
+                    Text(" - ")
+                        .font(.system(size: 15))
+                        .fontWeight(.medium)
+                    
+                    HStack(spacing: 0) {
+                        Text("\(awayTeamScore) ")
+                            .font(.system(size: 15))
+                            .fontWeight(.medium)
+                            .foregroundStyle((awayTeamScore >= homeTeamScore) ? .moare : .primary)
+                        
+                        Text(teamNameDic["short_\(lastGame.teams.away.id)"] ?? "")
+                            .font(.system(size: 15))
+                            .lineLimit(1)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
+                .opacity(showContents ? 1 : 0)
+                
+                Text(CalendarUtil.formatDate(date: lastGame.gameInfo.gameDate, formatType: .ampmWithDayOfWeekDate))
+                    .font(.system(size: 15))
+                    .opacity(showContents ? 1 : 0)
             }
-            .opacity(showContents ? 1 : 0)
-        } // VStack
-        .padding(.horizontal, UIConstants.Padding.defaultHPadding)
+        }
     }
 }
 
@@ -566,8 +550,6 @@ struct MLBTeamInfoSixthItem: View {
                 searchStore.send(.showGameStats(gameType: "next"))
             }
         ) {
-            HCapsuleBar()
-            
             Text("다음경기")
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
@@ -575,26 +557,30 @@ struct MLBTeamInfoSixthItem: View {
             if let nextGame = mlbTeamInfoStore.baseInfo.displayModel?.nextGame {
                 HStack {
                     Text(teamNameDic["short_\(nextGame.teams.home.id)"] ?? "")
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
+                        .font(.system(size: 15))
                         .frame(maxWidth: .infinity, alignment: .trailing)
+                        .lineLimit(1)
                     
                     Text(" vs ")
-                        .fontWeight(.semibold)
+                        .font(.system(size: 15))
+                        .fontWeight(.medium)
                     
                     Text(teamNameDic["short_\(nextGame.teams.away.id)"] ?? "")
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
+                        .font(.system(size: 15))
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .lineLimit(1)
                 }
-                .padding(.vertical, 4)
                 .opacity(showContents ? 1 : 0)
                 
-                Text(CalendarUtil.formatDate(date: nextGame.gameInfo.gameDate))
+                Text(CalendarUtil.formatDate(date: nextGame.gameInfo.gameDate, formatType: .ampmWithDayOfWeekDate))
                     .font(.system(size: 15))
                     .opacity(showContents ? 1 : 0)
+            } else {
+                Text("예정된 경기가 없습니다.")
+                    .font(.system(size: 15))
+                    .opacity(showContents ? 1 : 0)
+                    .padding(.top, 4)
             }
-        } // VStack
-        .padding(.horizontal, UIConstants.Padding.defaultHPadding)
+        }
     }
 }

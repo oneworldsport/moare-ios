@@ -20,7 +20,7 @@ struct FBLeagueScheduleStore {
         /* ---------------------
            constants
            --------------------- */
-        let itemHeight: CGFloat = 110
+        let itemHeight: CGFloat = 80
         
         /* ---------------------
            data state
@@ -85,20 +85,36 @@ struct FBLeagueScheduleStore {
                 }
                 
                 // select default yearMonth
-                if let date = state.baseSchedule.displayModel?.games.first?.date {
-                    let defaultYearMonth = CalendarUtil.formatDate(date: date, formatType: .yearMonth)
-                    let defaultYearMonthIndex = state.baseSchedule.yearMonthList.enumerated().first { $0.element == defaultYearMonth }
-                    
-                    state.baseSchedule.selectedYearMonth = defaultYearMonth
-                    
-                    if let defaultYearMonthIndex {
-                        state.baseSchedule.selectedYearMonthIndex = defaultYearMonthIndex.offset
+                switch state.baseSchedule.displayModel?.scheduleType {
+                case .league:
+                    if let date = state.baseSchedule.displayModel?.games.first?.date {
+                        return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
                     }
+                    
+                    return .send(.setDays(isInit: true))
+                    
+                case .team:
+                    let upcomingGame = state.baseSchedule.displayModel?.games.first { game in
+                        CalendarUtil.isUpcomingDay(date: game.date)
+                    }
+                    
+                    
+                    if let upcomingGame {
+                        return .send(.baseSchedule(.setDefaultYearMonth(date: upcomingGame.date)))
+                    } else {
+                        if let date = state.baseSchedule.displayModel?.games.last?.date {
+                            return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
+                        }
+                    }
+                    
+                    return .send(.setDays(isInit: true))
+                    
+                default:
+                    return .none
                 }
-                
-                return .run { send in
-                    await send(.setDays(isInit: true))
-                }
+                                
+            case .baseSchedule(.setDefaultYearMonth(_)):
+                return .send(.setDays(isInit: true))
                 
             case .baseSchedule(_):
                 return .none
@@ -107,7 +123,14 @@ struct FBLeagueScheduleStore {
                 state.baseSchedule.selectedYearMonth = yearMonth
                 state.baseSchedule.selectedYearMonthIndex = selectedIndex
                 
-                return .send(.fetchGames)
+                switch state.baseSchedule.displayModel?.scheduleType {
+                case .league:
+                    return .send(.fetchGames)
+                case .team:
+                    return .send(.setDays())
+                default :
+                    return .none
+                }
                 
             case .toggleAllResult:
                 let newState = !state.baseSchedule.isAllResultOpened
@@ -212,7 +235,8 @@ struct FBLeagueScheduleStore {
                             playerId: nil
                         )
                         
-                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, yearMonth: String(yearMonth))
+                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel?.season, yearMonth: String(yearMonth))
+                        
                         
                         if case .fbLeagueSchedule(_, let displayModel) = result.data {
                             await send(.setDisplayModel(displayModel))

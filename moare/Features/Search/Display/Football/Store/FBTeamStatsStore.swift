@@ -49,12 +49,29 @@ struct FBTeamStatsStore {
                     state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
                 case Constants.Ids.ligue1:
                     state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
+                case Constants.Ids.seriea:
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaTeamDic)
+                case Constants.Ids.mls:
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlsTeamDic)
                 default: break
                 }
                 
-                state.statsList = displayModel.stats
                 state.team = displayModel.team
                 state.venue = displayModel.venue
+                
+                // 리그 기록을 제일 첫번째 아이템으로
+                state.statsList = displayModel.stats.sorted { a, b in
+                    let aIsLeague = Constants.Ids.footballLeagues.contains(a.league.id)
+                    let bIsLeague = Constants.Ids.footballLeagues.contains(b.league.id)
+                    
+                    if aIsLeague && !bIsLeague {
+                        return true
+                    } else if !aIsLeague && bIsLeague {
+                        return false
+                    } else {
+                        return false
+                    }
+                }
 
                 return .none
             }

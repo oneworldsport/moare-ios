@@ -11,11 +11,13 @@ struct ModelConverter {
     let keywords: [Keyword]
     let entityInfo: [EntityInfo]
     let leagueId: Int?
+    let season: Int
     
     init(keywords: [Keyword] = [], entityInfo: [EntityInfo] = []) {
         self.keywords = keywords
         self.entityInfo = entityInfo
         self.leagueId = entityInfo.first?.leagueId
+        self.season = Calendar.current.component(.year, from: Date())
     }
     
     /* ---------------------
@@ -35,6 +37,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             info: info.player,
             stats: stats,
             lastGame: response.lastGame,
@@ -52,6 +55,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             player: info.player,
             team: stats?.team,
             stats: info.statistics
@@ -76,6 +80,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             standings: standings
         )
     }
@@ -89,6 +94,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             team: info.team,
             venue: info.venue,
             stats: stats,
@@ -104,6 +110,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             team: info.team,
             venue: info.venue,
             stats: info.statistics
@@ -138,17 +145,9 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             league: league,
             standings: standings
-        )
-    }
-    
-    func fbTeamScheduleConverter(response: FBGameScheduleResponseModel) -> FBTeamScheduleDisplayModel {
-        return FBTeamScheduleDisplayModel(
-            leagueId: leagueId ?? Constants.Ids.epl,
-            keywords: keywords,
-            entityInfo: entityInfo,
-            games: response.schedule
         )
     }
     
@@ -164,6 +163,8 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
+            scheduleType: response.scheduleType ?? .league,
             yearMonthList: yearMonthList,
             games: response.schedule
         )
@@ -175,6 +176,7 @@ struct ModelConverter {
             leagueId: game.league.id,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             game: game
         )
     }
@@ -201,6 +203,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             info: info.player,
             stats: stats,
             lastGame: response.lastGame,
@@ -216,6 +219,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             player: info.player,
             stats: info.statistics
         )
@@ -239,6 +243,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             standings: standings
         )
     }
@@ -252,6 +257,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             team: info.team,
             venue: info.venue,
             stats: stats,
@@ -267,6 +273,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             team: info.team,
             venue: info.venue,
             stats: info.statistics
@@ -293,16 +300,8 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             standings: standings
-        )
-    }
-    
-    func nbaTeamScheduleConverter(response: NBAGameScheduleResponseModel) -> NBATeamScheduleDisplayModel {
-        return NBATeamScheduleDisplayModel(
-            leagueId: leagueId ?? Constants.Ids.nba,
-            keywords: keywords,
-            entityInfo: entityInfo,
-            games: response.schedule
         )
     }
     
@@ -318,6 +317,8 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
+            scheduleType: response.scheduleType ?? .league,
             yearMonthList: yearMonthList,
             games: response.schedule
         )
@@ -328,6 +329,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             game: response.game!
         )
     }
@@ -337,6 +339,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             yearMonthList: [],
             games: response.schedule
         )
@@ -372,6 +375,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.epl,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             info: info.player,
             stats: stats,
             lastGame: response.lastGame,
@@ -388,6 +392,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.kbo,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             player: info.player,
             stats: info.statistics
         )
@@ -411,6 +416,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.kbo,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             standings: standings
         )
     }
@@ -425,6 +431,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.kbo,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             team: info.team,
             venue: info.venue,
             stats: info.statistics.first,
@@ -440,6 +447,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.kbo,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             team: info.team,
             venue: info.venue,
             stats: info.statistics
@@ -457,16 +465,8 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.kbo,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             standings: standings
-        )
-    }
-    
-    func kboTeamScheduleConverter(response: KBOGameScheduleResponseModel) -> KBOTeamScheduleDisplayModel {
-        return KBOTeamScheduleDisplayModel(
-            leagueId: leagueId ?? Constants.Ids.kbo,
-            keywords: keywords,
-            entityInfo: entityInfo,
-            games: response.schedule
         )
     }
     
@@ -482,6 +482,8 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.kbo,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
+            scheduleType: response.scheduleType ?? .league,
             yearMonthList: yearMonthList,
             games: response.schedule
         )
@@ -492,6 +494,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.kbo,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             game: response.game!
         )
     }
@@ -525,9 +528,10 @@ struct ModelConverter {
         }
         
         return MLBPlayerInfoDisplayModel(
-            leagueId: leagueId ?? Constants.Ids.epl,
+            leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             info: info.player,
             teamId: teamId,
             stats: stats,
@@ -559,6 +563,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             player: info.player,
             teamId: teamId,
             stats: info.statistics
@@ -583,6 +588,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             standings: standings
         )
     }
@@ -597,6 +603,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             team: info.team,
             venue: info.venue,
             stats: info.statistics.first,
@@ -612,6 +619,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             team: info.team,
             venue: info.venue,
             stats: info.statistics
@@ -629,16 +637,8 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             standings: standings
-        )
-    }
-    
-    func mlbTeamScheduleConverter(response: MLBGameScheduleResponseModel) -> MLBTeamScheduleDisplayModel {
-        return MLBTeamScheduleDisplayModel(
-            leagueId: leagueId ?? Constants.Ids.mlb,
-            keywords: keywords,
-            entityInfo: entityInfo,
-            games: response.schedule
         )
     }
     
@@ -654,6 +654,8 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
+            scheduleType: response.scheduleType ?? .league,
             yearMonthList: yearMonthList,
             games: response.schedule
         )
@@ -664,6 +666,7 @@ struct ModelConverter {
             leagueId: leagueId ?? Constants.Ids.mlb,
             keywords: keywords,
             entityInfo: entityInfo,
+            season: season,
             game: response.game!
         )
     }
@@ -703,7 +706,7 @@ struct ModelConverter {
         let awayTeamScore = game.lineScore.first { $0.teamId == awayTeamId }?.pts ?? 0
         
         return NBAGameForSchedule(
-            itemKey: date != nil ? "\(date!)#\(gameSummary?.gameCode ?? "")" : "",
+            itemKey: date != nil ? "\(date!)#\(gameSummary?.gameId ?? "")" : "",
             homeTeamId: homeTeamId,
             awayTeamId: awayTeamId,
             homeTeamScore: homeTeamScore,
@@ -717,9 +720,9 @@ struct ModelConverter {
         let date = game.gameInfo.gameDate.split(separator: "+").first
         let homeTeamId = game.teams.home.id
         let awayTeamId = game.teams.away.id
-        let homeTeamScore = game.linescore.teams.home.runs
-        let awayTeamScore = game.linescore.teams.away.runs
-        let gameInfo = MLBGameInfoForSchedule(currentInning: game.linescore.currentInning)
+        let homeTeamScore = game.linescore?.teams.home.runs
+        let awayTeamScore = game.linescore?.teams.away.runs
+        let gameInfo = MLBGameInfoForSchedule(currentInning: "\(game.linescore?.currentInning ?? 1)회\((game.linescore?.isTopInning ?? true) ? "초" : "말")")
         
         return MLBGameForSchedule(
             itemKey: date != nil ? "\(date!)#\(game.game.id)" : "",
@@ -732,12 +735,34 @@ struct ModelConverter {
         )
     }
     
+    static func mlbGameScheduleToGameConverter(game: MLBGameForSchedule) -> MLBGame {
+        let gameData = MLBGameData(id: game.gameId)
+        let gameInfo = MLBGameInfo(gameDate: game.date)
+        let status = MLBGameStatus(detailedState: game.gameStatus)
+        let teams = MLBGameTeams(away: MLBGameTeamDetail(id: game.awayTeamId), home: MLBGameTeamDetail(id: game.homeTeamId))
+        
+        return MLBGame(
+            boxscore: nil,
+            decisions: nil,
+            game: gameData,
+            gameInfo: gameInfo,
+            linescore: nil,
+            moundVisits: nil,
+            probablePitchers: nil,
+            review: nil,
+            status: status,
+            teams: teams,
+            weather: nil
+        )
+    }
+    
     static func kboGameToGameScheduleConverter(game: KBOGame) -> KBOGameForSchedule {
         let date = game.gameInfo?.date.split(separator: "+").first
         let homeTeamId = game.gameInfo?.homeTeamId ?? 0
         let awayTeamId = game.gameInfo?.awayTeamId ?? 0
         let homeTeamScore = game.lineScore?.home.r ?? "0"
         let awayTeamScore = game.lineScore?.away.r ?? "0"
+        let gameInfo = KBOGameInfoForSchedule(currentInning: game.lineScore?.currentInning)
         
         return KBOGameForSchedule(
             itemKey: date != nil ? "\(date!)#\(game.gameInfo?.gameId ?? "")" : "",
@@ -746,7 +771,20 @@ struct ModelConverter {
             homeTeamScore: Int(homeTeamScore),
             awayTeamScore: Int(awayTeamScore),
             gameStatus: game.gameInfo?.gameStatus,
-            gameInfo: nil
+            gameInfo: gameInfo
         )
+    }
+    
+    static func kboGameScheduleToGameConverter(game: KBOGameForSchedule) -> KBOGame {
+        let gameInfo = KBOGameInfo(
+            awayTeamId: game.awayTeamId,
+            date: game.date,
+            gameId: game.gameId,
+            homeTeamId: game.homeTeamId,
+            remark: nil,
+            gameStatus: game.gameStatus
+        )
+        
+        return KBOGame(gameInfo: gameInfo, lineScore: nil, lineup: nil)
     }
 }

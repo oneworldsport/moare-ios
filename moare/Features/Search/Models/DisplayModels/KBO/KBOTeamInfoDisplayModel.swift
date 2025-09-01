@@ -11,6 +11,7 @@ struct KBOTeamInfoDisplayModel: SportDisplayModel {
     let leagueId: Int
     let keywords: [Keyword]
     let entityInfo: [EntityInfo]
+    let season: Int
     let team: KBOTeamInfo
     let venue: KBOTeamVenue
     let stats: KBOTeamStats?

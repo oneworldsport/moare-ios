@@ -1,0 +1,1416 @@
+{
+  "keywords": [
+    {
+      "keyword": "경기",
+      "id": "game",
+      "priority": 1
+    }
+  ],
+  "entityInfo": [
+    {
+      "entityId": 6,
+      "entityName": "기아 타이거즈",
+      "category": "baseball",
+      "entityType": "team",
+      "leagueId": 90101,
+      "playerId": null,
+      "teamId": 6
+    }
+  ],
+  "dataType": "baseball_league_schedule",
+  "season": 2025,
+  "data": {
+    "scheduleType": "team",
+    "scheduledMonths": [
+      "2025-03",
+      "2025-04",
+      "2025-05",
+      "2025-06",
+      "2025-07",
+      "2025-08",
+      "2025-09"
+    ],
+    "schedule": [
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 9,
+        "awayTeamId": 8,
+        "homeTeamId": 6,
+        "itemKey": "2025-03-22T14:00:00#20250322NCHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 2,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 4,
+        "awayTeamId": 8,
+        "homeTeamId": 6,
+        "itemKey": "2025-03-23T14:00:00#20250323NCHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 5,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 11,
+        "awayTeamId": 7,
+        "homeTeamId": 6,
+        "itemKey": "2025-03-25T18:30:00#20250325WOHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 6,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 10,
+        "awayTeamId": 7,
+        "homeTeamId": 6,
+        "itemKey": "2025-03-26T18:30:00#20250326WOHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 17,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 3,
+        "awayTeamId": 7,
+        "homeTeamId": 6,
+        "itemKey": "2025-03-27T18:30:00#20250327WOHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 5,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 7,
+        "awayTeamId": 6,
+        "homeTeamId": 4,
+        "itemKey": "2025-03-28T18:30:00#20250328HTHH0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 2,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 5,
+        "awayTeamId": 6,
+        "homeTeamId": 4,
+        "itemKey": "2025-03-29T14:00:00#20250329HTHH0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 4,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 3,
+        "awayTeamId": 6,
+        "homeTeamId": 4,
+        "itemKey": "2025-03-30T14:00:00#20250330HTHH0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 5,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "4",
+        "homeTeamScore": null,
+        "awayTeamId": 3,
+        "homeTeamId": 6,
+        "itemKey": "2025-04-01T18:30:00#20250401SSHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 2,
+        "awayTeamId": 3,
+        "homeTeamId": 6,
+        "itemKey": "2025-04-02T18:30:00#20250402SSHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 4,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 3,
+        "awayTeamId": 3,
+        "homeTeamId": 6,
+        "itemKey": "2025-04-03T18:30:00#20250403SSHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 1,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 8,
+        "awayTeamId": 6,
+        "homeTeamId": 5,
+        "itemKey": "2025-04-04T18:30:00#20250404HTLG0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 2,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "4",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 5,
+        "itemKey": "2025-04-05T14:00:00#20250405HTLG0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 5,
+        "awayTeamId": 6,
+        "homeTeamId": 5,
+        "itemKey": "2025-04-06T14:00:00#20250406HTLG0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 1,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 4,
+        "awayTeamId": 6,
+        "homeTeamId": 2,
+        "itemKey": "2025-04-08T18:30:00#20250408HTLT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 5,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 1,
+        "awayTeamId": 6,
+        "homeTeamId": 2,
+        "itemKey": "2025-04-09T18:30:00#20250409HTLT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 3,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 8,
+        "awayTeamId": 6,
+        "homeTeamId": 2,
+        "itemKey": "2025-04-10T18:30:00#20250410HTLT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 3,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 3,
+        "awayTeamId": 10,
+        "homeTeamId": 6,
+        "itemKey": "2025-04-11T18:30:00#20250411SKHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 9,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "4",
+        "homeTeamScore": null,
+        "awayTeamId": 10,
+        "homeTeamId": 6,
+        "itemKey": "2025-04-12T17:00:00#20250412SKHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 11,
+        "awayTeamId": 10,
+        "homeTeamId": 6,
+        "itemKey": "2025-04-13T14:00:00#20250413SKHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 5,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 1,
+        "awayTeamId": 9,
+        "homeTeamId": 6,
+        "itemKey": "2025-04-15T18:30:00#20250415KTHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 0,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 0,
+        "awayTeamId": 9,
+        "homeTeamId": 6,
+        "itemKey": "2025-04-16T18:30:00#20250416KTHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 3,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 5,
+        "awayTeamId": 9,
+        "homeTeamId": 6,
+        "itemKey": "2025-04-17T18:30:00#20250417KTHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 4,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 7,
+        "awayTeamId": 6,
+        "homeTeamId": 1,
+        "itemKey": "2025-04-18T18:30:00#20250418HTOB0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 1,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 4,
+        "awayTeamId": 6,
+        "homeTeamId": 1,
+        "itemKey": "2025-04-19T14:00:00#20250419HTOB0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 8,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 2,
+        "awayTeamId": 6,
+        "homeTeamId": 1,
+        "itemKey": "2025-04-20T14:00:00#20250420HTOB0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 6,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "4",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 3,
+        "itemKey": "2025-04-22T18:30:00#20250422HTSS0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 7,
+        "awayTeamId": 6,
+        "homeTeamId": 3,
+        "itemKey": "2025-04-23T18:30:00#20250423HTSS0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 2,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 17,
+        "awayTeamId": 6,
+        "homeTeamId": 3,
+        "itemKey": "2025-04-24T18:30:00#20250424HTSS0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 5,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 5,
+        "awayTeamId": 5,
+        "homeTeamId": 6,
+        "itemKey": "2025-04-25T18:30:00#20250425LGHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 6,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 8,
+        "awayTeamId": 5,
+        "homeTeamId": 6,
+        "itemKey": "2025-04-26T14:00:00#20250426LGHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 4,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 3,
+        "awayTeamId": 5,
+        "homeTeamId": 6,
+        "itemKey": "2025-04-27T14:00:00#20250427LGHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 2,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 13,
+        "awayTeamId": 8,
+        "homeTeamId": 6,
+        "itemKey": "2025-04-29T18:30:00#20250429NCHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 3,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 0,
+        "awayTeamId": 8,
+        "homeTeamId": 6,
+        "itemKey": "2025-04-30T18:30:00#20250430NCHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 7,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "4",
+        "homeTeamScore": null,
+        "awayTeamId": 8,
+        "homeTeamId": 6,
+        "itemKey": "2025-05-01T18:30:00#20250501NCHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 2,
+        "awayTeamId": 4,
+        "homeTeamId": 6,
+        "itemKey": "2025-05-02T18:30:00#20250502HHHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 3,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "4",
+        "homeTeamScore": null,
+        "awayTeamId": 4,
+        "homeTeamId": 6,
+        "itemKey": "2025-05-03T14:00:00#20250503HHHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 1,
+        "awayTeamId": 4,
+        "homeTeamId": 6,
+        "itemKey": "2025-05-04T14:00:00#20250504HHHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 3,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 1,
+        "awayTeamId": 6,
+        "homeTeamId": 7,
+        "itemKey": "2025-05-05T14:00:00#20250505HTWO0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 13,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 3,
+        "awayTeamId": 6,
+        "homeTeamId": 7,
+        "itemKey": "2025-05-06T14:00:00#20250506HTWO0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 5,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 11,
+        "awayTeamId": 6,
+        "homeTeamId": 7,
+        "itemKey": "2025-05-07T18:30:00#20250507HTWO0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 10,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "4",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 10,
+        "itemKey": "2025-05-09T18:30:00#20250509HTSK0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "4",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 10,
+        "itemKey": "2025-05-10T14:00:00#20250510HTSK0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 4,
+        "awayTeamId": 6,
+        "homeTeamId": 10,
+        "itemKey": "2025-05-10T17:00:00#20250510HTSK0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 5,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 8,
+        "awayTeamId": 6,
+        "homeTeamId": 10,
+        "itemKey": "2025-05-11T14:00:00#20250511HTSK1",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 4,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 5,
+        "awayTeamId": 6,
+        "homeTeamId": 10,
+        "itemKey": "2025-05-11T17:00:00#20250511HTSK2",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 1,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 4,
+        "awayTeamId": 2,
+        "homeTeamId": 6,
+        "itemKey": "2025-05-13T18:30:00#20250513LTHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 1,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 0,
+        "awayTeamId": 2,
+        "homeTeamId": 6,
+        "itemKey": "2025-05-14T18:30:00#20250514LTHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 4,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 7,
+        "awayTeamId": 2,
+        "homeTeamId": 6,
+        "itemKey": "2025-05-15T18:30:00#20250515LTHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 6,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "4",
+        "homeTeamScore": null,
+        "awayTeamId": 1,
+        "homeTeamId": 6,
+        "itemKey": "2025-05-16T18:30:00#20250516OBHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 5,
+        "awayTeamId": 1,
+        "homeTeamId": 6,
+        "itemKey": "2025-05-17T14:00:00#20250517OBHT1",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 2,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 4,
+        "awayTeamId": 1,
+        "homeTeamId": 6,
+        "itemKey": "2025-05-17T17:00:00#20250517OBHT2",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 1,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 5,
+        "awayTeamId": 1,
+        "homeTeamId": 6,
+        "itemKey": "2025-05-18T14:00:00#20250518OBHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 4,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 5,
+        "awayTeamId": 6,
+        "homeTeamId": 9,
+        "itemKey": "2025-05-20T18:30:00#20250520HTKT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 3,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 3,
+        "awayTeamId": 6,
+        "homeTeamId": 9,
+        "itemKey": "2025-05-21T18:30:00#20250521HTKT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 1,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 3,
+        "awayTeamId": 6,
+        "homeTeamId": 9,
+        "itemKey": "2025-05-22T18:30:00#20250522HTKT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 8,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 6,
+        "awayTeamId": 6,
+        "homeTeamId": 3,
+        "itemKey": "2025-05-23T18:30:00#20250523HTSS0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 7,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 8,
+        "awayTeamId": 6,
+        "homeTeamId": 3,
+        "itemKey": "2025-05-24T17:00:00#20250524HTSS0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 4,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 3,
+        "awayTeamId": 6,
+        "homeTeamId": 3,
+        "itemKey": "2025-05-25T14:00:00#20250525HTSS0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 2,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 7,
+        "awayTeamId": 7,
+        "homeTeamId": 6,
+        "itemKey": "2025-05-27T18:30:00#20250527WOHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 5,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 13,
+        "awayTeamId": 7,
+        "homeTeamId": 6,
+        "itemKey": "2025-05-28T18:30:00#20250528WOHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 7,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 3,
+        "awayTeamId": 7,
+        "homeTeamId": 6,
+        "itemKey": "2025-05-29T18:30:00#20250529WOHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 3,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 3,
+        "awayTeamId": 6,
+        "homeTeamId": 9,
+        "itemKey": "2025-05-30T18:30:00#20250530HTKT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 1,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 5,
+        "awayTeamId": 6,
+        "homeTeamId": 9,
+        "itemKey": "2025-05-31T14:00:00#20250531HTKT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 1,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 3,
+        "awayTeamId": 6,
+        "homeTeamId": 9,
+        "itemKey": "2025-06-01T17:00:00#20250601HTKT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 5,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 3,
+        "awayTeamId": 6,
+        "homeTeamId": 1,
+        "itemKey": "2025-06-03T17:00:00#20250603HTOB0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 11,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 3,
+        "awayTeamId": 6,
+        "homeTeamId": 1,
+        "itemKey": "2025-06-04T18:30:00#20250604HTOB0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 8,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 2,
+        "awayTeamId": 6,
+        "homeTeamId": 1,
+        "itemKey": "2025-06-05T18:30:00#20250605HTOB0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 1,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 3,
+        "awayTeamId": 4,
+        "homeTeamId": 6,
+        "itemKey": "2025-06-06T17:00:00#20250606HHHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 2,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 2,
+        "awayTeamId": 4,
+        "homeTeamId": 6,
+        "itemKey": "2025-06-07T17:00:00#20250607HHHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 3,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 7,
+        "awayTeamId": 4,
+        "homeTeamId": 6,
+        "itemKey": "2025-06-08T17:00:00#20250608HHHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 6,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 0,
+        "awayTeamId": 3,
+        "homeTeamId": 6,
+        "itemKey": "2025-06-10T18:30:00#20250610SSHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 8,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 6,
+        "awayTeamId": 3,
+        "homeTeamId": 6,
+        "itemKey": "2025-06-11T18:30:00#20250611SSHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 3,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 1,
+        "awayTeamId": 3,
+        "homeTeamId": 6,
+        "itemKey": "2025-06-12T18:30:00#20250612SSHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 2,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 4,
+        "awayTeamId": 6,
+        "homeTeamId": 8,
+        "itemKey": "2025-06-13T18:30:00#20250613HTNC0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 1,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 8,
+        "awayTeamId": 6,
+        "homeTeamId": 8,
+        "itemKey": "2025-06-14T17:00:00#20250614HTNC0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 9,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 2,
+        "awayTeamId": 6,
+        "homeTeamId": 8,
+        "itemKey": "2025-06-15T17:00:00#20250615HTNC0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 4,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 10,
+        "awayTeamId": 9,
+        "homeTeamId": 6,
+        "itemKey": "2025-06-17T18:30:00#20250617KTHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 3,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 5,
+        "awayTeamId": 9,
+        "homeTeamId": 6,
+        "itemKey": "2025-06-18T18:30:00#20250618KTHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 3,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 5,
+        "awayTeamId": 9,
+        "homeTeamId": 6,
+        "itemKey": "2025-06-19T18:30:00#20250619KTHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": 0,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "4",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 10,
+        "itemKey": "2025-06-20T18:30:00#20250620HTSK0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 10,
+        "itemKey": "2025-06-21T17:00:00#20250621HTSK0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 10,
+        "itemKey": "2025-06-22T17:00:00#20250622HTSK0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 7,
+        "itemKey": "2025-06-24T18:30:00#20250624HTWO0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 7,
+        "itemKey": "2025-06-25T18:30:00#20250625HTWO0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 7,
+        "itemKey": "2025-06-26T18:30:00#20250626HTWO0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 5,
+        "itemKey": "2025-06-27T18:30:00#20250627HTLG0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 5,
+        "itemKey": "2025-06-28T17:00:00#20250628HTLG0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 5,
+        "itemKey": "2025-06-29T17:00:00#20250629HTLG0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 10,
+        "homeTeamId": 6,
+        "itemKey": "2025-07-01T18:30:00#20250701SKHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 10,
+        "homeTeamId": 6,
+        "itemKey": "2025-07-02T18:30:00#20250702SKHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 10,
+        "homeTeamId": 6,
+        "itemKey": "2025-07-03T18:30:00#20250703SKHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 2,
+        "homeTeamId": 6,
+        "itemKey": "2025-07-04T18:30:00#20250704LTHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 2,
+        "homeTeamId": 6,
+        "itemKey": "2025-07-05T18:00:00#20250705LTHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 2,
+        "homeTeamId": 6,
+        "itemKey": "2025-07-06T18:00:00#20250706LTHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 4,
+        "itemKey": "2025-07-08T18:30:00#20250708HTHH0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 4,
+        "itemKey": "2025-07-09T18:30:00#20250709HTHH0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 4,
+        "itemKey": "2025-07-10T18:30:00#20250710HTHH0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 8,
+        "homeTeamId": 6,
+        "itemKey": "2025-07-17T18:30:00#20250717NCHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 8,
+        "homeTeamId": 6,
+        "itemKey": "2025-07-18T18:30:00#20250718NCHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 8,
+        "homeTeamId": 6,
+        "itemKey": "2025-07-19T18:00:00#20250719NCHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 8,
+        "homeTeamId": 6,
+        "itemKey": "2025-07-20T18:00:00#20250720NCHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 5,
+        "homeTeamId": 6,
+        "itemKey": "2025-07-22T18:30:00#20250722LGHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 5,
+        "homeTeamId": 6,
+        "itemKey": "2025-07-23T18:30:00#20250723LGHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 5,
+        "homeTeamId": 6,
+        "itemKey": "2025-07-24T18:30:00#20250724LGHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 2,
+        "itemKey": "2025-07-25T18:30:00#20250725HTLT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 2,
+        "itemKey": "2025-07-26T18:00:00#20250726HTLT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 2,
+        "itemKey": "2025-07-27T18:00:00#20250727HTLT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 1,
+        "homeTeamId": 6,
+        "itemKey": "2025-07-29T18:30:00#20250729OBHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 1,
+        "homeTeamId": 6,
+        "itemKey": "2025-07-30T18:30:00#20250730OBHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 1,
+        "homeTeamId": 6,
+        "itemKey": "2025-07-31T18:30:00#20250731OBHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 4,
+        "homeTeamId": 6,
+        "itemKey": "2025-08-01T18:30:00#20250801HHHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 4,
+        "homeTeamId": 6,
+        "itemKey": "2025-08-02T18:00:00#20250802HHHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 4,
+        "homeTeamId": 6,
+        "itemKey": "2025-08-03T18:00:00#20250803HHHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 2,
+        "itemKey": "2025-08-05T18:30:00#20250805HTLT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 2,
+        "itemKey": "2025-08-06T18:30:00#20250806HTLT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 2,
+        "itemKey": "2025-08-07T18:30:00#20250807HTLT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 8,
+        "itemKey": "2025-08-08T18:30:00#20250808HTNC0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 8,
+        "itemKey": "2025-08-09T18:00:00#20250809HTNC0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 8,
+        "itemKey": "2025-08-10T18:00:00#20250810HTNC0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 3,
+        "itemKey": "2025-08-12T18:30:00#20250812HTSS0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 3,
+        "itemKey": "2025-08-13T18:30:00#20250813HTSS0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 3,
+        "itemKey": "2025-08-14T18:30:00#20250814HTSS0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 1,
+        "itemKey": "2025-08-15T18:00:00#20250815HTOB0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 1,
+        "itemKey": "2025-08-16T18:00:00#20250816HTOB0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 1,
+        "itemKey": "2025-08-17T18:00:00#20250817HTOB0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 7,
+        "homeTeamId": 6,
+        "itemKey": "2025-08-19T18:30:00#20250819WOHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 7,
+        "homeTeamId": 6,
+        "itemKey": "2025-08-20T18:30:00#20250820WOHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 7,
+        "homeTeamId": 6,
+        "itemKey": "2025-08-21T18:30:00#20250821WOHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 5,
+        "homeTeamId": 6,
+        "itemKey": "2025-08-22T18:30:00#20250822LGHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 5,
+        "homeTeamId": 6,
+        "itemKey": "2025-08-23T18:00:00#20250823LGHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 5,
+        "homeTeamId": 6,
+        "itemKey": "2025-08-24T18:00:00#20250824LGHT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 10,
+        "itemKey": "2025-08-26T18:30:00#20250826HTSK0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 10,
+        "itemKey": "2025-08-27T18:30:00#20250827HTSK0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 10,
+        "itemKey": "2025-08-28T18:30:00#20250828HTSK0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 9,
+        "itemKey": "2025-08-29T18:30:00#20250829HTKT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 9,
+        "itemKey": "2025-08-30T18:00:00#20250830HTKT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": null,
+        "awayTeamId": 6,
+        "homeTeamId": 9,
+        "itemKey": "2025-08-31T18:00:00#20250831HTKT0",
+        "categoryKey": "baseball#90101",
+        "awayTeamScore": null,
+        "gameInfo": null
+      }
+    ]
+  }
+}

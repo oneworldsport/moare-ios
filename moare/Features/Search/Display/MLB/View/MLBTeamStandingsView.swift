@@ -22,36 +22,6 @@ struct MLBTeamStandingsView: View {
     
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-//            let standings: [StandingsItemState] = mlbTeamStandingsStore?.standings.map {
-//                let recordData = $0.stats.recordData
-//                let hittingData = $0.stats.hitting
-//                let pitchingData = $0.stats.pitching
-//                
-//                return StandingsItemState(
-//                    imageUrl: MLBUtil.teamLogoURL(id: $0.team.id),
-//                    name: mlbTeamStandingsStore?.baseTeamStandings.teamNameDictionary["short_\($0.team.id)"] ?? $0.team.name,
-//                    isSvgLogo: true,
-//                    dataList: [
-//                        recordData?.winningPercentage ?? "",
-//                        recordData?.gamesBack ?? "",
-//                        String(recordData?.wins ?? 0),
-//                        String(recordData?.losses ?? 0),
-//                        String(recordData?.gamesPlayed ?? 0),
-//                        String(recordData?.streak.streakNumber ?? 0),
-//                        hittingData?.avg ?? "",
-//                        String(hittingData?.hits ?? 0),
-//                        String(hittingData?.homeRuns ?? 0),
-//                        hittingData?.slg ?? "",
-//                        String(hittingData?.runs ?? 0),
-//                        pitchingData?.era ?? "",
-//                        pitchingData?.avg ?? "",
-//                        String(pitchingData?.hits ?? 0),
-//                        String(pitchingData?.homeRuns ?? 0),
-//                        String(pitchingData?.runs ?? 0),
-//                        hittingData?.stolenBasePercentage ?? ""
-//                    ]
-//                )
-//            } ?? []
             
             VStack {
                 if let mlbTeamStandingsStore {
@@ -61,37 +31,32 @@ struct MLBTeamStandingsView: View {
                             secondCategories: StringConstants.MLB.teamStandingsCategories,
                             standings: [],
                             headerCategorySelectedIndex: mlbTeamStandingsStore.headerCategorySelectedIndex,
-                            secondCategorySelectedIndex: mlbTeamStandingsStore.baseTeamStandings.secondCategorySelectedIndex
+                            secondCategorySelectedIndex: mlbTeamStandingsStore.baseTeamStandings.secondCategorySelectedIndex,
+                            columnWidthList: mlbTeamStandingsStore.columnWidthList
                         ),
                         actions: StandingsContainerActions(
                             headerCategoryButtonAction: { index in
                                 mlbTeamStandingsStore.send(.selectHeaderCategory(index: index))
                             },
-                            secondCategoryButtonAction: { index in
+                            secondCategoryButtonAction: { index, _ in
                                 mlbTeamStandingsStore.send(.baseTeamStandings(.selectSecondCategory(index)))
                             },
-                            itemButtonAction: {
-                                
+                            itemButtonAction: { _ in
                             }
                         ),
                         shouldUseCustomListContent: true,
                         titleContent: {
-                            HStack {
-                                BaseballLeagueTitle(
-                                    logoUrl: MLBUtil.mlbLogoUrl,
-                                    name: "MLB",
-                                    season: mlbTeamStandingsStore.westStandings.first?.team.season ?? 2025
-                                )
-    
-                                Spacer()
-                            }
-                            .padding(.horizontal)
-                            .padding(.top, 4)
+                            BaseballLeagueTitle(
+                                logoUrl: MLBUtil.mlbLogoUrl,
+                                name: "MLB",
+                                season: mlbTeamStandingsStore.westStandings.first?.team.season
+                            )
                         },
                         customListContent: { totalHScrollDistance in
                             VStack {
                                 // west
                                 MLBTeamStandingsDataList(
+                                    searchStore: searchStore,
                                     mlbTeamStandingsStore: mlbTeamStandingsStore,
                                     divisionTitle: "서부",
                                     standings: mlbTeamStandingsStore.westStandings,
@@ -100,6 +65,7 @@ struct MLBTeamStandingsView: View {
                                 
                                 // east
                                 MLBTeamStandingsDataList(
+                                    searchStore: searchStore,
                                     mlbTeamStandingsStore: mlbTeamStandingsStore,
                                     divisionTitle: "동부",
                                     standings: mlbTeamStandingsStore.eastStandings,
@@ -108,6 +74,7 @@ struct MLBTeamStandingsView: View {
                                 
                                 // central
                                 MLBTeamStandingsDataList(
+                                    searchStore: searchStore,
                                     mlbTeamStandingsStore: mlbTeamStandingsStore,
                                     divisionTitle: "중부",
                                     standings: mlbTeamStandingsStore.centralStandings,
@@ -146,6 +113,7 @@ struct MLBTeamStandingsView: View {
 }
 
 struct MLBTeamStandingsDataList: View {
+    @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var mlbTeamStandingsStore: StoreOf<MLBTeamStandingsStore>
     
     let divisionTitle: String
@@ -170,12 +138,12 @@ struct MLBTeamStandingsDataList: View {
                         let data = standings[index - 1]
                         
                         StandingsRankItem(
+                            id: data.team.id,
                             rank: index,
                             imageUrl: MLBUtil.teamLogoURL(id: data.team.id),
-                            isSvgLogo: true,
                             name: teamNameDic["short_\(data.team.id)"] ?? data.team.shortName,
-                            action: {
-                                
+                            action: { id in
+                                searchStore.send(.showTeamStats(teamId: id))
                             }
                         )
                     }
@@ -219,15 +187,15 @@ struct MLBTeamStandingsDataListItem: View {
     var body: some View {
         Text(intDataText)
             .font(.system(size: 15))
-            .frame(width: 100)
+            .frame(width: mlbTeamStandingsStore.columnWidthList[safe: index] ?? 100)
     }
     
     private var intDataText: String {
         switch index {
         case 0:
-            data.stats.recordData?.winningPercentage ?? ""
-        case 1:
             data.stats.recordData?.gamesBack ?? ""
+        case 1:
+            data.stats.recordData?.winningPercentage ?? ""
         case 2:
             String(data.stats.recordData?.wins ?? 0)
         case 3:
