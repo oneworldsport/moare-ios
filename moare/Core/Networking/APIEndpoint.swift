@@ -16,12 +16,22 @@ enum APIEndpoint {
     
     case fetchTrendingKeywords
     
+    case startLoginAuth(body: StartAuthRequest)
+    case confirmLoginAuth(body: ConfirmAuthRequest)
+    case initiateSignUp(body: SignUpInitiateRequest)
+    case verifySignUpOtp(body: SignUpVerificationRequest)
+    case completeSignUp(body: SignUpCompleteRequest)
+    case checkNickname(nickname: String)
+    case reserveNickname(body: NicknameReserveRequest)
+    
     var defaultHTTPMethod: String {
         switch self {
-        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname:
             return "GET"
-        case .getLeagueSchedule, .searchByKeyword:
+        case .getLeagueSchedule, .searchByKeyword, .startLoginAuth, .confirmLoginAuth, .initiateSignUp, .verifySignUpOtp, .completeSignUp:
             return "POST"
+        case .reserveNickname:
+            return "PUT"
         }
     }
     
@@ -75,6 +85,30 @@ enum APIEndpoint {
             
         case .fetchTrendingKeywords:
             components.path = "/keywords/trending"
+            
+        case .startLoginAuth(let body):
+            components.path = "/auth/login/start"
+            
+        case .confirmLoginAuth(let body):
+            components.path = "/auth/login/confirm"
+            
+        case .initiateSignUp(let body):
+            components.path = "/auth/signup/initiate"
+            
+        case .verifySignUpOtp(let body):
+            components.path = "/auth/signup/verify"
+            
+        case .completeSignUp(let body):
+            components.path = "/auth/signup/complete"
+            
+        case .checkNickname(let nickname):
+            components.path = "/auth/nickname/check"
+            components.queryItems = [
+                URLQueryItem(name: "nickname", value: nickname)
+            ]
+            
+        case .reserveNickname(let body):
+            components.path = "/auth/nickname/reserve"
         }
         
         return components.url
@@ -82,13 +116,25 @@ enum APIEndpoint {
     
     var httpBody: Data? {
         switch self {
-        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname:
             return nil
         case .searchByKeyword(let keyword):
             // NOTE: nil is excluded
             return try? JSONEncoder().encode(keyword)
         case .getLeagueSchedule(let entity, _, _):
             return try? JSONEncoder().encode(entity)
+        case .startLoginAuth(let body):
+            return try? JSONEncoder().encode(body)
+        case .confirmLoginAuth(let body):
+            return try? JSONEncoder().encode(body)
+        case .initiateSignUp(let body):
+            return try? JSONEncoder().encode(body)
+        case .verifySignUpOtp(let body):
+            return try? JSONEncoder().encode(body)
+        case .completeSignUp(let body):
+            return try? JSONEncoder().encode(body)
+        case .reserveNickname(let body):
+            return try? JSONEncoder().encode(body)
         }
     }
 }

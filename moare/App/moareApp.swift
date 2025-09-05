@@ -16,7 +16,13 @@ struct SportSearchEngine_iOSApp: App {
     
     @State var isSplashFinished = false
     
-    @State var viewForTest: SportDisplayType? = SportDisplayType.fbPlayerInfo
+    @State var viewForTest: SportDisplayType? = nil
+    
+    enum Screen {
+        case search, moat, profile
+    }
+    
+    @State private var selection: Screen = .moat
     
     init() {
         Task {
@@ -25,7 +31,7 @@ struct SportSearchEngine_iOSApp: App {
         
         SDImageCodersManager.shared.addCoder(SDImageSVGCoder.shared)
     }
- 
+    
     var body: some Scene {
         WindowGroup {
             if isSplashFinished {
@@ -34,9 +40,45 @@ struct SportSearchEngine_iOSApp: App {
                         .environmentObject(storeManager)
                         .preferredColorScheme(.light) // force light mode
                 } else {
-                    SearchView()
-                        .environmentObject(storeManager)
-                        .preferredColorScheme(.light) // force light mode
+                    TabView(selection: $selection) {
+                        SearchView()
+                            .environmentObject(storeManager)
+                            .tabItem {
+                                Image(systemName: "magnifyingglass")
+                                if selection == .search {
+                                    Text("검색")
+                                } else {
+                                    Text("")
+                                }
+                            }
+                            .tag(Screen.search)
+                        
+                        MoatTimelineView()
+                            .environmentObject(storeManager)
+                            .tabItem {
+                                Image(systemName: "bubble.left")
+                                if selection == .moat {
+                                    Text("모트")
+                                } else {
+                                    Text("")
+                                }
+                            }
+                            .tag(Screen.moat)
+                        
+                        SearchView()
+                            .environmentObject(storeManager)
+                            .tabItem {
+                                Image(systemName: "person.crop.circle")
+                                if selection == .profile {
+                                    Text("내 프로필")
+                                } else {
+                                    Text("")
+                                }
+                            }
+                            .tag(Screen.profile)
+                    }
+                    .preferredColorScheme(.light) // force light mode
+                    .tint(Color("moare"))
                 }
             } else {
                 SplashView(isSplashFinished: $isSplashFinished)

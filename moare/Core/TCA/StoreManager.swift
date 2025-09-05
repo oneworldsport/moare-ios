@@ -56,6 +56,10 @@ struct StoreKeys {
     static let mlbTeamScheduleStore = "MLBTeamScheduleStore"
     static let mlbLeagueScheduleStore = "MLBLeagueScheduleStore"
     static let mlbGameStatsStore = "MLBGameStatsStore"
+    
+    // sign
+    static let signStore = "SignStore"
+    static let moatTimelineStore = "MoatTimelineStore"
 }
 
 class StoreManager: ObservableObject {
