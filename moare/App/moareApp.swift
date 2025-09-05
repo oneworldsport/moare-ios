@@ -29,10 +29,10 @@ struct SportSearchEngine_iOSApp: App {
     @StateObject private var storeManager = StoreManager()
     
     @State var isSplashFinished = false
+    @State private var didInitialLoad = false
     
 //    var viewForTest: SportDisplayType? = SportDisplayType.kboGameStats
     var viewForTest: SportDisplayType? = nil
-    @State var viewForTest: SportDisplayType? = nil
     
     enum Screen {
         case search, moat, profile
@@ -62,44 +62,44 @@ struct SportSearchEngine_iOSApp: App {
                 } else {
                     if isSplashFinished && didInitialLoad {
                         TabView(selection: $selection) {
-                        SearchView()
-                            .environmentObject(storeManager)
-                            .tabItem {
-                                Image(systemName: "magnifyingglass")
-                                if selection == .search {
-                                    Text("검색")
-                                } else {
-                                    Text("")
-                                }
-                            }
-                            .tag(Screen.search)
-                        
-                        MoatTimelineView()
-                            .environmentObject(storeManager)
-                            .tabItem {
-                                Image(systemName: "bubble.left")
-                                if selection == .moat {
-                                    Text("모트")
-                                } else {
-                                    Text("")
-                                }
-                            }
-                            .tag(Screen.moat)
-                        
-                        SearchView()
+                            SearchView()
                                 .environmentObject(storeManager)
                                 .tabItem {
-                                Image(systemName: "person.crop.circle")
-                                if selection == .profile {
-                                    Text("내 프로필")
-                                } else {
-                                    Text("")
+                                    Image(systemName: "magnifyingglass")
+                                    if selection == .search {
+                                        Text("검색")
+                                    } else {
+                                        Text("")
+                                    }
                                 }
-                            }
-                            .tag(Screen.profile)
-                    }
-                    .preferredColorScheme(.light) // force light mode
-                    .tint(Color("moare"))
+                                .tag(Screen.search)
+                            
+                            MoatTimelineView()
+                                .environmentObject(storeManager)
+                                .tabItem {
+                                    Image(systemName: "bubble.left")
+                                    if selection == .moat {
+                                        Text("모트")
+                                    } else {
+                                        Text("")
+                                    }
+                                }
+                                .tag(Screen.moat)
+                            
+                            SearchView()
+                                .environmentObject(storeManager)
+                                .tabItem {
+                                    Image(systemName: "person.crop.circle")
+                                    if selection == .profile {
+                                        Text("내 프로필")
+                                    } else {
+                                        Text("")
+                                    }
+                                }
+                                .tag(Screen.profile)
+                        }
+                        .preferredColorScheme(.light) // force light mode
+                        .tint(Color("moare"))
                     } else {
                         SplashView(isSplashFinished: $isSplashFinished)
                             .preferredColorScheme(.light) // force light mode
