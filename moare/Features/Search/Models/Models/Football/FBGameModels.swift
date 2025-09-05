@@ -197,7 +197,7 @@ struct FBGameStats: Decodable, Equatable {
 
 struct FBGameTeamStats: Decodable, Equatable {
     private let _type: String?
-    let value: StatValue
+    let value: DynamicCodableValue
     
     var type: String {
         return _type ?? ""
@@ -359,45 +359,6 @@ struct FBGamePlayerStatsGames: Decodable, Equatable {
         self._rating = rating
         self._captain = captain
         self._substitute = substitute
-    }
-}
-
-enum StatValue: Decodable, Equatable {
-    case intValue(Int)
-    case doubleValue(Double)
-    case stringValue(String)
-    case boolValue(Bool)
-    case none
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let intValue = try? container.decode(Int.self) {
-            self = .intValue(intValue)
-        } else if let doubleValue = try? container.decode(Double.self) {
-            self = .doubleValue(doubleValue)
-        } else if let stringValue = try? container.decode(String.self) {
-            self = .stringValue(stringValue)
-        } else if let boolValue = try? container.decode(Bool.self) {
-            self = .boolValue(boolValue)
-        } else {
-            self = .none
-        }
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .intValue(let intValue):
-            try container.encode(intValue)
-        case .doubleValue(let doubleValue):
-            try container.encode(doubleValue)
-        case .stringValue(let stringValue):
-            try container.encode(stringValue)
-        case .boolValue(let boolValue):
-            try container.encode(boolValue)
-        case .none:
-            try container.encodeNil()
-        }
     }
 }
 
