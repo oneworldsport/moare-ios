@@ -244,7 +244,7 @@ struct MLBPlayerHittingData: Decodable, Equatable {
 
 struct MLBPlayerHittingStats: Decodable, Equatable {
     private let _airOuts: Int?
-    private let _atBats: Int?
+    let _atBats: Int? // MLBPlayerInfoView에서 선수 기록 있는지 판단할때 사용하기 위해 private 제거함.
     private let _atBatsPerHomeRun: String?
     private let _avg: String?
     private let _babip: String?
@@ -402,7 +402,7 @@ struct MLBPlayerPitchingStats: Decodable, Equatable {
     private let _inningsPitched: String?
     private let _intentionalWalks: Int?
     private let _losses: Int?
-    private let _numberOfPitches: Int?
+    let _numberOfPitches: Int? // MLBPlayerInfoView에서 선수 기록 있는지 판단할때 사용하기 위해 private 제거함.
     private let _obp: String?
     private let _ops: String?
     private let _outs: Int?

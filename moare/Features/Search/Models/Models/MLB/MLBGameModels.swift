@@ -12,13 +12,13 @@ struct MLBGame: Decodable, Equatable {
     let decisions: MLBGameDecisions?
     let game: MLBGameData
     let gameInfo: MLBGameInfo
-    let linescore: MLBGameLineScore
-    let moundVisits: MLBGameMoundVisits
-    let probablePitchers: MLBGameProbablePitchers
-    let review: MLBGameReview
+    let linescore: MLBGameLineScore?
+    let moundVisits: MLBGameMoundVisits?
+    let probablePitchers: MLBGameProbablePitchers?
+    let review: MLBGameReview?
     let status: MLBGameStatus
     let teams: MLBGameTeams
-    let weather: MLBGameWeather
+    let weather: MLBGameWeather?
 }
 
 struct MLBGameBoxScore: Decodable, Equatable {
@@ -202,6 +202,30 @@ struct MLBGameData: Decodable, Equatable {
         case _tiebreaker = "tiebreaker"
         case _type = "type"
     }
+    
+    init(
+        calendarEventID: String? = nil,
+        doubleHeader: String? = nil,
+        gamedayType: String? = nil,
+        gameNumber: Int? = nil,
+        id: String?,
+        pk: Int? = nil,
+        season: String? = nil,
+        seasonDisplay: String? = nil,
+        tiebreaker: String? = nil,
+        type: String? = nil
+    ) {
+        self._calendarEventID = calendarEventID
+        self._doubleHeader = doubleHeader
+        self._gamedayType = gamedayType
+        self._gameNumber = gameNumber
+        self._id = id
+        self._pk = pk
+        self._season = season
+        self._seasonDisplay = seasonDisplay
+        self._tiebreaker = tiebreaker
+        self._type = type
+    }
 }
 
 struct MLBGameInfo: Decodable, Equatable {
@@ -221,6 +245,18 @@ struct MLBGameInfo: Decodable, Equatable {
         case _gameDurationMinutes = "gameDurationMinutes"
         case _gameDate = "gameDate"
     }
+    
+    init(
+        attendance: Int? = nil,
+        firstPitch: String? = nil,
+        gameDurationMinutes: Int? = nil,
+        gameDate: String?
+    ) {
+        self._attendance = attendance
+        self._firstPitch = firstPitch
+        self._gameDurationMinutes = gameDurationMinutes
+        self._gameDate = gameDate
+    }
 }
 
 struct MLBGameLineScore: Decodable, Equatable {
@@ -239,11 +275,11 @@ struct MLBGameLineScore: Decodable, Equatable {
     let teams: MLBGameLineScoreTeams
 
     var balls: Int { _balls ?? 0 }
-    var currentInning: Int { _currentInning ?? 0 }
+    var currentInning: Int { _currentInning ?? 1 }
     var currentInningOrdinal: String { _currentInningOrdinal ?? "" }
     var inningHalf: String { _inningHalf ?? "" }
     var inningState: String { _inningState ?? "" }
-    var isTopInning: Bool { _isTopInning ?? false }
+    var isTopInning: Bool { _isTopInning ?? true }
     var outs: Int { _outs ?? 0 }
     var scheduledInnings: Int { _scheduledInnings ?? 0 }
     var strikes: Int { _strikes ?? 0 }
@@ -401,6 +437,22 @@ struct MLBGameStatus: Decodable, Equatable {
         case _startTimeTBD = "startTimeTBD"
         case _statusCode = "statusCode"
     }
+    
+    init(
+        abstractGameCode: String? = nil,
+        abstractGameState: String? = nil,
+        codedGameState: String? = nil,
+        detailedState: String?,
+        startTimeTBD: Bool? = nil,
+        statusCode: String? = nil
+    ) {
+        self._abstractGameCode = abstractGameCode
+        self._abstractGameState = abstractGameState
+        self._codedGameState = codedGameState
+        self._detailedState = detailedState
+        self._startTimeTBD = startTimeTBD
+        self._statusCode = statusCode
+    }
 }
 
 struct MLBGameTeams: Decodable, Equatable {
@@ -412,10 +464,10 @@ struct MLBGameTeamDetail: Decodable, Equatable {
     private let _abbreviation: String?
     private let _allStarStatus: String?
     private let _clubName: String?
-    let division: MLBNameObj
+    let division: MLBNameObj?
     private let _franchiseName: String?
     private let _id: Int?
-    let league: MLBNameObj
+    let league: MLBNameObj?
     private let _locationName: String?
     private let _name: String?
     let record: MLBGameTeamRecord?
@@ -451,6 +503,38 @@ struct MLBGameTeamDetail: Decodable, Equatable {
         case _shortName = "shortName"
         case _teamCode = "teamCode"
         case _teamName = "teamName"
+    }
+    
+    init(
+        abbreviation: String? = nil,
+        allStarStatus: String? = nil,
+        clubName: String? = nil,
+        division: MLBNameObj? = nil,
+        franchiseName: String? = nil,
+        id: Int?,
+        league: MLBNameObj? = nil,
+        locationName: String? = nil,
+        name: String? = nil,
+        record: MLBGameTeamRecord? = nil,
+        season: Int? = nil,
+        shortName: String? = nil,
+        teamCode: String? = nil,
+        teamName: String? = nil
+    ) {
+        self._abbreviation = abbreviation
+        self._allStarStatus = allStarStatus
+        self._clubName = clubName
+        self.division = division
+        self._franchiseName = franchiseName
+        self._id = id
+        self.league = league
+        self._locationName = locationName
+        self._name = name
+        self.record = record
+        self._season = season
+        self._shortName = shortName
+        self._teamCode = teamCode
+        self._teamName = teamName
     }
 }
 
@@ -535,18 +619,16 @@ struct MLBGameWeather: Decodable, Equatable {
 }
 
 struct MLBGameInfoForSchedule: Decodable, Equatable {
-    private let _currentInning: Int?
+    private let _currentInning: String?
 
-    var currentInning: Int {
-        return _currentInning ?? 0
-    }
+    var currentInning: String { _currentInning ?? StringConstants.gameLiveStr }
 
     private enum CodingKeys: String, CodingKey {
-        case _currentInning = "round"
+        case _currentInning = "currentInning"
     }
     
     init(
-        currentInning: Int?
+        currentInning: String?
     ) {
         self._currentInning = currentInning
     }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct InfoViewContainer<MeasureContent: View, DisplayContent: View>: View {
     let itemCount: Int
+    let shouldShowMeasureContent: Bool
     @ViewBuilder let measureContent: (InfoViewScope) -> MeasureContent
     @ViewBuilder let displayContent: (InfoViewScope) -> DisplayContent
     
@@ -20,16 +21,19 @@ struct InfoViewContainer<MeasureContent: View, DisplayContent: View>: View {
     
     @State private var animatePositions = false
     @State private var showContents = false
+    @State private var isMeasureContentVisible = false
 
-//    init(
-//        itemCount: Int,
-//        @ViewBuilder measureContent: @escaping () -> MeasureContent,
-//        @ViewBuilder displayContent: @escaping () -> DisplayContent
-//    ) {
-//        self.itemCount = itemCount
-//        self.measureContent = measureContent
-//        self.displayContent = displayContent
-//    }
+    init(
+        itemCount: Int,
+        shouldShowMeasureContent: Bool = false,
+        @ViewBuilder measureContent: @escaping (InfoViewScope) -> MeasureContent,
+        @ViewBuilder displayContent: @escaping (InfoViewScope) -> DisplayContent
+    ) {
+        self.itemCount = itemCount
+        self.shouldShowMeasureContent = shouldShowMeasureContent
+        self.measureContent = measureContent
+        self.displayContent = displayContent
+    }
 
     var body: some View {
         let scope = InfoViewScope(
@@ -51,14 +55,16 @@ struct InfoViewContainer<MeasureContent: View, DisplayContent: View>: View {
             Spacer() // empty space for smooth animation effect
                 .frame(maxWidth: .infinity, maxHeight: 0)
             
+            if !shouldShowMeasureContent || !isMeasureContentVisible {
+                displayContent(scope)
+            }
+            
             VStack(spacing: 20) {
                 measureContent(scope)
             }
-            .opacity(0)
-            
-            displayContent(scope)
+            .opacity(isMeasureContentVisible ? 1 : 0)
         }
-        .padding(.top, 6)
+//        .padding(.top, 6)
         .coordinateSpace(name: coordinateSpaceName)
         .background(
             GeometryReader { proxy in
@@ -75,16 +81,23 @@ struct InfoViewContainer<MeasureContent: View, DisplayContent: View>: View {
     }
     
     private func triggerAnimation() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short) { // after 0.3 seconds
             withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
 //            withAnimation(.spring(response: AnimationConstants.Duration.medium)) {
                 animatePositions = true
             }
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short + AnimationConstants.Duration.medium) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short + AnimationConstants.Duration.medium) { // after 1 seconds
             withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                 showContents = true
+            }
+        }
+        
+        if shouldShowMeasureContent {
+            DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.short + AnimationConstants.Duration.medium + AnimationConstants.Duration.defaultDuration) { // after 1.5 seconds
+                isMeasureContentVisible = true
+                showContents = false
             }
         }
     }

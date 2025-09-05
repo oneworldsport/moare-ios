@@ -1,0 +1,174 @@
+{
+  "keywords": [
+    {
+      "keyword": "일정",
+      "id": "schedule",
+      "priority": 1
+    }
+  ],
+  "entityInfo": [
+    {
+      "entityId": 90001,
+      "entityName": "NBA",
+      "category": "basketball",
+      "entityType": "league",
+      "leagueId": 90001,
+      "playerId": null,
+      "teamId": null
+    }
+  ],
+  "dataType": "basketball_league_schedule",
+  "season": 2024,
+  "data": {
+    "scheduleType": "league",
+    "scheduledMonths": [
+      "2024-10",
+      "2024-11",
+      "2024-12",
+      "2025-01",
+      "2025-02",
+      "2025-03",
+      "2025-04",
+      "2025-05",
+      "2025-06"
+    ],
+    "schedule": [
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 125,
+        "awayTeamId": 1610612752,
+        "homeTeamId": 1610612754,
+        "itemKey": "2025-06-01T09:00:00#0042400306",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 108,
+        "gameInfo": {
+          "seriesGameNumber": "Game 6",
+          "seriesText": "IND wins 4-2",
+          "weekName": "Week 32",
+          "gameLabel": "East Conf. Finals",
+          "gameSubLabel": "Game 6",
+          "weekNumber": 32
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 110,
+        "awayTeamId": 1610612754,
+        "homeTeamId": 1610612760,
+        "itemKey": "2025-06-06T09:30:00#0042400401",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 111,
+        "gameInfo": {
+          "seriesGameNumber": "Game 1",
+          "seriesText": "IND leads 1-0",
+          "weekName": "Week 33",
+          "gameLabel": "NBA Finals",
+          "gameSubLabel": "Game 1",
+          "weekNumber": 33
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 123,
+        "awayTeamId": 1610612754,
+        "homeTeamId": 1610612760,
+        "itemKey": "2025-06-09T09:00:00#0042400402",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 107,
+        "gameInfo": {
+          "seriesGameNumber": "Game 2",
+          "seriesText": "Series tied 1-1",
+          "weekName": "Week 33",
+          "gameLabel": "NBA Finals",
+          "gameSubLabel": "Game 2",
+          "weekNumber": 33
+        }
+      },
+      {
+        "gameStatus": "3",
+        "homeTeamScore": 116,
+        "awayTeamId": 1610612760,
+        "homeTeamId": 1610612754,
+        "itemKey": "2025-06-12T09:30:00#0042400403",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 107,
+        "gameInfo": {
+          "seriesGameNumber": "Game 3",
+          "seriesText": "IND leads 2-1",
+          "weekName": "Week 34",
+          "gameLabel": "NBA Finals",
+          "gameSubLabel": "Game 3",
+          "weekNumber": 34
+        }
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": 0,
+        "awayTeamId": 1610612760,
+        "homeTeamId": 1610612754,
+        "itemKey": "2025-06-14T09:30:00#0042400404",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "seriesGameNumber": "Game 4",
+          "seriesText": "IND leads 2-1",
+          "weekName": "Week 34",
+          "gameLabel": "NBA Finals",
+          "gameSubLabel": "Game 4",
+          "weekNumber": 34
+        }
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": 0,
+        "awayTeamId": 1610612754,
+        "homeTeamId": 1610612760,
+        "itemKey": "2025-06-17T09:30:00#0042400405",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "seriesGameNumber": "Game 5",
+          "seriesText": "IND leads 2-1",
+          "weekName": "Week 35",
+          "gameLabel": "NBA Finals",
+          "gameSubLabel": "Game 5",
+          "weekNumber": 35
+        }
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": 0,
+        "awayTeamId": 1610612760,
+        "homeTeamId": 1610612754,
+        "itemKey": "2025-06-20T09:30:00#0042400406",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "seriesGameNumber": "Game 6",
+          "seriesText": "IND leads 2-1",
+          "weekName": "Week 35",
+          "gameLabel": "NBA Finals",
+          "gameSubLabel": "Game 6",
+          "weekNumber": 35
+        }
+      },
+      {
+        "gameStatus": "1",
+        "homeTeamScore": 0,
+        "awayTeamId": 1610612754,
+        "homeTeamId": 1610612760,
+        "itemKey": "2025-06-23T09:00:00#0042400407",
+        "categoryKey": "basketball#90001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "seriesGameNumber": "Game 7",
+          "seriesText": "IND leads 2-1",
+          "weekName": "Week 35",
+          "gameLabel": "NBA Finals",
+          "gameSubLabel": "Game 7",
+          "weekNumber": 35
+        }
+      }
+    ]
+  }
+}

@@ -20,20 +20,23 @@ struct KBOTeamStandingsView: View {
        --------------------- */
     let displayModel: KBOTeamStandingsDisplayModel
     
+    private let columnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 60, 60, 50, 50, 50, 70]
+    
     var body: some View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            let standings: [StandingsItemState] = kboTeamStandingsStore?.standings.map {
+            let teamStandings: [StandingsItemState] = kboTeamStandingsStore?.standings.map {
                 let rankData = $0.stats.rankData
                 let hitterData = $0.stats.hitterData
                 let pitcherData = $0.stats.pitcherData
                 let runnerData = $0.stats.runnerData
                 
                 return StandingsItemState(
+                    id: $0.team.id,
                     imageUrl: KBOUtil.teamLogoURL(id: $0.team.id),
                     name: kboTeamStandingsStore?.baseTeamStandings.teamNameDictionary["short_\($0.team.id)"] ?? $0.team.teamName,
                     dataList: [
-                        rankData.winpct,
                         rankData.gb,
+                        rankData.winpct,
                         rankData.wins,
                         rankData.losses,
                         rankData.gp,
@@ -59,29 +62,25 @@ struct KBOTeamStandingsView: View {
                     StandingsViewContainer(
                         state: StandingsContainerState(
                             secondCategories: StringConstants.KBO.teamStandingsCategories,
-                            standings: standings,
-                            secondCategorySelectedIndex: kboTeamStandingsStore.baseTeamStandings.secondCategorySelectedIndex
+                            standings: teamStandings,
+                            secondCategorySelectedIndex: kboTeamStandingsStore.baseTeamStandings.secondCategorySelectedIndex,
+                            firstColumnWidth: 100,
+                            columnWidthList: columnWidthList
                         ),
                         actions: StandingsContainerActions(
-                            secondCategoryButtonAction: { index in
+                            secondCategoryButtonAction: { index, _ in
                                 kboTeamStandingsStore.send(.baseTeamStandings(.selectSecondCategory(index)))
                             },
-                            itemButtonAction: {
-                                
+                            itemButtonAction: { id in
+                                searchStore.send(.showTeamStats(teamId: id))
                             }
                         ),
                         titleContent: {
-                            HStack {
-                                BaseballLeagueTitle(
-                                    logoUrl: KBOUtil.kboLogoUrl,
-                                    name: "KBO",
-                                    season: kboTeamStandingsStore.standings.first?.stats.season ?? 2025
-                                )
-    
-                                Spacer()
-                            }
-                            .padding(.horizontal)
-                            .padding(.top, 4)
+                            BaseballLeagueTitle(
+                                logoUrl: KBOUtil.kboLogoUrl,
+                                name: "KBO",
+                                season: kboTeamStandingsStore.standings.first?.stats.season
+                            )
                         },
                         customListContent: { _ in }
                     )

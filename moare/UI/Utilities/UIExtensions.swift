@@ -9,15 +9,15 @@ import SwiftUI
 
 extension View {
     /// get view's width and height
-    func getViewSize(_ onChange: @escaping (CGSize) -> Void) -> some View {
+    func readSize(_ onChange: @escaping (CGSize) -> Void) -> some View {
         self.background(
-            GeometryReader { geometry in
+            GeometryReader { proxy in
                 Color.clear
                     .onAppear {
-                        onChange(geometry.size)
+                        onChange(proxy.size)
                     }
-                    .onChange(of: geometry.size) { newValue in
-                        onChange(newValue)
+                    .onChange(of: proxy.size) {
+                        onChange(proxy.size)
                     }
             }
         )

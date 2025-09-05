@@ -18,8 +18,8 @@ struct LeagueTitle: View {
             URLImage(url: url, size: .small)
                 .padding(.trailing, 6)
             
-            // TODO: make season text to use util
-            Text("\(leagueName) \(String(leagueSeason).suffix(2))/25")
+//            Text("\(leagueName) \(String(leagueSeason).suffix(2))/25")
+            Text("\(leagueName) \(String(leagueSeason))-\(String(leagueSeason + 1).suffix(2))")
                 .fontWeight(.medium)
         }
     }
@@ -28,6 +28,11 @@ struct LeagueTitle: View {
 struct NBATitle: View {
     let leagueName: String
     let leagueSeason: Int
+    
+    init(leagueName: String, leagueSeason: Int?) {
+        self.leagueName = leagueName
+        self.leagueSeason = leagueSeason ?? CalendarUtil.currentYear
+    }
     
     var body: some View {
         HStack(spacing: 0) {
@@ -47,6 +52,12 @@ struct BaseballLeagueTitle: View {
     let logoUrl: String
     let name: String
     let season: Int
+    
+    init(logoUrl: String, name: String, season: Int?) {
+        self.logoUrl = logoUrl
+        self.name = name
+        self.season = season ?? 2025
+    }
     
     var body: some View {
         HStack(spacing: 0) {

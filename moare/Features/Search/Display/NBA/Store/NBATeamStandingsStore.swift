@@ -136,7 +136,7 @@ struct NBATeamStandingsStore {
                 
                 switch state.selectedCategoryIndex {
                 case 0:
-                    state.standings.sort { calculateGamesBack(standings: standings, team: $0.stats) > calculateGamesBack(standings: standings, team: $1.stats) }
+                    state.standings.sort { calculateGamesBack(standings: standings, team: $0.stats) < calculateGamesBack(standings: standings, team: $1.stats) }
                 case 1:
                     state.standings.sort { $0.stats.winsPct > $1.stats.winsPct }
                 case 2:

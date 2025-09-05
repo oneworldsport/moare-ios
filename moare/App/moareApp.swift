@@ -9,13 +9,29 @@ import SwiftUI
 import ComposableArchitecture
 import SDWebImageSwiftUI
 import SDWebImageSVGCoder
+import FirebaseCore
+import FirebaseAnalytics
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+  func application(_ application: UIApplication,
+                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    FirebaseApp.configure()
+
+    return true
+  }
+}
 
 @main
 struct SportSearchEngine_iOSApp: App {
+    // register app delegate for Firebase setup
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
     @StateObject private var storeManager = StoreManager()
     
     @State var isSplashFinished = false
     
+//    var viewForTest: SportDisplayType? = SportDisplayType.kboGameStats
+    var viewForTest: SportDisplayType? = nil
     @State var viewForTest: SportDisplayType? = nil
     
     enum Screen {
@@ -30,17 +46,22 @@ struct SportSearchEngine_iOSApp: App {
         }
         
         SDImageCodersManager.shared.addCoder(SDImageSVGCoder.shared)
+        
+//        Analytics.logEvent("test_event", parameters: [
+//            "source": "iOS_debug"
+//        ])
     }
     
     var body: some Scene {
         WindowGroup {
-            if isSplashFinished {
-                if viewForTest != nil {
+            Group {
+                if viewForTest != nil && didInitialLoad {
                     SearchView(viewForTest: viewForTest)
                         .environmentObject(storeManager)
                         .preferredColorScheme(.light) // force light mode
                 } else {
-                    TabView(selection: $selection) {
+                    if isSplashFinished && didInitialLoad {
+                        TabView(selection: $selection) {
                         SearchView()
                             .environmentObject(storeManager)
                             .tabItem {
@@ -66,8 +87,8 @@ struct SportSearchEngine_iOSApp: App {
                             .tag(Screen.moat)
                         
                         SearchView()
-                            .environmentObject(storeManager)
-                            .tabItem {
+                                .environmentObject(storeManager)
+                                .tabItem {
                                 Image(systemName: "person.crop.circle")
                                 if selection == .profile {
                                     Text("내 프로필")
@@ -79,10 +100,21 @@ struct SportSearchEngine_iOSApp: App {
                     }
                     .preferredColorScheme(.light) // force light mode
                     .tint(Color("moare"))
+                    } else {
+                        SplashView(isSplashFinished: $isSplashFinished)
+                            .preferredColorScheme(.light) // force light mode
+                    }
                 }
-            } else {
-                SplashView(isSplashFinished: $isSplashFinished)
-                    .preferredColorScheme(.light) // force light mode
+            }
+            .task {
+                if viewForTest != nil {
+                    // NOTE: test code를 실행할때는 s3가 모두 초기화(비동기 작업) 되기 전에 화면이 나와 사전이 비어있는 경우가 있음. 그래서 s3 초기화 작업이 모두 끝나면 다음 코드 진행.
+                    await AWSManager.shared.loadInitialData()
+                    didInitialLoad = true
+                } else {
+                    didInitialLoad = true
+                    Task { await AWSManager.shared.loadInitialData() }
+                }
             }
         }
     }

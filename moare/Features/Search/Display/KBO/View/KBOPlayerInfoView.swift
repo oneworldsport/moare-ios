@@ -232,22 +232,20 @@ struct KBOPlayerInfoFirstItem: View {
     }
     
     var body: some View {
-        let player = kboPlayerInfoStore.baseInfo.displayModel?.info
-        
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
         ) {
-            HCapsuleBar()
-            
-            URLImage(url: KBOUtil.playerPhotoURL(id: player?.id))
-                .opacity(showContents ? 1 : 0)
-            
-            Text(player?.name ?? "")
-                .font(.system(size: 16))
-                .fontWeight(.medium)
-                .opacity(showContents ? 1 : 0)
+            if let player = kboPlayerInfoStore.baseInfo.displayModel?.info {
+                URLImage(url: KBOUtil.playerPhotoURL(id: player.id))
+                    .opacity(showContents ? 1 : 0)
+                
+                Text(player.name)
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+                    .opacity(showContents ? 1 : 0)
+            }
         }
     }
 }
@@ -277,22 +275,21 @@ struct KBOPlayerInfoSecondItem: View {
     
     var body: some View {
         let teamNameDic = kboPlayerInfoStore.baseInfo.teamNameDictionary
-        let player = kboPlayerInfoStore.baseInfo.displayModel?.info
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset
         ) {
-            HCapsuleBar()
-            
-            URLImage(url: KBOUtil.teamLogoURL(id: player?.teamId))
-                .opacity(showContents ? 1 : 0)
-            
-            Text(teamNameDic["full_\(player?.teamId ?? 0)"] ?? "")
-                .font(.system(size: 16))
-                .fontWeight(.medium)
-                .opacity(showContents ? 1 : 0)
+            if let player = kboPlayerInfoStore.baseInfo.displayModel?.info {
+                URLImage(url: KBOUtil.teamLogoURL(id: player.teamId))
+                    .opacity(showContents ? 1 : 0)
+                
+                Text(teamNameDic["full_\(player.teamId)"] ?? "")
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+                    .opacity(showContents ? 1 : 0)
+            }
         }
     }
 }
@@ -327,12 +324,6 @@ struct KBOPlayerInfoThirdItem: View {
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            // added HStack to position Capsule at center
-            HStack {
-                HCapsuleBar()
-            }
-            .frame(maxWidth: .infinity)
-            
             if let player = kboPlayerInfoStore.baseInfo.displayModel?.info {
                 HStack(spacing: 0) {
                     Text("등번호: ")
@@ -344,14 +335,14 @@ struct KBOPlayerInfoThirdItem: View {
                 }
                 .opacity(showContents ? 1 : 0)
                 
-                HStack(spacing: 0) {
+                (
                     Text("포지션: ")
                         .font(.system(size: 15))
-                    
-                    Text(player.position)
+                    + Text(player.position)
                         .font(.system(size: 16))
                         .fontWeight(.medium)
-                }
+                )
+                .multilineTextAlignment(.leading)
                 .opacity(showContents ? 1 : 0)
             }
         }
@@ -388,41 +379,35 @@ struct KBOPlayerInfoFourthItem: View {
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            // added HStack to position Capsule at center
-            HStack {
-                HCapsuleBar()
-            }
-            .frame(maxWidth: .infinity)
-            
             if let player = kboPlayerInfoStore.baseInfo.displayModel?.info {
-                HStack(spacing: 0) {
+                (
                     Text("드래프트: ")
                         .font(.system(size: 15))
-                    
-                    Text(player.draftRound)
+                    + Text(player.draftRound)
                         .font(.system(size: 16))
                         .fontWeight(.medium)
-                }
+                )
+                .multilineTextAlignment(.leading)
                 .opacity(showContents ? 1 : 0)
                 
-                HStack(spacing: 0) {
+                (
                     Text("경력: ")
                         .font(.system(size: 15))
-                    
-                    Text("\(KBOUtil.getFullYear(fromYear: player.fromYear))~현재 (\(KBOUtil.calculateYear(fromYear: player.fromYear))년차)")
+                    + Text("\(KBOUtil.getFullYear(fromYear: player.fromYear))~현재 (\(KBOUtil.calculateYear(fromYear: player.fromYear))년차)")
                         .font(.system(size: 16))
                         .fontWeight(.medium)
-                }
+                )
+                .multilineTextAlignment(.leading)
                 .opacity(showContents ? 1 : 0)
                 
-                HStack(spacing: 0) {
+                (
                     Text("연봉: ")
                         .font(.system(size: 15))
-                    
-                    Text(KBOUtil.formatMoney(player.salary))
+                    + Text(KBOUtil.formatMoney(player.salary))
                         .font(.system(size: 16))
                         .fontWeight(.medium)
-                }
+                )
+                .multilineTextAlignment(.leading)
                 .opacity(showContents ? 1 : 0)
             }
         }
@@ -459,12 +444,6 @@ struct KBOPlayerInfoFifthItem: View {
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            // added HStack to position Capsule at center
-            HStack {
-                HCapsuleBar()
-            }
-            .frame(maxWidth: .infinity)
-            
             if let player = kboPlayerInfoStore.baseInfo.displayModel?.info {
                 HStack(spacing: 0) {
                     Text("출생: ")
@@ -537,7 +516,6 @@ struct KBOPlayerInfoSixthItem: View {
     }
     
     var body: some View {
-        let teamNameDic = kboPlayerInfoStore.baseInfo.teamNameDictionary
         let stats = kboPlayerInfoStore.baseInfo.displayModel?.stats
         
         MovingCapsuleItemContainer(
@@ -550,12 +528,10 @@ struct KBOPlayerInfoSixthItem: View {
                 }
             }
         ) {
-            HCapsuleBar()
-            
             BaseballLeagueTitle(
                 logoUrl: KBOUtil.kboLogoUrl,
                 name: "KBO",
-                season: stats?.season ?? 2025
+                season: stats?.season
             )
             .opacity(showContents ? 1 : 0)
             
@@ -567,24 +543,28 @@ struct KBOPlayerInfoSixthItem: View {
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "타율",
                         data: hitter.avg,
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "홈런",
                         data: hitter.hr,
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "ops",
                         data: hitter.ops,
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "도루",
                         data: hitter.sb,
@@ -603,18 +583,21 @@ struct KBOPlayerInfoSixthItem: View {
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "평균자책점",
                         data: pitcher.era,
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "승",
                         data: pitcher.w,
                         customCategoryFontSize: 11
                     )
                     .frame(maxWidth: .infinity)
+                    StatsDivider()
                     FBStatDataItem(
                         category: "패",
                         data: pitcher.l,
@@ -625,6 +608,7 @@ struct KBOPlayerInfoSixthItem: View {
                 .opacity(showContents ? 1 : 0)
             }
         }
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
     }
 }
@@ -668,8 +652,6 @@ struct KBOPlayerInfoSeventhItem: View {
                 searchStore.send(.showGameStats(gameType: "previous"))
             }
         ) {
-            HCapsuleBar()
-            
             Text("최근경기")
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
@@ -680,99 +662,120 @@ struct KBOPlayerInfoSeventhItem: View {
                     let awayTeamScore = Int(lastGame.lineScore?.away.r ?? "0") ?? 0
                     
                     VStack {
-                        HStack {
-                            Text(teamNameDic["short_\(lastGame.gameInfo?.homeTeamId ?? 0)"] ?? "")
-                                .font(.system(size: 14))
-                                .fontWeight(.light)
-                                .lineLimit(1)
+                        HStack(spacing: 0) {
+                            HStack(spacing: 0) {
+                                Text(teamNameDic["short_\(lastGame.gameInfo?.homeTeamId ?? 0)"] ?? "")
+                                    .font(.system(size: 14))
+                                    .fontWeight(.light)
+                                    .lineLimit(1)
+                                
+                                Text(" \(homeTeamScore)")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.medium)
+                                    .foregroundStyle((homeTeamScore >= awayTeamScore) ? .moare : .primary)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .trailing)
                             
-                            Text("\(homeTeamScore)")
+                            Text(" - ")
                                 .font(.system(size: 15))
                                 .fontWeight(.medium)
-                                .foregroundStyle((homeTeamScore >= awayTeamScore) ? .moare : .primary)
                             
-                            Text(" vs ")
-                                .font(.system(size: 15))
-                                .fontWeight(.medium)
-                            
-                            Text("\(awayTeamScore)")
-                                .font(.system(size: 15))
-                                .fontWeight(.medium)
-                                .foregroundStyle((awayTeamScore >= homeTeamScore) ? .moare : .primary)
-                            
-                            Text(teamNameDic["short_\(lastGame.gameInfo?.awayTeamId ?? 0)"] ?? "")
-                                .font(.system(size: 14))
-                                .fontWeight(.light)
-                                .lineLimit(1)
+                            HStack(spacing: 0) {
+                                Text("\(awayTeamScore) ")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.medium)
+                                    .foregroundStyle((awayTeamScore >= homeTeamScore) ? .moare : .primary)
+                                
+                                Text(teamNameDic["short_\(lastGame.gameInfo?.awayTeamId ?? 0)"] ?? "")
+                                    .font(.system(size: 14))
+                                    .fontWeight(.light)
+                                    .lineLimit(1)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         
-                        Text(CalendarUtil.formatDate(date: lastGame.gameInfo?.date))
+                        Text(CalendarUtil.formatDate(date: lastGame.gameInfo?.date, formatType: .ampmWithDayOfWeekDate))
                             .font(.system(size: 15))
-                            .frame(maxHeight: 30)
                     }
-                    .padding(.top, 4)
+                    .frame(width: UIScreen.main.bounds.width * 0.40) // NOTE: 너비를 화면 전체 너비중 40%로 고정
                 }
                 
                 if lastGamePlayerHitterStats != nil && lastGamePlayerPitcherStats == nil {
-                    FBStatDataItem(
-                        category: "타수",
-                        data: lastGamePlayerHitterStats!.ab,
-                        customCategoryFontSize: 12
-                    )
-                    .frame(maxWidth: .infinity)
-                    FBStatDataItem(
-                        category: "안타",
-                        data: lastGamePlayerHitterStats!.h,
-                        customCategoryFontSize: 12
-                    )
-                    .frame(maxWidth: .infinity)
-                    FBStatDataItem(
-                        category: "득점",
-                        data: lastGamePlayerHitterStats!.r,
-                        customCategoryFontSize: 12
-                    )
-                    .frame(maxWidth: .infinity)
-                    FBStatDataItem(
-                        category: "타점",
-                        data: lastGamePlayerHitterStats!.rbi,
-                        customCategoryFontSize: 12
-                    )
+                    HStack {
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "타수",
+                            data: "\(lastGamePlayerHitterStats!.ab)",
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "안타",
+                            data: "\(lastGamePlayerHitterStats!.h)",
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "득점",
+                            data: "\(lastGamePlayerHitterStats!.r)",
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "타점",
+                            data: "\(lastGamePlayerHitterStats!.rbi)",
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                    }
                     .frame(maxWidth: .infinity)
                 } else if lastGamePlayerPitcherStats != nil && lastGamePlayerHitterStats == nil {
-                    FBStatDataItem(
-                        category: "이낭",
-                        data: lastGamePlayerPitcherStats!.ip,
-                        customCategoryFontSize: 12
-                    )
-                    .frame(maxWidth: .infinity)
-                    FBStatDataItem(
-                        category: "삼진",
-                        data: lastGamePlayerPitcherStats!.so,
-                        customCategoryFontSize: 12
-                    )
-                    .frame(maxWidth: .infinity)
-                    FBStatDataItem(
-                        category: "볼넷",
-                        data: lastGamePlayerPitcherStats!.bb,
-                        customCategoryFontSize: 12
-                    )
-                    .frame(maxWidth: .infinity)
-                    FBStatDataItem(
-                        category: "실점",
-                        data: lastGamePlayerPitcherStats!.r,
-                        customCategoryFontSize: 12
-                    )
-                    .frame(maxWidth: .infinity)
-                    FBStatDataItem(
-                        category: "자책점",
-                        data: lastGamePlayerPitcherStats!.er,
-                        customCategoryFontSize: 12
-                    )
+                    HStack {
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "이낭",
+                            data: lastGamePlayerPitcherStats!.ip,
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "삼진",
+                            data: lastGamePlayerPitcherStats!.so,
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "볼넷",
+                            data: lastGamePlayerPitcherStats!.bb,
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "실점",
+                            data: lastGamePlayerPitcherStats!.r,
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                        StatsDivider()
+                        FBStatDataItem(
+                            category: "자책점",
+                            data: lastGamePlayerPitcherStats!.er,
+                            customCategoryFontSize: 12
+                        )
+                        .frame(maxWidth: .infinity)
+                    }
                     .frame(maxWidth: .infinity)
                 }
             }
             .opacity(showContents ? 1 : 0)
-        } // VStack
+        }
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
     }
 }
@@ -814,8 +817,6 @@ struct KBOPlayerInfoEigthItem: View {
                 searchStore.send(.showGameStats(gameType: "next"))
             }
         ) {
-            HCapsuleBar()
-            
             Text("다음경기")
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
@@ -835,14 +836,19 @@ struct KBOPlayerInfoEigthItem: View {
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .padding(.vertical, 4)
                 .opacity(showContents ? 1 : 0)
                 
-                Text(CalendarUtil.formatDate(date: nextGame.gameInfo?.date))
+                Text(CalendarUtil.formatDate(date: nextGame.gameInfo?.date, formatType: .ampmWithDayOfWeekDate))
                     .font(.system(size: 15))
                     .opacity(showContents ? 1 : 0)
+            } else {
+                Text("예정된 경기가 없습니다.")
+                    .font(.system(size: 15))
+                    .opacity(showContents ? 1 : 0)
+                    .padding(.top, 4)
             }
-        } // VStack
+        }
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
     }
 }

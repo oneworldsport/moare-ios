@@ -26,16 +26,28 @@ struct InfoViewScope {
         updateItemSize(index, geometry.size)
     }
     
-    func computedOffset(for index: Int) -> CGSize {
+    func computedOffset(for index: Int, startOffset: CGSize? = nil) -> CGSize {
         if animatePositions, let position = itemPositions[index] {
             return CGSize(width: position.x, height: position.y)
         } else if let size = itemSizes[index] {
-            return CGSize(
+            return startOffset ?? CGSize(
                 width: containerSize.width / 2 - size.width / 2,
                 height: containerSize.height / 2
             )
         } else {
-            return .zero
+            return startOffset ?? .zero
         }
+        
+//        if animatePositions, let position = itemPositions[index] {
+//            return CGSize(width: position.x, height: position.y)
+//        } else if let size = itemSizes[index] {
+//            return CGSize(
+//                width: containerSize.width / 2 - size.width / 2,
+//                height: containerSize.height / 2
+//            )
+//        } else {
+////            return CGSize(width: 0, height: 500)
+//            return .zero
+//        }
     }
 }

@@ -104,6 +104,12 @@ struct FBGameStatsStore {
                 case Constants.Ids.ligue1:
                     state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
                     state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
+                case Constants.Ids.seriea:
+                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaPlayerDic)
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaTeamDic)
+                case Constants.Ids.mls:
+                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlsPlayerDic)
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlsTeamDic)
                 default: break
                 }
                 
