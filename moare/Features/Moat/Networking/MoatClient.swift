@@ -21,8 +21,8 @@ struct MoatClient {
     }
     
     // TODO: fetch라는 단어가 여기에 더 맞을까 아니면 APIEndpoint에서 사용하는게 더 맞을까?
-    func fetchSingleMoat(moatId: String) async throws -> MoatResponse {
-        return try await apiClient.fetchData(endpoint: .getSingleMoat(moatId: moatId))
+    func fetchMoatDetail(moatId: String) async throws -> MoatDetailResponse {
+        return try await apiClient.fetchData(endpoint: .getMoatDetail(moatId: moatId))
     }
     
     func fetchTimelineMoats(body: MoatListRequest) async throws -> MoatListResponse {

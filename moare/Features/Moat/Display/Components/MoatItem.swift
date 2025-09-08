@@ -13,9 +13,10 @@ enum MoatType {
 
 struct MoatItem: View {
     let moatType: MoatType
+    let isButtonDisabled: Bool
     let title: String?
     let content: String
-    let hashtagList: [String]
+    let hashtagList: [String]?
     let fireCount: Int
     let commentCount: Int
     let profileImageURL: String
@@ -32,19 +33,23 @@ struct MoatItem: View {
     let iconFontSize: CGFloat
     let iconCountFontSize: CGFloat
     
+    @State private var isSideBarShowing: Bool = true
+    
     init(
         moatType: MoatType = .timeline,
-        title: String? = "손흥민 LA FC 이적 손흥민 LA FC 이적 손흥민 LA FC 이적 손흥민 LA FC 이적",
-        content: String = "손흥민 LA FC 이적!!!!!!손흥민 LA FC 이적!!!!!!손흥민 LA FC 이적!!!!!!손흥민 LA FC 이적!!!!!!손흥민 LA FC 이적!!!!!!손흥민 LA FC 이적!!!!!!",
-        hashtagList: [String] = ["#축구", "#축구", "#축구"],
-        fireCount: Int = 111,
-        commentCount: Int = 111,
+        isButtonDisabled: Bool = false,
+        title: String?,
+        content: String,
+        hashtagList: [String]?,
+        fireCount: Int,
+        commentCount: Int,
         profileImageURL: String = "",
-        nickname: String = "모아레",
-        createdAt: String = "1시간전",
+        nickname: String,
+        createdAt: String,
         action: @escaping () -> Void = {}
     ) {
         self.moatType = moatType
+        self.isButtonDisabled = isButtonDisabled
         self.title = moatType == .comment ? nil : title
         self.content = content
         self.hashtagList = hashtagList
@@ -98,7 +103,10 @@ struct MoatItem: View {
     var body: some View {
         Button(action: action) {
             HStack {
-                MoatItemSideBar(isLeft: true, height: height)
+                if isSideBarShowing {
+                    MoatItemSideBar(isLeft: true, height: height)
+                        .transition(.move(edge: .leading))
+                }
                 
                 VStack {
                     HStack {
@@ -118,6 +126,7 @@ struct MoatItem: View {
                                 Text(content)
                                     .font(.system(size: contentFontSize))
                                     .frame(maxHeight: moatType == .detail ? nil : .infinity)
+                                    .multilineTextAlignment(.leading)
                             }
                             
                             if moatType != .comment {
@@ -127,10 +136,12 @@ struct MoatItem: View {
                                 }
                                 
                                 HStack {
-                                    ForEach(hashtagList, id: \.self) { item in
-                                        Text(item)
-                                            .font(.system(size: 14))
-                                            .foregroundStyle(.moare)
+                                    if let hashtagList {
+                                        ForEach(hashtagList, id: \.self) { item in
+                                            Text(item)
+                                                .font(.system(size: 14))
+                                                .foregroundStyle(.moare)
+                                        }
                                     }
                                     
                                     if moatType == .userProfile {
@@ -188,12 +199,23 @@ struct MoatItem: View {
                 }
                 .frame(maxWidth: .infinity)
                 
-                MoatItemSideBar(isLeft: false, height: height)
+                if isSideBarShowing {
+                    MoatItemSideBar(isLeft: false, height: height)
+                        .transition(.move(edge: .trailing))
+                }
             }
         }
+        .disabled(isButtonDisabled)
         .frame(height: height)
         .foregroundStyle(.primary)
         .padding(.horizontal, 8)
+        .onChange(of: moatType) {
+            if moatType == .detail {
+                withAnimation(.easeInOut(duration: 0.5)) {
+                    isSideBarShowing = false
+                }
+            }
+        }
     }
 }
 
@@ -229,6 +251,6 @@ struct MoatItemSideBar: View {
 }
 
 
-#Preview {
-    MoatItem()
-}
+//#Preview {
+//    MoatItem()
+//}

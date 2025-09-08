@@ -5,7 +5,7 @@
 //  Created by Mohwa Yoon on 9/7/25.
 //
 
-struct MoatResponse: Decodable {
+struct MoatResponse: Decodable, Equatable {
     let moatId: String
     let userId: String
     let content: String
@@ -18,7 +18,12 @@ struct MoatResponse: Decodable {
     let commentCount: Int
 }
 
+struct MoatDetailResponse: Decodable {
+    let moat: MoatResponse
+    let comments: MoatListResponse?
+}
+
 struct MoatListResponse: Decodable {
     let items: [MoatResponse]
-//    let nextToken: 
+    let nextToken: [String: String]?
 }

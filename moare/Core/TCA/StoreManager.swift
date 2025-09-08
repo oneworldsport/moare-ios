@@ -60,6 +60,7 @@ struct StoreKeys {
     // sign
     static let signStore = "SignStore"
     static let moatStore = "MoatStore"
+    static let formStore = "FormStore"
 }
 
 class StoreManager: ObservableObject {

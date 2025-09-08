@@ -8,18 +8,20 @@
 import SwiftUI
 
 struct FloatingAddButton: View {
+    let action: () -> Void
+    
     var body: some View {
         ZStack {
-            Button(action: {}) {
+            Button(action: action) {
                 Image(systemName: "plus.circle")
-                    .font(.system(size: 40))
+                    .font(.system(size: 40, weight: .light))
                     .foregroundStyle(.moare)
-                    .shadow(color: .moare, radius: 3, x: 2, y: 1)
+                    .shadow(color: .moare, radius: 2, x: 1, y: 1)
             }
         }
     }
 }
 
 #Preview {
-    FloatingAddButton()
+    FloatingAddButton(action: {})
 }

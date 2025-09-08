@@ -9,24 +9,21 @@ import Foundation
 
 struct RequestBuilder {
     static func buildRequest(
-        endpoint: APIEndpoint,
-        method: String,
-        headers: [String: String]? = nil,
-        body: Data? = nil
+        endpoint: APIEndpoint
     ) -> URLRequest? {
+        let method = endpoint.defaultHTTPMethod
         guard let url = endpoint.url() else {
             return nil
         }
         
         var request = URLRequest(url: url)
         request.httpMethod = method
-//        headers?.forEach { key, value in
-//            request.setValue($1, forHTTPHeaderField: $0)
-//            request.setValue(value, forHTTPHeaderField: key)
-//        }
-//        request.httpBody = body
         
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        endpoint.headers?.forEach { key, value in
+            request.setValue(value, forHTTPHeaderField: key)
+        }
         
         if method == "POST" || method == "PUT" {
             request.httpBody = endpoint.httpBody

@@ -14,34 +14,57 @@ struct MoatView: View {
     
     @AppStorage("accessToken") private var accessToken: String = ""
     
-    @State private var testClick = false
     @State private var listCount = 10
     @State private var formTestShow = false
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             if let moatStore {
+                let timelineMoats = moatStore.timelineMoats
+                let selectedMoat = moatStore.selectedMoat
+                let comments = selectedMoat?.comments?.items ?? []
+                
                 if !accessToken.isEmpty {
                     VStack {
                         ScrollView {
                             LazyVStack(spacing: 28) {
-                                ForEach(0..<listCount, id: \.self) { _ in
-                                    MoatItem(moatType: testClick ? .detail : .timeline) {
-                                        testClick = true
-                                        listCount = 1
+                                ForEach(timelineMoats, id: \.moatId) { moat in
+                                    MoatItem(
+                                        moatType: selectedMoat != nil ? .detail : .timeline,
+                                        isButtonDisabled: selectedMoat != nil,
+                                        title: "test",
+                                        content: moat.content,
+                                        hashtagList: moat.sportType,
+                                        fireCount: moat.fireCount,
+                                        commentCount: moat.commentCount,
+                                        nickname: moat.userId,
+                                        createdAt: moat.createdAt,
+                                    ) {
+                                        moatStore.send(.selectMoat(moatId: moat.moatId))
                                     }
                                 }
                             }
                             .padding(.top, 10)
                         }
-                        .scrollDisabled(testClick)
-                        .frame(height: testClick ? 160 : nil)
+                        .scrollDisabled(selectedMoat != nil)
+                        .frame(height: selectedMoat != nil ? 180 : nil)
                         
-                        if testClick {
+                        if selectedMoat != nil {
+                            HDivider()
+                            
                             ScrollView {
                                 LazyVStack(spacing: 28) {
-                                    ForEach(0..<10) { _ in
-                                        MoatItem(moatType: .comment) {
+                                    ForEach(comments, id: \.moatId) { moat in
+                                        MoatItem(
+                                            moatType: .comment,
+                                            title: "test",
+                                            content: moat.content,
+                                            hashtagList: moat.sportType,
+                                            fireCount: moat.fireCount,
+                                            commentCount: moat.commentCount,
+                                            nickname: moat.userId,
+                                            createdAt: moat.createdAt,
+                                        ) {
                                         }
                                     }
                                 }
@@ -51,13 +74,8 @@ struct MoatView: View {
                     }
                     
                     if !formTestShow {
-                        Button(action: {
+                        FloatingAddButton {
                             formTestShow = true
-                        }) {
-                            Image(systemName: "plus.circle")
-                                .font(.system(size: 40))
-                                .foregroundStyle(.moare)
-                                .shadow(color: .moare, radius: 3, x: 2, y: 1)
                         }
                         .padding(10)
                         
@@ -85,7 +103,8 @@ struct MoatView: View {
                 self.moatStore = moatStore
             }
             
-//            moatTimelineStore.send(.delete)
+            moatStore.send(.getTimelineMoats)
+//            moatStore.send(.deleteToken)
         }
     }
 }

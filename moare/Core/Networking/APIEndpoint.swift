@@ -30,13 +30,13 @@ enum APIEndpoint {
     case createMoat(body: MoatCreateRequest)
     case updateMoat(moatId: String, body: MoatUpdateRequest)
     case deleteMoat(moatId: String)
-    case getSingleMoat(moatId: String)
+    case getMoatDetail(moatId: String)
     case getTimelineMoats(body: MoatListRequest)
     case getUserMoats(body: MoatListRequest)
     
     var defaultHTTPMethod: String {
         switch self {
-        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname, .getSingleMoat:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname, .getMoatDetail:
             return "GET"
         case .getLeagueSchedule, .searchByKeyword, .startLoginAuth, .confirmLoginAuth, .initiateSignUp, .verifySignUpOtp, .completeSignUp,
                 .createMoat, .getTimelineMoats, .getUserMoats:
@@ -137,7 +137,7 @@ enum APIEndpoint {
         case .deleteMoat(let moatId):
             components.path = "/moats/\(moatId)"
             
-        case .getSingleMoat(let moatId):
+        case .getMoatDetail(let moatId):
             components.path = "/moats/\(moatId)"
             
         case .getTimelineMoats:
@@ -151,9 +151,23 @@ enum APIEndpoint {
         return components.url
     }
     
+    var headers: [String: String]? {
+        switch self {
+        case .createMoat, .updateMoat, .deleteMoat, .getMoatDetail, .getTimelineMoats, .getUserMoats:
+            if let token = UserDefaults.standard.string(forKey: "accessToken") {
+                return ["Authorization": "Bearer \(token)"]
+            } else {
+                return nil
+            }
+            
+        default: return nil
+
+        }
+    }
+    
     var httpBody: Data? {
         switch self {
-        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname, .deleteMoat, .getSingleMoat:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname, .deleteMoat, .getMoatDetail:
             return nil
             
         // search
