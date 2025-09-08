@@ -8,6 +8,8 @@
 struct MoatResponse: Decodable, Equatable {
     let moatId: String
     let userId: String
+    let nickname: String
+    let profileImageUrl: String?
     let content: String
     let sportType: [String]
     let parentMoatId: String?

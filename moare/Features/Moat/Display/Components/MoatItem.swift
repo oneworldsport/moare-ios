@@ -21,7 +21,7 @@ struct MoatItem: View {
     let commentCount: Int
     let profileImageURL: String
     let nickname: String
-    let createdAt: String
+    let timeAgo: String
     let action: () -> Void
     
     let height: CGFloat
@@ -57,7 +57,7 @@ struct MoatItem: View {
         self.commentCount = commentCount
         self.profileImageURL = profileImageURL
         self.nickname = nickname
-        self.createdAt = createdAt
+        self.timeAgo = CalendarUtil.timeAgoString(from: createdAt)
         self.action = action
         
         switch moatType {
@@ -146,7 +146,7 @@ struct MoatItem: View {
                                     
                                     if moatType == .userProfile {
                                         Spacer()
-                                        Text(createdAt)
+                                        Text(timeAgo)
                                             .font(.system(size: timeFontSize))
                                             .foregroundStyle(.secondary)
                                     }
@@ -190,7 +190,7 @@ struct MoatItem: View {
                             
                             Spacer()
                             
-                            Text(createdAt)
+                            Text(timeAgo)
                                 .font(.system(size: timeFontSize))
                                 .foregroundStyle(.secondary)
                         }

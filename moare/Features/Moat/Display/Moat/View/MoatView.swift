@@ -37,7 +37,7 @@ struct MoatView: View {
                                         hashtagList: moat.sportType,
                                         fireCount: moat.fireCount,
                                         commentCount: moat.commentCount,
-                                        nickname: moat.userId,
+                                        nickname: moat.nickname,
                                         createdAt: moat.createdAt,
                                     ) {
                                         moatStore.send(.selectMoat(moatId: moat.moatId))
@@ -62,7 +62,7 @@ struct MoatView: View {
                                             hashtagList: moat.sportType,
                                             fireCount: moat.fireCount,
                                             commentCount: moat.commentCount,
-                                            nickname: moat.userId,
+                                            nickname: moat.nickname,
                                             createdAt: moat.createdAt,
                                         ) {
                                         }

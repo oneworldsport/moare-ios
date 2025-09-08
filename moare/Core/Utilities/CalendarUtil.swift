@@ -84,7 +84,7 @@ class CalendarUtil {
         
         let inputFormatter = DateFormatter()
         inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        inputFormatter.locale = Locale(identifier: "en_US_POSIX") // NOTE: 예상치 못한 오류 방지위해 설정 권장
+        inputFormatter.locale = Locale(identifier: "en_US_POSIX") // NOTE: 예상치 못한 오류 방지위해 설정 권장 - by gpt
         
         guard let parsedDate = inputFormatter.date(from: date) else {
             return ""
@@ -223,5 +223,50 @@ class CalendarUtil {
         let today = Date()
         
         return gameDate >= today
+    }
+    
+    static func timeAgoString(from dateString: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        
+        guard let date = formatter.date(from: dateString) else {
+            return dateString
+        }
+        
+        let now = Date()
+        let diff = now.timeIntervalSince(date) // 초 단위 차이
+        if diff < 60 { // 1분 미만
+            return "방금 전"
+        }
+        
+        let minutes = Int(diff / 60)
+        if minutes < 60 {
+            return "\(minutes)분 전"
+        }
+        
+        let hours = Int(diff / 3600)
+        if hours < 24 {
+            return "\(hours)시간 전"
+        }
+        
+        let days = Int(diff / 86400)
+        if days < 7 {
+            return "\(days)일 전"
+        }
+        
+        let weeks = Int(days / 7)
+        if weeks < 4 {
+            return "\(weeks)주 전"
+        }
+        
+        let months = Int(days / 30)
+        if months < 12 {
+            return "\(months)개월 전"
+        }
+        
+        let years = Int(days / 365)
+        return "\(years)년 전"
     }
 }
