@@ -34,16 +34,20 @@ enum APIEndpoint {
     case getTimelineMoats(body: MoatListRequest)
     case getUserMoats(body: MoatListRequest)
     
+    // user
+    case getUserProfile
+    case updateUserProfile(body: UserProfileUpdateRequest)
+    
     var defaultHTTPMethod: String {
         switch self {
-        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname, .getMoatDetail:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname, .getMoatDetail, .getUserProfile:
             return "GET"
         case .getLeagueSchedule, .searchByKeyword, .startLoginAuth, .confirmLoginAuth, .initiateSignUp, .verifySignUpOtp, .completeSignUp,
                 .createMoat, .getTimelineMoats, .getUserMoats:
             return "POST"
         case .reserveNickname:
             return "PUT"
-        case .updateMoat:
+        case .updateMoat, .updateUserProfile:
             return "PATCH"
         case .deleteMoat:
             return "DELETE"
@@ -73,7 +77,7 @@ enum APIEndpoint {
                 URLQueryItem(name: "yearMonth", value: yearMonth)
             ]
             
-        case .searchByKeyword(let keyword):
+        case .searchByKeyword(_):
             components.path = "/search/keyword"
             
         case .searchByEndpoint(let endpoint):
@@ -146,6 +150,12 @@ enum APIEndpoint {
         case .getUserMoats:
             components.path = "/moats/user"
             
+        // user
+        case .getUserProfile:
+            components.path = "/users/me"
+            
+        case .updateUserProfile(_):
+            components.path = "/users/me"
         }
         
         return components.url
@@ -153,7 +163,7 @@ enum APIEndpoint {
     
     var headers: [String: String]? {
         switch self {
-        case .createMoat, .updateMoat, .deleteMoat, .getMoatDetail, .getTimelineMoats, .getUserMoats:
+        case .createMoat, .updateMoat, .deleteMoat, .getMoatDetail, .getTimelineMoats, .getUserMoats, .getUserProfile, .updateUserProfile:
             if let token = UserDefaults.standard.string(forKey: "accessToken") {
                 return ["Authorization": "Bearer \(token)"]
             } else {
@@ -167,7 +177,7 @@ enum APIEndpoint {
     
     var httpBody: Data? {
         switch self {
-        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname, .deleteMoat, .getMoatDetail:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname, .deleteMoat, .getMoatDetail, .getUserProfile:
             return nil
             
         // search
@@ -199,6 +209,10 @@ enum APIEndpoint {
         case .getTimelineMoats(let body):
             return try? JSONEncoder().encode(body)
         case .getUserMoats(let body):
+            return try? JSONEncoder().encode(body)
+            
+        // user
+        case .updateUserProfile(let body):
             return try? JSONEncoder().encode(body)
         }
     }

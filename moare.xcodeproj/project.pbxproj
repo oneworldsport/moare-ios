@@ -241,6 +241,9 @@
 		DA9E42402E4AB9430074B1F2 /* football_league_schedule.json in Resources */ = {isa = PBXBuildFile; fileRef = DA9E41F82E4AB9430074B1F2 /* football_league_schedule.json */; };
 		DA9E42412E4AB9430074B1F2 /* nba_team_schedule.json in Resources */ = {isa = PBXBuildFile; fileRef = DA9E42192E4AB9430074B1F2 /* nba_team_schedule.json */; };
 		DAA08A4E2E03EDD600602693 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA08A4D2E03EDD500602693 /* TestView.swift */; };
+		DAA9750B2E6F2744005D619E /* UserProfileRequestModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA9750A2E6F273D005D619E /* UserProfileRequestModels.swift */; };
+		DAA9750D2E6F2777005D619E /* UserProfileResponseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA9750C2E6F276A005D619E /* UserProfileResponseModels.swift */; };
+		DAA9750F2E6F28B3005D619E /* UserProfileClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA9750E2E6F28A6005D619E /* UserProfileClient.swift */; };
 		DAB3CAA72E052AA900949CB9 /* FBUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB3CAA62E052AA500949CB9 /* FBUtil.swift */; };
 		DABE3D6B2D7E977F0048DCAA /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABE3D6A2D7E977F0048DCAA /* Utilities.swift */; };
 		DABE3D6F2D7ECF8F0048DCAA /* CommonTextComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABE3D6E2D7ECF8F0048DCAA /* CommonTextComponents.swift */; };
@@ -546,6 +549,9 @@
 		DA9E421A2E4AB9430074B1F2 /* nba_team_standings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = nba_team_standings.json; sourceTree = "<group>"; };
 		DA9E421B2E4AB9430074B1F2 /* nba_team_stats.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = nba_team_stats.json; sourceTree = "<group>"; };
 		DAA08A4D2E03EDD500602693 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
+		DAA9750A2E6F273D005D619E /* UserProfileRequestModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileRequestModels.swift; sourceTree = "<group>"; };
+		DAA9750C2E6F276A005D619E /* UserProfileResponseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileResponseModels.swift; sourceTree = "<group>"; };
+		DAA9750E2E6F28A6005D619E /* UserProfileClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileClient.swift; sourceTree = "<group>"; };
 		DAB3CAA62E052AA500949CB9 /* FBUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBUtil.swift; sourceTree = "<group>"; };
 		DABE3D6A2D7E977F0048DCAA /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		DABE3D6E2D7ECF8F0048DCAA /* CommonTextComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonTextComponents.swift; sourceTree = "<group>"; };
@@ -1298,6 +1304,8 @@
 		DA919CA42E6D290A003151B6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				DAA9750C2E6F276A005D619E /* UserProfileResponseModels.swift */,
+				DAA9750A2E6F273D005D619E /* UserProfileRequestModels.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1314,6 +1322,7 @@
 		DA919CA62E6D2917003151B6 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				DAA9750E2E6F28A6005D619E /* UserProfileClient.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -1893,6 +1902,7 @@
 				DA531B942D64A8CA00DB87CB /* FBStatDataItem.swift in Sources */,
 				DA531BA32D64A8CA00DB87CB /* FBPlayerStatsView.swift in Sources */,
 				DA531C0C2D64A91900DB87CB /* UIExtensions.swift in Sources */,
+				DAA9750B2E6F2744005D619E /* UserProfileRequestModels.swift in Sources */,
 				DA30E7172DF7BDEF000639AD /* MLBTeamStatsView.swift in Sources */,
 				DA531B9E2D64A8CA00DB87CB /* FBTeamStatsStore.swift in Sources */,
 				DA531C102D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift in Sources */,
@@ -1943,6 +1953,7 @@
 				DAD3FAEF2DF561D7009B367D /* StandingsContainerState.swift in Sources */,
 				DAC1EBD72E55BDDD0031221C /* GameStatsContainerState.swift in Sources */,
 				DA9202192DA8E10000BB6B15 /* NBAUtil.swift in Sources */,
+				DAA9750D2E6F2777005D619E /* UserProfileResponseModels.swift in Sources */,
 				5B7153FA2E617CB100D74E5B /* MoatView.swift in Sources */,
 				DA252B242DEF786F00006AB8 /* KBOLeagueScheduleDisplayModel.swift in Sources */,
 				DA081BD22DDF40AE00034589 /* BaseScheduleStore.swift in Sources */,
@@ -1960,6 +1971,7 @@
 				DA252B1B2DEF73DB00006AB8 /* MLBPlayerInfoResponseModel.swift in Sources */,
 				DA252B1C2DEF73DB00006AB8 /* MLBGameStatsResponseModel.swift in Sources */,
 				DA252B1D2DEF73DB00006AB8 /* MLBTeamInfoResponseModel.swift in Sources */,
+				DAA9750F2E6F28B3005D619E /* UserProfileClient.swift in Sources */,
 				DA252B1E2DEF73DB00006AB8 /* MLBPlayerStandingsResponseModel.swift in Sources */,
 				DA17021B2DA8C6600021EF80 /* NBAPlayerModels.swift in Sources */,
 				DA30E71B2DF7BE32000639AD /* MLBPlayerStatsStore.swift in Sources */,

@@ -6,43 +6,86 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 struct UserProfileView: View {
+    @EnvironmentObject var storeManager: StoreManager
+    @State var userProfileStore: StoreOf<UserProfileStore>? = nil
+    
     var body: some View {
         VStack {
-            HStack(alignment: .top) {
-                Circle()
-                    .fill(.moare)
-                    .frame(width: 80, height: 80)
+            if let userProfileStore {
+                let userProfile = userProfileStore.userProfile
+                let userMoats = userProfileStore.userMoats?.items ?? []
                 
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text("모아레")
+                VStack {
+                    HStack(alignment: .top) {
+                        Circle()
+                            .fill(.moare)
+                            .frame(width: 80, height: 80)
                         
-                        Spacer()
-                        
-                        Image(systemName: "gearshape")
-                            .font(.system(size: 24))
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text(userProfile?.nickname ?? "")
+                                
+                                Spacer()
+                                
+                                Image(systemName: "gearshape")
+                                    .font(.system(size: 24))
+                            }
+                            
+                            Spacer()
+                            
+                            if let sports = userProfile?.sportsInterests, !sports.isEmpty {
+                                ForEach(sports, id: \.self) { sport in
+                                    Text(sport)
+                                }
+                            }
+                        }
                     }
+                    .frame(height: 80)
+                    .padding(.horizontal, 8)
                     
-                    Spacer()
+                    HDivider()
                     
-                    Text("#축구 #농구 #야구")
-                }
-            }
-            .frame(height: 80)
-            .padding(.horizontal, 8)
-            
-            HDivider()
-            
-            ScrollView {
-                LazyVStack(spacing: 28) {
-                    ForEach(0..<9) { _ in
-                        MoatItem(moatType: .userProfile)
+                    ScrollView {
+                        LazyVStack(spacing: 28) {
+                            ForEach(userMoats, id: \.moatId) { moat in
+                                MoatItem(
+                                    moatType: .userProfile,
+                                    title: "test",
+                                    content: moat.content,
+                                    hashtagList: moat.sportType,
+                                    fireCount: moat.fireCount,
+                                    commentCount: moat.commentCount,
+                                    nickname: moat.nickname,
+                                    createdAt: moat.createdAt,
+                                ) {
+                                }
+                            }
+                        }
+                        .padding(.top, 10)
                     }
                 }
-                .padding(.top, 10)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+        }
+        .onAppear {
+            let userProfileStore: StoreOf<UserProfileStore> = storeManager.getStore(forKey: StoreKeys.userProfileStore) ?? {
+                let newStore = Store(initialState: UserProfileStore.State()) {
+                    UserProfileStore()
+                }
+                
+                storeManager.setStore(newStore, forKey: StoreKeys.userProfileStore)
+                
+                return newStore
+            }()
+            
+            withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                self.userProfileStore = userProfileStore
+            }
+            
+            userProfileStore.send(.getUserProfile)
         }
     }
 }

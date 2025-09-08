@@ -59,8 +59,13 @@ struct StoreKeys {
     
     // sign
     static let signStore = "SignStore"
+    
+    // moat
     static let moatStore = "MoatStore"
     static let formStore = "FormStore"
+    
+    // user
+    static let userProfileStore = "UserProfileStore"
 }
 
 class StoreManager: ObservableObject {
