@@ -8,6 +8,7 @@
 import Foundation
 
 enum APIEndpoint {
+    // search
     case searchByQuery(query: String)
     case getLeagueSchedule(entity: EntityInfo, season: Int, yearMonth: String)
     case searchByKeyword(keyword: KeywordInfo)
@@ -16,6 +17,7 @@ enum APIEndpoint {
     
     case fetchTrendingKeywords
     
+    // sign
     case startLoginAuth(body: StartAuthRequest)
     case confirmLoginAuth(body: ConfirmAuthRequest)
     case initiateSignUp(body: SignUpInitiateRequest)
@@ -24,26 +26,40 @@ enum APIEndpoint {
     case checkNickname(nickname: String)
     case reserveNickname(body: NicknameReserveRequest)
     
+    // moat
+    case createMoat(body: MoatCreateRequest)
+    case updateMoat(moatId: String, body: MoatUpdateRequest)
+    case deleteMoat(moatId: String)
+    case getSingleMoat(moatId: String)
+    case getTimelineMoats(body: MoatListRequest)
+    case getUserMoats(body: MoatListRequest)
+    
     var defaultHTTPMethod: String {
         switch self {
-        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname, .getSingleMoat:
             return "GET"
-        case .getLeagueSchedule, .searchByKeyword, .startLoginAuth, .confirmLoginAuth, .initiateSignUp, .verifySignUpOtp, .completeSignUp:
+        case .getLeagueSchedule, .searchByKeyword, .startLoginAuth, .confirmLoginAuth, .initiateSignUp, .verifySignUpOtp, .completeSignUp,
+                .createMoat, .getTimelineMoats, .getUserMoats:
             return "POST"
         case .reserveNickname:
             return "PUT"
+        case .updateMoat:
+            return "PATCH"
+        case .deleteMoat:
+            return "DELETE"
         }
     }
     
     func url(isTest: Bool = true) -> URL? {
         var components = URLComponents()
-//        components.scheme = APIConfiguration.localscheme
-//        components.host = APIConfiguration.localhost
-//        components.port = APIConfiguration.localport
-        components.scheme = APIConfiguration.scheme
-        components.host = APIConfiguration.host
+        components.scheme = APIConfiguration.localscheme
+        components.host = APIConfiguration.localhost
+        components.port = APIConfiguration.localport
+//        components.scheme = APIConfiguration.scheme
+//        components.host = APIConfiguration.host
         
         switch self {
+        // search
         case .searchByQuery(let query):
             components.path = "/search"
             components.queryItems = [
@@ -86,19 +102,20 @@ enum APIEndpoint {
         case .fetchTrendingKeywords:
             components.path = "/keywords/trending"
             
-        case .startLoginAuth(let body):
+        // sign
+        case .startLoginAuth:
             components.path = "/auth/login/start"
             
-        case .confirmLoginAuth(let body):
+        case .confirmLoginAuth:
             components.path = "/auth/login/confirm"
             
-        case .initiateSignUp(let body):
+        case .initiateSignUp:
             components.path = "/auth/signup/initiate"
             
-        case .verifySignUpOtp(let body):
+        case .verifySignUpOtp:
             components.path = "/auth/signup/verify"
             
-        case .completeSignUp(let body):
+        case .completeSignUp:
             components.path = "/auth/signup/complete"
             
         case .checkNickname(let nickname):
@@ -107,8 +124,28 @@ enum APIEndpoint {
                 URLQueryItem(name: "nickname", value: nickname)
             ]
             
-        case .reserveNickname(let body):
+        case .reserveNickname:
             components.path = "/auth/nickname/reserve"
+            
+        // moat
+        case .createMoat:
+            components.path = "/moats"
+            
+        case .updateMoat(let moatId, _):
+            components.path = "/moats/\(moatId)"
+            
+        case .deleteMoat(let moatId):
+            components.path = "/moats/\(moatId)"
+            
+        case .getSingleMoat(let moatId):
+            components.path = "/moats/\(moatId)"
+            
+        case .getTimelineMoats:
+            components.path = "/moats/timeline"
+            
+        case .getUserMoats:
+            components.path = "/moats/user"
+            
         }
         
         return components.url
@@ -116,13 +153,17 @@ enum APIEndpoint {
     
     var httpBody: Data? {
         switch self {
-        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname, .deleteMoat, .getSingleMoat:
             return nil
+            
+        // search
         case .searchByKeyword(let keyword):
             // NOTE: nil is excluded
             return try? JSONEncoder().encode(keyword)
         case .getLeagueSchedule(let entity, _, _):
             return try? JSONEncoder().encode(entity)
+            
+        // sign
         case .startLoginAuth(let body):
             return try? JSONEncoder().encode(body)
         case .confirmLoginAuth(let body):
@@ -134,6 +175,16 @@ enum APIEndpoint {
         case .completeSignUp(let body):
             return try? JSONEncoder().encode(body)
         case .reserveNickname(let body):
+            return try? JSONEncoder().encode(body)
+            
+        // moat
+        case .createMoat(let body):
+            return try? JSONEncoder().encode(body)
+        case .updateMoat(_, let body):
+            return try? JSONEncoder().encode(body)
+        case .getTimelineMoats(let body):
+            return try? JSONEncoder().encode(body)
+        case .getUserMoats(let body):
             return try? JSONEncoder().encode(body)
         }
     }

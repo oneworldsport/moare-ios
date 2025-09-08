@@ -1,0 +1,35 @@
+//
+//  MoatClient.swift
+//  moare
+//
+//  Created by Mohwa Yoon on 9/7/25.
+//
+
+struct MoatClient {
+    private let apiClient = APIClient()
+    
+    func createMoat(body: MoatCreateRequest) async throws -> MoatResponse {
+        return try await apiClient.fetchData(endpoint: .createMoat(body: body))
+    }
+    
+    func updateMoat(moatId: String, body: MoatUpdateRequest) async throws -> MoatResponse {
+        return try await apiClient.fetchData(endpoint: .updateMoat(moatId: moatId, body: body))
+    }
+    
+    func deleteMoat(moatId: String) async throws -> MoatResponse {
+        return try await apiClient.fetchData(endpoint: .deleteMoat(moatId: moatId))
+    }
+    
+    // TODO: fetch라는 단어가 여기에 더 맞을까 아니면 APIEndpoint에서 사용하는게 더 맞을까?
+    func fetchSingleMoat(moatId: String) async throws -> MoatResponse {
+        return try await apiClient.fetchData(endpoint: .getSingleMoat(moatId: moatId))
+    }
+    
+    func fetchTimelineMoats(body: MoatListRequest) async throws -> MoatListResponse {
+        return try await apiClient.fetchData(endpoint: .getTimelineMoats(body: body))
+    }
+    
+    func fetchUserMoats(body: MoatListRequest) async throws -> MoatListResponse {
+        return try await apiClient.fetchData(endpoint: .getUserMoats(body: body))
+    }
+}
