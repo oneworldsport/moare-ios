@@ -59,7 +59,7 @@ struct StoreKeys {
     
     // sign
     static let signStore = "SignStore"
-    static let moatTimelineStore = "MoatTimelineStore"
+    static let moatStore = "MoatStore"
 }
 
 class StoreManager: ObservableObject {

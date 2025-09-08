@@ -74,7 +74,7 @@ struct SportSearchEngine_iOSApp: App {
                                 }
                                 .tag(Screen.search)
                             
-                            MoatTimelineView()
+                            MoatView()
                                 .environmentObject(storeManager)
                                 .tabItem {
                                     Image(systemName: "bubble.left")
@@ -86,7 +86,7 @@ struct SportSearchEngine_iOSApp: App {
                                 }
                                 .tag(Screen.moat)
                             
-                            SearchView()
+                            UserProfileView()
                                 .environmentObject(storeManager)
                                 .tabItem {
                                     Image(systemName: "person.crop.circle")
