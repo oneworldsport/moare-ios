@@ -116,6 +116,7 @@ struct MoatItem: View {
                                 HStack {
                                     Text(title)
                                         .font(.system(size: titleFontSize, weight: .medium))
+                                        .lineLimit(2)
                                         .multilineTextAlignment(.leading)
                                 }
                                 .frame(maxHeight: moatType == .detail ? nil : .infinity)
@@ -213,6 +214,10 @@ struct MoatItem: View {
             if moatType == .detail {
                 withAnimation(.easeInOut(duration: 0.5)) {
                     isSideBarShowing = false
+                }
+            } else {
+                withAnimation(.easeInOut(duration: 0.5)) {
+                    isSideBarShowing = true
                 }
             }
         }

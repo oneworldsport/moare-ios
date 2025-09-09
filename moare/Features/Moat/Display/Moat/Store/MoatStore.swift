@@ -27,6 +27,7 @@ struct MoatStore {
         var poppedView: MoatViewType? = nil
         
         var moatListResponse: MoatListResponse? = nil
+        var originalTimelineMoats: [MoatResponse] = []
         var timelineMoats: [MoatResponse] = []
         var selectedMoat: MoatDetailResponse? = nil
     }
@@ -66,29 +67,43 @@ struct MoatStore {
             case .selectMoat(let moatId):
                 return .run { send in
                     let result = try await moatClient.fetchMoatDetail(moatId: moatId)
-                    await send(.updateSelectedMoat(moatDetailResponse: result))
+                    await send(.updateSelectedMoat(moatDetailResponse: result), animation: AnimationConstants.AnimationType.mediumDefaultAnimation)
                     
                     // TODO: 화면 먼저 보여주고 결과 띄워야하기때문에 실행시점 고민 필요
                     await send(.addViewStack(viewType: .detail))
                 }
                 
             case .createMoat(let content):
-                return .run { [moat = state.selectedMoat] send in
+                return .run { [moat = state.selectedMoat, currentViewType = state.currentViewType] send in
                     if let moat {
                         let moatRequest = MoatCreateRequest(content: content, sportType: ["#축구"], parentMoatId: moat.moat.moatId)
-                        let _ = try await moatClient.createMoat(body: moatRequest)
+                        let result = try await moatClient.createMoat(body: moatRequest)
+                        
+                        if currentViewType == .detail {
+                            var comments = moat.comments?.items ?? []
+                            comments.append(result)
+                            
+                            var moatList = moat.comments
+                            moatList?.items = comments
+                            
+                            var newMoatDetail = moat
+                            newMoatDetail.comments = moatList
+                            
+                            await send(.updateSelectedMoat(moatDetailResponse: newMoatDetail))
+                        }
                     }
                 }
                 
             case .updateTimelineMoats(let moatListResponse):
                 state.moatListResponse = moatListResponse
+                state.originalTimelineMoats = moatListResponse.items
                 state.timelineMoats = moatListResponse.items
                 
                 return .none
                 
             case .updateSelectedMoat(let moatDetailResponse):
                 state.selectedMoat = moatDetailResponse
-                state.timelineMoats.filter {
+                state.timelineMoats = state.timelineMoats.filter {
                     $0.moatId == moatDetailResponse.moat.moatId
                 }
                 
@@ -103,6 +118,17 @@ struct MoatStore {
             case .goBack:
                 let lastView = state.viewStack.popLast()
                 state.poppedView = lastView
+                
+                let viewToShow = state.viewStack.last
+                
+                if let viewToShow {
+                    state.currentViewType = viewToShow
+                } else {
+                    state.currentViewType = .timeline
+                    
+                    state.selectedMoat = nil
+                    state.timelineMoats = state.originalTimelineMoats
+                }
                 
                 return .none
             }

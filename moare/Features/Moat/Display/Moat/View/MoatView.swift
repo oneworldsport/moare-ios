@@ -20,84 +20,95 @@ struct MoatView: View {
     @State private var commentsToDisplay: [MoatResponse] = []
     
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
+        VStack(spacing: 0) {
             if let moatStore {
-                let timelineMoats = moatStore.timelineMoats
-                let selectedMoat = moatStore.selectedMoat
+                HStack {
+                    BackButton {
+                        moatStore.send(.goBack)
+                    }
+                    
+                    Spacer()
+                }
                 
-                if !accessToken.isEmpty {
-                    VStack {
-                        ScrollView {
-                            LazyVStack(spacing: 28) {
-                                ForEach(timelineMoats, id: \.moatId) { moat in
-                                    let lines = moat.content.components(separatedBy: "\n")
-                                    let title = lines.first ?? ""
-                                    let body = lines.dropFirst().joined(separator: "\n")
-                                    
-                                    MoatItem(
-                                        moatType: selectedMoat != nil ? .detail : .timeline,
-                                        isButtonDisabled: selectedMoat != nil,
-                                        title: title,
-                                        content: body,
-                                        hashtagList: moat.sportType,
-                                        fireCount: moat.fireCount,
-                                        commentCount: moat.commentCount,
-                                        nickname: moat.nickname,
-                                        createdAt: moat.createdAt,
-                                    ) {
-                                        moatStore.send(.selectMoat(moatId: moat.moatId))
-                                    }
-                                }
-                            }
-                            .padding(.top, 10)
-                        }
-                        .scrollDisabled(selectedMoat != nil)
-                        .frame(height: selectedMoat != nil ? 180 : nil)
-                        
-//                        if selectedMoat != nil {
-                        if !commentsToDisplay.isEmpty {
-                            HDivider()
-                            
+                ZStack(alignment: .bottomTrailing) {
+                    let timelineMoats = moatStore.timelineMoats
+                    let selectedMoat = moatStore.selectedMoat
+                    let comments = selectedMoat?.comments?.items ?? []
+                    
+                    if !accessToken.isEmpty {
+                        VStack {
                             ScrollView {
                                 LazyVStack(spacing: 28) {
-                                    ForEach(commentsToDisplay, id: \.moatId) { moat in
+                                    ForEach(timelineMoats, id: \.moatId) { moat in
+                                        let lines = moat.content.components(separatedBy: "\n")
+                                        let title = lines.first ?? ""
+                                        let body = lines.dropFirst().joined(separator: "\n")
+                                        
                                         MoatItem(
-                                            moatType: .comment,
-                                            content: moat.content,
+                                            moatType: selectedMoat != nil ? .detail : .timeline,
+                                            isButtonDisabled: selectedMoat != nil,
+                                            title: title,
+                                            content: body,
                                             hashtagList: moat.sportType,
                                             fireCount: moat.fireCount,
                                             commentCount: moat.commentCount,
                                             nickname: moat.nickname,
                                             createdAt: moat.createdAt,
                                         ) {
+                                            moatStore.send(.selectMoat(moatId: moat.moatId))
                                         }
                                     }
                                 }
                                 .padding(.top, 10)
                             }
+                            .scrollDisabled(selectedMoat != nil)
+                            .frame(height: selectedMoat != nil ? 180 : nil)
+                            
+                            if selectedMoat != nil {
+//                            if !commentsToDisplay.isEmpty {
+                                HDivider()
+                                
+                                ScrollView {
+                                    LazyVStack(spacing: 28) {
+                                        ForEach(comments, id: \.moatId) { moat in
+                                            MoatItem(
+                                                moatType: .comment,
+                                                content: moat.content,
+                                                hashtagList: moat.sportType,
+                                                fireCount: moat.fireCount,
+                                                commentCount: moat.commentCount,
+                                                nickname: moat.nickname,
+                                                createdAt: moat.createdAt,
+                                            ) {
+                                            }
+                                        }
+                                    }
+                                    .padding(.top, 10)
+                                }
+                            }
                         }
+//                        .onChange(of: moatStore.selectedMoat) {
+//                            withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+//                                commentsToDisplay = moatStore.selectedMoat?.comments?.items ?? []
+//                            }
+//                        }
+                        
+                        if moatStore.currentViewType == .timeline {
+                            FloatingAddButton {
+                                moatStore.send(.addViewStack(viewType: .form))
+                            }
+                            .padding(10)
+                        } else if moatStore.currentViewType == .form {
+                            FormView()
+                        } else if moatStore.currentViewType == .detail {
+                            CommentComposer(text: $text) {
+                                moatStore.send(.createMoat(content: text))
+                            }
+                        }
+                    } else {
+                        SignView()
+                            .environmentObject(storeManager)
                     }
-                    .onChange(of: moatStore.selectedMoat) {
-                        withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                            commentsToDisplay = moatStore.selectedMoat?.comments?.items ?? []
-                        }
-                    }
-                    
-                    if moatStore.currentViewType == .timeline {
-                        FloatingAddButton {
-                            moatStore.send(.addViewStack(viewType: .form))
-                        }
-                        .padding(10)
-                    } else if moatStore.currentViewType == .form {
-                        FormView()
-                    } else if moatStore.currentViewType == .detail {
-                        CommentComposer(text: $text) {
-                            moatStore.send(.createMoat(content: text))
-                        }
-                    }
-                } else {
-                    SignView()
-                        .environmentObject(storeManager)
                 }
             }
         }

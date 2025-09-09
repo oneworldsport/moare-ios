@@ -42,15 +42,9 @@ struct SearchView: View {
                    --------------------- */
                 VStack {
                     HStack {
-                        Button(action: {
+                        BackButton(height: barHeight) {
                             searchStore.send(.goBack)
-                        }) {
-                            Image(systemName: "chevron.backward")
-                                .font(.system(size: 22))
-                                .frame(width: 30, height: barHeight)
-                                .padding(.leading, 10)
                         }
-                        .foregroundStyle(.moare)
                         
                         Spacer()
                     }

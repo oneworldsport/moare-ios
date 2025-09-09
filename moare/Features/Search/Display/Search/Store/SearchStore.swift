@@ -416,7 +416,7 @@ struct SearchStore {
                     
                     let viewToShow = state.viewStack.last
                     
-                    if let viewToShow = viewToShow {
+                    if let viewToShow {
                         return .run { send in
                             await send(.updateResultVisibleState(bool: false))
                             await send(.updateMainDisplayModel(data: viewToShow))
