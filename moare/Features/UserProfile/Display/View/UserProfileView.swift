@@ -51,10 +51,14 @@ struct UserProfileView: View {
                     ScrollView {
                         LazyVStack(spacing: 28) {
                             ForEach(userMoats, id: \.moatId) { moat in
+                                let lines = moat.content.components(separatedBy: "\n")
+                                let title = lines.first ?? ""
+                                let body = lines.dropFirst().joined(separator: "\n")
+                                
                                 MoatItem(
                                     moatType: .userProfile,
-                                    title: "test",
-                                    content: moat.content,
+                                    title: title,
+                                    content: body,
                                     hashtagList: moat.sportType,
                                     fireCount: moat.fireCount,
                                     commentCount: moat.commentCount,

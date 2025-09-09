@@ -16,23 +16,29 @@ struct MoatView: View {
     
     @State var text = ""
     
+    // TODO: store에서 action을 통해 애니메이션을 주는걸로 바꿔야함
+    @State private var commentsToDisplay: [MoatResponse] = []
+    
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             if let moatStore {
                 let timelineMoats = moatStore.timelineMoats
                 let selectedMoat = moatStore.selectedMoat
-                let comments = selectedMoat?.comments?.items ?? []
                 
                 if !accessToken.isEmpty {
                     VStack {
                         ScrollView {
                             LazyVStack(spacing: 28) {
                                 ForEach(timelineMoats, id: \.moatId) { moat in
+                                    let lines = moat.content.components(separatedBy: "\n")
+                                    let title = lines.first ?? ""
+                                    let body = lines.dropFirst().joined(separator: "\n")
+                                    
                                     MoatItem(
                                         moatType: selectedMoat != nil ? .detail : .timeline,
                                         isButtonDisabled: selectedMoat != nil,
-                                        title: "test",
-                                        content: moat.content,
+                                        title: title,
+                                        content: body,
                                         hashtagList: moat.sportType,
                                         fireCount: moat.fireCount,
                                         commentCount: moat.commentCount,
@@ -48,15 +54,15 @@ struct MoatView: View {
                         .scrollDisabled(selectedMoat != nil)
                         .frame(height: selectedMoat != nil ? 180 : nil)
                         
-                        if selectedMoat != nil {
+//                        if selectedMoat != nil {
+                        if !commentsToDisplay.isEmpty {
                             HDivider()
                             
                             ScrollView {
                                 LazyVStack(spacing: 28) {
-                                    ForEach(comments, id: \.moatId) { moat in
+                                    ForEach(commentsToDisplay, id: \.moatId) { moat in
                                         MoatItem(
                                             moatType: .comment,
-                                            title: "test",
                                             content: moat.content,
                                             hashtagList: moat.sportType,
                                             fireCount: moat.fireCount,
@@ -69,6 +75,11 @@ struct MoatView: View {
                                 }
                                 .padding(.top, 10)
                             }
+                        }
+                    }
+                    .onChange(of: moatStore.selectedMoat) {
+                        withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                            commentsToDisplay = moatStore.selectedMoat?.comments?.items ?? []
                         }
                     }
                     

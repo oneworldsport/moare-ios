@@ -20,13 +20,13 @@ struct MoatResponse: Decodable, Equatable {
     let commentCount: Int
 }
 
-struct MoatDetailResponse: Decodable {
+struct MoatDetailResponse: Decodable, Equatable {
     let moat: MoatResponse
     let comments: MoatListResponse?
 }
 
 // TODO: 이름 변경
-struct MoatListResponse: Decodable {
+struct MoatListResponse: Decodable, Equatable {
     let items: [MoatResponse]
     let nextToken: [String: String]?
 }

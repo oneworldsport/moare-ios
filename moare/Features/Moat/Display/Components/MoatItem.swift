@@ -38,7 +38,7 @@ struct MoatItem: View {
     init(
         moatType: MoatType = .timeline,
         isButtonDisabled: Bool = false,
-        title: String?,
+        title: String? = nil,
         content: String,
         hashtagList: [String]?,
         fireCount: Int,
