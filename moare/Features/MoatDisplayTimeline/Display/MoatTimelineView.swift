@@ -40,7 +40,7 @@ struct MoatTimelineView: View {
                 self.moatTimelineStore = moatTimelineStore
             }
             
-//            moatTimelineStore.send(.delete)
+            moatTimelineStore.send(.deleteOneTimeOnly)
         }
     }
 }
