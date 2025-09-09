@@ -8,7 +8,7 @@
 struct UserProfileClient {
     private let apiClient = APIClient()
     
-    func fetchUserProfile() async throws -> UserProfileResponse {
+    func fetchUserProfile() async throws -> UserProfileWithMoatsResponse {
         return try await apiClient.fetchData(endpoint: .getUserProfile)
     }
     

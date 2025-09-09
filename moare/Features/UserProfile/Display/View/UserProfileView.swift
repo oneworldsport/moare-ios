@@ -16,7 +16,7 @@ struct UserProfileView: View {
         VStack {
             if let userProfileStore {
                 let userProfile = userProfileStore.userProfile
-                let userMoats = userProfileStore.userMoats?.items ?? []
+                let userMoats = userProfileStore.userMoats
                 
                 VStack {
                     HStack(alignment: .top) {

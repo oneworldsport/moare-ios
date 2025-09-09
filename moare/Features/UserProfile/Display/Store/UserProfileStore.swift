@@ -15,14 +15,15 @@ struct UserProfileStore {
     @ObservableState
     struct State {
         var userProfile: UserProfileResponse? = nil
-        var userMoats: MoatListResponse? = nil
+        var moatResponse: MoatListResponse? = nil // TODO: 이름 변경
+        var userMoats: [MoatResponse] = []
     }
     
     enum Action {
         case getUserProfile
         case updateUserProfile
         
-        case setUserProfile(userProfile: UserProfileResponse)
+        case setUserProfile(userProfile: UserProfileWithMoatsResponse)
     }
     
     var body: some Reducer<State, Action> {
@@ -38,7 +39,9 @@ struct UserProfileStore {
                 return .none
                 
             case .setUserProfile(let userProfile):
-                state.userProfile = userProfile
+                state.userProfile = userProfile.userProfile
+                state.moatResponse = userProfile.moats
+                state.userMoats = userProfile.moats?.items ?? []
                 return .none
             }
         }

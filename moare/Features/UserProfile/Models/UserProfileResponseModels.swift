@@ -14,6 +14,11 @@ struct UserProfileResponse: Decodable {
     let joinedAt: String
 }
 
+struct UserProfileWithMoatsResponse: Decodable {
+    let userProfile: UserProfileResponse
+    let moats: MoatListResponse?
+}
+
 struct UserSummaryResponse: Decodable {
     let userId: String
     let nickname: String

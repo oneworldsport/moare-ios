@@ -25,6 +25,7 @@ struct MoatDetailResponse: Decodable {
     let comments: MoatListResponse?
 }
 
+// TODO: 이름 변경
 struct MoatListResponse: Decodable {
     let items: [MoatResponse]
     let nextToken: [String: String]?
