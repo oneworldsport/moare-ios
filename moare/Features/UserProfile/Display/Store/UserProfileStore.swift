@@ -8,6 +8,10 @@
 import SwiftUI
 import ComposableArchitecture
 
+enum UserProfileViewType {
+    case userProfile, moatDetail, profileUpdateForm
+}
+
 @Reducer
 struct UserProfileStore {
     let userProfileClient = UserProfileClient()

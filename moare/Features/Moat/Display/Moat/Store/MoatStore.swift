@@ -8,6 +8,10 @@
 import SwiftUI
 import ComposableArchitecture
 
+enum MoatViewType {
+    case timeline, detail, form // createForm, updateForm
+}
+
 @Reducer
 struct MoatStore {
     let moatClient = MoatClient()
@@ -17,6 +21,10 @@ struct MoatStore {
         var idToken: String? = nil
         var accessToken: String? = nil
         var refreshToken: String? = nil
+        
+        var currentViewType: MoatViewType = .timeline
+        var viewStack: [MoatViewType] = []
+        var poppedView: MoatViewType? = nil
         
         var moatListResponse: MoatListResponse? = nil
         var timelineMoats: [MoatResponse] = []
@@ -28,9 +36,13 @@ struct MoatStore {
         
         case getTimelineMoats
         case selectMoat(moatId: String)
+        case createMoat(content: String)
         
         case updateTimelineMoats(moatListResponse: MoatListResponse)
         case updateSelectedMoat(moatDetailResponse: MoatDetailResponse)
+        
+        case addViewStack(viewType: MoatViewType)
+        case goBack
     }
     
     var body: some Reducer<State, Action> {
@@ -55,11 +67,23 @@ struct MoatStore {
                 return .run { send in
                     let result = try await moatClient.fetchMoatDetail(moatId: moatId)
                     await send(.updateSelectedMoat(moatDetailResponse: result))
+                    
+                    // TODO: 화면 먼저 보여주고 결과 띄워야하기때문에 실행시점 고민 필요
+                    await send(.addViewStack(viewType: .detail))
+                }
+                
+            case .createMoat(let content):
+                return .run { [moat = state.selectedMoat] send in
+                    if let moat {
+                        let moatRequest = MoatCreateRequest(content: content, sportType: ["#축구"], parentMoatId: moat.moat.moatId)
+                        let _ = try await moatClient.createMoat(body: moatRequest)
+                    }
                 }
                 
             case .updateTimelineMoats(let moatListResponse):
                 state.moatListResponse = moatListResponse
                 state.timelineMoats = moatListResponse.items
+                
                 return .none
                 
             case .updateSelectedMoat(let moatDetailResponse):
@@ -67,6 +91,18 @@ struct MoatStore {
                 state.timelineMoats.filter {
                     $0.moatId == moatDetailResponse.moat.moatId
                 }
+                
+                return .none
+                
+            case .addViewStack(let viewType):
+                state.viewStack.append(viewType)
+                state.currentViewType = viewType
+                
+                return .none
+                
+            case .goBack:
+                let lastView = state.viewStack.popLast()
+                state.poppedView = lastView
                 
                 return .none
             }

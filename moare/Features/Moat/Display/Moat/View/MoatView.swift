@@ -14,8 +14,7 @@ struct MoatView: View {
     
     @AppStorage("accessToken") private var accessToken: String = ""
     
-    @State private var listCount = 10
-    @State private var formTestShow = false
+    @State var text = ""
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -73,14 +72,17 @@ struct MoatView: View {
                         }
                     }
                     
-                    if !formTestShow {
+                    if moatStore.currentViewType == .timeline {
                         FloatingAddButton {
-                            formTestShow = true
+                            moatStore.send(.addViewStack(viewType: .form))
                         }
                         .padding(10)
-                        
-                    } else {
+                    } else if moatStore.currentViewType == .form {
                         FormView()
+                    } else if moatStore.currentViewType == .detail {
+                        CommentComposer(text: $text) {
+                            moatStore.send(.createMoat(content: text))
+                        }
                     }
                 } else {
                     SignView()
