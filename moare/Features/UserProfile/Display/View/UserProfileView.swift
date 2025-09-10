@@ -13,41 +13,54 @@ struct UserProfileView: View {
     @State var userProfileStore: StoreOf<UserProfileStore>? = nil
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             if let userProfileStore {
                 let userProfile = userProfileStore.userProfile
                 let userMoats = userProfileStore.userMoats
+                let selectedMoat = userProfileStore.selectedMoat
+                let comments = selectedMoat?.commentListResponse?.moats ?? []
                 
-                VStack {
-                    HStack(alignment: .top) {
-                        Circle()
-                            .fill(.moare)
-                            .frame(width: 80, height: 80)
-                        
-                        VStack(alignment: .leading) {
-                            HStack {
-                                Text(userProfile?.nickname ?? "")
+                HStack {
+                    BackButton {
+                        userProfileStore.send(.goBack)
+                    }
+                    
+                    Spacer()
+                }
+                
+                VStack(spacing: 0) {
+                    if selectedMoat == nil {
+                        HStack(alignment: .top) {
+                            Circle()
+                                .fill(.moare)
+                                .frame(width: 80, height: 80)
+                            
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Text(userProfile?.nickname ?? "")
+                                    
+                                    Spacer()
+                                    
+                                    Image(systemName: "gearshape")
+                                        .font(.system(size: 24))
+                                }
                                 
                                 Spacer()
                                 
-                                Image(systemName: "gearshape")
-                                    .font(.system(size: 24))
-                            }
-                            
-                            Spacer()
-                            
-                            if let sports = userProfile?.sportsInterests, !sports.isEmpty {
-                                ForEach(sports, id: \.self) { sport in
-                                    Text(sport)
+                                if let sports = userProfile?.sportsInterests, !sports.isEmpty {
+                                    ForEach(sports, id: \.self) { sport in
+                                        Text(sport)
+                                    }
                                 }
                             }
                         }
+                        .frame(height: 80)
+                        .padding(.horizontal, 8)
+                        
+                        HDivider()
+                            .padding(.top, 8)
                     }
-                    .frame(height: 80)
-                    .padding(.horizontal, 8)
-                    
-                    HDivider()
-                    
+                                        
                     ScrollView {
                         LazyVStack(spacing: 28) {
                             ForEach(userMoats, id: \.moatId) { moat in
@@ -56,7 +69,8 @@ struct UserProfileView: View {
                                 let body = lines.dropFirst().joined(separator: "\n")
                                 
                                 MoatItem(
-                                    moatType: .userProfile,
+                                    moatType: selectedMoat != nil ? .detail : .timeline,
+                                    isButtonDisabled: selectedMoat != nil,
                                     title: title,
                                     content: body,
                                     hashtagList: moat.sportType,
@@ -65,10 +79,38 @@ struct UserProfileView: View {
                                     nickname: moat.nickname,
                                     createdAt: moat.createdAt,
                                 ) {
+                                    userProfileStore.send(.selectMoat(moatId: moat.moatId))
                                 }
                             }
                         }
-                        .padding(.top, 10)
+                        .padding(.top, 18) // 10 + 8 (side bar end height + extra space)
+                    }
+                    .scrollDisabled(selectedMoat != nil)
+                    .frame(height: selectedMoat != nil ? 180 : nil)
+                    
+                    if selectedMoat != nil {
+                        HDivider()
+                            .padding(.top, 8)
+                        
+                        ScrollView {
+                            LazyVStack(spacing: 28) {
+                                ForEach(comments, id: \.moatId) { moat in
+                                    MoatItem(
+                                        moatType: .comment,
+                                        content: moat.content,
+                                        hashtagList: moat.sportType,
+                                        fireCount: moat.fireCount,
+                                        commentCount: moat.commentCount,
+                                        nickname: moat.nickname,
+                                        createdAt: moat.createdAt,
+                                    ) {
+                                        userProfileStore.send(.selectMoat(isComment: true, moatId: moat.moatId))
+                                    }
+                                }
+                            }
+                            .padding(.top, 18) // 10 + 8 (side bar end height + extra space)
+                            .padding(.bottom, 61) // 35 + 8 + 10 + 8 (firstLineHeight + bottom padding + side bar end height + extra space)
+                        }
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
