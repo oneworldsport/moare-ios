@@ -36,11 +36,11 @@ struct MoatStore {
         case deleteToken
         
         case getTimelineMoats
-        case selectMoat(moatId: String)
+        case selectMoat(isComment: Bool = false, moatId: String)
         case createMoat(content: String)
         
         case updateTimelineMoats(moatListResponse: MoatListResponse)
-        case updateSelectedMoat(moatDetailResponse: MoatDetailResponse)
+        case updateSelectedMoat(isComment: Bool, moatDetailResponse: MoatDetailResponse)
         
         case addViewStack(viewType: MoatViewType)
         case goBack
@@ -64,10 +64,10 @@ struct MoatStore {
                     await send(.updateTimelineMoats(moatListResponse: result))
                 }
                 
-            case .selectMoat(let moatId):
+            case .selectMoat(let isComment, let moatId):
                 return .run { send in
                     let result = try await moatClient.fetchMoatDetail(moatId: moatId)
-                    await send(.updateSelectedMoat(moatDetailResponse: result), animation: AnimationConstants.AnimationType.mediumDefaultAnimation)
+                    await send(.updateSelectedMoat(isComment: isComment, moatDetailResponse: result), animation: AnimationConstants.AnimationType.mediumDefaultAnimation)
                     
                     // TODO: 화면 먼저 보여주고 결과 띄워야하기때문에 실행시점 고민 필요
                     await send(.addViewStack(viewType: .detail))
@@ -93,7 +93,7 @@ struct MoatStore {
                         var newMoatDetail = moat
                         newMoatDetail.comments = moatList
                         
-                        await send(.updateSelectedMoat(moatDetailResponse: newMoatDetail))
+                        await send(.updateSelectedMoat(isComment: false, moatDetailResponse: newMoatDetail))
                     } else if currentViewType == .form {
                         let moatRequest = MoatCreateRequest(content: content, sportType: ["#축구"])
                         let result = try await moatClient.createMoat(body: moatRequest)
@@ -119,10 +119,15 @@ struct MoatStore {
                 
                 return .none
                 
-            case .updateSelectedMoat(let moatDetailResponse):
-                state.selectedMoat = moatDetailResponse
-                state.timelineMoats = state.timelineMoats.filter {
-                    $0.moatId == moatDetailResponse.moat.moatId
+            case .updateSelectedMoat(let isComment, let moatDetailResponse):
+                if isComment {
+                    state.selectedMoat = moatDetailResponse
+                    state.timelineMoats = [moatDetailResponse.moat]
+                } else {
+                    state.selectedMoat = moatDetailResponse
+                    state.timelineMoats = state.timelineMoats.filter {
+                        $0.moatId == moatDetailResponse.moat.moatId
+                    }
                 }
                 
                 return .none
@@ -140,8 +145,17 @@ struct MoatStore {
                 let viewToShow = state.viewStack.last
                 
                 if let viewToShow {
-                    state.currentViewType = viewToShow
+                    switch viewToShow {
+                    case .detail:
+                        state.currentViewType = viewToShow
+                        // TODO: 이전 selectedMoat를 다 저장해서 처리해줘야함.
+                        
+                    case .form:
+                        state.currentViewType = viewToShow
+                    default: break
+                    }
                 } else {
+                    // 뒤로갈 뷰가 없는 경우. 즉, 메인 화면으로 이동하는 경우.
                     state.currentViewType = .timeline
                     
                     state.selectedMoat = nil

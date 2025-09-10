@@ -36,7 +36,7 @@ struct MoatView: View {
                     let comments = selectedMoat?.comments?.items ?? []
                     
                     if !accessToken.isEmpty {
-                        VStack {
+                        VStack(spacing: 0) {
                             ScrollView {
                                 LazyVStack(spacing: 28) {
                                     ForEach(timelineMoats, id: \.moatId) { moat in
@@ -67,6 +67,7 @@ struct MoatView: View {
                             if selectedMoat != nil {
 //                            if !commentsToDisplay.isEmpty {
                                 HDivider()
+                                    .padding(.top, 8)
                                 
                                 ScrollView {
                                     LazyVStack(spacing: 28) {
@@ -80,10 +81,12 @@ struct MoatView: View {
                                                 nickname: moat.nickname,
                                                 createdAt: moat.createdAt,
                                             ) {
+                                                moatStore.send(.selectMoat(isComment: true, moatId: moat.moatId))
                                             }
                                         }
                                     }
-                                    .padding(.top, 10)
+                                    .padding(.top, 18) // 10 + 8 (side bar end height + extra space)
+                                    .padding(.bottom, 61) // 35 + 8 + 10 + 8 (firstLineHeight + bottom padding + side bar end height + extra space)
                                 }
                             }
                         }

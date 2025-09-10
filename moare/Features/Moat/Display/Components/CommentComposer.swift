@@ -37,11 +37,17 @@ struct CommentComposer: View {
             }
         }
         .frame(height: min(maxHeight, (firstLineHeight + lineHeight * CGFloat(numberOfLines - 1))))
+        .background {
+            RoundedRectangle(cornerRadius: 8)
+                .fill(.white)
+                .shadow(radius: 3, y: 2)
+        }
         .overlay {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(.moare, lineWidth: 1)
         }
         .padding(.horizontal, 8)
+        .padding(.bottom, 8)
     }
 }
 
