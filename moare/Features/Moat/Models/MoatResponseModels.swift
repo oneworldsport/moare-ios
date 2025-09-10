@@ -22,11 +22,10 @@ struct MoatResponse: Decodable, Equatable {
 
 struct MoatDetailResponse: Decodable, Equatable {
     let moat: MoatResponse
-    var comments: MoatListResponse?
+    var commentListResponse: MoatListResponse?
 }
 
-// TODO: 이름 변경
 struct MoatListResponse: Decodable, Equatable {
-    var items: [MoatResponse]
+    var moats: [MoatResponse]
     let nextToken: [String: String]?
 }

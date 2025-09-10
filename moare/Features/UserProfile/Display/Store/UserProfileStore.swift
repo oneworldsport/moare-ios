@@ -19,7 +19,7 @@ struct UserProfileStore {
     @ObservableState
     struct State {
         var userProfile: UserProfileResponse? = nil
-        var moatResponse: MoatListResponse? = nil // TODO: 이름 변경
+        var moatListResponse: MoatListResponse? = nil // TODO: 이름 변경
         var userMoats: [MoatResponse] = []
     }
     
@@ -44,8 +44,8 @@ struct UserProfileStore {
                 
             case .setUserProfile(let userProfile):
                 state.userProfile = userProfile.userProfile
-                state.moatResponse = userProfile.moats
-                state.userMoats = userProfile.moats?.items ?? []
+                state.moatListResponse = userProfile.moatListResponse
+                state.userMoats = userProfile.moatListResponse?.moats ?? []
                 return .none
             }
         }

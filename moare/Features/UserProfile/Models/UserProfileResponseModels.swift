@@ -16,7 +16,7 @@ struct UserProfileResponse: Decodable {
 
 struct UserProfileWithMoatsResponse: Decodable {
     let userProfile: UserProfileResponse
-    let moats: MoatListResponse?
+    let moatListResponse: MoatListResponse?
 }
 
 struct UserSummaryResponse: Decodable {

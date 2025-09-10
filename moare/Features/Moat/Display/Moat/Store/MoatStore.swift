@@ -84,14 +84,14 @@ struct MoatStore {
                         let moatRequest = MoatCreateRequest(content: content, sportType: ["#축구"], parentMoatId: moat.moat.moatId)
                         let result = try await moatClient.createMoat(body: moatRequest)
                         
-                        var comments = moat.comments?.items ?? []
+                        var comments = moat.commentListResponse?.moats ?? []
                         comments.append(result)
                         
-                        var moatList = moat.comments
-                        moatList?.items = comments
+                        var commentListResponse = moat.commentListResponse
+                        commentListResponse?.moats = comments
                         
                         var newMoatDetail = moat
-                        newMoatDetail.comments = moatList
+                        newMoatDetail.commentListResponse = commentListResponse
                         
                         await send(.updateSelectedMoat(isComment: false, moatDetailResponse: newMoatDetail))
                     } else if currentViewType == .form {
@@ -105,7 +105,7 @@ struct MoatStore {
                             timelineMoats.append(result)
                             
                             var moatList = moatListResponse
-                            moatList.items = timelineMoats
+                            moatList.moats = timelineMoats
                             
                             await send(.updateTimelineMoats(moatListResponse: moatList))
                         }
@@ -114,8 +114,8 @@ struct MoatStore {
                 
             case .updateTimelineMoats(let moatListResponse):
                 state.moatListResponse = moatListResponse
-                state.originalTimelineMoats = moatListResponse.items
-                state.timelineMoats = moatListResponse.items
+                state.originalTimelineMoats = moatListResponse.moats
+                state.timelineMoats = moatListResponse.moats
                 
                 return .none
                 

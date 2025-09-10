@@ -33,7 +33,7 @@ struct MoatView: View {
                 ZStack(alignment: .bottomTrailing) {
                     let timelineMoats = moatStore.timelineMoats
                     let selectedMoat = moatStore.selectedMoat
-                    let comments = selectedMoat?.comments?.items ?? []
+                    let comments = selectedMoat?.commentListResponse?.moats ?? []
                     
                     if !accessToken.isEmpty {
                         VStack(spacing: 0) {
