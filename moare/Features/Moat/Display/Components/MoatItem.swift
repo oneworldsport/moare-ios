@@ -256,6 +256,15 @@ struct MoatItemSideBar: View {
 }
 
 
-//#Preview {
-//    MoatItem()
-//}
+#Preview {
+    MoatItem(
+        moatType: .detail,
+        title: "test",
+        content: "testetstest",
+        hashtagList: ["#축구"],
+        fireCount: 0,
+        commentCount: 0,
+        nickname: "test",
+        createdAt: "2025-08-16T20:10:00.666666"
+    )
+}

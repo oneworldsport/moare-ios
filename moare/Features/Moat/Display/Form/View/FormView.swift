@@ -10,7 +10,7 @@ import ComposableArchitecture
 
 struct FormView: View {
     @EnvironmentObject var storeManager: StoreManager
-    @State var formStore: StoreOf<FormStore>? = nil
+    @State var moatStore: StoreOf<MoatStore>? = nil
     
     @State var text = ""
     
@@ -18,7 +18,7 @@ struct FormView: View {
     
     var body: some View {
         VStack {
-            if let formStore {
+            if let moatStore {
                 VStack {
                     Text("모트 작성")
                     
@@ -46,7 +46,7 @@ struct FormView: View {
                     
                     // 만들기, 생성하기, 올리기, 공유하기, 작성하기
                     Button(action: {
-                        formStore.send(.createMoat(content: text))
+                        moatStore.send(.createMoat(content: text))
                     }) {
                         Text("작성하기")
                             .padding(5)
@@ -63,18 +63,18 @@ struct FormView: View {
             }
         }
         .onAppear {
-            let formStore: StoreOf<FormStore> = storeManager.getStore(forKey: StoreKeys.formStore) ?? {
-                let newStore = Store(initialState: FormStore.State()) {
-                    FormStore()
+            let moatStore: StoreOf<MoatStore> = storeManager.getStore(forKey: StoreKeys.moatStore) ?? {
+                let newStore = Store(initialState: MoatStore.State()) {
+                    MoatStore()
                 }
                 
-                storeManager.setStore(newStore, forKey: StoreKeys.formStore)
+                storeManager.setStore(newStore, forKey: StoreKeys.moatStore)
                 
                 return newStore
             }()
             
             withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                self.formStore = formStore
+                self.moatStore = moatStore
             }
             
 //            moatTimelineStore.send(.deleteToken)

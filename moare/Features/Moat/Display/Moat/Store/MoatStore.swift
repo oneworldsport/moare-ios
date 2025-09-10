@@ -74,22 +74,40 @@ struct MoatStore {
                 }
                 
             case .createMoat(let content):
-                return .run { [moat = state.selectedMoat, currentViewType = state.currentViewType] send in
-                    if let moat {
+                return .run { [
+                    moat = state.selectedMoat,
+                    currentViewType = state.currentViewType,
+                    moatListResponse = state.moatListResponse,
+                    originalTimeLineMoats = state.originalTimelineMoats
+                ] send in
+                    if currentViewType == .detail, let moat {
                         let moatRequest = MoatCreateRequest(content: content, sportType: ["#축구"], parentMoatId: moat.moat.moatId)
                         let result = try await moatClient.createMoat(body: moatRequest)
                         
-                        if currentViewType == .detail {
-                            var comments = moat.comments?.items ?? []
-                            comments.append(result)
+                        var comments = moat.comments?.items ?? []
+                        comments.append(result)
+                        
+                        var moatList = moat.comments
+                        moatList?.items = comments
+                        
+                        var newMoatDetail = moat
+                        newMoatDetail.comments = moatList
+                        
+                        await send(.updateSelectedMoat(moatDetailResponse: newMoatDetail))
+                    } else if currentViewType == .form {
+                        let moatRequest = MoatCreateRequest(content: content, sportType: ["#축구"])
+                        let result = try await moatClient.createMoat(body: moatRequest)
+                        
+                        await send(.goBack)
+                        
+                        if let moatListResponse {
+                            var timelineMoats = originalTimeLineMoats
+                            timelineMoats.append(result)
                             
-                            var moatList = moat.comments
-                            moatList?.items = comments
+                            var moatList = moatListResponse
+                            moatList.items = timelineMoats
                             
-                            var newMoatDetail = moat
-                            newMoatDetail.comments = moatList
-                            
-                            await send(.updateSelectedMoat(moatDetailResponse: newMoatDetail))
+                            await send(.updateTimelineMoats(moatListResponse: moatList))
                         }
                     }
                 }
