@@ -5,6 +5,8 @@
 //  Created by Mohwa Yoon on 4/23/25.
 //
 
+import SwiftUI
+
 struct Constants {
     struct Keys {
         static let eplPlayerDic = "epl_player"
@@ -20,6 +22,8 @@ struct Constants {
         static let mlbPlayerDic = "mlb_player"
         static let mlbTeamDic = "mlb_team"
         static let footballTeamDic = "football_team"
+        
+        static let tournamentTeams = "tournament_teams"
     }
     
     struct Ids {
@@ -34,6 +38,16 @@ struct Constants {
         static let kbo = 90101
         static let mlb = 90102
         static let footballLeagues = [epl, laliga, bundesliga, ligue1, seriea, mls]
+        static let championsLeague = 2
+        static let europaLeague = 3
+        static let conferenceLeague = 848
+        static let faCup = 45
+        static let eflCup = 48
+        static let dfbPokal = 81
+        static let coupeDeFrance = 66
+        static let copaDelRey = 143
+        static let coppaItalia = 137
+        static let footballTournamentLeagues = [championsLeague, europaLeague, conferenceLeague, faCup, eflCup, dfbPokal, coupeDeFrance, copaDelRey, coppaItalia]
         
         // nba team
         // TODO: Move to struct NBATeam
@@ -115,9 +129,96 @@ struct Constants {
         static let nationalLeagueCentral = 205
     }
     
-    struct NBAGameStatus {
-        static let notStarted = 1
-        static let live = 2
-        static let finished = 3
+    struct GameStatus {
+        struct Football {
+            static let notStarted = "NS"
+            static let firstHalf = "1H"
+            static let halftime = "HT"
+            static let secondHalf = "2H"
+            static let extraTime = "ET" // 연장전
+            static let breakTime = "BT" // 연장전 전반 후 휴식시간
+            static let penaltyShootout = "P" // 승부차기
+            static let finished = "FT"
+            static let finishedAfterExtraTime = "AET" // 승부차기 없이 연장전 후 경기 종료
+            static let finishedAfterPenaltyShootout = "PET" // 승부차기 후 경기 종료
+            static let postponed = "PST"
+            static let cancelled = "CANC"
+            static let liveList = [firstHalf, halftime, secondHalf, extraTime, breakTime, penaltyShootout]
+            static let finishedList = [finished, finishedAfterExtraTime, finishedAfterPenaltyShootout]
+        }
+        
+        struct NBA {
+            static let notStarted = 1
+            static let live = 2
+            static let finished = 3
+        }
+        
+        struct MLB {
+            static let scheduled = "Scheduled"
+            static let live = "In Progress"
+            static let postponed = "Postponed"
+            static let rain = "Completed Early: Rain"
+            static let final = "Final"
+            static let finishedList = [rain, final]
+        }
+        
+        struct KBO {
+            static let scheduled = 1
+            static let live = 2
+            static let final = 3
+            static let canceled = 4
+        }
+        
+        static func gameStatusText(leagueId: Int, status: String) -> String {
+            switch leagueId {
+            case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
+                switch status {
+                case Football.notStarted:
+                    return StringConstants.gameNotStartedStr
+                case Football.firstHalf:
+                    return StringConstants.Football.gameFirstHalfStr
+                case Football.halftime:
+                    return StringConstants.Football.gameHalftimeStr
+                case Football.secondHalf:
+                    return StringConstants.Football.gameSecondHalfStr
+                case let status where Football.finishedList.contains(status):
+                    return StringConstants.gameFinishedStr
+                default:
+                    return ""
+                }
+            case Constants.Ids.nba:
+                return ""
+            case Constants.Ids.mlb:
+                return ""
+            case Constants.Ids.kbo:
+                return ""
+            default :
+                return ""
+            }
+        }
+        
+        static func isLive(leagueId: Int, status: String) -> Bool {
+            switch leagueId {
+            case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
+                switch status {
+                case let status where Football.liveList.contains(status):
+                    return true
+                default:
+                    return false
+                }
+            case Constants.Ids.nba:
+                return false
+            case Constants.Ids.mlb:
+                return false
+            case Constants.Ids.kbo:
+                return false
+            default :
+                return false
+            }
+        }
+        
+        static func gameStatusColor(leagueId: Int, status: String) -> Color {
+            isLive(leagueId: leagueId, status: status) ? .moare : .secondary
+        }
     }
 }

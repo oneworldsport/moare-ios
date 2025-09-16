@@ -321,6 +321,7 @@ struct SearchView: View {
         .fbTeamStandings: { AnyView(FBTeamStandingsView(displayModel: $0 as! FBTeamStandingsDisplayModel)) },
         .fbLeagueSchedule: { AnyView(FBLeaugeScheduleView(displayModel: $0 as! FBLeagueScheduleDisplayModel)) },
         .fbGameStats: { AnyView(FBGameStatsView(displayModel: $0 as! FBGameStatsDisplayModel)) },
+        .fbTournament: { AnyView(FBTournamentView(displayModel: $0 as! FBTournamentDisplayModel)) },
         
             .nbaPlayerInfo: { AnyView(NBAPlayerInfoView(displayModel: $0 as! NBAPlayerInfoDisplayModel)) },
         .nbaPlayerStats: { AnyView(NBAPlayerStatsView(displayModel: $0 as! NBAPlayerStatsDisplayModel)) },

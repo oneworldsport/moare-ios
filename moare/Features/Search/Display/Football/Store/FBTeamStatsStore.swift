@@ -41,7 +41,7 @@ struct FBTeamStatsStore {
                 state.displayModel = displayModel
                 
                 switch displayModel.leagueId {
-                case Constants.Ids.epl, Constants.Ids.laliga, Constants.Ids.bundesliga, Constants.Ids.ligue1, Constants.Ids.seriea, Constants.Ids.mls:
+                case let id where Constants.Ids.footballLeagues.contains(id):
                     state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                 default: break
                 }

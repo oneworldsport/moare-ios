@@ -35,7 +35,7 @@ struct Keyword: Codable, Equatable {
 // Used as keys in DisplayModels dictionary in SearchStore State
 enum SportDisplayType: Hashable, CaseIterable {
     // football
-    case fbPlayerInfo, fbPlayerStats, fbPlayerStandings, fbTeamInfo, fbTeamStats, fbTeamStandings, fbLeagueSchedule, fbGameStats
+    case fbPlayerInfo, fbPlayerStats, fbPlayerStandings, fbTeamInfo, fbTeamStats, fbTeamStandings, fbLeagueSchedule, fbGameStats, fbTournament
     // nba
     case nbaPlayerInfo, nbaPlayerStats, nbaPlayerStandings, nbaTeamInfo, nbaTeamStats, nbaTeamStandings, nbaLeagueSchedule, nbaGameStats, nbaLeagueTournament
     // kbo
@@ -63,6 +63,7 @@ indirect enum SportDecodableModel: Equatable {
     case fbTeamStandings(FBTeamStandingsResponseModel, FBTeamStandingsDisplayModel)
     case fbLeagueSchedule(FBGameScheduleResponseModel, FBLeagueScheduleDisplayModel)
     case fbGameStats(FBGameStatsResponseModel, FBGameStatsDisplayModel)
+    case fbTournament(FBGameScheduleResponseModel, FBTournamentDisplayModel)
     
     // nba
     case nbaPlayerInfo(NBAPlayerInfoResponseModel, NBAPlayerInfoDisplayModel)
@@ -106,6 +107,7 @@ indirect enum SportDecodableModel: Equatable {
             (.fbTeamStats, .fbTeamStats),
             (.fbTeamStandings, .fbTeamStandings),
             (.fbLeagueSchedule, .fbLeagueSchedule),
+            (.fbTournament, .fbTournament),
             (.fbGameStats, .fbGameStats),
             (.nbaPlayerInfo, .nbaPlayerInfo),
             (.nbaPlayerStats, .nbaPlayerStats),
@@ -229,6 +231,11 @@ extension DataModel {
                 let displayModel = modelConverter.fbGameStatsConverter(response: responseModel)
                 self.data = .fbGameStats(responseModel, displayModel)
             }
+            
+        case let dataType where dataType == "football_league_tournament":
+            let responseModel = try container.decode(FBGameScheduleResponseModel.self, forKey: .data)
+            let displayModel = modelConverter.fbTournamentConverter(response: responseModel)
+            self.data = .fbTournament(responseModel, displayModel)
             
         // basketball
         case let dataType where dataType == "basketball_player_info":

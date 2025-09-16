@@ -181,6 +181,17 @@ struct ModelConverter {
         )
     }
     
+    func fbTournamentConverter(response: FBGameScheduleResponseModel) -> FBTournamentDisplayModel {
+        return FBTournamentDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.epl,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            season: season,
+            scheduleType: response.scheduleType ?? .tournamentDraw,
+            games: response.schedule
+        )
+    }
+    
     /* ---------------------
        nba
        --------------------- */

@@ -22,6 +22,7 @@ struct StoreKeys {
     static let fbTeamScheduleStore = "FBTeamScheduleStore"
     static let fbLeagueScheduleStore = "FBLeagueScheduleStore"
     static let fbGameStatsStore = "FBGameStatsStore"
+    static let fbTournamentStore = "FBTournamentStore"
     
     // nba
     static let nbaPlayerInfoStore = "NBAPlayerInfoStore"
