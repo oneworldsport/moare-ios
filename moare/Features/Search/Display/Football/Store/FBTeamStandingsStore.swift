@@ -71,18 +71,8 @@ struct FBTeamStandingsStore {
                 state.isMLS = displayModel.leagueId == Constants.Ids.mls
                 
                 switch displayModel.leagueId {
-                case Constants.Ids.epl:
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplTeamDic)
-                case Constants.Ids.laliga:
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaTeamDic)
-                case Constants.Ids.bundesliga:
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
-                case Constants.Ids.ligue1:
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
-                case Constants.Ids.seriea:
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaTeamDic)
-                case Constants.Ids.mls:
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlsTeamDic)
+                case Constants.Ids.epl, Constants.Ids.laliga, Constants.Ids.bundesliga, Constants.Ids.ligue1, Constants.Ids.seriea, Constants.Ids.mls:
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                 default: break
                 }
                 
