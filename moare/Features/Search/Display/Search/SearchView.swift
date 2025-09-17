@@ -340,6 +340,7 @@ struct SearchView: View {
         .kboTeamStandings: { AnyView(KBOTeamStandingsView(displayModel: $0 as! KBOTeamStandingsDisplayModel)) },
         .kboLeagueSchedule: { AnyView(KBOLeagueScheduleView(displayModel: $0 as! KBOLeagueScheduleDisplayModel)) },
         .kboGameStats: { AnyView(KBOGameStatsView(displayModel: $0 as! KBOGameStatsDisplayModel)) },
+        .kboTournament: { AnyView(KBOTournamentView(displayModel: $0 as! KBOTournamentDisplayModel)) },
         
             .mlbPlayerInfo: { AnyView(MLBPlayerInfoView(displayModel: $0 as! MLBPlayerInfoDisplayModel)) },
         .mlbPlayerStats: { AnyView(MLBPlayerStatsView(displayModel: $0 as! MLBPlayerStatsDisplayModel)) },

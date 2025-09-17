@@ -46,6 +46,7 @@ struct StoreKeys {
     static let kboTeamScheduleStore = "KBOTeamScheduleStore"
     static let kboLeagueScheduleStore = "KBOLeagueScheduleStore"
     static let kboGameStatsStore = "KBOGameStatsStore"
+    static let kboTournamentStore = "KBOTournamentStore"
     
     // mlb
     static let mlbPlayerInfoStore = "MLBPlayerInfoStore"

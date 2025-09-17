@@ -510,6 +510,17 @@ struct ModelConverter {
         )
     }
     
+    func kboTournamentConverter(response: KBOGameScheduleResponseModel) -> KBOTournamentDisplayModel {
+        return KBOTournamentDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.kbo,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            season: season,
+            scheduleType: response.scheduleType ?? .tournamentBracket,
+            games: response.schedule
+        )
+    }
+    
     /* ---------------------
        mlb
        --------------------- */

@@ -39,7 +39,7 @@ enum SportDisplayType: Hashable, CaseIterable {
     // nba
     case nbaPlayerInfo, nbaPlayerStats, nbaPlayerStandings, nbaTeamInfo, nbaTeamStats, nbaTeamStandings, nbaLeagueSchedule, nbaGameStats, nbaLeagueTournament
     // kbo
-    case kboPlayerInfo, kboPlayerStats, kboPlayerStandings, kboTeamInfo, kboTeamStats, kboTeamStandings, kboLeagueSchedule, kboGameStats
+    case kboPlayerInfo, kboPlayerStats, kboPlayerStandings, kboTeamInfo, kboTeamStats, kboTeamStandings, kboLeagueSchedule, kboGameStats, kboTournament
     // mlb
     case mlbPlayerInfo, mlbPlayerStats, mlbPlayerStandings, mlbTeamInfo, mlbTeamStats, mlbTeamStandings, mlbLeagueSchedule, mlbGameStats
     case unknown
@@ -85,6 +85,7 @@ indirect enum SportDecodableModel: Equatable {
     case kboTeamStandings(KBOTeamStandingsResponseModel, KBOTeamStandingsDisplayModel)
     case kboLeagueSchedule(KBOGameScheduleResponseModel, KBOLeagueScheduleDisplayModel)
     case kboGameStats(KBOGameStatsResponseModel, KBOGameStatsDisplayModel)
+    case kboTournament(KBOGameScheduleResponseModel, KBOTournamentDisplayModel)
     
     // mlb
     case mlbPlayerInfo(MLBPlayerInfoResponseModel, MLBPlayerInfoDisplayModel)
@@ -126,6 +127,7 @@ indirect enum SportDecodableModel: Equatable {
             (.kboTeamStandings, .kboTeamStandings),
             (.kboLeagueSchedule, .kboLeagueSchedule),
             (.kboGameStats, .kboGameStats),
+            (.kboTournament, .kboTournament),
             (.mlbPlayerInfo, .mlbPlayerInfo),
             (.mlbPlayerStats, .mlbPlayerStats),
             (.mlbPlayerStandings, .mlbPlayerStandings),
@@ -489,6 +491,20 @@ extension DataModel {
                     let displayModel = modelConverter.mlbGameStatsConverter(response: responseModel)
                     self.data = .mlbGameStats(responseModel, displayModel)
                 }
+            } else {
+                self.data = .unknown
+            }
+            
+        case let dataType where dataType == "baseball_league_tournament":
+            if leagueId == Constants.Ids.kbo {
+                let responseModel = try container.decode(KBOGameScheduleResponseModel.self, forKey: .data)
+                let displayModel = modelConverter.kboTournamentConverter(response: responseModel)
+                self.data = .kboTournament(responseModel, displayModel)
+            } else if leagueId == Constants.Ids.mlb {
+//                let responseModel = try container.decode(MLBGameScheduleResponseModel.self, forKey: .data)
+//                let displayModel = modelConverter.mlbTournamentConverter(response: responseModel)
+//                self.data = .mlbTournament(responseModel, displayModel)
+                self.data = .unknown
             } else {
                 self.data = .unknown
             }

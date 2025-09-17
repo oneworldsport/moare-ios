@@ -163,10 +163,10 @@ struct Constants {
         }
         
         struct KBO {
-            static let scheduled = 1
-            static let live = 2
-            static let final = 3
-            static let canceled = 4
+            static let scheduled = "1"
+            static let live = "2"
+            static let final = "3"
+            static let canceled = "4"
         }
         
         static func gameStatusText(leagueId: Int, status: String) -> String {
@@ -191,7 +191,18 @@ struct Constants {
             case Constants.Ids.mlb:
                 return ""
             case Constants.Ids.kbo:
-                return ""
+                switch status {
+                case KBO.scheduled:
+                    return StringConstants.gameNotStartedStr
+                case KBO.live:
+                    return StringConstants.gameLiveStr
+                case KBO.final:
+                    return StringConstants.gameFinishedStr
+                case KBO.canceled:
+                    return StringConstants.gameCanceledStr
+                default:
+                    return ""
+                }
             default :
                 return ""
             }
@@ -211,7 +222,11 @@ struct Constants {
             case Constants.Ids.mlb:
                 return false
             case Constants.Ids.kbo:
-                return false
+                if status == KBO.live {
+                    return true
+                } else {
+                    return false
+                }
             default :
                 return false
             }
