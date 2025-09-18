@@ -50,6 +50,7 @@ struct SearchStore {
         var poppedView: SportDecodableModel? = nil
         var trendingKeywords: OrderedDictionary<String, KeywordInfo> = [:]
         var noticeList: [NoticeModel] = []
+        var searchExample = ""
     }
     
     enum SearchType {
@@ -169,7 +170,8 @@ struct SearchStore {
                 return .none
                 
             case .initNoticeList(let noticeList):
-                state.noticeList = noticeList
+                state.searchExample = noticeList.first { $0.title == "검색 예시" }?.content ?? ""
+                state.noticeList = noticeList.filter { $0.title != "검색 예시" }
                 
                 return .none
                 
@@ -343,8 +345,8 @@ struct SearchStore {
                     state.displayModels[.nbaLeagueSchedule] = displayModel
                 case .nbaGameStats(_, let displayModel):
                     state.displayModels[.nbaGameStats] = displayModel
-                case .nbaLeagueTournament(_, let displayModel):
-                    state.displayModels[.nbaLeagueTournament] = displayModel
+                case .nbaTournament(_, let displayModel):
+                    state.displayModels[.nbaTournament] = displayModel
 
                 case .kboPlayerInfo(_, let displayModel):
                     state.displayModels[.kboPlayerInfo] = displayModel
@@ -889,7 +891,7 @@ struct SearchStore {
                 let dataModel: SportDecodableModel
                 
                 switch state.viewStack.last {
-                case .nbaLeagueTournament(let responseModel, let displayModel):
+                case .nbaTournament(let responseModel, let displayModel):
                     let teamScheduleResponseModel = NBAGameScheduleResponseModel(scheduleType: ScheduleType.teamFlat, scheduledMonths: nil, schedule: ModelConverter.nbaGameListToGameScheduleListConverter(gameList: gameList))
                     
                     dataModel = .nbaLeagueSchedule(
@@ -956,8 +958,8 @@ struct SearchStore {
                     state.displayModels[.nbaLeagueSchedule] = displayModel
                 case .nbaGameStats(_, let displayModel):
                     state.displayModels[.nbaGameStats] = displayModel
-                case .nbaLeagueTournament(_, let displayModel):
-                    state.displayModels[.nbaLeagueTournament] = displayModel
+                case .nbaTournament(_, let displayModel):
+                    state.displayModels[.nbaTournament] = displayModel
 
                 case .kboPlayerInfo(_, let displayModel):
                     state.displayModels[.kboPlayerInfo] = displayModel
