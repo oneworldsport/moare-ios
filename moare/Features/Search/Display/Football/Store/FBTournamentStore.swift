@@ -54,6 +54,7 @@ struct FBTournamentStore {
                 }
                 
                 return .none
+                
             case .baseTournament(_):
                 return .none
             }

@@ -37,7 +37,7 @@ enum SportDisplayType: Hashable, CaseIterable {
     // football
     case fbPlayerInfo, fbPlayerStats, fbPlayerStandings, fbTeamInfo, fbTeamStats, fbTeamStandings, fbLeagueSchedule, fbGameStats, fbTournament
     // nba
-    case nbaPlayerInfo, nbaPlayerStats, nbaPlayerStandings, nbaTeamInfo, nbaTeamStats, nbaTeamStandings, nbaLeagueSchedule, nbaGameStats, nbaLeagueTournament
+    case nbaPlayerInfo, nbaPlayerStats, nbaPlayerStandings, nbaTeamInfo, nbaTeamStats, nbaTeamStandings, nbaLeagueSchedule, nbaGameStats, nbaTournament
     // kbo
     case kboPlayerInfo, kboPlayerStats, kboPlayerStandings, kboTeamInfo, kboTeamStats, kboTeamStandings, kboLeagueSchedule, kboGameStats, kboTournament
     // mlb
@@ -74,7 +74,7 @@ indirect enum SportDecodableModel: Equatable {
     case nbaTeamStandings(NBATeamStandingsResponseModel, NBATeamStandingsDisplayModel)
     case nbaLeagueSchedule(NBAGameScheduleResponseModel, NBALeagueScheduleDisplayModel)
     case nbaGameStats(NBAGameStatsResponseModel, NBAGameStatsDisplayModel)
-    case nbaLeagueTournament(NBAGameListResponseModel, NBATournamentDisplayModel) // TODO: Should change models to use NBAGameForSchedule(Which is used in NBAGameScheduleResponsModel)
+    case nbaTournament(NBAGameScheduleResponseModel, NBATournamentDisplayModel)
     
     // kbo
     case kboPlayerInfo(KBOPlayerInfoResponseModel, KBOPlayerInfoDisplayModel)
@@ -118,7 +118,7 @@ indirect enum SportDecodableModel: Equatable {
             (.nbaTeamStandings, .nbaTeamStandings),
             (.nbaLeagueSchedule, .nbaLeagueSchedule),
             (.nbaGameStats, .nbaGameStats),
-            (.nbaLeagueTournament, .nbaLeagueTournament),
+            (.nbaTournament, .nbaTournament),
             (.kboPlayerInfo, .kboPlayerInfo),
             (.kboPlayerStats, .kboPlayerStats),
             (.kboPlayerStandings, .kboPlayerStandings),
@@ -316,9 +316,9 @@ extension DataModel {
             }
             
         case let dataType where dataType == "basketball_league_tournament":
-            let responseModel = try container.decode(NBAGameListResponseModel.self, forKey: .data)
-            let displayModel = modelConverter.nbaLeagueTournamentConverter(response: responseModel)
-            self.data = .nbaLeagueTournament(responseModel, displayModel)
+            let responseModel = try container.decode(NBAGameScheduleResponseModel.self, forKey: .data)
+            let displayModel = modelConverter.nbaTournamentConverter(response: responseModel)
+            self.data = .nbaTournament(responseModel, displayModel)
             
         // baseball
         case let dataType where dataType == "baseball_player_info":

@@ -17,6 +17,4 @@ struct TournamentGameItemState {
     var gameStatusText: String
     var gameStatusColor: Color
     var date: String
-    
-    
 }

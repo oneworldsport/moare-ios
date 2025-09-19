@@ -64,51 +64,6 @@ struct SearchView: View {
                 /* ---------------------
                    notice, search example
                    --------------------- */
-//                HStack {
-//                    Spacer()
-//                    
-//                    VStack(alignment: .trailing) {
-//                        ZStack(alignment: .bottomTrailing) {
-//                            SearchExampleBox()
-//                                .opacity(isSearchExampleOpened ? 1 : 0)
-//                                .padding(.trailing, 25)
-//                            
-//                            NoticeBox(noticeList: searchStore.noticeList)
-//                                .opacity(isNoticeOpened ? 1 : 0)
-//                        }
-//                        
-//                        HStack(spacing: 8) {
-//                            if isSearchExampleButtonVisible {
-//                                Button(action: {
-//                                    withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-//                                        isSearchExampleOpened.toggle()
-//                                    }
-//                                }) {
-//                                    Text("검색 예시")
-//                                        .font(.system(size: 13))
-//                                        .tint(.secondary)
-//                                        .opacity(0.7)
-//                                }
-//                                .foregroundStyle(.secondary)
-//                            }
-//                            
-//                            if isNoticeIconVisible {
-//                                Button(action: {
-//                                    withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-//                                        isNoticeOpened.toggle()
-//                                    }
-//                                }) {
-//                                    Image(systemName: "info.circle")
-//                                        .tint(.secondary)
-//                                        .opacity(0.7)
-//                                }
-//                            }
-//                        }
-//                    }
-//                    .padding(.trailing, 12)
-//                }
-//                .offset(x: 0, y: -113)
-//                .zIndex(1)
                 HStack(alignment: .bottom) {
                     if isSearchExampleButtonVisible {
                         VStack(alignment: .leading) {

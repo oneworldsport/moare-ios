@@ -345,13 +345,13 @@ struct ModelConverter {
         )
     }
     
-    func nbaLeagueTournamentConverter(response: NBAGameListResponseModel) -> NBATournamentDisplayModel {
+    func nbaTournamentConverter(response: NBAGameScheduleResponseModel) -> NBATournamentDisplayModel {
         return NBATournamentDisplayModel(
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
             season: season,
-            yearMonthList: [],
+            scheduleType: response.scheduleType ?? .tournamentBracket,
             games: response.schedule
         )
     }

@@ -13,7 +13,7 @@ struct BaseTournamentStore<T> {
     struct State {
         var displayModel: T? = nil
         
-        var teamNameDictionary: [String: String] = [:]
+        var teamNameDic: [String: String] = [:]
         var tournamentTeams: [String: [Int]] = [:]
     }
     
@@ -34,13 +34,13 @@ struct BaseTournamentStore<T> {
                 if let displayModel = displayModel as? SportDisplayModel {
                     switch displayModel.leagueId {
                     case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
+                        state.teamNameDic = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                     case Constants.Ids.nba:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
+                        state.teamNameDic = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
                     case Constants.Ids.kbo:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.kboTeamDic)
+                        state.teamNameDic = nameProvider.getDictionary(category: Constants.Keys.kboTeamDic)
                     case Constants.Ids.mlb:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlbTeamDic)
+                        state.teamNameDic = nameProvider.getDictionary(category: Constants.Keys.mlbTeamDic)
                     default: break
                     }
                 }

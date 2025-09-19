@@ -34,7 +34,7 @@ struct StoreKeys {
     static let nbaTeamScheduleStore = "NBATeamScheduleStore"
     static let nbaLeagueScheduleStore = "NBALeagueScheduleStore"
     static let nbaGameStatsStore = "NBAGameStatsStore"
-    static let nbaLeagueTournamentStore = "NBALeagueTournamentStore"
+    static let nbaTournamentStore = "NBATournamentStore"
     
     // kbo
     static let kboPlayerInfoStore = "KBOPlayerInfoStore"

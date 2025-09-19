@@ -29,7 +29,11 @@ struct TournamentDrawViewContainer<T: Decodable & Equatable>: View {
                             ForEach(gameList.indices, id: \.self) { index in
                                 let games = gameList[index]
                                 
-                                if games.count == 1 {
+                                if state.isSeries {
+                                    ForEach(games, id: \.gameId) { game in
+                                        
+                                    }
+                                } else {
                                     if let game = games.first {
                                         let shouldShowScore = game.gameStatus != Constants.GameStatus.Football.notStarted
                                         
@@ -45,10 +49,6 @@ struct TournamentDrawViewContainer<T: Decodable & Equatable>: View {
                                             date: game.date)
                                         )
                                         .padding(.bottom, 8)
-                                    }
-                                } else {
-                                    ForEach(games, id: \.gameId) { game in
-                                        
                                     }
                                 }
                             }

@@ -21,8 +21,9 @@ struct KBOTournamentView: View {
                     TournamentDrawViewContainer(
                         state: TournamentDrawContainerState(
                             leagueId: displayModel.leagueId,
+                            teamNameDic: kboTournamentStore.baseTournament.teamNameDic,
                             gameListDic: kboTournamentStore.gameListDic,
-                            teamNameDic: kboTournamentStore.baseTournament.teamNameDictionary
+                            isSeries: true
                         )
                     )
                 }
