@@ -47,6 +47,7 @@ struct NBATournamentStore {
 //                let season = displayModel?.season ?? CalendarUtil.currentYear
                 let season = 2024
                 
+                // 시드 순서를 유지해야해서 다음과 같은 로직 적용
                 let firstRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_16"] ?? []
                 let westFristRoundTeamIds = Array(firstRoundTeamIds.prefix(8))
                 let eastFirstRoundTeamIds = Array(firstRoundTeamIds.suffix(8))

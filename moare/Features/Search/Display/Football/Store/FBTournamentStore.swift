@@ -16,7 +16,7 @@ struct FBTournamentStore {
     struct State {
         var baseTournament = BaseTournament.State()
         
-        var gameListDic: [String: [[FBGameForSchedule]]] = [:]
+        var gameListTuple: [(title: String, gameList: [[FBGameForSchedule]])] = []
     }
     
     enum Action {
@@ -30,26 +30,32 @@ struct FBTournamentStore {
         
         Reduce { state, action in
             switch action {
-            case .baseTournament(.initData):
+            case .baseTournament(.initTournamentTeams):
                 let tournamentTeams = state.baseTournament.tournamentTeams
                 let displayModel = state.baseTournament.displayModel
                 let leagueId = displayModel?.leagueId ?? Constants.Ids.faCup
                 let season = displayModel?.season ?? CalendarUtil.currentYear
                 
                 let firstRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_32"] ?? []
+                let secondRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_16"] ?? []
+                let thirdRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_8"] ?? []
+                let fourthRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_4"] ?? []
+                let fifthRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_2"] ?? []
+                
+                let firstRoundPairedTeamIds = stride(from: 0, to: firstRoundTeamIds.count, by: 2).map {
+                    Array(firstRoundTeamIds[$0 ..< min($0 + 2, firstRoundTeamIds.count)])
+                }
                 
                 if let displayModel {
-                    let firstRoundFilteredGames = displayModel.games.filter { game in
-                        firstRoundTeamIds.contains(game.homeTeamId) && firstRoundTeamIds.contains(game.awayTeamId)
-                    }
-                    let firstRoundGrouped = Dictionary(grouping: firstRoundFilteredGames) { game in
-                        let pair = [game.homeTeamId, game.awayTeamId].sorted()
-                        return "\(pair[0])_\(pair[1])"
-                    }
-                    let firstRound = Array(firstRoundGrouped.values)
+                    let games = displayModel.games
                     
-                    state.gameListDic = [
-                        "32강": firstRound
+                    let firstRound: [[FBGameForSchedule]] = firstRoundPairedTeamIds.map { pair in
+                        let set = Set(pair.prefix(2))
+                        return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
+                    }
+                    
+                    state.gameListTuple = [
+                        ("32강", firstRound)
                     ]
                 }
                 

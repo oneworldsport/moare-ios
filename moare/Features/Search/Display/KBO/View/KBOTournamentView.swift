@@ -18,14 +18,14 @@ struct KBOTournamentView: View {
         if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
             VStack {
                 if let kboTournamentStore {
-                    TournamentDrawViewContainer(
-                        state: TournamentDrawContainerState(
-                            leagueId: displayModel.leagueId,
-                            teamNameDic: kboTournamentStore.baseTournament.teamNameDic,
-                            gameListDic: kboTournamentStore.gameListDic,
-                            isSeries: true
-                        )
-                    )
+//                    TournamentDrawViewContainer(
+//                        state: TournamentDrawContainerState(
+//                            leagueId: displayModel.leagueId,
+//                            teamNameDic: kboTournamentStore.baseTournament.teamNameDic,
+//                            gameListTuple: kboTournamentStore.gameListTuple,
+//                            isSeries: true
+//                        )
+//                    )
                 }
             }
             .onAppear {

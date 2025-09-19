@@ -25,7 +25,7 @@ struct FBTournamentView: View {
                             state: TournamentDrawContainerState(
                                 leagueId: displayModel.leagueId,
                                 teamNameDic: fbTournamentStore.baseTournament.teamNameDic,
-                                gameListDic: fbTournamentStore.gameListDic,
+                                gameListTuple: fbTournamentStore.gameListTuple,
                                 isSeries: false
                             )
                         )

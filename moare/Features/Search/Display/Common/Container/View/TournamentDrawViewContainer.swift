@@ -16,11 +16,13 @@ struct TournamentDrawViewContainer<T: Decodable & Equatable>: View {
         ScrollView(.horizontal) {
             ScrollView(.vertical) {
                 HStack {
-                    ForEach(Array(state.gameListDic.keys), id: \.self) { key in
-                        let gameList = state.gameListDic[key] ?? []
+                    ForEach(state.gameListTuple.indices, id: \.self) { roundIndex in
+                        let item = state.gameListTuple[roundIndex]
+                        let gameList = item.gameList
+                        let title = item.title
                         
                         VStack(spacing: 0) {
-                            Text(key)
+                            Text(title)
                                 .font(.system(size: 20, weight: .medium))
                             HCapsuleBar()
                                 .padding(.top, 4)
