@@ -46,22 +46,22 @@ struct FBPlayerStatsStore {
                 switch displayModel.leagueId {
                 case Constants.Ids.epl:
                     state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplTeamDic)
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                 case Constants.Ids.laliga:
                     state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaTeamDic)
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                 case Constants.Ids.bundesliga:
                     state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                 case Constants.Ids.ligue1:
                     state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                 case Constants.Ids.seriea:
                     state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaTeamDic)
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                 case Constants.Ids.mls:
                     state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlsPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlsTeamDic)
+                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                 default: break
                 }
                 

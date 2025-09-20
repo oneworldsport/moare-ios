@@ -181,6 +181,17 @@ struct ModelConverter {
         )
     }
     
+    func fbTournamentConverter(response: FBGameScheduleResponseModel) -> FBTournamentDisplayModel {
+        return FBTournamentDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.epl,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            season: season,
+            scheduleType: response.scheduleType ?? .tournamentDraw,
+            games: response.schedule
+        )
+    }
+    
     /* ---------------------
        nba
        --------------------- */
@@ -334,13 +345,13 @@ struct ModelConverter {
         )
     }
     
-    func nbaLeagueTournamentConverter(response: NBAGameListResponseModel) -> NBATournamentDisplayModel {
+    func nbaTournamentConverter(response: NBAGameScheduleResponseModel) -> NBATournamentDisplayModel {
         return NBATournamentDisplayModel(
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
             season: season,
-            yearMonthList: [],
+            scheduleType: response.scheduleType ?? .tournamentBracket,
             games: response.schedule
         )
     }
@@ -496,6 +507,17 @@ struct ModelConverter {
             entityInfo: entityInfo,
             season: season,
             game: response.game!
+        )
+    }
+    
+    func kboTournamentConverter(response: KBOGameScheduleResponseModel) -> KBOTournamentDisplayModel {
+        return KBOTournamentDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.kbo,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            season: season,
+            scheduleType: response.scheduleType ?? .tournamentBracket,
+            games: response.schedule
         )
     }
     

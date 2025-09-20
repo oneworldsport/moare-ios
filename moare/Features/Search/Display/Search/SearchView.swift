@@ -31,6 +31,8 @@ struct SearchView: View {
     
     @State private var isNoticeIconVisible = false
     @State private var isNoticeOpened = false
+    @State private var isSearchExampleButtonVisible = false
+    @State private var isSearchExampleOpened = false
     
     var viewForTest: SportDisplayType? = nil
     
@@ -60,14 +62,33 @@ struct SearchView: View {
                 .zIndex(1)
                 
                 /* ---------------------
-                   notice
-                   - notice about providing data
+                   notice, search example
                    --------------------- */
-                if isNoticeIconVisible {
-                    HStack {
-                        Spacer()
-                        
-                        VStack(alignment: .trailing, spacing: 0) {
+                HStack(alignment: .bottom) {
+                    if isSearchExampleButtonVisible {
+                        VStack(alignment: .leading) {
+                            SearchExampleBox(text: searchStore.searchExample)
+                                .opacity(isSearchExampleOpened ? 1 : 0)
+                                .padding(.trailing, 25)
+                            
+                            Button(action: {
+                                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                                    isSearchExampleOpened.toggle()
+                                }
+                            }) {
+                                Text("검색 예시")
+                                    .font(.system(size: 13))
+                                    .tint(.secondary)
+                                    .opacity(0.7)
+                            }
+                            .foregroundStyle(.secondary)
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                    if isNoticeIconVisible {
+                        VStack(alignment: .trailing) {
                             NoticeBox(noticeList: searchStore.noticeList)
                                 .opacity(isNoticeOpened ? 1 : 0)
                             
@@ -78,16 +99,16 @@ struct SearchView: View {
                             }) {
                                 Image(systemName: "info.circle")
                                     .tint(.secondary)
-                                    .padding(.leading, 8)
-                                    .padding(.top, 4)
+                                    .opacity(0.7)
                             }
                         }
-                        .padding(.trailing, 12)
                     }
-                    .offset(x: 0, y: -113)
-                    .zIndex(1)
-                    // y: 전체 박스 높이(100 + 20 + 4) / 2 + (검색창 높이(50) + 트렌딩 키워드 높이(40)) / 2 + 추가 패딩 6
                 }
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 12)
+                .offset(x: 0, y: -113)
+                .zIndex(1)
+                // y: 전체 박스 높이(100 + 20 + 4) / 2 + (검색창 높이(50) + 트렌딩 키워드 높이(40)) / 2 + 추가 패딩 6
                 
                 VStack(spacing: 0) {
                     /* ---------------------
@@ -186,11 +207,14 @@ struct SearchView: View {
                         withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                             isNoticeOpened = false
                             isNoticeIconVisible = false
+                            isSearchExampleOpened = false
+                            isSearchExampleButtonVisible = false
                             searchStore.send(.updateTrendingKeywordsVisibleState(false))
                         }
                     } else {
                         withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                             isNoticeIconVisible = true
+                            isSearchExampleButtonVisible = true
                             searchStore.send(.updateTrendingKeywordsVisibleState(true))
                         }
                     }
@@ -200,12 +224,15 @@ struct SearchView: View {
                     if searchStore.autoCompleteList.isEmpty && !searchStore.searchState {
                         withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                             isNoticeIconVisible = true
+                            isSearchExampleButtonVisible = true
                             searchStore.send(.updateTrendingKeywordsVisibleState(true))
                         }
                     } else {
                         withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                             isNoticeOpened = false
                             isNoticeIconVisible = false
+                            isSearchExampleOpened = false
+                            isSearchExampleButtonVisible = false
                             searchStore.send(.updateTrendingKeywordsVisibleState(false))
                         }
                     }
@@ -215,15 +242,17 @@ struct SearchView: View {
                         DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.medium) {
                             withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                                 isNoticeIconVisible = true
+                                isSearchExampleButtonVisible = true
                                 searchStore.send(.updateTrendingKeywordsVisibleState(true))
                             }
                         }
                     }
                 }
                 .onTapGesture {
-                    if isNoticeOpened {
+                    if isNoticeOpened || isSearchExampleOpened {
                         withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                             isNoticeOpened = false
+                            isSearchExampleOpened = false
                         }
                     } else {
                         focusState = false
@@ -321,6 +350,7 @@ struct SearchView: View {
         .fbTeamStandings: { AnyView(FBTeamStandingsView(displayModel: $0 as! FBTeamStandingsDisplayModel)) },
         .fbLeagueSchedule: { AnyView(FBLeaugeScheduleView(displayModel: $0 as! FBLeagueScheduleDisplayModel)) },
         .fbGameStats: { AnyView(FBGameStatsView(displayModel: $0 as! FBGameStatsDisplayModel)) },
+        .fbTournament: { AnyView(FBTournamentView(displayModel: $0 as! FBTournamentDisplayModel)) },
         
             .nbaPlayerInfo: { AnyView(NBAPlayerInfoView(displayModel: $0 as! NBAPlayerInfoDisplayModel)) },
         .nbaPlayerStats: { AnyView(NBAPlayerStatsView(displayModel: $0 as! NBAPlayerStatsDisplayModel)) },
@@ -330,7 +360,7 @@ struct SearchView: View {
         .nbaTeamStandings: { AnyView(NBATeamStandingsView(displayModel: $0 as! NBATeamStandingsDisplayModel)) },
         .nbaLeagueSchedule: { AnyView(NBALeagueScheduleView(displayModel: $0 as! NBALeagueScheduleDisplayModel)) },
         .nbaGameStats: { AnyView(NBAGameStatsView(displayModel: $0 as! NBAGameStatsDisplayModel)) },
-        .nbaLeagueTournament: { AnyView(NBALeagueTournamentView(displayModel: $0 as! NBATournamentDisplayModel)) },
+        .nbaTournament: { AnyView(NBATournamentView(displayModel: $0 as! NBATournamentDisplayModel)) },
         
             .kboPlayerInfo: { AnyView(KBOPlayerInfoView(displayModel: $0 as! KBOPlayerInfoDisplayModel)) },
         .kboPlayerStats: { AnyView(KBOPlayerStatsView(displayModel: $0 as! KBOPlayerStatsDisplayModel)) },
@@ -339,6 +369,7 @@ struct SearchView: View {
         .kboTeamStandings: { AnyView(KBOTeamStandingsView(displayModel: $0 as! KBOTeamStandingsDisplayModel)) },
         .kboLeagueSchedule: { AnyView(KBOLeagueScheduleView(displayModel: $0 as! KBOLeagueScheduleDisplayModel)) },
         .kboGameStats: { AnyView(KBOGameStatsView(displayModel: $0 as! KBOGameStatsDisplayModel)) },
+        .kboTournament: { AnyView(KBOTournamentView(displayModel: $0 as! KBOTournamentDisplayModel)) },
         
             .mlbPlayerInfo: { AnyView(MLBPlayerInfoView(displayModel: $0 as! MLBPlayerInfoDisplayModel)) },
         .mlbPlayerStats: { AnyView(MLBPlayerStatsView(displayModel: $0 as! MLBPlayerStatsDisplayModel)) },

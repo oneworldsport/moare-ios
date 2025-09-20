@@ -85,8 +85,8 @@ struct NBAGameStatsView: View {
                 if let nbaGameStatsStore {
                     GameStatsViewContainer(
                         state: GameStatsContainerState(
-                            shouldShowStats: game.gameSummary?.gameStatusId != Constants.NBAGameStatus.notStarted,
-                            shouldShowRefreshButton: game.gameSummary?.gameStatusId == Constants.NBAGameStatus.live,
+                            shouldShowStats: game.gameSummary?.gameStatusId != Constants.GameStatus.NBA.notStarted,
+                            shouldShowRefreshButton: game.gameSummary?.gameStatusId == Constants.GameStatus.NBA.live,
                             teamCategories: teamCategories,
                             teamCategorySelectedIndex: nbaGameStatsStore.selectedTeamIndex,
                             gameDetailTitle: gameDetailTitle,
@@ -194,9 +194,9 @@ struct NBAGameStatsScoreInfoItem: View {
         
         let gameStatusText: String = {
             switch game?.gameSummary?.gameStatusId {
-            case Constants.NBAGameStatus.notStarted:
+            case Constants.GameStatus.NBA.notStarted:
                 return StringConstants.gameNotStartedStr
-            case Constants.NBAGameStatus.live:
+            case Constants.GameStatus.NBA.live:
                 if homeTeamLineScore?.ptsOt3 != nil {
                     return StringConstants.NBA.gameOt3
                 } else if homeTeamLineScore?.ptsOt2 != nil {
@@ -214,7 +214,7 @@ struct NBAGameStatsScoreInfoItem: View {
                 } else {
                     return ""
                 }
-            case Constants.NBAGameStatus.finished:
+            case Constants.GameStatus.NBA.finished:
                 return StringConstants.gameFinishedStr
             default:
                 return ""
@@ -222,7 +222,7 @@ struct NBAGameStatsScoreInfoItem: View {
         }()
         
         let gameStatusColor: Color = {
-            if game?.gameSummary?.gameStatusId == Constants.NBAGameStatus.live {
+            if game?.gameSummary?.gameStatusId == Constants.GameStatus.NBA.live {
                 return .moare
             } else {
                 return .secondary

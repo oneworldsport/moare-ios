@@ -29,6 +29,31 @@ struct NoticeBox: View {
             .padding(10)
         }
         .frame(maxWidth: 160, maxHeight: 100)
+        .background(
+            RoundedRectangle(cornerRadius: UIConstants.CornerRadius.small)
+                .fill(.white)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: UIConstants.CornerRadius.small)
+                .stroke(.secondary, lineWidth: UIConstants.StrokeWidth.thin)
+        )
+    }
+}
+
+struct SearchExampleBox: View {
+    let text: String
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(text)
+            .font(.system(size: 12))
+            .foregroundStyle(.secondary)
+        }
+        .padding(6)
+        .background(
+            RoundedRectangle(cornerRadius: UIConstants.CornerRadius.small)
+                .fill(.white)
+        )
         .overlay(
             RoundedRectangle(cornerRadius: UIConstants.CornerRadius.small)
                 .stroke(.secondary, lineWidth: UIConstants.StrokeWidth.thin)
