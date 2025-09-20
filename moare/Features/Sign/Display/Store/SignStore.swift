@@ -54,6 +54,7 @@ struct SignStore {
         case completeSignUpSuccess(result: Bool)
         case updateSignFlow(signFlow: SignFlow)
         case signUpIdSuccess
+        case clearErrorText
     }
     
     var body: some Reducer<State, Action> {
@@ -174,6 +175,9 @@ struct SignStore {
                 return .run { send in
                     do {
                         let body = StartAuthRequest(id: id, method: method)
+                        
+//                        try await Task.sleep(for: .seconds(3))
+                        
                         let result = try await signClient.startLoginAuth(body: body)
                         
                         await send(.sendLoginOtpSuccess(session: result.session))
@@ -183,6 +187,7 @@ struct SignStore {
                 }
                 
             case .sendLoginOtpSuccess(let session):
+                state.apiFetchState = .success
                 state.session = session
                 
                 return .send(.updateSignFlow(signFlow: .loginOtp))
@@ -243,6 +248,8 @@ struct SignStore {
                 
                 return .run { send in
                     do {
+//                        try await Task.sleep(for: .seconds(3))
+                        
                         let result = try await signClient.initiateSignUp(body: body)
                         
                         await send(.updateSignFlow(signFlow: .signUpOtp))
@@ -439,6 +446,11 @@ struct SignStore {
                 
                 state.title = "회원가입"
                 state.submitBtnLabel = "코드 전송"
+                
+                return .none
+                
+            case .clearErrorText:
+                state.errorText = ""
                 
                 return .none
             }

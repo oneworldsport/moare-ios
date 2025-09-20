@@ -15,13 +15,14 @@ struct SignView: View {
     @State private var updateText = ""
     @State private var hstackWidth: CGFloat = UIConstants.Width.screenWidth - 16
     @State private var barWidth: CGFloat = 20
-    @State private var underlineLeading = true
+    @State private var barAlignment: Alignment = .bottomLeading
+    @State private var barDuration: Double = 0.5
     
     @FocusState private var isFocused: Bool
 
     var body: some View {
-        VStack {
-            if let signStore {                
+        VStack(spacing: 0) {
+            if let signStore {
                 ZStack {
                     Text(signStore.title)
                         .font(.system(size: 16, weight: .medium))
@@ -37,10 +38,12 @@ struct SignView: View {
                         .uiState(visibleState: signStore.currentFlow == SignFlow.loginId)
                     }
                 }
+                .padding(.vertical, 8)
                 
                 IdTypeSelectButton(selectedIndex: signStore.idTypeSelectedIndex) { index in
                     signStore.send(.selectType(index: index), animation: AnimationConstants.AnimationType.mediumDefaultAnimation)
                 }
+                .padding(.vertical, 8)
                 .uiState(visibleState: signStore.currentFlow == SignFlow.loginId || signStore.currentFlow == SignFlow.signUpId)
                 
                 HStack {
@@ -61,20 +64,69 @@ struct SignView: View {
                     .buttonBorderShape(.capsule)
                     .tint(signStore.isValid ? Color("moare") : .gray)
                 }
-                .background(alignment: [.loginId, .signUpNickname, .signUpId].contains(signStore.currentFlow) ? .bottomLeading : .bottomTrailing) {
+                
+                VStack {
                     if signStore.currentFlow != SignFlow.signUpSportsInterest {
-                        if [.loginOtpExpired, .loginOtpLimitExceeded, .signUpOtpExpired].contains(signStore.currentFlow) {
-                            Rectangle()
-                                .fill(Color("moare"))
-                                .frame(width: hstackWidth, height: 2)
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                        } else {
-                            Rectangle()
-                                .fill(Color("moare"))
-                                .frame(width: barWidth, height: 2)
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                                .animation(.easeInOut(duration: 0.5), value: barWidth)
+                        Rectangle()
+                            .fill(Color("moare"))
+                            .frame(width: barWidth, height: 2)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .animation(.easeInOut(duration: barDuration), value: barWidth)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: barAlignment)
+                .onChange(of: signStore.apiFetchState) {
+                    if signStore.isCheckingNickname {
+                        if signStore.apiFetchState == ApiFetchState.fetching {
+                            barWidth = hstackWidth
+                            barDuration = 4
+                        } else if case ApiFetchState.failure = signStore.apiFetchState {
+                            barWidth = 20
+                            barDuration = 0.5
                         }
+                    } else {
+                        if signStore.apiFetchState == ApiFetchState.fetching {
+                            barAlignment = if barAlignment == Alignment.bottomLeading {
+                                Alignment.bottomTrailing
+                            } else {
+                                Alignment.bottomLeading
+                            }
+                            
+                            barWidth = 10
+                            barDuration = 4
+                        } else if signStore.apiFetchState == ApiFetchState.success {
+                            barWidth = 20
+                            barDuration = 0.5
+                        } else if case ApiFetchState.failure = signStore.apiFetchState {
+                            if [.loginOtpExpired, .loginOtpLimitExceeded, .signUpOtpExpired].contains(signStore.currentFlow) {
+                                barWidth = hstackWidth
+                                barDuration = 0.5
+                            } else {
+                                barWidth = 20
+                                barDuration = 0.5
+                            }
+                        }
+                    }
+                }
+                .onChange(of: updateText) {
+                    signStore.send(.updateText(text: updateText))
+                    
+                    if !updateText.isEmpty && !signStore.errorText.isEmpty {
+                        signStore.send(.clearErrorText)
+                    }
+                }
+                .onChange(of: signStore.text) {
+                    let newValue = signStore.text
+                    
+                    if newValue != updateText {
+                        updateText = newValue
+                    }
+                }
+                .onChange(of: signStore.isValid) {
+                    let isValid = signStore.isValid
+                    
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        barWidth = isValid ? hstackWidth : 20
                     }
                 }
                 
@@ -104,19 +156,6 @@ struct SignView: View {
             isFocused = true
             
             updateText = signStore.text
-        }
-        .onChange(of: updateText) {
-            signStore?.send(.updateText(text: updateText))
-        }
-        .onChange(of: signStore?.text ?? "") { newValue in
-            if newValue != updateText {
-                updateText = newValue
-            }
-        }
-        .onChange(of: signStore?.isValid ?? false) { isValid in
-            withAnimation(.easeInOut(duration: 0.5)) {
-                barWidth = isValid ? hstackWidth : 20
-            }
         }
     }
 }
