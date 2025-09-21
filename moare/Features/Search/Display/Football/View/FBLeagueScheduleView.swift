@@ -281,7 +281,8 @@ struct FBLeagueScheduleListItem: View {
             } else {
                 isResultOpened = true
             }
-            
+        }
+        .onChange(of: fbGameStatsModel) {
             if fbGameStatsModel != nil {
                 if gameStatus != StringConstants.Football.gameNotStarted {
                     isResultOpened = true
