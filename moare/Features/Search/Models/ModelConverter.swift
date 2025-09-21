@@ -529,7 +529,7 @@ struct ModelConverter {
         
         let stats = info.statistics.first { $0.type == "season" }
         let teamId: Int? = {
-            if let id = stats?.hitting?.team.id {
+            if let id = stats?.hitting?.team?.id {
                 return id
             } else if let id = stats?.fielding?.team.id {
                 return id
@@ -568,7 +568,7 @@ struct ModelConverter {
         
         let stats = info.statistics.first { $0.type == "season" }
         var teamId: Int? {
-            if let id = stats?.hitting?.team.id {
+            if let id = stats?.hitting?.team?.id {
                 return id
             } else if let id = stats?.fielding?.team.id {
                 return id
