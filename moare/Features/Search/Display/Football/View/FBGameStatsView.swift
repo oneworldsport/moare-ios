@@ -14,7 +14,6 @@ struct FBGameStatsView: View {
        --------------------- */
     @EnvironmentObject var storeManager: StoreManager
     @State var fbGameStatsStore: StoreOf<FBGameStatsStore>? = nil
-    @State var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>? = nil
     
     let displayModel: FBGameStatsDisplayModel
     
@@ -140,14 +139,23 @@ struct FBGameStatsView: View {
                             }
                         },
                         gameContent: {
-//                            if let fbLeagueScheduleStore {
-//                                FBLeagueScheduleListItem(
-//                                    searchStore: searchStore,
-//                                    fbLeagueScheduleStore: fbLeagueScheduleStore,
-//                                    data: ModelConverter.fbGameToGameScheduleConverter(game: game),
-//                                    teamNameDic: fbGameStatsStore.teamNameDictionary
-//                                )
-//                            }
+                            let previousViewStack = searchStore.viewStack.dropLast().last
+                            // NOTE: || 연산자가 안먹고, switch case문도 오류가 나서 아래처럼 처리.
+                            if case .fbPlayerInfo = previousViewStack {
+                                FBLeagueScheduleListItem(
+                                    searchStore: searchStore,
+                                    fbLeagueScheduleStore: nil,
+                                    data: ModelConverter.fbGameToGameScheduleConverter(game: game),
+                                    teamNameDic: fbGameStatsStore.teamNameDictionary
+                                )
+                            } else if case .fbTeamInfo = previousViewStack {
+                                FBLeagueScheduleListItem(
+                                    searchStore: searchStore,
+                                    fbLeagueScheduleStore: nil,
+                                    data: ModelConverter.fbGameToGameScheduleConverter(game: game),
+                                    teamNameDic: fbGameStatsStore.teamNameDictionary
+                                )
+                            }
                         }
                     )
                 }
@@ -168,20 +176,6 @@ struct FBGameStatsView: View {
                 
                 if searchStore.poppedView == nil {
                     fbGameStatsStore.send(.initData(displayModel: displayModel))
-                }
-                
-                // TODO: has to figure out better structure
-                // when game_stats show at first(meaning ScheduleView never showed)
-                let scheduleStore: StoreOf<FBLeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.fbLeagueScheduleStore) ?? {
-                    let newStore = Store(initialState: FBLeagueScheduleStore.State()) { FBLeagueScheduleStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.fbLeagueScheduleStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.fbLeagueScheduleStore = scheduleStore
                 }
                 
 //                if displayModel.game.fixture.status.short != "NS" && displayModel.game.fixture.status.short != "FT" {

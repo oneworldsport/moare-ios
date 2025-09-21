@@ -191,7 +191,9 @@ struct FBLeagueScheduleList: View {
 
 struct FBLeagueScheduleListItem: View {
     @Bindable var searchStore: StoreOf<SearchStore>
-    @Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
+    // STUDY: @Bindable을 써야할때가 따로 있음. 더 알아보고 제대로 사용해야 할듯..
+//    @Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
+    let fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>?
     
     let data: FBGameForSchedule
     // FBLeagueScheduleStore이 한번도 초기화 된적 없이 FBGameStatsView에서 해당 구조체가 호출될때 teamNameDictionary를 fbLeagueScheduleStore에서 가져올수가 없어 추가.
@@ -261,21 +263,27 @@ struct FBLeagueScheduleListItem: View {
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
-                    if let displayModel = fbLeagueScheduleStore.baseSchedule.displayModel {
-                        searchStore.send(.selectFBGame(game: data, season: displayModel.season, leagueId: displayModel.leagueId))
+                    if let fbLeagueScheduleStore {
+                        if let displayModel = fbLeagueScheduleStore.baseSchedule.displayModel {
+                            searchStore.send(.selectFBGame(game: data, season: displayModel.season, leagueId: displayModel.leagueId))
+                        }
+                        
+                        // set selected game's isOpened true
+                        fbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: true))
                     }
-                    
-                    // set selected game's isOpened true
-                    fbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: true))
                 },
                 onCapsuleButtonClick: {
-                    fbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: !isResultOpened))
+                    if let fbLeagueScheduleStore {
+                        fbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: !isResultOpened))
+                    }
                 }
             )
         )
         .onAppear {
             if StringConstants.Football.gameFinishedList.contains(gameStatus) {
-                isResultOpened = fbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
+                if let fbLeagueScheduleStore {
+                    isResultOpened = fbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
+                }
             } else if gameStatus == StringConstants.Football.gameNotStarted {
                 isResultOpened = false
             } else {
@@ -289,8 +297,8 @@ struct FBLeagueScheduleListItem: View {
                 }
             }
         }
-        .onChange(of: fbLeagueScheduleStore.gameResultOpenedStateList) {
-            if StringConstants.Football.gameFinishedList.contains(gameStatus) {
+        .onChange(of: fbLeagueScheduleStore?.gameResultOpenedStateList) {
+            if let fbLeagueScheduleStore, StringConstants.Football.gameFinishedList.contains(gameStatus) {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                     isResultOpened = fbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
                 }
