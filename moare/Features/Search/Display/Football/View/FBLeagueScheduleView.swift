@@ -128,10 +128,13 @@ struct FBLeagueScheduleList: View {
     @Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
     
     @State var gameListToDisplay: [FBGameForSchedule] = []
+    @State var itemHeight: CGFloat? = nil
     
     var body: some View {
         let fbGameStatsModel = searchStore.displayModels[.fbGameStats] as? FBGameStatsDisplayModel
         let teamNameDic = fbLeagueScheduleStore.baseSchedule.teamNameDictionary
+        let isCollapsed = fbGameStatsModel != nil && gameListToDisplay.count == 1
+        let singleId = gameListToDisplay.first?.gameId
         
         ScrollView {
 //            HStack {
@@ -147,6 +150,20 @@ struct FBLeagueScheduleList: View {
                         teamNameDic: teamNameDic
                     )
                     .padding(.vertical, 8)
+                    .background(
+                        // NOTE: .readSize가 안먹혀서 아래 코드로 적용
+                        Group {
+                            if isCollapsed && value.gameId == singleId {
+                                GeometryReader { proxy in
+                                    Color.clear
+                                        .onAppear { itemHeight = proxy.size.height }
+                                        .onChange(of: proxy.size.height) { itemHeight = proxy.size.height }
+                                }
+                            } else {
+                                Color.clear
+                            }
+                        }
+                    )
 //                    .vSequentialListAni(
 //                        index: index,
 //                        itemCount: gameListToDisplay.count,
@@ -157,8 +174,8 @@ struct FBLeagueScheduleList: View {
                 }
             }
         }
-        .frame(maxHeight: fbGameStatsModel == nil ? .infinity : fbLeagueScheduleStore.itemHeight)
-        .scrollDisabled(fbGameStatsModel != nil)
+        .frame(height: isCollapsed ? itemHeight : nil)
+        .scrollDisabled(isCollapsed)
         .onAppear {
             // TODO: init에서 해도 상관없다. 어디서 하는게 나을까?
             if let game = fbGameStatsModel?.game {

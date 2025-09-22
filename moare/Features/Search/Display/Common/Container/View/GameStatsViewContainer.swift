@@ -41,9 +41,10 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
         let firstStatsColumnWidthList = state.firstStatsColumnWidthList
         let secondStatsColumnWidthList = state.secondStatsColumnWidthList
         
-        VStack {
+        VStack(spacing: 0) {
             if state.shouldShowTitle {
                 titleContent()
+                    .padding(.bottom, 8)
             }
             
             if state.shouldShowGameItem {
@@ -379,6 +380,7 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                 }
                             }
                         } // VStack
+                        .padding(.top, 8)
                     } // ScrollView
                     .coordinateSpace(name: coordinateSpaceName)
                 } else {

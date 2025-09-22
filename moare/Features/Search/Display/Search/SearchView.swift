@@ -168,7 +168,7 @@ struct SearchView: View {
                            search result
                            --------------------- */
                         if searchStore.resultVisibleState {
-                            VStack {
+                            VStack(spacing: 0) {
                                 // by gpt
                                 // STUDY: searchStore.displayModels의 타입인 Dictionary는 순서가 보장되지 않기 때문에, 배열로 변환후 sortOrder를 사용해 정렬 후 view를 그려준다.
                                 ForEach(Array(searchStore.displayModels).sorted(by: { $0.key.sortOrder < $1.key.sortOrder }), id: \.key) { type, model in
