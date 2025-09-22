@@ -273,7 +273,6 @@ struct FBLeagueScheduleListItem: View {
                 gameType: MatchDescriptionConverter.convert(input: data.gameInfo?.round ?? ""),
                 referee: fbGameStatsModel?.game.fixture.referee,
                 shouldShowOnlyDateTime: fbGameStatsModel == nil,
-                shouldShowVenue: fbGameStatsModel != nil,
                 shouldShowGameType: fbGameStatsModel == nil,
                 shouldShowHomeLabel: fbGameStatsModel != nil,
                 shouldShowAwayLabel: fbGameStatsModel != nil,

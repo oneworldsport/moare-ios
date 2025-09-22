@@ -90,8 +90,13 @@ struct FBGameStatsView: View {
                 }
             } ?? []
             
-            let gameDetailTitle = "심판: "
-            let gameDetailContent = displayModel.game.fixture.referee
+            let gameDetailTitle = "장소: \n심판: "
+            let gameDetailContent: String = {
+                var result = ""
+                result += "\(fbGameStatsStore?.teamNameDictionary["venue_\(displayModel.game.teams.home.id)"] ?? "")\n"
+                result += "\(displayModel.game.fixture.referee)\n"
+                return result
+            }()
             
             VStack {
                 if let fbGameStatsStore {
