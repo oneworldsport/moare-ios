@@ -13,7 +13,7 @@ struct SearchView: View {
        store
        --------------------- */
     @EnvironmentObject var storeManager: StoreManager
-    @State var searchStore: StoreOf<SearchStore>? = nil
+//    @State var searchStore: StoreOf<SearchStore>? = nil
     
     /* ---------------------
        constants
@@ -34,11 +34,13 @@ struct SearchView: View {
     @State private var isSearchExampleButtonVisible = false
     @State private var isSearchExampleOpened = false
     
+    let appStore: StoreOf<AppStore>
+    let searchStore: StoreOf<SearchStore>
     var viewForTest: SportDisplayType? = nil
     
     var body: some View {
         ZStack {
-            if let searchStore = searchStore {
+//            if let searchStore = searchStore {
                 /* ---------------------
                    back button
                    --------------------- */
@@ -171,13 +173,28 @@ struct SearchView: View {
                             VStack(spacing: 0) {
                                 // by gpt
                                 // STUDY: searchStore.displayModels의 타입인 Dictionary는 순서가 보장되지 않기 때문에, 배열로 변환후 sortOrder를 사용해 정렬 후 view를 그려준다.
-                                ForEach(Array(searchStore.displayModels).sorted(by: { $0.key.sortOrder < $1.key.sortOrder }), id: \.key) { type, model in
-                                    if type == .kboPlayerStandings {
-                                        Text(StringConstants.viewPreparingAdviseText(type: "KBO 선수 순위"))
-                                    } else if type == .mlbPlayerStandings {
-                                        Text(StringConstants.viewPreparingAdviseText(type: "MLB 선수 순위"))
-                                    } else if let builder = viewBuilderMap[type], let model {
-                                        builder(model)
+//                                ForEach(Array(searchStore.displayModels).sorted(by: { $0.key.sortOrder < $1.key.sortOrder }), id: \.key) { type, model in
+//                                    if type == .kboPlayerStandings {
+//                                        Text(StringConstants.viewPreparingAdviseText(type: "KBO 선수 순위"))
+//                                    } else if type == .mlbPlayerStandings {
+//                                        Text(StringConstants.viewPreparingAdviseText(type: "MLB 선수 순위"))
+//                                    } else if let builder = viewBuilderMap[type], let model {
+//                                        builder(model)
+//                                    }
+                                //                                }
+                                ForEach(appStore.path.ids, id: \.self) { id in
+                                    if let elementStore = appStore.scope(
+                                        state: \.path[id: id],
+                                        action: \.path[id: id]
+                                    ) {
+                                        switch elementStore.state {
+                                        case .fbPlayerInfo:
+                                            if let s = elementStore.scope(state: \.fbPlayerInfo, action: \.fbPlayerInfo) {
+                                                FBPlayerInfoView(store: s)
+                                            }
+                                        case .fbPlayerStats:
+                                            Text("\(elementStore.state)")
+                                        }
                                     }
                                 }
                             }
@@ -284,99 +301,117 @@ struct SearchView: View {
                             }
                         }
                 )
-            } // if let searchStore
+//            }  if let searchStore
         } // ZStack
         .opacity(opacity)
         .onAppear {
             // init SearchStore
-            let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) ?? {
-                let newStore = Store(initialState: SearchStore.State()) { SearchStore() }
-                
-                storeManager.setStore(newStore, forKey: StoreKeys.searchStore)
-                
-                return newStore
-            }()
+//            let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) ?? {
+//                let newStore = Store(initialState: SearchStore.State()) { SearchStore() }
+//                
+//                storeManager.setStore(newStore, forKey: StoreKeys.searchStore)
+//                
+//                return newStore
+//            }()
             
-            self.searchStore = searchStore
+//            self.searchStore = searchStore
             
-            if searchStore.poppedView == nil {
-                searchStore.send(.initData)
-            }
+//            if searchStore.poppedView == nil {
+//                searchStore.send(.initData)
+//            }
             
 //            if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
 //                self.searchStore = searchStore
 //            } else {
 //                storeManager.setStore(Store(initialState: SearchStore.State()) { SearchStore() }, forKey: StoreKeys.searchStore)
 //                searchStore = storeManager.getStore(forKey: StoreKeys.searchStore)
-//                
-//                searchStore?.send(.initData)
+                
+                searchStore.send(.initData)
 //            }
             
             // test
 //            searchStore?.send(.initForTest)
             
-            if let viewForTest = viewForTest {
-                self.searchStore?.send(.testSearch(viewForTest: viewForTest))
-            }
+//            if let viewForTest = viewForTest {
+//                self.searchStore?.send(.testSearch(viewForTest: viewForTest))
+//            }
         }
     }
     
     // NOTE: VStack안에 if let 조건문 너무 많아서 생긴 런타임 에러(EXC_BAD_ACCESS)로 인해 추가. 정확한 원인 및 해결 방법은 더 조사 필요.
-    func viewsToRender() -> [AnyView] {
-        guard let searchStore else { return [] }
-        var views: [AnyView] = []
-
-        for (type, model) in searchStore.displayModels {
-            guard let model else { continue }
-
-            if type == .kboPlayerStandings {
-                views.append(AnyView(Text(StringConstants.viewPreparingAdviseText(type: "KBO 선수 순위"))))
-            } else if type == .mlbPlayerStandings {
-                views.append(AnyView(Text(StringConstants.viewPreparingAdviseText(type: "MLB 선수 순위"))))
-            } else if let builder = viewBuilderMap[type] {
-                views.append(builder(model))
-            }
-        }
-
-        return views
-    }
-    
-    let viewBuilderMap: [SportDisplayType: (any SportDisplayModel) -> AnyView] = [
-        .fbPlayerInfo: { AnyView(FBPlayerInfoView(displayModel: $0 as! FBPlayerInfoDisplayModel)) },
-        .fbPlayerStats: { AnyView(FBPlayerStatsView(displayModel: $0 as! FBPlayerStatsDisplayModel)) },
-        .fbPlayerStandings: { AnyView(FBPlayerStandingsView(displayModel: $0 as! FBPlayerStandingsDisplayModel)) },
-        .fbTeamInfo: { AnyView(FBTeamInfoView(displayModel: $0 as! FBTeamInfoDisplayModel)) },
-        .fbTeamStats: { AnyView(FBTeamStatsView(displayModel: $0 as! FBTeamStatsDisplayModel)) },
-        .fbTeamStandings: { AnyView(FBTeamStandingsView(displayModel: $0 as! FBTeamStandingsDisplayModel)) },
-        .fbLeagueSchedule: { AnyView(FBLeaugeScheduleView(displayModel: $0 as! FBLeagueScheduleDisplayModel)) },
-        .fbGameStats: { AnyView(FBGameStatsView(displayModel: $0 as! FBGameStatsDisplayModel)) },
-        .fbTournament: { AnyView(FBTournamentView(displayModel: $0 as! FBTournamentDisplayModel)) },
-        
-            .nbaPlayerInfo: { AnyView(NBAPlayerInfoView(displayModel: $0 as! NBAPlayerInfoDisplayModel)) },
-        .nbaPlayerStats: { AnyView(NBAPlayerStatsView(displayModel: $0 as! NBAPlayerStatsDisplayModel)) },
-        .nbaPlayerStandings: { AnyView(NBAPlayerStandingsView(displayModel: $0 as! NBAPlayerStandingsDisplayModel)) },
-        .nbaTeamInfo: { AnyView(NBATeamInfoView(displayModel: $0 as! NBATeamInfoDisplayModel)) },
-        .nbaTeamStats: { AnyView(NBATeamStatsView(displayModel: $0 as! NBATeamStatsDisplayModel)) },
-        .nbaTeamStandings: { AnyView(NBATeamStandingsView(displayModel: $0 as! NBATeamStandingsDisplayModel)) },
-        .nbaLeagueSchedule: { AnyView(NBALeagueScheduleView(displayModel: $0 as! NBALeagueScheduleDisplayModel)) },
-        .nbaGameStats: { AnyView(NBAGameStatsView(displayModel: $0 as! NBAGameStatsDisplayModel)) },
-        .nbaTournament: { AnyView(NBATournamentView(displayModel: $0 as! NBATournamentDisplayModel)) },
-        
-            .kboPlayerInfo: { AnyView(KBOPlayerInfoView(displayModel: $0 as! KBOPlayerInfoDisplayModel)) },
-        .kboPlayerStats: { AnyView(KBOPlayerStatsView(displayModel: $0 as! KBOPlayerStatsDisplayModel)) },
-        .kboTeamInfo: { AnyView(KBOTeamInfoView(displayModel: $0 as! KBOTeamInfoDisplayModel)) },
-        .kboTeamStats: { AnyView(KBOTeamStatsView(displayModel: $0 as! KBOTeamStatsDisplayModel)) },
-        .kboTeamStandings: { AnyView(KBOTeamStandingsView(displayModel: $0 as! KBOTeamStandingsDisplayModel)) },
-        .kboLeagueSchedule: { AnyView(KBOLeagueScheduleView(displayModel: $0 as! KBOLeagueScheduleDisplayModel)) },
-        .kboGameStats: { AnyView(KBOGameStatsView(displayModel: $0 as! KBOGameStatsDisplayModel)) },
-        .kboTournament: { AnyView(KBOTournamentView(displayModel: $0 as! KBOTournamentDisplayModel)) },
-        
-            .mlbPlayerInfo: { AnyView(MLBPlayerInfoView(displayModel: $0 as! MLBPlayerInfoDisplayModel)) },
-        .mlbPlayerStats: { AnyView(MLBPlayerStatsView(displayModel: $0 as! MLBPlayerStatsDisplayModel)) },
-        .mlbTeamInfo: { AnyView(MLBTeamInfoView(displayModel: $0 as! MLBTeamInfoDisplayModel)) },
-        .mlbTeamStats: { AnyView(MLBTeamStatsView(displayModel: $0 as! MLBTeamStatsDisplayModel)) },
-        .mlbTeamStandings: { AnyView(MLBTeamStandingsView(displayModel: $0 as! MLBTeamStandingsDisplayModel)) },
-        .mlbLeagueSchedule: { AnyView(MLBLeagueScheduleView(displayModel: $0 as! MLBLeagueScheduleDisplayModel)) },
-        .mlbGameStats: { AnyView(MLBGameStatsView(displayModel: $0 as! MLBGameStatsDisplayModel)) },
-    ]
+//    func viewsToRender() -> [AnyView] {
+//        guard let searchStore else { return [] }
+//        var views: [AnyView] = []
+//
+//        for (type, model) in searchStore.displayModels {
+//            guard let model else { continue }
+//
+//            if type == .kboPlayerStandings {
+//                views.append(AnyView(Text(StringConstants.viewPreparingAdviseText(type: "KBO 선수 순위"))))
+//            } else if type == .mlbPlayerStandings {
+//                views.append(AnyView(Text(StringConstants.viewPreparingAdviseText(type: "MLB 선수 순위"))))
+//            } else if let builder = viewBuilderMap[type] {
+//                views.append(builder(model))
+//            }
+//        }
+//
+//        return views
+//    }
+//    
+//    let viewBuilderMap: [SportDisplayType: (any SportDisplayModel) -> AnyView] = [
+//        .fbPlayerInfo: { AnyView(FBPlayerInfoView(displayModel: $0 as! FBPlayerInfoDisplayModel)) },
+//        .fbPlayerStats: { AnyView(FBPlayerStatsView(displayModel: $0 as! FBPlayerStatsDisplayModel)) },
+//        .fbPlayerStandings: { AnyView(FBPlayerStandingsView(displayModel: $0 as! FBPlayerStandingsDisplayModel)) },
+//        .fbTeamInfo: { AnyView(FBTeamInfoView(displayModel: $0 as! FBTeamInfoDisplayModel)) },
+//        .fbTeamStats: { AnyView(FBTeamStatsView(displayModel: $0 as! FBTeamStatsDisplayModel)) },
+//        .fbTeamStandings: { AnyView(FBTeamStandingsView(displayModel: $0 as! FBTeamStandingsDisplayModel)) },
+//        .fbLeagueSchedule: { AnyView(FBLeaugeScheduleView(displayModel: $0 as! FBLeagueScheduleDisplayModel)) },
+//        .fbGameStats: { AnyView(FBGameStatsView(displayModel: $0 as! FBGameStatsDisplayModel)) },
+//        .fbTournament: { AnyView(FBTournamentView(displayModel: $0 as! FBTournamentDisplayModel)) },
+//        
+//            .nbaPlayerInfo: { AnyView(NBAPlayerInfoView(displayModel: $0 as! NBAPlayerInfoDisplayModel)) },
+//        .nbaPlayerStats: { AnyView(NBAPlayerStatsView(displayModel: $0 as! NBAPlayerStatsDisplayModel)) },
+//        .nbaPlayerStandings: { AnyView(NBAPlayerStandingsView(displayModel: $0 as! NBAPlayerStandingsDisplayModel)) },
+//        .nbaTeamInfo: { AnyView(NBATeamInfoView(displayModel: $0 as! NBATeamInfoDisplayModel)) },
+//        .nbaTeamStats: { AnyView(NBATeamStatsView(displayModel: $0 as! NBATeamStatsDisplayModel)) },
+//        .nbaTeamStandings: { AnyView(NBATeamStandingsView(displayModel: $0 as! NBATeamStandingsDisplayModel)) },
+//        .nbaLeagueSchedule: { AnyView(NBALeagueScheduleView(displayModel: $0 as! NBALeagueScheduleDisplayModel)) },
+//        .nbaGameStats: { AnyView(NBAGameStatsView(displayModel: $0 as! NBAGameStatsDisplayModel)) },
+//        .nbaTournament: { AnyView(NBATournamentView(displayModel: $0 as! NBATournamentDisplayModel)) },
+//        
+//            .kboPlayerInfo: { AnyView(KBOPlayerInfoView(displayModel: $0 as! KBOPlayerInfoDisplayModel)) },
+//        .kboPlayerStats: { AnyView(KBOPlayerStatsView(displayModel: $0 as! KBOPlayerStatsDisplayModel)) },
+//        .kboTeamInfo: { AnyView(KBOTeamInfoView(displayModel: $0 as! KBOTeamInfoDisplayModel)) },
+//        .kboTeamStats: { AnyView(KBOTeamStatsView(displayModel: $0 as! KBOTeamStatsDisplayModel)) },
+//        .kboTeamStandings: { AnyView(KBOTeamStandingsView(displayModel: $0 as! KBOTeamStandingsDisplayModel)) },
+//        .kboLeagueSchedule: { AnyView(KBOLeagueScheduleView(displayModel: $0 as! KBOLeagueScheduleDisplayModel)) },
+//        .kboGameStats: { AnyView(KBOGameStatsView(displayModel: $0 as! KBOGameStatsDisplayModel)) },
+//        .kboTournament: { AnyView(KBOTournamentView(displayModel: $0 as! KBOTournamentDisplayModel)) },
+//        
+//            .mlbPlayerInfo: { AnyView(MLBPlayerInfoView(displayModel: $0 as! MLBPlayerInfoDisplayModel)) },
+//        .mlbPlayerStats: { AnyView(MLBPlayerStatsView(displayModel: $0 as! MLBPlayerStatsDisplayModel)) },
+//        .mlbTeamInfo: { AnyView(MLBTeamInfoView(displayModel: $0 as! MLBTeamInfoDisplayModel)) },
+//        .mlbTeamStats: { AnyView(MLBTeamStatsView(displayModel: $0 as! MLBTeamStatsDisplayModel)) },
+//        .mlbTeamStandings: { AnyView(MLBTeamStandingsView(displayModel: $0 as! MLBTeamStandingsDisplayModel)) },
+//        .mlbLeagueSchedule: { AnyView(MLBLeagueScheduleView(displayModel: $0 as! MLBLeagueScheduleDisplayModel)) },
+//        .mlbGameStats: { AnyView(MLBGameStatsView(displayModel: $0 as! MLBGameStatsDisplayModel)) },
+//    ]
 }
+
+
+//struct PathView: View {
+//    let store: StoreOf<AppStore.Path?>
+//
+//    var body: some View {
+//        switch store.state {
+//        case .fbPlayerInfo:
+//            if let store = store.scope(state: \.fbPlayerInfo, action: \.fbPlayerInfo) {
+//                FBPlayerInfoView(store: store)
+//            }
+//        case .fbPlayerStats:
+//            if let store = store.scope(state: \.fbPlayerStats, action: \.fbPlayerStats) {
+//                FBPlayerStatsView(store: store)
+//            }
+//        }
+//    }
+//}

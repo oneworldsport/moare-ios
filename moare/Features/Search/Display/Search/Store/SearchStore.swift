@@ -111,6 +111,12 @@ struct SearchStore {
            --------------------- */
         case initForTest
         case testSearch(viewForTest: SportDisplayType)
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case show(model: SportDecodableModel)
     }
     
     @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
@@ -398,7 +404,8 @@ struct SearchStore {
                 // NOTE: if apply animation here, it is not applied because of allocating each view's store at onAppear()
                 state.resultVisibleState = true
                 
-                return .none
+//                return .none
+                return .send(.delegate(.show(model: model.data)))
                 
             case .goBack:
                 guard !state.viewStack.isEmpty else { return .none }
@@ -423,10 +430,9 @@ struct SearchStore {
                     let viewToShow = state.viewStack.last
                     
                     if let viewToShow = viewToShow {
-                        return .run { send in
+                        return .run { [poppedView = state.poppedView] send in
                             await send(.updateResultVisibleState(bool: false))
                             await send(.updateMainDisplayModel(data: viewToShow))
-                            
                             // wait for previous view's removing animation
                             // NOTE: 0.1 for temporary
                             try await Task.sleep(for: .seconds(0.1))
@@ -1030,6 +1036,9 @@ struct SearchStore {
                     
                     await send(.searchResultsReceived(result))
                 }
+                
+            case .delegate:
+                return .none
             }
         }
     }

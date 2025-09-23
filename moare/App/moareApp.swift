@@ -28,6 +28,8 @@ struct SportSearchEngine_iOSApp: App {
     
     @StateObject private var storeManager = StoreManager()
     
+    let appStore = Store(initialState: AppStore.State()) { AppStore() }
+    
     @State var isSplashFinished = false
     @State private var didInitialLoad = false
     
@@ -50,12 +52,19 @@ struct SportSearchEngine_iOSApp: App {
         WindowGroup {
             Group {
                 if viewForTest != nil && didInitialLoad {
-                    SearchView(viewForTest: viewForTest)
+                    SearchView(
+                        appStore: appStore,
+                        searchStore: appStore.scope(state: \.search, action: \.search),
+                        viewForTest: viewForTest
+                    )
                         .environmentObject(storeManager)
                         .preferredColorScheme(.light) // force light mode
                 } else {
                     if isSplashFinished && didInitialLoad {
-                        SearchView()
+                        SearchView(
+                            appStore: appStore,
+                            searchStore: appStore.scope(state: \.search, action: \.search)
+                        )
                             .environmentObject(storeManager)
                             .preferredColorScheme(.light) // force light mode
                     } else {
