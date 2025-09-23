@@ -9,85 +9,59 @@ import SwiftUI
 import ComposableArchitecture
 
 struct FBPlayerStatsView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var fbPlayerStatsStore: StoreOf<FBPlayerStatsStore>? = nil
-    
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: FBPlayerStatsDisplayModel
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<FBPlayerStatsStore>
     
     var startOffset = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
     
+    @State private var show = false
+    
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            ScrollView {
-                InfoViewContainer(
-                    itemCount: (fbPlayerStatsStore?.displayModel?.stats.count ?? 0) + 1,
-                    shouldShowMeasureContent: true,
-                    measureContent: { scope in
-                        // NOTE: if let fbPlayerStatsStore {} 를 InfoViewContainer 바깥에서 선언하는 것보다 안에서 선언하는게 초기 에니메이션이 더 자연스러움.
-                        if let fbPlayerStatsStore {
-                            FBPlayerStatsPlayerInfoItem(fbPlayerStatsStore: fbPlayerStatsStore)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onAppear {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
+        ScrollView {
+            InfoViewContainer(
+                itemCount: store.baseStats.displayModel.stats.count + 1,
+                shouldShowMeasureContent: true,
+                measureContent: { scope in
+                    // NOTE: if let fbPlayerStatsStore {} 를 InfoViewContainer 바깥에서 선언하는 것보다 안에서 선언하는게 초기 에니메이션이 더 자연스러움.
+                    if show {
+                        FBPlayerStatsPlayerInfoItem(fbPlayerStatsStore: store)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onAppear {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
                                     }
-                                )
-                            
-                            FBPlayerStatsList(fbPlayerStatsStore: fbPlayerStatsStore, scope: scope)
-                        }
-                    }, displayContent: { scope in
-                        if let fbPlayerStatsStore {
-                            // player info
-                            FBPlayerStatsPlayerInfoItem(
-                                fbPlayerStatsStore: fbPlayerStatsStore,
-                                isAniItem: true,
-                                //                            itemSize: scope.itemSizes[0],
-                                itemOffset: scope.computedOffset(for: 0, startOffset: startOffset),
-                                showContents: scope.showContents
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
+                                    }
+                                }
                             )
-                            
-                            // stats list
-                            FBPlayerStatsList(
-                                fbPlayerStatsStore: fbPlayerStatsStore,
-                                isAniItem: true,
-                                scope: scope
-                            )
-                        }
+                        
+                        FBPlayerStatsList(fbPlayerStatsStore: store, scope: scope)
                     }
-                )
-            } // ScrollView
-            .onAppear {
-                // init FBPlayerStatsStore
-                let fbPlayerStatsStore: StoreOf<FBPlayerStatsStore> = storeManager.getStore(forKey: StoreKeys.fbPlayerStatsStore) ?? {
-                    let newStore = Store(initialState: FBPlayerStatsStore.State()) { FBPlayerStatsStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.fbPlayerStatsStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    self.fbPlayerStatsStore = fbPlayerStatsStore
+                }, displayContent: { scope in
+                    if show {
+                        // player info
+                        FBPlayerStatsPlayerInfoItem(
+                            fbPlayerStatsStore: store,
+                            isAniItem: true,
+                            //                            itemSize: scope.itemSizes[0],
+                            itemOffset: scope.computedOffset(for: 0, startOffset: startOffset),
+                            showContents: scope.showContents
+                        )
+                        
+                        // stats list
+                        FBPlayerStatsList(
+                            fbPlayerStatsStore: store,
+                            isAniItem: true,
+                            scope: scope
+                        )
+                    }
                 }
-                
-                if searchStore.poppedView == nil {
-                    fbPlayerStatsStore.send(.initData(displayModel: displayModel))
-                }
-            }
-            .onChange(of: displayModel) {
-                if case .fbPlayerStats = searchStore.poppedView {
-                    fbPlayerStatsStore?.send(.initData(displayModel: displayModel))
-                }
+            )
+        } // ScrollView
+        .onAppear {
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
         }
     }
@@ -113,55 +87,54 @@ struct FBPlayerStatsPlayerInfoItem: View {
     }
     
     var body: some View {
-        let playerNameDic = fbPlayerStatsStore.playerNameDictionary
-        let teamNameDic = fbPlayerStatsStore.teamNameDictionary
+        let playerNameDic = fbPlayerStatsStore.baseStats.playerNameDictionary
+        let teamNameDic = fbPlayerStatsStore.baseStats.teamNameDictionary
+        let player = fbPlayerStatsStore.baseStats.displayModel.player
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemOffset: itemOffset
         ) {
-            if let player = fbPlayerStatsStore.player {
-                HStack {
-                    URLImage(url: player.photo)
+            HStack {
+                URLImage(url: player.photo)
+                
+                VStack(alignment: .leading) {
+                    Text(playerNameDic["\(player.id)"] ?? (player.name))
+                        .font(.system(size: 16))
+                        .fontWeight(.medium)
                     
-                    VStack(alignment: .leading) {
-                        Text(playerNameDic["\(player.id)"] ?? (player.name))
+                    Text("\(player.name)")
+                        .font(.system(size: 15))
+                        .fontWeight(.light)
+                        .lineLimit(2)
+                }
+                
+                VStack(alignment: .leading) {
+                    HStack(spacing: 0) {
+                        Text("국적: ")
+                            .font(.system(size: 15))
+                            
+                        Text(player.nationality)
                             .font(.system(size: 16))
                             .fontWeight(.medium)
-                        
-                        Text("\(player.name)")
-                            .font(.system(size: 15))
-                            .fontWeight(.light)
-                            .lineLimit(2)
                     }
                     
-                    VStack(alignment: .leading) {
+                    if let team = fbPlayerStatsStore.baseStats.displayModel.team {
                         HStack(spacing: 0) {
-                            Text("국적: ")
+                            Text("소속팀: ")
                                 .font(.system(size: 15))
-                                
-                            Text(fbPlayerStatsStore.nationalityKrName)
+                            
+                            URLImage(url: team.logo, customSize: CGSize(width: 24, height: 24))
+                                .padding(.trailing, 6)
+                            
+                            Text(teamNameDic["full_\(team.id)"] ?? team.name)
                                 .font(.system(size: 16))
                                 .fontWeight(.medium)
                         }
-                        
-                        if let team = fbPlayerStatsStore.team {
-                            HStack(spacing: 0) {
-                                Text("소속팀: ")
-                                    .font(.system(size: 15))
-                                
-                                URLImage(url: team.logo, customSize: CGSize(width: 24, height: 24))
-                                    .padding(.trailing, 6)
-                                
-                                Text(teamNameDic["full_\(team.id)"] ?? team.name)
-                                    .font(.system(size: 16))
-                                    .fontWeight(.medium)
-                            }
-                        }
                     }
                 }
-                .opacity(showContents ? 1 : 0)
             }
+            .opacity(showContents ? 1 : 0)
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
@@ -282,7 +255,7 @@ struct FBPlayerStatsItem: View {
     @State private var isCommonStatsOpened = false
     
     var body: some View {
-        let teamNameDic = fbPlayerStatsStore.teamNameDictionary
+        let teamNameDic = fbPlayerStatsStore.baseStats.teamNameDictionary
         
         // league / team
         HStack {

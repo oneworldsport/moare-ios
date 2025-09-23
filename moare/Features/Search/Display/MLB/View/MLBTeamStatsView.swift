@@ -9,82 +9,56 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MLBTeamStatsView: View {
-    /* ---------------------
-     store
-     --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var mlbTeamStatsStore: StoreOf<MLBTeamStatsStore>? = nil
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<MLBTeamStatsStore>
     
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: MLBTeamStatsDisplayModel
+    @State private var show = false
 
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            ScrollView {
-                InfoViewContainer(
-                    itemCount: (mlbTeamStatsStore?.baseStats.displayModel?.stats.count ?? 0) + 1,
-                    shouldShowMeasureContent: true,
-                    measureContent: { scope in
-                        if let mlbTeamStatsStore {
-                            MLBTeamStatsPlayerInfoItem(mlbTeamStatsStore: mlbTeamStatsStore)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onAppear {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
+        ScrollView {
+            InfoViewContainer(
+                itemCount: store.baseStats.displayModel.stats.count + 1,
+                shouldShowMeasureContent: true,
+                measureContent: { scope in
+                    if show {
+                        MLBTeamStatsPlayerInfoItem(mlbTeamStatsStore: store)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onAppear {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
                                     }
-                                )
-                            
-                            MLBTeamStatsList(mlbTeamStatsStore: mlbTeamStatsStore, scope: scope)
-                        }
-                    },
-                    displayContent: { scope in
-                        if let mlbTeamStatsStore {
-                            // team info
-                            MLBTeamStatsPlayerInfoItem(
-                                mlbTeamStatsStore: mlbTeamStatsStore,
-                                isAniItem: true,
-                                itemOffset: scope.computedOffset(for: 0),
-                                showContents: scope.showContents
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
+                                    }
+                                }
                             )
-                            
-                            // stats list
-                            MLBTeamStatsList(
-                                mlbTeamStatsStore: mlbTeamStatsStore,
-                                isAniItem: true,
-                                scope: scope
-                            )
-                        }
+                        
+                        MLBTeamStatsList(mlbTeamStatsStore: store, scope: scope)
                     }
-                )
-            } // ScrollView
-            .onAppear {
-                // init MLBTeamStatsStore
-                let mlbTeamStatsStore: StoreOf<MLBTeamStatsStore> = storeManager.getStore(forKey: StoreKeys.mlbTeamStatsStore) ?? {
-                    let newStore = Store(initialState: MLBTeamStatsStore.State()) { MLBTeamStatsStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.mlbTeamStatsStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    self.mlbTeamStatsStore = mlbTeamStatsStore
+                },
+                displayContent: { scope in
+                    if show {
+                        // team info
+                        MLBTeamStatsPlayerInfoItem(
+                            mlbTeamStatsStore: store,
+                            isAniItem: true,
+                            itemOffset: scope.computedOffset(for: 0),
+                            showContents: scope.showContents
+                        )
+                        
+                        // stats list
+                        MLBTeamStatsList(
+                            mlbTeamStatsStore: store,
+                            isAniItem: true,
+                            scope: scope
+                        )
+                    }
                 }
-                
-                if searchStore.poppedView == nil {
-                    mlbTeamStatsStore.send(.baseStats(.initData(displayModel: displayModel)))
-                }
-            }
-            .onChange(of: displayModel) {
-                if case .mlbPlayerStats = searchStore.poppedView {
-                    mlbTeamStatsStore?.send(.baseStats(.initData(displayModel: displayModel)))
-                }
+            )
+        } // ScrollView
+        .onAppear {
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
         }
     }
@@ -112,68 +86,67 @@ struct MLBTeamStatsPlayerInfoItem: View {
     var body: some View {
         let displayModel = mlbTeamStatsStore.baseStats.displayModel
         let teamNameDic = mlbTeamStatsStore.baseStats.teamNameDictionary
+        let team = displayModel.team
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemOffset: itemOffset
         ) {
-            if let team = displayModel?.team {
-                HStack {
-                    URLImage(url: MLBUtil.teamLogoURL(id: team.id), isSvg: true)
+            HStack {
+                URLImage(url: MLBUtil.teamLogoURL(id: team.id), isSvg: true)
+                
+                // name, state and city
+                VStack(alignment: .leading) {
+                    Text(teamNameDic["full_\(team.id)"] ?? team.teamName)
+                        .font(.system(size: 16))
+                        .fontWeight(.medium)
                     
-                    // name, state and city
-                    VStack(alignment: .leading) {
-                        Text(teamNameDic["full_\(team.id)"] ?? team.teamName)
+                    Text(team.name)
+                        .font(.system(size: 15))
+                        .fontWeight(.light)
+                        .lineLimit(2)
+                    
+                    (
+                        Text("연고지: ")
+                            .font(.system(size: 15))
+                        + Text(team.locationName)
                             .font(.system(size: 16))
                             .fontWeight(.medium)
-                        
-                        Text(team.name)
-                            .font(.system(size: 15))
-                            .fontWeight(.light)
-                            .lineLimit(2)
-                        
-                        (
-                            Text("연고지: ")
-                                .font(.system(size: 15))
-                            + Text(team.locationName)
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        )
-                        .multilineTextAlignment(.leading)
-                    }
-                    
-                    // venue, conference, division
-                    VStack(alignment: .leading) {
-                        (
-                            Text("홈구장: ")
-                                .font(.system(size: 15))
-                            + Text(teamNameDic["venue_\(team.id)"] ?? (displayModel!.venue.name))
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        )
-                        .multilineTextAlignment(.leading)
-                        
-                        (
-                            Text("리그: ")
-                                .font(.system(size: 15))
-                            + Text(MLBUtil.leagueDivisionMap[team.league.id] ?? team.league.name)
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        )
-                        .multilineTextAlignment(.leading)
-                        
-                        (
-                            Text("디비전: ")
-                                .font(.system(size: 15))
-                            + Text(MLBUtil.leagueDivisionMap[team.division.id] ?? team.division.name)
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        )
-                        .multilineTextAlignment(.leading)
-                    }
+                    )
+                    .multilineTextAlignment(.leading)
                 }
-                .opacity(showContents ? 1 : 0)
+                
+                // venue, conference, division
+                VStack(alignment: .leading) {
+                    (
+                        Text("홈구장: ")
+                            .font(.system(size: 15))
+                        + Text(teamNameDic["venue_\(team.id)"] ?? displayModel.venue.name)
+                            .font(.system(size: 16))
+                            .fontWeight(.medium)
+                    )
+                    .multilineTextAlignment(.leading)
+                    
+                    (
+                        Text("리그: ")
+                            .font(.system(size: 15))
+                        + Text(MLBUtil.leagueDivisionMap[team.league.id] ?? team.league.name)
+                            .font(.system(size: 16))
+                            .fontWeight(.medium)
+                    )
+                    .multilineTextAlignment(.leading)
+                    
+                    (
+                        Text("디비전: ")
+                            .font(.system(size: 15))
+                        + Text(MLBUtil.leagueDivisionMap[team.division.id] ?? team.division.name)
+                            .font(.system(size: 16))
+                            .fontWeight(.medium)
+                    )
+                    .multilineTextAlignment(.leading)
+                }
             }
+            .opacity(showContents ? 1 : 0)
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
@@ -197,35 +170,35 @@ struct MLBTeamStatsList: View {
     }
     
     var body: some View {
-        if let stats = mlbTeamStatsStore.baseStats.displayModel?.stats {
-            ForEach(stats.indices, id: \.self) { index in
-                let stats = stats[index]
-                let itemIndex = index + 1
-                
-                MLBTeamStatsListItem(
-                    mlbTeamStatsStore: mlbTeamStatsStore,
-                    stats: stats,
-                    isAniItem: isAniItem,
-                    itemSize: scope.itemSizes[itemIndex],
-                    itemOffset: scope.computedOffset(for: itemIndex),
-                    showContents: scope.showContents
-                )
-                .background(
-                    GeometryReader { geometry in
-                        if !isAniItem {
-                            // 1) 최초 한 번은 무조건 측정 - gpt
-                            // NOTE: Color.clear.onChange()만 했을때는 update가 안돼서 Color.clear.onAppear 추가해줌
-                            Color.clear.onAppear {
-                                scope.updateItemFrame(index: itemIndex, geometry: geometry)
-                            }
-                            // 2) 위치 변하면 - gpt
-                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                scope.updateItemFrame(index: itemIndex, geometry: geometry)
-                            }
+        let stats = mlbTeamStatsStore.baseStats.displayModel.stats
+        
+        ForEach(stats.indices, id: \.self) { index in
+            let stats = stats[index]
+            let itemIndex = index + 1
+            
+            MLBTeamStatsListItem(
+                mlbTeamStatsStore: mlbTeamStatsStore,
+                stats: stats,
+                isAniItem: isAniItem,
+                itemSize: scope.itemSizes[itemIndex],
+                itemOffset: scope.computedOffset(for: itemIndex),
+                showContents: scope.showContents
+            )
+            .background(
+                GeometryReader { geometry in
+                    if !isAniItem {
+                        // 1) 최초 한 번은 무조건 측정 - gpt
+                        // NOTE: Color.clear.onChange()만 했을때는 update가 안돼서 Color.clear.onAppear 추가해줌
+                        Color.clear.onAppear {
+                            scope.updateItemFrame(index: itemIndex, geometry: geometry)
+                        }
+                        // 2) 위치 변하면 - gpt
+                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                            scope.updateItemFrame(index: itemIndex, geometry: geometry)
                         }
                     }
-                )
-            }
+                }
+            )
         }
     }
 }
@@ -290,7 +263,9 @@ struct MLBTeamStatsItem: View {
     @State private var isPitcherStatsOpened = false
 
     var body: some View {
-        if let team = mlbTeamStatsStore.baseStats.displayModel?.team, let record = stats.recordData,
+        let team = mlbTeamStatsStore.baseStats.displayModel.team
+        
+        if let record = stats.recordData,
            let hitting = stats.hitting, let pitching = stats.pitching,
            let fielding = stats.fielding, let catching = stats.catching {
             BaseballLeagueTitle(

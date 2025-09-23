@@ -13,20 +13,18 @@ struct BaseStatsStore<T> {
     
     @ObservableState
     struct State {
-        /* ---------------------
-           data state
-           --------------------- */
-        var displayModel: T? = nil
+        var displayModel: T
         
-        /* ---------------------
-           etc
-           --------------------- */
         var playerNameDictionary: [String: String] = [:]
         var teamNameDictionary: [String: String] = [:]
+        
+        init(displayModel: T) {
+            self.displayModel = displayModel
+        }
     }
     
     enum Action {
-        case initData(displayModel: T)
+        case initData
     }
     
     @Dependency(\.translatedNameProvider) var nameProvider
@@ -34,10 +32,8 @@ struct BaseStatsStore<T> {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .initData(let displayModel):
-                state.displayModel = displayModel
-                
-                if let displayModel = displayModel as? SportDisplayModel {
+            case .initData:
+                if let displayModel = state.displayModel as? SportDisplayModel {
                     switch displayModel.leagueId {
                     case Constants.Ids.epl:
                         state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplPlayerDic)

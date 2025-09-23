@@ -9,21 +9,12 @@ import SwiftUI
 import ComposableArchitecture
 
 struct SearchView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-//    @State var searchStore: StoreOf<SearchStore>? = nil
-    
-    /* ---------------------
-       constants
-       --------------------- */
+    let appStore: StoreOf<AppStore>
+    let searchStore: StoreOf<SearchStore>
+
     private let dragMaxOffset = UIConstants.Width.screenWidth / 3 + 20
     let barHeight: CGFloat = 50
     
-    /* ---------------------
-       ui state
-       --------------------- */
     @FocusState var focusState: Bool
     
     @State private var dragOffset: CGFloat = 0
@@ -34,201 +25,211 @@ struct SearchView: View {
     @State private var isSearchExampleButtonVisible = false
     @State private var isSearchExampleOpened = false
     
-    let appStore: StoreOf<AppStore>
-    let searchStore: StoreOf<SearchStore>
     var viewForTest: SportDisplayType? = nil
     
     var body: some View {
         ZStack {
-//            if let searchStore = searchStore {
-                /* ---------------------
-                   back button
-                   --------------------- */
-                VStack {
-                    HStack {
-                        Button(action: {
-                            searchStore.send(.goBack)
-                        }) {
-                            Image(systemName: "chevron.backward")
-                                .font(.system(size: 22))
-                                .frame(width: 30, height: barHeight)
-                                .padding(.leading, 10)
-                        }
-                        .foregroundStyle(.moare)
+            /* ---------------------
+             back button
+             --------------------- */
+            VStack {
+                HStack {
+                    Button(action: {
+                        searchStore.send(.pop)
+                    }) {
+                        Image(systemName: "chevron.backward")
+                            .font(.system(size: 22))
+                            .frame(width: 30, height: barHeight)
+                            .padding(.leading, 10)
+                    }
+                    .foregroundStyle(.moare)
+                    
+                    Spacer()
+                }
+                
+                Spacer()
+            }
+            .zIndex(1)
+            
+            /* ---------------------
+             notice, search example
+             --------------------- */
+            HStack(alignment: .bottom) {
+                if isSearchExampleButtonVisible {
+                    VStack(alignment: .leading) {
+                        SearchExampleBox(text: searchStore.searchExample)
+                            .opacity(isSearchExampleOpened ? 1 : 0)
+                            .padding(.trailing, 25)
                         
-                        Spacer()
+                        Button(action: {
+                            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                                isSearchExampleOpened.toggle()
+                            }
+                        }) {
+                            Text("검색 예시")
+                                .font(.system(size: 13))
+                                .tint(.secondary)
+                                .opacity(0.7)
+                        }
+                        .foregroundStyle(.secondary)
                     }
-
-                    Spacer()
                 }
-                .zIndex(1)
+                
+                Spacer()
+                
+                if isNoticeIconVisible {
+                    VStack(alignment: .trailing) {
+                        NoticeBox(noticeList: searchStore.noticeList)
+                            .opacity(isNoticeOpened ? 1 : 0)
+                        
+                        Button(action: {
+                            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                                isNoticeOpened.toggle()
+                            }
+                        }) {
+                            Image(systemName: "info.circle")
+                                .tint(.secondary)
+                                .opacity(0.7)
+                        }
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 12)
+            .offset(x: 0, y: -113)
+            .zIndex(1)
+            // y: 전체 박스 높이(100 + 20 + 4) / 2 + (검색창 높이(50) + 트렌딩 키워드 높이(40)) / 2 + 추가 패딩 6
+            
+            VStack(spacing: 0) {
+                /* ---------------------
+                 search bar
+                 --------------------- */
+                AnimatingSearchBar(
+                    searchStore: searchStore,
+                    focusState: $focusState
+                )
                 
                 /* ---------------------
-                   notice, search example
-                   --------------------- */
-                HStack(alignment: .bottom) {
-                    if isSearchExampleButtonVisible {
-                        VStack(alignment: .leading) {
-                            SearchExampleBox(text: searchStore.searchExample)
-                                .opacity(isSearchExampleOpened ? 1 : 0)
-                                .padding(.trailing, 25)
-                            
-                            Button(action: {
-                                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                                    isSearchExampleOpened.toggle()
-                                }
-                            }) {
-                                Text("검색 예시")
-                                    .font(.system(size: 13))
-                                    .tint(.secondary)
-                                    .opacity(0.7)
-                            }
-                            .foregroundStyle(.secondary)
-                        }
-                    }
-                    
-                    Spacer()
-                    
-                    if isNoticeIconVisible {
-                        VStack(alignment: .trailing) {
-                            NoticeBox(noticeList: searchStore.noticeList)
-                                .opacity(isNoticeOpened ? 1 : 0)
-                            
-                            Button(action: {
-                                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                                    isNoticeOpened.toggle()
-                                }
-                            }) {
-                                Image(systemName: "info.circle")
-                                    .tint(.secondary)
-                                    .opacity(0.7)
-                            }
-                        }
+                 trending keywords
+                 --------------------- */
+                if searchStore.trendingKeyowrdsVisibleState {
+                    TrendingKeywordList(keywords: searchStore.trendingKeywordList) { keyword in
+                        // update bar's text
+                        searchStore.send(.updateTextField(keyword, false))
+                        
+                        // remove textfield for bar animation
+                        searchStore.send(.updateTextFieldVisibleState(false))
+                        
+                        searchStore.send(.performSearch(searchType: .trendingKeyword, aniDuration: AnimationConstants.Duration.medium))
                     }
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, 12)
-                .offset(x: 0, y: -113)
-                .zIndex(1)
-                // y: 전체 박스 높이(100 + 20 + 4) / 2 + (검색창 높이(50) + 트렌딩 키워드 높이(40)) / 2 + 추가 패딩 6
                 
-                VStack(spacing: 0) {
+                ZStack {
                     /* ---------------------
-                       search bar
-                       --------------------- */
-                    AnimatingSearchBar(
-                        searchStore: searchStore,
-                        focusState: $focusState
-                    )
-                    
-                    /* ---------------------
-                       trending keywords
-                       --------------------- */
-                    if searchStore.trendingKeyowrdsVisibleState {
-                        TrendingKeywordList(keywords: searchStore.trendingKeywordList) { keyword in
+                     autocomplete list
+                     --------------------- */
+                    if !searchStore.autoCompleteList.isEmpty {
+                        AutoCompleteList(autoCompleteList: searchStore.autoCompleteList, onItemSelected: { words in
                             // update bar's text
-                            searchStore.send(.updateTextField(keyword, false))
+                            searchStore.send(.updateTextField(words, false))
                             
                             // remove textfield for bar animation
                             searchStore.send(.updateTextFieldVisibleState(false))
                             
-                            searchStore.send(.performSearch(searchType: .trendingKeyword, aniDuration: AnimationConstants.Duration.medium))
-                        }
+                            // remove autocomplete after bar's animation
+                            DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.medium) {
+                                searchStore.send(.removeAutoCompleteWithAni)
+                            }
+                            
+                            // search
+                            searchStore.send(.performSearch(searchType: .autoComplete, aniDuration: AnimationConstants.Duration.medium * 2))
+                        })
                     }
                     
-                    ZStack {
-                        /* ---------------------
-                           autocomplete list
-                           --------------------- */
-                        if !searchStore.autoCompleteList.isEmpty {
-                            AutoCompleteList(autoCompleteList: searchStore.autoCompleteList, onItemSelected: { words in
-                                // update bar's text
-                                searchStore.send(.updateTextField(words, false))
-                                
-                                // remove textfield for bar animation
-                                searchStore.send(.updateTextFieldVisibleState(false))
-                                
-                                // remove autocomplete after bar's animation
-                                DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.medium) {
-                                    searchStore.send(.removeAutoCompleteWithAni)
-                                }
-                                
-                                // search
-                                searchStore.send(.performSearch(searchType: .autoComplete, aniDuration: AnimationConstants.Duration.medium * 2))
-                            })
-                        }
-                        
-                        /* ---------------------
-                           loading
-                           --------------------- */
-                        if searchStore.searchDataState == .fetching {
-                            ProgressView()
-                                .padding(.top, UIConstants.Padding.defaultPadding)
-                        }
-                        
-                        /* ---------------------
-                           search result
-                           --------------------- */
-                        if searchStore.resultVisibleState {
-                            VStack(spacing: 0) {
-                                // by gpt
-                                // STUDY: searchStore.displayModels의 타입인 Dictionary는 순서가 보장되지 않기 때문에, 배열로 변환후 sortOrder를 사용해 정렬 후 view를 그려준다.
-//                                ForEach(Array(searchStore.displayModels).sorted(by: { $0.key.sortOrder < $1.key.sortOrder }), id: \.key) { type, model in
-//                                    if type == .kboPlayerStandings {
-//                                        Text(StringConstants.viewPreparingAdviseText(type: "KBO 선수 순위"))
-//                                    } else if type == .mlbPlayerStandings {
-//                                        Text(StringConstants.viewPreparingAdviseText(type: "MLB 선수 순위"))
-//                                    } else if let builder = viewBuilderMap[type], let model {
-//                                        builder(model)
-//                                    }
-                                //                                }
-                                ForEach(appStore.path.ids, id: \.self) { id in
-                                    if let elementStore = appStore.scope(
-                                        state: \.path[id: id],
-                                        action: \.path[id: id]
-                                    ) {
-                                        switch elementStore.state {
-                                        case .fbPlayerInfo:
-                                            if let s = elementStore.scope(state: \.fbPlayerInfo, action: \.fbPlayerInfo) {
-                                                FBPlayerInfoView(store: s)
-                                            }
-                                        case .fbPlayerStats:
-                                            Text("\(elementStore.state)")
-                                        }
-                                    }
-                                }
-                            }
+                    /* ---------------------
+                     loading
+                     --------------------- */
+                    if searchStore.searchDataState == .fetching {
+                        ProgressView()
                             .padding(.top, UIConstants.Padding.defaultPadding)
-                        }
-                        
-                        /* ---------------------
-                           error
-                           --------------------- */
-                        if case .failure(let message) = searchStore.searchDataState {
-                            Text(message)
-                                .padding(.top, UIConstants.Padding.defaultPadding)
-                        }
-                    } // ZStack
-                    .onChange(of: searchStore.isFocused) {
-                        if searchStore.isFocused {
-                            focusState.toggle()
-                            searchStore.send(.updateIsFocused(false)) // Reset searchStore's isFocused to ensure this .onChange() triggered when isFocused set true.
-                        }
                     }
-                } // VStack
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .contentShape(Rectangle()) // for .onTapGesture{}
-                // TODO: has to think about better structure
-                .onChange(of: searchStore.searchState) {
-                    if searchStore.searchState {
-                        withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
-                            isNoticeOpened = false
-                            isNoticeIconVisible = false
-                            isSearchExampleOpened = false
-                            isSearchExampleButtonVisible = false
-                            searchStore.send(.updateTrendingKeywordsVisibleState(false))
+                    
+                    /* ---------------------
+                     search result
+                     --------------------- */
+                    if searchStore.resultVisibleState {
+                        VStack(spacing: 0) {
+                            if let id = appStore.path.ids.last {
+                              if let store = appStore.scope(
+                                state: \.path[id: id],
+                                action: \.path[id: id]
+                              ) {
+                                PathView(
+                                  searchStore: searchStore,
+                                  store: store
+                                )
+                              }
+                            }
                         }
-                    } else {
+                        .padding(.top, UIConstants.Padding.defaultPadding)
+                    }
+                    
+                    /* ---------------------
+                     error
+                     --------------------- */
+                    if case .failure(let message) = searchStore.searchDataState {
+                        Text(message)
+                            .padding(.top, UIConstants.Padding.defaultPadding)
+                    }
+                } // ZStack
+                .onChange(of: searchStore.isFocused) {
+                    if searchStore.isFocused {
+                        focusState.toggle()
+                        searchStore.send(.updateIsFocused(false)) // Reset searchStore's isFocused to ensure this .onChange() triggered when isFocused set true.
+                    }
+                }
+            } // VStack
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .contentShape(Rectangle()) // for .onTapGesture{}
+            // TODO: has to think about better structure
+            .onChange(of: searchStore.searchState) {
+                if searchStore.searchState {
+                    withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                        isNoticeOpened = false
+                        isNoticeIconVisible = false
+                        isSearchExampleOpened = false
+                        isSearchExampleButtonVisible = false
+                        searchStore.send(.updateTrendingKeywordsVisibleState(false))
+                    }
+                } else {
+                    withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                        isNoticeIconVisible = true
+                        isSearchExampleButtonVisible = true
+                        searchStore.send(.updateTrendingKeywordsVisibleState(true))
+                    }
+                }
+            }
+            // TODO: has to think about better structure
+            .onChange(of: searchStore.autoCompleteList) {
+                if searchStore.autoCompleteList.isEmpty && !searchStore.searchState {
+                    withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                        isNoticeIconVisible = true
+                        isSearchExampleButtonVisible = true
+                        searchStore.send(.updateTrendingKeywordsVisibleState(true))
+                    }
+                } else {
+                    withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                        isNoticeOpened = false
+                        isNoticeIconVisible = false
+                        isSearchExampleOpened = false
+                        isSearchExampleButtonVisible = false
+                        searchStore.send(.updateTrendingKeywordsVisibleState(false))
+                    }
+                }
+            }
+            .onChange(of: searchStore.firstOpened) {
+                if searchStore.firstOpened {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.medium) {
                         withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                             isNoticeIconVisible = true
                             isSearchExampleButtonVisible = true
@@ -236,182 +237,134 @@ struct SearchView: View {
                         }
                     }
                 }
-                // TODO: has to think about better structure
-                .onChange(of: searchStore.autoCompleteList) {
-                    if searchStore.autoCompleteList.isEmpty && !searchStore.searchState {
-                        withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
-                            isNoticeIconVisible = true
-                            isSearchExampleButtonVisible = true
-                            searchStore.send(.updateTrendingKeywordsVisibleState(true))
-                        }
-                    } else {
-                        withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
-                            isNoticeOpened = false
-                            isNoticeIconVisible = false
-                            isSearchExampleOpened = false
-                            isSearchExampleButtonVisible = false
-                            searchStore.send(.updateTrendingKeywordsVisibleState(false))
-                        }
+            }
+            .onTapGesture {
+                if isNoticeOpened || isSearchExampleOpened {
+                    withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                        isNoticeOpened = false
+                        isSearchExampleOpened = false
                     }
+                } else {
+                    focusState = false
                 }
-                .onChange(of: searchStore.firstOpened) {
-                    if searchStore.firstOpened {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.medium) {
-                            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
-                                isNoticeIconVisible = true
-                                isSearchExampleButtonVisible = true
-                                searchStore.send(.updateTrendingKeywordsVisibleState(true))
+            }
+            .gesture(
+                // custom back handler
+                DragGesture(minimumDistance: 3)
+                    .onChanged { value in
+                        if !searchStore.viewStack.isEmpty {
+                            dragOffset = value.translation.width
+                            
+                            if dragOffset > 0 {
+                                opacity = max(1 - Double(dragOffset / dragMaxOffset), 0.2)
                             }
                         }
                     }
-                }
-                .onTapGesture {
-                    if isNoticeOpened || isSearchExampleOpened {
-                        withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                            isNoticeOpened = false
-                            isSearchExampleOpened = false
+                    .onEnded { _ in
+                        if !searchStore.viewStack.isEmpty {
+                            if dragOffset > dragMaxOffset {
+                                searchStore.send(.pop)
+                            }
+                            
+                            dragOffset = 0
+                            
+                            withAnimation(.easeOut(duration: 0.5)) {
+                                opacity = 1.0
+                            }
                         }
-                    } else {
-                        focusState = false
                     }
-                }
-                .gesture(
-                    // custom back handler
-                    DragGesture(minimumDistance: 3)
-                        .onChanged { value in
-                            if !searchStore.viewStack.isEmpty {
-                                dragOffset = value.translation.width
-                                
-                                if dragOffset > 0 {
-                                    opacity = max(1 - Double(dragOffset / dragMaxOffset), 0.2)
-                                }
-                            }
-                        }
-                        .onEnded { _ in
-                            if !searchStore.viewStack.isEmpty {
-                                if dragOffset > dragMaxOffset {
-                                    searchStore.send(.goBack)
-                                }
-                                
-                                dragOffset = 0
-                                
-                                withAnimation(.easeOut(duration: 0.5)) {
-                                    opacity = 1.0
-                                }
-                            }
-                        }
-                )
-//            }  if let searchStore
+            )
         } // ZStack
         .opacity(opacity)
         .onAppear {
-            // init SearchStore
-//            let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) ?? {
-//                let newStore = Store(initialState: SearchStore.State()) { SearchStore() }
-//                
-//                storeManager.setStore(newStore, forKey: StoreKeys.searchStore)
-//                
-//                return newStore
-//            }()
-            
-//            self.searchStore = searchStore
-            
-//            if searchStore.poppedView == nil {
-//                searchStore.send(.initData)
-//            }
-            
-//            if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-//                self.searchStore = searchStore
-//            } else {
-//                storeManager.setStore(Store(initialState: SearchStore.State()) { SearchStore() }, forKey: StoreKeys.searchStore)
-//                searchStore = storeManager.getStore(forKey: StoreKeys.searchStore)
-                
-                searchStore.send(.initData)
-//            }
+            searchStore.send(.initData)
             
             // test
-//            searchStore?.send(.initForTest)
+//            searchStore.send(.initForTest)
             
-//            if let viewForTest = viewForTest {
-//                self.searchStore?.send(.testSearch(viewForTest: viewForTest))
-//            }
+            if let viewForTest {
+                self.searchStore.send(.testSearch(viewForTest: viewForTest))
+            }
         }
     }
-    
-    // NOTE: VStack안에 if let 조건문 너무 많아서 생긴 런타임 에러(EXC_BAD_ACCESS)로 인해 추가. 정확한 원인 및 해결 방법은 더 조사 필요.
-//    func viewsToRender() -> [AnyView] {
-//        guard let searchStore else { return [] }
-//        var views: [AnyView] = []
-//
-//        for (type, model) in searchStore.displayModels {
-//            guard let model else { continue }
-//
-//            if type == .kboPlayerStandings {
-//                views.append(AnyView(Text(StringConstants.viewPreparingAdviseText(type: "KBO 선수 순위"))))
-//            } else if type == .mlbPlayerStandings {
-//                views.append(AnyView(Text(StringConstants.viewPreparingAdviseText(type: "MLB 선수 순위"))))
-//            } else if let builder = viewBuilderMap[type] {
-//                views.append(builder(model))
-//            }
-//        }
-//
-//        return views
-//    }
-//    
-//    let viewBuilderMap: [SportDisplayType: (any SportDisplayModel) -> AnyView] = [
-//        .fbPlayerInfo: { AnyView(FBPlayerInfoView(displayModel: $0 as! FBPlayerInfoDisplayModel)) },
-//        .fbPlayerStats: { AnyView(FBPlayerStatsView(displayModel: $0 as! FBPlayerStatsDisplayModel)) },
-//        .fbPlayerStandings: { AnyView(FBPlayerStandingsView(displayModel: $0 as! FBPlayerStandingsDisplayModel)) },
-//        .fbTeamInfo: { AnyView(FBTeamInfoView(displayModel: $0 as! FBTeamInfoDisplayModel)) },
-//        .fbTeamStats: { AnyView(FBTeamStatsView(displayModel: $0 as! FBTeamStatsDisplayModel)) },
-//        .fbTeamStandings: { AnyView(FBTeamStandingsView(displayModel: $0 as! FBTeamStandingsDisplayModel)) },
-//        .fbLeagueSchedule: { AnyView(FBLeaugeScheduleView(displayModel: $0 as! FBLeagueScheduleDisplayModel)) },
-//        .fbGameStats: { AnyView(FBGameStatsView(displayModel: $0 as! FBGameStatsDisplayModel)) },
-//        .fbTournament: { AnyView(FBTournamentView(displayModel: $0 as! FBTournamentDisplayModel)) },
-//        
-//            .nbaPlayerInfo: { AnyView(NBAPlayerInfoView(displayModel: $0 as! NBAPlayerInfoDisplayModel)) },
-//        .nbaPlayerStats: { AnyView(NBAPlayerStatsView(displayModel: $0 as! NBAPlayerStatsDisplayModel)) },
-//        .nbaPlayerStandings: { AnyView(NBAPlayerStandingsView(displayModel: $0 as! NBAPlayerStandingsDisplayModel)) },
-//        .nbaTeamInfo: { AnyView(NBATeamInfoView(displayModel: $0 as! NBATeamInfoDisplayModel)) },
-//        .nbaTeamStats: { AnyView(NBATeamStatsView(displayModel: $0 as! NBATeamStatsDisplayModel)) },
-//        .nbaTeamStandings: { AnyView(NBATeamStandingsView(displayModel: $0 as! NBATeamStandingsDisplayModel)) },
-//        .nbaLeagueSchedule: { AnyView(NBALeagueScheduleView(displayModel: $0 as! NBALeagueScheduleDisplayModel)) },
-//        .nbaGameStats: { AnyView(NBAGameStatsView(displayModel: $0 as! NBAGameStatsDisplayModel)) },
-//        .nbaTournament: { AnyView(NBATournamentView(displayModel: $0 as! NBATournamentDisplayModel)) },
-//        
-//            .kboPlayerInfo: { AnyView(KBOPlayerInfoView(displayModel: $0 as! KBOPlayerInfoDisplayModel)) },
-//        .kboPlayerStats: { AnyView(KBOPlayerStatsView(displayModel: $0 as! KBOPlayerStatsDisplayModel)) },
-//        .kboTeamInfo: { AnyView(KBOTeamInfoView(displayModel: $0 as! KBOTeamInfoDisplayModel)) },
-//        .kboTeamStats: { AnyView(KBOTeamStatsView(displayModel: $0 as! KBOTeamStatsDisplayModel)) },
-//        .kboTeamStandings: { AnyView(KBOTeamStandingsView(displayModel: $0 as! KBOTeamStandingsDisplayModel)) },
-//        .kboLeagueSchedule: { AnyView(KBOLeagueScheduleView(displayModel: $0 as! KBOLeagueScheduleDisplayModel)) },
-//        .kboGameStats: { AnyView(KBOGameStatsView(displayModel: $0 as! KBOGameStatsDisplayModel)) },
-//        .kboTournament: { AnyView(KBOTournamentView(displayModel: $0 as! KBOTournamentDisplayModel)) },
-//        
-//            .mlbPlayerInfo: { AnyView(MLBPlayerInfoView(displayModel: $0 as! MLBPlayerInfoDisplayModel)) },
-//        .mlbPlayerStats: { AnyView(MLBPlayerStatsView(displayModel: $0 as! MLBPlayerStatsDisplayModel)) },
-//        .mlbTeamInfo: { AnyView(MLBTeamInfoView(displayModel: $0 as! MLBTeamInfoDisplayModel)) },
-//        .mlbTeamStats: { AnyView(MLBTeamStatsView(displayModel: $0 as! MLBTeamStatsDisplayModel)) },
-//        .mlbTeamStandings: { AnyView(MLBTeamStandingsView(displayModel: $0 as! MLBTeamStandingsDisplayModel)) },
-//        .mlbLeagueSchedule: { AnyView(MLBLeagueScheduleView(displayModel: $0 as! MLBLeagueScheduleDisplayModel)) },
-//        .mlbGameStats: { AnyView(MLBGameStatsView(displayModel: $0 as! MLBGameStatsDisplayModel)) },
-//    ]
 }
 
-
-//struct PathView: View {
-//    let store: StoreOf<AppStore.Path?>
-//
-//    var body: some View {
-//        switch store.state {
-//        case .fbPlayerInfo:
-//            if let store = store.scope(state: \.fbPlayerInfo, action: \.fbPlayerInfo) {
-//                FBPlayerInfoView(store: store)
-//            }
-//        case .fbPlayerStats:
-//            if let store = store.scope(state: \.fbPlayerStats, action: \.fbPlayerStats) {
-//                FBPlayerStatsView(store: store)
-//            }
-//        }
-//    }
-//}
+struct PathView: View {
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<AppStore.Path>
+    
+    var body: some View {
+        switch store.state {
+        case .fbPlayerInfo:
+            if let s = store.scope(state: \.fbPlayerInfo, action: \.fbPlayerInfo) { FBPlayerInfoView(searchStore: searchStore, store: s) }
+        case .fbPlayerStats:
+            if let s = store.scope(state: \.fbPlayerStats, action: \.fbPlayerStats) { FBPlayerStatsView(searchStore: searchStore, store: s) }
+//        case .fbPlayerStandings:
+//            if let s = store.scope(state: \.fbPlayerStandings, action: \.fbPlayerStandings) { FBPlayerStandingsView(store: s) }
+        case .fbTeamInfo:
+            if let s = store.scope(state: \.fbTeamInfo, action: \.fbTeamInfo) { FBTeamInfoView(searchStore: searchStore, store: s) }
+        case .fbTeamStats:
+            if let s = store.scope(state: \.fbTeamStats, action: \.fbTeamStats) { FBTeamStatsView(searchStore: searchStore, store: s) }
+//        case .fbTeamStandings:
+//            if let s = store.scope(state: \.fbTeamStandings, action: \.fbTeamStandings) { FBTeamStandingsView(store: s) }
+//        case .fbLeagueSchedule:
+//            if let s = store.scope(state: \.fbLeagueSchedule, action: \.fbLeagueSchedule) { FBLeagueScheduleView(store: s) }
+//        case .fbGameStats:
+//            if let s = store.scope(state: \.fbGameStats, action: \.fbGameStats) { FBGameStatsView(store: s) }
+//        case .fbTournament:
+//            if let s = store.scope(state: \.fbTournament, action: \.fbTournament) { FBTournamentView(store: s) }
+            
+        case .nbaPlayerInfo:
+            if let s = store.scope(state: \.nbaPlayerInfo, action: \.nbaPlayerInfo) { NBAPlayerInfoView(searchStore: searchStore, store: s) }
+        case .nbaPlayerStats:
+            if let s = store.scope(state: \.nbaPlayerStats, action: \.nbaPlayerStats) { NBAPlayerStatsView(searchStore: searchStore, store: s) }
+//        case .nbaPlayerStandings:
+//            if let s = store.scope(state: \.nbaPlayerStandings, action: \.nbaPlayerStandings) { NBAPlayerStandingsView(store: s) }
+        case .nbaTeamInfo:
+            if let s = store.scope(state: \.nbaTeamInfo, action: \.nbaTeamInfo) { NBATeamInfoView(searchStore: searchStore, store: s) }
+        case .nbaTeamStats:
+            if let s = store.scope(state: \.nbaTeamStats, action: \.nbaTeamStats) { NBATeamStatsView(searchStore: searchStore, store: s) }
+//        case .nbaTeamStandings:
+//            if let s = store.scope(state: \.nbaTeamStandings, action: \.nbaTeamStandings) { NBATeamStandingsView(store: s) }
+//        case .nbaLeagueSchedule:
+//            if let s = store.scope(state: \.nbaLeagueSchedule, action: \.nbaLeagueSchedule) { NBALeagueScheduleView(store: s) }
+//        case .nbaGameStats:
+//            if let s = store.scope(state: \.nbaGameStats, action: \.nbaGameStats) { NBAGameStatsView(store: s) }
+//        case .nbaTournament:
+//            if let s = store.scope(state: \.nbaTournament, action: \.nbaTournament) { NBATournamentView(store: s) }
+            
+        case .kboPlayerInfo:
+            if let s = store.scope(state: \.kboPlayerInfo, action: \.kboPlayerInfo) { KBOPlayerInfoView(searchStore: searchStore, store: s) }
+        case .kboPlayerStats:
+            if let s = store.scope(state: \.kboPlayerStats, action: \.kboPlayerStats) { KBOPlayerStatsView(searchStore: searchStore, store: s) }
+        case .kboTeamInfo:
+            if let s = store.scope(state: \.kboTeamInfo, action: \.kboTeamInfo) { KBOTeamInfoView(searchStore: searchStore, store: s) }
+        case .kboTeamStats:
+            if let s = store.scope(state: \.kboTeamStats, action: \.kboTeamStats) { KBOTeamStatsView(searchStore: searchStore, store: s) }
+//        case .kboTeamStandings:
+//            if let s = store.scope(state: \.kboTeamStandings, action: \.kboTeamStandings) { KBOTeamStandingsView(store: s) }
+//        case .kboLeagueSchedule:
+//            if let s = store.scope(state: \.kboLeagueSchedule, action: \.kboLeagueSchedule) { KBOLeagueScheduleView(store: s) }
+//        case .kboGameStats:
+//            if let s = store.scope(state: \.kboGameStats, action: \.kboGameStats) { KBOGameStatsView(store: s) }
+//        case .kboTournament:
+//            if let s = store.scope(state: \.kboTournament, action: \.kboTournament) { KBOTournamentView(store: s) }
+            
+        case .mlbPlayerInfo:
+            if let s = store.scope(state: \.mlbPlayerInfo, action: \.mlbPlayerInfo) { MLBPlayerInfoView(searchStore: searchStore, store: s) }
+        case .mlbPlayerStats:
+            if let s = store.scope(state: \.mlbPlayerStats, action: \.mlbPlayerStats) { MLBPlayerStatsView(searchStore: searchStore, store: s) }
+        case .mlbTeamInfo:
+            if let s = store.scope(state: \.mlbTeamInfo, action: \.mlbTeamInfo) { MLBTeamInfoView(searchStore: searchStore, store: s) }
+        case .mlbTeamStats:
+            if let s = store.scope(state: \.mlbTeamStats, action: \.mlbTeamStats) { MLBTeamStatsView(searchStore: searchStore, store: s) }
+//        case .mlbTeamStandings:
+//            if let s = store.scope(state: \.mlbTeamStandings, action: \.mlbTeamStandings) { MLBTeamStandingsView(store: s) }
+//        case .mlbLeagueSchedule:
+//            if let s = store.scope(state: \.mlbLeagueSchedule, action: \.mlbLeagueSchedule) { MLBLeagueScheduleView(store: s) }
+//        case .mlbGameStats:
+//            if let s = store.scope(state: \.mlbGameStats, action: \.mlbGameStats) { MLBGameStatsView(store: s) }
+        default: EmptyView()
+        }
+    }
+}

@@ -9,79 +9,53 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MLBPlayerStatsView: View {
-    /* ---------------------
-     store
-     --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var mlbPlayerStatsStore: StoreOf<MLBPlayerStatsStore>? = nil
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<MLBPlayerStatsStore>
     
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: MLBPlayerStatsDisplayModel
+    @State private var show = false
 
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            ScrollView {
-                InfoViewContainer(
-                    itemCount: (mlbPlayerStatsStore?.baseStats.displayModel?.stats.count ?? 0) + 1,
-                    shouldShowMeasureContent: true,
-                    measureContent: { scope in
-                        if let mlbPlayerStatsStore {
-                            MLBPlayerStatsPlayerInfoItem(mlbPlayerStatsStore: mlbPlayerStatsStore)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onAppear {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
+        ScrollView {
+            InfoViewContainer(
+                itemCount: store.baseStats.displayModel.stats.count + 1,
+                shouldShowMeasureContent: true,
+                measureContent: { scope in
+                    if show {
+                        MLBPlayerStatsPlayerInfoItem(mlbPlayerStatsStore: store)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onAppear {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
                                     }
-                                )
-                            
-                            MLBPlayerStatsList(mlbPlayerStatsStore: mlbPlayerStatsStore, scope: scope)
-                        }
-                    },
-                    displayContent: { scope in
-                        if let mlbPlayerStatsStore {
-                            MLBPlayerStatsPlayerInfoItem(
-                                mlbPlayerStatsStore: mlbPlayerStatsStore,
-                                isAniItem: true,
-                                itemOffset: scope.computedOffset(for: 0),
-                                showContents: scope.showContents
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
+                                    }
+                                }
                             )
-                            MLBPlayerStatsList(
-                                mlbPlayerStatsStore: mlbPlayerStatsStore,
-                                isAniItem: true,
-                                scope: scope
-                            )
-                        }
+                        
+                        MLBPlayerStatsList(mlbPlayerStatsStore: store, scope: scope)
                     }
-                )
-            } // ScrollView
-            .onAppear {
-                // init MLBPlayerStatsStore
-                let mlbPlayerStatsStore: StoreOf<MLBPlayerStatsStore> = storeManager.getStore(forKey: StoreKeys.mlbPlayerStatsStore) ?? {
-                    let newStore = Store(initialState: MLBPlayerStatsStore.State()) { MLBPlayerStatsStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.mlbPlayerStatsStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    self.mlbPlayerStatsStore = mlbPlayerStatsStore
+                },
+                displayContent: { scope in
+                    if show {
+                        MLBPlayerStatsPlayerInfoItem(
+                            mlbPlayerStatsStore: store,
+                            isAniItem: true,
+                            itemOffset: scope.computedOffset(for: 0),
+                            showContents: scope.showContents
+                        )
+                        MLBPlayerStatsList(
+                            mlbPlayerStatsStore: store,
+                            isAniItem: true,
+                            scope: scope
+                        )
+                    }
                 }
-                
-                if searchStore.poppedView == nil {
-                    mlbPlayerStatsStore.send(.baseStats(.initData(displayModel: displayModel)))
-                }
-            }
-            .onChange(of: displayModel) {
-                if case .mlbPlayerStats = searchStore.poppedView {
-                    mlbPlayerStatsStore?.send(.baseStats(.initData(displayModel: displayModel)))
-                }
+            )
+        } // ScrollView
+        .onAppear {
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
         }
     }
@@ -110,70 +84,69 @@ struct MLBPlayerStatsPlayerInfoItem: View {
         let displayModel = mlbPlayerStatsStore.baseStats.displayModel
         let playerNameDic = mlbPlayerStatsStore.baseStats.playerNameDictionary
         let teamNameDic = mlbPlayerStatsStore.baseStats.teamNameDictionary
+        let player = displayModel.player
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemOffset: itemOffset
         ) {
-            if let player = displayModel?.player {
-                HStack {
-                    URLImage(url: MLBUtil.playerPhotoURL(id: player.id))
+            HStack {
+                URLImage(url: MLBUtil.playerPhotoURL(id: player.id))
+                
+                // name
+                VStack(alignment: .leading) {
+                    Text(playerNameDic["\(player.id)"] ?? (player.fullName))
+                        .font(.system(size: 16))
+                        .fontWeight(.medium)
                     
-                    // name
-                    VStack(alignment: .leading) {
-                        Text(playerNameDic["\(player.id)"] ?? (player.fullName))
-                            .font(.system(size: 16))
-                            .fontWeight(.medium)
-                        
-                        Text("\(player.fullName)")
+                    Text("\(player.fullName)")
+                        .font(.system(size: 15))
+                        .fontWeight(.light)
+                        .lineLimit(2)
+                    
+                    (
+                        Text("국적: ")
                             .font(.system(size: 15))
-                            .fontWeight(.light)
-                            .lineLimit(2)
-                        
-                        (
-                            Text("국적: ")
-                                .font(.system(size: 15))
-                            + Text(player.birthCountry)
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        )
-                        .multilineTextAlignment(.leading)
-                    }
-                    
-                    URLImage(
-                        url: MLBUtil.teamLogoURL(id: displayModel!.teamId),
-                        isSvg: true
-                    )
-    
-                    // team, jersey, position
-                    VStack(alignment: .leading) {
-                        Text(teamNameDic["full_\(displayModel?.teamId ?? 0)"] ?? "")
+                        + Text(player.birthCountry)
                             .font(.system(size: 16))
                             .fontWeight(.medium)
-                            .multilineTextAlignment(.leading)
-                        
-                        (
-                            Text("등번호: ")
-                                .font(.system(size: 15))
-                            + Text(player.primaryNumber)
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        )
-                        .multilineTextAlignment(.leading)
-                        
-                        (
-                            Text("포지션: ")
-                                .font(.system(size: 15))
-                            + Text(player.primaryPosition.name)
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        )
-                        .multilineTextAlignment(.leading)
-                    }
+                    )
+                    .multilineTextAlignment(.leading)
                 }
-                .frame(maxWidth: .infinity)
-                .opacity(showContents ? 1 : 0)
+                
+                URLImage(
+                    url: MLBUtil.teamLogoURL(id: displayModel.teamId),
+                    isSvg: true
+                )
+
+                // team, jersey, position
+                VStack(alignment: .leading) {
+                    Text(teamNameDic["full_\(displayModel.teamId ?? 0)"] ?? "")
+                        .font(.system(size: 16))
+                        .fontWeight(.medium)
+                        .multilineTextAlignment(.leading)
+                    
+                    (
+                        Text("등번호: ")
+                            .font(.system(size: 15))
+                        + Text(player.primaryNumber)
+                            .font(.system(size: 16))
+                            .fontWeight(.medium)
+                    )
+                    .multilineTextAlignment(.leading)
+                    
+                    (
+                        Text("포지션: ")
+                            .font(.system(size: 15))
+                        + Text(player.primaryPosition.name)
+                            .font(.system(size: 16))
+                            .fontWeight(.medium)
+                    )
+                    .multilineTextAlignment(.leading)
+                }
             }
+            .frame(maxWidth: .infinity)
+            .opacity(showContents ? 1 : 0)
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
@@ -197,35 +170,35 @@ struct MLBPlayerStatsList: View {
     }
     
     var body: some View {
-        if let stats = mlbPlayerStatsStore.baseStats.displayModel?.stats {
-            ForEach(stats.indices, id: \.self) { index in
-                let stats = stats[index]
-                let itemIndex = index + 1
-                
-                MLBPlayerStatsListItem(
-                    mlbPlayerStatsStore: mlbPlayerStatsStore,
-                    stats: stats,
-                    isAniItem: isAniItem,
-                    itemSize: scope.itemSizes[itemIndex],
-                    itemOffset: scope.computedOffset(for: itemIndex),
-                    showContents: scope.showContents
-                )
-                .background(
-                    GeometryReader { geometry in
-                        if !isAniItem {
-                            // 1) 최초 한 번은 무조건 측정 - gpt
-                            // NOTE: Color.clear.onChange()만 했을때는 update가 안돼서 Color.clear.onAppear 추가해줌
-                            Color.clear.onAppear {
-                                scope.updateItemFrame(index: itemIndex, geometry: geometry)
-                            }
-                            // 2) 위치 변하면 - gpt
-                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                scope.updateItemFrame(index: itemIndex, geometry: geometry)
-                            }
+        let stats = mlbPlayerStatsStore.baseStats.displayModel.stats
+        
+        ForEach(stats.indices, id: \.self) { index in
+            let stats = stats[index]
+            let itemIndex = index + 1
+            
+            MLBPlayerStatsListItem(
+                mlbPlayerStatsStore: mlbPlayerStatsStore,
+                stats: stats,
+                isAniItem: isAniItem,
+                itemSize: scope.itemSizes[itemIndex],
+                itemOffset: scope.computedOffset(for: itemIndex),
+                showContents: scope.showContents
+            )
+            .background(
+                GeometryReader { geometry in
+                    if !isAniItem {
+                        // 1) 최초 한 번은 무조건 측정 - gpt
+                        // NOTE: Color.clear.onChange()만 했을때는 update가 안돼서 Color.clear.onAppear 추가해줌
+                        Color.clear.onAppear {
+                            scope.updateItemFrame(index: itemIndex, geometry: geometry)
+                        }
+                        // 2) 위치 변하면 - gpt
+                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                            scope.updateItemFrame(index: itemIndex, geometry: geometry)
                         }
                     }
-                )
-            }
+                }
+            )
         }
     }
 }

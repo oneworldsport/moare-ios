@@ -15,15 +15,13 @@ struct FBPlayerInfoStore {
     
     @ObservableState
     struct State {
-        /* ---------------------
-           constants
-           --------------------- */
         let itemHeight: CGFloat = 30
         
-        /* ---------------------
-           data state
-           --------------------- */
-        var baseInfo = BaseInfo.State()
+        var baseInfo: BaseInfo.State
+        
+        init(displayModel: FBPlayerInfoDisplayModel) {
+            self.baseInfo = BaseInfo.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
@@ -31,8 +29,6 @@ struct FBPlayerInfoStore {
     }
     
     var body: some Reducer<State, Action> {
-        Scope(state: \.baseInfo, action: \.baseInfo) {
-            BaseInfo()
-        }
+        Scope(state: \.baseInfo, action: \.baseInfo) { BaseInfo() }
     }
 }

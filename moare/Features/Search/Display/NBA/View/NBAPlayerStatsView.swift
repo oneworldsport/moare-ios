@@ -9,83 +9,57 @@ import SwiftUI
 import ComposableArchitecture
 
 struct NBAPlayerStatsView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var nbaPlayerStatsStore: StoreOf<NBAPlayerStatsStore>? = nil
-    
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: NBAPlayerStatsDisplayModel
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<NBAPlayerStatsStore>
     
 //    var startOffset = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
     
+    @State private var show = false
+    
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            ScrollView {
-                InfoViewContainer(
-                    itemCount: (nbaPlayerStatsStore?.displayModel?.stats.count ?? 0) + 1,
-                    shouldShowMeasureContent: true,
-                    measureContent: { scope in
-                        if let nbaPlayerStatsStore {
-                            NBAPlayerStatsPlayerInfoItem(nbaPlayerStatsStore: nbaPlayerStatsStore)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onAppear {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
+        ScrollView {
+            InfoViewContainer(
+                itemCount: store.baseStats.displayModel.stats.count + 1,
+                shouldShowMeasureContent: true,
+                measureContent: { scope in
+                    if show {
+                        NBAPlayerStatsPlayerInfoItem(nbaPlayerStatsStore: store)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onAppear {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
                                     }
-                                )
-                            
-                            NBAPlayerStatsList(nbaPlayerStatsStore: nbaPlayerStatsStore, scope: scope)
-                        }
-                    }, displayContent: { scope in
-                        if let nbaPlayerStatsStore {
-                            // player info
-                            NBAPlayerStatsPlayerInfoItem(
-                                nbaPlayerStatsStore: nbaPlayerStatsStore,
-                                isAniItem: true,
-                                itemOffset: scope.computedOffset(for: 0),
-                                showContents: scope.showContents
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
+                                    }
+                                }
                             )
-                            
-                            // stats list
-                            NBAPlayerStatsList(
-                                nbaPlayerStatsStore: nbaPlayerStatsStore,
-                                isAniItem: true,
-                                scope: scope
-                            )
-                        }
+                        
+                        NBAPlayerStatsList(nbaPlayerStatsStore: store, scope: scope)
                     }
-                )
-            } // ScrollView
-            .onAppear {
-                // init NBAPlayerStatsStore
-                let nbaPlayerStatsStore: StoreOf<NBAPlayerStatsStore> = storeManager.getStore(forKey: StoreKeys.nbaPlayerStatsStore) ?? {
-                    let newStore = Store(initialState: NBAPlayerStatsStore.State()) { NBAPlayerStatsStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.nbaPlayerStatsStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    self.nbaPlayerStatsStore = nbaPlayerStatsStore
+                }, displayContent: { scope in
+                    if show {
+                        // player info
+                        NBAPlayerStatsPlayerInfoItem(
+                            nbaPlayerStatsStore: store,
+                            isAniItem: true,
+                            itemOffset: scope.computedOffset(for: 0),
+                            showContents: scope.showContents
+                        )
+                        
+                        // stats list
+                        NBAPlayerStatsList(
+                            nbaPlayerStatsStore: store,
+                            isAniItem: true,
+                            scope: scope
+                        )
+                    }
                 }
-                
-                if searchStore.poppedView == nil {
-                    nbaPlayerStatsStore.send(.initData(displayModel: displayModel))
-                }
-            }
-            .onChange(of: displayModel) {
-                if case .nbaPlayerStats = searchStore.poppedView {
-                    nbaPlayerStatsStore?.send(.initData(displayModel: displayModel))
-                }
+            )
+        } // ScrollView
+        .onAppear {
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
         }
     }
@@ -111,67 +85,66 @@ struct NBAPlayerStatsPlayerInfoItem: View {
     }
     
     var body: some View {
-        let playerNameDic = nbaPlayerStatsStore.playerNameDictionary
-        let teamNameDic = nbaPlayerStatsStore.teamNameDictionary
+        let playerNameDic = nbaPlayerStatsStore.baseStats.playerNameDictionary
+        let teamNameDic = nbaPlayerStatsStore.baseStats.teamNameDictionary
+        let player = nbaPlayerStatsStore.baseStats.displayModel.player
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemOffset: itemOffset
         ) {
-            if let player = nbaPlayerStatsStore.displayModel?.player {
-                HStack {
-                    URLImage(url: NBAUtil.playerPhotoURL(id: player.personId))
+            HStack {
+                URLImage(url: NBAUtil.playerPhotoURL(id: player.personId))
+                
+                // name
+                VStack(alignment: .leading) {
+                    Text(playerNameDic["\(player.personId)"] ?? player.displayFirstLast)
+                        .font(.system(size: 16))
+                        .fontWeight(.medium)
                     
-                    // name
-                    VStack(alignment: .leading) {
-                        Text(playerNameDic["\(player.personId)"] ?? player.displayFirstLast)
-                            .font(.system(size: 16))
-                            .fontWeight(.medium)
-                        
-                        Text(player.displayFirstLast)
+                    Text(player.displayFirstLast)
+                        .font(.system(size: 15))
+                        .fontWeight(.light)
+                        .lineLimit(2)
+                    
+                    HStack {
+                        Text("국적: ")
                             .font(.system(size: 15))
-                            .fontWeight(.light)
-                            .lineLimit(2)
                         
-                        HStack {
-                            Text("국적: ")
-                                .font(.system(size: 15))
-                            
-                            Text(player.country)
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        }
-                    }
-                    
-                    URLImage(url: NBAUtil.teamLogoURL(id: player.teamId), isSvg: true)
-                    
-                    // nationality, team, jersey, position
-                    VStack(alignment: .leading) {
-                        Text(teamNameDic["full_\(player.teamId)"] ?? "\(player.teamCity) \(player.teamName)")
+                        Text(player.country)
                             .font(.system(size: 16))
                             .fontWeight(.medium)
-                        
-                        HStack(spacing: 0) {
-                            Text("등번호: ")
-                                .font(.system(size: 15))
-                            
-                            Text(player.jersey)
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        }
-                        
-                        HStack(spacing: 0) {
-                            Text("포지션: ")
-                                .font(.system(size: 15))
-                            
-                            Text(player.position)
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        }
                     }
                 }
-                .opacity(showContents ? 1 : 0)
-            } // if let player
+                
+                URLImage(url: NBAUtil.teamLogoURL(id: player.teamId), isSvg: true)
+                
+                // nationality, team, jersey, position
+                VStack(alignment: .leading) {
+                    Text(teamNameDic["full_\(player.teamId)"] ?? "\(player.teamCity) \(player.teamName)")
+                        .font(.system(size: 16))
+                        .fontWeight(.medium)
+                    
+                    HStack(spacing: 0) {
+                        Text("등번호: ")
+                            .font(.system(size: 15))
+                        
+                        Text(player.jersey)
+                            .font(.system(size: 16))
+                            .fontWeight(.medium)
+                    }
+                    
+                    HStack(spacing: 0) {
+                        Text("포지션: ")
+                            .font(.system(size: 15))
+                        
+                        Text(player.position)
+                            .font(.system(size: 16))
+                            .fontWeight(.medium)
+                    }
+                }
+            }
+            .opacity(showContents ? 1 : 0)
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
@@ -195,35 +168,35 @@ struct NBAPlayerStatsList: View {
     }
     
     var body: some View {
-        if let statsList = nbaPlayerStatsStore.displayModel?.stats {
-            ForEach(statsList.indices, id: \.self) { index in
-                let stats = statsList[index]
-                let itemIndex = index + 1
-                
-                NBAPlayerStatsListItem(
-                    nbaPlayerStatsStore: nbaPlayerStatsStore,
-                    stats: stats,
-                    isAniItem: isAniItem,
-                    itemSize: scope.itemSizes[itemIndex],
-                    itemOffset: scope.computedOffset(for: itemIndex),
-                    showContents: scope.showContents
-                )
-                .background(
-                    GeometryReader { geometry in
-                        if !isAniItem {
-                            // 1) 최초 한 번은 무조건 측정 - gpt
-                            // NOTE: Color.clear.onChange()만 했을때는 update가 안돼서 Color.clear.onAppear 추가해줌
-                            Color.clear.onAppear {
-                                scope.updateItemFrame(index: itemIndex, geometry: geometry)
-                            }
-                            // 2) 위치 변하면 - gpt
-                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                scope.updateItemFrame(index: itemIndex, geometry: geometry)
-                            }
+        let statsList = nbaPlayerStatsStore.baseStats.displayModel.stats
+         
+        ForEach(statsList.indices, id: \.self) { index in
+            let stats = statsList[index]
+            let itemIndex = index + 1
+            
+            NBAPlayerStatsListItem(
+                nbaPlayerStatsStore: nbaPlayerStatsStore,
+                stats: stats,
+                isAniItem: isAniItem,
+                itemSize: scope.itemSizes[itemIndex],
+                itemOffset: scope.computedOffset(for: itemIndex),
+                showContents: scope.showContents
+            )
+            .background(
+                GeometryReader { geometry in
+                    if !isAniItem {
+                        // 1) 최초 한 번은 무조건 측정 - gpt
+                        // NOTE: Color.clear.onChange()만 했을때는 update가 안돼서 Color.clear.onAppear 추가해줌
+                        Color.clear.onAppear {
+                            scope.updateItemFrame(index: itemIndex, geometry: geometry)
+                        }
+                        // 2) 위치 변하면 - gpt
+                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                            scope.updateItemFrame(index: itemIndex, geometry: geometry)
                         }
                     }
-                )
-            }
+                }
+            )
         }
     }
 }

@@ -14,10 +14,11 @@ struct NBATeamInfoStore {
     
     @ObservableState
     struct State {
-        /* ---------------------
-           data state
-           --------------------- */
-        var baseInfo = BaseInfo.State()
+        var baseInfo: BaseInfo.State
+        
+        init(displayModel: NBATeamInfoDisplayModel) {
+            self.baseInfo = BaseInfo.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
@@ -25,8 +26,6 @@ struct NBATeamInfoStore {
     }
     
     var body: some Reducer<State, Action> {
-        Scope(state: \.baseInfo, action: \.baseInfo) {
-            BaseInfo()
-        }
+        Scope(state: \.baseInfo, action: \.baseInfo) { BaseInfo() }
     }
 }
