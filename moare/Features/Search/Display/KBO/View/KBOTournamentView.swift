@@ -9,15 +9,14 @@ import SwiftUI
 import ComposableArchitecture
 
 struct KBOTournamentView: View {
-    @EnvironmentObject var storeManager: StoreManager
-    @State var kboTournamentStore: StoreOf<KBOTournamentStore>? = nil
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<KBOTournamentStore>
     
-    let displayModel: KBOTournamentDisplayModel
+    @State private var show = false
     
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            VStack {
-                if let kboTournamentStore {
+        VStack {
+            if show {
 //                    TournamentDrawViewContainer(
 //                        state: TournamentDrawContainerState(
 //                            leagueId: displayModel.leagueId,
@@ -26,30 +25,13 @@ struct KBOTournamentView: View {
 //                            isSeries: true
 //                        )
 //                    )
-                }
             }
-            .onAppear {
-                // init KBOTournamentStore
-                let kboTournamentStore: StoreOf<KBOTournamentStore> = storeManager.getStore(forKey: StoreKeys.kboTournamentStore) ?? {
-                    let newStore = Store(initialState: KBOTournamentStore.State()) { KBOTournamentStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.kboTournamentStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.kboTournamentStore = kboTournamentStore
-                }
-                
-                if searchStore.poppedView == nil {
-                    kboTournamentStore.send(.baseTournament(.initData(displayModel: displayModel)))
-                }
-            }
-            .onChange(of: displayModel) {
-                if case .kboTournament = searchStore.poppedView {
-                    kboTournamentStore?.send(.baseTournament(.initData(displayModel: displayModel)))
-                }
+        }
+        .onAppear {
+            store.send(.baseTournament(.initData))
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
         }
     }

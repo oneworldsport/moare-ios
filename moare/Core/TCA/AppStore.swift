@@ -47,7 +47,7 @@ struct AppStore {
                 case .fbGameStats(_, let displayModel):
                     state.path.append(.fbGameStats(FBGameStatsStore.State(displayModel: displayModel)))
                 case .fbTournament(_, let displayModel):
-                    state.path.append(.fbTournament(FBTournamentStore.State()))
+                    state.path.append(.fbTournament(FBTournamentStore.State(displayModel: displayModel)))
                     
                 case .nbaPlayerInfo(_, let displayModel):
                     state.path.append(.nbaPlayerInfo(NBAPlayerInfoStore.State(displayModel: displayModel)))
@@ -66,7 +66,7 @@ struct AppStore {
                 case .nbaGameStats(_, let displayModel):
                     state.path.append(.nbaGameStats(NBAGameStatsStore.State(displayModel: displayModel)))
                 case .nbaTournament(_, let displayModel):
-                    state.path.append(.nbaTournament(NBATournamentStore.State()))
+                    state.path.append(.nbaTournament(NBATournamentStore.State(displayModel: displayModel)))
                     
                 case .kboPlayerInfo(_, let displayModel):
                     state.path.append(.kboPlayerInfo(KBOPlayerInfoStore.State(displayModel: displayModel)))
@@ -85,7 +85,7 @@ struct AppStore {
                 case .kboGameStats(_, let displayModel):
                     state.path.append(.kboGameStats(KBOGameStatsStore.State(displayModel: displayModel)))
                 case .kboTournament(_, let displayModel):
-                    state.path.append(.kboTournament(KBOTournamentStore.State()))
+                    state.path.append(.kboTournament(KBOTournamentStore.State(displayModel: displayModel)))
                     
                 case .mlbPlayerInfo(_, let displayModel):
                     state.path.append(.mlbPlayerInfo(MLBPlayerInfoStore.State(displayModel: displayModel)))

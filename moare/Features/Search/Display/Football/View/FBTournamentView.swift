@@ -9,51 +9,35 @@ import SwiftUI
 import ComposableArchitecture
 
 struct FBTournamentView: View {
-    @EnvironmentObject var storeManager: StoreManager
-    @State var fbTournamentStore: StoreOf<FBTournamentStore>? = nil
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<FBTournamentStore>
     
-    let displayModel: FBTournamentDisplayModel
+    @State private var show = false
     
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            VStack {
-                if let fbTournamentStore {
-                    if displayModel.scheduleType == .tournamentBracket {
-                        
-                    } else {
-                        TournamentDrawViewContainer(
-                            state: TournamentDrawContainerState(
-                                leagueId: displayModel.leagueId,
-                                teamNameDic: fbTournamentStore.baseTournament.teamNameDic,
-                                gameListTuple: fbTournamentStore.gameListTuple,
-                                isSeries: false
-                            )
+        let displayModel = store.baseTournament.displayModel
+        
+        VStack {
+            if show {
+                if displayModel.scheduleType == .tournamentBracket {
+                    
+                } else {
+                    TournamentDrawViewContainer(
+                        state: TournamentDrawContainerState(
+                            leagueId: displayModel.leagueId,
+                            teamNameDic: store.baseTournament.teamNameDic,
+                            gameListTuple: store.gameListTuple,
+                            isSeries: false
                         )
-                    }
+                    )
                 }
             }
-            .onAppear {
-                // init FBTournamentStore
-                let fbTournamentStore: StoreOf<FBTournamentStore> = storeManager.getStore(forKey: StoreKeys.fbTournamentStore) ?? {
-                    let newStore = Store(initialState: FBTournamentStore.State()) { FBTournamentStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.fbTournamentStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.fbTournamentStore = fbTournamentStore
-                }
-                
-                if searchStore.poppedView == nil {
-                    fbTournamentStore.send(.baseTournament(.initData(displayModel: displayModel)))
-                }
-            }
-            .onChange(of: displayModel) {
-                if case .fbTournament = searchStore.poppedView {
-                    fbTournamentStore?.send(.baseTournament(.initData(displayModel: displayModel)))
-                }
+        }
+        .onAppear {
+            store.send(.baseTournament(.initData))
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
         }
     }

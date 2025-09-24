@@ -311,8 +311,8 @@ struct PathView: View {
             if let s = store.scope(state: \.fbLeagueSchedule, action: \.fbLeagueSchedule) { FBLeagueScheduleView(searchStore: searchStore, store: s) }
         case .fbGameStats:
             if let s = store.scope(state: \.fbGameStats, action: \.fbGameStats) { FBGameStatsView(searchStore: searchStore, store: s) }
-//        case .fbTournament:
-//            if let s = store.scope(state: \.fbTournament, action: \.fbTournament) { FBTournamentView(store: s) }
+        case .fbTournament:
+            if let s = store.scope(state: \.fbTournament, action: \.fbTournament) { FBTournamentView(searchStore: searchStore, store: s) }
             
         case .nbaPlayerInfo:
             if let s = store.scope(state: \.nbaPlayerInfo, action: \.nbaPlayerInfo) { NBAPlayerInfoView(searchStore: searchStore, store: s) }
@@ -330,8 +330,8 @@ struct PathView: View {
             if let s = store.scope(state: \.nbaLeagueSchedule, action: \.nbaLeagueSchedule) { NBALeagueScheduleView(searchStore: searchStore, store: s) }
         case .nbaGameStats:
             if let s = store.scope(state: \.nbaGameStats, action: \.nbaGameStats) { NBAGameStatsView(searchStore: searchStore, store: s) }
-//        case .nbaTournament:
-//            if let s = store.scope(state: \.nbaTournament, action: \.nbaTournament) { NBATournamentView(store: s) }
+        case .nbaTournament:
+            if let s = store.scope(state: \.nbaTournament, action: \.nbaTournament) { NBATournamentView(searchStore: searchStore, store: s) }
             
         case .kboPlayerInfo:
             if let s = store.scope(state: \.kboPlayerInfo, action: \.kboPlayerInfo) { KBOPlayerInfoView(searchStore: searchStore, store: s) }
@@ -347,8 +347,8 @@ struct PathView: View {
             if let s = store.scope(state: \.kboLeagueSchedule, action: \.kboLeagueSchedule) { KBOLeagueScheduleView(searchStore: searchStore, store: s) }
         case .kboGameStats:
             if let s = store.scope(state: \.kboGameStats, action: \.kboGameStats) { KBOGameStatsView(searchStore: searchStore, store: s) }
-//        case .kboTournament:
-//            if let s = store.scope(state: \.kboTournament, action: \.kboTournament) { KBOTournamentView(store: s) }
+        case .kboTournament:
+            if let s = store.scope(state: \.kboTournament, action: \.kboTournament) { KBOTournamentView(searchStore: searchStore, store: s) }
             
         case .mlbPlayerInfo:
             if let s = store.scope(state: \.mlbPlayerInfo, action: \.mlbPlayerInfo) { MLBPlayerInfoView(searchStore: searchStore, store: s) }
