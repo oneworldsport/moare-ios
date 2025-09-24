@@ -60,6 +60,8 @@ struct FBPlayerStatsView: View {
             )
         } // ScrollView
         .onAppear {
+            store.send(.baseStats(.initData))
+            
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true
             }

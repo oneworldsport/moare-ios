@@ -175,6 +175,8 @@ struct MLBPlayerInfoView: View {
             }
         )
         .onAppear {
+            store.send(.baseInfo(.initData))
+            
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true
             }
