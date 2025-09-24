@@ -16,22 +16,28 @@ struct BaseTeamStandingsStore<T> {
         /* ---------------------
            data state
            --------------------- */
-        var displayModel: T? = nil
+        var displayModel: T
         
         /* ---------------------
            ui state
            --------------------- */
-        var secondCategorySelectedIndex = 0
+        var headerCategorySelectedIndex = 0
+        var categorySelectedIndex = 0
         
         /* ---------------------
            etc
            --------------------- */
         var teamNameDictionary: [String: String] = [:]
+        
+        init(displayModel: T) {
+            self.displayModel = displayModel
+        }
     }
     
     enum Action {
-        case initData(displayModel: T)
-        case selectSecondCategory(Int)
+        case initData
+        case selectCategory(index: Int)
+        case selectHeaderCategory(index: Int, isInit: Bool = false)
     }
     
     @Dependency(\.translatedNameProvider) var nameProvider
@@ -39,14 +45,13 @@ struct BaseTeamStandingsStore<T> {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .initData(let displayModel):
+            case .initData:
                 // init with default value
-                state.secondCategorySelectedIndex = 0
+                state.headerCategorySelectedIndex = 0
+                state.categorySelectedIndex = 0
                 
-                // init data
-                state.displayModel = displayModel
-                
-                if let displayModel = displayModel as? SportDisplayModel {
+                var teamStandingsCategories = StringConstants.Football.teamStandingsCategories
+                if let displayModel = state.displayModel as? SportDisplayModel {
                     switch displayModel.leagueId {
                     case Constants.Ids.epl:
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
@@ -62,31 +67,37 @@ struct BaseTeamStandingsStore<T> {
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                     case Constants.Ids.nba:
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
+                        teamStandingsCategories = StringConstants.NBA.teamStandingsCategories
                     case Constants.Ids.kbo:
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.kboTeamDic)
+                        teamStandingsCategories = StringConstants.KBO.teamStandingsCategories
                     case Constants.Ids.mlb:
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlbTeamDic)
+                        teamStandingsCategories = StringConstants.MLB.teamStandingsCategories
                     default: break
                     }
                     
                     let keywords = displayModel.keywords
                     if !keywords.isEmpty {
-                        let index = StringConstants.Football.teamStandingsCategories.firstIndex { category in
+                        let index = teamStandingsCategories.firstIndex { category in
                             let keyword = keywords.first { $0.keyword == category }
                             return keyword != nil
                         }
                         
                         if let index {
-                            state.secondCategorySelectedIndex = index
+                            state.categorySelectedIndex = index
                         }
                     }
                 }
                 
                 return .none
                 
-            case .selectSecondCategory(let index):
-                state.secondCategorySelectedIndex = index
+            case .selectCategory(let index):
+                state.categorySelectedIndex = index
                 
+                return .none
+                
+            case .selectHeaderCategory(_, _):
                 return .none
             }
         }

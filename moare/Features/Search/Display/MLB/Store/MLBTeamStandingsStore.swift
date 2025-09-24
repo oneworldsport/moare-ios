@@ -10,7 +10,7 @@ import ComposableArchitecture
 
 @Reducer
 struct MLBTeamStandingsStore {
-    typealias BaseTeamStandings = BaseTeamStandingsStore<MLBTeamStandingsDisplayModel>
+    typealias BaseStandings = BaseTeamStandingsStore<MLBTeamStandingsDisplayModel>
     
     @ObservableState
     struct State {
@@ -19,115 +19,107 @@ struct MLBTeamStandingsStore {
         /* ---------------------
            data state
            --------------------- */
-        var baseTeamStandings = BaseTeamStandings.State()
+        var baseStandings: BaseStandings.State
+        
         var westStandings: [MLBTeamStandingsDisplay] = []
         var eastStandings: [MLBTeamStandingsDisplay] = []
         var centralStandings: [MLBTeamStandingsDisplay] = []
         
-        /* ---------------------
-           ui state
-           --------------------- */
-        var headerCategorySelectedIndex = 0
+        init(displayModel: MLBTeamStandingsDisplayModel) {
+            self.baseStandings = BaseStandings.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
-        case baseTeamStandings(BaseTeamStandings.Action)
+        case baseStandings(BaseStandings.Action)
         
-        /* ---------------------
-           view action
-           --------------------- */
-        case selectHeaderCategory(index: Int, isInit: Bool = false)
-        
-        /* ---------------------
-           private
-           --------------------- */
         case sortStandings
     }
     
     var body: some Reducer<State, Action> {
-        Scope(state: \.baseTeamStandings, action: \.baseTeamStandings) {
-            BaseTeamStandings()
-        }
+        Scope(state: \.baseStandings, action: \.baseStandings) { BaseStandings() }
         
         Reduce { state, action in
             switch action {
-            case .baseTeamStandings(.initData):
+            case .baseStandings(.initData):
                 // init data
                 state.westStandings = []
                 state.eastStandings = []
                 state.centralStandings = []
-                state.baseTeamStandings.secondCategorySelectedIndex = 1 // defalue category is "승률"
+                state.baseStandings.categorySelectedIndex = 1 // defalue category is "승률"
                 
-                return .send(.selectHeaderCategory(index: 0, isInit: true))
+                return .send(.baseStandings(.selectHeaderCategory(index: 0, isInit: true)))
                 
-            case .baseTeamStandings(.selectSecondCategory):
+            case .baseStandings(.selectCategory):
                 return .send(.sortStandings)
                 
-            case .selectHeaderCategory(let index, let isInit):
+            case let .baseStandings(.selectHeaderCategory(index, isInit)):
+                let displayModel = state.baseStandings.displayModel
+                
                 if isInit {
-                    let entityTeam = state.baseTeamStandings.displayModel?.standings.first { team in
+                    let entityTeam = displayModel.standings.first { team in
                         // Any first team that matches with any team in entityInfo
-                        state.baseTeamStandings.displayModel?.entityInfo.first { $0.teamId == team.team.id } != nil
+                        displayModel.entityInfo.first { $0.teamId == team.team.id } != nil
                     }
                     
                     // When init, if entity's league is american, set index 1.
                     // Otherwise do nothing, which would be set as default(0).
                     if entityTeam?.team.league.id == Constants.Ids.americanLeague {
-                        state.headerCategorySelectedIndex = 1
+                        state.baseStandings.headerCategorySelectedIndex = 1
                     }
                     
-                    state.westStandings = state.baseTeamStandings.displayModel?.standings.filter {
+                    state.westStandings = displayModel.standings.filter {
                         if entityTeam?.team.league.id == Constants.Ids.americanLeague {
                             $0.team.division.id == Constants.Ids.americanLeagueWest
                         } else {
                             $0.team.division.id == Constants.Ids.nationalLeagueWest
                         }
-                    } ?? []
-                    state.eastStandings = state.baseTeamStandings.displayModel?.standings.filter {
+                    }
+                    state.eastStandings = displayModel.standings.filter {
                         if entityTeam?.team.league.id == Constants.Ids.americanLeague {
                             $0.team.division.id == Constants.Ids.americanLeagueEast
                         } else {
                             $0.team.division.id == Constants.Ids.nationalLeagueEast
                         }
-                    } ?? []
-                    state.centralStandings = state.baseTeamStandings.displayModel?.standings.filter {
+                    }
+                    state.centralStandings = displayModel.standings.filter {
                         if entityTeam?.team.league.id == Constants.Ids.americanLeague {
                             $0.team.division.id == Constants.Ids.americanLeagueCentral
                         } else {
                             $0.team.division.id == Constants.Ids.nationalLeagueCentral
                         }
-                    } ?? []
+                    }
                 } else {
-                    state.headerCategorySelectedIndex = index
+                    state.baseStandings.headerCategorySelectedIndex = index
                     
-                    state.westStandings = state.baseTeamStandings.displayModel?.standings.filter {
+                    state.westStandings = displayModel.standings.filter {
                         if index == 0 {
                             $0.team.division.id == Constants.Ids.nationalLeagueWest
                         } else {
                             $0.team.division.id == Constants.Ids.americanLeagueWest
                         }
-                    } ?? []
-                    state.eastStandings = state.baseTeamStandings.displayModel?.standings.filter {
+                    }
+                    state.eastStandings = displayModel.standings.filter {
                         if index == 0 {
                             $0.team.division.id == Constants.Ids.nationalLeagueEast
                         } else {
                             $0.team.division.id == Constants.Ids.americanLeagueEast
                         }
-                    } ?? []
-                    state.centralStandings = state.baseTeamStandings.displayModel?.standings.filter {
+                    }
+                    state.centralStandings = displayModel.standings.filter {
                         if index == 0 {
                             $0.team.division.id == Constants.Ids.nationalLeagueCentral
                         } else {
                             $0.team.division.id == Constants.Ids.americanLeagueCentral
                         }
-                    } ?? []
+                    }
 
                 }
                 
                 return .send(.sortStandings)
                 
             case .sortStandings:
-                switch state.baseTeamStandings.secondCategorySelectedIndex {
+                switch state.baseStandings.categorySelectedIndex {
                 case 0: // 게임차
                     state.westStandings.sort { Double($0.stats.recordData?.gamesBack ?? "0") ?? 0 < Double($1.stats.recordData?.gamesBack ?? "0") ?? 0 }
                     state.eastStandings.sort { Double($0.stats.recordData?.gamesBack ?? "0") ?? 0 < Double($1.stats.recordData?.gamesBack ?? "0") ?? 0 }

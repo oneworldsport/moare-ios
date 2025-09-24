@@ -10,6 +10,7 @@ import ComposableArchitecture
 
 @Reducer
 struct NBATeamStandingsStore {
+    typealias BaseStandings = BaseTeamStandingsStore<NBATeamStandingsDisplayModel>
     
     @ObservableState
     struct State {
@@ -26,115 +27,79 @@ struct NBATeamStandingsStore {
         /* ---------------------
            data state
            --------------------- */
-        var displayModel: NBATeamStandingsDisplayModel? = nil
+        var baseStandings: BaseStandings.State
+        
         var standings: [NBATeamStandingsDisplay] = []
         
-        /* ---------------------
-           ui state
-           --------------------- */
-        var selectedConferenceIndex = 0
-        var selectedCategoryIndex = 1
-        
-        /* ---------------------
-           etc
-           --------------------- */
-        var teamNameDictionary: [String: String] = [:]
+        init(displayModel: NBATeamStandingsDisplayModel) {
+            self.baseStandings = BaseStandings.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
-        /* ---------------------
-           init
-           --------------------- */
-        case initData(displayModel: NBATeamStandingsDisplayModel)
+        case baseStandings(BaseStandings.Action)
         
-        /* ---------------------
-           view action
-           --------------------- */
-        case selectConference(index: Int, isInit: Bool = false)
-        case selectCategory(index: Int)
-        
-        /* ---------------------
-           private
-           --------------------- */
         case sortStandings
     }
     
-    @Dependency(\.translatedNameProvider) var nameProvider
-    
     var body: some Reducer<State, Action> {
+        Scope(state: \.baseStandings, action: \.baseStandings) { BaseStandings() }
+        
         Reduce { state, action in
             switch action {
-            case .initData(let displayModel):
+            case .baseStandings(.initData):
                 // init with default value
-                state.selectedConferenceIndex = 0
-                state.selectedCategoryIndex = 1
+                state.baseStandings.categorySelectedIndex = 1
                 
-                // init data
-                state.displayModel = displayModel
+                return .send(.baseStandings(.selectHeaderCategory(index: 0, isInit: true)))
                 
-                state.teamNameDictionary = nameProvider.getDictionary(category: "nba_team")
+            case let .baseStandings(.selectHeaderCategory(index, isInit)):
+                let displayModel = state.baseStandings.displayModel
                 
-                let keywords = displayModel.keywords
-                // select category that matches with the keyword
-                if !keywords.isEmpty {
-                    let index = StringConstants.NBA.teamStandingsCategories.firstIndex { category in
-                        let keyword = keywords.first { $0.keyword == category }
-                        return keyword != nil
-                    }
-                    
-                    if let index {
-                        state.selectedCategoryIndex = index
-                    }
-                }
-                
-                return .send(.selectConference(index: 0, isInit: true))
-                
-            case .selectConference(let index, let isInit):
                 var standings: [NBATeamStandingsDisplay]
+                
                 if isInit {
-                    let entityTeam = state.displayModel?.standings.first { team in
+                    let entityTeam = displayModel.standings.first { team in
                         // Any first team that matches with any team in entityInfo
-                        state.displayModel?.entityInfo.first { $0.teamId == team.team.id } != nil
+                        displayModel.entityInfo.first { $0.teamId == team.team.id } != nil
                     }
                     
                     // When init, if entity's conference is east, set index 1.
                     // Otherwise do nothing, which would be set as default(0).
                     if entityTeam?.team.teamConference.lowercased() == "east" {
-                        state.selectedConferenceIndex = 1
+                        state.baseStandings.headerCategorySelectedIndex = 1
                     }
                     
-                    standings = state.displayModel?.standings.filter {
+                    standings = displayModel.standings.filter {
                         if entityTeam != nil {
                             $0.team.teamConference == entityTeam?.team.teamConference
                         } else {
                             $0.team.teamConference.lowercased() == "west"
                         }
-                    } ?? []
+                    }
                 } else {
-                    state.selectedConferenceIndex = index
+                    state.baseStandings.headerCategorySelectedIndex = index
                     
-                    standings = state.displayModel?.standings.filter {
+                    standings = displayModel.standings.filter {
                         if index == 0 {
                             $0.team.teamConference.lowercased() == "west"
                         } else {
                             $0.team.teamConference.lowercased() == "east"
                         }
-                    } ?? []
+                    }
                 }
                 
                 state.standings = standings
                 
                 return .send(.sortStandings)
                 
-            case .selectCategory(let index):
-                state.selectedCategoryIndex = index
-                
+            case .baseStandings(.selectCategory):
                 return .send(.sortStandings)
                 
             case .sortStandings:
                 let standings = state.standings
                 
-                switch state.selectedCategoryIndex {
+                switch state.baseStandings.categorySelectedIndex {
                 case 0:
                     state.standings.sort { calculateGamesBack(standings: standings, team: $0.stats) < calculateGamesBack(standings: standings, team: $1.stats) }
                 case 1:

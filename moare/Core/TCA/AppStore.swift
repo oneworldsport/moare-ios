@@ -34,14 +34,14 @@ struct AppStore {
                     state.path.append(.fbPlayerInfo(FBPlayerInfoStore.State(displayModel: displayModel)))
                 case .fbPlayerStats(_, let displayModel):
                     state.path.append(.fbPlayerStats(FBPlayerStatsStore.State(displayModel: displayModel)))
-                case .fbPlayerStandings(_, _):
-                    state.path.append(.fbPlayerStandings(FBPlayerStandingsStore.State()))
+                case .fbPlayerStandings(_, let displayModel):
+                    state.path.append(.fbPlayerStandings(FBPlayerStandingsStore.State(displayModel: displayModel)))
                 case .fbTeamInfo(_, let displayModel):
                     state.path.append(.fbTeamInfo(FBTeamInfoStore.State(displayModel: displayModel)))
                 case .fbTeamStats(_, let displayModel):
                     state.path.append(.fbTeamStats(FBTeamStatsStore.State(displayModel: displayModel)))
-                case .fbTeamStandings(_, _):
-                    state.path.append(.fbTeamStandings(FBTeamStandingsStore.State()))
+                case .fbTeamStandings(_, let displayModel):
+                    state.path.append(.fbTeamStandings(FBTeamStandingsStore.State(displayModel: displayModel)))
                 case .fbLeagueSchedule(_, _):
                     state.path.append(.fbLeagueSchedule(FBLeagueScheduleStore.State()))
                 case .fbGameStats(_, _):
@@ -53,14 +53,14 @@ struct AppStore {
                     state.path.append(.nbaPlayerInfo(NBAPlayerInfoStore.State(displayModel: displayModel)))
                 case .nbaPlayerStats(_, let displayModel):
                     state.path.append(.nbaPlayerStats(NBAPlayerStatsStore.State(displayModel: displayModel)))
-                case .nbaPlayerStandings(_, _):
-                    state.path.append(.nbaPlayerStandings(NBAPlayerStandingsStore.State()))
+                case .nbaPlayerStandings(_, let displayModel):
+                    state.path.append(.nbaPlayerStandings(NBAPlayerStandingsStore.State(displayModel: displayModel)))
                 case .nbaTeamInfo(_, let displayModel):
                     state.path.append(.nbaTeamInfo(NBATeamInfoStore.State(displayModel: displayModel)))
                 case .nbaTeamStats(_, let displayModel):
                     state.path.append(.nbaTeamStats(NBATeamStatsStore.State(displayModel: displayModel)))
-                case .nbaTeamStandings(_, _):
-                    state.path.append(.nbaTeamStandings(NBATeamStandingsStore.State()))
+                case .nbaTeamStandings(_, let displayModel):
+                    state.path.append(.nbaTeamStandings(NBATeamStandingsStore.State(displayModel: displayModel)))
                 case .nbaLeagueSchedule(_, _):
                     state.path.append(.nbaLeagueSchedule(NBALeagueScheduleStore.State()))
                 case .nbaGameStats(_, _):
@@ -78,8 +78,8 @@ struct AppStore {
                     state.path.append(.kboTeamInfo(KBOTeamInfoStore.State(displayModel: displayModel)))
                 case .kboTeamStats(_, let displayModel):
                     state.path.append(.kboTeamStats(KBOTeamStatsStore.State(displayModel: displayModel)))
-                case .kboTeamStandings(_, _):
-                    state.path.append(.kboTeamStandings(KBOTeamStandingsStore.State()))
+                case .kboTeamStandings(_, let displayModel):
+                    state.path.append(.kboTeamStandings(KBOTeamStandingsStore.State(displayModel: displayModel)))
                 case .kboLeagueSchedule(_, _):
                     state.path.append(.kboLeagueSchedule(KBOLeagueScheduleStore.State()))
                 case .kboGameStats(_, _):
@@ -97,8 +97,8 @@ struct AppStore {
                     state.path.append(.mlbTeamInfo(MLBTeamInfoStore.State(displayModel: displayModel)))
                 case .mlbTeamStats(_, let displayModel):
                     state.path.append(.mlbTeamStats(MLBTeamStatsStore.State(displayModel: displayModel)))
-                case .mlbTeamStandings(_, _):
-                    state.path.append(.mlbTeamStandings(MLBTeamStandingsStore.State()))
+                case .mlbTeamStandings(_, let displayModel):
+                    state.path.append(.mlbTeamStandings(MLBTeamStandingsStore.State(displayModel: displayModel)))
                 case .mlbLeagueSchedule(_, _):
                     state.path.append(.mlbLeagueSchedule(MLBLeagueScheduleStore.State()))
                 case .mlbGameStats(_, _):

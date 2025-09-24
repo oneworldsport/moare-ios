@@ -299,14 +299,14 @@ struct PathView: View {
             if let s = store.scope(state: \.fbPlayerInfo, action: \.fbPlayerInfo) { FBPlayerInfoView(searchStore: searchStore, store: s) }
         case .fbPlayerStats:
             if let s = store.scope(state: \.fbPlayerStats, action: \.fbPlayerStats) { FBPlayerStatsView(searchStore: searchStore, store: s) }
-//        case .fbPlayerStandings:
-//            if let s = store.scope(state: \.fbPlayerStandings, action: \.fbPlayerStandings) { FBPlayerStandingsView(store: s) }
+        case .fbPlayerStandings:
+            if let s = store.scope(state: \.fbPlayerStandings, action: \.fbPlayerStandings) { FBPlayerStandingsView(searchStore: searchStore, store: s) }
         case .fbTeamInfo:
             if let s = store.scope(state: \.fbTeamInfo, action: \.fbTeamInfo) { FBTeamInfoView(searchStore: searchStore, store: s) }
         case .fbTeamStats:
             if let s = store.scope(state: \.fbTeamStats, action: \.fbTeamStats) { FBTeamStatsView(searchStore: searchStore, store: s) }
-//        case .fbTeamStandings:
-//            if let s = store.scope(state: \.fbTeamStandings, action: \.fbTeamStandings) { FBTeamStandingsView(store: s) }
+        case .fbTeamStandings:
+            if let s = store.scope(state: \.fbTeamStandings, action: \.fbTeamStandings) { FBTeamStandingsView(searchStore: searchStore, store: s) }
 //        case .fbLeagueSchedule:
 //            if let s = store.scope(state: \.fbLeagueSchedule, action: \.fbLeagueSchedule) { FBLeagueScheduleView(store: s) }
 //        case .fbGameStats:
@@ -318,14 +318,14 @@ struct PathView: View {
             if let s = store.scope(state: \.nbaPlayerInfo, action: \.nbaPlayerInfo) { NBAPlayerInfoView(searchStore: searchStore, store: s) }
         case .nbaPlayerStats:
             if let s = store.scope(state: \.nbaPlayerStats, action: \.nbaPlayerStats) { NBAPlayerStatsView(searchStore: searchStore, store: s) }
-//        case .nbaPlayerStandings:
-//            if let s = store.scope(state: \.nbaPlayerStandings, action: \.nbaPlayerStandings) { NBAPlayerStandingsView(store: s) }
+        case .nbaPlayerStandings:
+            if let s = store.scope(state: \.nbaPlayerStandings, action: \.nbaPlayerStandings) { NBAPlayerStandingsView(searchStore: searchStore, store: s) }
         case .nbaTeamInfo:
             if let s = store.scope(state: \.nbaTeamInfo, action: \.nbaTeamInfo) { NBATeamInfoView(searchStore: searchStore, store: s) }
         case .nbaTeamStats:
             if let s = store.scope(state: \.nbaTeamStats, action: \.nbaTeamStats) { NBATeamStatsView(searchStore: searchStore, store: s) }
-//        case .nbaTeamStandings:
-//            if let s = store.scope(state: \.nbaTeamStandings, action: \.nbaTeamStandings) { NBATeamStandingsView(store: s) }
+        case .nbaTeamStandings:
+            if let s = store.scope(state: \.nbaTeamStandings, action: \.nbaTeamStandings) { NBATeamStandingsView(searchStore: searchStore, store: s) }
 //        case .nbaLeagueSchedule:
 //            if let s = store.scope(state: \.nbaLeagueSchedule, action: \.nbaLeagueSchedule) { NBALeagueScheduleView(store: s) }
 //        case .nbaGameStats:
@@ -341,8 +341,8 @@ struct PathView: View {
             if let s = store.scope(state: \.kboTeamInfo, action: \.kboTeamInfo) { KBOTeamInfoView(searchStore: searchStore, store: s) }
         case .kboTeamStats:
             if let s = store.scope(state: \.kboTeamStats, action: \.kboTeamStats) { KBOTeamStatsView(searchStore: searchStore, store: s) }
-//        case .kboTeamStandings:
-//            if let s = store.scope(state: \.kboTeamStandings, action: \.kboTeamStandings) { KBOTeamStandingsView(store: s) }
+        case .kboTeamStandings:
+            if let s = store.scope(state: \.kboTeamStandings, action: \.kboTeamStandings) { KBOTeamStandingsView(searchStore: searchStore, store: s) }
 //        case .kboLeagueSchedule:
 //            if let s = store.scope(state: \.kboLeagueSchedule, action: \.kboLeagueSchedule) { KBOLeagueScheduleView(store: s) }
 //        case .kboGameStats:
@@ -358,8 +358,8 @@ struct PathView: View {
             if let s = store.scope(state: \.mlbTeamInfo, action: \.mlbTeamInfo) { MLBTeamInfoView(searchStore: searchStore, store: s) }
         case .mlbTeamStats:
             if let s = store.scope(state: \.mlbTeamStats, action: \.mlbTeamStats) { MLBTeamStatsView(searchStore: searchStore, store: s) }
-//        case .mlbTeamStandings:
-//            if let s = store.scope(state: \.mlbTeamStandings, action: \.mlbTeamStandings) { MLBTeamStandingsView(store: s) }
+        case .mlbTeamStandings:
+            if let s = store.scope(state: \.mlbTeamStandings, action: \.mlbTeamStandings) { MLBTeamStandingsView(searchStore: searchStore, store: s) }
 //        case .mlbLeagueSchedule:
 //            if let s = store.scope(state: \.mlbLeagueSchedule, action: \.mlbLeagueSchedule) { MLBLeagueScheduleView(store: s) }
 //        case .mlbGameStats:

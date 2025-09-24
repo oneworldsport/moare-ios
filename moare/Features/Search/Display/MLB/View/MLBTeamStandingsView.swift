@@ -9,106 +9,81 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MLBTeamStandingsView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var mlbTeamStandingsStore: StoreOf<MLBTeamStandingsStore>? = nil
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<MLBTeamStandingsStore>
     
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: MLBTeamStandingsDisplayModel
+    @State private var show = false
     
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            
-            VStack {
-                if let mlbTeamStandingsStore {
-                    StandingsViewContainer(
-                        state: StandingsContainerState(
-                            headerCategories: StringConstants.MLB.conferenceCategory,
-                            secondCategories: StringConstants.MLB.teamStandingsCategories,
-                            standings: [],
-                            headerCategorySelectedIndex: mlbTeamStandingsStore.headerCategorySelectedIndex,
-                            secondCategorySelectedIndex: mlbTeamStandingsStore.baseTeamStandings.secondCategorySelectedIndex,
-                            columnWidthList: mlbTeamStandingsStore.columnWidthList
-                        ),
-                        actions: StandingsContainerActions(
-                            headerCategoryButtonAction: { index in
-                                mlbTeamStandingsStore.send(.selectHeaderCategory(index: index))
-                            },
-                            secondCategoryButtonAction: { index, _ in
-                                mlbTeamStandingsStore.send(.baseTeamStandings(.selectSecondCategory(index)))
-                            },
-                            itemButtonAction: { _ in
-                            }
-                        ),
-                        shouldUseCustomListContent: true,
-                        titleContent: {
-                            BaseballLeagueTitle(
-                                logoUrl: MLBUtil.mlbLogoUrl,
-                                name: "MLB",
-                                season: mlbTeamStandingsStore.westStandings.first?.team.season
-                            )
+        VStack {
+            if show {
+                StandingsViewContainer(
+                    state: StandingsContainerState(
+                        headerCategories: StringConstants.MLB.conferenceCategory,
+                        secondCategories: StringConstants.MLB.teamStandingsCategories,
+                        standings: [],
+                        headerCategorySelectedIndex: store.baseStandings.headerCategorySelectedIndex,
+                        secondCategorySelectedIndex: store.baseStandings.categorySelectedIndex,
+                        columnWidthList: store.columnWidthList
+                    ),
+                    actions: StandingsContainerActions(
+                        headerCategoryButtonAction: { index in
+                            store.send(.baseStandings(.selectHeaderCategory(index: index)))
                         },
-                        customListContent: { totalHScrollDistance in
-                            VStack {
-                                // west
-                                MLBTeamStandingsDataList(
-                                    searchStore: searchStore,
-                                    mlbTeamStandingsStore: mlbTeamStandingsStore,
-                                    divisionTitle: "서부",
-                                    standings: mlbTeamStandingsStore.westStandings,
-                                    totalHScrollDistance: totalHScrollDistance
-                                )
-                                
-                                // east
-                                MLBTeamStandingsDataList(
-                                    searchStore: searchStore,
-                                    mlbTeamStandingsStore: mlbTeamStandingsStore,
-                                    divisionTitle: "동부",
-                                    standings: mlbTeamStandingsStore.eastStandings,
-                                    totalHScrollDistance: totalHScrollDistance
-                                )
-                                
-                                // central
-                                MLBTeamStandingsDataList(
-                                    searchStore: searchStore,
-                                    mlbTeamStandingsStore: mlbTeamStandingsStore,
-                                    divisionTitle: "중부",
-                                    standings: mlbTeamStandingsStore.centralStandings,
-                                    totalHScrollDistance: totalHScrollDistance
-                                )
-                            }
+                        secondCategoryButtonAction: { index, _ in
+                            store.send(.baseStandings(.selectCategory(index: index)))
+                        },
+                        itemButtonAction: { _ in
                         }
-                    )
-                }
+                    ),
+                    shouldUseCustomListContent: true,
+                    titleContent: {
+                        BaseballLeagueTitle(
+                            logoUrl: MLBUtil.mlbLogoUrl,
+                            name: "MLB",
+                            season: store.westStandings.first?.team.season
+                        )
+                    },
+                    customListContent: { totalHScrollDistance in
+                        VStack {
+                            // west
+                            MLBTeamStandingsDataList(
+                                searchStore: searchStore,
+                                mlbTeamStandingsStore: store,
+                                divisionTitle: "서부",
+                                standings: store.westStandings,
+                                totalHScrollDistance: totalHScrollDistance
+                            )
+                            
+                            // east
+                            MLBTeamStandingsDataList(
+                                searchStore: searchStore,
+                                mlbTeamStandingsStore: store,
+                                divisionTitle: "동부",
+                                standings: store.eastStandings,
+                                totalHScrollDistance: totalHScrollDistance
+                            )
+                            
+                            // central
+                            MLBTeamStandingsDataList(
+                                searchStore: searchStore,
+                                mlbTeamStandingsStore: store,
+                                divisionTitle: "중부",
+                                standings: store.centralStandings,
+                                totalHScrollDistance: totalHScrollDistance
+                            )
+                        }
+                    }
+                )
             }
-            .onAppear {
-                // init MLBTeamStandingsStore
-                let mlbTeamStandingsStore: StoreOf<MLBTeamStandingsStore> = storeManager.getStore(forKey: StoreKeys.mlbTeamStandingsStore) ?? {
-                    let newStore = Store(initialState: MLBTeamStandingsStore.State()) { MLBTeamStandingsStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.mlbTeamStandingsStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.mlbTeamStandingsStore = mlbTeamStandingsStore
-                }
-                
-                if searchStore.poppedView == nil {
-                    mlbTeamStandingsStore.send(.baseTeamStandings(.initData(displayModel: displayModel)))
-                }
+        }
+        .onAppear {
+            store.send(.baseStandings(.initData))
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
-            .onChange(of: displayModel) {
-                if case .mlbTeamStandings = searchStore.poppedView {
-                    mlbTeamStandingsStore?.send(.baseTeamStandings(.initData(displayModel: displayModel)))
-                }
-            }
-        } // if let searchStore
+        }
     }
 }
 
@@ -121,7 +96,7 @@ struct MLBTeamStandingsDataList: View {
     let totalHScrollDistance: CGFloat
     
     var body: some View {
-        let teamNameDic = mlbTeamStandingsStore.baseTeamStandings.teamNameDictionary
+        let teamNameDic = mlbTeamStandingsStore.baseStandings.teamNameDictionary
         
         HStack(spacing: 0) {
             // title, rank items
