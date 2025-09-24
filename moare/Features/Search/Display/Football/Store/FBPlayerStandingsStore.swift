@@ -49,6 +49,7 @@ struct FBPlayerStandingsStore {
            view action
            --------------------- */
         case showMoreStandings(isUp: Bool)
+        case showPlayerStats(id: Int)
         
         /* ---------------------
            private
@@ -58,6 +59,12 @@ struct FBPlayerStandingsStore {
         case fetchStandings(category: String)
         case setDisplayModel(data: SportDecodableModel)
         case updateDisplayDataState(fetchState: ApiFetchState)
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case showPlayerStats(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -225,6 +232,32 @@ struct FBPlayerStandingsStore {
                 
                 state.filteredStandings = Array(standings.prefix(20))
                 
+                return .none
+                
+            case let .showPlayerStats(id):
+                return .run { [league = state.league, displayModel = state.baseStandings.displayModel] send in
+                    let leagueId = league?.id ?? Constants.Ids.epl
+                    
+                    // TODO: Has to add loading
+                    let result = try await searchClient.fetchById(
+                        season: displayModel.season,
+                        category: "football",
+                        dataType: "football_player_stats",
+                        leagueId: leagueId,
+                        id: String(id)
+                    )
+                    
+                    await send(.delegate(.showPlayerStats(model: result.data)))
+//                    let player = responseModel.standings.first { $0.player.id == playerId }
+//                    
+//                    let playerInfoResponseModel = FBPlayerInfoResponseModel(info: player, lastGame: nil, nextGame: nil)
+//                    dataModel = .fbPlayerStats(
+//                        playerInfoResponseModel,
+//                        modelConverter.fbPlayerStatsConverter(response: playerInfoResponseModel)
+//                    )
+                }
+                
+            case .delegate:
                 return .none
             }
         }

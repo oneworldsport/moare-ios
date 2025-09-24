@@ -209,6 +209,16 @@ struct AppStore {
                 
                 return .none
                 
+            case let .path(.element(id: elementId, action: .fbPlayerStandings(.delegate(.showPlayerStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .fbPlayerStats(_, let displayModel) = model {
+                    state.path.append(.fbPlayerStats(FBPlayerStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
             case .path:
                 return .none
             }
