@@ -45,7 +45,7 @@ struct AppStore {
                 case .fbLeagueSchedule(_, let displayModel):
                     state.path.append(.fbLeagueSchedule(FBLeagueScheduleStore.State(displayModel: displayModel)))
                 case .fbGameStats(_, let displayModel):
-                    state.path.append(.fbGameStats(FBGameStatsStore.State()))
+                    state.path.append(.fbGameStats(FBGameStatsStore.State(displayModel: displayModel)))
                 case .fbTournament(_, let displayModel):
                     state.path.append(.fbTournament(FBTournamentStore.State()))
                     
@@ -64,7 +64,7 @@ struct AppStore {
                 case .nbaLeagueSchedule(_, let displayModel):
                     state.path.append(.nbaLeagueSchedule(NBALeagueScheduleStore.State(displayModel: displayModel)))
                 case .nbaGameStats(_, let displayModel):
-                    state.path.append(.nbaGameStats(NBAGameStatsStore.State()))
+                    state.path.append(.nbaGameStats(NBAGameStatsStore.State(displayModel: displayModel)))
                 case .nbaTournament(_, let displayModel):
                     state.path.append(.nbaTournament(NBATournamentStore.State()))
                     
@@ -83,7 +83,7 @@ struct AppStore {
                 case .kboLeagueSchedule(_, let displayModel):
                     state.path.append(.kboLeagueSchedule(KBOLeagueScheduleStore.State(displayModel: displayModel)))
                 case .kboGameStats(_, let displayModel):
-                    state.path.append(.kboGameStats(KBOGameStatsStore.State()))
+                    state.path.append(.kboGameStats(KBOGameStatsStore.State(displayModel: displayModel)))
                 case .kboTournament(_, let displayModel):
                     state.path.append(.kboTournament(KBOTournamentStore.State()))
                     
@@ -102,7 +102,7 @@ struct AppStore {
                 case .mlbLeagueSchedule(_, let displayModel):
                     state.path.append(.mlbLeagueSchedule(MLBLeagueScheduleStore.State(displayModel: displayModel)))
                 case .mlbGameStats(_, let displayModel):
-                    state.path.append(.mlbGameStats(MLBGameStatsStore.State()))
+                    state.path.append(.mlbGameStats(MLBGameStatsStore.State(displayModel: displayModel)))
                 default: break
                 }
                 

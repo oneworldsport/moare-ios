@@ -16,7 +16,7 @@ struct BaseGameStatsStore<T> {
         /* ---------------------
            data state
            --------------------- */
-        var displayModel: T? = nil
+        var displayModel: T
         var displayDataState: ApiFetchState = ApiFetchState.idle
         
         /* ---------------------
@@ -24,7 +24,7 @@ struct BaseGameStatsStore<T> {
            --------------------- */
         var firstCategorySelectedIndex = 0
         var secondCategorySelectedIndex = 0
-        var selectedTeamIndex = 0
+        var teamCategorySelectedIndex = 0
         var shouldScrollCategory = false
         
         /* ---------------------
@@ -32,10 +32,14 @@ struct BaseGameStatsStore<T> {
            --------------------- */
         var playerNameDictionary: [String: String] = [:]
         var teamNameDictionary: [String: String] = [:]
+        
+        init(displayModel: T) {
+            self.displayModel = displayModel
+        }
     }
     
     enum Action {
-        case initData(displayModel: T)
+        case initData
         case selectFirstCategory(Int)
         case selectSecondCategory(Int)
         case selectTeam(Int)
@@ -46,19 +50,17 @@ struct BaseGameStatsStore<T> {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .initData(let displayModel):
+            case .initData:
                 // init with default value
                 state.displayDataState = .idle
                 
                 state.firstCategorySelectedIndex = 0
                 state.secondCategorySelectedIndex = 0
-                state.selectedTeamIndex = 0
+                state.teamCategorySelectedIndex = 0
                 state.shouldScrollCategory = false
                 
-                // init data
-                state.displayModel = displayModel
                 
-                if let displayModel = displayModel as? SportDisplayModel {
+                if let displayModel = state.displayModel as? SportDisplayModel {
                     switch displayModel.leagueId {
                     case Constants.Ids.epl:
                         state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplPlayerDic)
@@ -93,7 +95,7 @@ struct BaseGameStatsStore<T> {
                 return .none
                 
             case .selectFirstCategory(let index):
-                state.shouldScrollCategory =  true
+                state.shouldScrollCategory =  false
                 state.firstCategorySelectedIndex = index
                 
                 return .none
@@ -105,7 +107,7 @@ struct BaseGameStatsStore<T> {
                 return .none
                 
             case .selectTeam(let index):
-                state.selectedTeamIndex = index
+                state.teamCategorySelectedIndex = index
                 
                 return .none
             }

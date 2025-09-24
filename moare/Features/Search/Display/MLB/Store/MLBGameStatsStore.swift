@@ -23,15 +23,16 @@ struct MLBGameStatsStore {
         /* ---------------------
            data state
            --------------------- */
-        var baseGameStats = BaseGameStats.State()
+        var baseGameStats: BaseGameStats.State
+        
         var teamBoxScore: MLBGameBoxscoreTeamData? = nil
         var teamHitters: [(String, MLBGameBoxscoreTeamPlayer)] = []
         var teamPitchers: [(String, MLBGameBoxscoreTeamPlayer)] = []
 //        var playersTotalStats: NBAGameBoxScoreStats? = nil
         
-        /* ---------------------
-           ui state
-           --------------------- */
+        init(displayModel: MLBGameStatsDisplayModel) {
+            self.baseGameStats = BaseGameStats.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
@@ -46,9 +47,7 @@ struct MLBGameStatsStore {
     }
     
     var body: some Reducer<State, Action> {
-        Scope(state: \.baseGameStats, action: \.baseGameStats) {
-            BaseGameStats()
-        }
+        Scope(state: \.baseGameStats, action: \.baseGameStats) { BaseGameStats() }
         
         Reduce { state, action in
             switch action {
@@ -64,9 +63,9 @@ struct MLBGameStatsStore {
             case .baseGameStats(.selectTeam(let index)):
                 // set selected team's boxscore
                 state.teamBoxScore = if index == 0 {
-                    state.baseGameStats.displayModel?.game.boxscore?.teams.home
+                    state.baseGameStats.displayModel.game.boxscore?.teams.home
                 } else {
-                    state.baseGameStats.displayModel?.game.boxscore?.teams.away
+                    state.baseGameStats.displayModel.game.boxscore?.teams.away
                 }
                 
                 state.teamHitters = state.teamBoxScore?.players
@@ -89,9 +88,6 @@ struct MLBGameStatsStore {
                 
             case .baseGameStats(.selectSecondCategory):
                 return .send(.sortPitchers)
-                
-            case .baseGameStats(_):
-                return .none
                 
             case .sortHitters:
                 switch state.baseGameStats.firstCategorySelectedIndex {
@@ -140,6 +136,9 @@ struct MLBGameStatsStore {
                 return .none
                 
             case .setPlayersTotalStats:
+                return .none
+                
+            case .baseGameStats:
                 return .none
             }
         }

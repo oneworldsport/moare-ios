@@ -9,194 +9,173 @@ import SwiftUI
 import ComposableArchitecture
 
 struct FBGameStatsView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var fbGameStatsStore: StoreOf<FBGameStatsStore>? = nil
-    
-    let displayModel: FBGameStatsDisplayModel
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<FBGameStatsStore>
     
     private let columnWidthList: [CGFloat] = [50, 50, 50, 50, 60, 50, 80, 70, 70, 80, 60, 60, 60, 50, 50, 50, 80, 50]
     
+    @State private var show = false
+    
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            let game = displayModel.game
-            let fbLeagueScheduleModel = searchStore.displayModels[.fbLeagueSchedule] as? FBLeagueScheduleDisplayModel
+        let displayModel = store.baseGameStats.displayModel
+        let game = displayModel.game
+        let playerNameDic = store.baseGameStats.playerNameDictionary
+        let teamNameDic = store.baseGameStats.teamNameDictionary
+        let fbLeagueScheduleModel = searchStore.displayModels[.fbLeagueSchedule] as? FBLeagueScheduleDisplayModel
+        
+        let teamIds = [game.teams.home.id, game.teams.away.id]
+        let teamCategories: [GameStatsTeamState] = teamIds.map {
+            return GameStatsTeamState(
+                name: teamNameDic["short_\($0)"] ?? "",
+                imageUrl: FBUtil.teamLogoURL(id: $0)
+            )
+        }
+        
+        let playerList: [StandingsItemState] = store.playerStats.compactMap {
+            let stats = $0.statistics.first
+            let playerId = $0.player.id
             
-            let teamIds = [displayModel.game.teams.home.id, displayModel.game.teams.away.id]
-            let teamCategories: [GameStatsTeamState] = teamIds.map {
-                return GameStatsTeamState(
-                    name: fbGameStatsStore?.teamNameDictionary["short_\($0)"] ?? "",
-                    imageUrl: FBUtil.teamLogoURL(id: $0)
+            var isStarter = false
+            var position = ""
+            
+            if let lineups = store.lineups {
+                for item in lineups.startXI {
+                    if playerId == item.player.id {
+                        isStarter = true
+                        position = item.player.pos
+                        break
+                    }
+                }
+                
+                for item in lineups.substitutes {
+                    if playerId == item.player.id {
+                        isStarter = false
+                        position = item.player.pos
+                        break
+                    }
+                }
+            }
+            
+            if let stats {
+                return StandingsItemState(
+                    id: playerId,
+                    imageUrl: $0.player.photo,
+                    name: playerNameDic["\(playerId)"] ?? $0.player.name,
+                    extraInfo: isStarter ? "선발" : "후보",
+                    extraSubInfo: position,
+                    dataList: [
+                        String(stats.goals.total),
+                        String(stats.penalty.scored),
+                        String(stats.goals.assists),
+                        String(stats.shots.total),
+                        String(stats.shots.on),
+                        String(stats.passes.key),
+                        "\(stats.dribbles.success)/\(stats.dribbles.attempts)(\(stats.dribbles.success.percentage(of: stats.dribbles.attempts, to: 1))%)",
+                        String(stats.offsides),
+                        String(stats.tackles.total),
+                        "\(stats.duels.won)/\(stats.duels.total)(\(stats.duels.won.percentage(of: stats.duels.total, to: 1))%)",
+                        String(stats.tackles.interceptions),
+                        String(stats.passes.total),
+                        String(stats.fouls.drawn),
+                        String(stats.fouls.committed),
+                        String(stats.cards.yellow),
+                        String(stats.cards.red),
+                        String(stats.games.minutes),
+                        stats.games.rating
+                    ]
+                )
+            } else {
+              return nil
+            }
+        } ?? []
+        
+        let gameDetailTitle = "장소: \n심판: "
+        let gameDetailContent: String = {
+            var result = ""
+            result += "\(teamNameDic["venue_\(displayModel.game.teams.home.id)"] ?? "")\n"
+            result += "\(displayModel.game.fixture.referee)\n"
+            return result
+        }()
+        
+        VStack {
+            if show {
+                GameStatsViewContainer(
+                    state: GameStatsContainerState(
+                        shouldShowTitle: fbLeagueScheduleModel == nil,
+                        shouldShowGameItem: fbLeagueScheduleModel == nil,
+                        shouldShowStats: displayModel.game.fixture.status.short != StringConstants.Football.gameNotStarted,
+                        shouldShowCoach: true,
+                        shouldShowRefreshButton: StringConstants.Football.gameLiveList.contains(displayModel.game.fixture.status.short),
+                        teamCategories: teamCategories,
+                        coachState: GameStatsCoachState(
+                            name: store.coach?.name,
+                            imageUrl: store.coach?.photo
+                        ),
+                        teamCategorySelectedIndex: store.baseGameStats.teamCategorySelectedIndex,
+                        gameDetailTitle: gameDetailTitle,
+                        gameDetailContent: gameDetailContent,
+                        firstStatsCategories: StringConstants.Football.gameStatsSecondCategories,
+                        firstStatsCategorySelectedIndex: store.baseGameStats.firstCategorySelectedIndex,
+                        firstStatsColumnWidthList: columnWidthList,
+                        firstStatsPlayerList: playerList,
+                    ),
+                    actions: GameStatsContainerActions(
+                        teamCategoryButtonAction: { index in
+                            store.send(.baseGameStats(.selectTeam(index)))
+                        },
+                        firstStatsCategoryButtonAction: { index in
+                            store.send(.baseGameStats(.selectFirstCategory(index)))
+                        },
+                        refreshButtonAction: {
+                            searchStore.send(.refreshGame(season: displayModel.season, category: "football"))
+                        }
+                    ),
+                    titleContent: {
+                        HStack(spacing: 0) {
+                            LeagueTitle(
+                                url: game.league.logo,
+                                leagueName: game.league.name,
+                                leagueSeason: game.league.season
+                            )
+                            
+                            Text(" - \(MatchDescriptionConverter.convert(descriptionType: .roundWithoutDash, input: game.league.round))")
+                                .font(.system(size: 14))
+                        }
+                    },
+                    gameContent: {
+                        let previousViewStack = searchStore.viewStack.dropLast().last
+                        // NOTE: || 연산자가 안먹고, switch case문도 오류가 나서 아래처럼 처리.
+                        if case .fbPlayerInfo = previousViewStack {
+                            FBLeagueScheduleListItem(
+                                searchStore: searchStore,
+                                fbLeagueScheduleStore: nil,
+                                data: ModelConverter.fbGameToGameScheduleConverter(game: game),
+                                teamNameDic: teamNameDic
+                            )
+                        } else if case .fbTeamInfo = previousViewStack {
+                            FBLeagueScheduleListItem(
+                                searchStore: searchStore,
+                                fbLeagueScheduleStore: nil,
+                                data: ModelConverter.fbGameToGameScheduleConverter(game: game),
+                                teamNameDic: teamNameDic
+                            )
+                        }
+                    }
                 )
             }
+        }
+        .onAppear {
+            store.send(.baseGameStats(.initData))
             
-            let playerList: [StandingsItemState] = fbGameStatsStore?.playerStats.compactMap {
-                let stats = $0.statistics.first
-                let playerId = $0.player.id
-                
-                var isStarter = false
-                var position = ""
-                
-                if let lineups = fbGameStatsStore?.lineups {
-                    for item in lineups.startXI {
-                        if playerId == item.player.id {
-                            isStarter = true
-                            position = item.player.pos
-                            break
-                        }
-                    }
-                    
-                    for item in lineups.substitutes {
-                        if playerId == item.player.id {
-                            isStarter = false
-                            position = item.player.pos
-                            break
-                        }
-                    }
-                }
-                
-                if let stats {
-                    return StandingsItemState(
-                        id: playerId,
-                        imageUrl: $0.player.photo,
-                        name: fbGameStatsStore?.playerNameDictionary["\(playerId)"] ?? $0.player.name,
-                        extraInfo: isStarter ? "선발" : "후보",
-                        extraSubInfo: position,
-                        dataList: [
-                            String(stats.goals.total),
-                            String(stats.penalty.scored),
-                            String(stats.goals.assists),
-                            String(stats.shots.total),
-                            String(stats.shots.on),
-                            String(stats.passes.key),
-                            "\(stats.dribbles.success)/\(stats.dribbles.attempts)(\(stats.dribbles.success.percentage(of: stats.dribbles.attempts, to: 1))%)",
-                            String(stats.offsides),
-                            String(stats.tackles.total),
-                            "\(stats.duels.won)/\(stats.duels.total)(\(stats.duels.won.percentage(of: stats.duels.total, to: 1))%)",
-                            String(stats.tackles.interceptions),
-                            String(stats.passes.total),
-                            String(stats.fouls.drawn),
-                            String(stats.fouls.committed),
-                            String(stats.cards.yellow),
-                            String(stats.cards.red),
-                            String(stats.games.minutes),
-                            stats.games.rating
-                        ]
-                    )
-                } else {
-                  return nil
-                }
-            } ?? []
-            
-            let gameDetailTitle = "장소: \n심판: "
-            let gameDetailContent: String = {
-                var result = ""
-                result += "\(fbGameStatsStore?.teamNameDictionary["venue_\(displayModel.game.teams.home.id)"] ?? "")\n"
-                result += "\(displayModel.game.fixture.referee)\n"
-                return result
-            }()
-            
-            VStack {
-                if let fbGameStatsStore {
-                    GameStatsViewContainer(
-                        state: GameStatsContainerState(
-                            shouldShowTitle: fbLeagueScheduleModel == nil,
-                            shouldShowGameItem: fbLeagueScheduleModel == nil,
-                            shouldShowStats: displayModel.game.fixture.status.short != StringConstants.Football.gameNotStarted,
-                            shouldShowCoach: true,
-                            shouldShowRefreshButton: StringConstants.Football.gameLiveList.contains(displayModel.game.fixture.status.short),
-                            teamCategories: teamCategories,
-                            coachState: GameStatsCoachState(
-                                name: fbGameStatsStore.coach?.name,
-                                imageUrl: fbGameStatsStore.coach?.photo
-                            ),
-                            teamCategorySelectedIndex: fbGameStatsStore.selectedTeamIndex,
-                            gameDetailTitle: gameDetailTitle,
-                            gameDetailContent: gameDetailContent,
-                            firstStatsCategories: StringConstants.Football.gameStatsSecondCategories,
-                            firstStatsCategorySelectedIndex: fbGameStatsStore.secondSelectedIndex,
-                            firstStatsColumnWidthList: columnWidthList,
-                            firstStatsPlayerList: playerList,
-                        ),
-                        actions: GameStatsContainerActions(
-                            teamCategoryButtonAction: { index in
-                                fbGameStatsStore.send(.selectTeam(index))
-                            },
-                            firstStatsCategoryButtonAction: { index in
-                                fbGameStatsStore.send(.selectSecondCategory(index))
-                            },
-                            refreshButtonAction: {
-                                searchStore.send(.refreshGame(season: displayModel.season, category: "football"))
-                            }
-                        ),
-                        titleContent: {
-                            HStack(spacing: 0) {
-                                LeagueTitle(
-                                    url: game.league.logo,
-                                    leagueName: game.league.name,
-                                    leagueSeason: game.league.season
-                                )
-                                
-                                Text(" - \(MatchDescriptionConverter.convert(descriptionType: .roundWithoutDash, input: game.league.round))")
-                                    .font(.system(size: 14))
-                            }
-                        },
-                        gameContent: {
-                            let previousViewStack = searchStore.viewStack.dropLast().last
-                            // NOTE: || 연산자가 안먹고, switch case문도 오류가 나서 아래처럼 처리.
-                            if case .fbPlayerInfo = previousViewStack {
-                                FBLeagueScheduleListItem(
-                                    searchStore: searchStore,
-                                    fbLeagueScheduleStore: nil,
-                                    data: ModelConverter.fbGameToGameScheduleConverter(game: game),
-                                    teamNameDic: fbGameStatsStore.teamNameDictionary
-                                )
-                            } else if case .fbTeamInfo = previousViewStack {
-                                FBLeagueScheduleListItem(
-                                    searchStore: searchStore,
-                                    fbLeagueScheduleStore: nil,
-                                    data: ModelConverter.fbGameToGameScheduleConverter(game: game),
-                                    teamNameDic: fbGameStatsStore.teamNameDictionary
-                                )
-                            }
-                        }
-                    )
-                }
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
-            .onAppear {
-                // init FBGameStatsStore
-                let fbGameStatsStore: StoreOf<FBGameStatsStore> = storeManager.getStore(forKey: StoreKeys.fbGameStatsStore) ?? {
-                    let newStore = Store(initialState: FBGameStatsStore.State()) { FBGameStatsStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.fbGameStatsStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.fbGameStatsStore = fbGameStatsStore
-                }
-                
-                if searchStore.poppedView == nil {
-                    fbGameStatsStore.send(.initData(displayModel: displayModel))
-                }
-                
-//                if displayModel.game.fixture.status.short != "NS" && displayModel.game.fixture.status.short != "FT" {
-//                    searchStore.send(.refreshGame(category: "football"))
-//                }
-            } // onAppear
-            .onChange(of: displayModel) {
-                if case .fbGameStats = searchStore.poppedView {
-                    fbGameStatsStore?.send(.initData(displayModel: displayModel))
-                }
-                
-                // for refreshGame
-                if case .fbGameStats = searchStore.viewStack.last {
-                    fbGameStatsStore?.send(.initData(displayModel: displayModel))
-                }
-            }
-        } // if let searchStore
+        }
+//        .onChange(of: displayModel) {
+//            // for refreshGame
+//            if case .fbGameStats = searchStore.viewStack.last {
+//                store.send(.initData(displayModel: displayModel))
+//            }
+//        }
     }
 }

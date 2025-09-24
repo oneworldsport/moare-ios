@@ -10,6 +10,7 @@ import ComposableArchitecture
 
 @Reducer
 struct NBAGameStatsStore {
+    typealias BaseGameStats = BaseGameStatsStore<NBAGameStatsDisplayModel>
     
     @ObservableState
     struct State {
@@ -30,68 +31,39 @@ struct NBAGameStatsStore {
         /* ---------------------
            data state
            --------------------- */
-        var displayModel: NBAGameStatsDisplayModel? = nil
+        var baseGameStats: BaseGameStats.State
+
         var homeTeamLineScore: NBALineScore? = nil
         var awayTeamLineScore: NBALineScore? = nil
         var playerStats: [NBABoxScoreTeamPlayer] = []
         var playersTotalStats: NBAGameBoxScoreStats? = nil
         
-        /* ---------------------
-           ui state
-           --------------------- */
-        var firstSelectedIndex = 0
-        var secondSelectedIndex = 0
-        var selectedTeamIndex = 0
-        var shouldScrollCategory = false
-        
-        /* ---------------------
-           etc
-           --------------------- */
         var homeTeamId = 0
         var awayTeamId = 0
-        var playerNameDictionary: [String: String] = [:]
-        var teamNameDictionary: [String: String] = [:]
+        
+        init(displayModel: NBAGameStatsDisplayModel) {
+            self.baseGameStats = BaseGameStats.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
-        /* ---------------------
-           init
-           --------------------- */
-        case initData(displayModel: NBAGameStatsDisplayModel)
+        case baseGameStats(BaseGameStats.Action)
         
-        /* ---------------------
-           view action
-           --------------------- */
-        case selectTeam(index: Int)
-        case selectFirstCategory(index: Int)
-        case selectSecondCategory(index: Int)
-        
-        /* ---------------------
-           private
-           --------------------- */
         case sortPlayers
         case setPlayersTotalStats
     }
     
-    @Dependency(\.translatedNameProvider) var nameProvider
-    
     var body: some Reducer<State, Action> {
+        Scope(state: \.baseGameStats, action: \.baseGameStats) { BaseGameStats() }
+        
         Reduce { state, action in
             switch action {
-            case .initData(let displayModel):
+            case .baseGameStats(.initData):
                 // init with default value
                 state.playerStats = []
                 state.playersTotalStats = nil
-                state.firstSelectedIndex = 0
-                state.secondSelectedIndex = 0
-                state.selectedTeamIndex = 0
-                state.shouldScrollCategory = false
                 
-                // init data
-                state.displayModel = displayModel
-                
-                state.playerNameDictionary = nameProvider.getDictionary(category: "nba_player")
-                state.teamNameDictionary = nameProvider.getDictionary(category: "nba_team")
+                let displayModel = state.baseGameStats.displayModel
                 
                 if let gameSummary = displayModel.game.gameSummary {
                     state.homeTeamId = gameSummary.homeTeamId
@@ -102,21 +74,20 @@ struct NBAGameStatsStore {
                 state.homeTeamLineScore = displayModel.game.lineScore.first { $0.teamId == state.homeTeamId }
                 state.awayTeamLineScore = displayModel.game.lineScore.first { $0.teamId == state.awayTeamId }
                 
-                if let boxScoreTraditional = displayModel.game.boxScoreTraditional {
+                if let _ = displayModel.game.boxScoreTraditional {
                     // set current(home) team's players stats
-                    return .send(.selectTeam(index: 0))
+                    return .send(.baseGameStats(.selectTeam(0)))
                 }
                 
                 return .none
                 
-            case .selectTeam(let index):
-                state.selectedTeamIndex = index
+            case let .baseGameStats(.selectTeam(index)):
                 
                 // set selected team's players stats
                 state.playerStats = if index == 0 {
-                    state.displayModel?.game.boxScoreTraditional?.homeTeam.players ?? []
+                    state.baseGameStats.displayModel.game.boxScoreTraditional?.homeTeam.players ?? []
                 } else {
-                    state.displayModel?.game.boxScoreTraditional?.awayTeam.players ?? []
+                    state.baseGameStats.displayModel.game.boxScoreTraditional?.awayTeam.players ?? []
                 }
                 
                 return .run { send in
@@ -124,43 +95,11 @@ struct NBAGameStatsStore {
                     await send(.setPlayersTotalStats)
                 }
                 
-            case .selectFirstCategory(let index):
-                state.shouldScrollCategory = true
-                
-                let attackCategoriesSize = StringConstants.NBA.gameStatsAttackCategories.count
-                let defendCategoriesSize = StringConstants.NBA.gameStatsDefendCategories.count
-                
-                switch index {
-                case 0: state.secondSelectedIndex = 0
-                case 1: state.secondSelectedIndex = attackCategoriesSize
-                case 2: state.secondSelectedIndex = attackCategoriesSize + defendCategoriesSize
-                default: break
-                }
-                
-                state.firstSelectedIndex = index
-                
-                return .send(.sortPlayers)
-                
-            case .selectSecondCategory(let index):
-                state.shouldScrollCategory = false
-                state.secondSelectedIndex = index
-                
-                let attackCategories = StringConstants.NBA.gameStatsAttackCategories
-                let defendCategories = StringConstants.NBA.gameStatsDefendCategories
-                
-                switch index {
-                case attackCategories.indices:
-                    state.firstSelectedIndex = 0
-                case attackCategories.count..<(attackCategories.count + defendCategories.count):
-                    state.firstSelectedIndex = 1
-                default:
-                    state.firstSelectedIndex = 2
-                }
-                
+            case .baseGameStats(.selectFirstCategory):
                 return .send(.sortPlayers)
                 
             case .sortPlayers:
-                switch state.secondSelectedIndex {
+                switch state.baseGameStats.firstCategorySelectedIndex {
                 case 0:
                     state.playerStats.sort { $0.statistics.points > $1.statistics.points }
                 case 1:
@@ -255,10 +194,13 @@ struct NBAGameStatsStore {
                 
                 playersTotalStats.threePointersPercentage = playersTotalStats.threePointersAttempted > 0 ? Double(playersTotalStats.threePointersMade) / Double(playersTotalStats.threePointersAttempted).rounded(to: 3) : 0.0
                 
-                playersTotalStats.plusMinusPoints = state.selectedTeamIndex == 0 ? (state.homeTeamLineScore?.pts ?? 0) - (state.awayTeamLineScore?.pts ?? 0) : (state.awayTeamLineScore?.pts ?? 0) - (state.homeTeamLineScore?.pts ?? 0)
+                playersTotalStats.plusMinusPoints = state.baseGameStats.teamCategorySelectedIndex == 0 ? (state.homeTeamLineScore?.pts ?? 0) - (state.awayTeamLineScore?.pts ?? 0) : (state.awayTeamLineScore?.pts ?? 0) - (state.homeTeamLineScore?.pts ?? 0)
                 
                 state.playersTotalStats = playersTotalStats
                 
+                return .none
+                
+            case .baseGameStats:
                 return .none
             } // switch action
         }

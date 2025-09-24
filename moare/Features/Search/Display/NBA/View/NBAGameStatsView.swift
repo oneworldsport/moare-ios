@@ -9,172 +9,148 @@ import SwiftUI
 import ComposableArchitecture
 
 struct NBAGameStatsView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var nbaGameStatsStore: StoreOf<NBAGameStatsStore>? = nil
-    
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: NBAGameStatsDisplayModel
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<NBAGameStatsStore>
     
     private let columnWidthList: [CGFloat] = [50, 50, 80, 70, 70, 80, 70, 70, 80, 80, 80, 100, 80, 50, 50, 70, 50, 50, 70, 70]
     
+    @State private var show = false
+    
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            let game = displayModel.game
+        let displayModel = store.baseGameStats.displayModel
+        let game = displayModel.game
+        let playerNameDic = store.baseGameStats.playerNameDictionary
+        let teamNameDic = store.baseGameStats.teamNameDictionary
+        
+        let teamIds = [game.gameSummary?.homeTeamId, game.gameSummary?.visitorTeamId]
+        let teamCategories: [GameStatsTeamState] = teamIds.map {
+            return GameStatsTeamState(
+                name: teamNameDic["short_\($0 ?? 0)"] ?? "",
+                imageUrl: NBAUtil.teamLogoURL(id: $0)
+            )
+        }
+        
+        let playerList: [StandingsItemState] = store.playerStats.map {
+            let stats = $0.statistics
+            let playerId = $0.personId
             
-            let teamIds = [game.gameSummary?.homeTeamId, game.gameSummary?.visitorTeamId]
-            let teamCategories: [GameStatsTeamState] = teamIds.map {
-                return GameStatsTeamState(
-                    name: nbaGameStatsStore?.teamNameDictionary["short_\($0 ?? 0)"] ?? "",
-                    imageUrl: NBAUtil.teamLogoURL(id: $0)
-                )
-            }
-            
-            let playerList: [StandingsItemState] = nbaGameStatsStore?.playerStats.map {
-                let stats = $0.statistics
-                let playerId = $0.personId
-                
-                return StandingsItemState(
-                    id: playerId,
-                    imageUrl: NBAUtil.playerPhotoURL(id: playerId),
-                    name: nbaGameStatsStore?.playerNameDictionary["\(playerId)"] ?? $0.nameI,
-                    extraInfo: !$0.position.isEmpty ? "선발" : "후보",
-                    extraSubInfo: $0.position,
-                    dataList: [
-                        String(stats.points),
-                        String(stats.assists),
-                        String(stats.reboundsOffensive),
-                        String(stats.fieldGoalsAttempted),
-                        String(stats.fieldGoalsMade),
-                        String(stats.fieldGoalsPercentage),
-                        String(stats.threePointersAttempted),
-                        String(stats.threePointersMade),
-                        String(stats.threePointersPercentage),
-                        String(stats.freeThrowsAttempted),
-                        String(stats.freeThrowsMade),
-                        String(stats.freeThrowsPercentage),
-                        String(stats.reboundsDefensive),
-                        String(stats.blocks),
-                        String(stats.steals),
-                        String(stats.reboundsTotal),
-                        String(stats.turnovers),
-                        String(stats.foulsPersonal),
-                        String(stats.plusMinusPoints),
-                        stats.minutes
-                    ]
-                )
-            } ?? []
-            
-            let gameDetailTitle = "날짜: \n\n장소: \n관중수: \n심판: "
-            let gameDetailContent: String = {
-                let officials = game.officials
-                var result = ""
-                result += "\(CalendarUtil.formatDate(date: game.gameSummary?.date).split(separator: " ").first ?? "")\n"
-                result += "\(CalendarUtil.formatDate(date: game.gameSummary?.date, formatType: .ampm))\n"
-                result += "\(nbaGameStatsStore?.teamNameDictionary["venue_\(game.gameSummary?.homeTeamId ?? 0)"] ?? "")\n"
-                result += "\(game.gameInfo?.attendance ?? 0)\n"
-                result += officials.map { "• \($0.firstName + $0.lastName)" }.joined(separator: "\n")
-                return result
-            }()
-            
-            VStack {
-                if let nbaGameStatsStore {
-                    GameStatsViewContainer(
-                        state: GameStatsContainerState(
-                            shouldShowStats: game.gameSummary?.gameStatusId != Constants.GameStatus.NBA.notStarted,
-                            shouldShowRefreshButton: game.gameSummary?.gameStatusId == Constants.GameStatus.NBA.live,
-                            teamCategories: teamCategories,
-                            teamCategorySelectedIndex: nbaGameStatsStore.selectedTeamIndex,
-                            gameDetailTitle: gameDetailTitle,
-                            gameDetailContent: gameDetailContent,
-                            firstStatsCategories: StringConstants.NBA.gameStatsSecondCategories,
-                            firstStatsCategorySelectedIndex: nbaGameStatsStore.secondSelectedIndex,
-                            firstStatsColumnWidthList: columnWidthList,
-                            firstStatsPlayerList: playerList,
-                        ),
-                        actions: GameStatsContainerActions(
-                            teamCategoryButtonAction: { index in
-                                nbaGameStatsStore.send(.selectTeam(index: index))
-                            },
-                            firstStatsCategoryButtonAction: { index in
-                                nbaGameStatsStore.send(.selectSecondCategory(index: index))
-                            },
-                            refreshButtonAction: {
-                                searchStore.send(.refreshGame(season: displayModel.season, category: "basketball"))
-                            }
-                        ),
-                        titleContent: {
-                            HStack(spacing: 0) {
-                                NBATitle(
-                                    leagueName: "NBA",
-                                    leagueSeason: game.gameSummary?.season.split(separator: "-").first.flatMap { Int(String($0)) } // TODO: 이 문법으로 다른 비슷한 코드도 다 바꾸기
-                                )
-                                
-                                Text(" | ")
-                                    .font(.system(size: 14))
-                                
-                                Text(NBAUtil.gameType(gameSummary: game.gameSummary))
-                                    .font(.system(size: 14))
-                                
-                                Spacer()
-                            }
-                            .padding(.horizontal, UIConstants.Padding.defaultHPadding)
-                            
-                            /* ---------------------
-                               playoffs series text
-                               --------------------- */
-                            if game.gameSummary?.seriesGameNumber.isEmpty == false {
-                                NBAGameStatsPlayoffsSeriesTextContainer(nbaGameStatsStore: nbaGameStatsStore)
-                            }
+            return StandingsItemState(
+                id: playerId,
+                imageUrl: NBAUtil.playerPhotoURL(id: playerId),
+                name: playerNameDic["\(playerId)"] ?? $0.nameI,
+                extraInfo: !$0.position.isEmpty ? "선발" : "후보",
+                extraSubInfo: $0.position,
+                dataList: [
+                    String(stats.points),
+                    String(stats.assists),
+                    String(stats.reboundsOffensive),
+                    String(stats.fieldGoalsAttempted),
+                    String(stats.fieldGoalsMade),
+                    String(stats.fieldGoalsPercentage),
+                    String(stats.threePointersAttempted),
+                    String(stats.threePointersMade),
+                    String(stats.threePointersPercentage),
+                    String(stats.freeThrowsAttempted),
+                    String(stats.freeThrowsMade),
+                    String(stats.freeThrowsPercentage),
+                    String(stats.reboundsDefensive),
+                    String(stats.blocks),
+                    String(stats.steals),
+                    String(stats.reboundsTotal),
+                    String(stats.turnovers),
+                    String(stats.foulsPersonal),
+                    String(stats.plusMinusPoints),
+                    stats.minutes
+                ]
+            )
+        }
+        
+        let gameDetailTitle = "날짜: \n\n장소: \n관중수: \n심판: "
+        let gameDetailContent: String = {
+            let officials = game.officials
+            var result = ""
+            result += "\(CalendarUtil.formatDate(date: game.gameSummary?.date).split(separator: " ").first ?? "")\n"
+            result += "\(CalendarUtil.formatDate(date: game.gameSummary?.date, formatType: .ampm))\n"
+            result += "\(teamNameDic["venue_\(game.gameSummary?.homeTeamId ?? 0)"] ?? "")\n"
+            result += "\(game.gameInfo?.attendance ?? 0)\n"
+            result += officials.map { "• \($0.firstName + $0.lastName)" }.joined(separator: "\n")
+            return result
+        }()
+        
+        VStack {
+            if show {
+                GameStatsViewContainer(
+                    state: GameStatsContainerState(
+                        shouldShowStats: game.gameSummary?.gameStatusId != Constants.GameStatus.NBA.notStarted,
+                        shouldShowRefreshButton: game.gameSummary?.gameStatusId == Constants.GameStatus.NBA.live,
+                        teamCategories: teamCategories,
+                        teamCategorySelectedIndex: store.baseGameStats.teamCategorySelectedIndex,
+                        gameDetailTitle: gameDetailTitle,
+                        gameDetailContent: gameDetailContent,
+                        firstStatsCategories: StringConstants.NBA.gameStatsSecondCategories,
+                        firstStatsCategorySelectedIndex: store.baseGameStats.firstCategorySelectedIndex,
+                        firstStatsColumnWidthList: columnWidthList,
+                        firstStatsPlayerList: playerList,
+                    ),
+                    actions: GameStatsContainerActions(
+                        teamCategoryButtonAction: { index in
+                            store.send(.baseGameStats(.selectTeam(index)))
                         },
-                        gameContent: {
+                        firstStatsCategoryButtonAction: { index in
+                            store.send(.baseGameStats(.selectSecondCategory(index)))
+                        },
+                        refreshButtonAction: {
+                            searchStore.send(.refreshGame(season: displayModel.season, category: "basketball"))
+                        }
+                    ),
+                    titleContent: {
+                        HStack(spacing: 0) {
+                            NBATitle(
+                                leagueName: "NBA",
+                                leagueSeason: game.gameSummary?.season.split(separator: "-").first.flatMap { Int(String($0)) } // TODO: 이 문법으로 다른 비슷한 코드도 다 바꾸기
+                            )
+                            
+                            Text(" | ")
+                                .font(.system(size: 14))
+                            
+                            Text(NBAUtil.gameType(gameSummary: game.gameSummary))
+                                .font(.system(size: 14))
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal, UIConstants.Padding.defaultHPadding)
+                        
+                        /* ---------------------
+                           playoffs series text
+                           --------------------- */
+                        if game.gameSummary?.seriesGameNumber.isEmpty == false {
+                            NBAGameStatsPlayoffsSeriesTextContainer(nbaGameStatsStore: store)
+                        }
+                    },
+                    gameContent: {
 //                            if game.gameSummary?.gameStatusId == StringConstants.NBA.gameScheduled {
-//                                
+//
 //                            } else {
 //                                NBAGameStatsScoreInfoItem(nbaGameStatsStore: nbaGameStatsStore)
 //                            }
-                            
-                            NBAGameStatsScoreInfoItem(nbaGameStatsStore: nbaGameStatsStore)
-                        }
-                    )
-                }
+                        
+                        NBAGameStatsScoreInfoItem(nbaGameStatsStore: store)
+                    }
+                )
             }
-            .onAppear {
-                // init NBAGameStatsStore
-                let nbaGameStatsStore: StoreOf<NBAGameStatsStore> = storeManager.getStore(forKey: StoreKeys.nbaGameStatsStore) ?? {
-                    let newStore = Store(initialState: NBAGameStatsStore.State()) { NBAGameStatsStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.nbaGameStatsStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.nbaGameStatsStore = nbaGameStatsStore
-                }
-                
-                if searchStore.poppedView == nil {
-                    nbaGameStatsStore.send(.initData(displayModel: displayModel))
-                }
-                
-//                if game.gameSummary?.gameStatusId == 2 {
-//                    searchStore.send(.refreshGame(category: "basketball"))
-//                }
-            } // onAppear
-            .onChange(of: displayModel) {
-                if case .nbaGameStats = searchStore.poppedView {
-                    nbaGameStatsStore?.send(.initData(displayModel: displayModel))
-                }
-                
-                if case .nbaGameStats = searchStore.viewStack.last {
-                    nbaGameStatsStore?.send(.initData(displayModel: displayModel))
-                }
+        }
+        .onAppear {
+            store.send(.baseGameStats(.initData))
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
-        } // if let searchStore
+        } // onAppear
+//        .onChange(of: displayModel) {
+//            if case .nbaGameStats = searchStore.viewStack.last {
+//                nbaGameStatsStore?.send(.initData(displayModel: displayModel))
+//            }
+//        }
     }
 }
 
@@ -184,16 +160,16 @@ struct NBAGameStatsScoreInfoItem: View {
     @State private var borderTextWidth: CGFloat = 0
     
     var body: some View {
-        let displayModel = nbaGameStatsStore.displayModel
-        let game = displayModel?.game
+        let displayModel = nbaGameStatsStore.baseGameStats.displayModel
+        let game = displayModel.game
         let homeTeamId = nbaGameStatsStore.homeTeamId
         let awayTeamId = nbaGameStatsStore.awayTeamId
         let homeTeamLineScore = nbaGameStatsStore.homeTeamLineScore
         let awayTeamLineScore = nbaGameStatsStore.awayTeamLineScore
-        let teamNameDic = nbaGameStatsStore.teamNameDictionary
+        let teamNameDic = nbaGameStatsStore.baseGameStats.teamNameDictionary
         
         let gameStatusText: String = {
-            switch game?.gameSummary?.gameStatusId {
+            switch game.gameSummary?.gameStatusId {
             case Constants.GameStatus.NBA.notStarted:
                 return StringConstants.gameNotStartedStr
             case Constants.GameStatus.NBA.live:
@@ -222,7 +198,7 @@ struct NBAGameStatsScoreInfoItem: View {
         }()
         
         let gameStatusColor: Color = {
-            if game?.gameSummary?.gameStatusId == Constants.GameStatus.NBA.live {
+            if game.gameSummary?.gameStatusId == Constants.GameStatus.NBA.live {
                 return .moare
             } else {
                 return .secondary
@@ -464,9 +440,9 @@ struct NBAGameStatsPlayoffsSeriesTextContainer: View {
     @Bindable var nbaGameStatsStore: StoreOf<NBAGameStatsStore>
     
     var body: some View {
-        let teamNameDic = nbaGameStatsStore.teamNameDictionary
+        let teamNameDic = nbaGameStatsStore.baseGameStats.teamNameDictionary
         
-        if let series = nbaGameStatsStore.displayModel?.game.seasonSeries {
+        if let series = nbaGameStatsStore.baseGameStats.displayModel.game.seasonSeries {
             HStack(spacing: 0) {
                 // NOTE: 게임별 시리즈 스코어 정보를 가져올 방법을 찾지 못해서 일단은 현재 시리즈 스코어로 표시
                 Text("현재 시리즈 스코어: ")

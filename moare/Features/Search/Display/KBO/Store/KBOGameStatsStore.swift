@@ -23,16 +23,16 @@ struct KBOGameStatsStore {
         /* ---------------------
            data state
            --------------------- */
-        var displayModel: KBOGameStatsDisplayModel? = nil
-        var baseGameStats = BaseGameStats.State()
+        var baseGameStats: BaseGameStats.State
+        
         var teamLineup: KBOGameLineup? = nil
         var teamHitters: [KBOGameHitterStats] = []
         var teamPitchers: [KBOGamePitcherStats] = []
 //        var playersTotalStats: NBAGameBoxScoreStats? = nil
         
-        /* ---------------------
-           ui state
-           --------------------- */
+        init(displayModel: KBOGameStatsDisplayModel) {
+            self.baseGameStats = BaseGameStats.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
@@ -47,9 +47,7 @@ struct KBOGameStatsStore {
     }
     
     var body: some Reducer<State, Action> {
-        Scope(state: \.baseGameStats, action: \.baseGameStats) {
-            BaseGameStats()
-        }
+        Scope(state: \.baseGameStats, action: \.baseGameStats) { BaseGameStats() }
         
         Reduce { state, action in
             switch action {
@@ -65,9 +63,9 @@ struct KBOGameStatsStore {
             case .baseGameStats(.selectTeam(let index)):
                 // set selected team's boxscore
                 state.teamLineup = if index == 0 {
-                    state.baseGameStats.displayModel?.game.lineup?.home
+                    state.baseGameStats.displayModel.game.lineup?.home
                 } else {
-                    state.baseGameStats.displayModel?.game.lineup?.away
+                    state.baseGameStats.displayModel.game.lineup?.away
                 }
                 
                 state.teamHitters = state.teamLineup?.hitters ?? []
@@ -85,21 +83,18 @@ struct KBOGameStatsStore {
             case .baseGameStats(.selectSecondCategory):
                 return .send(.sortPitchers)
                 
-            case .baseGameStats(_):
-                return .none
-                
             case .sortHitters:
                 switch state.baseGameStats.firstCategorySelectedIndex {
                 case 0:
-                    state.teamHitters.sort { (Double($0.ab) ?? 0) > Double($1.ab) ?? 0 }
+                    state.teamHitters.sort { Double($0.ab) > Double($1.ab)}
                 case 1:
-                    state.teamHitters.sort { (Double($0.h) ?? 0) > Double($1.h) ?? 0 }
+                    state.teamHitters.sort { Double($0.h) > Double($1.h) }
                 case 2:
                     state.teamHitters.sort { $0.homeRuns > $1.homeRuns }
                 case 3:
-                    state.teamHitters.sort { (Double($0.rbi) ?? 0) > Double($1.rbi) ?? 0 }
+                    state.teamHitters.sort { Double($0.rbi) > Double($1.rbi) }
                 case 4:
-                    state.teamHitters.sort { (Double($0.r) ?? 0) > Double($1.r) ?? 0 }
+                    state.teamHitters.sort { Double($0.r) > Double($1.r) }
                 case 5:
                     state.teamHitters.sort { $0.baseOnBalls > $1.baseOnBalls }
                 case 6:
@@ -131,6 +126,9 @@ struct KBOGameStatsStore {
                 return .none
                 
             case .setPlayersTotalStats:
+                return .none
+                
+            case .baseGameStats(_):
                 return .none
             }
         }
