@@ -13,6 +13,8 @@ import ComposableArchitecture
 struct FBGameStatsStore {
     typealias BaseGameStats = BaseGameStatsStore<FBGameStatsDisplayModel>
     
+    let searchClient = SearchClient()
+    
     @ObservableState
     struct State {
         /* ---------------------
@@ -48,6 +50,14 @@ struct FBGameStatsStore {
         
         case sortPlayers
         case setPlayersTotalStats
+        case refreshGame
+        case updateDisplayModel(model: SportDecodableModel)
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case didRefreshGame(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -224,7 +234,36 @@ struct FBGameStatsStore {
                 
                 return .none
                 
+            case .refreshGame:
+                return .run { [displayModel = state.baseGameStats.displayModel] send in
+                    let game = displayModel.game
+                    
+                    let result = try await searchClient.fetchById(
+                        season: displayModel.season,
+                        category: "football",
+                        date: game.fixture.date,
+                        dataType: "football_game_stats",
+                        leagueId: game.league.id,
+                        id: String(game.fixture.id)
+                    )
+                    
+                    await send(.updateDisplayModel(model: result.data))
+                    await send(.delegate(.didRefreshGame(model: result.data)))
+                }
+                
+            case let .updateDisplayModel(model):
+                if case .fbGameStats(_, let displayModel) = model {
+                    state.baseGameStats.displayModel = displayModel
+                    
+                    return .send(.baseGameStats(.initData))
+                } else {
+                    return .none
+                }
+                
             case .baseGameStats:
+                return .none
+                
+            case .delegate:
                 return .none
             } // switch action
         }

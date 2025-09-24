@@ -128,7 +128,8 @@ struct FBGameStatsView: View {
                             store.send(.baseGameStats(.selectFirstCategory(index)))
                         },
                         refreshButtonAction: {
-                            searchStore.send(.refreshGame(season: displayModel.season, category: "football"))
+//                            searchStore.send(.refreshGame(season: displayModel.season, category: "football"))
+                            store.send(.refreshGame)
                         }
                     ),
                     titleContent: {
@@ -174,11 +175,5 @@ struct FBGameStatsView: View {
                 show = true
             }
         }
-//        .onChange(of: displayModel) {
-//            // for refreshGame
-//            if case .fbGameStats = searchStore.viewStack.last {
-//                store.send(.initData(displayModel: displayModel))
-//            }
-//        }
     }
 }

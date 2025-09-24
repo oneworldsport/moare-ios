@@ -97,26 +97,29 @@ struct SearchStore {
         case initNoticeList([NoticeModel])
         case updateSearchDataState(ApiFetchState)
         case updateIsFocused(Bool)
-        case goBack
         case updateAutoCompleteList
         case updateResultVisibleState(bool: Bool)
 //        case fetchTrendingKeywords
         case updateMainDisplayModel(data: SportDecodableModel?, shouldReset: Bool = true)
         case updateLastViewStack(data: SportDecodableModel)
         case updateSearchStateWithAni(bool: Bool)
-        case addViewStack(data: SportDecodableModel)
+        
+        
+        case pop
+        case showPreviousView
+        case popView(lastPath: AppStore.Path.State?, isEmpty: Bool)
+        case delegate(Delegate)
         
         /* ---------------------
            test
            --------------------- */
         case initForTest
         case testSearch(viewForTest: SportDisplayType)
-        
-        case delegate(Delegate)
     }
     
     enum Delegate {
-        case show(model: SportDecodableModel)
+        case push(model: SportDecodableModel)
+        case pop(searchState: Bool)
     }
     
     @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
@@ -311,147 +314,113 @@ struct SearchStore {
                 }
                                 
             case let .searchResultsReceived(model):
-                for key in SportDisplayType.allCases {
-                    state.displayModels[key] = nil
-                }
-                
                 switch model.data {
-                case .fbPlayerInfo(_, let displayModel):
-                    state.displayModels[.fbPlayerInfo] = displayModel
-                case .fbPlayerStats(_, let displayModel):
-                    state.displayModels[.fbPlayerStats] = displayModel
-                case .fbPlayerStandings(_, let displayModel):
-                    state.displayModels[.fbPlayerStandings] = displayModel
-                case .fbTeamInfo(_, let displayModel):
-                    state.displayModels[.fbTeamInfo] = displayModel
-                case .fbTeamStats(_, let displayModel):
-                    state.displayModels[.fbTeamStats] = displayModel
-                case .fbTeamStandings(_, let displayModel):
-                    state.displayModels[.fbTeamStandings] = displayModel
-                case .fbLeagueSchedule(_, let displayModel):
-                    state.displayModels[.fbLeagueSchedule] = displayModel
-                case .fbGameStats(_, let displayModel):
-                    state.displayModels[.fbGameStats] = displayModel
-                case .fbTournament(_, let displayModel):
-                    state.displayModels[.fbTournament] = displayModel
+                case .fbPlayerInfo(_,_): break
+                case .fbPlayerStats(_,_): break
+                case .fbPlayerStandings(_,_): break
+                case .fbTeamInfo(_,_): break
+                case .fbTeamStats(_,_): break
+                case .fbTeamStandings(_,_): break
+                case .fbLeagueSchedule(_,_): break
+                case .fbGameStats(_,_): break
+                case .fbTournament(_,_): break
 
-                case .nbaPlayerInfo(_, let displayModel):
-                    state.displayModels[.nbaPlayerInfo] = displayModel
-                case .nbaPlayerStats(_, let displayModel):
-                    state.displayModels[.nbaPlayerStats] = displayModel
-                case .nbaPlayerStandings(_, let displayModel):
-                    state.displayModels[.nbaPlayerStandings] = displayModel
-                case .nbaTeamInfo(_, let displayModel):
-                    state.displayModels[.nbaTeamInfo] = displayModel
-                case .nbaTeamStats(_, let displayModel):
-                    state.displayModels[.nbaTeamStats] = displayModel
-                case .nbaTeamStandings(_, let displayModel):
-                    state.displayModels[.nbaTeamStandings] = displayModel
-                case .nbaLeagueSchedule(_, let displayModel):
-                    state.displayModels[.nbaLeagueSchedule] = displayModel
-                case .nbaGameStats(_, let displayModel):
-                    state.displayModels[.nbaGameStats] = displayModel
-                case .nbaTournament(_, let displayModel):
-                    state.displayModels[.nbaTournament] = displayModel
+                case .nbaPlayerInfo(_,_): break
+                case .nbaPlayerStats(_,_): break
+                case .nbaPlayerStandings(_,_): break
+                case .nbaTeamInfo(_,_): break
+                case .nbaTeamStats(_,_): break
+                case .nbaTeamStandings(_,_): break
+                case .nbaLeagueSchedule(_,_): break
+                case .nbaGameStats(_,_): break
+                case .nbaTournament(_,_): break
 
-                case .kboPlayerInfo(_, let displayModel):
-                    state.displayModels[.kboPlayerInfo] = displayModel
-                case .kboPlayerStats(_, let displayModel):
-                    state.displayModels[.kboPlayerStats] = displayModel
-                case .kboPlayerStandings(_, let displayModel):
-                    state.displayModels[.kboPlayerStandings] = displayModel
-                case .kboTeamInfo(_, let displayModel):
-                    state.displayModels[.kboTeamInfo] = displayModel
-                case .kboTeamStats(_, let displayModel):
-                    state.displayModels[.kboTeamStats] = displayModel
-                case .kboTeamStandings(_, let displayModel):
-                    state.displayModels[.kboTeamStandings] = displayModel
-                case .kboLeagueSchedule(_, let displayModel):
-                    state.displayModels[.kboLeagueSchedule] = displayModel
-                case .kboGameStats(_, let displayModel):
-                    state.displayModels[.kboGameStats] = displayModel
-                case .kboTournament(_, let displayModel):
-                    state.displayModels[.kboTournament] = displayModel
+                case .kboPlayerInfo(_,_): break
+                case .kboPlayerStats(_,_): break
+                case .kboPlayerStandings(_,_): break
+                case .kboTeamInfo(_,_): break
+                case .kboTeamStats(_,_): break
+                case .kboTeamStandings(_,_): break
+                case .kboLeagueSchedule(_,_): break
+                case .kboGameStats(_,_): break
+                case .kboTournament(_,_): break
 
-                case .mlbPlayerInfo(_, let displayModel):
-                    state.displayModels[.mlbPlayerInfo] = displayModel
-                case .mlbPlayerStats(_, let displayModel):
-                    state.displayModels[.mlbPlayerStats] = displayModel
-                case .mlbPlayerStandings(_, let displayModel):
-                    state.displayModels[.mlbPlayerStandings] = displayModel
-                case .mlbTeamInfo(_, let displayModel):
-                    state.displayModels[.mlbTeamInfo] = displayModel
-                case .mlbTeamStats(_, let displayModel):
-                    state.displayModels[.mlbTeamStats] = displayModel
-                case .mlbTeamStandings(_, let displayModel):
-                    state.displayModels[.mlbTeamStandings] = displayModel
-                case .mlbLeagueSchedule(_, let displayModel):
-                    state.displayModels[.mlbLeagueSchedule] = displayModel
-                case .mlbGameStats(_, let displayModel):
-                    state.displayModels[.mlbGameStats] = displayModel
+                case .mlbPlayerInfo(_,_): break
+                case .mlbPlayerStats(_,_): break
+                case .mlbPlayerStandings(_,_): break
+                case .mlbTeamInfo(_,_): break
+                case .mlbTeamStats(_,_): break
+                case .mlbTeamStandings(_,_): break
+                case .mlbLeagueSchedule(_,_): break
+                case .mlbGameStats(_,_): break
 
                 default:
                     // TODO: animation is applied by the animation below. Should be modified
+                    // TODO: 여기서 안하고 AppStore에서 하게 개선 필요
                     state.searchDataState = .failure("검색 결과가 없습니다.")
                     return .none
                 }
                 
-                // add viewStack
-                // TODO: has to make it as action
-                state.viewStack.append(model.data)
-                state.poppedView = nil
-                
                 // NOTE: if apply animation here, it is not applied because of allocating each view's store at onAppear()
                 state.resultVisibleState = true
                 
-//                return .none
-                return .send(.delegate(.show(model: model.data)))
+                return .send(.delegate(.push(model: model.data)))
                 
-            case .goBack:
-                guard !state.viewStack.isEmpty else { return .none }
+            case .pop:
+                return .send(.delegate(.pop(searchState: state.searchState)))
                 
-                if !state.searchState {
-                    // If searchBar is Opened and there are viewStack, show the lastView.
-                    state.textFieldVisibleState = false
-                    
+            case .showPreviousView:
+                state.textFieldVisibleState = false
+                
+                return .run { send in
+                    await send(.updateSearchStateWithAni(bool: true), animation: AnimationConstants.AnimationType.mediumDefaultAnimation)
+                    try await Task.sleep(for: .seconds(0.1)) // NOTE: Due to crash
+                    await send(.updateSearchDataState(.success))
+                    await send(.updateResultVisibleState(bool: true))
+                    await send(.removeAutoCompleteWithAni)
+                }
+                
+            case let .popView(lastPath, isEmpty):
+                guard lastPath != nil else { return .none }
+                
+                if isEmpty {
                     return .run { send in
-                        await send(.updateSearchStateWithAni(bool: true), animation: AnimationConstants.AnimationType.mediumDefaultAnimation)
-                        try await Task.sleep(for: .seconds(0.1)) // NOTE: Due to crash
-                        await send(.updateSearchDataState(.success))
-                        await send(.updateResultVisibleState(bool: true))
-                        await send(.removeAutoCompleteWithAni)
+                        await send(.toggleSearchBar)
+                        
+                        //                            try await Task.sleep(for: .seconds(0.5))
+                        try await Task.sleep(for: .seconds(AnimationConstants.Duration.medium))
+                        
+                        await send(.updateTextFieldVisibleState(true))
+                        await send(.updateIsFocused(true))
                     }
                 } else {
-                    // After state.viewStack.popLast(), it ensures triggering onChange(viewStack) after all view is shown in below code.
-                    // Maybe because of TCA Reduce feature?
-                    let lastView = state.viewStack.popLast()
-                    state.poppedView = lastView
-                    
-                    let viewToShow = state.viewStack.last
-                    
-                    if let viewToShow = viewToShow {
-                        return .run { [poppedView = state.poppedView] send in
-                            await send(.updateResultVisibleState(bool: false))
-                            await send(.updateMainDisplayModel(data: viewToShow))
-                            // wait for previous view's removing animation
-                            // NOTE: 0.1 for temporary
-                            try await Task.sleep(for: .seconds(0.1))
-                            
-                            await send(.updateResultVisibleState(bool: true))
-                        }
-                    } else {
-                        return .run { send in
-                            await send(.updateMainDisplayModel(data: nil))
-                            await send(.toggleSearchBar)
-                            
-//                            try await Task.sleep(for: .seconds(0.5))
-                            try await Task.sleep(for: .seconds(AnimationConstants.Duration.medium))
-                            
-                            await send(.updateTextFieldVisibleState(true))
-                            await send(.updateIsFocused(true))
-                        }
-                    }
+                    return .none
                 }
+                
+//                if !state.searchState {
+//                } else {
+//                        return .run { [poppedView = state.poppedView] send in
+//                            await send(.updateResultVisibleState(bool: false))
+//                            await send(.updateMainDisplayModel(data: viewToShow))
+//                            // wait for previous view's removing animation
+//                            // NOTE: 0.1 for temporary
+//                            try await Task.sleep(for: .seconds(0.1))
+//                            
+//                            await send(.updateResultVisibleState(bool: true))
+//                        }
+//                    } else {
+//                        return .run { send in
+//                            await send(.updateMainDisplayModel(data: nil))
+//                            await send(.toggleSearchBar)
+//                            
+//                            //                            try await Task.sleep(for: .seconds(0.5))
+//                            try await Task.sleep(for: .seconds(AnimationConstants.Duration.medium))
+//                            
+//                            await send(.updateTextFieldVisibleState(true))
+//                            await send(.updateIsFocused(true))
+//                        }
+//                    }
+//                }
                 
             case .updateSearchDataState(let dataState):
                 withAnimation(.easeOut(duration: 0.5)) {
@@ -470,8 +439,7 @@ struct SearchStore {
                         id: game.gameId
                     )
                     
-                    await send(.addViewStack(data: result.data))
-                    await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+                    await send(.delegate(.push(model: result.data)))
                 }
                 
             case .selectNBAGame(let game, let season):
@@ -485,8 +453,7 @@ struct SearchStore {
                         id: game.gameId
                     )
                     
-                    await send(.addViewStack(data: result.data))
-                    await send(.updateMainDisplayModel(data: result.data))
+                    await send(.delegate(.push(model: result.data)))
                 }
                 
             case .selectKBOGame(let game, let season):
@@ -513,8 +480,7 @@ struct SearchStore {
                             dataModel = result.data
                         }
                         
-                        await send(.addViewStack(data: dataModel))
-                        await send(.updateMainDisplayModel(data: dataModel))
+                        await send(.delegate(.push(model: dataModel)))
                     } catch {
                         print("\(error)")
                     }
@@ -544,8 +510,7 @@ struct SearchStore {
                             dataModel = result.data
                         }
                         
-                        await send(.addViewStack(data: dataModel))
-                        await send(.updateMainDisplayModel(data: dataModel))
+                        await send(.delegate(.push(model: dataModel)))
                     } catch {
                         print("\(error)")
                     }
@@ -649,8 +614,7 @@ struct SearchStore {
                     }
                     
                     
-                    await send(.updateMainDisplayModel(data: dataModel))
-                    await send(.addViewStack(data: dataModel))
+                    await send(.delegate(.push(model: dataModel)))
                     
                     // wait for before view's removing animation
                     // NOTE: 0.1 for temporary
@@ -729,8 +693,7 @@ struct SearchStore {
                 state.resultVisibleState = false
                 
                 return .run { send in
-                    await send(.updateMainDisplayModel(data: dataModel))
-                    await send(.addViewStack(data: dataModel))
+                    await send(.delegate(.push(model: dataModel)))
                     
                     // wait for before view's removing animation
                     // NOTE: 0.1 for temporary
@@ -813,8 +776,7 @@ struct SearchStore {
                 state.resultVisibleState = false
                 
                 return .run { send in
-                    await send(.updateMainDisplayModel(data: dataModel))
-                    await send(.addViewStack(data: dataModel))
+                    await send(.delegate(.push(model: dataModel)))
                     
                     // wait for before view's removing animation
                     // NOTE: 0.1 for temporary
@@ -837,8 +799,8 @@ struct SearchStore {
                                 id: String(game.fixture.id)
                             )
                             
-                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
-                            await send(.updateLastViewStack(data: result.data))
+//                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+//                            await send(.updateLastViewStack(data: result.data))
                         }
                         
                     case .nbaGameStats(_, _):
@@ -854,8 +816,8 @@ struct SearchStore {
                                 id: boxScoreTraditional.gameId
                             )
                             
-                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
-                            await send(.updateLastViewStack(data: result.data))
+//                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+//                            await send(.updateLastViewStack(data: result.data))
                         }
                         
                     case .kboGameStats(_, _):
@@ -870,8 +832,8 @@ struct SearchStore {
                                 id: gameInfo.gameId
                             )
                             
-                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
-                            await send(.updateLastViewStack(data: result.data))
+//                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+//                            await send(.updateLastViewStack(data: result.data))
                         }
                         
                     case .mlbGameStats(_, _):
@@ -885,8 +847,8 @@ struct SearchStore {
                                 id: String(game.game.pk)
                             )
                             
-                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
-                            await send(.updateLastViewStack(data: result.data))
+//                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+//                            await send(.updateLastViewStack(data: result.data))
                         }
                         
                     default: return // do nothing
@@ -911,8 +873,7 @@ struct SearchStore {
                 state.resultVisibleState = false
                 
                 return .run { send in
-                    await send(.updateMainDisplayModel(data: dataModel))
-                    await send(.addViewStack(data: dataModel))
+                    await send(.delegate(.push(model: dataModel)))
                     
                     // wait for before view's removing animation
                     // NOTE: 0.1 for temporary
@@ -1021,12 +982,6 @@ struct SearchStore {
 //                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     state.searchState = bool
 //                }
-                
-                return .none
-                
-            case .addViewStack(let data):
-                state.viewStack.append(data)
-                state.poppedView = nil
                 
                 return .none
                 

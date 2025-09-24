@@ -12,18 +12,17 @@ struct FBLeagueScheduleView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<FBLeagueScheduleStore>
     let didPop: Bool
+    let isCombinedView: Bool
     
     @State private var show = false
     
     var body: some View {
-        let fbGameStatsModel = searchStore.displayModels[.fbGameStats] as? FBGameStatsDisplayModel
-        
         VStack {
             if show {
                 ScheduleViewContainer(
                     state: ScheduleContainerState(
-                        shouldShowCalendar: fbGameStatsModel == nil,
-                        shouldShowAllResultToggleButton: fbGameStatsModel == nil,
+                        shouldShowCalendar: store.selectedGame == nil,
+                        shouldShowAllResultToggleButton: store.selectedGame == nil,
                         displayDataState: store.baseSchedule.displayDataState,
                         calendarUiState: CalendarUiState(
                             yearMonthList: store.baseSchedule.yearMonthList,
@@ -47,18 +46,18 @@ struct FBLeagueScheduleView: View {
                         }
                     ),
                     titleContent: {
-                        if let fbGameStatsModel {
+                        if let league = store.league, store.selectedGame != nil {
                             HStack {
                                 HStack(spacing: 0) {
-                                    URLImage(url: fbGameStatsModel.game.league.logo, customSize: CGSize(width: 23, height: 23))
+                                    URLImage(url: league.logo, customSize: CGSize(width: 23, height: 23))
                                         .padding(.trailing, 4)
                                     
                                     // TODO: make season text to use util
-                                    Text("\(fbGameStatsModel.game.league.name) \(String(fbGameStatsModel.game.league.season).suffix(2))/25")
+                                    Text("\(league.name) \(String(league.season).suffix(2))/25")
                                         .font(.system(size: 14))
                                 }
                                 
-                                Text(" - \(MatchDescriptionConverter.convert(descriptionType: .roundWithoutDash, input: fbGameStatsModel.game.league.round))")
+                                Text(" - \(MatchDescriptionConverter.convert(descriptionType: .roundWithoutDash, input: league.round))")
                                     .font(.system(size: 14))
                                 
                                 Spacer()
@@ -76,28 +75,22 @@ struct FBLeagueScheduleView: View {
             }
         }
         .onAppear {
-            if !didPop {
-                store.send(.baseSchedule(.initData))
+            if !isCombinedView {
+                if !didPop {
+                    store.send(.baseSchedule(.initData))
+                } else {
+                    // TODO: FBGameStatsView에서 뒤로왔을때만 실행하게 개선 필요
+                    store.send(.updateFilteredGames)
+                }
             }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true
             }
         }
-        .onChange(of: searchStore.viewStack) {
-            guard let lastItem = searchStore.viewStack.last,
-                  case .fbLeagueSchedule = lastItem,
-                  let poppedView = searchStore.poppedView,
-                  case .fbGameStats = searchStore.poppedView else {
-                return
-            }
-            
-            store.send(.updateGamesData(fbLeagueScheduleData: lastItem, fbGameStatsData: poppedView))
-        }
-        .onChange(of: store.dataForViewStack) {
-            if let data = store.dataForViewStack {
-                searchStore.send(.updateLastViewStack(data: data))
-            }
+        .onChange(of: store.baseSchedule.displayModel) {
+            // FBGameStatsView에서 새로고침 후 AppStore에서 FBLeagueScheduleDisplayModel이 업데이트 됐을때 해당 .onChange 실행
+            store.send(.updateSelectedGame)
         }
     }
 }
@@ -106,13 +99,13 @@ struct FBLeagueScheduleList: View {
     @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
     
-    @State var gameListToDisplay: [FBGameForSchedule] = []
+//    @State var gameListToDisplay: [FBGameForSchedule] = []
     @State var itemHeight: CGFloat? = nil
     
     var body: some View {
-        let fbGameStatsModel = searchStore.displayModels[.fbGameStats] as? FBGameStatsDisplayModel
+        let gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+        let isCollapsed = fbLeagueScheduleStore.selectedGame != nil && gameListToDisplay.count == 1
         let teamNameDic = fbLeagueScheduleStore.baseSchedule.teamNameDictionary
-        let isCollapsed = fbGameStatsModel != nil && gameListToDisplay.count == 1
         let singleId = gameListToDisplay.first?.gameId
         
         ScrollView {
@@ -155,33 +148,33 @@ struct FBLeagueScheduleList: View {
         }
         .frame(height: isCollapsed ? itemHeight : nil)
         .scrollDisabled(isCollapsed)
-        .onAppear {
+//        .onAppear {
             // TODO: init에서 해도 상관없다. 어디서 하는게 나을까?
-            if let game = fbGameStatsModel?.game {
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    gameListToDisplay = [ModelConverter.fbGameToGameScheduleConverter(game: game)]
-                }
-            } else {
-                gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-            }
-        }
-        .onChange(of: fbGameStatsModel) {
-            if let game = fbGameStatsModel?.game {
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    gameListToDisplay = [ModelConverter.fbGameToGameScheduleConverter(game: game)]
-                }
-            } else {
-                gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-            }
-        }
-        .onChange(of: fbLeagueScheduleStore.baseSchedule.selectedDayIndex) {
-            gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
-        .onChange(of: fbLeagueScheduleStore.filteredGames) {
+//            if let game = fbGameStatsModel?.game {
+//                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+//                    gameListToDisplay = [ModelConverter.fbGameToGameScheduleConverter(game: game)]
+//                }
+//            } else {
+//                gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+//            }
+//        }
+//        .onChange(of: fbGameStatsModel) {
+//            if let game = fbGameStatsModel?.game {
+//                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+//                    gameListToDisplay = [ModelConverter.fbGameToGameScheduleConverter(game: game)]
+//                }
+//            } else {
+//                gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+//            }
+//        }
+//        .onChange(of: fbLeagueScheduleStore.baseSchedule.selectedDayIndex) {
+//            gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+//        }
+//        .onChange(of: fbLeagueScheduleStore.filteredGames) {
             // TODO: Has to think about better structure, because 'gameListToDisplay' could be set multiple times.
             // Has to find if there are cases like here from other .onChange()
-            gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
+//            gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+//        }
     }
 }
 
@@ -262,8 +255,9 @@ struct FBLeagueScheduleListItem: View {
                         let displayModel = fbLeagueScheduleStore.baseSchedule.displayModel
                         searchStore.send(.selectFBGame(game: data, season: displayModel.season, leagueId: displayModel.leagueId))
                         
+                        fbLeagueScheduleStore.send(.selectGame(game: data))
                         // set selected game's isOpened true
-                        fbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: true))
+//                        fbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: true))
                     }
                 },
                 onCapsuleButtonClick: {

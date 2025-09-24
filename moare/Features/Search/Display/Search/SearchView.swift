@@ -159,6 +159,22 @@ struct SearchView: View {
                      --------------------- */
                     if searchStore.resultVisibleState {
                         VStack(spacing: 0) {
+                            if appStore.includesPreviousView {
+                                if let id = appStore.path.ids.suffix(2).first {
+                                  if let store = appStore.scope(
+                                    state: \.path[id: id],
+                                    action: \.path[id: id]
+                                  ) {
+                                      PathView(
+                                        searchStore: searchStore,
+                                        store: store,
+                                        didPop: true,
+                                        isCombinedView: true
+                                      )
+                                  }
+                                }
+                            }
+                            
                             if let id = appStore.path.ids.last {
                               if let store = appStore.scope(
                                 state: \.path[id: id],
@@ -293,7 +309,21 @@ struct SearchView: View {
 struct PathView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<AppStore.Path>
+//    let previousStore: StoreOf<AppStore.Path>?
     let didPop: Bool
+    let isCombinedView: Bool
+    
+    init(
+        searchStore: StoreOf<SearchStore>,
+        store: StoreOf<AppStore.Path>,
+        didPop: Bool,
+        isCombinedView: Bool = false
+    ) {
+        self.searchStore = searchStore
+        self.store = store
+        self.didPop = didPop
+        self.isCombinedView = isCombinedView
+    }
     
     var body: some View {
         switch store.state {
@@ -310,7 +340,7 @@ struct PathView: View {
         case .fbTeamStandings:
             if let s = store.scope(state: \.fbTeamStandings, action: \.fbTeamStandings) { FBTeamStandingsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .fbLeagueSchedule:
-            if let s = store.scope(state: \.fbLeagueSchedule, action: \.fbLeagueSchedule) { FBLeagueScheduleView(searchStore: searchStore, store: s, didPop: didPop) }
+            if let s = store.scope(state: \.fbLeagueSchedule, action: \.fbLeagueSchedule) { FBLeagueScheduleView(searchStore: searchStore, store: s, didPop: didPop, isCombinedView: isCombinedView) }
         case .fbGameStats:
             if let s = store.scope(state: \.fbGameStats, action: \.fbGameStats) { FBGameStatsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .fbTournament:

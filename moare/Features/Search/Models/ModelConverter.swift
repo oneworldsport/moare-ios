@@ -713,6 +713,21 @@ struct ModelConverter {
         )
     }
     
+    static func fbGameDisplayToLeagueScheduleDisplayConverter(
+        gameStatsDisplayModel: FBGameStatsDisplayModel,
+        leagueScheduleDisplayModel: FBLeagueScheduleDisplayModel
+    ) -> FBLeagueScheduleDisplayModel {
+        let game = gameStatsDisplayModel.game
+        let newGames = leagueScheduleDisplayModel.games.map {
+            $0.gameId == String(game.fixture.id) ? fbGameToGameScheduleConverter(game: game) : $0
+        }
+        
+        var newDisplayModel = leagueScheduleDisplayModel
+        newDisplayModel.games = newGames
+        
+        return newDisplayModel
+    }
+    
     static func nbaGameListToGameScheduleListConverter(gameList: [NBAGame]) -> [NBAGameForSchedule] {
         return gameList.compactMap { game in
             return nbaGameToGameScheduleConverter(game: game)
