@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct FBPlayerStandingsView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<FBPlayerStandingsStore>
+    let didPop: Bool
     
     private let columnWidthList: [CGFloat] = [50, 50, 70, 50, 70, 50, 70, 50, 70, 80, 70, 50, 50, 50, 50, 70, 70, 80, 70]
     
@@ -88,7 +89,9 @@ struct FBPlayerStandingsView: View {
             }
         }
         .onAppear {
-            store.send(.baseStandings(.initData))
+            if !didPop {
+                store.send(.baseStandings(.initData))
+            }
             
             // TODO: 왜 SearchView 애니메이션은 안먹히지?
             // NOTE: show를 먼저하고 .initData를 나중에하면 애니메이션이 다름(카테고리가 위에서 내려오고, 순위 리스트는 오른쪽에서 나옴)

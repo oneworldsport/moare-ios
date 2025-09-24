@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct NBATournamentView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<NBATournamentStore>
+    let didPop: Bool
     
     @State private var show = false
     
@@ -31,7 +32,9 @@ struct NBATournamentView: View {
             }
         }
         .onAppear {
-            store.send(.baseTournament(.initData))
+            if !didPop {
+                store.send(.baseTournament(.initData))
+            }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true

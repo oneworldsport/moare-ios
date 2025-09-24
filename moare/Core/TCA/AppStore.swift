@@ -14,6 +14,8 @@ struct AppStore {
     struct State {
         var search = SearchStore.State()
         var path = StackState<Path.State>()
+        
+        var didPop: Bool = false
     }
     
     enum Action {
@@ -106,12 +108,21 @@ struct AppStore {
                 default: break
                 }
                 
+                state.didPop = false
+                
                 return .none
                 
-            case .search(.delegate(.pop)):
-                let lastPath = state.path.popLast()
-                
-                return .send(.search(.popView(lastPath: lastPath, isEmpty: state.path.isEmpty)))
+            case let .search(.delegate(.pop(searchState))):
+                // If searchBar is Opened and there are stack, don't pop and show the previous view.
+                if !searchState {
+                    return .none
+                } else {
+                    let lastPath = state.path.popLast()
+                    
+                    state.didPop = true
+                    
+                    return .send(.search(.popView(lastPath: lastPath, isEmpty: state.path.isEmpty)))
+                }
                 
             case .search:
                 return .none

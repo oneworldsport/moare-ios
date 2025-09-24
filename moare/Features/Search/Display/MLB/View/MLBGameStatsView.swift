@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct MLBGameStatsView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<MLBGameStatsStore>
+    let didPop: Bool
     
     private let firstStatsColumnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50, 50, 50]
     private let secondStatsColumnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50]
@@ -141,7 +142,9 @@ struct MLBGameStatsView: View {
             }
         }
         .onAppear {
-            store.send(.baseGameStats(.initData))
+            if !didPop {
+                store.send(.baseGameStats(.initData))
+            }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true

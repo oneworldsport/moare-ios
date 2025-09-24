@@ -166,7 +166,8 @@ struct SearchView: View {
                               ) {
                                 PathView(
                                   searchStore: searchStore,
-                                  store: store
+                                  store: store,
+                                  didPop: appStore.didPop
                                 )
                               }
                             }
@@ -292,79 +293,79 @@ struct SearchView: View {
 struct PathView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<AppStore.Path>
+    let didPop: Bool
     
     var body: some View {
         switch store.state {
         case .fbPlayerInfo:
-            if let s = store.scope(state: \.fbPlayerInfo, action: \.fbPlayerInfo) { FBPlayerInfoView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.fbPlayerInfo, action: \.fbPlayerInfo) { FBPlayerInfoView(searchStore: searchStore, store: s, didPop: didPop) }
         case .fbPlayerStats:
-            if let s = store.scope(state: \.fbPlayerStats, action: \.fbPlayerStats) { FBPlayerStatsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.fbPlayerStats, action: \.fbPlayerStats) { FBPlayerStatsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .fbPlayerStandings:
-            if let s = store.scope(state: \.fbPlayerStandings, action: \.fbPlayerStandings) { FBPlayerStandingsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.fbPlayerStandings, action: \.fbPlayerStandings) { FBPlayerStandingsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .fbTeamInfo:
-            if let s = store.scope(state: \.fbTeamInfo, action: \.fbTeamInfo) { FBTeamInfoView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.fbTeamInfo, action: \.fbTeamInfo) { FBTeamInfoView(searchStore: searchStore, store: s, didPop: didPop) }
         case .fbTeamStats:
-            if let s = store.scope(state: \.fbTeamStats, action: \.fbTeamStats) { FBTeamStatsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.fbTeamStats, action: \.fbTeamStats) { FBTeamStatsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .fbTeamStandings:
-            if let s = store.scope(state: \.fbTeamStandings, action: \.fbTeamStandings) { FBTeamStandingsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.fbTeamStandings, action: \.fbTeamStandings) { FBTeamStandingsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .fbLeagueSchedule:
-            if let s = store.scope(state: \.fbLeagueSchedule, action: \.fbLeagueSchedule) { FBLeagueScheduleView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.fbLeagueSchedule, action: \.fbLeagueSchedule) { FBLeagueScheduleView(searchStore: searchStore, store: s, didPop: didPop) }
         case .fbGameStats:
-            if let s = store.scope(state: \.fbGameStats, action: \.fbGameStats) { FBGameStatsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.fbGameStats, action: \.fbGameStats) { FBGameStatsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .fbTournament:
-            if let s = store.scope(state: \.fbTournament, action: \.fbTournament) { FBTournamentView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.fbTournament, action: \.fbTournament) { FBTournamentView(searchStore: searchStore, store: s, didPop: didPop) }
             
         case .nbaPlayerInfo:
-            if let s = store.scope(state: \.nbaPlayerInfo, action: \.nbaPlayerInfo) { NBAPlayerInfoView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.nbaPlayerInfo, action: \.nbaPlayerInfo) { NBAPlayerInfoView(searchStore: searchStore, store: s, didPop: didPop) }
         case .nbaPlayerStats:
-            if let s = store.scope(state: \.nbaPlayerStats, action: \.nbaPlayerStats) { NBAPlayerStatsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.nbaPlayerStats, action: \.nbaPlayerStats) { NBAPlayerStatsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .nbaPlayerStandings:
-            if let s = store.scope(state: \.nbaPlayerStandings, action: \.nbaPlayerStandings) { NBAPlayerStandingsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.nbaPlayerStandings, action: \.nbaPlayerStandings) { NBAPlayerStandingsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .nbaTeamInfo:
-            if let s = store.scope(state: \.nbaTeamInfo, action: \.nbaTeamInfo) { NBATeamInfoView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.nbaTeamInfo, action: \.nbaTeamInfo) { NBATeamInfoView(searchStore: searchStore, store: s, didPop: didPop) }
         case .nbaTeamStats:
-            if let s = store.scope(state: \.nbaTeamStats, action: \.nbaTeamStats) { NBATeamStatsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.nbaTeamStats, action: \.nbaTeamStats) { NBATeamStatsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .nbaTeamStandings:
-            if let s = store.scope(state: \.nbaTeamStandings, action: \.nbaTeamStandings) { NBATeamStandingsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.nbaTeamStandings, action: \.nbaTeamStandings) { NBATeamStandingsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .nbaLeagueSchedule:
-            if let s = store.scope(state: \.nbaLeagueSchedule, action: \.nbaLeagueSchedule) { NBALeagueScheduleView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.nbaLeagueSchedule, action: \.nbaLeagueSchedule) { NBALeagueScheduleView(searchStore: searchStore, store: s, didPop: didPop) }
         case .nbaGameStats:
-            if let s = store.scope(state: \.nbaGameStats, action: \.nbaGameStats) { NBAGameStatsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.nbaGameStats, action: \.nbaGameStats) { NBAGameStatsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .nbaTournament:
-            if let s = store.scope(state: \.nbaTournament, action: \.nbaTournament) { NBATournamentView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.nbaTournament, action: \.nbaTournament) { NBATournamentView(searchStore: searchStore, store: s, didPop: didPop) }
             
         case .kboPlayerInfo:
-            if let s = store.scope(state: \.kboPlayerInfo, action: \.kboPlayerInfo) { KBOPlayerInfoView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.kboPlayerInfo, action: \.kboPlayerInfo) { KBOPlayerInfoView(searchStore: searchStore, store: s, didPop: didPop) }
         case .kboPlayerStats:
-            if let s = store.scope(state: \.kboPlayerStats, action: \.kboPlayerStats) { KBOPlayerStatsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.kboPlayerStats, action: \.kboPlayerStats) { KBOPlayerStatsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .kboTeamInfo:
-            if let s = store.scope(state: \.kboTeamInfo, action: \.kboTeamInfo) { KBOTeamInfoView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.kboTeamInfo, action: \.kboTeamInfo) { KBOTeamInfoView(searchStore: searchStore, store: s, didPop: didPop) }
         case .kboTeamStats:
-            if let s = store.scope(state: \.kboTeamStats, action: \.kboTeamStats) { KBOTeamStatsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.kboTeamStats, action: \.kboTeamStats) { KBOTeamStatsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .kboTeamStandings:
-            if let s = store.scope(state: \.kboTeamStandings, action: \.kboTeamStandings) { KBOTeamStandingsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.kboTeamStandings, action: \.kboTeamStandings) { KBOTeamStandingsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .kboLeagueSchedule:
-            if let s = store.scope(state: \.kboLeagueSchedule, action: \.kboLeagueSchedule) { KBOLeagueScheduleView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.kboLeagueSchedule, action: \.kboLeagueSchedule) { KBOLeagueScheduleView(searchStore: searchStore, store: s, didPop: didPop) }
         case .kboGameStats:
-            if let s = store.scope(state: \.kboGameStats, action: \.kboGameStats) { KBOGameStatsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.kboGameStats, action: \.kboGameStats) { KBOGameStatsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .kboTournament:
-            if let s = store.scope(state: \.kboTournament, action: \.kboTournament) { KBOTournamentView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.kboTournament, action: \.kboTournament) { KBOTournamentView(searchStore: searchStore, store: s, didPop: didPop) }
             
         case .mlbPlayerInfo:
-            if let s = store.scope(state: \.mlbPlayerInfo, action: \.mlbPlayerInfo) { MLBPlayerInfoView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.mlbPlayerInfo, action: \.mlbPlayerInfo) { MLBPlayerInfoView(searchStore: searchStore, store: s, didPop: didPop) }
         case .mlbPlayerStats:
-            if let s = store.scope(state: \.mlbPlayerStats, action: \.mlbPlayerStats) { MLBPlayerStatsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.mlbPlayerStats, action: \.mlbPlayerStats) { MLBPlayerStatsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .mlbTeamInfo:
-            if let s = store.scope(state: \.mlbTeamInfo, action: \.mlbTeamInfo) { MLBTeamInfoView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.mlbTeamInfo, action: \.mlbTeamInfo) { MLBTeamInfoView(searchStore: searchStore, store: s, didPop: didPop) }
         case .mlbTeamStats:
-            if let s = store.scope(state: \.mlbTeamStats, action: \.mlbTeamStats) { MLBTeamStatsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.mlbTeamStats, action: \.mlbTeamStats) { MLBTeamStatsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .mlbTeamStandings:
-            if let s = store.scope(state: \.mlbTeamStandings, action: \.mlbTeamStandings) { MLBTeamStandingsView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.mlbTeamStandings, action: \.mlbTeamStandings) { MLBTeamStandingsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .mlbLeagueSchedule:
-            if let s = store.scope(state: \.mlbLeagueSchedule, action: \.mlbLeagueSchedule) { MLBLeagueScheduleView(searchStore: searchStore, store: s) }
+            if let s = store.scope(state: \.mlbLeagueSchedule, action: \.mlbLeagueSchedule) { MLBLeagueScheduleView(searchStore: searchStore, store: s, didPop: didPop) }
         case .mlbGameStats:
-            if let s = store.scope(state: \.mlbGameStats, action: \.mlbGameStats) { MLBGameStatsView(searchStore: searchStore, store: s) }
-        default: EmptyView()
+            if let s = store.scope(state: \.mlbGameStats, action: \.mlbGameStats) { MLBGameStatsView(searchStore: searchStore, store: s, didPop: didPop) }
         }
     }
 }

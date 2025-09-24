@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct KBOGameStatsView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<KBOGameStatsStore>
+    let didPop: Bool
     
     private let firstStatsColumnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50, 50, 50]
     private let secondStatsColumnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50]
@@ -129,7 +130,9 @@ struct KBOGameStatsView: View {
             }
         }
         .onAppear {
-            store.send(.baseGameStats(.initData))
+            if !didPop {
+                store.send(.baseGameStats(.initData))
+            }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true

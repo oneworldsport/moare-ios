@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct FBTournamentView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<FBTournamentStore>
+    let didPop: Bool
     
     @State private var show = false
     
@@ -34,7 +35,9 @@ struct FBTournamentView: View {
             }
         }
         .onAppear {
-            store.send(.baseTournament(.initData))
+            if !didPop {
+                store.send(.baseTournament(.initData))
+            }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true

@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct NBAPlayerStatsView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<NBAPlayerStatsStore>
+    let didPop: Bool
     
 //    var startOffset = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
     
@@ -58,7 +59,9 @@ struct NBAPlayerStatsView: View {
             )
         } // ScrollView
         .onAppear {
-            store.send(.baseStats(.initData))
+            if !didPop {
+                store.send(.baseStats(.initData))
+            }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true

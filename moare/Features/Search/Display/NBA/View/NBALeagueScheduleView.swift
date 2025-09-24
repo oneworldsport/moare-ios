@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct NBALeagueScheduleView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<NBALeagueScheduleStore>
+    let didPop: Bool
     
     @State private var show = false
     
@@ -56,7 +57,9 @@ struct NBALeagueScheduleView: View {
             }
         } // VStack
         .onAppear {
-            store.send(.baseSchedule(.initData))
+            if !didPop {
+                store.send(.baseSchedule(.initData))
+            }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true

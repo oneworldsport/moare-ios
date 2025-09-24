@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct FBTeamStandingsView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<FBTeamStandingsStore>
+    let didPop: Bool
     
     private let columnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50, 50, 50, 100, 100]
     private let headerCategories = ["서부 컨퍼런스", "동부 컨퍼런스"]
@@ -74,7 +75,9 @@ struct FBTeamStandingsView: View {
             }
         }
         .onAppear {
-            store.send(.baseStandings(.initData))
+            if !didPop {
+                store.send(.baseStandings(.initData))
+            }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true

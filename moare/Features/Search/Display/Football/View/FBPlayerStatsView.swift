@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct FBPlayerStatsView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<FBPlayerStatsStore>
+    let didPop: Bool
     
     var startOffset = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
     
@@ -60,7 +61,9 @@ struct FBPlayerStatsView: View {
             )
         } // ScrollView
         .onAppear {
-            store.send(.baseStats(.initData))
+            if !didPop {
+                store.send(.baseStats(.initData))
+            }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true

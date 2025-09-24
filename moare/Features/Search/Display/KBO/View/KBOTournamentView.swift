@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct KBOTournamentView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<KBOTournamentStore>
+    let didPop: Bool
     
     @State private var show = false
     
@@ -28,7 +29,9 @@ struct KBOTournamentView: View {
             }
         }
         .onAppear {
-            store.send(.baseTournament(.initData))
+            if !didPop {
+                store.send(.baseTournament(.initData))
+            }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true

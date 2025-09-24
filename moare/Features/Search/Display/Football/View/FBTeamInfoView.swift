@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct FBTeamInfoView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<FBTeamInfoStore>
+    let didPop: Bool
     
     @State private var show = false
     
@@ -150,7 +151,9 @@ struct FBTeamInfoView: View {
             }
         })
         .onAppear {
-            store.send(.baseInfo(.initData))
+            if !didPop {
+                store.send(.baseInfo(.initData))
+            }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true

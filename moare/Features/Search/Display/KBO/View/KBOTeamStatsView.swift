@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct KBOTeamStatsView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<KBOTeamStatsStore>
+    let didPop: Bool
     
     @State private var show = false
 
@@ -56,7 +57,9 @@ struct KBOTeamStatsView: View {
             )
         } // ScrollView
         .onAppear {
-            store.send(.baseStats(.initData))
+            if !didPop {
+                store.send(.baseStats(.initData))
+            }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true

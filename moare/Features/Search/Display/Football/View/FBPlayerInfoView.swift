@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct FBPlayerInfoView: View {
     let searchStore: StoreOf<SearchStore> // TODO: 구조 고민 필요
     let store: StoreOf<FBPlayerInfoStore>
+    let didPop: Bool
     
     @State private var show = false // NOTE: Store 리팩토링 후 처음 오픈 시 애니메이션이 안먹어서 만듬
     
@@ -147,7 +148,9 @@ struct FBPlayerInfoView: View {
             }
         })
         .onAppear {
-            store.send(.baseInfo(.initData))
+            if !didPop {
+                store.send(.baseInfo(.initData))
+            }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true

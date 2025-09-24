@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct NBATeamStatsView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<NBATeamStatsStore>
+    let didPop: Bool
     
     @State private var show = false
     
@@ -56,7 +57,9 @@ struct NBATeamStatsView: View {
             )
         } // ScrollView
         .onAppear {
-            store.send(.baseStats(.initData))
+            if !didPop {
+                store.send(.baseStats(.initData))
+            }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true

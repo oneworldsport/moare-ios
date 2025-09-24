@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct KBOLeagueScheduleView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<KBOLeagueScheduleStore>
+    let didPop: Bool
     
     @State private var show = false
     
@@ -52,7 +53,9 @@ struct KBOLeagueScheduleView: View {
             }
         }
         .onAppear {
-            store.send(.baseSchedule(.initData))
+            if !didPop {
+                store.send(.baseSchedule(.initData))
+            }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true
