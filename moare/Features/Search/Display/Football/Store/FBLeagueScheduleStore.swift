@@ -25,18 +25,16 @@ struct FBLeagueScheduleStore {
         /* ---------------------
            data state
            --------------------- */
-        var baseSchedule = BaseSchedule.State()
-        var filteredGames: [Int: [FBGameForSchedule]] = [:]
+        var baseSchedule: BaseSchedule.State
         
-        /* ---------------------
-           ui state
-           --------------------- */
+        var filteredGames: [Int: [FBGameForSchedule]] = [:]
         var gameResultOpenedStateList: [String: Bool] = [:]
         
-        /* ---------------------
-           etc
-           --------------------- */
         var dataForViewStack: SportDecodableModel? = nil
+        
+        init(displayModel: FBLeagueScheduleDisplayModel) {
+            self.baseSchedule = BaseSchedule.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
@@ -67,9 +65,7 @@ struct FBLeagueScheduleStore {
     }
     
     var body: some Reducer<State, Action> {
-        Scope(state: \.baseSchedule, action: \.baseSchedule) {
-            BaseSchedule()
-        }
+        Scope(state: \.baseSchedule, action: \.baseSchedule) { BaseSchedule() }
         
         Reduce { state, action in
             switch action {
@@ -80,21 +76,19 @@ struct FBLeagueScheduleStore {
                 state.dataForViewStack = nil
                 
                 // init data
-                if let yearMonthList = state.baseSchedule.displayModel?.yearMonthList {
-                    state.baseSchedule.yearMonthList = yearMonthList
-                }
+                state.baseSchedule.yearMonthList = state.baseSchedule.displayModel.yearMonthList
                 
                 // select default yearMonth
-                switch state.baseSchedule.displayModel?.scheduleType {
+                switch state.baseSchedule.displayModel.scheduleType {
                 case .league:
-                    if let date = state.baseSchedule.displayModel?.games.first?.date {
+                    if let date = state.baseSchedule.displayModel.games.first?.date {
                         return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
                     }
                     
                     return .send(.setDays(isInit: true))
                     
                 case .team:
-                    let upcomingGame = state.baseSchedule.displayModel?.games.first { game in
+                    let upcomingGame = state.baseSchedule.displayModel.games.first { game in
                         CalendarUtil.isUpcomingDay(date: game.date)
                     }
                     
@@ -102,7 +96,7 @@ struct FBLeagueScheduleStore {
                     if let upcomingGame {
                         return .send(.baseSchedule(.setDefaultYearMonth(date: upcomingGame.date)))
                     } else {
-                        if let date = state.baseSchedule.displayModel?.games.last?.date {
+                        if let date = state.baseSchedule.displayModel.games.last?.date {
                             return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
                         }
                     }
@@ -116,14 +110,11 @@ struct FBLeagueScheduleStore {
             case .baseSchedule(.setDefaultYearMonth(_)):
                 return .send(.setDays(isInit: true))
                 
-            case .baseSchedule(_):
-                return .none
-                
             case .selectYearMonth(let yearMonth, let selectedIndex):
                 state.baseSchedule.selectedYearMonth = yearMonth
                 state.baseSchedule.selectedYearMonthIndex = selectedIndex
                 
-                switch state.baseSchedule.displayModel?.scheduleType {
+                switch state.baseSchedule.displayModel.scheduleType {
                 case .league:
                     return .send(.fetchGames)
                 case .team:
@@ -158,7 +149,7 @@ struct FBLeagueScheduleStore {
                     days = days.enumerated().compactMap { index, day in
                         var newDay = day
                         
-                        let games = state.baseSchedule.displayModel?.games.filter { game in
+                        let games = state.baseSchedule.displayModel.games.filter { game in
                             CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: day.day)
                         }
 
@@ -166,7 +157,7 @@ struct FBLeagueScheduleStore {
                         
                         newFilteredGame[index] = games ?? []
                         
-                        if games?.isEmpty == true {
+                        if games.isEmpty == true {
                             newDay.isDataEmpty = true
                         }
                         
@@ -225,7 +216,7 @@ struct FBLeagueScheduleStore {
                         let selectedYearMonth = selectedYearMonth.split(separator: "/")
                         let yearMonth = selectedYearMonth[0] + selectedYearMonth[1]
                         
-                        let entity = displayModel?.entityInfo.first ?? EntityInfo(
+                        let entity = displayModel.entityInfo.first ?? EntityInfo(
                             entityId: 39,
                             entityName: "프리미어리그",
                             category: "football",
@@ -235,7 +226,7 @@ struct FBLeagueScheduleStore {
                             playerId: nil
                         )
                         
-                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel?.season, yearMonth: String(yearMonth))
+                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel.season, yearMonth: String(yearMonth))
                         
                         
                         if case .fbLeagueSchedule(_, let displayModel) = result.data {
@@ -295,6 +286,9 @@ struct FBLeagueScheduleStore {
             case .setDisplayModel(let displayModel):
                 state.baseSchedule.displayModel = displayModel
                 
+                return .none
+                
+            case .baseSchedule:
                 return .none
             } // switch action
         }

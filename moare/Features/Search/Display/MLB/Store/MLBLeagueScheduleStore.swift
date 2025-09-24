@@ -19,18 +19,16 @@ struct MLBLeagueScheduleStore {
         /* ---------------------
            data state
            --------------------- */
-        var baseSchedule = BaseSchedule.State()
-        var filteredGames: [Int: [MLBGameForSchedule]] = [:]
+        var baseSchedule: BaseSchedule.State
         
-        /* ---------------------
-           ui state
-           --------------------- */
+        var filteredGames: [Int: [MLBGameForSchedule]] = [:]
         var gameResultOpenedStateList: [String: Bool] = [:]
         
-        /* ---------------------
-           etc
-           --------------------- */
         var dataForViewStack: SportDecodableModel? = nil
+        
+        init(displayModel: MLBLeagueScheduleDisplayModel) {
+            self.baseSchedule = BaseSchedule.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
@@ -61,9 +59,7 @@ struct MLBLeagueScheduleStore {
     }
     
     var body: some Reducer<State, Action> {
-        Scope(state: \.baseSchedule, action: \.baseSchedule) {
-            BaseSchedule()
-        }
+        Scope(state: \.baseSchedule, action: \.baseSchedule) { BaseSchedule() }
         
         Reduce { state, action in
             switch action {
@@ -74,21 +70,19 @@ struct MLBLeagueScheduleStore {
                 state.dataForViewStack = nil
                 
                 // init data
-                if let yearMonthList = state.baseSchedule.displayModel?.yearMonthList {
-                    state.baseSchedule.yearMonthList = yearMonthList
-                }
+                state.baseSchedule.yearMonthList = state.baseSchedule.displayModel.yearMonthList
                 
                 // select default yearMonth
-                switch state.baseSchedule.displayModel?.scheduleType {
+                switch state.baseSchedule.displayModel.scheduleType {
                 case .league:
-                    if let date = state.baseSchedule.displayModel?.games.first?.date {
+                    if let date = state.baseSchedule.displayModel.games.first?.date {
                         return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
                     }
                     
                     return .send(.setDays(isInit: true))
                     
                 case .team:
-                    let upcomingGame = state.baseSchedule.displayModel?.games.first { game in
+                    let upcomingGame = state.baseSchedule.displayModel.games.first { game in
                         CalendarUtil.isUpcomingDay(date: game.date)
                     }
                     
@@ -96,7 +90,7 @@ struct MLBLeagueScheduleStore {
                     if let upcomingGame {
                         return .send(.baseSchedule(.setDefaultYearMonth(date: upcomingGame.date)))
                     } else {
-                        if let date = state.baseSchedule.displayModel?.games.last?.date {
+                        if let date = state.baseSchedule.displayModel.games.last?.date {
                             return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
                         }
                     }
@@ -110,14 +104,11 @@ struct MLBLeagueScheduleStore {
             case .baseSchedule(.setDefaultYearMonth(_)):
                 return .send(.setDays(isInit: true))
                 
-            case .baseSchedule(_):
-                return .none
-                
             case .selectYearMonth(let yearMonth, let selectedIndex):
                 state.baseSchedule.selectedYearMonth = yearMonth
                 state.baseSchedule.selectedYearMonthIndex = selectedIndex
                 
-                switch state.baseSchedule.displayModel?.scheduleType {
+                switch state.baseSchedule.displayModel.scheduleType {
                 case .league:
                     return .send(.fetchGames)
                 case .team:
@@ -153,7 +144,7 @@ struct MLBLeagueScheduleStore {
                     days = days.enumerated().compactMap { index, day in
                         var newDay = day
                         
-                        let games = state.baseSchedule.displayModel?.games.filter { game in
+                        let games = state.baseSchedule.displayModel.games.filter { game in
                             CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: day.day)
                         }
                         
@@ -162,7 +153,7 @@ struct MLBLeagueScheduleStore {
                         // NOTE: games는 optional인데 왜 컴파일 에러가 안나지..?
                         newFilteredGame[index] = games ?? []
                         
-                        if games?.isEmpty == true {
+                        if games.isEmpty == true {
                             newDay.isDataEmpty = true
                         }
                         
@@ -215,7 +206,7 @@ struct MLBLeagueScheduleStore {
                         let selectedYearMonth = selectedYearMonth.split(separator: "/")
                         let yearMonth = selectedYearMonth[0] + selectedYearMonth[1]
                         
-                        let entity = displayModel?.entityInfo.first ?? EntityInfo(
+                        let entity = displayModel.entityInfo.first ?? EntityInfo(
                             entityId: 90102,
                             entityName: "MLB",
                             category: "baseball",
@@ -225,7 +216,7 @@ struct MLBLeagueScheduleStore {
                             playerId: nil
                         )
                         
-                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel?.season, yearMonth: String(yearMonth))
+                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel.season, yearMonth: String(yearMonth))
                         
                         if case let .mlbLeagueSchedule(_, displayModel) = result.data {
                             await send(.setDisplayModel(displayModel: displayModel))
@@ -286,6 +277,9 @@ struct MLBLeagueScheduleStore {
             case .setDisplayModel(let displayModel):
                 state.baseSchedule.displayModel = displayModel
                 
+                return .none
+                
+            case .baseSchedule:
                 return .none
             }
         }

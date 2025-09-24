@@ -42,11 +42,11 @@ struct AppStore {
                     state.path.append(.fbTeamStats(FBTeamStatsStore.State(displayModel: displayModel)))
                 case .fbTeamStandings(_, let displayModel):
                     state.path.append(.fbTeamStandings(FBTeamStandingsStore.State(displayModel: displayModel)))
-                case .fbLeagueSchedule(_, _):
-                    state.path.append(.fbLeagueSchedule(FBLeagueScheduleStore.State()))
-                case .fbGameStats(_, _):
+                case .fbLeagueSchedule(_, let displayModel):
+                    state.path.append(.fbLeagueSchedule(FBLeagueScheduleStore.State(displayModel: displayModel)))
+                case .fbGameStats(_, let displayModel):
                     state.path.append(.fbGameStats(FBGameStatsStore.State()))
-                case .fbTournament(_, _):
+                case .fbTournament(_, let displayModel):
                     state.path.append(.fbTournament(FBTournamentStore.State()))
                     
                 case .nbaPlayerInfo(_, let displayModel):
@@ -61,11 +61,11 @@ struct AppStore {
                     state.path.append(.nbaTeamStats(NBATeamStatsStore.State(displayModel: displayModel)))
                 case .nbaTeamStandings(_, let displayModel):
                     state.path.append(.nbaTeamStandings(NBATeamStandingsStore.State(displayModel: displayModel)))
-                case .nbaLeagueSchedule(_, _):
-                    state.path.append(.nbaLeagueSchedule(NBALeagueScheduleStore.State()))
-                case .nbaGameStats(_, _):
+                case .nbaLeagueSchedule(_, let displayModel):
+                    state.path.append(.nbaLeagueSchedule(NBALeagueScheduleStore.State(displayModel: displayModel)))
+                case .nbaGameStats(_, let displayModel):
                     state.path.append(.nbaGameStats(NBAGameStatsStore.State()))
-                case .nbaTournament(_, _):
+                case .nbaTournament(_, let displayModel):
                     state.path.append(.nbaTournament(NBATournamentStore.State()))
                     
                 case .kboPlayerInfo(_, let displayModel):
@@ -80,11 +80,11 @@ struct AppStore {
                     state.path.append(.kboTeamStats(KBOTeamStatsStore.State(displayModel: displayModel)))
                 case .kboTeamStandings(_, let displayModel):
                     state.path.append(.kboTeamStandings(KBOTeamStandingsStore.State(displayModel: displayModel)))
-                case .kboLeagueSchedule(_, _):
-                    state.path.append(.kboLeagueSchedule(KBOLeagueScheduleStore.State()))
-                case .kboGameStats(_, _):
+                case .kboLeagueSchedule(_, let displayModel):
+                    state.path.append(.kboLeagueSchedule(KBOLeagueScheduleStore.State(displayModel: displayModel)))
+                case .kboGameStats(_, let displayModel):
                     state.path.append(.kboGameStats(KBOGameStatsStore.State()))
-                case .kboTournament(_, _):
+                case .kboTournament(_, let displayModel):
                     state.path.append(.kboTournament(KBOTournamentStore.State()))
                     
                 case .mlbPlayerInfo(_, let displayModel):
@@ -99,9 +99,9 @@ struct AppStore {
                     state.path.append(.mlbTeamStats(MLBTeamStatsStore.State(displayModel: displayModel)))
                 case .mlbTeamStandings(_, let displayModel):
                     state.path.append(.mlbTeamStandings(MLBTeamStandingsStore.State(displayModel: displayModel)))
-                case .mlbLeagueSchedule(_, _):
-                    state.path.append(.mlbLeagueSchedule(MLBLeagueScheduleStore.State()))
-                case .mlbGameStats(_, _):
+                case .mlbLeagueSchedule(_, let displayModel):
+                    state.path.append(.mlbLeagueSchedule(MLBLeagueScheduleStore.State(displayModel: displayModel)))
+                case .mlbGameStats(_, let displayModel):
                     state.path.append(.mlbGameStats(MLBGameStatsStore.State()))
                 default: break
                 }

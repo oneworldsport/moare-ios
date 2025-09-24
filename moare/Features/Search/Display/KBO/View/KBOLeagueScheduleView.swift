@@ -9,94 +9,70 @@ import SwiftUI
 import ComposableArchitecture
 
 struct KBOLeagueScheduleView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var kboLeagueScheduleStore: StoreOf<KBOLeagueScheduleStore>? = nil
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<KBOLeagueScheduleStore>
     
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: KBOLeagueScheduleDisplayModel
+    @State private var show = false
     
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            VStack(spacing: 0) {
-                if let kboLeagueScheduleStore {
-                    ScheduleViewContainer(
-                        state: ScheduleContainerState(
-                            displayDataState: kboLeagueScheduleStore.baseSchedule.displayDataState,
-                            calendarUiState: CalendarUiState(
-                                yearMonthList: kboLeagueScheduleStore.baseSchedule.yearMonthList,
-                                days: kboLeagueScheduleStore.baseSchedule.days,
-                                selectedYearMonthIndex: kboLeagueScheduleStore.baseSchedule.selectedYearMonthIndex,
-                                selectedDayIndex: kboLeagueScheduleStore.baseSchedule.selectedDayIndex
-                            ),
-                            isAllResultOpened: kboLeagueScheduleStore.baseSchedule.isAllResultOpened
+        VStack {
+            if show {
+                ScheduleViewContainer(
+                    state: ScheduleContainerState(
+                        displayDataState: store.baseSchedule.displayDataState,
+                        calendarUiState: CalendarUiState(
+                            yearMonthList: store.baseSchedule.yearMonthList,
+                            days: store.baseSchedule.days,
+                            selectedYearMonthIndex: store.baseSchedule.selectedYearMonthIndex,
+                            selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
-                        actions: ScheduleContainerActions(
-                            calendarUiActions: CalendarUiActions(
-                                onSelectYearMonth: { yearMonth, index in
-                                    kboLeagueScheduleStore.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
-                                },
-                                onSelectDay: { day, index in
-                                    kboLeagueScheduleStore.send(.baseSchedule(.selectDay(day, index)))
-                                }
-                            ),
-                            allResultButtonAction: {
-                                kboLeagueScheduleStore.send(.toggleAllResult)
+                        isAllResultOpened: store.baseSchedule.isAllResultOpened
+                    ),
+                    actions: ScheduleContainerActions(
+                        calendarUiActions: CalendarUiActions(
+                            onSelectYearMonth: { yearMonth, index in
+                                store.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
+                            },
+                            onSelectDay: { day, index in
+                                store.send(.baseSchedule(.selectDay(day, index)))
                             }
                         ),
-                        titleContent: {},
-                        gameListContent: {
-                            KBOLeagueScheduleList(
-                                searchStore: searchStore,
-                                kboLeagueScheduleStore: kboLeagueScheduleStore
-                            )
+                        allResultButtonAction: {
+                            store.send(.toggleAllResult)
                         }
-                    )
-                }
+                    ),
+                    titleContent: {},
+                    gameListContent: {
+                        KBOLeagueScheduleList(
+                            searchStore: searchStore,
+                            kboLeagueScheduleStore: store
+                        )
+                    }
+                )
             }
-            .onAppear {
-                // init KBOLeagueScheduleStore
-                let kboLeagueScheduleStore: StoreOf<KBOLeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.kboLeagueScheduleStore) ?? {
-                    let newStore = Store(initialState: KBOLeagueScheduleStore.State()) { KBOLeagueScheduleStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.kboLeagueScheduleStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.kboLeagueScheduleStore = kboLeagueScheduleStore
-                }
-                
-                if searchStore.poppedView == nil {
-                    kboLeagueScheduleStore.send(.baseSchedule(.initData(displayModel: displayModel)))
-                }
+        }
+        .onAppear {
+            store.send(.baseSchedule(.initData))
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
-            .onChange(of: displayModel) {
-                if case .kboLeagueSchedule = searchStore.poppedView {
-                    kboLeagueScheduleStore?.send(.baseSchedule(.initData(displayModel: displayModel)))
-                }
+        }
+        .onChange(of: searchStore.viewStack) {
+            guard let lastItem = searchStore.viewStack.last,
+                  case .kboLeagueSchedule = lastItem,
+                  let poppedView = searchStore.poppedView,
+                  case .kboGameStats = searchStore.poppedView else {
+                return
             }
-            .onChange(of: searchStore.viewStack) {
-                guard let lastItem = searchStore.viewStack.last,
-                      case .kboLeagueSchedule = lastItem,
-                      let poppedView = searchStore.poppedView,
-                      case .kboGameStats = searchStore.poppedView else {
-                    return
-                }
-                
-                kboLeagueScheduleStore?.send(.updateGamesData(kboLeagueScheduleData: lastItem, kboGameStatsData: poppedView))
+            
+            store.send(.updateGamesData(kboLeagueScheduleData: lastItem, kboGameStatsData: poppedView))
+        }
+        .onChange(of: store.dataForViewStack) {
+            if let data = store.dataForViewStack {
+                searchStore.send(.updateLastViewStack(data: data))
             }
-            .onChange(of: kboLeagueScheduleStore?.dataForViewStack) {
-                if let data = kboLeagueScheduleStore?.dataForViewStack {
-                    searchStore.send(.updateLastViewStack(data: data))
-                }
-            }
-        } // if let searchStore
+        }
     }
 }
 
@@ -192,9 +168,7 @@ struct KBOLeagueScheduleListItem: View {
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
-                    if let displayModel = kboLeagueScheduleStore.baseSchedule.displayModel {
-                        searchStore.send(.selectKBOGame(game: data, season: displayModel.season))
-                    }
+                    searchStore.send(.selectKBOGame(game: data, season: kboLeagueScheduleStore.baseSchedule.displayModel.season))
                     
                     // set selected game's isOpened true
                     kboLeagueScheduleStore.send(.updateResultOpenedState(itemKey: itemKey, isOpened: true))
