@@ -101,7 +101,7 @@ struct KBOGameStatsView: View {
                             store.send(.baseGameStats(.selectSecondCategory(index)))
                         },
                         refreshButtonAction: {
-                            searchStore.send(.refreshGame(season: displayModel.season, category: "baseball"))
+                            store.send(.refreshGame())
                         }
                     ),
                     titleContent: {
@@ -137,12 +137,7 @@ struct KBOGameStatsView: View {
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true
             }
-        } // onAppear
-//        .onChange(of: displayModel) {
-//            if case .kboGameStats = searchStore.viewStack.last {
-//                kboGameStatsStore?.send(.baseGameStats(.initData(displayModel: displayModel)))
-//            }
-//        }
+        }
     }
 }
 

@@ -55,25 +55,13 @@ struct MLBLeagueScheduleView: View {
         .onAppear {
             if !didPop {
                 store.send(.baseSchedule(.initData))
+            } else {
+                // TODO: MLBGameStatsView에서 뒤로왔을때만 실행하게 개선 필요
+                store.send(.updateFilteredGames)
             }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true
-            }
-        }
-        .onChange(of: searchStore.viewStack) {
-            guard let lastItem = searchStore.viewStack.last,
-                  case .mlbLeagueSchedule = lastItem,
-                  let poppedView = searchStore.poppedView,
-                  case .mlbGameStats = searchStore.poppedView else {
-                return
-            }
-            
-            store.send(.updateGamesData(mlbLeagueScheduleData: lastItem, mlbGameStatsData: poppedView))
-        }
-        .onChange(of: store.dataForViewStack) {
-            if let data = store.dataForViewStack {
-                searchStore.send(.updateLastViewStack(data: data))
             }
         }
     }
@@ -83,9 +71,9 @@ struct MLBLeagueScheduleList: View {
     @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var mlbLeagueScheduleStore: StoreOf<MLBLeagueScheduleStore>
     
-    @State var gameListToDisplay: [MLBGameForSchedule] = []
-    
     var body: some View {
+        let gameListToDisplay = mlbLeagueScheduleStore.filteredGames[mlbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+        
         ScrollView {
             LazyVStack(spacing: 8) {
                 ForEach(gameListToDisplay, id: \.gameId) { item in
@@ -99,17 +87,6 @@ struct MLBLeagueScheduleList: View {
             }
         }
         .frame(maxHeight: .infinity)
-        .onAppear {
-            gameListToDisplay = mlbLeagueScheduleStore.filteredGames[mlbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
-        .onChange(of: mlbLeagueScheduleStore.baseSchedule.selectedDayIndex) {
-            gameListToDisplay = mlbLeagueScheduleStore.filteredGames[mlbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
-        .onChange(of: mlbLeagueScheduleStore.filteredGames) {
-            // TODO: Has to think about better structure, because 'gameListToDisplay' could be set multiple times.
-            // Has to find if there are cases like here from other .onChange()
-            gameListToDisplay = mlbLeagueScheduleStore.filteredGames[mlbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
     }
 }
 

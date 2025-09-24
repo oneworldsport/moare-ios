@@ -59,25 +59,13 @@ struct NBALeagueScheduleView: View {
         .onAppear {
             if !didPop {
                 store.send(.baseSchedule(.initData))
+            } else {
+                // TODO: NBAGameStatsView에서 뒤로왔을때만 실행하게 개선 필요
+                store.send(.updateFilteredGames)
             }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true
-            }
-        }
-        .onChange(of: searchStore.viewStack) {
-            guard let lastItem = searchStore.viewStack.last,
-                  case .nbaLeagueSchedule = lastItem,
-                  let poppedView = searchStore.poppedView,
-                  case .nbaGameStats = searchStore.poppedView else {
-                return
-            }
-            
-            store.send(.updateGamesData(nbaLeagueScheduleData: lastItem, nbaGameStatsData: poppedView))
-        }
-        .onChange(of: store.dataForViewStack) {
-            if let data = store.dataForViewStack {
-                searchStore.send(.updateLastViewStack(data: data))
             }
         }
     }
@@ -87,9 +75,9 @@ struct NBALeagueScheduleList: View {
     @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var nbaLeagueScheduleStore: StoreOf<NBALeagueScheduleStore>
     
-    @State var gameListToDisplay: [NBAGameForSchedule] = []
-    
     var body: some View {
+        let gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+        
         ScrollView {
             LazyVStack(spacing: 8) {
                 ForEach(gameListToDisplay, id: \.gameId) { item in
@@ -103,17 +91,6 @@ struct NBALeagueScheduleList: View {
             }
         }
         .frame(maxHeight: .infinity)
-        .onAppear {
-            gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
-        .onChange(of: nbaLeagueScheduleStore.baseSchedule.selectedDayIndex) {
-            gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
-        .onChange(of: nbaLeagueScheduleStore.filteredGames) {
-            // TODO: Has to think about better structure, because 'gameListToDisplay' could be set multiple times.
-            // Has to find if there are cases like here from other .onChange()
-            gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
     }
 }
 
@@ -133,7 +110,7 @@ struct NBALeagueScheduleListItem: View {
         let homeTeamId = data.homeTeamId
         let awayTeamId = data.awayTeamId
         let gameStatus = Int(data.gameStatus)
-        let teamNameDic = nbaLeagueScheduleStore.teamNameDictionary
+        let teamNameDic = nbaLeagueScheduleStore.baseSchedule.teamNameDictionary
         
         let gameStatusText: String = {
             guard isResultOpened else { return StringConstants.resultOpen }
@@ -198,10 +175,10 @@ struct NBALeagueScheduleListItem: View {
                     searchStore.send(.selectNBAGame(game: data, season: displayModel.season))
                     
                     // set selected game's isOpened true
-                    nbaLeagueScheduleStore.send(.updateResultOpenedState(gameCode: data.gameId, isOpened: true))
+                    nbaLeagueScheduleStore.send(.updateResultOpenedState(gameId: data.gameId, isOpened: true))
                 },
                 onCapsuleButtonClick: {
-                    nbaLeagueScheduleStore.send(.updateResultOpenedState(gameCode: data.gameId, isOpened: !isResultOpened))
+                    nbaLeagueScheduleStore.send(.updateResultOpenedState(gameId: data.gameId, isOpened: !isResultOpened))
                 }
             )
         )

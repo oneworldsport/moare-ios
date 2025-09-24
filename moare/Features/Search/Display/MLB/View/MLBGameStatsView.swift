@@ -115,7 +115,7 @@ struct MLBGameStatsView: View {
                             store.send(.baseGameStats(.selectSecondCategory(index)))
                         },
                         refreshButtonAction: {
-                            searchStore.send(.refreshGame(season: displayModel.season, category: "baseball"))
+                            store.send(.refreshGame())
                         }
                     ),
                     titleContent: {
@@ -149,12 +149,7 @@ struct MLBGameStatsView: View {
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true
             }
-        } // onAppear
-//        .onChange(of: displayModel) {
-//            if case .mlbGameStats = searchStore.viewStack.last {
-//                store.send(.baseGameStats(.initData(displayModel: displayModel)))
-//            }
-//        }
+        }
     }
 }
 

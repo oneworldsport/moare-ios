@@ -183,7 +183,8 @@ struct SearchView: View {
                                 PathView(
                                   searchStore: searchStore,
                                   store: store,
-                                  didPop: appStore.didPop
+                                  didPop: appStore.didPop,
+                                  isCombinedView: appStore.includesPreviousView
                                 )
                               }
                             }
@@ -342,7 +343,7 @@ struct PathView: View {
         case .fbLeagueSchedule:
             if let s = store.scope(state: \.fbLeagueSchedule, action: \.fbLeagueSchedule) { FBLeagueScheduleView(searchStore: searchStore, store: s, didPop: didPop, isCombinedView: isCombinedView) }
         case .fbGameStats:
-            if let s = store.scope(state: \.fbGameStats, action: \.fbGameStats) { FBGameStatsView(searchStore: searchStore, store: s, didPop: didPop) }
+            if let s = store.scope(state: \.fbGameStats, action: \.fbGameStats) { FBGameStatsView(searchStore: searchStore, store: s, didPop: didPop, isCombinedView: isCombinedView) }
         case .fbTournament:
             if let s = store.scope(state: \.fbTournament, action: \.fbTournament) { FBTournamentView(searchStore: searchStore, store: s, didPop: didPop) }
             

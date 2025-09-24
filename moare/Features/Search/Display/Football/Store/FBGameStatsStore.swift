@@ -50,7 +50,8 @@ struct FBGameStatsStore {
         
         case sortPlayers
         case setPlayersTotalStats
-        case refreshGame
+        // NOTE: shouldFetch는 최초에 FBGameStats에 진입했을때 받은 데이터로 FBLeagueSchedule데이터 업데이트 해줄때 사용.
+        case refreshGame(shouldFetch: Bool = true)
         case updateDisplayModel(model: SportDecodableModel)
         
         case delegate(Delegate)
@@ -87,6 +88,7 @@ struct FBGameStatsStore {
                 return .run { send in
                     await send(.setPlayersTotalStats)
                     await send(.sortPlayers)
+                    await send(.refreshGame(shouldFetch: false)) // NOTE: 이걸 안해주면 새로고침 누르기 전에는 FBLeagueSchedule 데이터가 업데이트 안됨.
                 }
                 
             case let .baseGameStats(.selectTeam(index)):
@@ -234,21 +236,30 @@ struct FBGameStatsStore {
                 
                 return .none
                 
-            case .refreshGame:
-                return .run { [displayModel = state.baseGameStats.displayModel] send in
-                    let game = displayModel.game
-                    
-                    let result = try await searchClient.fetchById(
-                        season: displayModel.season,
-                        category: "football",
-                        date: game.fixture.date,
-                        dataType: "football_game_stats",
-                        leagueId: game.league.id,
-                        id: String(game.fixture.id)
-                    )
-                    
-                    await send(.updateDisplayModel(model: result.data))
-                    await send(.delegate(.didRefreshGame(model: result.data)))
+            case let .refreshGame(shouldFetch):
+                if shouldFetch {
+                    return .run { [displayModel = state.baseGameStats.displayModel] send in
+                        let game = displayModel.game
+                        
+                        let result = try await searchClient.fetchById(
+                            season: displayModel.season,
+                            category: "football",
+                            date: game.fixture.date,
+                            dataType: "football_game_stats",
+                            leagueId: game.league.id,
+                            id: String(game.fixture.id)
+                        )
+                        
+                        await send(.updateDisplayModel(model: result.data))
+                        await send(.delegate(.didRefreshGame(model: result.data)))
+                    }
+                } else {
+                    return .run { [displayModel = state.baseGameStats.displayModel] send in
+                        let responseModel = FBGameStatsResponseModel(game: displayModel.game)
+                        let dataModel: SportDecodableModel = .fbGameStats(responseModel, displayModel)
+                            
+                        await send(.delegate(.didRefreshGame(model: dataModel)))
+                    }
                 }
                 
             case let .updateDisplayModel(model):

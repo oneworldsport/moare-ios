@@ -98,8 +98,7 @@ struct FBLeagueScheduleView: View {
 struct FBLeagueScheduleList: View {
     @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
-    
-//    @State var gameListToDisplay: [FBGameForSchedule] = []
+
     @State var itemHeight: CGFloat? = nil
     
     var body: some View {
@@ -148,33 +147,6 @@ struct FBLeagueScheduleList: View {
         }
         .frame(height: isCollapsed ? itemHeight : nil)
         .scrollDisabled(isCollapsed)
-//        .onAppear {
-            // TODO: init에서 해도 상관없다. 어디서 하는게 나을까?
-//            if let game = fbGameStatsModel?.game {
-//                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-//                    gameListToDisplay = [ModelConverter.fbGameToGameScheduleConverter(game: game)]
-//                }
-//            } else {
-//                gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-//            }
-//        }
-//        .onChange(of: fbGameStatsModel) {
-//            if let game = fbGameStatsModel?.game {
-//                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-//                    gameListToDisplay = [ModelConverter.fbGameToGameScheduleConverter(game: game)]
-//                }
-//            } else {
-//                gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-//            }
-//        }
-//        .onChange(of: fbLeagueScheduleStore.baseSchedule.selectedDayIndex) {
-//            gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-//        }
-//        .onChange(of: fbLeagueScheduleStore.filteredGames) {
-            // TODO: Has to think about better structure, because 'gameListToDisplay' could be set multiple times.
-            // Has to find if there are cases like here from other .onChange()
-//            gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-//        }
     }
 }
 
@@ -199,7 +171,8 @@ struct FBLeagueScheduleListItem: View {
         let homeTeamId = data.homeTeamId
         let awayTeamId = data.awayTeamId
         let gameStatus = data.gameStatus
-        let fbGameStatsModel = searchStore.displayModels[.fbGameStats] as? FBGameStatsDisplayModel
+        // FBLeagueScheduleView가 아닌 FBPlayerInfoView나 FBTeamInfoView 등에서 보여질때 사용되는 flag
+        let isFromSchedule = fbLeagueScheduleStore != nil
         
         let gameStatusText: String = {
             switch gameStatus {
@@ -229,7 +202,7 @@ struct FBLeagueScheduleListItem: View {
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
-                isClickEnabled: fbGameStatsModel == nil,
+                isClickEnabled: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
                 homeTeamLogo: FBUtil.teamLogoURL(id: homeTeamId),
                 homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
                 homeTeamScore: data.homeTeamScore,
@@ -239,15 +212,14 @@ struct FBLeagueScheduleListItem: View {
                 isResultOpened: isResultOpened,
                 gameStatusText: gameStatusText,
                 gameStatusColor: gameStatusColor,
-                isCapsuleButtonDisabled: fbGameStatsModel != nil || !StringConstants.Football.gameFinishedList.contains(gameStatus),
+                isCapsuleButtonDisabled: (isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true) || !StringConstants.Football.gameFinishedList.contains(gameStatus),
                 date: data.date,
                 venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
                 gameType: MatchDescriptionConverter.convert(input: data.gameInfo?.round ?? ""),
-                referee: fbGameStatsModel?.game.fixture.referee,
-                shouldShowOnlyDateTime: fbGameStatsModel == nil,
-                shouldShowGameType: fbGameStatsModel == nil,
-                shouldShowHomeLabel: fbGameStatsModel != nil,
-                shouldShowAwayLabel: fbGameStatsModel != nil,
+                shouldShowOnlyDateTime: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
+                shouldShowGameType: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
+                shouldShowHomeLabel: isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true,
+                shouldShowAwayLabel: isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true,
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
@@ -256,8 +228,6 @@ struct FBLeagueScheduleListItem: View {
                         searchStore.send(.selectFBGame(game: data, season: displayModel.season, leagueId: displayModel.leagueId))
                         
                         fbLeagueScheduleStore.send(.selectGame(game: data))
-                        // set selected game's isOpened true
-//                        fbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: true))
                     }
                 },
                 onCapsuleButtonClick: {
@@ -278,13 +248,6 @@ struct FBLeagueScheduleListItem: View {
                 isResultOpened = true
             }
         }
-        .onChange(of: fbGameStatsModel) {
-            if fbGameStatsModel != nil {
-                if gameStatus != StringConstants.Football.gameNotStarted {
-                    isResultOpened = true
-                }
-            }
-        }
         .onChange(of: fbLeagueScheduleStore?.gameResultOpenedStateList) {
             if let fbLeagueScheduleStore, StringConstants.Football.gameFinishedList.contains(gameStatus) {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
@@ -292,12 +255,5 @@ struct FBLeagueScheduleListItem: View {
                 }
             }
         }
-//        .onChange(of: fbGameStatsModel) {
-//            if fbGameStatsModel != nil {
-//                if gameStatus != StringConstants.Football.gameNotStarted {
-//                    isResultOpened = true
-//                }
-//            }
-//        }
     }
 }

@@ -55,25 +55,13 @@ struct KBOLeagueScheduleView: View {
         .onAppear {
             if !didPop {
                 store.send(.baseSchedule(.initData))
+            } else {
+                // TODO: KBOGameStatsView에서 뒤로왔을때만 실행하게 개선 필요
+                store.send(.updateFilteredGames)
             }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true
-            }
-        }
-        .onChange(of: searchStore.viewStack) {
-            guard let lastItem = searchStore.viewStack.last,
-                  case .kboLeagueSchedule = lastItem,
-                  let poppedView = searchStore.poppedView,
-                  case .kboGameStats = searchStore.poppedView else {
-                return
-            }
-            
-            store.send(.updateGamesData(kboLeagueScheduleData: lastItem, kboGameStatsData: poppedView))
-        }
-        .onChange(of: store.dataForViewStack) {
-            if let data = store.dataForViewStack {
-                searchStore.send(.updateLastViewStack(data: data))
             }
         }
     }
@@ -83,9 +71,9 @@ struct KBOLeagueScheduleList: View {
     @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var kboLeagueScheduleStore: StoreOf<KBOLeagueScheduleStore>
     
-    @State var gameListToDisplay: [KBOGameForSchedule] = []
-    
     var body: some View {
+        let gameListToDisplay = kboLeagueScheduleStore.filteredGames[kboLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+        
         ScrollView {
             LazyVStack(spacing: 8) {
                 ForEach(gameListToDisplay, id: \.itemKey) { item in
@@ -99,17 +87,6 @@ struct KBOLeagueScheduleList: View {
             }
         }
         .frame(maxHeight: .infinity)
-        .onAppear {
-            gameListToDisplay = kboLeagueScheduleStore.filteredGames[kboLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
-        .onChange(of: kboLeagueScheduleStore.baseSchedule.selectedDayIndex) { newValue in
-            gameListToDisplay = kboLeagueScheduleStore.filteredGames[newValue] ?? []
-        }
-        .onChange(of: kboLeagueScheduleStore.filteredGames) {
-            // TODO: Has to think about better structure, because 'gameListToDisplay' could be set multiple times.
-            // Has to find if there are cases like here from other .onChange()
-            gameListToDisplay = kboLeagueScheduleStore.filteredGames[kboLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
     }
 }
 

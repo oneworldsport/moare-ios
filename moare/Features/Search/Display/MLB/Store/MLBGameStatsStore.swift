@@ -12,6 +12,8 @@ import ComposableArchitecture
 struct MLBGameStatsStore {
     typealias BaseGameStats = BaseGameStatsStore<MLBGameStatsDisplayModel>
     
+    let searchClient = SearchClient()
+    
     @ObservableState
     struct State {
         /* ---------------------
@@ -38,12 +40,17 @@ struct MLBGameStatsStore {
     enum Action {
         case baseGameStats(BaseGameStats.Action)
         
-        /* ---------------------
-           private
-           --------------------- */
         case sortHitters
         case sortPitchers
         case setPlayersTotalStats
+        case refreshGame(shouldFetch: Bool = true)
+        case updateDisplayModel(model: SportDecodableModel)
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case didRefreshGame(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -81,6 +88,7 @@ struct MLBGameStatsStore {
                     await send(.sortHitters)
                     await send(.sortPitchers)
                     await send(.setPlayersTotalStats)
+                    await send(.refreshGame(shouldFetch: false))
                 }
                 
             case .baseGameStats(.selectFirstCategory):
@@ -138,7 +146,45 @@ struct MLBGameStatsStore {
             case .setPlayersTotalStats:
                 return .none
                 
+            case let .refreshGame(shouldFetch):
+                if shouldFetch {
+                    return .run { [displayModel = state.baseGameStats.displayModel] send in
+                        let game = displayModel.game
+                        
+                        let result = try await searchClient.fetchById(
+                            season: displayModel.season,
+                            category: "baseball",
+                            date: game.gameInfo.gameDate,
+                            dataType: "baseball_game_stats",
+                            leagueId: Constants.Ids.mlb,
+                            id: String(game.game.pk)
+                        )
+                        
+                        await send(.updateDisplayModel(model: result.data))
+                        await send(.delegate(.didRefreshGame(model: result.data)))
+                    }
+                } else {
+                    return .run { [displayModel = state.baseGameStats.displayModel] send in
+                        let responseModel = MLBGameStatsResponseModel(game: displayModel.game)
+                        let dataModel: SportDecodableModel = .mlbGameStats(responseModel, displayModel)
+                            
+                        await send(.delegate(.didRefreshGame(model: dataModel)))
+                    }
+                }
+                
+            case let .updateDisplayModel(model):
+                if case .mlbGameStats(_, let displayModel) = model {
+                    state.baseGameStats.displayModel = displayModel
+                    
+                    return .send(.baseGameStats(.initData))
+                } else {
+                    return .none
+                }
+                
             case .baseGameStats:
+                return .none
+                
+            case .delegate:
                 return .none
             }
         }

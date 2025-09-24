@@ -16,6 +16,7 @@ struct AppStore {
         var path = StackState<Path.State>()
         
         var didPop: Bool = false
+        var includesPreviousView: Bool = false
     }
     
     enum Action {
@@ -31,6 +32,9 @@ struct AppStore {
         Reduce { state, action in
             switch action {
             case .search(.delegate(.push(let model))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
                 switch model {
                 case .fbPlayerInfo(_, let displayModel):
                     state.path.append(.fbPlayerInfo(FBPlayerInfoStore.State(displayModel: displayModel)))
@@ -48,6 +52,8 @@ struct AppStore {
                     state.path.append(.fbLeagueSchedule(FBLeagueScheduleStore.State(displayModel: displayModel)))
                 case .fbGameStats(_, let displayModel):
                     state.path.append(.fbGameStats(FBGameStatsStore.State(displayModel: displayModel)))
+                    // TODO: 이전 화면이 fbLeagueSchedule일때만
+                    state.includesPreviousView = true
                 case .fbTournament(_, let displayModel):
                     state.path.append(.fbTournament(FBTournamentStore.State(displayModel: displayModel)))
                     
@@ -108,8 +114,6 @@ struct AppStore {
                 default: break
                 }
                 
-                state.didPop = false
-                
                 return .none
                 
             case let .search(.delegate(.pop(searchState))):
@@ -117,9 +121,11 @@ struct AppStore {
                 if !searchState {
                     return .none
                 } else {
-                    let lastPath = state.path.popLast()
-                    
                     state.didPop = true
+                    // TODO: 이전 화면이 fbLeagueSchedule일때는 true
+                    state.includesPreviousView = false
+                    
+                    let lastPath = state.path.popLast()
                     
                     return .send(.search(.popView(lastPath: lastPath, isEmpty: state.path.isEmpty)))
                 }
@@ -128,6 +134,79 @@ struct AppStore {
                 return .none
                 
             case .pop:
+                return .none
+                
+            case let .path(.element(id: elementId, action: .fbGameStats(.delegate(.didRefreshGame(model))))):
+                if case .fbGameStats(_, let displayModel) = model {
+                    if let idx = state.path.ids.firstIndex(of: elementId) {
+                        for previousId in state.path.ids[..<idx].reversed() {
+                            if case .fbLeagueSchedule(var leagueState) = state.path[id: previousId] {
+                                leagueState.baseSchedule.displayModel = ModelConverter.fbGameDisplayToLeagueScheduleDisplayConverter(
+                                    gameStatsDisplayModel: displayModel,
+                                    leagueScheduleDisplayModel: leagueState.baseSchedule.displayModel
+                                )
+                                leagueState.league = displayModel.game.league
+                                state.path[id: previousId] = .fbLeagueSchedule(leagueState)
+                                break
+                            }
+                        }
+                    }
+                }
+                
+                return .none
+                
+            case let .path(.element(id: elementId, action: .nbaGameStats(.delegate(.didRefreshGame(model))))):
+                if case .nbaGameStats(_, let displayModel) = model {
+                    if let idx = state.path.ids.firstIndex(of: elementId) {
+                        for previousId in state.path.ids[..<idx].reversed() {
+                            if case .nbaLeagueSchedule(var leagueState) = state.path[id: previousId] {
+                                leagueState.baseSchedule.displayModel = ModelConverter.nbaGameDisplayToLeagueScheduleDisplayConverter(
+                                    gameStatsDisplayModel: displayModel,
+                                    leagueScheduleDisplayModel: leagueState.baseSchedule.displayModel
+                                )
+                                state.path[id: previousId] = .nbaLeagueSchedule(leagueState)
+                                break
+                            }
+                        }
+                    }
+                }
+                
+                return .none
+                
+            case let .path(.element(id: elementId, action: .mlbGameStats(.delegate(.didRefreshGame(model))))):
+                if case .mlbGameStats(_, let displayModel) = model {
+                    if let idx = state.path.ids.firstIndex(of: elementId) {
+                        for previousId in state.path.ids[..<idx].reversed() {
+                            if case .mlbLeagueSchedule(var leagueState) = state.path[id: previousId] {
+                                leagueState.baseSchedule.displayModel = ModelConverter.mlbGameDisplayToLeagueScheduleDisplayConverter(
+                                    gameStatsDisplayModel: displayModel,
+                                    leagueScheduleDisplayModel: leagueState.baseSchedule.displayModel
+                                )
+                                state.path[id: previousId] = .mlbLeagueSchedule(leagueState)
+                                break
+                            }
+                        }
+                    }
+                }
+                
+                return .none
+                
+            case let .path(.element(id: elementId, action: .kboGameStats(.delegate(.didRefreshGame(model))))):
+                if case .kboGameStats(_, let displayModel) = model {
+                    if let idx = state.path.ids.firstIndex(of: elementId) {
+                        for previousId in state.path.ids[..<idx].reversed() {
+                            if case .kboLeagueSchedule(var leagueState) = state.path[id: previousId] {
+                                leagueState.baseSchedule.displayModel = ModelConverter.kboGameDisplayToLeagueScheduleDisplayConverter(
+                                    gameStatsDisplayModel: displayModel,
+                                    leagueScheduleDisplayModel: leagueState.baseSchedule.displayModel
+                                )
+                                state.path[id: previousId] = .kboLeagueSchedule(leagueState)
+                                break
+                            }
+                        }
+                    }
+                }
+                
                 return .none
                 
             case .path:

@@ -12,6 +12,7 @@ struct FBGameStatsView: View {
     let searchStore: StoreOf<SearchStore>
     let store: StoreOf<FBGameStatsStore>
     let didPop: Bool
+    let isCombinedView: Bool
     
     private let columnWidthList: [CGFloat] = [50, 50, 50, 50, 60, 50, 80, 70, 70, 80, 60, 60, 60, 50, 50, 50, 80, 50]
     
@@ -22,7 +23,6 @@ struct FBGameStatsView: View {
         let game = displayModel.game
         let playerNameDic = store.baseGameStats.playerNameDictionary
         let teamNameDic = store.baseGameStats.teamNameDictionary
-        let fbLeagueScheduleModel = searchStore.displayModels[.fbLeagueSchedule] as? FBLeagueScheduleDisplayModel
         
         let teamIds = [game.teams.home.id, game.teams.away.id]
         let teamCategories: [GameStatsTeamState] = teamIds.map {
@@ -88,7 +88,7 @@ struct FBGameStatsView: View {
             } else {
               return nil
             }
-        } ?? []
+        }
         
         let gameDetailTitle = "장소: \n심판: "
         let gameDetailContent: String = {
@@ -102,8 +102,8 @@ struct FBGameStatsView: View {
             if show {
                 GameStatsViewContainer(
                     state: GameStatsContainerState(
-                        shouldShowTitle: fbLeagueScheduleModel == nil,
-                        shouldShowGameItem: fbLeagueScheduleModel == nil,
+                        shouldShowTitle: !isCombinedView,
+                        shouldShowGameItem: !isCombinedView,
                         shouldShowStats: displayModel.game.fixture.status.short != StringConstants.Football.gameNotStarted,
                         shouldShowCoach: true,
                         shouldShowRefreshButton: StringConstants.Football.gameLiveList.contains(displayModel.game.fixture.status.short),
@@ -128,8 +128,7 @@ struct FBGameStatsView: View {
                             store.send(.baseGameStats(.selectFirstCategory(index)))
                         },
                         refreshButtonAction: {
-//                            searchStore.send(.refreshGame(season: displayModel.season, category: "football"))
-                            store.send(.refreshGame)
+                            store.send(.refreshGame())
                         }
                     ),
                     titleContent: {
@@ -145,16 +144,7 @@ struct FBGameStatsView: View {
                         }
                     },
                     gameContent: {
-                        let previousViewStack = searchStore.viewStack.dropLast().last
-                        // NOTE: || 연산자가 안먹고, switch case문도 오류가 나서 아래처럼 처리.
-                        if case .fbPlayerInfo = previousViewStack {
-                            FBLeagueScheduleListItem(
-                                searchStore: searchStore,
-                                fbLeagueScheduleStore: nil,
-                                data: ModelConverter.fbGameToGameScheduleConverter(game: game),
-                                teamNameDic: teamNameDic
-                            )
-                        } else if case .fbTeamInfo = previousViewStack {
+                        if !isCombinedView {
                             FBLeagueScheduleListItem(
                                 searchStore: searchStore,
                                 fbLeagueScheduleStore: nil,
