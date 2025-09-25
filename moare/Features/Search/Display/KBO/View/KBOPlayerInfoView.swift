@@ -501,7 +501,7 @@ struct KBOPlayerInfoSixthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showPlayerStats(playerId: kboPlayerInfoStore.baseInfo.displayModel.info.id))
+                kboPlayerInfoStore.send(.showPlayerStats)
             }
         ) {
             BaseballLeagueTitle(

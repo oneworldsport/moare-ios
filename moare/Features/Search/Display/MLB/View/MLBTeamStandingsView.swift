@@ -121,7 +121,7 @@ struct MLBTeamStandingsDataList: View {
                             imageUrl: MLBUtil.teamLogoURL(id: data.team.id),
                             name: teamNameDic["short_\(data.team.id)"] ?? data.team.shortName,
                             action: { id in
-                                searchStore.send(.showTeamStats(teamId: id))
+                                mlbTeamStandingsStore.send(.showTeamStats(id: id))
                             }
                         )
                     }

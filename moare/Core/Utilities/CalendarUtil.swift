@@ -18,6 +18,7 @@ enum TimeFormatType {
     case ampm, ampmWithDate, ampmWithDayOfWeekDate, yearMonth
 }
 
+// TODO: struct로 바꾸는게 맞을듯?
 class CalendarUtil {
     static let currentYear = Calendar.current.component(.year, from: Date())
     

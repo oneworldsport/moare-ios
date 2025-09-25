@@ -36,18 +36,18 @@ struct AppStore {
                 state.includesPreviousView = false
                 
                 switch model {
-                case .fbPlayerInfo(_, let displayModel):
-                    state.path.append(.fbPlayerInfo(FBPlayerInfoStore.State(displayModel: displayModel)))
+                case let .fbPlayerInfo(responseModel, displayModel):
+                    state.path.append(.fbPlayerInfo(FBPlayerInfoStore.State(responseModel: responseModel, displayModel: displayModel)))
                 case .fbPlayerStats(_, let displayModel):
                     state.path.append(.fbPlayerStats(FBPlayerStatsStore.State(displayModel: displayModel)))
                 case .fbPlayerStandings(_, let displayModel):
                     state.path.append(.fbPlayerStandings(FBPlayerStandingsStore.State(displayModel: displayModel)))
-                case .fbTeamInfo(_, let displayModel):
-                    state.path.append(.fbTeamInfo(FBTeamInfoStore.State(displayModel: displayModel)))
+                case let .fbTeamInfo(responseModel, displayModel):
+                    state.path.append(.fbTeamInfo(FBTeamInfoStore.State(responseModel: responseModel, displayModel: displayModel)))
                 case .fbTeamStats(_, let displayModel):
                     state.path.append(.fbTeamStats(FBTeamStatsStore.State(displayModel: displayModel)))
-                case .fbTeamStandings(_, let displayModel):
-                    state.path.append(.fbTeamStandings(FBTeamStandingsStore.State(displayModel: displayModel)))
+                case let .fbTeamStandings(responseModel, displayModel):
+                    state.path.append(.fbTeamStandings(FBTeamStandingsStore.State(responseModel: responseModel, displayModel: displayModel)))
                 case .fbLeagueSchedule(_, let displayModel):
                     state.path.append(.fbLeagueSchedule(FBLeagueScheduleStore.State(displayModel: displayModel)))
                 case .fbGameStats(_, let displayModel):
@@ -57,18 +57,18 @@ struct AppStore {
                 case .fbTournament(_, let displayModel):
                     state.path.append(.fbTournament(FBTournamentStore.State(displayModel: displayModel)))
                     
-                case .nbaPlayerInfo(_, let displayModel):
-                    state.path.append(.nbaPlayerInfo(NBAPlayerInfoStore.State(displayModel: displayModel)))
+                case let .nbaPlayerInfo(responseModel, displayModel):
+                    state.path.append(.nbaPlayerInfo(NBAPlayerInfoStore.State(responseModel: responseModel, displayModel: displayModel)))
                 case .nbaPlayerStats(_, let displayModel):
                     state.path.append(.nbaPlayerStats(NBAPlayerStatsStore.State(displayModel: displayModel)))
-                case .nbaPlayerStandings(_, let displayModel):
-                    state.path.append(.nbaPlayerStandings(NBAPlayerStandingsStore.State(displayModel: displayModel)))
-                case .nbaTeamInfo(_, let displayModel):
-                    state.path.append(.nbaTeamInfo(NBATeamInfoStore.State(displayModel: displayModel)))
+                case let .nbaPlayerStandings(responseModel, displayModel):
+                    state.path.append(.nbaPlayerStandings(NBAPlayerStandingsStore.State(responseModel: responseModel, displayModel: displayModel)))
+                case let .nbaTeamInfo(responseModel, displayModel):
+                    state.path.append(.nbaTeamInfo(NBATeamInfoStore.State(responseModel: responseModel, displayModel: displayModel)))
                 case .nbaTeamStats(_, let displayModel):
                     state.path.append(.nbaTeamStats(NBATeamStatsStore.State(displayModel: displayModel)))
-                case .nbaTeamStandings(_, let displayModel):
-                    state.path.append(.nbaTeamStandings(NBATeamStandingsStore.State(displayModel: displayModel)))
+                case let .nbaTeamStandings(responseModel, displayModel):
+                    state.path.append(.nbaTeamStandings(NBATeamStandingsStore.State(responseModel: responseModel, displayModel: displayModel)))
                 case .nbaLeagueSchedule(_, let displayModel):
                     state.path.append(.nbaLeagueSchedule(NBALeagueScheduleStore.State(displayModel: displayModel)))
                 case .nbaGameStats(_, let displayModel):
@@ -76,18 +76,18 @@ struct AppStore {
                 case .nbaTournament(_, let displayModel):
                     state.path.append(.nbaTournament(NBATournamentStore.State(displayModel: displayModel)))
                     
-                case .kboPlayerInfo(_, let displayModel):
-                    state.path.append(.kboPlayerInfo(KBOPlayerInfoStore.State(displayModel: displayModel)))
+                case let .kboPlayerInfo(responseModel, displayModel):
+                    state.path.append(.kboPlayerInfo(KBOPlayerInfoStore.State(responseModel: responseModel, displayModel: displayModel)))
                 case .kboPlayerStats(_, let displayModel):
                     state.path.append(.kboPlayerStats(KBOPlayerStatsStore.State(displayModel: displayModel)))
 //                case .kboPlayerStandings(_, _):
 //                    state.path.append(.kboPlayerStandings(.State()))
-                case .kboTeamInfo(_, let displayModel):
-                    state.path.append(.kboTeamInfo(KBOTeamInfoStore.State(displayModel: displayModel)))
+                case let .kboTeamInfo(responseModel, displayModel):
+                    state.path.append(.kboTeamInfo(KBOTeamInfoStore.State(responseModel: responseModel, displayModel: displayModel)))
                 case .kboTeamStats(_, let displayModel):
                     state.path.append(.kboTeamStats(KBOTeamStatsStore.State(displayModel: displayModel)))
-                case .kboTeamStandings(_, let displayModel):
-                    state.path.append(.kboTeamStandings(KBOTeamStandingsStore.State(displayModel: displayModel)))
+                case let .kboTeamStandings(responseModel, displayModel):
+                    state.path.append(.kboTeamStandings(KBOTeamStandingsStore.State(responseModel: responseModel, displayModel: displayModel)))
                 case .kboLeagueSchedule(_, let displayModel):
                     state.path.append(.kboLeagueSchedule(KBOLeagueScheduleStore.State(displayModel: displayModel)))
                 case .kboGameStats(_, let displayModel):
@@ -95,18 +95,18 @@ struct AppStore {
                 case .kboTournament(_, let displayModel):
                     state.path.append(.kboTournament(KBOTournamentStore.State(displayModel: displayModel)))
                     
-                case .mlbPlayerInfo(_, let displayModel):
-                    state.path.append(.mlbPlayerInfo(MLBPlayerInfoStore.State(displayModel: displayModel)))
+                case let .mlbPlayerInfo(responseModel, displayModel):
+                    state.path.append(.mlbPlayerInfo(MLBPlayerInfoStore.State(responseModel: responseModel, displayModel: displayModel)))
                 case .mlbPlayerStats(_, let displayModel):
                     state.path.append(.mlbPlayerStats(MLBPlayerStatsStore.State(displayModel: displayModel)))
 //                case .mlbPlayerStandings(_, _):
 //                    state.path.append(.mlbPlayerStandings(.State()))
-                case .mlbTeamInfo(_, let displayModel):
-                    state.path.append(.mlbTeamInfo(MLBTeamInfoStore.State(displayModel: displayModel)))
+                case let .mlbTeamInfo(responseModel, displayModel):
+                    state.path.append(.mlbTeamInfo(MLBTeamInfoStore.State(responseModel: responseModel, displayModel: displayModel)))
                 case .mlbTeamStats(_, let displayModel):
                     state.path.append(.mlbTeamStats(MLBTeamStatsStore.State(displayModel: displayModel)))
-                case .mlbTeamStandings(_, let displayModel):
-                    state.path.append(.mlbTeamStandings(MLBTeamStandingsStore.State(displayModel: displayModel)))
+                case let .mlbTeamStandings(responseModel, displayModel):
+                    state.path.append(.mlbTeamStandings(MLBTeamStandingsStore.State(responseModel: responseModel, displayModel: displayModel)))
                 case .mlbLeagueSchedule(_, let displayModel):
                     state.path.append(.mlbLeagueSchedule(MLBLeagueScheduleStore.State(displayModel: displayModel)))
                 case .mlbGameStats(_, let displayModel):
@@ -209,12 +209,142 @@ struct AppStore {
                 
                 return .none
                 
-            case let .path(.element(id: elementId, action: .fbPlayerStandings(.delegate(.showPlayerStats(model))))):
+            case let .path(.element(id: _, action: .fbPlayerInfo(.delegate(.showPlayerStats(model))))):
                 state.didPop = false
                 state.includesPreviousView = false
                 
                 if case .fbPlayerStats(_, let displayModel) = model {
                     state.path.append(.fbPlayerStats(FBPlayerStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .fbPlayerStandings(.delegate(.showPlayerStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .fbPlayerStats(_, let displayModel) = model {
+                    state.path.append(.fbPlayerStats(FBPlayerStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .fbTeamInfo(.delegate(.showTeamStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .fbTeamStats(_, let displayModel) = model {
+                    state.path.append(.fbTeamStats(FBTeamStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .fbTeamStandings(.delegate(.showTeamStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .fbTeamStats(_, let displayModel) = model {
+                    state.path.append(.fbTeamStats(FBTeamStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .nbaPlayerInfo(.delegate(.showPlayerStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .nbaPlayerStats(_, let displayModel) = model {
+                    state.path.append(.nbaPlayerStats(NBAPlayerStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .nbaPlayerStandings(.delegate(.showPlayerStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .nbaPlayerStats(_, let displayModel) = model {
+                    state.path.append(.nbaPlayerStats(NBAPlayerStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .nbaTeamInfo(.delegate(.showTeamStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .nbaTeamStats(_, let displayModel) = model {
+                    state.path.append(.nbaTeamStats(NBATeamStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .nbaTeamStandings(.delegate(.showTeamStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .nbaTeamStats(_, let displayModel) = model {
+                    state.path.append(.nbaTeamStats(NBATeamStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .mlbPlayerInfo(.delegate(.showPlayerStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .mlbPlayerStats(_, let displayModel) = model {
+                    state.path.append(.mlbPlayerStats(MLBPlayerStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .mlbTeamInfo(.delegate(.showTeamStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .mlbTeamStats(_, let displayModel) = model {
+                    state.path.append(.mlbTeamStats(MLBTeamStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .mlbTeamStandings(.delegate(.showTeamStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .mlbTeamStats(_, let displayModel) = model {
+                    state.path.append(.mlbTeamStats(MLBTeamStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .kboPlayerInfo(.delegate(.showPlayerStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .kboPlayerStats(_, let displayModel) = model {
+                    state.path.append(.kboPlayerStats(KBOPlayerStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .kboTeamInfo(.delegate(.showTeamStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .kboTeamStats(_, let displayModel) = model {
+                    state.path.append(.kboTeamStats(KBOTeamStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .kboTeamStandings(.delegate(.showTeamStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .kboTeamStats(_, let displayModel) = model {
+                    state.path.append(.kboTeamStats(KBOTeamStatsStore.State(displayModel: displayModel)))
                 }
                 
                 return .none

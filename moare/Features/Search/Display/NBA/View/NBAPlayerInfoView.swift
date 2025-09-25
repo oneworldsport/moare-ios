@@ -580,7 +580,7 @@ struct NBAPlayerInfoSeventhItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showPlayerStats(playerId: nbaPlayerInfoStore.baseInfo.displayModel.info.personId))
+                nbaPlayerInfoStore.send(.showPlayerStats)
             }
         ) {
             NBATitle(

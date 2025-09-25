@@ -14,7 +14,7 @@ import Collections
 struct SearchStore {
     let searchClient = SearchClient()
     let keywordsClient = KeywordsClient()
-    let modelConverter = ModelConverter()
+    let modelConverter = ModelConverter.shared
     
     @ObservableState
     struct State {
@@ -70,8 +70,6 @@ struct SearchStore {
         case selectNBAGame(game: NBAGameForSchedule, season: Int)
         case selectKBOGame(game: KBOGameForSchedule, season: Int)
         case selectMLBGame(game: MLBGameForSchedule, season: Int)
-        case showPlayerStats(season: Int? = nil, category: String? = nil, playerId: Int)
-        case showTeamStats(teamId: Int)
         case showGameStats(gameType: String)
         case updateTrendingKeywordsVisibleState(Bool)
         case selectNBATournamentRound(gameList: [NBAGame])
@@ -505,167 +503,6 @@ struct SearchStore {
                 }
                 
                 return .none
-                
-            case .showPlayerStats(let season, let category, let playerId):
-                state.resultVisibleState = false
-                
-                return .run { [viewStack = state.viewStack] send in
-                    let dataModel: SportDecodableModel
-                    
-                    switch viewStack.last {
-                    case .fbPlayerStandings(let responseModel, _):
-                        if let category {
-                            let leagueId = responseModel.standings.first?.statistics.first?.league.id ?? 39
-                            
-                            // TODO: Has to add loading
-                            let result = try await searchClient.fetchById(
-                                season: season,
-                                category: category,
-                                dataType: "\(category)_player_stats",
-                                leagueId: leagueId,
-                                id: String(playerId)
-                            )
-                            
-                            if case .fbPlayerStats = result.data {
-                                dataModel = result.data
-                            } else {
-                                return
-                            }
-                        } else {
-                            let player = responseModel.standings.first { $0.player.id == playerId }
-                            
-                            let playerInfoResponseModel = FBPlayerInfoResponseModel(info: player, lastGame: nil, nextGame: nil)
-                            dataModel = .fbPlayerStats(
-                                playerInfoResponseModel,
-                                modelConverter.fbPlayerStatsConverter(response: playerInfoResponseModel)
-                            )
-                        }
-                        
-                    case .fbPlayerInfo(let responseModel, _):
-                        dataModel = .fbPlayerStats(
-                            responseModel,
-                            modelConverter.fbPlayerStatsConverter(response: responseModel)
-                        )
-                        
-                    case .nbaPlayerStandings(let responseModel, _):
-                        // NOTE: nba player stats data in standings has all the stats for now, so doesn't has to fetchById like football above.
-                        let player = responseModel.standings.first { $0.player.personId == playerId }
-                        
-                        let playerInfoResponseModel = NBAPlayerInfoResponseModel(info: player, lastGame: nil, nextGame: nil)
-                        dataModel = .nbaPlayerStats(
-                            playerInfoResponseModel,
-                            modelConverter.nbaPlayerStatsConverter(response: playerInfoResponseModel)
-                        )
-                        
-                    case .nbaPlayerInfo(let responseModel, _):
-                        dataModel = .nbaPlayerStats(
-                            responseModel,
-                            modelConverter.nbaPlayerStatsConverter(response: responseModel)
-                        )
-                        
-                    case .kboPlayerInfo(let responseModel, _):
-                        dataModel = .kboPlayerStats(
-                            responseModel,
-                            modelConverter.kboPlayerStatsConverter(response: responseModel)
-                        )
-                        
-                    case .mlbPlayerInfo(let responseModel, _):
-                        dataModel = .mlbPlayerStats(
-                            responseModel,
-                            modelConverter.mlbPlayerStatsConverter(response: responseModel)
-                        )
-                        
-                    default: return // Make it do nothing
-                    }
-                    
-                    
-                    await send(.delegate(.push(model: dataModel)))
-                    
-                    // wait for before view's removing animation
-                    // NOTE: 0.1 for temporary
-                    try await Task.sleep(for: .seconds(0.1))
-                    
-                    await send(.updateResultVisibleState(bool: true))
-                }
-                
-            case .showTeamStats(let teamId):
-                let dataModel: SportDecodableModel
-                
-                switch state.viewStack.last {
-                case .fbTeamStandings(let responseModel, _):
-                    let team = responseModel.standings.first { $0.team.id == teamId }
-                    
-                    let teamInfoResponseModel = FBTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
-                    dataModel = .fbTeamStats(
-                        teamInfoResponseModel,
-                        modelConverter.fbTeamStatsConverter(response: teamInfoResponseModel)
-                    )
-                    
-                case .fbTeamInfo(let responseModel, _):
-                    dataModel = .fbTeamStats(
-                        responseModel,
-                        modelConverter.fbTeamStatsConverter(response: responseModel)
-                    )
-                    
-                case .nbaTeamStandings(let responseModel, _):
-                    let team = responseModel.standings.first { $0.team.id == teamId }
-                    
-                    let teamInfoResponseModel = NBATeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
-                    dataModel = .nbaTeamStats(
-                        teamInfoResponseModel,
-                        modelConverter.nbaTeamStatsConverter(response: teamInfoResponseModel)
-                    )
-                    
-                case .nbaTeamInfo(let responseModel, _):
-                    dataModel = .nbaTeamStats(
-                        responseModel,
-                        modelConverter.nbaTeamStatsConverter(response: responseModel)
-                    )
-                    
-                case .kboTeamStandings(let responseModel, _):
-                    let team = responseModel.standings.first { $0.team.id == teamId }
-                    
-                    let teamInfoResponseModel = KBOTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
-                    dataModel = .kboTeamStats(
-                        teamInfoResponseModel,
-                        modelConverter.kboTeamStatsConverter(response: teamInfoResponseModel)
-                    )
-                    
-                case .kboTeamInfo(let responseModel, _):
-                    dataModel = .kboTeamStats(
-                        responseModel,
-                        modelConverter.kboTeamStatsConverter(response: responseModel)
-                    )
-                    
-                case .mlbTeamStandings(let responseModel, _):
-                    let team = responseModel.standings.first { $0.team.id == teamId }
-                    
-                    let teamInfoResponseModel = MLBTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
-                    dataModel = .mlbTeamStats(
-                        teamInfoResponseModel,
-                        modelConverter.mlbTeamStatsConverter(response: teamInfoResponseModel)
-                    )
-                    
-                case .mlbTeamInfo(let responseModel, _):
-                    dataModel = .mlbTeamStats(
-                        responseModel,
-                        modelConverter.mlbTeamStatsConverter(response: responseModel)
-                    )
-                    
-                default: return .none // Make it do nothing
-                }
-                
-                state.resultVisibleState = false
-                
-                return .run { send in
-                    await send(.delegate(.push(model: dataModel)))
-                    
-                    // wait for before view's removing animation
-                    // NOTE: 0.1 for temporary
-                    try await Task.sleep(for: .seconds(0.1))
-                    
-                    await send(.updateResultVisibleState(bool: true))
-                }
                 
             case .showGameStats(let gameType):
                 let dataModel: SportDecodableModel

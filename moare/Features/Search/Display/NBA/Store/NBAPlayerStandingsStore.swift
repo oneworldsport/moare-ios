@@ -33,12 +33,14 @@ struct NBAPlayerStandingsStore {
         /* ---------------------
            data state
            --------------------- */
+        let responseModel: NBAPlayerStandingsResponseModel
         var baseStandings: BaseStandings.State
         
         var filteredStandings: [NBAPlayerStandingsDisplay] = []
         var standings: [NBAPlayerStandingsDisplay] = []
         
-        init(displayModel: NBAPlayerStandingsDisplayModel) {
+        init(responseModel: NBAPlayerStandingsResponseModel, displayModel: NBAPlayerStandingsDisplayModel) {
+            self.responseModel = responseModel
             self.baseStandings = BaseStandings.State(displayModel: displayModel)
         }
     }
@@ -46,8 +48,8 @@ struct NBAPlayerStandingsStore {
     enum Action {
         case baseStandings(BaseStandings.Action)
         
-        
         case showMoreStandings(isUp: Bool)
+        case showPlayerStats(id: Int)
         
         /* ---------------------
            private
@@ -57,6 +59,12 @@ struct NBAPlayerStandingsStore {
         case fetchStandings(category: String)
         case updateDisplayDataState(fetchState: ApiFetchState)
         case setDisplayModel(data: SportDecodableModel)
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case showPlayerStats(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -222,6 +230,21 @@ struct NBAPlayerStandingsStore {
                     return .send(.sortStandings)
                 }
                 
+                return .none
+                
+            case let .showPlayerStats(id):
+                // NOTE: For now nba player stats data in standings has all the stats, so doesn't has to fetchById like football.
+                let player = state.responseModel.standings.first { $0.player.personId == id }
+                let responseModel = NBAPlayerInfoResponseModel(info: player, lastGame: nil, nextGame: nil)
+                
+                let dataModel: SportDecodableModel = .nbaPlayerStats(
+                    responseModel,
+                    ModelConverter.shared.nbaPlayerStatsConverter(response: responseModel)
+                )
+                
+                return .send(.delegate(.showPlayerStats(model: dataModel)))
+                
+            case .delegate:
                 return .none
             } // switch action
         }

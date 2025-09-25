@@ -58,7 +58,7 @@ struct FBTeamStandingsView: View {
                             store.send(.baseStandings(.selectCategory(index: index)))
                         },
                         itemButtonAction: { id in
-                            searchStore.send(.showTeamStats(teamId: id))
+                            store.send(.showTeamStats(id: id))
                         }
                     ),
                     titleContent: {

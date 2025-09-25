@@ -81,7 +81,7 @@ struct NBAPlayerStandingsView: View {
                             store.send(.baseStandings(.selectCategory(index: index, category: category)))
                         },
                         itemButtonAction: { id in
-                            searchStore.send(.showPlayerStats(category: "basketball", playerId: id))
+                            store.send(.showPlayerStats(id: id))
                         },
                         showMoreStandingsAction: { isUp in
                             store.send(.showMoreStandings(isUp: isUp))

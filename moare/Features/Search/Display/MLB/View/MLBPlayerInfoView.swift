@@ -500,7 +500,7 @@ struct MLBPlayerInfoSixthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showPlayerStats(playerId: mlbPlayerInfoStore.baseInfo.displayModel.info.id))
+                mlbPlayerInfoStore.send(.showPlayerStats)
             }
         ) {
             BaseballLeagueTitle(

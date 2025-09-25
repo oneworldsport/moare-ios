@@ -19,13 +19,15 @@ struct MLBTeamStandingsStore {
         /* ---------------------
            data state
            --------------------- */
+        let responseModel: MLBTeamStandingsResponseModel
         var baseStandings: BaseStandings.State
         
         var westStandings: [MLBTeamStandingsDisplay] = []
         var eastStandings: [MLBTeamStandingsDisplay] = []
         var centralStandings: [MLBTeamStandingsDisplay] = []
         
-        init(displayModel: MLBTeamStandingsDisplayModel) {
+        init(responseModel: MLBTeamStandingsResponseModel, displayModel: MLBTeamStandingsDisplayModel) {
+            self.responseModel = responseModel
             self.baseStandings = BaseStandings.State(displayModel: displayModel)
         }
     }
@@ -34,6 +36,13 @@ struct MLBTeamStandingsStore {
         case baseStandings(BaseStandings.Action)
         
         case sortStandings
+        case showTeamStats(id: Int)
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case showTeamStats(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -197,6 +206,20 @@ struct MLBTeamStandingsStore {
                 default: break
                 }
                 
+                return .none
+                
+            case let .showTeamStats(id):
+                let team = state.responseModel.standings.first { $0.team.id == id }
+                let responseModel = MLBTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
+                
+                let dataModel: SportDecodableModel = .mlbTeamStats(
+                    responseModel,
+                    ModelConverter.shared.mlbTeamStatsConverter(response: responseModel)
+                )
+                
+                return .send(.delegate(.showTeamStats(model: dataModel)))
+                
+            case .delegate:
                 return .none
             }
             

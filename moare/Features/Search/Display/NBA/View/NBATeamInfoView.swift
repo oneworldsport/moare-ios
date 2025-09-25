@@ -375,7 +375,7 @@ struct NBATeamInfoFourthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showTeamStats(teamId: team.id))
+                nbaTeamInfoStore.send(.showTeamStats)
             }
         ) {
             NBATitle(

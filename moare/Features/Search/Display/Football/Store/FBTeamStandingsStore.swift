@@ -31,13 +31,15 @@ struct FBTeamStandingsStore {
         /* ---------------------
            data state
            --------------------- */
+        let responseModel: FBTeamStandingsResponseModel
         var baseStandings: BaseStandings.State
         
         var standings: [FBTeamStandingsDisplay] = []
         var league: FBLeague? = nil
         var isMLS = false
         
-        init(displayModel: FBTeamStandingsDisplayModel) {
+        init(responseModel: FBTeamStandingsResponseModel, displayModel: FBTeamStandingsDisplayModel) {
+            self.responseModel = responseModel
             self.baseStandings = BaseStandings.State(displayModel: displayModel)
         }
     }
@@ -46,6 +48,13 @@ struct FBTeamStandingsStore {
         case baseStandings(BaseStandings.Action)
         
         case sortStandings
+        case showTeamStats(id: Int)
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case showTeamStats(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -140,6 +149,20 @@ struct FBTeamStandingsStore {
                     break
                 }
                 
+                return .none
+                
+            case let .showTeamStats(id):
+                let team = state.responseModel.standings.first { $0.team.id == id }
+                let responseModel = FBTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
+                
+                let dataModel: SportDecodableModel = .fbTeamStats(
+                    responseModel,
+                    ModelConverter.shared.fbTeamStatsConverter(response: responseModel)
+                )
+                
+                return .send(.delegate(.showTeamStats(model: dataModel)))
+                
+            case .delegate:
                 return .none
             } // switch action
             

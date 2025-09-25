@@ -7,17 +7,24 @@
 
 import Foundation
 
-struct ModelConverter {
-    let keywords: [Keyword]
-    let entityInfo: [EntityInfo]
-    let leagueId: Int?
-    let season: Int
+final class ModelConverter {
+    static let shared = ModelConverter()
+    private init() {}
     
-    init(keywords: [Keyword] = [], entityInfo: [EntityInfo] = []) {
+    private(set) var keywords: [Keyword] = []
+    private(set) var entityInfo: [EntityInfo] = []
+    private(set) var leagueId: Int? = nil
+    private(set) var season: Int = CalendarUtil.currentYear
+    
+    func configure(
+        keywords: [Keyword],
+        entityInfo: [EntityInfo],
+        season: Int
+    ) {
         self.keywords = keywords
         self.entityInfo = entityInfo
         self.leagueId = entityInfo.first?.leagueId
-        self.season = Calendar.current.component(.year, from: Date())
+        self.season = season
     }
     
     /* ---------------------
@@ -694,6 +701,7 @@ struct ModelConverter {
     }
     
     // Not used in DataModel
+    // football
     static func fbGameToGameScheduleConverter(game: FBGame) -> FBGameForSchedule {
         let date = game.fixture.date.split(separator: "+").first
         let homeTeamId = game.teams.home.id
@@ -728,6 +736,7 @@ struct ModelConverter {
         return newDisplayModel
     }
     
+    // nba
     static func nbaGameListToGameScheduleListConverter(gameList: [NBAGame]) -> [NBAGameForSchedule] {
         return gameList.compactMap { game in
             return nbaGameToGameScheduleConverter(game: game)
@@ -768,6 +777,7 @@ struct ModelConverter {
         return newDisplayModel
     }
     
+    // mlb
     static func mlbGameToGameScheduleConverter(game: MLBGame) -> MLBGameForSchedule {
         let date = game.gameInfo.gameDate.split(separator: "+").first
         let homeTeamId = game.teams.home.id
@@ -823,6 +833,7 @@ struct ModelConverter {
         )
     }
     
+    // kbo
     static func kboGameToGameScheduleConverter(game: KBOGame) -> KBOGameForSchedule {
         let date = game.gameInfo?.date.split(separator: "+").first
         let homeTeamId = game.gameInfo?.homeTeamId ?? 0

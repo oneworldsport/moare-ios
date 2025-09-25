@@ -155,7 +155,12 @@ extension DataModel {
         
         let leagueId = self.entityInfo.first?.leagueId
         
-        let modelConverter = ModelConverter(keywords: keywords, entityInfo: entityInfo)
+        let modelConverter = ModelConverter.shared
+        modelConverter.configure(
+            keywords: keywords,
+            entityInfo: entityInfo,
+            season: season
+        )
         
         switch dataType {
         // football

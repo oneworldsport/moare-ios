@@ -14,11 +14,13 @@ struct KBOTeamStandingsStore {
     
     @ObservableState
     struct State {
+        let responseModel: KBOTeamStandingsResponseModel
         var baseStandings: BaseStandings.State
         
         var standings: [KBOTeamStandingsDisplay] = []
         
-        init(displayModel: KBOTeamStandingsDisplayModel) {
+        init(responseModel: KBOTeamStandingsResponseModel, displayModel: KBOTeamStandingsDisplayModel) {
+            self.responseModel = responseModel
             self.baseStandings = BaseStandings.State(displayModel: displayModel)
         }
     }
@@ -27,6 +29,13 @@ struct KBOTeamStandingsStore {
         case baseStandings(BaseStandings.Action)
         
         case sortStandings
+        case showTeamStats(id: Int)
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case showTeamStats(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -102,6 +111,20 @@ struct KBOTeamStandingsStore {
                 return .none
                 
             case .baseStandings:
+                return .none
+                
+            case let .showTeamStats(id):
+                let team = state.responseModel.standings.first { $0.team.id == id }
+                let responseModel = KBOTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
+                
+                let dataModel: SportDecodableModel = .kboTeamStats(
+                    responseModel,
+                    ModelConverter.shared.kboTeamStatsConverter(response: responseModel)
+                )
+                
+                return .send(.delegate(.showTeamStats(model: dataModel)))
+                
+            case .delegate:
                 return .none
             }
             

@@ -361,7 +361,7 @@ struct KBOTeamInfoFourthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showTeamStats(teamId: team.id))
+                kboTeamInfoStore.send(.showTeamStats)
             }
         ) {
             BaseballLeagueTitle(

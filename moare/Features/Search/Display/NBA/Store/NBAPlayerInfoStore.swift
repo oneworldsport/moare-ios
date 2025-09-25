@@ -15,19 +15,47 @@ struct NBAPlayerInfoStore {
     @ObservableState
     struct State {
         let itemHeight: CGFloat = 30
-        
+    
+        let responseModel: NBAPlayerInfoResponseModel
         var baseInfo: BaseInfo.State
         
-        init(displayModel: NBAPlayerInfoDisplayModel) {
+        init(responseModel: NBAPlayerInfoResponseModel, displayModel: NBAPlayerInfoDisplayModel) {
+            self.responseModel = responseModel
             self.baseInfo = BaseInfo.State(displayModel: displayModel)
         }
     }
     
     enum Action {
         case baseInfo(BaseInfo.Action)
+        
+        case showPlayerStats
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case showPlayerStats(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
         Scope(state: \.baseInfo, action: \.baseInfo) { BaseInfo() }
+        
+        Reduce { state, action in
+            switch action {
+            case .showPlayerStats:
+                let dataModel: SportDecodableModel = .nbaPlayerStats(
+                    state.responseModel,
+                    ModelConverter.shared.nbaPlayerStatsConverter(response: state.responseModel)
+                )
+                
+                return .send(.delegate(.showPlayerStats(model: dataModel)))
+                
+            case .baseInfo:
+                return .none
+                
+            case .delegate:
+                return .none
+            }
+        }
     }
 }

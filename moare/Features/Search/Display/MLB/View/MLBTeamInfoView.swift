@@ -348,7 +348,7 @@ struct MLBTeamInfoFourthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showTeamStats(teamId: team.id))
+                mlbTeamInfoStore.send(.showTeamStats)
             }
         ) {
             BaseballLeagueTitle(

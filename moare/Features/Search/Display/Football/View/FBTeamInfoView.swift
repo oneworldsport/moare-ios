@@ -365,7 +365,7 @@ struct FBTeamInfoFourthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showTeamStats(teamId: displayModel.team.id))
+                fbTeamInfoStore.send(.showTeamStats)
             }
         ) {
             if let league = stats?.league {

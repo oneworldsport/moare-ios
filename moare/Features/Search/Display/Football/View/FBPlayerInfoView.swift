@@ -360,7 +360,7 @@ struct FBPlayerInfoFourthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showPlayerStats(playerId: fbPlayerInfoStore.baseInfo.displayModel.info.id))
+                fbPlayerInfoStore.send(.showPlayerStats)
             }
         ) {
             if let league = stats?.league {
