@@ -451,7 +451,7 @@ struct KBOTeamInfoFifthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "previous"))
+                kboTeamInfoStore.send(.showGameStats(isPrevious: false))
             }
         ) {
             Text("최근경기")
@@ -536,7 +536,7 @@ struct KBOTeamInfoSixthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "next"))
+                kboTeamInfoStore.send(.showGameStats())
             }
         ) {
             Text("다음경기")

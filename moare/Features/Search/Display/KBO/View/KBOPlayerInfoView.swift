@@ -626,7 +626,7 @@ struct KBOPlayerInfoSeventhItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "previous"))
+                kboPlayerInfoStore.send(.showGameStats(isPrevious: false))
             }
         ) {
             Text("최근경기")
@@ -792,7 +792,7 @@ struct KBOPlayerInfoEigthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "next"))
+                kboPlayerInfoStore.send(.showGameStats())
             }
         ) {
             Text("다음경기")

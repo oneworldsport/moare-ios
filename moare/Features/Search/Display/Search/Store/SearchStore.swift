@@ -66,11 +66,14 @@ struct SearchStore {
         case updateTextField(String, Bool = true)
         case updateTextFieldVisibleState(Bool)
         case performSearch(searchType: SearchType = .query, aniDuration: CGFloat = 0)
+        
+        // TODO: 각자의 Store로 옮겨야함
         case selectFBGame(game: FBGameForSchedule, season: Int, leagueId: Int?)
         case selectNBAGame(game: NBAGameForSchedule, season: Int)
         case selectKBOGame(game: KBOGameForSchedule, season: Int)
         case selectMLBGame(game: MLBGameForSchedule, season: Int)
-        case showGameStats(gameType: String)
+        //
+        
         case updateTrendingKeywordsVisibleState(Bool)
         case selectNBATournamentRound(gameList: [NBAGame])
         
@@ -503,89 +506,6 @@ struct SearchStore {
                 }
                 
                 return .none
-                
-            case .showGameStats(let gameType):
-                let dataModel: SportDecodableModel
-                
-                switch state.viewStack.last {
-                case .fbPlayerInfo(let responseModel, _):
-                    let gameStatsResponseModel = gameType == "previous" ? FBGameStatsResponseModel(game: responseModel.lastGame) : FBGameStatsResponseModel(game: responseModel.nextGame)
-                    
-                    dataModel = .fbGameStats(
-                        gameStatsResponseModel,
-                        modelConverter.fbGameStatsConverter(response: gameStatsResponseModel)
-                    )
-                    
-                case .fbTeamInfo(let responseModel, _):
-                    let gameStatsResponseModel = gameType == "previous" ? FBGameStatsResponseModel(game: responseModel.lastGame) : FBGameStatsResponseModel(game: responseModel.nextGame)
-                    
-                    dataModel = .fbGameStats(
-                        gameStatsResponseModel,
-                        modelConverter.fbGameStatsConverter(response: gameStatsResponseModel)
-                    )
-                    
-                case .nbaPlayerInfo(let responseModel, _):
-                    let gameStatsResponseModel = gameType == "previous" ? NBAGameStatsResponseModel(game: responseModel.lastGame) : NBAGameStatsResponseModel(game: responseModel.nextGame)
-                    
-                    dataModel = .nbaGameStats(
-                        gameStatsResponseModel,
-                        modelConverter.nbaGameStatsConverter(response: gameStatsResponseModel)
-                    )
-                    
-                case .nbaTeamInfo(let responseModel, _):
-                    let gameStatsResponseModel = gameType == "previous" ? NBAGameStatsResponseModel(game: responseModel.lastGame) : NBAGameStatsResponseModel(game: responseModel.nextGame)
-                    
-                    dataModel = .nbaGameStats(
-                        gameStatsResponseModel,
-                        modelConverter.nbaGameStatsConverter(response: gameStatsResponseModel)
-                    )
-                    
-                case .mlbPlayerInfo(let responseModel, _):
-                    let gameStatsResponseModel = gameType == "previous" ? MLBGameStatsResponseModel(game: responseModel.lastGame) : MLBGameStatsResponseModel(game: responseModel.nextGame)
-                    
-                    dataModel = .mlbGameStats(
-                        gameStatsResponseModel,
-                        modelConverter.mlbGameStatsConverter(response: gameStatsResponseModel)
-                    )
-                    
-                case .mlbTeamInfo(let responseModel, _):
-                    let gameStatsResponseModel = gameType == "previous" ? MLBGameStatsResponseModel(game: responseModel.lastGame) : MLBGameStatsResponseModel(game: responseModel.nextGame)
-                    
-                    dataModel = .mlbGameStats(
-                        gameStatsResponseModel,
-                        modelConverter.mlbGameStatsConverter(response: gameStatsResponseModel)
-                    )
-                    
-                case .kboPlayerInfo(let responseModel, _):
-                    let gameStatsResponseModel = gameType == "previous" ? KBOGameStatsResponseModel(game: responseModel.lastGame) : KBOGameStatsResponseModel(game: responseModel.nextGame)
-                    
-                    dataModel = .kboGameStats(
-                        gameStatsResponseModel,
-                        modelConverter.kboGameStatsConverter(response: gameStatsResponseModel)
-                    )
-                    
-                case .kboTeamInfo(let responseModel, _):
-                    let gameStatsResponseModel = gameType == "previous" ? KBOGameStatsResponseModel(game: responseModel.lastGame) : KBOGameStatsResponseModel(game: responseModel.nextGame)
-                    
-                    dataModel = .kboGameStats(
-                        gameStatsResponseModel,
-                        modelConverter.kboGameStatsConverter(response: gameStatsResponseModel)
-                    )
-                    
-                default: return .none // Make it do nothing
-                }
-                
-                state.resultVisibleState = false
-                
-                return .run { send in
-                    await send(.delegate(.push(model: dataModel)))
-                    
-                    // wait for before view's removing animation
-                    // NOTE: 0.1 for temporary
-                    try await Task.sleep(for: .seconds(0.1))
-                    
-                    await send(.updateResultVisibleState(bool: true))
-                }
                 
             case .selectNBATournamentRound(let gameList):
                 let dataModel: SportDecodableModel

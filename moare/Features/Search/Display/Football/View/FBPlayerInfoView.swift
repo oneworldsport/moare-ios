@@ -441,7 +441,7 @@ struct FBPlayerInfoFifthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "previous"))
+                fbPlayerInfoStore.send(.showGameStats())
             }
         ) {
             Text("최근경기")
@@ -547,7 +547,7 @@ struct FBPlayerInfoSixthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "next"))
+                fbPlayerInfoStore.send(.showGameStats(isPrevious: false))
             }
         ) {
             Text("다음경기")

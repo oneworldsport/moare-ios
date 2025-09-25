@@ -144,14 +144,12 @@ struct FBGameStatsView: View {
                         }
                     },
                     gameContent: {
-                        if !isCombinedView {
-                            FBLeagueScheduleListItem(
-                                searchStore: searchStore,
-                                fbLeagueScheduleStore: nil,
-                                data: ModelConverter.fbGameToGameScheduleConverter(game: game),
-                                teamNameDic: teamNameDic
-                            )
-                        }
+                        FBLeagueScheduleListItem(
+                            searchStore: searchStore,
+                            fbLeagueScheduleStore: nil,
+                            data: ModelConverter.fbGameToGameScheduleConverter(game: game),
+                            teamNameDic: teamNameDic
+                        )
                     }
                 )
             }

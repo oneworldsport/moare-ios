@@ -665,7 +665,7 @@ struct NBAPlayerInfoEighthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "previous"))
+                nbaPlayerInfoStore.send(.showGameStats())
             }
         ) {
             Text("최근경기")
@@ -791,7 +791,7 @@ struct NBAPlayerInfoNinthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "next"))
+                nbaPlayerInfoStore.send(.showGameStats(isPrevious: false))
             }
         ) {
             Text("다음경기")

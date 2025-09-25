@@ -30,12 +30,14 @@ struct FBPlayerInfoStore {
         case baseInfo(BaseInfo.Action)
         
         case showPlayerStats
+        case showGameStats(isPrevious: Bool = true)
         
         case delegate(Delegate)
     }
     
     enum Delegate {
         case showPlayerStats(model: SportDecodableModel)
+        case showGameStats(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -50,6 +52,16 @@ struct FBPlayerInfoStore {
                 )
                 
                 return .send(.delegate(.showPlayerStats(model: dataModel)))
+                
+            case let .showGameStats(isPrevious):
+                let responseModel = isPrevious ? FBGameStatsResponseModel(game: state.responseModel.lastGame) : FBGameStatsResponseModel(game: state.responseModel.nextGame)
+                
+                let dataModel: SportDecodableModel = .fbGameStats(
+                    responseModel,
+                    ModelConverter.shared.fbGameStatsConverter(response: responseModel)
+                )
+                
+                return .send(.delegate(.showGameStats(model: dataModel)))
                 
             case .baseInfo:
                 return .none

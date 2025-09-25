@@ -633,7 +633,7 @@ struct MLBPlayerInfoSeventhItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "previous"))
+                mlbPlayerInfoStore.send(.showGameStats(isPrevious: false))
             }
         ) {
             Text("최근경기")
@@ -800,7 +800,7 @@ struct MLBPlayerInfoEigthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "next"))
+                mlbPlayerInfoStore.send(.showGameStats())
             }
         ) {
             Text("다음경기")

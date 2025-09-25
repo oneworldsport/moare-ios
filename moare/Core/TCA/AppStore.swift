@@ -52,8 +52,12 @@ struct AppStore {
                     state.path.append(.fbLeagueSchedule(FBLeagueScheduleStore.State(displayModel: displayModel)))
                 case .fbGameStats(_, let displayModel):
                     state.path.append(.fbGameStats(FBGameStatsStore.State(displayModel: displayModel)))
-                    // TODO: 이전 화면이 fbLeagueSchedule일때만
-                    state.includesPreviousView = true
+                    // NOTE: 이전 화면이 .fbLeagueSchedule일때만
+                    if let pathId = state.path.ids.suffix(2).first {
+                        if case .fbLeagueSchedule = state.path[id: pathId] {
+                            state.includesPreviousView = true
+                        }
+                    }
                 case .fbTournament(_, let displayModel):
                     state.path.append(.fbTournament(FBTournamentStore.State(displayModel: displayModel)))
                     
@@ -117,12 +121,13 @@ struct AppStore {
                 return .none
                 
             case let .search(.delegate(.pop(searchState))):
-                // If searchBar is Opened and there are stack, don't pop and show the previous view.
                 if !searchState {
+                    // If searchBar is Opened and there are stack, don't pop and show the previous view.
                     return .none
                 } else {
                     state.didPop = true
-                    // TODO: 이전 화면이 fbLeagueSchedule일때는 true
+                    // NOTE: .fbGameStatsView로 뒤로갔을때(.fbLeagueSchedule -> .fbGameStats인 경우) includesPreviousView가 true여야 하지만 false여도
+                    // 그냥 .fbGameStats 화면이 잘 나오기 때문에 상관없음
                     state.includesPreviousView = false
                     
                     let lastPath = state.path.popLast()
@@ -345,6 +350,86 @@ struct AppStore {
                 
                 if case .kboTeamStats(_, let displayModel) = model {
                     state.path.append(.kboTeamStats(KBOTeamStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .fbPlayerInfo(.delegate(.showGameStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .fbGameStats(_, let displayModel) = model {
+                    state.path.append(.fbGameStats(FBGameStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .fbTeamInfo(.delegate(.showGameStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .fbGameStats(_, let displayModel) = model {
+                    state.path.append(.fbGameStats(FBGameStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .nbaPlayerInfo(.delegate(.showGameStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .nbaGameStats(_, let displayModel) = model {
+                    state.path.append(.nbaGameStats(NBAGameStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .nbaTeamInfo(.delegate(.showGameStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .nbaGameStats(_, let displayModel) = model {
+                    state.path.append(.nbaGameStats(NBAGameStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .mlbPlayerInfo(.delegate(.showGameStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .mlbGameStats(_, let displayModel) = model {
+                    state.path.append(.mlbGameStats(MLBGameStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .mlbTeamInfo(.delegate(.showGameStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .mlbGameStats(_, let displayModel) = model {
+                    state.path.append(.mlbGameStats(MLBGameStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .kboPlayerInfo(.delegate(.showGameStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .kboGameStats(_, let displayModel) = model {
+                    state.path.append(.kboGameStats(KBOGameStatsStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .kboTeamInfo(.delegate(.showGameStats(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .kboGameStats(_, let displayModel) = model {
+                    state.path.append(.kboGameStats(KBOGameStatsStore.State(displayModel: displayModel)))
                 }
                 
                 return .none

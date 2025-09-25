@@ -439,7 +439,7 @@ struct MLBTeamInfoFifthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "previous"))
+                mlbTeamInfoStore.send(.showGameStats(isPrevious: false))
             }
         ) {
             Text("최근경기")
@@ -524,7 +524,7 @@ struct MLBTeamInfoSixthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "next"))
+                mlbTeamInfoStore.send(.showGameStats())
             }
         ) {
             Text("다음경기")
