@@ -144,6 +144,7 @@ struct MLBTeamStandingsDataList: View {
                                 MLBTeamStandingsDataListItem(
                                     mlbTeamStandingsStore: mlbTeamStandingsStore,
                                     data: data,
+                                    standings: standings,
                                     index: index
                                 )
                             }
@@ -160,6 +161,7 @@ struct MLBTeamStandingsDataListItem: View {
     @Bindable var mlbTeamStandingsStore: StoreOf<MLBTeamStandingsStore>
     
     let data: MLBTeamStandingsDisplay
+    let standings: [MLBTeamStandingsDisplay]
     let index: Int
     
     var body: some View {
@@ -171,7 +173,8 @@ struct MLBTeamStandingsDataListItem: View {
     private var intDataText: String {
         switch index {
         case 0:
-            data.stats.recordData?.gamesBack ?? ""
+            MLBUtil.calculateGamesBack(team: data.stats, standings: standings) == 0.0 ? "-" : String(MLBUtil.calculateGamesBack(team: data.stats, standings: standings))
+//            data.stats.recordData?.divisionGamesBack ?? ""
         case 1:
             data.stats.recordData?.winningPercentage ?? ""
         case 2:

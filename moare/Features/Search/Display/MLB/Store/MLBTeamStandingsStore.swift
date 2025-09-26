@@ -128,11 +128,18 @@ struct MLBTeamStandingsStore {
                 return .send(.sortStandings)
                 
             case .sortStandings:
+                let westStandings = state.westStandings
+                let eastStandings = state.eastStandings
+                let centralStandings = state.centralStandings
+                
                 switch state.baseStandings.categorySelectedIndex {
                 case 0: // 게임차
-                    state.westStandings.sort { Double($0.stats.recordData?.gamesBack ?? "0") ?? 0 < Double($1.stats.recordData?.gamesBack ?? "0") ?? 0 }
-                    state.eastStandings.sort { Double($0.stats.recordData?.gamesBack ?? "0") ?? 0 < Double($1.stats.recordData?.gamesBack ?? "0") ?? 0 }
-                    state.centralStandings.sort { Double($0.stats.recordData?.gamesBack ?? "0") ?? 0 < Double($1.stats.recordData?.gamesBack ?? "0") ?? 0 }
+//                    state.westStandings.sort { Double($0.stats.recordData?.divisionGamesBack ?? "0") ?? 0 < Double($1.stats.recordData?.divisionGamesBack ?? "0") ?? 0 }
+//                    state.eastStandings.sort { Double($0.stats.recordData?.divisionGamesBack ?? "0") ?? 0 < Double($1.stats.recordData?.divisionGamesBack ?? "0") ?? 0 }
+//                    state.centralStandings.sort { Double($0.stats.recordData?.divisionGamesBack ?? "0") ?? 0 < Double($1.stats.recordData?.divisionGamesBack ?? "0") ?? 0 }
+                    state.westStandings.sort { MLBUtil.calculateGamesBack(team: $0.stats, standings: westStandings) < MLBUtil.calculateGamesBack(team: $1.stats, standings: westStandings) }
+                    state.eastStandings.sort { MLBUtil.calculateGamesBack(team: $0.stats, standings: eastStandings) < MLBUtil.calculateGamesBack(team: $1.stats, standings: eastStandings) }
+                    state.centralStandings.sort { MLBUtil.calculateGamesBack(team: $0.stats, standings: centralStandings) < MLBUtil.calculateGamesBack(team: $1.stats, standings: centralStandings) }
                 case 1: // 승률
                     state.westStandings.sort { Double($0.stats.recordData?.winningPercentage ?? "0") ?? 0 > Double($1.stats.recordData?.winningPercentage ?? "0") ?? 0 }
                     state.eastStandings.sort { Double($0.stats.recordData?.winningPercentage ?? "0") ?? 0 > Double($1.stats.recordData?.winningPercentage ?? "0") ?? 0 }

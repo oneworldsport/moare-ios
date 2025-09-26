@@ -62,4 +62,19 @@ struct MLBUtil {
 
         return Int(NBAUtil.toCm(feet: feet, inches: inches))
     }
+    
+    // NOTE: divisionGamesBack(게임차) 값이 이상해서 만듬
+    static func calculateGamesBack(team: MLBTeamStats, standings: [MLBTeamStandingsDisplay]) -> Double {
+        guard let leader = standings.max(by: { Double($0.stats.recordData?.winningPercentage ?? "0") ?? 0 < Double($1.stats.recordData?.winningPercentage ?? "0") ?? 0 }) else {
+            return 0.0
+        }
+
+        if let leaderRecordData = leader.stats.recordData,
+           let teamRecordData = team.recordData {
+            let gamesBack = Double((leaderRecordData.wins - teamRecordData.wins) + (teamRecordData.losses - leaderRecordData.losses)) / 2.0
+            return gamesBack
+        } else {
+            return 0.0
+        }
+    }
 }

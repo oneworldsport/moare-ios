@@ -110,7 +110,7 @@ struct NBATeamStandingsStore {
                 
                 switch state.baseStandings.categorySelectedIndex {
                 case 0:
-                    state.standings.sort { calculateGamesBack(standings: standings, team: $0.stats) < calculateGamesBack(standings: standings, team: $1.stats) }
+                    state.standings.sort { NBAUtil.calculateGamesBack(team: $0.stats, standings: standings) < NBAUtil.calculateGamesBack(team: $1.stats, standings: standings) }
                 case 1:
                     state.standings.sort { $0.stats.winsPct > $1.stats.winsPct }
                 case 2:
@@ -161,15 +161,6 @@ struct NBATeamStandingsStore {
             case .delegate:
                 return .none
             } // switch action
-            
-            // TODO: Should move to util
-            func calculateGamesBack(standings: [NBATeamStandingsDisplay], team: NBATeamStats) -> Double {
-                guard let leader = standings.max(by: { $0.stats.winsPct < $1.stats.winsPct }) else {
-                    return 0
-                }
-                
-                return Double((leader.stats.wins - team.wins) + (team.losses - leader.stats.losses)) / 2.0
-            }
         }
     }
 }

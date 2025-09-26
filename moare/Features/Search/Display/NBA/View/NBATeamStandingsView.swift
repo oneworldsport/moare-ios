@@ -26,7 +26,7 @@ struct NBATeamStandingsView: View {
                 imageUrl: NBAUtil.teamLogoURL(id: $0.team.id),
                 name: store.baseStandings.teamNameDictionary["short_\($0.team.id)"] ?? $0.team.fullName,
                 dataList: [
-                    String(calculateGamesBack(team: stats, standings: store.standings)),
+                    NBAUtil.calculateGamesBack(team: stats, standings: store.standings) == 0.0 ? "-" : String(NBAUtil.calculateGamesBack(team: stats, standings: store.standings)),
                     String(stats.winsPct),
                     String(stats.wins),
                     String(stats.losses),
@@ -87,14 +87,5 @@ struct NBATeamStandingsView: View {
                 show = true
             }
         }
-    }
-    
-    private func calculateGamesBack(team: NBATeamStats, standings: [NBATeamStandingsDisplay]) -> Double {
-        guard let leader = standings.max(by: { $0.stats.winsPct < $1.stats.winsPct }) else {
-            return 0.0
-        }
-
-        let gamesBack = Double((leader.stats.wins - team.wins) + (team.losses - leader.stats.losses)) / 2.0
-        return gamesBack
     }
 }
