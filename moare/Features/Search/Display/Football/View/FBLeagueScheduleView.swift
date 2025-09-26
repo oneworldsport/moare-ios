@@ -47,22 +47,12 @@ struct FBLeagueScheduleView: View {
                     ),
                     titleContent: {
                         if let league = store.league, store.selectedGame != nil {
-                            HStack {
-                                HStack(spacing: 0) {
-                                    URLImage(url: league.logo, customSize: CGSize(width: 23, height: 23))
-                                        .padding(.trailing, 4)
-                                    
-                                    // TODO: make season text to use util
-                                    Text("\(league.name) \(String(league.season).suffix(2))/25")
-                                        .font(.system(size: 14))
-                                }
-                                
-                                Text(" - \(MatchDescriptionConverter.convert(descriptionType: .roundWithoutDash, input: league.round))")
-                                    .font(.system(size: 14))
-                                
-                                Spacer()
-                            }
-                            .padding(.leading, UIConstants.Padding.defaultHPadding)
+                            FBLeagueTitleForGameStats(
+                                url: league.logo,
+                                leagueName: league.name,
+                                leagueSeason: league.season,
+                                description: league.round
+                            )
                         }
                     },
                     gameListContent: {

@@ -44,11 +44,11 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
         VStack(spacing: 0) {
             if state.shouldShowTitle {
                 titleContent()
-                    .padding(.bottom, 8)
             }
             
-            if state.shouldShowGameItem {
+            if state.shouldShowGameContent {
                 gameContent()
+                    .padding(.vertical, 8)
             }
             
             HDivider()

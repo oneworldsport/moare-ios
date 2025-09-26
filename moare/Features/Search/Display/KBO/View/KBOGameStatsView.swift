@@ -105,16 +105,11 @@ struct KBOGameStatsView: View {
                         }
                     ),
                     titleContent: {
-                        HStack {
-                            BaseballLeagueTitle(
-                                logoUrl: KBOUtil.kboLogoUrl,
-                                name: "KBO",
-                                season: displayModel.season
-                            )
-                            
-                            Spacer()
-                        }
-                        .padding(.horizontal, UIConstants.Padding.defaultHPadding)
+                        BaseballLeagueTitleForGameStats(
+                            logoUrl: KBOUtil.kboLogoUrl,
+                            name: "KBO",
+                            season: displayModel.season
+                        )
                     },
                     gameContent: {
 //                            if game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameScheduled ||

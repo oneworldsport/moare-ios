@@ -103,7 +103,7 @@ struct FBGameStatsView: View {
                 GameStatsViewContainer(
                     state: GameStatsContainerState(
                         shouldShowTitle: !isCombinedView,
-                        shouldShowGameItem: !isCombinedView,
+                        shouldShowGameContent: !isCombinedView,
                         shouldShowStats: displayModel.game.fixture.status.short != StringConstants.Football.gameNotStarted,
                         shouldShowCoach: true,
                         shouldShowRefreshButton: StringConstants.Football.gameLiveList.contains(displayModel.game.fixture.status.short),
@@ -132,16 +132,12 @@ struct FBGameStatsView: View {
                         }
                     ),
                     titleContent: {
-                        HStack(spacing: 0) {
-                            LeagueTitle(
-                                url: game.league.logo,
-                                leagueName: game.league.name,
-                                leagueSeason: game.league.season
-                            )
-                            
-                            Text(" - \(MatchDescriptionConverter.convert(descriptionType: .roundWithoutDash, input: game.league.round))")
-                                .font(.system(size: 14))
-                        }
+                        FBLeagueTitleForGameStats(
+                            url: game.league.logo,
+                            leagueName: game.league.name,
+                            leagueSeason: game.league.season,
+                            description: game.league.round
+                        )
                     },
                     gameContent: {
                         FBLeagueScheduleListItem(

@@ -9,7 +9,7 @@ import Foundation
 
 struct GameStatsContainerState {
     var shouldShowTitle: Bool = true
-    var shouldShowGameItem: Bool = true
+    var shouldShowGameContent: Bool = true
     var shouldShowStats: Bool = true
     var shouldShowCoach: Bool = false
     var shouldShowRefreshButton: Bool = false

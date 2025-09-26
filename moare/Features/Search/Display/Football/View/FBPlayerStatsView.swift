@@ -264,7 +264,7 @@ struct FBPlayerStatsItem: View {
         
         // league / team
         HStack {
-            LeagueTitle(
+            FBLeagueTitle(
                 url: stats.league.logo,
                 leagueName: stats.league.name,
                 leagueSeason: stats.league.season

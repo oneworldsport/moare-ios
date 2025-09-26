@@ -119,16 +119,11 @@ struct MLBGameStatsView: View {
                         }
                     ),
                     titleContent: {
-                        HStack {
-                            BaseballLeagueTitle(
-                                logoUrl: MLBUtil.mlbLogoUrl,
-                                name: "MLB",
-                                season: Int(store.baseGameStats.displayModel.game.game.season)
-                            )
-                            
-                            Spacer()
-                        }
-                        .padding(.horizontal, UIConstants.Padding.defaultHPadding)
+                        BaseballLeagueTitleForGameStats(
+                            logoUrl: MLBUtil.mlbLogoUrl,
+                            name: "MLB",
+                            season: Int(store.baseGameStats.displayModel.game.game.season)
+                        )
                     },
                     gameContent: {
 //                            if game.status.detailedState == StringConstants.MLB.gameScheduled {

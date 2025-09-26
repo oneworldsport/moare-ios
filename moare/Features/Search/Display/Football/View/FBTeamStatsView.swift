@@ -245,7 +245,7 @@ struct FBTeamStatsItem: View {
     
     var body: some View {
         // league / team
-        LeagueTitle(
+        FBLeagueTitle(
             url: stats.league.logo,
             leagueName: stats.league.name,
             leagueSeason: stats.league.season

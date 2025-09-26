@@ -77,7 +77,7 @@ struct FBPlayerStandingsView: View {
                     ),
                     titleContent: {
                         if let league = store.league {
-                            LeagueTitle(
+                            FBLeagueTitle(
                                 url: league.logo,
                                 leagueName: league.name,
                                 leagueSeason: league.season

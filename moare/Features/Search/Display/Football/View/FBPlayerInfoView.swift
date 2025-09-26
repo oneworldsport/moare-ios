@@ -364,7 +364,7 @@ struct FBPlayerInfoFourthItem: View {
             }
         ) {
             if let league = stats?.league {
-                LeagueTitle(
+                FBLeagueTitle(
                     url: league.logo,
                     leagueName: league.name,
                     leagueSeason: league.season
