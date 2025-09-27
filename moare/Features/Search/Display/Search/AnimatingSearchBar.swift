@@ -26,8 +26,6 @@ struct AnimatingSearchBar: View {
        --------------------- */
     @FocusState.Binding var focusState: Bool
     
-//    @State private var query = ""
-    
     @State private var startPathAni = false
     @State private var barVisibleState = false
     
@@ -49,7 +47,14 @@ struct AnimatingSearchBar: View {
                             .uiState(visibleState: searchStore.textFieldVisibleState)
                             .submitLabel(.search)
                             .onSubmit {
-                                performSearch()
+                                Task {
+                                    // NOTE: 키보드 버튼으로 검색했을때 자동완성 리스트가 안사라지는 버그 있는데, performSearch()에서 .removeAutoCompleteWithAni로 자동완성 리스트 지우고 나서
+                                    // focusState바뀌면서 binding(\.query)가 실행되어 자동완성이 나오는 것 같아, 먼저 focusState = false 설정해줌.
+                                    // 그리고 바로 performSearch()하면 또 안돼서 0.1초 delay줌.
+                                    focusState = false
+                                    try await Task.sleep(for: .seconds(0.1))
+                                    performSearch()
+                                }
                             }
                         
                         Text(searchStore.query)
