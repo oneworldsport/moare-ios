@@ -110,6 +110,7 @@ struct MLBLeagueScheduleListItem: View {
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
+                isClickEnabled: gameStatus != Constants.GameStatus.MLB.postponed, // 연기된 경기는 클릭 안되게
                 homeTeamLogo: MLBUtil.teamLogoURL(id: homeTeamId),
                 homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
                 homeTeamScore: data.homeTeamScore,

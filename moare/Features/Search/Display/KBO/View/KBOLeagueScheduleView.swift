@@ -105,7 +105,7 @@ struct KBOLeagueScheduleListItem: View {
         let itemKey = data.itemKey
         let homeTeamId = data.homeTeamId
         let awayTeamId = data.awayTeamId
-        let gameStatus = Int(data.gameStatus)
+        let gameStatus = Int(data.gameStatus) // TODO: String으로 사용
         let teamNameDic = kboLeagueScheduleStore.baseSchedule.teamNameDictionary
         
         let gameStatusText: String = {
@@ -133,6 +133,7 @@ struct KBOLeagueScheduleListItem: View {
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
+                isClickEnabled: data.gameStatus != Constants.GameStatus.KBO.canceled, // 취소된 경기는 클릭 안되게
                 homeTeamLogo: KBOUtil.teamLogoURL(id: data.homeTeamId),
                 homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
                 homeTeamScore: data.homeTeamScore,
