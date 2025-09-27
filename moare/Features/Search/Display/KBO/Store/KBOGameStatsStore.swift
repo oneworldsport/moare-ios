@@ -117,7 +117,7 @@ struct KBOGameStatsStore {
             case .sortPitchers:
                 switch state.baseGameStats.secondCategorySelectedIndex {
                 case 0:
-                    state.teamPitchers.sort { (Double($0.ip) ?? 0) > (Double($1.ip) ?? 0) }
+                    state.teamPitchers.sort { $0.inningsPitched > $1.inningsPitched }
                 case 1:
                     state.teamPitchers.sort { (Double($0.r) ?? 0) > (Double($1.r) ?? 0) }
                 case 2:

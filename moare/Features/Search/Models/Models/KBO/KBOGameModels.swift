@@ -253,7 +253,7 @@ struct KBOGamePitcherStats: Decodable, Equatable {
     var er: String { _er ?? "0" }           // 자책
     var h: String { _h ?? "0" }             // 피안타
     var hr: String { _hr ?? "0" }           // 피홈런
-    var ip: String { _ip ?? "0.0" }           // 이닝
+    var ip: String { _ip ?? "0" }           // 이닝 - "1 1/3" 방식 표기
     var np: String { _np ?? "0" }           // 투구수
     var name: String { _name ?? "" }
     var r: String { _r ?? "0" }             // 실점
@@ -265,6 +265,8 @@ struct KBOGamePitcherStats: Decodable, Equatable {
     var l: String { _l ?? "0" } // 패
     var sv: String { _sv ?? "0" } // 세이브
     var era: String { _era ?? "0.0" } // 평균자책점
+    
+    var inningsPitched: Double { parseInningString(ip) } // 이닝 - "1.2" 방식 표기
 
     private enum CodingKeys: String, CodingKey {
         case _id = "id"
@@ -285,6 +287,29 @@ struct KBOGamePitcherStats: Decodable, Equatable {
         case _l = "l"
         case _sv = "sv"
         case _era = "era"
+    }
+    
+    private func parseInningString(_ text: String) -> Double {
+        let parts = text.split(separator: " ")
+        
+        guard let wholePart = Int(parts[0]) else {
+            return 0.0
+        }
+        
+        if parts.count == 1 {
+            // ex: "2" -> 2.0
+            return Double(wholePart)
+        }
+        
+        let fraction = parts[1]
+        switch fraction {
+        case "1/3":
+            return Double(wholePart) + 0.1
+        case "2/3":
+            return Double(wholePart) + 0.2
+        default:
+            return Double(wholePart)
+        }
     }
 }
 

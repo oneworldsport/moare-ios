@@ -372,7 +372,7 @@ struct KBOPlayerInfoFourthItem: View {
             (
                 Text("경력: ")
                     .font(.system(size: 15))
-                + Text("\(KBOUtil.getFullYear(fromYear: player.fromYear))~현재 (\(KBOUtil.calculateYear(fromYear: player.fromYear))년차)")
+                + Text("\(String(KBOUtil.getFullYear(fromYear: player.fromYear)))~현재 (\(KBOUtil.calculateYear(fromYear: player.fromYear))년차)")
                     .font(.system(size: 16))
                     .fontWeight(.medium)
             )
