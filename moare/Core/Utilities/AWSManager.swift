@@ -100,6 +100,14 @@ class AWSManager {
             print("🚨 autoCompleteData fetch error: \(error)")
         }
         
+        // test
+//        let url = Bundle.main.url(forResource: "main_notice_test", withExtension: "json")
+//        let decoder = JSONDecoder()
+//        if let data = try? Data(contentsOf: url!) {
+//            if let noticeList = try? decoder.decode([NoticeModel].self, from: data) {
+//                await noticeListPromise.fulfill(with: noticeList)
+//            }
+//        }
         self.noticeList = try? await noticeList
         if let noticeList = self.noticeList {
             await noticeListPromise.fulfill(with: noticeList)

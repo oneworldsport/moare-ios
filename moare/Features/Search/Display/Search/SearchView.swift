@@ -24,10 +24,15 @@ struct SearchView: View {
     @State private var isNoticeOpened = false
     @State private var isSearchExampleButtonVisible = false
     @State private var isSearchExampleOpened = false
+    @State var noticeBoxHeight: CGFloat = 0
     
     var viewForTest: SportDisplayType? = nil
     
     var body: some View {
+        // notice 아이콘 y 위치
+        // y: (전체 컨텐츠 높이(박스 높이(noticeBoxHeight) + 아이콘 높이(17) + spacing(6))) / 2 + (검색창 높이(50) + 트렌딩 키워드 높이(40)) / 2 + 추가 패딩 6
+        let noticeYOffset = ((noticeBoxHeight + 17 + 6) / 2) + ((50 + 40) / 2) + 6
+        
         ZStack {
             /* ---------------------
              back button
@@ -56,7 +61,7 @@ struct SearchView: View {
              --------------------- */
             HStack(alignment: .bottom) {
                 if isSearchExampleButtonVisible {
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 6) {
                         SearchExampleBox(text: searchStore.searchExample)
                             .opacity(isSearchExampleOpened ? 1 : 0)
                             .padding(.trailing, 25)
@@ -78,8 +83,8 @@ struct SearchView: View {
                 Spacer()
                 
                 if isNoticeIconVisible {
-                    VStack(alignment: .trailing) {
-                        NoticeBox(noticeList: searchStore.noticeList)
+                    VStack(alignment: .trailing, spacing: 6) {
+                        NoticeBox(noticeList: searchStore.noticeList, height: $noticeBoxHeight)
                             .opacity(isNoticeOpened ? 1 : 0)
                         
                         Button(action: {
@@ -88,6 +93,7 @@ struct SearchView: View {
                             }
                         }) {
                             Image(systemName: "info.circle")
+                                .font(.system(size: 17))
                                 .tint(.secondary)
                                 .opacity(0.7)
                         }
@@ -96,9 +102,8 @@ struct SearchView: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 12)
-            .offset(x: 0, y: -113)
+            .offset(x: 0, y: -noticeYOffset)
             .zIndex(1)
-            // y: 전체 박스 높이(100 + 20 + 4) / 2 + (검색창 높이(50) + 트렌딩 키워드 높이(40)) / 2 + 추가 패딩 6
             
             VStack(spacing: 0) {
                 /* ---------------------
