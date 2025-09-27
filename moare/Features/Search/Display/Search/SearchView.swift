@@ -270,7 +270,7 @@ struct SearchView: View {
                 // custom back handler
                 DragGesture(minimumDistance: 3)
                     .onChanged { value in
-                        if !searchStore.viewStack.isEmpty {
+                        if !appStore.path.ids.isEmpty {
                             dragOffset = value.translation.width
                             
                             if dragOffset > 0 {
@@ -279,7 +279,7 @@ struct SearchView: View {
                         }
                     }
                     .onEnded { _ in
-                        if !searchStore.viewStack.isEmpty {
+                        if !appStore.path.ids.isEmpty {
                             if dragOffset > dragMaxOffset {
                                 searchStore.send(.pop)
                             }

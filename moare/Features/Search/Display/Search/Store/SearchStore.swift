@@ -60,7 +60,7 @@ struct SearchStore {
         /* ---------------------
            ui action
            --------------------- */
-        case binding(BindingAction<State>)
+        case binding(BindingAction<State>) // TODO: State가 모두 바뀔때마다 실행되는건가..? 그럼 query만 binding되게 해야하나?
         case firstOpen
         case toggleSearchBar
         case updateTextField(String, Bool = true)
