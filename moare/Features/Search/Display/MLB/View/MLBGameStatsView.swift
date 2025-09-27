@@ -106,7 +106,10 @@ struct MLBGameStatsView: View {
                     ),
                     actions: GameStatsContainerActions(
                         teamCategoryButtonAction: { index in
-                            store.send(.baseGameStats(.selectTeam(index)))
+                            store.send(.baseGameStats(.selectTeam(index: index)))
+                        },
+                        firstStatsTitleCategoryAction: {
+                            store.send(.sortByBattingOrder)
                         },
                         firstStatsCategoryButtonAction: { index in
                             store.send(.baseGameStats(.selectFirstCategory(index)))

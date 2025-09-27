@@ -197,6 +197,7 @@
 		DA7D42A52E7A08F500D844F9 /* KBOTournamentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7D42A42E7A08F000D844F9 /* KBOTournamentView.swift */; };
 		DA7D42A72E7A090100D844F9 /* KBOTournamentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7D42A62E7A08FB00D844F9 /* KBOTournamentStore.swift */; };
 		DA7D42A92E7A091200D844F9 /* KBOTournamentDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7D42A82E7A090A00D844F9 /* KBOTournamentDisplayModel.swift */; };
+		DA7EA80B2E87E5EF00B587A4 /* OptionalButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7EA80A2E87E5E600B587A4 /* OptionalButton.swift */; };
 		DA8DED8F2DF6AA3000AAB34B /* StandingsFirstCategoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8DED8E2DF6AA2300AAB34B /* StandingsFirstCategoryItem.swift */; };
 		DA8DED912DF6AB3700AAB34B /* StandingsRankItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8DED902DF6AB3700AAB34B /* StandingsRankItem.swift */; };
 		DA911BB02DF9B8DF0055B982 /* KBOTeamStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA911BAF2DF9B8DF0055B982 /* KBOTeamStatsView.swift */; };
@@ -498,6 +499,7 @@
 		DA7D42A42E7A08F000D844F9 /* KBOTournamentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOTournamentView.swift; sourceTree = "<group>"; };
 		DA7D42A62E7A08FB00D844F9 /* KBOTournamentStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOTournamentStore.swift; sourceTree = "<group>"; };
 		DA7D42A82E7A090A00D844F9 /* KBOTournamentDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOTournamentDisplayModel.swift; sourceTree = "<group>"; };
+		DA7EA80A2E87E5E600B587A4 /* OptionalButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalButton.swift; sourceTree = "<group>"; };
 		DA8DED8E2DF6AA2300AAB34B /* StandingsFirstCategoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandingsFirstCategoryItem.swift; sourceTree = "<group>"; };
 		DA8DED902DF6AB3700AAB34B /* StandingsRankItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandingsRankItem.swift; sourceTree = "<group>"; };
 		DA911BAF2DF9B8DF0055B982 /* KBOTeamStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOTeamStatsView.swift; sourceTree = "<group>"; };
@@ -1197,6 +1199,7 @@
 		DA531BFB2D64A91900DB87CB /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				DA7EA80A2E87E5E600B587A4 /* OptionalButton.swift */,
 				DA531BF72D64A91900DB87CB /* CalendarList.swift */,
 				DA531BF82D64A91900DB87CB /* CapsuleBar.swift */,
 				DA531BF92D64A91900DB87CB /* CapsuleButton.swift */,
@@ -1819,6 +1822,7 @@
 				DA252B022DEF69E400006AB8 /* MLBPlayerModels.swift in Sources */,
 				DA1702402DA8C7140021EF80 /* NBAPlayerStandingsStore.swift in Sources */,
 				DA252B392DEF790100006AB8 /* MLBTeamStandingsDisplayModel.swift in Sources */,
+				DA7EA80B2E87E5EF00B587A4 /* OptionalButton.swift in Sources */,
 				DAC1EBD92E561A3B0031221C /* StickyHeader.swift in Sources */,
 				DA252B3A2DEF790100006AB8 /* MLBLeagueScheduleDisplayModel.swift in Sources */,
 				DA252B3B2DEF790100006AB8 /* MLBGameStatsDisplayModel.swift in Sources */,

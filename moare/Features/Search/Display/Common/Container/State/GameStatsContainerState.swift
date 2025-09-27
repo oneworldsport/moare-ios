@@ -47,7 +47,9 @@ struct GameStatsCoachState {
 }
 
 struct GameStatsContainerActions {
+    // TODO: 이름에서 Button 빼도 될 듯?
     var teamCategoryButtonAction: ((Int) -> Void)? = nil
+    var firstStatsTitleCategoryAction: (() -> Void)? = nil
     let firstStatsCategoryButtonAction: (Int) -> Void
     var secondStatsCategoryButtonAction: ((Int) -> Void)? = nil
     let refreshButtonAction: () -> Void

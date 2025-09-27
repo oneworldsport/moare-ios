@@ -42,6 +42,7 @@ struct MLBGameStatsStore {
         
         case sortHitters
         case sortPitchers
+        case sortByBattingOrder
         case setPlayersTotalStats
         case refreshGame(shouldFetch: Bool = true)
         case updateDisplayModel(model: SportDecodableModel)
@@ -65,9 +66,9 @@ struct MLBGameStatsStore {
                 state.teamPitchers = []
 //                state.playersTotalStats = nil
                 
-                return .send(.baseGameStats(.selectTeam(0)))
+                return .send(.baseGameStats(.selectTeam(isInit: true, index: 0)))
                 
-            case .baseGameStats(.selectTeam(let index)):
+            case let .baseGameStats(.selectTeam(isInit, index)):
                 // set selected team's boxscore
                 state.teamBoxScore = if index == 0 {
                     state.baseGameStats.displayModel.game.boxscore?.teams.home
@@ -85,7 +86,11 @@ struct MLBGameStatsStore {
                     .map { ($0.key, $0.value) } ?? []
                 
                 return .run { send in
-                    await send(.sortHitters)
+                    if isInit {
+                        await send(.sortByBattingOrder)
+                    } else {
+                        await send(.sortHitters)
+                    }
                     await send(.sortPitchers)
                     await send(.setPlayersTotalStats)
                     await send(.refreshGame(shouldFetch: false))
@@ -141,6 +146,10 @@ struct MLBGameStatsStore {
                 default: break
                 }
                 
+                return .none
+                
+            case .sortByBattingOrder:
+                state.teamHitters.sort { Int($0.1.battingOrder.prefix(1)) ?? 0 < Int($1.1.battingOrder.prefix(1)) ?? 0 }
                 return .none
                 
             case .setPlayersTotalStats:

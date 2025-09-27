@@ -91,7 +91,7 @@ struct FBGameStatsStore {
                     await send(.refreshGame(shouldFetch: false)) // NOTE: 이걸 안해주면 새로고침 누르기 전에는 FBLeagueSchedule 데이터가 업데이트 안됨.
                 }
                 
-            case let .baseGameStats(.selectTeam(index)):
+            case let .baseGameStats(.selectTeam(_, index)):
                 let displayModel = state.baseGameStats.displayModel
                 
                 // set selected team's players stats

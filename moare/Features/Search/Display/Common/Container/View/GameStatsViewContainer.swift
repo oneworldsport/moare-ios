@@ -182,7 +182,9 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                             HStack(spacing: 0) {
                                 VStack(spacing: 0) {
                                     StickyHeader(coordinateSpaceName: coordinateSpaceName) {
-                                        StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory, width: state.firstColumnWidth)
+                                        OptionalButton(action: actions.firstStatsTitleCategoryAction) {
+                                            StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory, width: state.firstColumnWidth)
+                                        }
                                     }
                                     .frame(width: state.firstColumnWidth ?? 132)
                                     

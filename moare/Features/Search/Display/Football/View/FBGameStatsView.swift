@@ -122,7 +122,7 @@ struct FBGameStatsView: View {
                     ),
                     actions: GameStatsContainerActions(
                         teamCategoryButtonAction: { index in
-                            store.send(.baseGameStats(.selectTeam(index)))
+                            store.send(.baseGameStats(.selectTeam(index: index)))
                         },
                         firstStatsCategoryButtonAction: { index in
                             store.send(.baseGameStats(.selectFirstCategory(index)))

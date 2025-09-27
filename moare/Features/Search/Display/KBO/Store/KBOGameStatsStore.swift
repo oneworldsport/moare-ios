@@ -42,6 +42,7 @@ struct KBOGameStatsStore {
         
         case sortHitters
         case sortPitchers
+        case sortByBattingOrder
         case setPlayersTotalStats
         case refreshGame(shouldFetch: Bool = true)
         case updateDisplayModel(model: SportDecodableModel)
@@ -65,9 +66,9 @@ struct KBOGameStatsStore {
                 state.teamPitchers = []
 //                state.playersTotalStats = nil
                 
-                return .send(.baseGameStats(.selectTeam(0)))
+                return .send(.baseGameStats(.selectTeam(isInit: true, index: 0)))
                 
-            case .baseGameStats(.selectTeam(let index)):
+            case let .baseGameStats(.selectTeam(isInit, index)):
                 // set selected team's boxscore
                 state.teamLineup = if index == 0 {
                     state.baseGameStats.displayModel.game.lineup?.home
@@ -79,7 +80,11 @@ struct KBOGameStatsStore {
                 state.teamPitchers = state.teamLineup?.pitchers ?? []
                 
                 return .run { send in
-                    await send(.sortHitters)
+                    if isInit {
+                        await send(.sortByBattingOrder)
+                    } else {
+                        await send(.sortHitters)
+                    }
                     await send(.sortPitchers)
                     await send(.setPlayersTotalStats)
                     await send(.refreshGame(shouldFetch: false))
@@ -131,6 +136,10 @@ struct KBOGameStatsStore {
                 default: break
                 }
                 
+                return .none
+                
+            case .sortByBattingOrder:
+                state.teamHitters.sort { $0.battingNumber < $1.battingNumber }
                 return .none
                 
             case .setPlayersTotalStats:

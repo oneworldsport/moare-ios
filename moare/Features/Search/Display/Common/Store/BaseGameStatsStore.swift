@@ -42,7 +42,7 @@ struct BaseGameStatsStore<T> {
         case initData
         case selectFirstCategory(Int)
         case selectSecondCategory(Int)
-        case selectTeam(Int)
+        case selectTeam(isInit: Bool = false, index: Int)
     }
     
     @Dependency(\.translatedNameProvider) var nameProvider
@@ -103,7 +103,7 @@ struct BaseGameStatsStore<T> {
                 
                 return .none
                 
-            case .selectTeam(let index):
+            case .selectTeam(_, let index):
                 state.teamCategorySelectedIndex = index
                 
                 return .none
