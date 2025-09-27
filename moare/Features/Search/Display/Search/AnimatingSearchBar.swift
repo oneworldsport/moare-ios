@@ -129,6 +129,24 @@ struct AnimatingSearchBar: View {
                 drawPath: startPathAni
             )
             .uiState(visibleState: !barVisibleState)
+        } // ZStack
+        .onAppear {
+            // Bar's first open
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // NOTE: 로고가 사라지면서 magnifyingglass가 나타나는 시간 0.5초 wait
+                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                    startPathAni = true
+                    searchStore.send(.updateTextFieldVisibleState(true))
+                    searchStore.send(.firstOpen)
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.medium) {
+                    barVisibleState = true
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.medium + 0.1) {
+                    focusState.toggle()
+                }
+            }
         }
     }
     
