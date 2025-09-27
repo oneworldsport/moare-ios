@@ -108,29 +108,6 @@ struct MLBLeagueScheduleListItem: View {
         let gameStatus = data.gameStatus
         let teamNameDic = mlbLeagueScheduleStore.baseSchedule.teamNameDictionary
         
-        let gameStatusText: String = {
-            switch gameStatus {
-            case StringConstants.MLB.gameScheduled:
-                return StringConstants.gameNotStartedStr
-            case StringConstants.MLB.gameLive:
-                return data.gameInfo?.currentInning ?? StringConstants.gameLiveStr
-            case StringConstants.MLB.gamePostponed:
-                return StringConstants.gamePostponedStr
-            case let status where StringConstants.MLB.gameFinishedList.contains(status):
-                return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
-            default:
-                return ""
-            }
-        }()
-        
-        let gameStatusColor: Color = {
-            if gameStatus == StringConstants.MLB.gameLive {
-                return .moare
-            } else {
-                return .secondary
-            }
-        }()
-        
         ScheduleGameItem(
             state:ScheduleGameItemState(
                 homeTeamLogo: MLBUtil.teamLogoURL(id: homeTeamId),
@@ -140,8 +117,8 @@ struct MLBLeagueScheduleListItem: View {
                 awayTeamName: teamNameDic["short_\(awayTeamId)"] ?? "",
                 awayTeamScore: data.awayTeamScore,
                 isResultOpened: isResultOpened,
-                gameStatusText: gameStatusText,
-                gameStatusColor: gameStatusColor,
+                gameStatusText: Constants.GameStatus.mlbGameStatusText(status: gameStatus, currentInning: data.gameInfo?.currentInning, isResultOpened: isResultOpened),
+                gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: Constants.Ids.mlb, status: gameStatus),
                 isCapsuleButtonDisabled: !StringConstants.MLB.gameFinishedList.contains(gameStatus),
                 date: data.date,
                 venue: teamNameDic["venue_\(homeTeamId)"] ?? "",

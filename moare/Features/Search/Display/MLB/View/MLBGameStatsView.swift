@@ -161,29 +161,6 @@ struct MLBGameStatsScoreInfoItem: View {
         let teamNameDic = mlbGameStatsStore.baseGameStats.teamNameDictionary
         let gameStatus = game.status.detailedState
         
-        let gameStatusText: String = {
-            switch gameStatus {
-            case StringConstants.MLB.gameScheduled:
-                return StringConstants.gameNotStartedStr
-            case StringConstants.MLB.gameLive:
-                return "\(game.linescore?.currentInning ?? 1)회\((game.linescore?.isTopInning ?? true) ? "초" : "말")"
-            case StringConstants.MLB.gamePostponed:
-                return StringConstants.gamePostponedStr
-            case let status where StringConstants.MLB.gameFinishedList.contains(status):
-                return StringConstants.gameFinishedStr
-            default:
-                return ""
-            }
-        }()
-        
-        let gameStatusColor: Color = {
-            if gameStatus == StringConstants.MLB.gameLive {
-                return .moare
-            } else {
-                return .secondary
-            }
-        }()
-        
         HStack(alignment: .bottom) {
             VStack(spacing: 0) {
                 HStack(spacing: 0) {
@@ -210,8 +187,8 @@ struct MLBGameStatsScoreInfoItem: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
                 CapsuleButton(
-                    text: gameStatusText,
-                    color: gameStatusColor
+                    text: Constants.GameStatus.mlbGameStatusText(status: gameStatus, linescore: game.linescore),
+                    color: Constants.GameStatus.gameStatusColor(leagueId: Constants.Ids.mlb, status: gameStatus)
                 ) {
                 }
                 .disabled(true)
