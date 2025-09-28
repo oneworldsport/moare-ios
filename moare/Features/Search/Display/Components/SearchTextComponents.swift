@@ -8,20 +8,45 @@
 import Foundation
 import SwiftUI
 
-struct LeagueTitle: View {
+struct FBLeagueTitle: View {
     let url: String
     let leagueName: String
     let leagueSeason: Int
+    var logoCustomSize: CGSize? = nil
     
     var body: some View {
         HStack(spacing: 0) {
-            URLImage(url: url, size: .small)
+            URLImage(url: url, size: .small, customSize: logoCustomSize)
                 .padding(.trailing, 6)
-            
-//            Text("\(leagueName) \(String(leagueSeason).suffix(2))/25")
+        
             Text("\(leagueName) \(String(leagueSeason))-\(String(leagueSeason + 1).suffix(2))")
                 .fontWeight(.medium)
         }
+    }
+}
+
+struct FBLeagueTitleForGameStats: View {
+    let url: String
+    let leagueName: String
+    let leagueSeason: Int
+    let description: String
+    
+    var body: some View {
+        HStack {
+            HStack(spacing: 0) {
+                URLImage(url: url, customSize: CGSize(width: 23, height: 23))
+                    .padding(.trailing, 4)
+            
+                Text("\(leagueName) \(String(leagueSeason))-\(String(leagueSeason + 1).suffix(2))")
+                    .font(.system(size: 14))
+            }
+            
+            Text(" - \(MatchDescriptionConverter.convert(descriptionType: .roundWithoutDash, input: description))")
+                .font(.system(size: 14))
+            
+            Spacer()
+        }
+        .padding(.leading, UIConstants.Padding.defaultHPadding)
     }
 }
 
@@ -63,13 +88,37 @@ struct BaseballLeagueTitle: View {
         HStack(spacing: 0) {
             URLImage(
                 url: logoUrl,
-                size: .small,
-                isSvg: logoUrl.contains(".svg")
+                size: .small
             )
-                .padding(.trailing, 6)
+            .padding(.trailing, 6)
             
             Text("\(name) " + String(season))
                 .fontWeight(.medium)
         }
+    }
+}
+
+struct BaseballLeagueTitleForGameStats: View {
+    let logoUrl: String
+    let name: String
+    let season: Int
+    
+    init(logoUrl: String, name: String, season: Int?) {
+        self.logoUrl = logoUrl
+        self.name = name
+        self.season = season ?? 2025
+    }
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            URLImage(url: logoUrl, customSize: CGSize(width: 23, height: 23))
+                .padding(.trailing, 4)
+        
+            Text("\(name) " + String(season))
+                .font(.system(size: 14))
+            
+            Spacer()
+        }
+        .padding(.leading, UIConstants.Padding.defaultHPadding)
     }
 }

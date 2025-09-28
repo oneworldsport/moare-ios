@@ -11,6 +11,8 @@ import ComposableArchitecture
 
 @Reducer
 struct FBPlayerStandingsStore {
+    typealias BaseStandings = BasePlayerStandingsStore<FBPlayerStandingsDisplayModel>
+    
     let searchClient = SearchClient()
     
     @ObservableState
@@ -29,42 +31,25 @@ struct FBPlayerStandingsStore {
         /* ---------------------
            data state
            --------------------- */
-        var displayModel: FBPlayerStandingsDisplayModel? = nil
-        var displayDataState: ApiFetchState = .idle
+        var baseStandings: BaseStandings.State
+        
         var filteredStandings: [FBPlayerStandingsDisplay] = []
         var league: FBLeague? = nil
-        
-        /* ---------------------
-           ui state
-           --------------------- */
-        var firstSelectedIndex = 0
-        var secondSelectedIndex = 0
-        var shouldScrollCategory = false
-        var entityIndex: Int? = nil
-        var filteredStandingsStartIndex = 0
-        
-        /* ---------------------
-           etc
-           --------------------- */
         var standings: [FBPlayerStandingsDisplay] = []
-        var selectedEntity: EntityInfo? = nil
-        var filteredStandingsEndIndex = 0
-        var playerNameDictionary: [String: String] = [:]
-        var teamNameDictionary: [String: String] = [:]
+        
+        init(displayModel: FBPlayerStandingsDisplayModel) {
+            self.baseStandings = BaseStandings.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
-        /* ---------------------
-           init
-           --------------------- */
-        case initData(displayModel: FBPlayerStandingsDisplayModel)
+        case baseStandings(BaseStandings.Action)
         
         /* ---------------------
            view action
            --------------------- */
-        case selectFirstCategory(index: Int)
-        case selectSecondCategory(index: Int, category: String)
         case showMoreStandings(isUp: Bool)
+        case showPlayerStats(id: Int)
         
         /* ---------------------
            private
@@ -74,115 +59,40 @@ struct FBPlayerStandingsStore {
         case fetchStandings(category: String)
         case setDisplayModel(data: SportDecodableModel)
         case updateDisplayDataState(fetchState: ApiFetchState)
+        
+        case delegate(Delegate)
     }
     
-    @Dependency(\.translatedNameProvider) var nameProvider
+    enum Delegate {
+        case showPlayerStats(model: SportDecodableModel)
+    }
     
     var body: some Reducer<State, Action> {
+        Scope(state: \.baseStandings, action: \.baseStandings) { BaseStandings() }
+        
         Reduce { state, action in
             switch action {
-            case .initData(let displayModel):
+            case .baseStandings(.initData):
                 // init with default value
-                state.displayModel = nil
-                state.displayDataState = .idle
                 state.filteredStandings = []
                 state.league = nil
-                state.firstSelectedIndex = 0
-                state.secondSelectedIndex = 0
-                state.shouldScrollCategory = false
-                state.entityIndex = nil
-                state.filteredStandingsStartIndex = 0
                 state.standings = []
-                state.selectedEntity = nil
-                state.filteredStandingsEndIndex = 0
                 
                 // init data
-                state.displayModel = displayModel
-                state.standings = displayModel.standings
-                state.league = displayModel.standings.first?.stats.league
-                
-                switch displayModel.leagueId {
-                case Constants.Ids.epl:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                case Constants.Ids.laliga:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                case Constants.Ids.bundesliga:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                case Constants.Ids.ligue1:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                case Constants.Ids.seriea:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                case Constants.Ids.mls:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlsPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                default: break
-                }
-                
-                let keywords = displayModel.keywords
-                
-                if !keywords.isEmpty {
-                    // Check matching keyword in the order of categories, doesn't matter what keyword is in keywords
-                    let index = StringConstants.Football.playerStandingsSecondCategories.firstIndex { category in
-                        let keyword = keywords.first { $0.keyword == category }
-                        return keyword != nil
-                    }
-                    
-                    if let index = index {
-                        state.secondSelectedIndex = index
-                    }
-                }
+                state.standings = state.baseStandings.displayModel.standings
+                state.league = state.baseStandings.displayModel.standings.first?.stats.league
                 
                 return .send(.filterStandings)
                 
-            case .selectFirstCategory(let index):
-                state.shouldScrollCategory = true
-                
-                var secondCategory = "득점"
-                
-                // should change secondSelectedIndex first as bar moves based on secondSelectedIndex when firstSelectedIndex changes
-                switch index {
-                case 0: 
-                    state.secondSelectedIndex = 0
-                    secondCategory = "득점"
-                case 1: 
-                    state.secondSelectedIndex = StringConstants.Football.playerStandingsAttackCategories.count
-                    secondCategory = "태클 시도"
-                case 2:
-                    state.secondSelectedIndex = StringConstants.Football.playerStandingsAttackCategories.count + StringConstants.Football.playerStandingsDefendCategories.count
-                    secondCategory = "패스 시도"
-                default: break
-                }
-                
-                state.firstSelectedIndex = index
-                
-                return .send(.fetchStandings(category: secondCategory))
-                
-            case .selectSecondCategory(let index, let category):
-                state.shouldScrollCategory = false
-                state.secondSelectedIndex = index
-                
-                switch index {
-                case StringConstants.Football.playerStandingsAttackCategories.indices:
-                    state.firstSelectedIndex = 0
-                case StringConstants.Football.playerStandingsAttackCategories.count..<(StringConstants.Football.playerStandingsAttackCategories.count + StringConstants.Football.playerStandingsDefendCategories.count):
-                    state.firstSelectedIndex = 1
-                default:
-                    state.firstSelectedIndex = 2
-                }
-                
+            case let .baseStandings(.selectCategory(_, category)):
                 return .send(.fetchStandings(category: category))
                 
             case .filterStandings:
                 // Get the first entity(player) matching with the standings.(Checking in the order of standings)
                 let index = state.standings.firstIndex { player in
-                    let entity = state.displayModel?.entityInfo.first { $0.playerId == player.player.id }
+                    let entity = state.baseStandings.displayModel.entityInfo.first { $0.playerId == player.player.id }
                     if entity != nil {
-                        state.selectedEntity = entity
+                        state.baseStandings.selectedEntity = entity
                     }
                     return entity != nil
                 }
@@ -191,7 +101,7 @@ struct FBPlayerStandingsStore {
                     return .none
                 }
                 
-                state.entityIndex = index
+                state.baseStandings.entityIndex = index
                 
                 let rangeSize = 20
                 let startIndex = max(0, index - (rangeSize / 2) + 1) // previous 9 players from entity player
@@ -199,8 +109,8 @@ struct FBPlayerStandingsStore {
                 
                 let newStandings = Array(state.standings[startIndex...endIndex])
                 
-                state.filteredStandingsEndIndex = endIndex
-                state.filteredStandingsStartIndex = startIndex
+                state.baseStandings.filteredStandingsEndIndex = endIndex
+                state.baseStandings.filteredStandingsStartIndex = startIndex
                 state.filteredStandings = newStandings
                 
                 return .send(.updateDisplayDataState(fetchState: .success))
@@ -208,38 +118,38 @@ struct FBPlayerStandingsStore {
             case .showMoreStandings(let isUp):
                 // get 10 more standings
                 if isUp {
-                    let newStartIndex = max(0, state.filteredStandingsStartIndex - 10)
+                    let newStartIndex = max(0, state.baseStandings.filteredStandingsStartIndex - 10)
                     
-                    if newStartIndex == state.filteredStandingsStartIndex {
+                    if newStartIndex == state.baseStandings.filteredStandingsStartIndex {
                         return .none
                     }
                     
-                    let newStandings = Array(state.standings[newStartIndex...state.filteredStandingsEndIndex])
+                    let newStandings = Array(state.standings[newStartIndex...state.baseStandings.filteredStandingsEndIndex])
                     
-                    state.filteredStandingsStartIndex = newStartIndex
+                    state.baseStandings.filteredStandingsStartIndex = newStartIndex
                     state.filteredStandings = newStandings
                 } else {
-                    let newEndIndex = min(state.standings.count - 1, state.filteredStandingsEndIndex + 10)
+                    let newEndIndex = min(state.standings.count - 1, state.baseStandings.filteredStandingsEndIndex + 10)
                     
-                    if newEndIndex == state.filteredStandingsEndIndex {
+                    if newEndIndex == state.baseStandings.filteredStandingsEndIndex {
                         return .none
                     }
                     
-                    let newStandings = Array(state.standings[state.filteredStandingsStartIndex...newEndIndex])
+                    let newStandings = Array(state.standings[state.baseStandings.filteredStandingsStartIndex...newEndIndex])
                     
-                    state.filteredStandingsEndIndex = newEndIndex
+                    state.baseStandings.filteredStandingsEndIndex = newEndIndex
                     state.filteredStandings = newStandings
                 }
                 
                 return .none
                 
             case .fetchStandings(let category):
-                return .run { [displayModel = state.displayModel, selectedEntity = state.selectedEntity] send in
+                return .run { [displayModel = state.baseStandings.displayModel, selectedEntity = state.baseStandings.selectedEntity] send in
                     await send(.updateDisplayDataState(fetchState: .fetching))
                     
                     do {
                         // TODO: Structure should be updated(Temporary code)
-                        let standingsKeyword = displayModel?.keywords.first { $0.id == "standings" }
+                        let standingsKeyword = displayModel.keywords.first { $0.id == "standings" }
                         let keywords = [standingsKeyword!, Keyword(keyword: category, id: "", priority: 100)]
                         let entities = selectedEntity != nil ? [selectedEntity!] : []
                         let keywordInfo = KeywordInfo(
@@ -259,7 +169,7 @@ struct FBPlayerStandingsStore {
                 
             case .setDisplayModel(let data):
                 if case let .fbPlayerStandings(_, displayModel) = data {
-                    state.displayModel = displayModel
+                    state.baseStandings.displayModel = displayModel
                     state.standings = displayModel.standings
                     
                     return .send(.filterStandings)
@@ -269,7 +179,7 @@ struct FBPlayerStandingsStore {
                 
             case .updateDisplayDataState(let fetchState):
                 withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
-                    state.displayDataState = fetchState
+                    state.baseStandings.displayDataState = fetchState
                 }
                 
                 return .none
@@ -277,7 +187,7 @@ struct FBPlayerStandingsStore {
             case .sortStandings:
                 var standings = state.filteredStandings
                 
-                switch state.secondSelectedIndex {
+                switch state.baseStandings.categorySelectedIndex {
                 case 0:
                     standings.sort { $0.stats.goals.total > $1.stats.goals.total }
                 case 1:
@@ -322,6 +232,32 @@ struct FBPlayerStandingsStore {
                 
                 state.filteredStandings = Array(standings.prefix(20))
                 
+                return .none
+                
+            case let .showPlayerStats(id):
+                return .run { [league = state.league, displayModel = state.baseStandings.displayModel] send in
+                    let leagueId = league?.id ?? Constants.Ids.epl
+                    
+                    // TODO: Has to add loading
+                    let result = try await searchClient.fetchById(
+                        season: displayModel.season,
+                        category: "football",
+                        dataType: "football_player_stats",
+                        leagueId: leagueId,
+                        id: String(id)
+                    )
+                    
+                    await send(.delegate(.showPlayerStats(model: result.data)))
+//                    let player = responseModel.standings.first { $0.player.id == playerId }
+//                    
+//                    let playerInfoResponseModel = FBPlayerInfoResponseModel(info: player, lastGame: nil, nextGame: nil)
+//                    dataModel = .fbPlayerStats(
+//                        playerInfoResponseModel,
+//                        modelConverter.fbPlayerStatsConverter(response: playerInfoResponseModel)
+//                    )
+                }
+                
+            case .delegate:
                 return .none
             }
         }

@@ -8,130 +8,94 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct FBLeaugeScheduleView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>? = nil
+struct FBLeagueScheduleView: View {
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<FBLeagueScheduleStore>
+    let didPop: Bool
+    let isCombinedView: Bool
     
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: FBLeagueScheduleDisplayModel
+    @State private var show = false
     
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            let fbGameStatsModel = searchStore.displayModels[.fbGameStats] as? FBGameStatsDisplayModel
-            
-            VStack(spacing: 0) {
-                if let fbLeagueScheduleStore {
-                    ScheduleViewContainer(
-                        state: ScheduleContainerState(
-                            shouldShowCalendar: fbGameStatsModel == nil,
-                            shouldShowAllResultToggleButton: fbGameStatsModel == nil,
-                            displayDataState: fbLeagueScheduleStore.baseSchedule.displayDataState,
-                            calendarUiState: CalendarUiState(
-                                yearMonthList: fbLeagueScheduleStore.baseSchedule.yearMonthList,
-                                days: fbLeagueScheduleStore.baseSchedule.days,
-                                selectedYearMonthIndex: fbLeagueScheduleStore.baseSchedule.selectedYearMonthIndex,
-                                selectedDayIndex: fbLeagueScheduleStore.baseSchedule.selectedDayIndex
-                            ),
-                            isAllResultOpened: fbLeagueScheduleStore.baseSchedule.isAllResultOpened
+        VStack {
+            if show {
+                ScheduleViewContainer(
+                    state: ScheduleContainerState(
+                        shouldShowCalendar: store.selectedGame == nil,
+                        shouldShowAllResultToggleButton: store.selectedGame == nil,
+                        displayDataState: store.baseSchedule.displayDataState,
+                        calendarUiState: CalendarUiState(
+                            yearMonthList: store.baseSchedule.yearMonthList,
+                            days: store.baseSchedule.days,
+                            selectedYearMonthIndex: store.baseSchedule.selectedYearMonthIndex,
+                            selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
-                        actions: ScheduleContainerActions(
-                            calendarUiActions: CalendarUiActions(
-                                onSelectYearMonth: { yearMonth, index in
-                                    fbLeagueScheduleStore.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
-                                },
-                                onSelectDay: { day, index in
-                                    fbLeagueScheduleStore.send(.baseSchedule(.selectDay(day, index)))
-                                }
-                            ),
-                            allResultButtonAction: {
-                                fbLeagueScheduleStore.send(.toggleAllResult)
+                        isAllResultOpened: store.baseSchedule.isAllResultOpened
+                    ),
+                    actions: ScheduleContainerActions(
+                        calendarUiActions: CalendarUiActions(
+                            onSelectYearMonth: { yearMonth, index in
+                                store.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
+                            },
+                            onSelectDay: { day, index in
+                                store.send(.baseSchedule(.selectDay(day, index)))
                             }
                         ),
-                        titleContent: {
-                            if let fbGameStatsModel {
-                                HStack {
-                                    HStack(spacing: 0) {
-                                        URLImage(url: fbGameStatsModel.game.league.logo, customSize: CGSize(width: 23, height: 23))
-                                            .padding(.trailing, 4)
-                                        
-                                        // TODO: make season text to use util
-                                        Text("\(fbGameStatsModel.game.league.name) \(String(fbGameStatsModel.game.league.season).suffix(2))/25")
-                                            .font(.system(size: 14))
-                                    }
-                                    
-                                    Text(" - \(MatchDescriptionConverter.convert(descriptionType: .roundWithoutDash, input: fbGameStatsModel.game.league.round))")
-                                        .font(.system(size: 14))
-                                    
-                                    Spacer()
-                                }
-                                .padding(.leading, UIConstants.Padding.defaultHPadding)
-                            }
-                        },
-                        gameListContent: {
-                            FBLeagueScheduleList(
-                                searchStore: searchStore,
-                                fbLeagueScheduleStore: fbLeagueScheduleStore
+                        allResultButtonAction: {
+                            store.send(.toggleAllResult)
+                        }
+                    ),
+                    titleContent: {
+                        if let league = store.league, store.selectedGame != nil {
+                            FBLeagueTitleForGameStats(
+                                url: league.logo,
+                                leagueName: league.name,
+                                leagueSeason: league.season,
+                                description: league.round
                             )
                         }
-                    )
+                    },
+                    gameListContent: {
+                        FBLeagueScheduleList(
+                            searchStore: searchStore,
+                            fbLeagueScheduleStore: store
+                        )
+                    }
+                )
+            }
+        }
+        .onAppear {
+            if !isCombinedView {
+                if !didPop {
+                    store.send(.baseSchedule(.initData))
+                } else {
+                    // TODO: FBGameStatsView에서 뒤로왔을때만 실행하게 개선 필요
+                    store.send(.updateFilteredGames)
                 }
             }
-            .onAppear {
-                // init FBLeagueScheduleStore
-                let fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.fbLeagueScheduleStore) ?? {
-                    let newStore = Store(initialState: FBLeagueScheduleStore.State()) { FBLeagueScheduleStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.fbLeagueScheduleStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.fbLeagueScheduleStore = fbLeagueScheduleStore
-                }
-                
-                if searchStore.poppedView == nil {
-                    fbLeagueScheduleStore.send(.baseSchedule(.initData(displayModel: displayModel)))
-                }
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
-            .onChange(of: displayModel) {
-                if case .fbLeagueSchedule = searchStore.poppedView {
-                    fbLeagueScheduleStore?.send(.baseSchedule(.initData(displayModel: displayModel)))
-                }
-            }
-            .onChange(of: searchStore.viewStack) {
-                guard let lastItem = searchStore.viewStack.last,
-                      case .fbLeagueSchedule = lastItem,
-                      let poppedView = searchStore.poppedView,
-                      case .fbGameStats = searchStore.poppedView else {
-                    return
-                }
-                
-                fbLeagueScheduleStore?.send(.updateGamesData(fbLeagueScheduleData: lastItem, fbGameStatsData: poppedView))
-            }
-            .onChange(of: fbLeagueScheduleStore?.dataForViewStack) {
-                if let data = fbLeagueScheduleStore?.dataForViewStack {
-                    searchStore.send(.updateLastViewStack(data: data))
-                }
-            }
-        } // if let searchStore
+        }
+        .onChange(of: store.baseSchedule.displayModel) {
+            // FBGameStatsView에서 새로고침 후 AppStore에서 FBLeagueScheduleDisplayModel이 업데이트 됐을때 해당 .onChange 실행
+            store.send(.updateSelectedGame)
+        }
     }
 }
 
 struct FBLeagueScheduleList: View {
     @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
-    
-    @State var gameListToDisplay: [FBGameForSchedule] = []
+
+    @State var itemHeight: CGFloat? = nil
     
     var body: some View {
-        let fbGameStatsModel = searchStore.displayModels[.fbGameStats] as? FBGameStatsDisplayModel
+        let gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+        let isCollapsed = fbLeagueScheduleStore.selectedGame != nil && gameListToDisplay.count == 1
         let teamNameDic = fbLeagueScheduleStore.baseSchedule.teamNameDictionary
+        let singleId = gameListToDisplay.first?.gameId
         
         ScrollView {
 //            HStack {
@@ -147,6 +111,20 @@ struct FBLeagueScheduleList: View {
                         teamNameDic: teamNameDic
                     )
                     .padding(.vertical, 8)
+                    .background(
+                        // NOTE: .readSize가 안먹혀서 아래 코드로 적용
+                        Group {
+                            if isCollapsed && value.gameId == singleId {
+                                GeometryReader { proxy in
+                                    Color.clear
+                                        .onAppear { itemHeight = proxy.size.height }
+                                        .onChange(of: proxy.size.height) { itemHeight = proxy.size.height }
+                                }
+                            } else {
+                                Color.clear
+                            }
+                        }
+                    )
 //                    .vSequentialListAni(
 //                        index: index,
 //                        itemCount: gameListToDisplay.count,
@@ -157,41 +135,16 @@ struct FBLeagueScheduleList: View {
                 }
             }
         }
-        .frame(maxHeight: fbGameStatsModel == nil ? .infinity : fbLeagueScheduleStore.itemHeight)
-        .scrollDisabled(fbGameStatsModel != nil)
-        .onAppear {
-            // TODO: init에서 해도 상관없다. 어디서 하는게 나을까?
-            if let game = fbGameStatsModel?.game {
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    gameListToDisplay = [ModelConverter.fbGameToGameScheduleConverter(game: game)]
-                }
-            } else {
-                gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-            }
-        }
-        .onChange(of: fbGameStatsModel) {
-            if let game = fbGameStatsModel?.game {
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    gameListToDisplay = [ModelConverter.fbGameToGameScheduleConverter(game: game)]
-                }
-            } else {
-                gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-            }
-        }
-        .onChange(of: fbLeagueScheduleStore.baseSchedule.selectedDayIndex) {
-            gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
-        .onChange(of: fbLeagueScheduleStore.filteredGames) {
-            // TODO: Has to think about better structure, because 'gameListToDisplay' could be set multiple times.
-            // Has to find if there are cases like here from other .onChange()
-            gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
+        .frame(height: isCollapsed ? itemHeight : nil)
+        .scrollDisabled(isCollapsed)
     }
 }
 
 struct FBLeagueScheduleListItem: View {
     @Bindable var searchStore: StoreOf<SearchStore>
-    @Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
+    // STUDY: @Bindable을 써야할때가 따로 있음. 더 알아보고 제대로 사용해야 할듯..
+//    @Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
+    let fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>?
     
     let data: FBGameForSchedule
     // FBLeagueScheduleStore이 한번도 초기화 된적 없이 FBGameStatsView에서 해당 구조체가 호출될때 teamNameDictionary를 fbLeagueScheduleStore에서 가져올수가 없어 추가.
@@ -208,7 +161,8 @@ struct FBLeagueScheduleListItem: View {
         let homeTeamId = data.homeTeamId
         let awayTeamId = data.awayTeamId
         let gameStatus = data.gameStatus
-        let fbGameStatsModel = searchStore.displayModels[.fbGameStats] as? FBGameStatsDisplayModel
+        // FBLeagueScheduleView가 아닌 FBPlayerInfoView나 FBTeamInfoView 등에서 보여질때 사용되는 flag
+        let isFromSchedule = fbLeagueScheduleStore != nil
         
         let gameStatusText: String = {
             switch gameStatus {
@@ -238,7 +192,7 @@ struct FBLeagueScheduleListItem: View {
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
-                isClickEnabled: fbGameStatsModel == nil,
+                isClickEnabled: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
                 homeTeamLogo: FBUtil.teamLogoURL(id: homeTeamId),
                 homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
                 homeTeamScore: data.homeTeamScore,
@@ -248,59 +202,48 @@ struct FBLeagueScheduleListItem: View {
                 isResultOpened: isResultOpened,
                 gameStatusText: gameStatusText,
                 gameStatusColor: gameStatusColor,
-                isCapsuleButtonDisabled: fbGameStatsModel != nil || !StringConstants.Football.gameFinishedList.contains(gameStatus),
+                isCapsuleButtonDisabled: (isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true) || !StringConstants.Football.gameFinishedList.contains(gameStatus),
                 date: data.date,
                 venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
                 gameType: MatchDescriptionConverter.convert(input: data.gameInfo?.round ?? ""),
-                referee: fbGameStatsModel?.game.fixture.referee,
-                shouldShowOnlyDateTime: fbGameStatsModel == nil,
-                shouldShowVenue: fbGameStatsModel != nil,
-                shouldShowGameType: fbGameStatsModel == nil,
-                shouldShowHomeLabel: fbGameStatsModel != nil,
-                shouldShowAwayLabel: fbGameStatsModel != nil,
+                shouldShowOnlyDateTime: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
+                shouldShowGameType: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
+                shouldShowHomeLabel: isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true,
+                shouldShowAwayLabel: isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true,
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
-                    if let displayModel = fbLeagueScheduleStore.baseSchedule.displayModel {
+                    if let fbLeagueScheduleStore {
+                        let displayModel = fbLeagueScheduleStore.baseSchedule.displayModel
                         searchStore.send(.selectFBGame(game: data, season: displayModel.season, leagueId: displayModel.leagueId))
+                        
+                        fbLeagueScheduleStore.send(.selectGame(game: data))
                     }
-                    
-                    // set selected game's isOpened true
-                    fbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: true))
                 },
                 onCapsuleButtonClick: {
-                    fbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: !isResultOpened))
+                    if let fbLeagueScheduleStore {
+                        fbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: !isResultOpened))
+                    }
                 }
             )
         )
         .onAppear {
             if StringConstants.Football.gameFinishedList.contains(gameStatus) {
-                isResultOpened = fbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
+                if let fbLeagueScheduleStore {
+                    isResultOpened = fbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
+                }
             } else if gameStatus == StringConstants.Football.gameNotStarted {
                 isResultOpened = false
             } else {
                 isResultOpened = true
             }
-            
-            if fbGameStatsModel != nil {
-                if gameStatus != StringConstants.Football.gameNotStarted {
-                    isResultOpened = true
-                }
-            }
         }
-        .onChange(of: fbLeagueScheduleStore.gameResultOpenedStateList) {
-            if StringConstants.Football.gameFinishedList.contains(gameStatus) {
+        .onChange(of: fbLeagueScheduleStore?.gameResultOpenedStateList) {
+            if let fbLeagueScheduleStore, StringConstants.Football.gameFinishedList.contains(gameStatus) {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                     isResultOpened = fbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
                 }
             }
         }
-//        .onChange(of: fbGameStatsModel) {
-//            if fbGameStatsModel != nil {
-//                if gameStatus != StringConstants.Football.gameNotStarted {
-//                    isResultOpened = true
-//                }
-//            }
-//        }
     }
 }

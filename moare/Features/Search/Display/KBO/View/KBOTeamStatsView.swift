@@ -9,81 +9,60 @@ import SwiftUI
 import ComposableArchitecture
 
 struct KBOTeamStatsView: View {
-    /* ---------------------
-     store
-     --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var kboTeamStatsStore: StoreOf<KBOTeamStatsStore>? = nil
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<KBOTeamStatsStore>
+    let didPop: Bool
     
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: KBOTeamStatsDisplayModel
+    @State private var show = false
 
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            ScrollView {
-                InfoViewContainer(
-                    itemCount: (kboTeamStatsStore?.baseStats.displayModel?.stats.count ?? 0) + 1,
-                    measureContent: { scope in
-                        if let kboTeamStatsStore {
-                            KBOTeamStatsPlayerInfoItem(kboTeamStatsStore: kboTeamStatsStore)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onAppear {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
+        ScrollView {
+            InfoViewContainer(
+                itemCount: store.baseStats.displayModel.stats.count + 1,
+                measureContent: { scope in
+                    if show {
+                        KBOTeamStatsPlayerInfoItem(kboTeamStatsStore: store)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onAppear {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
                                     }
-                                )
-                            
-                            KBOTeamStatsList(kboTeamStatsStore: kboTeamStatsStore, scope: scope)
-                        }
-                    },
-                    displayContent: { scope in
-                        if let kboTeamStatsStore {
-                            // team info
-                            KBOTeamStatsPlayerInfoItem(
-                                kboTeamStatsStore: kboTeamStatsStore,
-                                isAniItem: true,
-                                itemOffset: scope.computedOffset(for: 0),
-                                showContents: scope.showContents
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
+                                    }
+                                }
                             )
-                            
-                            // stats list
-                            KBOTeamStatsList(
-                                kboTeamStatsStore: kboTeamStatsStore,
-                                isAniItem: true,
-                                scope: scope
-                            )
-                        }
+                        
+                        KBOTeamStatsList(kboTeamStatsStore: store, scope: scope)
                     }
-                )
-            } // ScrollView
-            .onAppear {
-                // init KBOTeamStatsStore
-                let kboTeamStatsStore: StoreOf<KBOTeamStatsStore> = storeManager.getStore(forKey: StoreKeys.kboTeamStatsStore) ?? {
-                    let newStore = Store(initialState: KBOTeamStatsStore.State()) { KBOTeamStatsStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.kboTeamStatsStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    self.kboTeamStatsStore = kboTeamStatsStore
+                },
+                displayContent: { scope in
+                    if show {
+                        // team info
+                        KBOTeamStatsPlayerInfoItem(
+                            kboTeamStatsStore: store,
+                            isAniItem: true,
+                            itemOffset: scope.computedOffset(for: 0),
+                            showContents: scope.showContents
+                        )
+                        
+                        // stats list
+                        KBOTeamStatsList(
+                            kboTeamStatsStore: store,
+                            isAniItem: true,
+                            scope: scope
+                        )
+                    }
                 }
-                
-                if searchStore.poppedView == nil {
-                    kboTeamStatsStore.send(.baseStats(.initData(displayModel: displayModel)))
-                }
+            )
+        } // ScrollView
+        .onAppear {
+            if !didPop {
+                store.send(.baseStats(.initData))
             }
-            .onChange(of: displayModel) {
-                if case .kboPlayerStats = searchStore.poppedView {
-                    kboTeamStatsStore?.send(.baseStats(.initData(displayModel: displayModel)))
-                }
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
         }
     }
@@ -111,42 +90,41 @@ struct KBOTeamStatsPlayerInfoItem: View {
     var body: some View {
         let displayModel = kboTeamStatsStore.baseStats.displayModel
         let teamNameDic = kboTeamStatsStore.baseStats.teamNameDictionary
+        let team = displayModel.team
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemOffset: itemOffset
         ) {
-            if let team = displayModel?.team {
-                HStack {
-                    URLImage(url: KBOUtil.teamLogoURL(id: team.id), isSvg: true)
+            HStack {
+                URLImage(url: KBOUtil.teamLogoURL(id: team.id), isSvg: true)
+                
+                // name, city
+                VStack(alignment: .leading) {
+                    Text(teamNameDic["full_\(team.id)"] ?? team.teamName)
+                        .font(.system(size: 16))
+                        .fontWeight(.medium)
                     
-                    // name, city
-                    VStack(alignment: .leading) {
-                        Text(teamNameDic["full_\(team.id)"] ?? team.teamName)
+                    HStack(spacing: 0) {
+                        Text("연고지: ")
+                            .font(.system(size: 15))
+                        
+                        Text(team.city)
                             .font(.system(size: 16))
                             .fontWeight(.medium)
+                    }
+                    
+                    HStack(spacing: 0) {
+                        Text("홈구장: ")
+                            .font(.system(size: 15))
                         
-                        HStack(spacing: 0) {
-                            Text("연고지: ")
-                                .font(.system(size: 15))
-                            
-                            Text(team.city)
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        }
-                        
-                        HStack(spacing: 0) {
-                            Text("홈구장: ")
-                                .font(.system(size: 15))
-                            
-                            Text(teamNameDic["venue_\(team.id)"] ?? (displayModel?.venue.name ?? ""))
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        }
+                        Text(teamNameDic["venue_\(team.id)"] ?? displayModel.venue.name)
+                            .font(.system(size: 16))
+                            .fontWeight(.medium)
                     }
                 }
-                .opacity(showContents ? 1 : 0)
             }
+            .opacity(showContents ? 1 : 0)
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
@@ -170,35 +148,35 @@ struct KBOTeamStatsList: View {
     }
     
     var body: some View {
-        if let stats = kboTeamStatsStore.baseStats.displayModel?.stats {
-            ForEach(stats.indices, id: \.self) { index in
-                let stats = stats[index]
-                let itemIndex = index + 1
-                
-                KBOTeamStatsListItem(
-                    kboTeamStatsStore: kboTeamStatsStore,
-                    stats: stats,
-                    isAniItem: isAniItem,
-                    itemSize: scope.itemSizes[itemIndex],
-                    itemOffset: scope.computedOffset(for: itemIndex),
-                    showContents: scope.showContents
-                )
-                .background(
-                    GeometryReader { geometry in
-                        if !isAniItem {
-                            // 1) 최초 한 번은 무조건 측정 - gpt
-                            // NOTE: Color.clear.onChange()만 했을때는 update가 안돼서 Color.clear.onAppear 추가해줌
-                            Color.clear.onAppear {
-                                scope.updateItemFrame(index: itemIndex, geometry: geometry)
-                            }
-                            // 2) 위치 변하면 - gpt
-                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                scope.updateItemFrame(index: itemIndex, geometry: geometry)
-                            }
+        let stats = kboTeamStatsStore.baseStats.displayModel.stats
+        
+        ForEach(stats.indices, id: \.self) { index in
+            let stats = stats[index]
+            let itemIndex = index + 1
+            
+            KBOTeamStatsListItem(
+                kboTeamStatsStore: kboTeamStatsStore,
+                stats: stats,
+                isAniItem: isAniItem,
+                itemSize: scope.itemSizes[itemIndex],
+                itemOffset: scope.computedOffset(for: itemIndex),
+                showContents: scope.showContents
+            )
+            .background(
+                GeometryReader { geometry in
+                    if !isAniItem {
+                        // 1) 최초 한 번은 무조건 측정 - gpt
+                        // NOTE: Color.clear.onChange()만 했을때는 update가 안돼서 Color.clear.onAppear 추가해줌
+                        Color.clear.onAppear {
+                            scope.updateItemFrame(index: itemIndex, geometry: geometry)
+                        }
+                        // 2) 위치 변하면 - gpt
+                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                            scope.updateItemFrame(index: itemIndex, geometry: geometry)
                         }
                     }
-                )
-            }
+                }
+            )
         }
     }
 }

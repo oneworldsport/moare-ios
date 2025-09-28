@@ -26,7 +26,7 @@ struct SportSearchEngine_iOSApp: App {
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-    @StateObject private var storeManager = StoreManager()
+    let appStore = Store(initialState: AppStore.State()) { AppStore() }
     
     @State var isSplashFinished = false
     @State private var didInitialLoad = false
@@ -50,14 +50,19 @@ struct SportSearchEngine_iOSApp: App {
         WindowGroup {
             Group {
                 if viewForTest != nil && didInitialLoad {
-                    SearchView(viewForTest: viewForTest)
-                        .environmentObject(storeManager)
-                        .preferredColorScheme(.light) // force light mode
+                    SearchView(
+                        appStore: appStore,
+                        searchStore: appStore.scope(state: \.search, action: \.search),
+                        viewForTest: viewForTest
+                    )
+                    .preferredColorScheme(.light) // force light mode
                 } else {
                     if isSplashFinished && didInitialLoad {
-                        SearchView()
-                            .environmentObject(storeManager)
-                            .preferredColorScheme(.light) // force light mode
+                        SearchView(
+                            appStore: appStore,
+                            searchStore: appStore.scope(state: \.search, action: \.search)
+                        )
+                        .preferredColorScheme(.light) // force light mode
                     } else {
                         SplashView(isSplashFinished: $isSplashFinished)
                             .preferredColorScheme(.light) // force light mode

@@ -9,56 +9,37 @@ import SwiftUI
 import ComposableArchitecture
 
 struct NBATournamentView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var nbaTournamentStore: StoreOf<NBATournamentStore>? = nil
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<NBATournamentStore>
+    let didPop: Bool
     
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: NBATournamentDisplayModel
+    @State private var show = false
     
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            VStack {
-                if let nbaTournamentStore {
-                    TournamentBracketViewContainer(
-                        state: TournamentBracketContainerState(
-                            leagueId: displayModel.leagueId,
-                            teamNameDic: nbaTournamentStore.baseTournament.teamNameDic,
-                            gameListTuple: nbaTournamentStore.gameListTuple,
-                            isConference: true,
-                            isSeries: true
-                        )
+        let displayModel = store.baseTournament.displayModel
+        
+        VStack {
+            if show {
+                TournamentBracketViewContainer(
+                    state: TournamentBracketContainerState(
+                        leagueId: displayModel.leagueId,
+                        teamNameDic: store.baseTournament.teamNameDic,
+                        gameListTuple: store.gameListTuple,
+                        isConference: true,
+                        isSeries: true
                     )
-                }
+                )
             }
-            .onAppear {
-                // init NBATournamentStore
-                let nbaTournamentStore: StoreOf<NBATournamentStore> = storeManager.getStore(forKey: StoreKeys.nbaTournamentStore) ?? {
-                    let newStore = Store(initialState: NBATournamentStore.State()) { NBATournamentStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.nbaTournamentStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.nbaTournamentStore = nbaTournamentStore
-                }
-                
-                if searchStore.poppedView == nil {
-                    nbaTournamentStore.send(.baseTournament(.initData(displayModel: displayModel)))
-                }
+        }
+        .onAppear {
+            if !didPop {
+                store.send(.baseTournament(.initData))
             }
-            .onChange(of: displayModel) {
-                if case .nbaTournament = searchStore.poppedView {
-                    nbaTournamentStore?.send(.baseTournament(.initData(displayModel: displayModel)))
-                }
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
-        } // if let searchStore
+        }
     }
 }
 

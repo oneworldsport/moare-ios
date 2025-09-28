@@ -11,46 +11,33 @@ import ComposableArchitecture
 
 @Reducer
 struct FBTeamStatsStore {
+    typealias BaseStats = BaseStatsStore<FBTeamStatsDisplayModel>
     
     @ObservableState
     struct State {
-        /* ---------------------
-           data state
-           --------------------- */
-        var displayModel: FBTeamStatsDisplayModel? = nil
-        var statsList: [FBTeamStats] = []
-        var team: FBTeamInfo? = nil
-        var venue: FBVenue? = nil
+        var baseStats: BaseStats.State
         
-        /* ---------------------
-           etc
-           --------------------- */
-        var teamNameDictionary: [String: String] = [:]
+        var statsList: [FBTeamStats] = []
+        
+        init(displayModel: FBTeamStatsDisplayModel) {
+            self.baseStats = BaseStats.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
-        case initData(displayModel: FBTeamStatsDisplayModel)
+        case baseStats(BaseStats.Action)
     }
     
     @Dependency(\.translatedNameProvider) var nameProvider
     
     var body: some Reducer<State, Action> {
+        Scope(state: \.baseStats, action: \.baseStats) { BaseStats() }
+        
         Reduce { state, action in
             switch action {
-            case .initData(let displayModel):
-                state.displayModel = displayModel
-                
-                switch displayModel.leagueId {
-                case let id where Constants.Ids.footballLeagues.contains(id):
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                default: break
-                }
-                
-                state.team = displayModel.team
-                state.venue = displayModel.venue
-                
+            case .baseStats(.initData):
                 // 리그 기록을 제일 첫번째 아이템으로
-                state.statsList = displayModel.stats.sorted { a, b in
+                state.statsList = state.baseStats.displayModel.stats.sorted { a, b in
                     let aIsLeague = Constants.Ids.footballLeagues.contains(a.league.id)
                     let bIsLeague = Constants.Ids.footballLeagues.contains(b.league.id)
                     

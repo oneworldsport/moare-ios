@@ -24,9 +24,13 @@ struct NBATournamentStore {
         /* ---------------------
            data state
            --------------------- */
-        var baseTournament = BaseTournament.State()
+        var baseTournament: BaseTournament.State
         
         var gameListTuple: [(title: String, gameList: [[NBAGameForSchedule]])] = []
+        
+        init(displayModel: NBATournamentDisplayModel) {
+            self.baseTournament = BaseTournament.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
@@ -34,17 +38,15 @@ struct NBATournamentStore {
     }
     
     var body: some Reducer<State, Action> {
-        Scope(state: \.baseTournament, action: \.baseTournament) {
-            BaseTournament()
-        }
+        Scope(state: \.baseTournament, action: \.baseTournament) { BaseTournament() }
         
         Reduce { state, action in
             switch action {
             case .baseTournament(.initTournamentTeams):
                 let tournamentTeams = state.baseTournament.tournamentTeams
                 let displayModel = state.baseTournament.displayModel
-                let leagueId = displayModel?.leagueId ?? Constants.Ids.nba
-//                let season = displayModel?.season ?? CalendarUtil.currentYear
+                let leagueId = displayModel.leagueId
+//                let season = displayModel.season
                 let season = 2024
                 
                 // 시드 순서를 유지해야해서 다음과 같은 로직 적용
@@ -87,55 +89,53 @@ struct NBATournamentStore {
                     Array(fourthRoundTeamIds[$0 ..< min($0 + 2, fourthRoundTeamIds.count)])
                 }
                 
-                if let displayModel {
-                    let games = displayModel.games
-                    
-                    let westFirstRound: [[NBAGameForSchedule]] = westFirstRoundPairedTeamIds.map { pair in
-                        let set = Set(pair.prefix(2))
-                        return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                    }
-                    let eastFirstRound: [[NBAGameForSchedule]] = eastFirstRoundPairedTeamIds.map { pair in
-                        let set = Set(pair.prefix(2))
-                        return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                    }
-                    
-                    let westSecondRound: [[NBAGameForSchedule]] = westSecondRoundPairedTeamIds.map { pair in
-                        let set = Set(pair.prefix(2))
-                        return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                    }
-                    let eastSecondRound: [[NBAGameForSchedule]] = eastSecondRoundPairedTeamIds.map { pair in
-                        let set = Set(pair.prefix(2))
-                        return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                    }
-                    
-                    let westThirdRound: [[NBAGameForSchedule]] = westThirdRoundPairedTeamIds.map { pair in
-                        let set = Set(pair.prefix(2))
-                        return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                    }
-                    let eastThirdRound: [[NBAGameForSchedule]] = eastThirdRoundPairedTeamIds.map { pair in
-                        let set = Set(pair.prefix(2))
-                        return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                    }
-                    
-                    let fourthRound: [[NBAGameForSchedule]] = fourthRoundPairedTeamIds.map { pair in
-                        let set = Set(pair.prefix(2))
-                        return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                    }
-                    
-                    state.gameListTuple = [
-                        ("서부 컨퍼런스 1라운드", westFirstRound),
-                        ("서부 컨퍼런스 세미파이널", westSecondRound),
-                        ("서부 컨퍼런스 파이널", westThirdRound),
-                        ("NBA 파이널", fourthRound),
-                        ("동부 컨퍼런스 파이널", eastThirdRound),
-                        ("동부 컨퍼런스 세미파이널", eastSecondRound),
-                        ("동부 컨퍼런스 1라운드", eastFirstRound)
-                    ]
+                let games = displayModel.games
+                
+                let westFirstRound: [[NBAGameForSchedule]] = westFirstRoundPairedTeamIds.map { pair in
+                    let set = Set(pair.prefix(2))
+                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
                 }
+                let eastFirstRound: [[NBAGameForSchedule]] = eastFirstRoundPairedTeamIds.map { pair in
+                    let set = Set(pair.prefix(2))
+                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
+                }
+                
+                let westSecondRound: [[NBAGameForSchedule]] = westSecondRoundPairedTeamIds.map { pair in
+                    let set = Set(pair.prefix(2))
+                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
+                }
+                let eastSecondRound: [[NBAGameForSchedule]] = eastSecondRoundPairedTeamIds.map { pair in
+                    let set = Set(pair.prefix(2))
+                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
+                }
+                
+                let westThirdRound: [[NBAGameForSchedule]] = westThirdRoundPairedTeamIds.map { pair in
+                    let set = Set(pair.prefix(2))
+                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
+                }
+                let eastThirdRound: [[NBAGameForSchedule]] = eastThirdRoundPairedTeamIds.map { pair in
+                    let set = Set(pair.prefix(2))
+                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
+                }
+                
+                let fourthRound: [[NBAGameForSchedule]] = fourthRoundPairedTeamIds.map { pair in
+                    let set = Set(pair.prefix(2))
+                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
+                }
+                
+                state.gameListTuple = [
+                    ("서부 컨퍼런스 1라운드", westFirstRound),
+                    ("서부 컨퍼런스 세미파이널", westSecondRound),
+                    ("서부 컨퍼런스 파이널", westThirdRound),
+                    ("NBA 파이널", fourthRound),
+                    ("동부 컨퍼런스 파이널", eastThirdRound),
+                    ("동부 컨퍼런스 세미파이널", eastSecondRound),
+                    ("동부 컨퍼런스 1라운드", eastFirstRound)
+                ]
                 
                 return .none
                 
-            case .baseTournament(_):
+            case .baseTournament:
                 return .none
             } // switch action
             

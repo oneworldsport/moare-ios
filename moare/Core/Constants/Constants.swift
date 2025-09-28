@@ -158,11 +158,15 @@ struct Constants {
         
         struct MLB {
             static let scheduled = "Scheduled"
+            static let warmup = "Warmup"
+            static let preGame = "Pre-Game"
             static let live = "In Progress"
             static let postponed = "Postponed"
             static let rain = "Completed Early: Rain"
+            static let gameOver = "Game Over"
             static let final = "Final"
-            static let finishedList = [rain, final]
+            static let beforeGameList = [scheduled, warmup, preGame]
+            static let finishedList = [rain, gameOver, final]
         }
         
         struct KBO {
@@ -191,8 +195,6 @@ struct Constants {
                 }
             case Constants.Ids.nba:
                 return ""
-            case Constants.Ids.mlb:
-                return ""
             case Constants.Ids.kbo:
                 switch status {
                 case KBO.scheduled:
@@ -211,6 +213,32 @@ struct Constants {
             }
         }
         
+        static func mlbGameStatusText(
+            status: String,
+            currentInning: String? = nil,
+            linescore: MLBGameLineScore? = nil,
+            isResultOpened: Bool = true
+        ) -> String {
+            switch status {
+            case let status where MLB.beforeGameList.contains(status):
+                return StringConstants.gameNotStartedStr
+            case MLB.live:
+                if let currentInning {
+                    return currentInning
+                } else if let linescore {
+                    return "\(linescore.currentInning)회\(linescore.isTopInning ? "초" : "말")"
+                } else {
+                    return StringConstants.gameLiveStr
+                }
+            case MLB.postponed:
+                return StringConstants.gamePostponedStr
+            case let status where MLB.finishedList.contains(status):
+                return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
+            default:
+                return ""
+            }
+        }
+        
         static func isLive(leagueId: Int, status: String) -> Bool {
             switch leagueId {
             case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
@@ -223,7 +251,11 @@ struct Constants {
             case Constants.Ids.nba:
                 return false
             case Constants.Ids.mlb:
-                return false
+                if status == MLB.live {
+                    return true
+                } else {
+                    return false
+                }
             case Constants.Ids.kbo:
                 if status == KBO.live {
                     return true

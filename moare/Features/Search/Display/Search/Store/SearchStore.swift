@@ -14,7 +14,7 @@ import Collections
 struct SearchStore {
     let searchClient = SearchClient()
     let keywordsClient = KeywordsClient()
-    let modelConverter = ModelConverter()
+    let modelConverter = ModelConverter.shared
     
     @ObservableState
     struct State {
@@ -22,7 +22,6 @@ struct SearchStore {
            data state
            --------------------- */
         var searchDataState: ApiFetchState = .idle
-        var displayModels: [SportDisplayType: (any SportDisplayModel)?] = [:]
         
         var autoCompleteList: [String] = []
         var trendingKeywordList: [String] = []
@@ -45,9 +44,9 @@ struct SearchStore {
            etc
            --------------------- */
         var trie: Trie?
-        // NOTE: viewStack should always be up to date
+        
         var viewStack: [SportDecodableModel] = []
-        var poppedView: SportDecodableModel? = nil
+        
         var trendingKeywords: OrderedDictionary<String, KeywordInfo> = [:]
         var noticeList: [NoticeModel] = []
         var searchExample = ""
@@ -61,26 +60,22 @@ struct SearchStore {
         /* ---------------------
            ui action
            --------------------- */
-        case binding(BindingAction<State>)
+        case binding(BindingAction<State>) // TODO: State가 모두 바뀔때마다 실행되는건가..? 그럼 query만 binding되게 해야하나?
         case firstOpen
         case toggleSearchBar
         case updateTextField(String, Bool = true)
         case updateTextFieldVisibleState(Bool)
         case performSearch(searchType: SearchType = .query, aniDuration: CGFloat = 0)
+        
+        // TODO: 각자의 Store로 옮겨야함
         case selectFBGame(game: FBGameForSchedule, season: Int, leagueId: Int?)
         case selectNBAGame(game: NBAGameForSchedule, season: Int)
         case selectKBOGame(game: KBOGameForSchedule, season: Int)
         case selectMLBGame(game: MLBGameForSchedule, season: Int)
-        case showPlayerStats(season: Int? = nil, category: String? = nil, playerId: Int)
-        case showTeamStats(teamId: Int)
-        case showGameStats(gameType: String)
-        case updateTrendingKeywordsVisibleState(Bool)
-        case refreshGame(season: Int?, category: String)
-        case selectNBATournamentRound(gameList: [NBAGame])
+        //
         
-        /* ---------------------
-           api request action
-           --------------------- */
+        case updateTrendingKeywordsVisibleState(Bool)
+        case selectNBATournamentRound(gameList: [NBAGame])
         
         /* ---------------------
            private
@@ -97,20 +92,27 @@ struct SearchStore {
         case initNoticeList([NoticeModel])
         case updateSearchDataState(ApiFetchState)
         case updateIsFocused(Bool)
-        case goBack
         case updateAutoCompleteList
         case updateResultVisibleState(bool: Bool)
-//        case fetchTrendingKeywords
-        case updateMainDisplayModel(data: SportDecodableModel?, shouldReset: Bool = true)
-        case updateLastViewStack(data: SportDecodableModel)
+
         case updateSearchStateWithAni(bool: Bool)
-        case addViewStack(data: SportDecodableModel)
+        
+        
+        case pop
+        case showPreviousView
+        case popView(lastPath: AppStore.Path.State?, isEmpty: Bool)
+        case delegate(Delegate)
         
         /* ---------------------
            test
            --------------------- */
         case initForTest
         case testSearch(viewForTest: SportDisplayType)
+    }
+    
+    enum Delegate {
+        case push(model: SportDecodableModel)
+        case pop(searchState: Bool)
     }
     
     @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
@@ -305,147 +307,86 @@ struct SearchStore {
                 }
                                 
             case let .searchResultsReceived(model):
-                for key in SportDisplayType.allCases {
-                    state.displayModels[key] = nil
-                }
-                
                 switch model.data {
-                case .fbPlayerInfo(_, let displayModel):
-                    state.displayModels[.fbPlayerInfo] = displayModel
-                case .fbPlayerStats(_, let displayModel):
-                    state.displayModels[.fbPlayerStats] = displayModel
-                case .fbPlayerStandings(_, let displayModel):
-                    state.displayModels[.fbPlayerStandings] = displayModel
-                case .fbTeamInfo(_, let displayModel):
-                    state.displayModels[.fbTeamInfo] = displayModel
-                case .fbTeamStats(_, let displayModel):
-                    state.displayModels[.fbTeamStats] = displayModel
-                case .fbTeamStandings(_, let displayModel):
-                    state.displayModels[.fbTeamStandings] = displayModel
-                case .fbLeagueSchedule(_, let displayModel):
-                    state.displayModels[.fbLeagueSchedule] = displayModel
-                case .fbGameStats(_, let displayModel):
-                    state.displayModels[.fbGameStats] = displayModel
-                case .fbTournament(_, let displayModel):
-                    state.displayModels[.fbTournament] = displayModel
-
-                case .nbaPlayerInfo(_, let displayModel):
-                    state.displayModels[.nbaPlayerInfo] = displayModel
-                case .nbaPlayerStats(_, let displayModel):
-                    state.displayModels[.nbaPlayerStats] = displayModel
-                case .nbaPlayerStandings(_, let displayModel):
-                    state.displayModels[.nbaPlayerStandings] = displayModel
-                case .nbaTeamInfo(_, let displayModel):
-                    state.displayModels[.nbaTeamInfo] = displayModel
-                case .nbaTeamStats(_, let displayModel):
-                    state.displayModels[.nbaTeamStats] = displayModel
-                case .nbaTeamStandings(_, let displayModel):
-                    state.displayModels[.nbaTeamStandings] = displayModel
-                case .nbaLeagueSchedule(_, let displayModel):
-                    state.displayModels[.nbaLeagueSchedule] = displayModel
-                case .nbaGameStats(_, let displayModel):
-                    state.displayModels[.nbaGameStats] = displayModel
-                case .nbaTournament(_, let displayModel):
-                    state.displayModels[.nbaTournament] = displayModel
-
-                case .kboPlayerInfo(_, let displayModel):
-                    state.displayModels[.kboPlayerInfo] = displayModel
-                case .kboPlayerStats(_, let displayModel):
-                    state.displayModels[.kboPlayerStats] = displayModel
-                case .kboPlayerStandings(_, let displayModel):
-                    state.displayModels[.kboPlayerStandings] = displayModel
-                case .kboTeamInfo(_, let displayModel):
-                    state.displayModels[.kboTeamInfo] = displayModel
-                case .kboTeamStats(_, let displayModel):
-                    state.displayModels[.kboTeamStats] = displayModel
-                case .kboTeamStandings(_, let displayModel):
-                    state.displayModels[.kboTeamStandings] = displayModel
-                case .kboLeagueSchedule(_, let displayModel):
-                    state.displayModels[.kboLeagueSchedule] = displayModel
-                case .kboGameStats(_, let displayModel):
-                    state.displayModels[.kboGameStats] = displayModel
-                case .kboTournament(_, let displayModel):
-                    state.displayModels[.kboTournament] = displayModel
-
-                case .mlbPlayerInfo(_, let displayModel):
-                    state.displayModels[.mlbPlayerInfo] = displayModel
-                case .mlbPlayerStats(_, let displayModel):
-                    state.displayModels[.mlbPlayerStats] = displayModel
-                case .mlbPlayerStandings(_, let displayModel):
-                    state.displayModels[.mlbPlayerStandings] = displayModel
-                case .mlbTeamInfo(_, let displayModel):
-                    state.displayModels[.mlbTeamInfo] = displayModel
-                case .mlbTeamStats(_, let displayModel):
-                    state.displayModels[.mlbTeamStats] = displayModel
-                case .mlbTeamStandings(_, let displayModel):
-                    state.displayModels[.mlbTeamStandings] = displayModel
-                case .mlbLeagueSchedule(_, let displayModel):
-                    state.displayModels[.mlbLeagueSchedule] = displayModel
-                case .mlbGameStats(_, let displayModel):
-                    state.displayModels[.mlbGameStats] = displayModel
-
+                case .fbPlayerInfo, .fbPlayerStats, .fbPlayerStandings,
+                        .fbTeamInfo, .fbTeamStats, .fbTeamStandings,
+                        .fbLeagueSchedule, .fbGameStats, .fbTournament,
+                        .nbaPlayerInfo, .nbaPlayerStats, .nbaPlayerStandings,
+                        .nbaTeamInfo, .nbaTeamStats, .nbaTeamStandings,
+                        .nbaLeagueSchedule, .nbaGameStats, .nbaTournament,
+                        .kboPlayerInfo, .kboPlayerStats, .kboPlayerStandings,
+                        .kboTeamInfo, .kboTeamStats, .kboTeamStandings,
+                        .kboLeagueSchedule, .kboGameStats, .kboTournament,
+                        .mlbPlayerInfo, .mlbPlayerStats, .mlbPlayerStandings,
+                        .mlbTeamInfo, .mlbTeamStats, .mlbTeamStandings,
+                        .mlbLeagueSchedule, .mlbGameStats: break
                 default:
                     // TODO: animation is applied by the animation below. Should be modified
+                    // TODO: 여기서 안하고 AppStore에서 하게 개선 필요
                     state.searchDataState = .failure("검색 결과가 없습니다.")
                     return .none
                 }
                 
-                // add viewStack
-                // TODO: has to make it as action
-                state.viewStack.append(model.data)
-                state.poppedView = nil
-                
                 // NOTE: if apply animation here, it is not applied because of allocating each view's store at onAppear()
                 state.resultVisibleState = true
                 
-                return .none
+                return .send(.delegate(.push(model: model.data)))
                 
-            case .goBack:
-                guard !state.viewStack.isEmpty else { return .none }
+            case .pop:
+                return .send(.delegate(.pop(searchState: state.searchState)))
                 
-                if !state.searchState {
-                    // If searchBar is Opened and there are viewStack, show the lastView.
-                    state.textFieldVisibleState = false
-                    
+            case .showPreviousView:
+                state.textFieldVisibleState = false
+                
+                return .run { send in
+                    await send(.updateSearchStateWithAni(bool: true), animation: AnimationConstants.AnimationType.mediumDefaultAnimation)
+                    try await Task.sleep(for: .seconds(0.1)) // NOTE: Due to crash
+                    await send(.updateSearchDataState(.success))
+                    await send(.updateResultVisibleState(bool: true))
+                    await send(.removeAutoCompleteWithAni)
+                }
+                
+            case let .popView(lastPath, isEmpty):
+                guard lastPath != nil else { return .none }
+                
+                if isEmpty {
                     return .run { send in
-                        await send(.updateSearchStateWithAni(bool: true), animation: AnimationConstants.AnimationType.mediumDefaultAnimation)
-                        try await Task.sleep(for: .seconds(0.1)) // NOTE: Due to crash
-                        await send(.updateSearchDataState(.success))
-                        await send(.updateResultVisibleState(bool: true))
-                        await send(.removeAutoCompleteWithAni)
+                        await send(.toggleSearchBar)
+                        
+                        //                            try await Task.sleep(for: .seconds(0.5))
+                        try await Task.sleep(for: .seconds(AnimationConstants.Duration.medium))
+                        
+                        await send(.updateTextFieldVisibleState(true))
+                        await send(.updateIsFocused(true))
                     }
                 } else {
-                    // After state.viewStack.popLast(), it ensures triggering onChange(viewStack) after all view is shown in below code.
-                    // Maybe because of TCA Reduce feature?
-                    let lastView = state.viewStack.popLast()
-                    state.poppedView = lastView
-                    
-                    let viewToShow = state.viewStack.last
-                    
-                    if let viewToShow = viewToShow {
-                        return .run { send in
-                            await send(.updateResultVisibleState(bool: false))
-                            await send(.updateMainDisplayModel(data: viewToShow))
-                            
-                            // wait for previous view's removing animation
-                            // NOTE: 0.1 for temporary
-                            try await Task.sleep(for: .seconds(0.1))
-                            
-                            await send(.updateResultVisibleState(bool: true))
-                        }
-                    } else {
-                        return .run { send in
-                            await send(.updateMainDisplayModel(data: nil))
-                            await send(.toggleSearchBar)
-                            
-//                            try await Task.sleep(for: .seconds(0.5))
-                            try await Task.sleep(for: .seconds(AnimationConstants.Duration.medium))
-                            
-                            await send(.updateTextFieldVisibleState(true))
-                            await send(.updateIsFocused(true))
-                        }
-                    }
+                    return .none
                 }
+                
+//                if !state.searchState {
+//                } else {
+//                        return .run { [poppedView = state.poppedView] send in
+//                            await send(.updateResultVisibleState(bool: false))
+//                            await send(.updateMainDisplayModel(data: viewToShow))
+//                            // wait for previous view's removing animation
+//                            // NOTE: 0.1 for temporary
+//                            try await Task.sleep(for: .seconds(0.1))
+//                            
+//                            await send(.updateResultVisibleState(bool: true))
+//                        }
+//                    } else {
+//                        return .run { send in
+//                            await send(.updateMainDisplayModel(data: nil))
+//                            await send(.toggleSearchBar)
+//                            
+//                            //                            try await Task.sleep(for: .seconds(0.5))
+//                            try await Task.sleep(for: .seconds(AnimationConstants.Duration.medium))
+//                            
+//                            await send(.updateTextFieldVisibleState(true))
+//                            await send(.updateIsFocused(true))
+//                        }
+//                    }
+//                }
                 
             case .updateSearchDataState(let dataState):
                 withAnimation(.easeOut(duration: 0.5)) {
@@ -464,8 +405,7 @@ struct SearchStore {
                         id: game.gameId
                     )
                     
-                    await send(.addViewStack(data: result.data))
-                    await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
+                    await send(.delegate(.push(model: result.data)))
                 }
                 
             case .selectNBAGame(let game, let season):
@@ -479,8 +419,7 @@ struct SearchStore {
                         id: game.gameId
                     )
                     
-                    await send(.addViewStack(data: result.data))
-                    await send(.updateMainDisplayModel(data: result.data))
+                    await send(.delegate(.push(model: result.data)))
                 }
                 
             case .selectKBOGame(let game, let season):
@@ -507,8 +446,7 @@ struct SearchStore {
                             dataModel = result.data
                         }
                         
-                        await send(.addViewStack(data: dataModel))
-                        await send(.updateMainDisplayModel(data: dataModel))
+                        await send(.delegate(.push(model: dataModel)))
                     } catch {
                         print("\(error)")
                     }
@@ -538,8 +476,7 @@ struct SearchStore {
                             dataModel = result.data
                         }
                         
-                        await send(.addViewStack(data: dataModel))
-                        await send(.updateMainDisplayModel(data: dataModel))
+                        await send(.delegate(.push(model: dataModel)))
                     } catch {
                         print("\(error)")
                     }
@@ -570,328 +507,11 @@ struct SearchStore {
                 
                 return .none
                 
-            case .showPlayerStats(let season, let category, let playerId):
-                state.resultVisibleState = false
-                
-                return .run { [viewStack = state.viewStack] send in
-                    let dataModel: SportDecodableModel
-                    
-                    switch viewStack.last {
-                    case .fbPlayerStandings(let responseModel, _):
-                        if let category {
-                            let leagueId = responseModel.standings.first?.statistics.first?.league.id ?? 39
-                            
-                            // TODO: Has to add loading
-                            let result = try await searchClient.fetchById(
-                                season: season,
-                                category: category,
-                                dataType: "\(category)_player_stats",
-                                leagueId: leagueId,
-                                id: String(playerId)
-                            )
-                            
-                            if case .fbPlayerStats = result.data {
-                                dataModel = result.data
-                            } else {
-                                return
-                            }
-                        } else {
-                            let player = responseModel.standings.first { $0.player.id == playerId }
-                            
-                            let playerInfoResponseModel = FBPlayerInfoResponseModel(info: player, lastGame: nil, nextGame: nil)
-                            dataModel = .fbPlayerStats(
-                                playerInfoResponseModel,
-                                modelConverter.fbPlayerStatsConverter(response: playerInfoResponseModel)
-                            )
-                        }
-                        
-                    case .fbPlayerInfo(let responseModel, _):
-                        dataModel = .fbPlayerStats(
-                            responseModel,
-                            modelConverter.fbPlayerStatsConverter(response: responseModel)
-                        )
-                        
-                    case .nbaPlayerStandings(let responseModel, _):
-                        // NOTE: nba player stats data in standings has all the stats for now, so doesn't has to fetchById like football above.
-                        let player = responseModel.standings.first { $0.player.personId == playerId }
-                        
-                        let playerInfoResponseModel = NBAPlayerInfoResponseModel(info: player, lastGame: nil, nextGame: nil)
-                        dataModel = .nbaPlayerStats(
-                            playerInfoResponseModel,
-                            modelConverter.nbaPlayerStatsConverter(response: playerInfoResponseModel)
-                        )
-                        
-                    case .nbaPlayerInfo(let responseModel, _):
-                        dataModel = .nbaPlayerStats(
-                            responseModel,
-                            modelConverter.nbaPlayerStatsConverter(response: responseModel)
-                        )
-                        
-                    case .kboPlayerInfo(let responseModel, _):
-                        dataModel = .kboPlayerStats(
-                            responseModel,
-                            modelConverter.kboPlayerStatsConverter(response: responseModel)
-                        )
-                        
-                    case .mlbPlayerInfo(let responseModel, _):
-                        dataModel = .mlbPlayerStats(
-                            responseModel,
-                            modelConverter.mlbPlayerStatsConverter(response: responseModel)
-                        )
-                        
-                    default: return // Make it do nothing
-                    }
-                    
-                    
-                    await send(.updateMainDisplayModel(data: dataModel))
-                    await send(.addViewStack(data: dataModel))
-                    
-                    // wait for before view's removing animation
-                    // NOTE: 0.1 for temporary
-                    try await Task.sleep(for: .seconds(0.1))
-                    
-                    await send(.updateResultVisibleState(bool: true))
-                }
-                
-            case .showTeamStats(let teamId):
-                let dataModel: SportDecodableModel
-                
-                switch state.viewStack.last {
-                case .fbTeamStandings(let responseModel, _):
-                    let team = responseModel.standings.first { $0.team.id == teamId }
-                    
-                    let teamInfoResponseModel = FBTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
-                    dataModel = .fbTeamStats(
-                        teamInfoResponseModel,
-                        modelConverter.fbTeamStatsConverter(response: teamInfoResponseModel)
-                    )
-                    
-                case .fbTeamInfo(let responseModel, _):
-                    dataModel = .fbTeamStats(
-                        responseModel,
-                        modelConverter.fbTeamStatsConverter(response: responseModel)
-                    )
-                    
-                case .nbaTeamStandings(let responseModel, _):
-                    let team = responseModel.standings.first { $0.team.id == teamId }
-                    
-                    let teamInfoResponseModel = NBATeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
-                    dataModel = .nbaTeamStats(
-                        teamInfoResponseModel,
-                        modelConverter.nbaTeamStatsConverter(response: teamInfoResponseModel)
-                    )
-                    
-                case .nbaTeamInfo(let responseModel, _):
-                    dataModel = .nbaTeamStats(
-                        responseModel,
-                        modelConverter.nbaTeamStatsConverter(response: responseModel)
-                    )
-                    
-                case .kboTeamStandings(let responseModel, _):
-                    let team = responseModel.standings.first { $0.team.id == teamId }
-                    
-                    let teamInfoResponseModel = KBOTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
-                    dataModel = .kboTeamStats(
-                        teamInfoResponseModel,
-                        modelConverter.kboTeamStatsConverter(response: teamInfoResponseModel)
-                    )
-                    
-                case .kboTeamInfo(let responseModel, _):
-                    dataModel = .kboTeamStats(
-                        responseModel,
-                        modelConverter.kboTeamStatsConverter(response: responseModel)
-                    )
-                    
-                case .mlbTeamStandings(let responseModel, _):
-                    let team = responseModel.standings.first { $0.team.id == teamId }
-                    
-                    let teamInfoResponseModel = MLBTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
-                    dataModel = .mlbTeamStats(
-                        teamInfoResponseModel,
-                        modelConverter.mlbTeamStatsConverter(response: teamInfoResponseModel)
-                    )
-                    
-                case .mlbTeamInfo(let responseModel, _):
-                    dataModel = .mlbTeamStats(
-                        responseModel,
-                        modelConverter.mlbTeamStatsConverter(response: responseModel)
-                    )
-                    
-                default: return .none // Make it do nothing
-                }
-                
-                state.resultVisibleState = false
-                
-                return .run { send in
-                    await send(.updateMainDisplayModel(data: dataModel))
-                    await send(.addViewStack(data: dataModel))
-                    
-                    // wait for before view's removing animation
-                    // NOTE: 0.1 for temporary
-                    try await Task.sleep(for: .seconds(0.1))
-                    
-                    await send(.updateResultVisibleState(bool: true))
-                }
-                
-            case .showGameStats(let gameType):
-                let dataModel: SportDecodableModel
-                
-                switch state.viewStack.last {
-                case .fbPlayerInfo(let responseModel, _):
-                    let gameStatsResponseModel = gameType == "previous" ? FBGameStatsResponseModel(game: responseModel.lastGame) : FBGameStatsResponseModel(game: responseModel.nextGame)
-                    
-                    dataModel = .fbGameStats(
-                        gameStatsResponseModel,
-                        modelConverter.fbGameStatsConverter(response: gameStatsResponseModel)
-                    )
-                    
-                case .fbTeamInfo(let responseModel, _):
-                    let gameStatsResponseModel = gameType == "previous" ? FBGameStatsResponseModel(game: responseModel.lastGame) : FBGameStatsResponseModel(game: responseModel.nextGame)
-                    
-                    dataModel = .fbGameStats(
-                        gameStatsResponseModel,
-                        modelConverter.fbGameStatsConverter(response: gameStatsResponseModel)
-                    )
-                    
-                case .nbaPlayerInfo(let responseModel, _):
-                    let gameStatsResponseModel = gameType == "previous" ? NBAGameStatsResponseModel(game: responseModel.lastGame) : NBAGameStatsResponseModel(game: responseModel.nextGame)
-                    
-                    dataModel = .nbaGameStats(
-                        gameStatsResponseModel,
-                        modelConverter.nbaGameStatsConverter(response: gameStatsResponseModel)
-                    )
-                    
-                case .nbaTeamInfo(let responseModel, _):
-                    let gameStatsResponseModel = gameType == "previous" ? NBAGameStatsResponseModel(game: responseModel.lastGame) : NBAGameStatsResponseModel(game: responseModel.nextGame)
-                    
-                    dataModel = .nbaGameStats(
-                        gameStatsResponseModel,
-                        modelConverter.nbaGameStatsConverter(response: gameStatsResponseModel)
-                    )
-                    
-                case .mlbPlayerInfo(let responseModel, _):
-                    let gameStatsResponseModel = gameType == "previous" ? MLBGameStatsResponseModel(game: responseModel.lastGame) : MLBGameStatsResponseModel(game: responseModel.nextGame)
-                    
-                    dataModel = .mlbGameStats(
-                        gameStatsResponseModel,
-                        modelConverter.mlbGameStatsConverter(response: gameStatsResponseModel)
-                    )
-                    
-                case .mlbTeamInfo(let responseModel, _):
-                    let gameStatsResponseModel = gameType == "previous" ? MLBGameStatsResponseModel(game: responseModel.lastGame) : MLBGameStatsResponseModel(game: responseModel.nextGame)
-                    
-                    dataModel = .mlbGameStats(
-                        gameStatsResponseModel,
-                        modelConverter.mlbGameStatsConverter(response: gameStatsResponseModel)
-                    )
-                    
-                case .kboPlayerInfo(let responseModel, _):
-                    let gameStatsResponseModel = gameType == "previous" ? KBOGameStatsResponseModel(game: responseModel.lastGame) : KBOGameStatsResponseModel(game: responseModel.nextGame)
-                    
-                    dataModel = .kboGameStats(
-                        gameStatsResponseModel,
-                        modelConverter.kboGameStatsConverter(response: gameStatsResponseModel)
-                    )
-                    
-                case .kboTeamInfo(let responseModel, _):
-                    let gameStatsResponseModel = gameType == "previous" ? KBOGameStatsResponseModel(game: responseModel.lastGame) : KBOGameStatsResponseModel(game: responseModel.nextGame)
-                    
-                    dataModel = .kboGameStats(
-                        gameStatsResponseModel,
-                        modelConverter.kboGameStatsConverter(response: gameStatsResponseModel)
-                    )
-                    
-                default: return .none // Make it do nothing
-                }
-                
-                state.resultVisibleState = false
-                
-                return .run { send in
-                    await send(.updateMainDisplayModel(data: dataModel))
-                    await send(.addViewStack(data: dataModel))
-                    
-                    // wait for before view's removing animation
-                    // NOTE: 0.1 for temporary
-                    try await Task.sleep(for: .seconds(0.1))
-                    
-                    await send(.updateResultVisibleState(bool: true))
-                }
-                
-            case .refreshGame(let season, let category):
-                return .run { [viewStack = state.viewStack, displayModels = state.displayModels] send in
-                    switch viewStack.last {
-                    case .fbGameStats(_, _):
-                        if let game = (displayModels[.fbGameStats] as? FBGameStatsDisplayModel)?.game {
-                            let result = try await searchClient.fetchById(
-                                season: season,
-                                category: category,
-                                date: game.fixture.date,
-                                dataType: "\(category)_game_stats",
-                                leagueId: game.league.id,
-                                id: String(game.fixture.id)
-                            )
-                            
-                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
-                            await send(.updateLastViewStack(data: result.data))
-                        }
-                        
-                    case .nbaGameStats(_, _):
-                        if let game = (displayModels[.nbaGameStats] as? NBAGameStatsDisplayModel)?.game,
-                           let gameSummary = game.gameSummary,
-                           let boxScoreTraditional = game.boxScoreTraditional {
-                            let result = try await searchClient.fetchById(
-                                season: season,
-                                category: category,
-                                date: gameSummary.date,
-                                dataType: "\(category)_game_stats",
-                                leagueId: Constants.Ids.nba,
-                                id: boxScoreTraditional.gameId
-                            )
-                            
-                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
-                            await send(.updateLastViewStack(data: result.data))
-                        }
-                        
-                    case .kboGameStats(_, _):
-                        if let game = (displayModels[.kboGameStats] as? KBOGameStatsDisplayModel)?.game,
-                           let gameInfo = game.gameInfo {
-                            let result = try await searchClient.fetchById(
-                                season: season,
-                                category: category,
-                                date: gameInfo.date,
-                                dataType: "\(category)_game_stats",
-                                leagueId: Constants.Ids.kbo,
-                                id: gameInfo.gameId
-                            )
-                            
-                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
-                            await send(.updateLastViewStack(data: result.data))
-                        }
-                        
-                    case .mlbGameStats(_, _):
-                        if let game = (displayModels[.mlbGameStats] as? MLBGameStatsDisplayModel)?.game {
-                            let result = try await searchClient.fetchById(
-                                season: season,
-                                category: category,
-                                date: game.gameInfo.gameDate,
-                                dataType: "\(category)_game_stats",
-                                leagueId: Constants.Ids.mlb,
-                                id: String(game.game.pk)
-                            )
-                            
-                            await send(.updateMainDisplayModel(data: result.data, shouldReset: false))
-                            await send(.updateLastViewStack(data: result.data))
-                        }
-                        
-                    default: return // do nothing
-                    }
-                }
-                
             case .selectNBATournamentRound(let gameList):
                 let dataModel: SportDecodableModel
                 
                 switch state.viewStack.last {
-                case .nbaTournament(let responseModel, let displayModel):
+                case .nbaTournament(_, _):
                     let teamScheduleResponseModel = NBAGameScheduleResponseModel(scheduleType: ScheduleType.teamFlat, scheduledMonths: nil, schedule: ModelConverter.nbaGameListToGameScheduleListConverter(gameList: gameList))
                     
                     dataModel = .nbaLeagueSchedule(
@@ -905,8 +525,7 @@ struct SearchStore {
                 state.resultVisibleState = false
                 
                 return .run { send in
-                    await send(.updateMainDisplayModel(data: dataModel))
-                    await send(.addViewStack(data: dataModel))
+                    await send(.delegate(.push(model: dataModel)))
                     
                     // wait for before view's removing animation
                     // NOTE: 0.1 for temporary
@@ -915,112 +534,10 @@ struct SearchStore {
                     await send(.updateResultVisibleState(bool: true))
                 }
                 
-            case .updateMainDisplayModel(let data, let shouldReset):
-                if shouldReset {
-                    for key in SportDisplayType.allCases {
-                        state.displayModels[key] = nil
-                    }
-                }
-                
-                switch data {
-                case .fbPlayerInfo(_, let displayModel):
-                    state.displayModels[.fbPlayerInfo] = displayModel
-                case .fbPlayerStats(_, let displayModel):
-                    state.displayModels[.fbPlayerStats] = displayModel
-                case .fbPlayerStandings(_, let displayModel):
-                    state.displayModels[.fbPlayerStandings] = displayModel
-                case .fbTeamInfo(_, let displayModel):
-                    state.displayModels[.fbTeamInfo] = displayModel
-                case .fbTeamStats(_, let displayModel):
-                    state.displayModels[.fbTeamStats] = displayModel
-                case .fbTeamStandings(_, let displayModel):
-                    state.displayModels[.fbTeamStandings] = displayModel
-                case .fbLeagueSchedule(_, let displayModel):
-                    state.displayModels[.fbLeagueSchedule] = displayModel
-                case .fbGameStats(_, let displayModel):
-                    state.displayModels[.fbGameStats] = displayModel
-                case .fbTournament(_, let displayModel):
-                    state.displayModels[.fbTournament] = displayModel
-
-                case .nbaPlayerInfo(_, let displayModel):
-                    state.displayModels[.nbaPlayerInfo] = displayModel
-                case .nbaPlayerStats(_, let displayModel):
-                    state.displayModels[.nbaPlayerStats] = displayModel
-                case .nbaPlayerStandings(_, let displayModel):
-                    state.displayModels[.nbaPlayerStandings] = displayModel
-                case .nbaTeamInfo(_, let displayModel):
-                    state.displayModels[.nbaTeamInfo] = displayModel
-                case .nbaTeamStats(_, let displayModel):
-                    state.displayModels[.nbaTeamStats] = displayModel
-                case .nbaTeamStandings(_, let displayModel):
-                    state.displayModels[.nbaTeamStandings] = displayModel
-                case .nbaLeagueSchedule(_, let displayModel):
-                    state.displayModels[.nbaLeagueSchedule] = displayModel
-                case .nbaGameStats(_, let displayModel):
-                    state.displayModels[.nbaGameStats] = displayModel
-                case .nbaTournament(_, let displayModel):
-                    state.displayModels[.nbaTournament] = displayModel
-
-                case .kboPlayerInfo(_, let displayModel):
-                    state.displayModels[.kboPlayerInfo] = displayModel
-                case .kboPlayerStats(_, let displayModel):
-                    state.displayModels[.kboPlayerStats] = displayModel
-                case .kboPlayerStandings(_, let displayModel):
-                    state.displayModels[.kboPlayerStandings] = displayModel
-                case .kboTeamInfo(_, let displayModel):
-                    state.displayModels[.kboTeamInfo] = displayModel
-                case .kboTeamStats(_, let displayModel):
-                    state.displayModels[.kboTeamStats] = displayModel
-                case .kboTeamStandings(_, let displayModel):
-                    state.displayModels[.kboTeamStandings] = displayModel
-                case .kboLeagueSchedule(_, let displayModel):
-                    state.displayModels[.kboLeagueSchedule] = displayModel
-                case .kboGameStats(_, let displayModel):
-                    state.displayModels[.kboGameStats] = displayModel
-                case .kboTournament(_, let displayModel):
-                    state.displayModels[.kboTournament] = displayModel
-
-                case .mlbPlayerInfo(_, let displayModel):
-                    state.displayModels[.mlbPlayerInfo] = displayModel
-                case .mlbPlayerStats(_, let displayModel):
-                    state.displayModels[.mlbPlayerStats] = displayModel
-                case .mlbPlayerStandings(_, let displayModel):
-                    state.displayModels[.mlbPlayerStandings] = displayModel
-                case .mlbTeamInfo(_, let displayModel):
-                    state.displayModels[.mlbTeamInfo] = displayModel
-                case .mlbTeamStats(_, let displayModel):
-                    state.displayModels[.mlbTeamStats] = displayModel
-                case .mlbTeamStandings(_, let displayModel):
-                    state.displayModels[.mlbTeamStandings] = displayModel
-                case .mlbLeagueSchedule(_, let displayModel):
-                    state.displayModels[.mlbLeagueSchedule] = displayModel
-                case .mlbGameStats(_, let displayModel):
-                    state.displayModels[.mlbGameStats] = displayModel
-
-                default:
-                    break
-                }
-                
-                return .none
-                
-            case .updateLastViewStack(let data):
-                var newViewStack = state.viewStack
-                newViewStack.popLast()
-                newViewStack.append(data)
-                state.viewStack = newViewStack
-                
-                return .none
-                
             case .updateSearchStateWithAni(let bool):
 //                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                     state.searchState = bool
 //                }
-                
-                return .none
-                
-            case .addViewStack(let data):
-                state.viewStack.append(data)
-                state.poppedView = nil
                 
                 return .none
                 
@@ -1030,6 +547,9 @@ struct SearchStore {
                     
                     await send(.searchResultsReceived(result))
                 }
+                
+            case .delegate:
+                return .none
             }
         }
     }

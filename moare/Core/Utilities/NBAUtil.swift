@@ -69,4 +69,12 @@ struct NBAUtil {
         let totalInches = feet * 12 + inches
         return (Double(totalInches) * 2.54).rounded(to: decimalPlaces)
     }
+    
+    static func calculateGamesBack(team: NBATeamStats, standings: [NBATeamStandingsDisplay]) -> Double {
+        guard let leader = standings.max(by: { $0.stats.winsPct < $1.stats.winsPct }) else {
+            return 0.0
+        }
+        
+        return Double((leader.stats.wins - team.wins) + (team.losses - leader.stats.losses)) / 2.0
+    }
 }

@@ -11,14 +11,19 @@ import ComposableArchitecture
 struct BaseTournamentStore<T> {
     @ObservableState
     struct State {
-        var displayModel: T? = nil
+        var displayModel: T
+        
+        var tournamentTeams: [String: [Int]] = [:]
         
         var teamNameDic: [String: String] = [:]
-        var tournamentTeams: [String: [Int]] = [:]
+        
+        init(displayModel: T) {
+            self.displayModel = displayModel
+        }
     }
     
     enum Action {
-        case initData(displayModel: T)
+        case initData
         case initTournamentTeams([String: [Int]])
     }
     
@@ -28,10 +33,11 @@ struct BaseTournamentStore<T> {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .initData(let displayModel):
-                state.displayModel = displayModel
+            case .initData:
+                // init with default value
+                state.tournamentTeams = [:]
                 
-                if let displayModel = displayModel as? SportDisplayModel {
+                if let displayModel = state.displayModel as? SportDisplayModel {
                     switch displayModel.leagueId {
                     case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
                         state.teamNameDic = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)

@@ -11,6 +11,9 @@ import ComposableArchitecture
 
 @Reducer
 struct FBGameStatsStore {
+    typealias BaseGameStats = BaseGameStatsStore<FBGameStatsDisplayModel>
+    
+    let searchClient = SearchClient()
     
     @ObservableState
     struct State {
@@ -30,88 +33,47 @@ struct FBGameStatsStore {
         /* ---------------------
            data state
            --------------------- */
-        var displayModel: FBGameStatsDisplayModel? = nil
+        var baseGameStats: BaseGameStats.State
+
         var playerStats: [FBGamePlayerStats] = []
         var lineups: FBGameLineups? = nil
         var coach: FBPerson? = nil
         var playerTotalStats: FBGamePlayerStatsDetail? = nil
         
-        /* ---------------------
-           ui state
-           --------------------- */
-        var firstSelectedIndex = 0
-        var secondSelectedIndex = 0
-        var selectedTeamIndex = 0
-        var shouldScrollCategory = false
-        
-        /* ---------------------
-           etc
-           --------------------- */
-        var playerNameDictionary: [String: String] = [:]
-        var teamNameDictionary: [String: String] = [:]
+        init(displayModel: FBGameStatsDisplayModel) {
+            self.baseGameStats = BaseGameStats.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
-        /* ---------------------
-           init
-           --------------------- */
-        case initData(displayModel: FBGameStatsDisplayModel)
+        case baseGameStats(BaseGameStats.Action)
         
-        /* ---------------------
-           view action
-           --------------------- */
-        case selectFirstCategory(Int)
-        case selectSecondCategory(Int)
-        case selectTeam(Int)
-        
-        /* ---------------------
-           private
-           --------------------- */
         case sortPlayers
         case setPlayersTotalStats
+        // NOTE: shouldFetch는 최초에 FBGameStats에 진입했을때 받은 데이터로 FBLeagueSchedule데이터 업데이트 해줄때 사용.
+        case refreshGame(shouldFetch: Bool = true)
+        case updateDisplayModel(model: SportDecodableModel)
+        
+        case delegate(Delegate)
     }
     
-    @Dependency(\.translatedNameProvider) var nameProvider
+    enum Delegate {
+        case didRefreshGame(model: SportDecodableModel)
+    }
     
     var body: some Reducer<State, Action> {
+        Scope(state: \.baseGameStats, action: \.baseGameStats) { BaseGameStats() }
+        
         Reduce { state, action in
             switch action {
-            case .initData(let displayModel):
+            case .baseGameStats(.initData):
                 // init with default value
-                state.displayModel = nil
                 state.playerStats = []
                 state.lineups = nil
                 state.coach = nil
                 state.playerTotalStats = nil
-                state.firstSelectedIndex = 0
-                state.secondSelectedIndex = 0
-                state.selectedTeamIndex = 0
-                state.shouldScrollCategory = false
-                
-                // init data
-                state.displayModel = displayModel
-                
-                switch displayModel.leagueId {
-                case Constants.Ids.epl:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                case Constants.Ids.laliga:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                case Constants.Ids.bundesliga:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                case Constants.Ids.ligue1:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                case Constants.Ids.seriea:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                case Constants.Ids.mls:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlsPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                default: break
-                }
+
+                let displayModel = state.baseGameStats.displayModel
                 
                 // set current(home) team's players stats
                 let homeTeamId = displayModel.game.teams.home.id
@@ -126,53 +88,24 @@ struct FBGameStatsStore {
                 return .run { send in
                     await send(.setPlayersTotalStats)
                     await send(.sortPlayers)
+                    await send(.refreshGame(shouldFetch: false)) // NOTE: 이걸 안해주면 새로고침 누르기 전에는 FBLeagueSchedule 데이터가 업데이트 안됨.
                 }
                 
-            case .selectFirstCategory(let index):
-                state.shouldScrollCategory =  true
-                
-                // should change secondSelectedIndex first as bar moves based on secondSelectedIndex when firstSelectedIndex changes
-                switch index {
-                case 0: state.secondSelectedIndex = 0
-                case 1: state.secondSelectedIndex = StringConstants.Football.gameStatsAttackCategories.count
-                case 2: state.secondSelectedIndex = StringConstants.Football.gameStatsAttackCategories.count + StringConstants.Football.gameStatsDefendCategories.count
-                default: break
-                }
-                
-                state.firstSelectedIndex = index
-                
-                return .send(.sortPlayers)
-                
-            case .selectSecondCategory(let index):
-                state.shouldScrollCategory = false
-                state.secondSelectedIndex = index
-                
-                switch index {
-                case StringConstants.Football.gameStatsAttackCategories.indices:
-                    state.firstSelectedIndex = 0
-                case StringConstants.Football.gameStatsAttackCategories.count..<(StringConstants.Football.gameStatsAttackCategories.count + StringConstants.Football.gameStatsDefendCategories.count):
-                    state.firstSelectedIndex = 1
-                default:
-                    state.firstSelectedIndex = 2
-                }
-                
-                return .send(.sortPlayers)
-                
-            case .selectTeam(let index):
-                state.selectedTeamIndex = index
+            case let .baseGameStats(.selectTeam(_, index)):
+                let displayModel = state.baseGameStats.displayModel
                 
                 // set selected team's players stats
                 let teamId: Int? = switch index {
-                case 0: state.displayModel?.game.teams.home.id
-                case 1: state.displayModel?.game.teams.away.id
+                case 0: displayModel.game.teams.home.id
+                case 1: displayModel.game.teams.away.id
                 default: nil
                 }
                 
-                let playersStats = state.displayModel?.game.players.first { teamId != nil && $0.team.id == teamId }?.players
+                let playersStats = displayModel.game.players.first { teamId != nil && $0.team.id == teamId }?.players
                 state.playerStats = playersStats ?? []
                 
                 // set selected team's coach, lineups
-                let lineups = state.displayModel?.game.lineups.first { teamId != nil && $0.team.id == teamId }
+                let lineups = displayModel.game.lineups.first { teamId != nil && $0.team.id == teamId }
                 state.lineups = lineups
                 state.coach = lineups?.coach
                 
@@ -181,8 +114,11 @@ struct FBGameStatsStore {
                     await send(.sortPlayers)
                 }
                 
+            case .baseGameStats(.selectFirstCategory):
+                return .send(.sortPlayers)
+                
             case .sortPlayers:
-                switch state.secondSelectedIndex {
+                switch state.baseGameStats.firstCategorySelectedIndex {
                 case 0:
                     state.playerStats.sort { $0.statistics.first?.goals.total ?? 0 > $1.statistics.first?.goals.total ?? 0 }
                 case 1:
@@ -298,6 +234,47 @@ struct FBGameStatsStore {
                         )
                     }
                 
+                return .none
+                
+            case let .refreshGame(shouldFetch):
+                if shouldFetch {
+                    return .run { [displayModel = state.baseGameStats.displayModel] send in
+                        let game = displayModel.game
+                        
+                        let result = try await searchClient.fetchById(
+                            season: displayModel.season,
+                            category: "football",
+                            date: game.fixture.date,
+                            dataType: "football_game_stats",
+                            leagueId: game.league.id,
+                            id: String(game.fixture.id)
+                        )
+                        
+                        await send(.updateDisplayModel(model: result.data))
+                        await send(.delegate(.didRefreshGame(model: result.data)))
+                    }
+                } else {
+                    return .run { [displayModel = state.baseGameStats.displayModel] send in
+                        let responseModel = FBGameStatsResponseModel(game: displayModel.game)
+                        let dataModel: SportDecodableModel = .fbGameStats(responseModel, displayModel)
+                            
+                        await send(.delegate(.didRefreshGame(model: dataModel)))
+                    }
+                }
+                
+            case let .updateDisplayModel(model):
+                if case .fbGameStats(_, let displayModel) = model {
+                    state.baseGameStats.displayModel = displayModel
+                    
+                    return .send(.baseGameStats(.initData))
+                } else {
+                    return .none
+                }
+                
+            case .baseGameStats:
+                return .none
+                
+            case .delegate:
                 return .none
             } // switch action
         }

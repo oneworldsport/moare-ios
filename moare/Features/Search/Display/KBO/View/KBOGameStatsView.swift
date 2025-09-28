@@ -9,159 +9,133 @@ import SwiftUI
 import ComposableArchitecture
 
 struct KBOGameStatsView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var kboGameStatsStore: StoreOf<KBOGameStatsStore>? = nil
-    
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: KBOGameStatsDisplayModel
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<KBOGameStatsStore>
+    let didPop: Bool
     
     private let firstStatsColumnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50, 50, 50]
     private let secondStatsColumnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50]
     
+    @State private var show = false
+    
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            let game = displayModel.game
-            let teamNameDic = kboGameStatsStore?.baseGameStats.teamNameDictionary
-            
-            let teamIds = [game.gameInfo?.homeTeamId, game.gameInfo?.awayTeamId]
-            let teamCategories: [GameStatsTeamState] = teamIds.map {
-                return GameStatsTeamState(
-                    name: teamNameDic?["short_\($0 ?? 0)"] ?? "",
-                    imageUrl: KBOUtil.teamLogoURL(id: $0)
-                )
-            }
-            
-            let hitterList: [StandingsItemState] = kboGameStatsStore?.teamHitters.map {
-                StandingsItemState(
-                    numInfo: $0.battingNumber,
-                    imageUrl: KBOUtil.playerPhotoURL(id: $0.id),
-                    name: $0.name,
-                    extraInfo: $0.position
-                        .replacingOccurrences(of: "#", with: "•")
-                        .replacingOccurrences(of: "지명타자", with: "지명"),
-                    dataList: [
-                        String($0.ab),
-                        String($0.h),
-                        String($0.homeRuns),
-                        String($0.rbi),
-                        String($0.r),
-                        String($0.baseOnBalls),
-                        String($0.strikeOuts),
-                        String($0.groundIntoDoublePlay)
-                    ]
-                )
-            } ?? []
-            let pitcherList: [StandingsItemState] = kboGameStatsStore?.teamPitchers.map {
-                StandingsItemState(
-                    imageUrl: KBOUtil.playerPhotoURL(id: $0.id),
-                    name: $0.name,
-                    dataList: [$0.ip, $0.r, $0.er, $0.bb, $0.so, $0.h]
-                )
-            } ?? []
-            
-            let gameDetailTitle = "날짜: \n\n장소: "
-            let gameDetailContent: String = {
-                var result = ""
-                result += "\(CalendarUtil.formatDate(date: game.gameInfo?.date).split(separator: " ").first ?? "")\n"
-                result += "\(CalendarUtil.formatDate(date: game.gameInfo?.date, formatType: .ampm))\n"
-                result += "\(teamNameDic?["venue_\(game.gameInfo?.homeTeamId ?? 0)"] ?? "")\n"
-                return result
-            }()
-            
-            VStack {
-                if let kboGameStatsStore {
-                    GameStatsViewContainer(
-                        state: GameStatsContainerState(
-                            shouldShowStats: (game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameLive) || (game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameFinal),
-                            shouldShowRefreshButton: game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameLive,
-                            teamCategories: teamCategories,
-                            teamCategorySelectedIndex: kboGameStatsStore.baseGameStats.selectedTeamIndex,
-                            firstColumnWidth: 150,
-                            gameDetailTitle: gameDetailTitle,
-                            gameDetailContent: gameDetailContent,
-                            firstStatsTitle: "타자",
-                            firstStatsCategories: StringConstants.KBO.gameStatsHittingCategories,
-                            firstStatsCategorySelectedIndex: kboGameStatsStore.baseGameStats.firstCategorySelectedIndex,
-                            firstStatsColumnWidthList: firstStatsColumnWidthList,
-                            firstStatsPlayerList: hitterList,
-                            secondStatsTitle: "투수",
-                            secondStatsCategories: StringConstants.KBO.gameStatsPitchingCategories,
-                            secondStatsCategorySelectedIndex: kboGameStatsStore.baseGameStats.secondCategorySelectedIndex,
-                            secondStatsColumnWidthList: secondStatsColumnWidthList,
-                            secondStatsPlayerList: pitcherList
-                        ),
-                        actions: GameStatsContainerActions(
-                            teamCategoryButtonAction: { index in
-                                kboGameStatsStore.send(.baseGameStats(.selectTeam(index)))
-                            },
-                            firstStatsCategoryButtonAction: { index in
-                                kboGameStatsStore.send(.baseGameStats(.selectFirstCategory(index)))
-                            },
-                            secondStatsCategoryButtonAction: { index in
-                                kboGameStatsStore.send(.baseGameStats(.selectSecondCategory(index)))
-                            },
-                            refreshButtonAction: {
-                                searchStore.send(.refreshGame(season: displayModel.season, category: "baseball"))
-                            }
-                        ),
-                        titleContent: {
-                            HStack {
-                                BaseballLeagueTitle(
-                                    logoUrl: KBOUtil.kboLogoUrl,
-                                    name: "KBO",
-                                    season: displayModel.season
-                                )
-                                
-                                Spacer()
-                            }
-                            .padding(.horizontal, UIConstants.Padding.defaultHPadding)
+        let displayModel = store.baseGameStats.displayModel
+        let game = displayModel.game
+        let teamNameDic = store.baseGameStats.teamNameDictionary
+        
+        let teamIds = [game.gameInfo?.homeTeamId, game.gameInfo?.awayTeamId]
+        let teamCategories: [GameStatsTeamState] = teamIds.map {
+            return GameStatsTeamState(
+                name: teamNameDic["short_\($0 ?? 0)"] ?? "",
+                imageUrl: KBOUtil.teamLogoURL(id: $0)
+            )
+        }
+        
+        let hitterList: [StandingsItemState] = store.teamHitters.map {
+            StandingsItemState(
+                numInfo: $0.battingNumber,
+                imageUrl: KBOUtil.playerPhotoURL(id: $0.id),
+                name: $0.name,
+                extraInfo: $0.position
+                    .replacingOccurrences(of: "#", with: "•")
+                    .replacingOccurrences(of: "지명타자", with: "지명"),
+                dataList: [
+                    String($0.ab),
+                    String($0.h),
+                    String($0.homeRuns),
+                    String($0.rbi),
+                    String($0.r),
+                    String($0.baseOnBalls),
+                    String($0.strikeOuts),
+                    String($0.groundIntoDoublePlay)
+                ]
+            )
+        }
+        let pitcherList: [StandingsItemState] = store.teamPitchers.map {
+            StandingsItemState(
+                imageUrl: KBOUtil.playerPhotoURL(id: $0.id),
+                name: $0.name,
+                dataList: [String($0.inningsPitched), $0.r, $0.er, $0.bb, $0.so, $0.h]
+            )
+        }
+        
+        let gameDetailTitle = "날짜: \n\n장소: "
+        let gameDetailContent: String = {
+            var result = ""
+            result += "\(CalendarUtil.formatDate(date: game.gameInfo?.date).split(separator: " ").first ?? "")\n"
+            result += "\(CalendarUtil.formatDate(date: game.gameInfo?.date, formatType: .ampm))\n"
+            result += "\(teamNameDic["venue_\(game.gameInfo?.homeTeamId ?? 0)"] ?? "")\n"
+            return result
+        }()
+        
+        VStack {
+            if show {
+                GameStatsViewContainer(
+                    state: GameStatsContainerState(
+                        shouldShowStats: (game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameLive) || (game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameFinal),
+                        shouldShowRefreshButton: game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameLive,
+                        teamCategories: teamCategories,
+                        teamCategorySelectedIndex: store.baseGameStats.teamCategorySelectedIndex,
+                        firstColumnWidth: 150,
+                        gameDetailTitle: gameDetailTitle,
+                        gameDetailContent: gameDetailContent,
+                        firstStatsTitle: "타자",
+                        firstStatsCategories: StringConstants.KBO.gameStatsHittingCategories,
+                        firstStatsCategorySelectedIndex: store.baseGameStats.firstCategorySelectedIndex,
+                        firstStatsColumnWidthList: firstStatsColumnWidthList,
+                        firstStatsPlayerList: hitterList,
+                        secondStatsTitle: "투수",
+                        secondStatsCategories: StringConstants.KBO.gameStatsPitchingCategories,
+                        secondStatsCategorySelectedIndex: store.baseGameStats.secondCategorySelectedIndex,
+                        secondStatsColumnWidthList: secondStatsColumnWidthList,
+                        secondStatsPlayerList: pitcherList
+                    ),
+                    actions: GameStatsContainerActions(
+                        teamCategoryButtonAction: { index in
+                            store.send(.baseGameStats(.selectTeam(index: index)))
                         },
-                        gameContent: {
+                        firstStatsTitleCategoryAction: {
+                            store.send(.sortByBattingOrder)
+                        },
+                        firstStatsCategoryButtonAction: { index in
+                            store.send(.baseGameStats(.selectFirstCategory(index)))
+                        },
+                        secondStatsCategoryButtonAction: { index in
+                            store.send(.baseGameStats(.selectSecondCategory(index)))
+                        },
+                        refreshButtonAction: {
+                            store.send(.refreshGame())
+                        }
+                    ),
+                    titleContent: {
+                        BaseballLeagueTitleForGameStats(
+                            logoUrl: KBOUtil.kboLogoUrl,
+                            name: "KBO",
+                            season: displayModel.season
+                        )
+                    },
+                    gameContent: {
 //                            if game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameScheduled ||
 //                                game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameCanceled {
-//                                
+//
 //                            } else {
 //                                KBOGameStatsScoreInfoItem(kboGameStatsStore: kboGameStatsStore)
 //                            }
-                            
-                            KBOGameStatsScoreInfoItem(kboGameStatsStore: kboGameStatsStore)
-                        }
-                    )
-                }
+                        
+                        KBOGameStatsScoreInfoItem(kboGameStatsStore: store)
+                    }
+                )
             }
-            .onAppear {
-                // init KBOGameStatsStore
-                let kboGameStatsStore: StoreOf<KBOGameStatsStore> = storeManager.getStore(forKey: StoreKeys.kboGameStatsStore) ?? {
-                    let newStore = Store(initialState: KBOGameStatsStore.State()) { KBOGameStatsStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.kboGameStatsStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.kboGameStatsStore = kboGameStatsStore
-                }
-                
-                if searchStore.poppedView == nil {
-                    kboGameStatsStore.send(.baseGameStats(.initData(displayModel: displayModel)))
-                }
-            } // onAppear
-            .onChange(of: displayModel) {
-                if case .kboGameStats = searchStore.poppedView {
-                    kboGameStatsStore?.send(.baseGameStats(.initData(displayModel: displayModel)))
-                }
-                
-                if case .kboGameStats = searchStore.viewStack.last {
-                    kboGameStatsStore?.send(.baseGameStats(.initData(displayModel: displayModel)))
-                }
+        }
+        .onAppear {
+            if !didPop {
+                store.send(.baseGameStats(.initData))
             }
-        } // if let searchStore
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
+            }
+        }
     }
 }
 
@@ -172,18 +146,18 @@ struct KBOGameStatsScoreInfoItem: View {
     
     var body: some View {
         let displayModel = kboGameStatsStore.baseGameStats.displayModel
-        let game = displayModel?.game
-        let homeTeamId = game?.gameInfo?.homeTeamId
-        let awayTeamId = game?.gameInfo?.awayTeamId
+        let game = displayModel.game
+        let homeTeamId = game.gameInfo?.homeTeamId
+        let awayTeamId = game.gameInfo?.awayTeamId
         let teamNameDic = kboGameStatsStore.baseGameStats.teamNameDictionary
-        let gameStatus = Int(game?.gameInfo?.gameStatus ?? "0") ?? 0
+        let gameStatus = Int(game.gameInfo?.gameStatus ?? "0") ?? 0
         
         let gameStatusText: String = {
             switch gameStatus {
             case StringConstants.KBO.gameScheduled:
                 return StringConstants.gameNotStartedStr
             case StringConstants.KBO.gameLive:
-                return game?.lineScore?.currentInning ?? StringConstants.gameLiveStr
+                return game.lineScore?.currentInning ?? StringConstants.gameLiveStr
             case StringConstants.KBO.gameFinal:
                 return StringConstants.gameFinishedStr
             case StringConstants.KBO.gameCanceled:
@@ -268,7 +242,7 @@ struct KBOGameStatsLineScoreContainer: View {
     @Bindable var kboGameStatsStore: StoreOf<KBOGameStatsStore>
     
     var body: some View {
-        if let lineScore = kboGameStatsStore.baseGameStats.displayModel?.game.lineScore {
+        if let lineScore = kboGameStatsStore.baseGameStats.displayModel.game.lineScore {
             let homeTeamLineScore = Int(lineScore.home.r) ?? 0
             let awayTeamLineScore = Int(lineScore.away.r) ?? 0
             
