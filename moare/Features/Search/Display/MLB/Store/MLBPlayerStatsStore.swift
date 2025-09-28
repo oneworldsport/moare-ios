@@ -14,10 +14,11 @@ struct MLBPlayerStatsStore {
     
     @ObservableState
     struct State {
-        /* ---------------------
-           data state
-           --------------------- */
-        var baseStats = BaseStats.State()
+        var baseStats: BaseStats.State
+        
+        init(displayModel: MLBPlayerStatsDisplayModel) {
+            self.baseStats = BaseStats.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
@@ -25,8 +26,6 @@ struct MLBPlayerStatsStore {
     }
     
     var body: some Reducer<State, Action> {
-        Scope(state: \.baseStats, action: \.baseStats) {
-            BaseStats()
-        }
+        Scope(state: \.baseStats, action: \.baseStats) { BaseStats() }
     }
 }

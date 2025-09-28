@@ -12,65 +12,31 @@ import ComposableArchitecture
 
 @Reducer
 struct FBPlayerStatsStore {
+    typealias BaseStats = BaseStatsStore<FBPlayerStatsDisplayModel>
     
     @ObservableState
     struct State {
-        /* ---------------------
-           data state
-           --------------------- */
-        var displayModel: FBPlayerStatsDisplayModel? = nil
-        var statsList: [FBPlayerStats] = []
-        var player: FBPlayerInfo? = nil
-        var team: FBTeamInfo? = nil
-        var nationalityKrName = ""
+        var baseStats: BaseStats.State
         
-        /* ---------------------
-           etc
-           --------------------- */
-        var playerNameDictionary: [String: String] = [:]
-        var teamNameDictionary: [String: String] = [:]
+        var statsList: [FBPlayerStats] = []
+        
+        init(displayModel: FBPlayerStatsDisplayModel) {
+            self.baseStats = BaseStats.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
-        case initData(displayModel: FBPlayerStatsDisplayModel)
+        case baseStats(BaseStats.Action)
     }
     
-    @Dependency(\.translatedNameProvider) var nameProvider
-    
     var body: some Reducer<State, Action> {
+        Scope(state: \.baseStats, action: \.baseStats) { BaseStats() }
+        
         Reduce { state, action in
             switch action {
-            case .initData(let displayModel):
-                state.displayModel = displayModel
-                
-                switch displayModel.leagueId {
-                case Constants.Ids.epl:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplTeamDic)
-                case Constants.Ids.laliga:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaTeamDic)
-                case Constants.Ids.bundesliga:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
-                case Constants.Ids.ligue1:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
-                case Constants.Ids.seriea:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaTeamDic)
-                case Constants.Ids.mls:
-                    state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlsPlayerDic)
-                    state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlsTeamDic)
-                default: break
-                }
-                
-                state.player = displayModel.player
-                state.team = displayModel.team
-                state.nationalityKrName = EnNameTranslationUtility.translateByDic(type: .country, input: displayModel.player.nationality)
-                
+            case .baseStats(.initData):
                 // 리그 기록을 제일 첫번째 아이템으로
-                state.statsList = displayModel.stats.sorted { a, b in
+                state.statsList = state.baseStats.displayModel.stats.sorted { a, b in
                     let aIsLeague = Constants.Ids.footballLeagues.contains(a.league.id)
                     let bIsLeague = Constants.Ids.footballLeagues.contains(b.league.id)
                     

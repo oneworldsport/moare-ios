@@ -223,11 +223,11 @@ struct MLBPlayerFieldingStats: Decodable, Equatable {
 
 struct MLBPlayerHittingData: Decodable, Equatable {
     private let _gameType: String?
-    let league: MLBNameObj
+    let league: MLBNameObj?
     private let _season: String?
     let sport: MLBAbbreviationIdObj
     let stat: MLBPlayerHittingStats
-    let team: MLBNameObj
+    let team: MLBNameObj?
 
     var gameType: String { _gameType ?? "" }
     var season: String { _season ?? "" }

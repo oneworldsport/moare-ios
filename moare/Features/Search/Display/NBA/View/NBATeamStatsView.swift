@@ -9,83 +9,62 @@ import SwiftUI
 import ComposableArchitecture
 
 struct NBATeamStatsView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var nbaTeamStatsStore: StoreOf<NBATeamStatsStore>? = nil
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<NBATeamStatsStore>
+    let didPop: Bool
     
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: NBATeamStatsDisplayModel
+    @State private var show = false
     
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            ScrollView {
-                InfoViewContainer(
-                    itemCount: (nbaTeamStatsStore?.displayModel?.stats.count ?? 0) + 1,
-                    shouldShowMeasureContent: true,
-                    measureContent: { scope in
-                        if let nbaTeamStatsStore {
-                            NBATeamStatsTeamInfoItem(nbaTeamStatsStore: nbaTeamStatsStore)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onAppear {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
+        ScrollView {
+            InfoViewContainer(
+                itemCount: store.baseStats.displayModel.stats.count + 1,
+                shouldShowMeasureContent: true,
+                measureContent: { scope in
+                    if show {
+                        NBATeamStatsTeamInfoItem(nbaTeamStatsStore: store)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onAppear {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
                                     }
-                                )
-                            
-                            NBATeamStatsList(nbaTeamStatsStore: nbaTeamStatsStore, scope: scope)
-                        }
-                    }, displayContent: { scope in
-                        if let nbaTeamStatsStore {
-                            // team info
-                            NBATeamStatsTeamInfoItem(
-                                nbaTeamStatsStore: nbaTeamStatsStore,
-                                isAniItem: true,
-                                itemOffset: scope.computedOffset(for: 0),
-                                showContents: scope.showContents
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
+                                    }
+                                }
                             )
-                            
-                            // stats list
-                            NBATeamStatsList(
-                                nbaTeamStatsStore: nbaTeamStatsStore,
-                                isAniItem: true,
-                                scope: scope
-                            )
-                        }
+                        
+                        NBATeamStatsList(nbaTeamStatsStore: store, scope: scope)
                     }
-                )
-            } // ScrollView
-            .onAppear {
-                // init NBATeamStatsStore
-                let nbaTeamStatsStore: StoreOf<NBATeamStatsStore> = storeManager.getStore(forKey: StoreKeys.nbaTeamStatsStore) ?? {
-                    let newStore = Store(initialState: NBATeamStatsStore.State()) { NBATeamStatsStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.nbaTeamStatsStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    self.nbaTeamStatsStore = nbaTeamStatsStore
+                }, displayContent: { scope in
+                    if show {
+                        // team info
+                        NBATeamStatsTeamInfoItem(
+                            nbaTeamStatsStore: store,
+                            isAniItem: true,
+                            itemOffset: scope.computedOffset(for: 0),
+                            showContents: scope.showContents
+                        )
+                        
+                        // stats list
+                        NBATeamStatsList(
+                            nbaTeamStatsStore: store,
+                            isAniItem: true,
+                            scope: scope
+                        )
+                    }
                 }
-                
-                if searchStore.poppedView == nil {
-                    nbaTeamStatsStore.send(.initData(displayModel: displayModel))
-                }
+            )
+        } // ScrollView
+        .onAppear {
+            if !didPop {
+                store.send(.baseStats(.initData))
             }
-            .onChange(of: displayModel) {
-                if case .nbaTeamStats = searchStore.poppedView {
-                    nbaTeamStatsStore?.send(.initData(displayModel: displayModel))
-                }
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
-        } // if let searchStore
+        }
     }
 }
 
@@ -109,71 +88,70 @@ struct NBATeamStatsTeamInfoItem: View {
     }
     
     var body: some View {
-        let displayModel = nbaTeamStatsStore.displayModel
-        let teamNameDic = nbaTeamStatsStore.teamNameDictionary
+        let displayModel = nbaTeamStatsStore.baseStats.displayModel
+        let teamNameDic = nbaTeamStatsStore.baseStats.teamNameDictionary
+        let team = displayModel.team
+        let venue = displayModel.venue
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemOffset: itemOffset
         ) {
-            if let team = displayModel?.team,
-               let venue = displayModel?.venue {
-                HStack(spacing: 8) {
-                    URLImage(url: NBAUtil.teamLogoURL(id: team.id), isSvg: true)
+            HStack(spacing: 8) {
+                URLImage(url: NBAUtil.teamLogoURL(id: team.id), isSvg: true)
+                
+                // name, state and city
+                VStack(alignment: .leading) {
+                    Text(teamNameDic["full_\(team.id)"] ?? team.fullName)
+                        .font(.system(size: 16))
+                        .fontWeight(.medium)
                     
-                    // name, state and city
-                    VStack(alignment: .leading) {
-                        Text(teamNameDic["full_\(team.id)"] ?? team.fullName)
+                    Text(team.fullName)
+                        .font(.system(size: 15))
+                        .fontWeight(.light)
+                        .lineLimit(2)
+                    
+                    (
+                        Text("연고지: ")
+                            .font(.system(size: 15))
+                        + Text(team.state)
                             .font(.system(size: 16))
                             .fontWeight(.medium)
-                        
-                        Text(team.fullName)
+                    )
+                    .multilineTextAlignment(.leading)
+                }
+                
+                // venue, conference, division
+                VStack(alignment: .leading) {
+                    (
+                        Text("홈구장: ")
                             .font(.system(size: 15))
-                            .fontWeight(.light)
-                            .lineLimit(2)
+                        + Text(teamNameDic["venue_\(team.id)"] ?? venue.name)
+                            .font(.system(size: 16))
+                            .fontWeight(.medium)
+                    )
+                    .multilineTextAlignment(.leading)
+                    
+                    HStack(spacing: 0) {
+                        Text("컨퍼런스: ")
+                            .font(.system(size: 15))
                         
-                        (
-                            Text("연고지: ")
-                                .font(.system(size: 15))
-                            + Text(team.state)
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        )
-                        .multilineTextAlignment(.leading)
+                        Text(NBAUtil.translateEastWest(team.teamConference))
+                            .font(.system(size: 16))
+                            .fontWeight(.medium)
                     }
                     
-                    // venue, conference, division
-                    VStack(alignment: .leading) {
-                        (
-                            Text("홈구장: ")
-                                .font(.system(size: 15))
-                            + Text(teamNameDic["venue_\(team.id)"] ?? venue.name)
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        )
-                        .multilineTextAlignment(.leading)
+                    HStack(spacing: 0) {
+                        Text("디비전: ")
+                            .font(.system(size: 15))
                         
-                        HStack(spacing: 0) {
-                            Text("컨퍼런스: ")
-                                .font(.system(size: 15))
-                            
-                            Text(NBAUtil.translateEastWest(team.teamConference))
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        }
-                        
-                        HStack(spacing: 0) {
-                            Text("디비전: ")
-                                .font(.system(size: 15))
-                            
-                            Text(team.teamDivision)
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        }
+                        Text(team.teamDivision)
+                            .font(.system(size: 16))
+                            .fontWeight(.medium)
                     }
                 }
-                .opacity(showContents ? 1 : 0)
             }
+            .opacity(showContents ? 1 : 0)
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
@@ -197,35 +175,35 @@ struct NBATeamStatsList: View {
     }
     
     var body: some View {
-        if let statsList = nbaTeamStatsStore.displayModel?.stats {
-            ForEach(statsList.indices, id: \.self) { index in
-                let stats = statsList[index]
-                let itemIndex = index + 1
-                
-                NBATeamStatsListItem(
-                    nbaTeamStatsStore: nbaTeamStatsStore,
-                    stats: stats,
-                    isAniItem: isAniItem,
-                    itemSize: scope.itemSizes[itemIndex],
-                    itemOffset: scope.computedOffset(for: itemIndex),
-                    showContents: scope.showContents
-                )
-                .background(
-                    GeometryReader { geometry in
-                        if !isAniItem {
-                            // 1) 최초 한 번은 무조건 측정 - gpt
-                            // NOTE: Color.clear.onChange()만 했을때는 update가 안돼서 Color.clear.onAppear 추가해줌
-                            Color.clear.onAppear {
-                                scope.updateItemFrame(index: itemIndex, geometry: geometry)
-                            }
-                            // 2) 위치 변하면 - gpt
-                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                scope.updateItemFrame(index: itemIndex, geometry: geometry)
-                            }
+        let statsList = nbaTeamStatsStore.baseStats.displayModel.stats
+        
+        ForEach(statsList.indices, id: \.self) { index in
+            let stats = statsList[index]
+            let itemIndex = index + 1
+            
+            NBATeamStatsListItem(
+                nbaTeamStatsStore: nbaTeamStatsStore,
+                stats: stats,
+                isAniItem: isAniItem,
+                itemSize: scope.itemSizes[itemIndex],
+                itemOffset: scope.computedOffset(for: itemIndex),
+                showContents: scope.showContents
+            )
+            .background(
+                GeometryReader { geometry in
+                    if !isAniItem {
+                        // 1) 최초 한 번은 무조건 측정 - gpt
+                        // NOTE: Color.clear.onChange()만 했을때는 update가 안돼서 Color.clear.onAppear 추가해줌
+                        Color.clear.onAppear {
+                            scope.updateItemFrame(index: itemIndex, geometry: geometry)
+                        }
+                        // 2) 위치 변하면 - gpt
+                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                            scope.updateItemFrame(index: itemIndex, geometry: geometry)
                         }
                     }
-                )
-            }
+                }
+            )
         }
     }
 }
@@ -292,7 +270,7 @@ struct NBATeamStatsItem: View {
     @State private var isEtcStatsOpened = false
     
     var body: some View {
-        let team = nbaTeamStatsStore.displayModel?.team
+        let team = nbaTeamStatsStore.baseStats.displayModel.team
         
         // league
         NBATitle(
@@ -317,8 +295,8 @@ struct NBATeamStatsItem: View {
         if isBasicStatsOpened {
             HStack(spacing: 0) {
                 FBStatDataItem(
-                    category: "\(NBAUtil.translateEastWest(team?.teamConference ?? ""))컨퍼런스 순위",
-                    data: "\(team?.confRank ?? 0)",
+                    category: "\(NBAUtil.translateEastWest(team.teamConference))컨퍼런스 순위",
+                    data: "\(team.confRank)",
                     customCategoryFontSize: 11,
                     customWidth: 70
                 )

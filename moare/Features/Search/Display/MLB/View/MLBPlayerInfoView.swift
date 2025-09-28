@@ -9,202 +9,181 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MLBPlayerInfoView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var mlbPlayerInfoStore: StoreOf<MLBPlayerInfoStore>? = nil
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<MLBPlayerInfoStore>
+    let didPop: Bool
     
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: MLBPlayerInfoDisplayModel
+    @State private var show = false
     
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            InfoViewContainer(
-                itemCount: 8,
-                measureContent: { scope in
-                    if let mlbPlayerInfoStore {
-                        HStack(alignment: .top) {
-                            MLBPlayerInfoFirstItem(mlbPlayerInfoStore: mlbPlayerInfoStore)
-                                .frame(maxWidth: .infinity)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
+        InfoViewContainer(
+            itemCount: 8,
+            measureContent: { scope in
+                if show {
+                    HStack(alignment: .top) {
+                        MLBPlayerInfoFirstItem(mlbPlayerInfoStore: store)
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
                                     }
-                                )
-                            
-                            MLBPlayerInfoSecondItem(mlbPlayerInfoStore: mlbPlayerInfoStore)
-                                .frame(maxWidth: .infinity)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 1, geometry: geometry)
-                                        }
-                                    }
-                                )
-                            
-                            MLBPlayerInfoThirdItem(mlbPlayerInfoStore: mlbPlayerInfoStore)
-                                .frame(maxWidth: .infinity)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 2, geometry: geometry)
-                                        }
-                                    }
-                                )
-                        }
-                        
-                        HStack(alignment: .top) {
-                            MLBPlayerInfoFourthItem(mlbPlayerInfoStore: mlbPlayerInfoStore)
-                                .frame(maxWidth: .infinity)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 3, geometry: geometry)
-                                        }
-                                    }
-                                )
-                            
-                            MLBPlayerInfoFifthItem(mlbPlayerInfoStore: mlbPlayerInfoStore)
-                                .frame(maxWidth: .infinity)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 4, geometry: geometry)
-                                        }
-                                    }
-                                )
-                        }
-                        
-                        MLBPlayerInfoSixthItem(
-                            searchStore: searchStore,
-                            mlbPlayerInfoStore: mlbPlayerInfoStore
-                        )
-                        .background(
-                            GeometryReader { geometry in
-                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                    scope.updateItemFrame(index: 5, geometry: geometry)
                                 }
-                            }
-                        )
+                            )
                         
-                        MLBPlayerInfoSeventhItem(
-                            searchStore: searchStore,
-                            mlbPlayerInfoStore: mlbPlayerInfoStore
-                        )
-                        .background(
-                            GeometryReader { geometry in
-                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                    scope.updateItemFrame(index: 6, geometry: geometry)
+                        MLBPlayerInfoSecondItem(mlbPlayerInfoStore: store)
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 1, geometry: geometry)
+                                    }
                                 }
-                            }
-                        )
+                            )
                         
-                        MLBPlayerInfoEigthItem(
-                            searchStore: searchStore,
-                            mlbPlayerInfoStore: mlbPlayerInfoStore
-                        )
-                        .background(
-                            GeometryReader { geometry in
-                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                    scope.updateItemFrame(index: 7, geometry: geometry)
+                        MLBPlayerInfoThirdItem(mlbPlayerInfoStore: store)
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 2, geometry: geometry)
+                                    }
                                 }
-                            }
-                        )
+                            )
                     }
-                },
-                displayContent: { scope in
-                    if let mlbPlayerInfoStore {
-                        MLBPlayerInfoFirstItem(
-                            mlbPlayerInfoStore: mlbPlayerInfoStore,
-                            isAniItem: true,
-                            itemSize: scope.itemSizes[0],
-                            itemOffset: scope.computedOffset(for: 0),
-                            showContents: scope.showContents
-                        )
-                        MLBPlayerInfoSecondItem(
-                            mlbPlayerInfoStore: mlbPlayerInfoStore,
-                            isAniItem: true,
-                            itemSize: scope.itemSizes[1],
-                            itemOffset: scope.computedOffset(for: 1),
-                            showContents: scope.showContents
-                        )
-                        MLBPlayerInfoThirdItem(
-                            mlbPlayerInfoStore: mlbPlayerInfoStore,
-                            isAniItem: true,
-                            itemSize: scope.itemSizes[2],
-                            itemOffset: scope.computedOffset(for: 2),
-                            showContents: scope.showContents
-                        )
-                        MLBPlayerInfoFourthItem(
-                            mlbPlayerInfoStore: mlbPlayerInfoStore,
-                            isAniItem: true,
-                            itemSize: scope.itemSizes[3],
-                            itemOffset: scope.computedOffset(for: 3),
-                            showContents: scope.showContents
-                        )
-                        MLBPlayerInfoFifthItem(
-                            mlbPlayerInfoStore: mlbPlayerInfoStore,
-                            isAniItem: true,
-                            itemSize: scope.itemSizes[4],
-                            itemOffset: scope.computedOffset(for: 4),
-                            showContents: scope.showContents
-                        )
-                        MLBPlayerInfoSixthItem(
-                            searchStore: searchStore,
-                            mlbPlayerInfoStore: mlbPlayerInfoStore,
-                            isAniItem: true,
-                            itemSize: scope.itemSizes[5],
-                            itemOffset: scope.computedOffset(for: 5),
-                            showContents: scope.showContents
-                        )
-                        MLBPlayerInfoSeventhItem(
-                            searchStore: searchStore,
-                            mlbPlayerInfoStore: mlbPlayerInfoStore,
-                            isAniItem: true,
-                            itemSize: scope.itemSizes[6],
-                            itemOffset: scope.computedOffset(for: 6),
-                            showContents: scope.showContents
-                        )
-                        MLBPlayerInfoEigthItem(
-                            searchStore: searchStore,
-                            mlbPlayerInfoStore: mlbPlayerInfoStore,
-                            isAniItem: true,
-                            itemSize: scope.itemSizes[7],
-                            itemOffset: scope.computedOffset(for: 7),
-                            showContents: scope.showContents
-                        )
+                    
+                    HStack(alignment: .top) {
+                        MLBPlayerInfoFourthItem(mlbPlayerInfoStore: store)
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 3, geometry: geometry)
+                                    }
+                                }
+                            )
+                        
+                        MLBPlayerInfoFifthItem(mlbPlayerInfoStore: store)
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 4, geometry: geometry)
+                                    }
+                                }
+                            )
                     }
-                }
-            )
-            .onAppear {
-                // init MLBPlayerInfoStore
-                let mlbPlayerInfoStore: StoreOf<MLBPlayerInfoStore> = storeManager.getStore(forKey: StoreKeys.mlbPlayerInfoStore) ?? {
-                    let newStore = Store(initialState: MLBPlayerInfoStore.State()) { MLBPlayerInfoStore() }
                     
-                    storeManager.setStore(newStore, forKey: StoreKeys.mlbPlayerInfoStore)
+                    MLBPlayerInfoSixthItem(
+                        searchStore: searchStore,
+                        mlbPlayerInfoStore: store
+                    )
+                    .background(
+                        GeometryReader { geometry in
+                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                scope.updateItemFrame(index: 5, geometry: geometry)
+                            }
+                        }
+                    )
                     
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    self.mlbPlayerInfoStore = mlbPlayerInfoStore
+                    MLBPlayerInfoSeventhItem(
+                        searchStore: searchStore,
+                        mlbPlayerInfoStore: store
+                    )
+                    .background(
+                        GeometryReader { geometry in
+                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                scope.updateItemFrame(index: 6, geometry: geometry)
+                            }
+                        }
+                    )
+                    
+                    MLBPlayerInfoEigthItem(
+                        searchStore: searchStore,
+                        mlbPlayerInfoStore: store
+                    )
+                    .background(
+                        GeometryReader { geometry in
+                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                scope.updateItemFrame(index: 7, geometry: geometry)
+                            }
+                        }
+                    )
                 }
-                
-                if searchStore.poppedView == nil {
-                    mlbPlayerInfoStore.send(.baseInfo(.initData(displayModel: displayModel)))
+            },
+            displayContent: { scope in
+                if show {
+                    MLBPlayerInfoFirstItem(
+                        mlbPlayerInfoStore: store,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[0],
+                        itemOffset: scope.computedOffset(for: 0),
+                        showContents: scope.showContents
+                    )
+                    MLBPlayerInfoSecondItem(
+                        mlbPlayerInfoStore: store,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[1],
+                        itemOffset: scope.computedOffset(for: 1),
+                        showContents: scope.showContents
+                    )
+                    MLBPlayerInfoThirdItem(
+                        mlbPlayerInfoStore: store,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[2],
+                        itemOffset: scope.computedOffset(for: 2),
+                        showContents: scope.showContents
+                    )
+                    MLBPlayerInfoFourthItem(
+                        mlbPlayerInfoStore: store,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[3],
+                        itemOffset: scope.computedOffset(for: 3),
+                        showContents: scope.showContents
+                    )
+                    MLBPlayerInfoFifthItem(
+                        mlbPlayerInfoStore: store,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[4],
+                        itemOffset: scope.computedOffset(for: 4),
+                        showContents: scope.showContents
+                    )
+                    MLBPlayerInfoSixthItem(
+                        searchStore: searchStore,
+                        mlbPlayerInfoStore: store,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[5],
+                        itemOffset: scope.computedOffset(for: 5),
+                        showContents: scope.showContents
+                    )
+                    MLBPlayerInfoSeventhItem(
+                        searchStore: searchStore,
+                        mlbPlayerInfoStore: store,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[6],
+                        itemOffset: scope.computedOffset(for: 6),
+                        showContents: scope.showContents
+                    )
+                    MLBPlayerInfoEigthItem(
+                        searchStore: searchStore,
+                        mlbPlayerInfoStore: store,
+                        isAniItem: true,
+                        itemSize: scope.itemSizes[7],
+                        itemOffset: scope.computedOffset(for: 7),
+                        showContents: scope.showContents
+                    )
                 }
             }
-            .onChange(of: displayModel) {
-                if case .mlbPlayerInfo = searchStore.poppedView {
-                    mlbPlayerInfoStore?.send(.baseInfo(.initData(displayModel: displayModel)))
-                }
+        )
+        .onAppear {
+            if !didPop {
+                store.send(.baseInfo(.initData))
             }
-        } // if let searchStore
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
+            }
+        }
     }
 }
 
@@ -233,27 +212,26 @@ struct MLBPlayerInfoFirstItem: View {
     
     var body: some View {
         let playerNameDic = mlbPlayerInfoStore.baseInfo.playerNameDictionary
+        let player = mlbPlayerInfoStore.baseInfo.displayModel.info
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
         ) {
-            if let player = mlbPlayerInfoStore.baseInfo.displayModel?.info {
-                URLImage(url: MLBUtil.playerPhotoURL(id: player.id))
-                    .opacity(showContents ? 1 : 0)
-                
-                Text(playerNameDic["\(player.id)"] ?? player.fullName)
-                    .font(.system(size: 16))
-                    .fontWeight(.medium)
-                    .opacity(showContents ? 1 : 0)
-                
-                Text(player.fullName)
-                    .font(.system(size: 12))
-                    .fontWeight(.light)
-                    .lineLimit(2)
-                    .opacity(showContents ? 1 : 0)
-            }
+            URLImage(url: MLBUtil.playerPhotoURL(id: player.id))
+                .opacity(showContents ? 1 : 0)
+            
+            Text(playerNameDic["\(player.id)"] ?? player.fullName)
+                .font(.system(size: 16))
+                .fontWeight(.medium)
+                .opacity(showContents ? 1 : 0)
+            
+            Text(player.fullName)
+                .font(.system(size: 12))
+                .fontWeight(.light)
+                .lineLimit(2)
+                .opacity(showContents ? 1 : 0)
         }
     }
 }
@@ -282,6 +260,7 @@ struct MLBPlayerInfoSecondItem: View {
     }
     
     var body: some View {
+        let displayModel = mlbPlayerInfoStore.baseInfo.displayModel
         let teamNameDic = mlbPlayerInfoStore.baseInfo.teamNameDictionary
         
         MovingCapsuleItemContainer(
@@ -289,15 +268,13 @@ struct MLBPlayerInfoSecondItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset
         ) {
-            if let displayModel = mlbPlayerInfoStore.baseInfo.displayModel {
-                URLImage(url: MLBUtil.teamLogoURL(id: displayModel.teamId), isSvg: true)
-                    .opacity(showContents ? 1 : 0)
-                
-                Text(teamNameDic["full_\(displayModel.teamId ?? 0)"] ?? "")
-                    .font(.system(size: 16))
-                    .fontWeight(.medium)
-                    .opacity(showContents ? 1 : 0)
-            }
+            URLImage(url: MLBUtil.teamLogoURL(id: displayModel.teamId), isSvg: true)
+                .opacity(showContents ? 1 : 0)
+            
+            Text(teamNameDic["full_\(displayModel.teamId ?? 0)"] ?? "")
+                .font(.system(size: 16))
+                .fontWeight(.medium)
+                .opacity(showContents ? 1 : 0)
         }
     }
 }
@@ -332,37 +309,37 @@ struct MLBPlayerInfoThirdItem: View {
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            if let player = mlbPlayerInfoStore.baseInfo.displayModel?.info {
-                HStack(spacing: 0) {
-                    Text("등번호: ")
-                        .font(.system(size: 15))
-                    
-                    Text(player.primaryNumber)
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                }
-                .opacity(showContents ? 1 : 0)
+            let player = mlbPlayerInfoStore.baseInfo.displayModel.info
+            
+            HStack(spacing: 0) {
+                Text("등번호: ")
+                    .font(.system(size: 15))
                 
-                HStack(spacing: 0) {
-                    Text("포지션: ")
-                        .font(.system(size: 15))
-                    
-                    Text(MLBUtil.getPositionName(input: player.primaryPosition.abbreviation))
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                }
-                .opacity(showContents ? 1 : 0)
-                
-                HStack(spacing: 0) {
-                    Text("데뷔년도: ")
-                        .font(.system(size: 15))
-                    
-                    Text(player.mlbDebutDate.split(separator: "-").first ?? "2025")
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                }
-                .opacity(showContents ? 1 : 0)
+                Text(player.primaryNumber)
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
             }
+            .opacity(showContents ? 1 : 0)
+            
+            HStack(spacing: 0) {
+                Text("포지션: ")
+                    .font(.system(size: 15))
+                
+                Text(MLBUtil.getPositionName(input: player.primaryPosition.abbreviation))
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+            }
+            .opacity(showContents ? 1 : 0)
+            
+            HStack(spacing: 0) {
+                Text("데뷔년도: ")
+                    .font(.system(size: 15))
+                
+                Text(player.mlbDebutDate.split(separator: "-").first ?? "2025")
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+            }
+            .opacity(showContents ? 1 : 0)
         }
     }
 }
@@ -397,37 +374,37 @@ struct MLBPlayerInfoFourthItem: View {
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            if let player = mlbPlayerInfoStore.baseInfo.displayModel?.info {
-                HStack(spacing: 0) {
-                    Text("국적: ")
-                        .font(.system(size: 15))
-                    
-                    Text(player.birthCountry)
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                }
-                .opacity(showContents ? 1 : 0)
+            let player = mlbPlayerInfoStore.baseInfo.displayModel.info
+            
+            HStack(spacing: 0) {
+                Text("국적: ")
+                    .font(.system(size: 15))
                 
-                HStack(spacing: 0) {
-                    Text("출생: ")
-                        .font(.system(size: 15))
-                    
-                    Text(player.birthDate)
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                }
-                .opacity(showContents ? 1 : 0)
-                
-                HStack(spacing: 0) {
-                    Text("나이: ")
-                        .font(.system(size: 15))
-                    
-                    Text(String(CalendarUtil.calculateAge(from: player.birthDate)))
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                }
-                .opacity(showContents ? 1 : 0)
+                Text(player.birthCountry)
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
             }
+            .opacity(showContents ? 1 : 0)
+            
+            HStack(spacing: 0) {
+                Text("출생: ")
+                    .font(.system(size: 15))
+                
+                Text(player.birthDate)
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+            }
+            .opacity(showContents ? 1 : 0)
+            
+            HStack(spacing: 0) {
+                Text("나이: ")
+                    .font(.system(size: 15))
+                
+                Text(String(CalendarUtil.calculateAge(from: player.birthDate)))
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+            }
+            .opacity(showContents ? 1 : 0)
         }
     }
 }
@@ -462,27 +439,27 @@ struct MLBPlayerInfoFifthItem: View {
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            if let player = mlbPlayerInfoStore.baseInfo.displayModel?.info {
-                HStack(spacing: 0) {
-                    Text("키(cm/ft): ")
-                        .font(.system(size: 15))
-                    
-                    Text("\(MLBUtil.changeToCm(input: player.height)) / \(player.height)")
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                }
-                .opacity(showContents ? 1 : 0)
+            let player = mlbPlayerInfoStore.baseInfo.displayModel.info
+            
+            HStack(spacing: 0) {
+                Text("키(cm/ft): ")
+                    .font(.system(size: 15))
                 
-                HStack(spacing: 0) {
-                    Text("몸무게(kg/lb): ")
-                        .font(.system(size: 15))
-                    
-                    Text("\(Int(player.weight.toKg())) / \(player.weight)")
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                }
-                .opacity(showContents ? 1 : 0)
+                Text("\(MLBUtil.changeToCm(input: player.height)) / \(player.height)")
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
             }
+            .opacity(showContents ? 1 : 0)
+            
+            HStack(spacing: 0) {
+                Text("몸무게(kg/lb): ")
+                    .font(.system(size: 15))
+                
+                Text("\(Int(player.weight.toKg())) / \(player.weight)")
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+            }
+            .opacity(showContents ? 1 : 0)
         }
     }
 }
@@ -514,7 +491,7 @@ struct MLBPlayerInfoSixthItem: View {
     }
     
     var body: some View {
-        let stats = mlbPlayerInfoStore.baseInfo.displayModel?.stats
+        let stats = mlbPlayerInfoStore.baseInfo.displayModel.stats
         let season = stats?.hitting?.season ?? stats?.pitching?.season ?? stats?.fielding?.season ?? stats?.catching?.season ?? "2025"
         
         
@@ -523,9 +500,7 @@ struct MLBPlayerInfoSixthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                if let player = mlbPlayerInfoStore.baseInfo.displayModel?.info {
-                    searchStore.send(.showPlayerStats(playerId: player.id))
-                }
+                mlbPlayerInfoStore.send(.showPlayerStats)
             }
         ) {
             BaseballLeagueTitle(
@@ -649,15 +624,16 @@ struct MLBPlayerInfoSeventhItem: View {
     
     var body: some View {
         let teamNameDic = mlbPlayerInfoStore.baseInfo.teamNameDictionary
-        let lastGamePlayerHitterStats = mlbPlayerInfoStore.baseInfo.displayModel?.lastGamePlayerStats?.stats?.batting
-        let lastGamePlayerPitcherStats = mlbPlayerInfoStore.baseInfo.displayModel?.lastGamePlayerStats?.stats?.pitching
+        let lastGame = mlbPlayerInfoStore.baseInfo.displayModel.lastGame
+        let lastGamePlayerHitterStats = mlbPlayerInfoStore.baseInfo.displayModel.lastGamePlayerStats?.stats?.batting
+        let lastGamePlayerPitcherStats = mlbPlayerInfoStore.baseInfo.displayModel.lastGamePlayerStats?.stats?.pitching
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "previous"))
+                mlbPlayerInfoStore.send(.showGameStats(isPrevious: false))
             }
         ) {
             Text("최근경기")
@@ -665,7 +641,7 @@ struct MLBPlayerInfoSeventhItem: View {
                 .opacity(showContents ? 1 : 0)
             
             HStack {
-                if let lastGame = mlbPlayerInfoStore.baseInfo.displayModel?.lastGame {
+                if let lastGame {
                     let homeTeamScore = lastGame.linescore?.teams.home.runs ?? 0
                     let awayTeamScore = lastGame.linescore?.teams.away.runs ?? 0
                     
@@ -817,20 +793,21 @@ struct MLBPlayerInfoEigthItem: View {
     
     var body: some View {
         let teamNameDic = mlbPlayerInfoStore.baseInfo.teamNameDictionary
+        let nextGame = mlbPlayerInfoStore.baseInfo.displayModel.nextGame
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "next"))
+                mlbPlayerInfoStore.send(.showGameStats())
             }
         ) {
             Text("다음경기")
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
             
-            if let nextGame = mlbPlayerInfoStore.baseInfo.displayModel?.nextGame {
+            if let nextGame {
                 HStack {
                     Text(teamNameDic["short_\(nextGame.teams.home.id)"] ?? "")
                         .font(.system(size: 16))

@@ -12,6 +12,8 @@ import ComposableArchitecture
 struct MLBGameStatsStore {
     typealias BaseGameStats = BaseGameStatsStore<MLBGameStatsDisplayModel>
     
+    let searchClient = SearchClient()
+    
     @ObservableState
     struct State {
         /* ---------------------
@@ -23,32 +25,37 @@ struct MLBGameStatsStore {
         /* ---------------------
            data state
            --------------------- */
-        var baseGameStats = BaseGameStats.State()
+        var baseGameStats: BaseGameStats.State
+        
         var teamBoxScore: MLBGameBoxscoreTeamData? = nil
         var teamHitters: [(String, MLBGameBoxscoreTeamPlayer)] = []
         var teamPitchers: [(String, MLBGameBoxscoreTeamPlayer)] = []
 //        var playersTotalStats: NBAGameBoxScoreStats? = nil
         
-        /* ---------------------
-           ui state
-           --------------------- */
+        init(displayModel: MLBGameStatsDisplayModel) {
+            self.baseGameStats = BaseGameStats.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
         case baseGameStats(BaseGameStats.Action)
         
-        /* ---------------------
-           private
-           --------------------- */
         case sortHitters
         case sortPitchers
+        case sortByBattingOrder
         case setPlayersTotalStats
+        case refreshGame(shouldFetch: Bool = true)
+        case updateDisplayModel(model: SportDecodableModel)
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case didRefreshGame(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
-        Scope(state: \.baseGameStats, action: \.baseGameStats) {
-            BaseGameStats()
-        }
+        Scope(state: \.baseGameStats, action: \.baseGameStats) { BaseGameStats() }
         
         Reduce { state, action in
             switch action {
@@ -59,14 +66,14 @@ struct MLBGameStatsStore {
                 state.teamPitchers = []
 //                state.playersTotalStats = nil
                 
-                return .send(.baseGameStats(.selectTeam(0)))
+                return .send(.baseGameStats(.selectTeam(isInit: true, index: 0)))
                 
-            case .baseGameStats(.selectTeam(let index)):
+            case let .baseGameStats(.selectTeam(isInit, index)):
                 // set selected team's boxscore
                 state.teamBoxScore = if index == 0 {
-                    state.baseGameStats.displayModel?.game.boxscore?.teams.home
+                    state.baseGameStats.displayModel.game.boxscore?.teams.home
                 } else {
-                    state.baseGameStats.displayModel?.game.boxscore?.teams.away
+                    state.baseGameStats.displayModel.game.boxscore?.teams.away
                 }
                 
                 state.teamHitters = state.teamBoxScore?.players
@@ -79,9 +86,14 @@ struct MLBGameStatsStore {
                     .map { ($0.key, $0.value) } ?? []
                 
                 return .run { send in
-                    await send(.sortHitters)
+                    if isInit {
+                        await send(.sortByBattingOrder)
+                    } else {
+                        await send(.sortHitters)
+                    }
                     await send(.sortPitchers)
                     await send(.setPlayersTotalStats)
+                    await send(.refreshGame(shouldFetch: false))
                 }
                 
             case .baseGameStats(.selectFirstCategory):
@@ -89,9 +101,6 @@ struct MLBGameStatsStore {
                 
             case .baseGameStats(.selectSecondCategory):
                 return .send(.sortPitchers)
-                
-            case .baseGameStats(_):
-                return .none
                 
             case .sortHitters:
                 switch state.baseGameStats.firstCategorySelectedIndex {
@@ -139,7 +148,52 @@ struct MLBGameStatsStore {
                 
                 return .none
                 
+            case .sortByBattingOrder:
+                state.teamHitters.sort { Int($0.1.battingOrder.prefix(1)) ?? 0 < Int($1.1.battingOrder.prefix(1)) ?? 0 }
+                return .none
+                
             case .setPlayersTotalStats:
+                return .none
+                
+            case let .refreshGame(shouldFetch):
+                if shouldFetch {
+                    return .run { [displayModel = state.baseGameStats.displayModel] send in
+                        let game = displayModel.game
+                        
+                        let result = try await searchClient.fetchById(
+                            season: displayModel.season,
+                            category: "baseball",
+                            date: game.gameInfo.gameDate,
+                            dataType: "baseball_game_stats",
+                            leagueId: Constants.Ids.mlb,
+                            id: String(game.game.pk)
+                        )
+                        
+                        await send(.updateDisplayModel(model: result.data))
+                        await send(.delegate(.didRefreshGame(model: result.data)))
+                    }
+                } else {
+                    return .run { [displayModel = state.baseGameStats.displayModel] send in
+                        let responseModel = MLBGameStatsResponseModel(game: displayModel.game)
+                        let dataModel: SportDecodableModel = .mlbGameStats(responseModel, displayModel)
+                            
+                        await send(.delegate(.didRefreshGame(model: dataModel)))
+                    }
+                }
+                
+            case let .updateDisplayModel(model):
+                if case .mlbGameStats(_, let displayModel) = model {
+                    state.baseGameStats.displayModel = displayModel
+                    
+                    return .send(.baseGameStats(.initData))
+                } else {
+                    return .none
+                }
+                
+            case .baseGameStats:
+                return .none
+                
+            case .delegate:
                 return .none
             }
         }

@@ -22,6 +22,7 @@ struct StoreKeys {
     static let fbTeamScheduleStore = "FBTeamScheduleStore"
     static let fbLeagueScheduleStore = "FBLeagueScheduleStore"
     static let fbGameStatsStore = "FBGameStatsStore"
+    static let fbTournamentStore = "FBTournamentStore"
     
     // nba
     static let nbaPlayerInfoStore = "NBAPlayerInfoStore"
@@ -33,7 +34,7 @@ struct StoreKeys {
     static let nbaTeamScheduleStore = "NBATeamScheduleStore"
     static let nbaLeagueScheduleStore = "NBALeagueScheduleStore"
     static let nbaGameStatsStore = "NBAGameStatsStore"
-    static let nbaLeagueTournamentStore = "NBALeagueTournamentStore"
+    static let nbaTournamentStore = "NBATournamentStore"
     
     // kbo
     static let kboPlayerInfoStore = "KBOPlayerInfoStore"
@@ -45,6 +46,7 @@ struct StoreKeys {
     static let kboTeamScheduleStore = "KBOTeamScheduleStore"
     static let kboLeagueScheduleStore = "KBOLeagueScheduleStore"
     static let kboGameStatsStore = "KBOGameStatsStore"
+    static let kboTournamentStore = "KBOTournamentStore"
     
     // mlb
     static let mlbPlayerInfoStore = "MLBPlayerInfoStore"

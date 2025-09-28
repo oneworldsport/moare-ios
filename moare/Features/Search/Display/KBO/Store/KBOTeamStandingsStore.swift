@@ -10,49 +10,51 @@ import ComposableArchitecture
 
 @Reducer
 struct KBOTeamStandingsStore {
-    typealias BaseTeamStandings = BaseTeamStandingsStore<KBOTeamStandingsDisplayModel>
+    typealias BaseStandings = BaseTeamStandingsStore<KBOTeamStandingsDisplayModel>
     
     @ObservableState
     struct State {
-        /* ---------------------
-           data state
-           --------------------- */
-        var baseTeamStandings = BaseTeamStandings.State()
+        let responseModel: KBOTeamStandingsResponseModel
+        var baseStandings: BaseStandings.State
+        
         var standings: [KBOTeamStandingsDisplay] = []
+        
+        init(responseModel: KBOTeamStandingsResponseModel, displayModel: KBOTeamStandingsDisplayModel) {
+            self.responseModel = responseModel
+            self.baseStandings = BaseStandings.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
-        case baseTeamStandings(BaseTeamStandings.Action)
+        case baseStandings(BaseStandings.Action)
         
-        /* ---------------------
-           view action
-           --------------------- */
-        
-        /* ---------------------
-           private
-           --------------------- */
         case sortStandings
+        case showTeamStats(id: Int)
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case showTeamStats(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
-        Scope(state: \.baseTeamStandings, action: \.baseTeamStandings) {
-            BaseTeamStandings()
-        }
+        Scope(state: \.baseStandings, action: \.baseStandings) { BaseStandings() }
         
         Reduce { state, action in
             switch action {
-            case .baseTeamStandings(.initData):
+            case .baseStandings(.initData):
                 // init data
-                state.standings = state.baseTeamStandings.displayModel?.standings ?? []
-                state.baseTeamStandings.secondCategorySelectedIndex = 1 // defalue category is "승률"
+                state.standings = state.baseStandings.displayModel.standings
+                state.baseStandings.categorySelectedIndex = 1 // defalue category is "승률"
                 
                 return .send(.sortStandings)
                 
-            case .baseTeamStandings(.selectSecondCategory):
+            case .baseStandings(.selectCategory):
                 return .send(.sortStandings)
                 
             case .sortStandings:
-                switch state.baseTeamStandings.secondCategorySelectedIndex {
+                switch state.baseStandings.categorySelectedIndex {
                 case 0: // 승률
                     state.standings.sort { Double($0.stats.rankData.winpct) ?? 0 > Double($1.stats.rankData.winpct) ?? 0 }
                 case 1: // 게임차
@@ -106,6 +108,23 @@ struct KBOTeamStandingsStore {
                 default: break
                 }
                 
+                return .none
+                
+            case .baseStandings:
+                return .none
+                
+            case let .showTeamStats(id):
+                let team = state.responseModel.standings.first { $0.team.id == id }
+                let responseModel = KBOTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
+                
+                let dataModel: SportDecodableModel = .kboTeamStats(
+                    responseModel,
+                    ModelConverter.shared.kboTeamStatsConverter(response: responseModel)
+                )
+                
+                return .send(.delegate(.showTeamStats(model: dataModel)))
+                
+            case .delegate:
                 return .none
             }
             

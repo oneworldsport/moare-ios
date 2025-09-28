@@ -41,13 +41,14 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
         let firstStatsColumnWidthList = state.firstStatsColumnWidthList
         let secondStatsColumnWidthList = state.secondStatsColumnWidthList
         
-        VStack {
+        VStack(spacing: 0) {
             if state.shouldShowTitle {
                 titleContent()
             }
             
-            if state.shouldShowGameItem {
+            if state.shouldShowGameContent {
                 gameContent()
+                    .padding(.vertical, 8)
             }
             
             HDivider()
@@ -181,7 +182,9 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                             HStack(spacing: 0) {
                                 VStack(spacing: 0) {
                                     StickyHeader(coordinateSpaceName: coordinateSpaceName) {
-                                        StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory, width: state.firstColumnWidth)
+                                        OptionalButton(action: actions.firstStatsTitleCategoryAction) {
+                                            StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory, width: state.firstColumnWidth)
+                                        }
                                     }
                                     .frame(width: state.firstColumnWidth ?? 132)
                                     
@@ -379,6 +382,7 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                 }
                             }
                         } // VStack
+                        .padding(.top, 8)
                     } // ScrollView
                     .coordinateSpace(name: coordinateSpaceName)
                 } else {

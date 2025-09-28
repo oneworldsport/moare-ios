@@ -16,7 +16,7 @@ struct BaseScheduleStore<T> {
         /* ---------------------
            data state
            --------------------- */
-        var displayModel: T? = nil
+        var displayModel: T
         var displayDataState: ApiFetchState = ApiFetchState.idle
         var yearMonthList: [String] = []
         var days: [DayInfo] = []
@@ -31,14 +31,15 @@ struct BaseScheduleStore<T> {
         var isAllResultOpened = false
         var scrollCalendar = true
         
-        /* ---------------------
-           etc
-           --------------------- */
         var teamNameDictionary: [String: String] = [:]
+        
+        init(displayModel: T) {
+            self.displayModel = displayModel
+        }
     }
     
     enum Action {
-        case initData(displayModel: T)
+        case initData
         case selectDay(DayInfo, Int)
         case setDefaultYearMonth(date: String)
     }
@@ -48,7 +49,7 @@ struct BaseScheduleStore<T> {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .initData(let displayModel):
+            case .initData:
                 // init with default value
                 state.displayDataState = .idle
                 state.yearMonthList = []
@@ -61,23 +62,10 @@ struct BaseScheduleStore<T> {
                 state.isAllResultOpened = false
                 state.scrollCalendar = true
                 
-                // init data
-                state.displayModel = displayModel
-                
-                if let displayModel = displayModel as? SportDisplayModel {
+                if let displayModel = state.displayModel as? SportDisplayModel {
                     switch displayModel.leagueId {
-                    case Constants.Ids.epl:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplTeamDic)
-                    case Constants.Ids.laliga:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaTeamDic)
-                    case Constants.Ids.bundesliga:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaTeamDic)
-                    case Constants.Ids.ligue1:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.ligue1TeamDic)
-                    case Constants.Ids.seriea:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaTeamDic)
-                    case Constants.Ids.mls:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlsTeamDic)
+                    case let id where Constants.Ids.footballLeagues.contains(id):
+                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                     case Constants.Ids.nba:
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
                     case Constants.Ids.kbo:

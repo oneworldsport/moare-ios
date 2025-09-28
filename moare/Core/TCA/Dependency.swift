@@ -23,6 +23,11 @@ extension DependencyValues {
         set { self[NoticeListKey.self] = newValue }
     }
     
+    var tournamentTeamsClient: TournamentTeamsClient {
+        get { self[TournamentTeamsKey.self] }
+        set { self[TournamentTeamsKey.self] = newValue }
+    }
+    
     var translatedNameProvider: TranslatedNameProvider {
         get { self[TranslatedNameProviderKey.self] }
         set { self[TranslatedNameProviderKey.self] = newValue }
@@ -53,6 +58,14 @@ private enum NoticeListKey: DependencyKey {
     )
 }
 
+private enum TournamentTeamsKey: DependencyKey {
+    static let liveValue = TournamentTeamsClient(
+        wait: {
+            try await AWSManager.shared.waitForTournamentTeams()
+        }
+    )
+}
+
 struct TranslatedNameProviderKey: DependencyKey {
     static let liveValue = TranslatedNameProvider()
 }
@@ -67,6 +80,10 @@ struct NoticeListClient {
 
 struct TrieTupleClient {
     var wait: () async throws -> (Trie, [KeywordInfo])
+}
+
+struct TournamentTeamsClient {
+    var wait: () async throws -> [String: [Int]]
 }
 
 // TODO: class 이름 고민

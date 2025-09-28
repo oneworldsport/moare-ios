@@ -9,166 +9,145 @@ import SwiftUI
 import ComposableArchitecture
 
 struct KBOTeamInfoView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var kboTeamInfoStore: StoreOf<KBOTeamInfoStore>? = nil
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<KBOTeamInfoStore>
+    let didPop: Bool
     
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: KBOTeamInfoDisplayModel
+    @State private var show = false
     
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            InfoViewContainer(itemCount: 8, measureContent: { scope in
-                if let kboTeamInfoStore {
-                    HStack(alignment: .top) {
-                        KBOTeamInfoFirstItem(kboTeamInfoStore: kboTeamInfoStore)
-                            .frame(maxWidth: .infinity)
-                            .background(
-                                GeometryReader { geometry in
-                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                        scope.updateItemFrame(index: 0, geometry: geometry)
-                                    }
+        InfoViewContainer(itemCount: 8, measureContent: { scope in
+            if show {
+                HStack(alignment: .top) {
+                    KBOTeamInfoFirstItem(kboTeamInfoStore: store)
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            GeometryReader { geometry in
+                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                    scope.updateItemFrame(index: 0, geometry: geometry)
                                 }
-                            )
-                        
-                        KBOTeamInfoSecondItem(kboTeamInfoStore: kboTeamInfoStore)
-                            .frame(maxWidth: .infinity)
-                            .background(
-                                GeometryReader { geometry in
-                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                        scope.updateItemFrame(index: 1, geometry: geometry)
-                                    }
-                                }
-                            )
-                        
-                        KBOTeamInfoThirdItem(kboTeamInfoStore: kboTeamInfoStore)
-                            .frame(maxWidth: .infinity)
-                            .background(
-                                GeometryReader { geometry in
-                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                        scope.updateItemFrame(index: 2, geometry: geometry)
-                                    }
-                                }
-                            )
-                    }
+                            }
+                        )
                     
-                    KBOTeamInfoFourthItem(
+                    KBOTeamInfoSecondItem(kboTeamInfoStore: store)
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            GeometryReader { geometry in
+                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                    scope.updateItemFrame(index: 1, geometry: geometry)
+                                }
+                            }
+                        )
+                    
+                    KBOTeamInfoThirdItem(kboTeamInfoStore: store)
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            GeometryReader { geometry in
+                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                    scope.updateItemFrame(index: 2, geometry: geometry)
+                                }
+                            }
+                        )
+                }
+                
+                KBOTeamInfoFourthItem(
+                    searchStore: searchStore,
+                    kboTeamInfoStore: store
+                )
+                .background(
+                    GeometryReader { geometry in
+                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                            scope.updateItemFrame(index: 3, geometry: geometry)
+                        }
+                    }
+                )
+                
+                HStack(alignment: .top) {
+                    KBOTeamInfoFifthItem(
                         searchStore: searchStore,
-                        kboTeamInfoStore: kboTeamInfoStore
+                        kboTeamInfoStore: store
                     )
+                    .frame(maxWidth: .infinity)
                     .background(
                         GeometryReader { geometry in
                             Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                scope.updateItemFrame(index: 3, geometry: geometry)
+                                scope.updateItemFrame(index: 4, geometry: geometry)
                             }
                         }
                     )
                     
-                    HStack(alignment: .top) {
-                        KBOTeamInfoFifthItem(
-                            searchStore: searchStore,
-                            kboTeamInfoStore: kboTeamInfoStore
-                        )
-                        .frame(maxWidth: .infinity)
-                        .background(
-                            GeometryReader { geometry in
-                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                    scope.updateItemFrame(index: 4, geometry: geometry)
-                                }
-                            }
-                        )
-                        
-                        KBOTeamInfoSixthItem(
-                            searchStore: searchStore,
-                            kboTeamInfoStore: kboTeamInfoStore
-                        )
-                        .frame(maxWidth: .infinity)
-                        .background(
-                            GeometryReader { geometry in
-                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                    scope.updateItemFrame(index: 5, geometry: geometry)
-                                }
-                            }
-                        )
-                    }
-                }
-            }, displayContent: { scope in
-                if let kboTeamInfoStore {
-                    KBOTeamInfoFirstItem(
-                        kboTeamInfoStore: kboTeamInfoStore,
-                        isAniItem: true,
-                        itemSize: scope.itemSizes[0],
-                        itemOffset: scope.computedOffset(for: 0),
-                        showContents: scope.showContents
-                    )
-                    KBOTeamInfoSecondItem(
-                        kboTeamInfoStore: kboTeamInfoStore,
-                        isAniItem: true,
-                        itemSize: scope.itemSizes[1],
-                        itemOffset: scope.computedOffset(for: 1),
-                        showContents: scope.showContents
-                    )
-                    KBOTeamInfoThirdItem(
-                        kboTeamInfoStore: kboTeamInfoStore,
-                        isAniItem: true,
-                        itemSize: scope.itemSizes[2],
-                        itemOffset: scope.computedOffset(for: 2),
-                        showContents: scope.showContents
-                    )
-                    KBOTeamInfoFourthItem(
-                        searchStore: searchStore,
-                        kboTeamInfoStore: kboTeamInfoStore,
-                        isAniItem: true,
-                        itemSize: scope.itemSizes[3],
-                        itemOffset: scope.computedOffset(for: 3),
-                        showContents: scope.showContents
-                    )
-                    KBOTeamInfoFifthItem(
-                        searchStore: searchStore,
-                        kboTeamInfoStore: kboTeamInfoStore,
-                        isAniItem: true,
-                        itemSize: scope.itemSizes[4],
-                        itemOffset: scope.computedOffset(for: 4),
-                        showContents: scope.showContents
-                    )
                     KBOTeamInfoSixthItem(
                         searchStore: searchStore,
-                        kboTeamInfoStore: kboTeamInfoStore,
-                        isAniItem: true,
-                        itemSize: scope.itemSizes[5],
-                        itemOffset: scope.computedOffset(for: 5),
-                        showContents: scope.showContents
+                        kboTeamInfoStore: store
+                    )
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        GeometryReader { geometry in
+                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                scope.updateItemFrame(index: 5, geometry: geometry)
+                            }
+                        }
                     )
                 }
-            })
-            .onAppear {
-                // init KBOTeamInfoStore
-                let kboTeamInfoStore: StoreOf<KBOTeamInfoStore> = storeManager.getStore(forKey: StoreKeys.kboTeamInfoStore) ?? {
-                    let newStore = Store(initialState: KBOTeamInfoStore.State()) { KBOTeamInfoStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.kboTeamInfoStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    self.kboTeamInfoStore = kboTeamInfoStore
-                }
-                
-                if searchStore.poppedView == nil {
-                    kboTeamInfoStore.send(.baseInfo(.initData(displayModel: displayModel)))
-                }
             }
-            .onChange(of: displayModel) {
-                if case .kboTeamInfo = searchStore.poppedView {
-                    kboTeamInfoStore?.send(.baseInfo(.initData(displayModel: displayModel)))
-                }
+        }, displayContent: { scope in
+            if show {
+                KBOTeamInfoFirstItem(
+                    kboTeamInfoStore: store,
+                    isAniItem: true,
+                    itemSize: scope.itemSizes[0],
+                    itemOffset: scope.computedOffset(for: 0),
+                    showContents: scope.showContents
+                )
+                KBOTeamInfoSecondItem(
+                    kboTeamInfoStore: store,
+                    isAniItem: true,
+                    itemSize: scope.itemSizes[1],
+                    itemOffset: scope.computedOffset(for: 1),
+                    showContents: scope.showContents
+                )
+                KBOTeamInfoThirdItem(
+                    kboTeamInfoStore: store,
+                    isAniItem: true,
+                    itemSize: scope.itemSizes[2],
+                    itemOffset: scope.computedOffset(for: 2),
+                    showContents: scope.showContents
+                )
+                KBOTeamInfoFourthItem(
+                    searchStore: searchStore,
+                    kboTeamInfoStore: store,
+                    isAniItem: true,
+                    itemSize: scope.itemSizes[3],
+                    itemOffset: scope.computedOffset(for: 3),
+                    showContents: scope.showContents
+                )
+                KBOTeamInfoFifthItem(
+                    searchStore: searchStore,
+                    kboTeamInfoStore: store,
+                    isAniItem: true,
+                    itemSize: scope.itemSizes[4],
+                    itemOffset: scope.computedOffset(for: 4),
+                    showContents: scope.showContents
+                )
+                KBOTeamInfoSixthItem(
+                    searchStore: searchStore,
+                    kboTeamInfoStore: store,
+                    isAniItem: true,
+                    itemSize: scope.itemSizes[5],
+                    itemOffset: scope.computedOffset(for: 5),
+                    showContents: scope.showContents
+                )
             }
-        } // if let searchStore
+        })
+        .onAppear {
+            if !didPop {
+                store.send(.baseInfo(.initData))
+            }
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
+            }
+        }
     }
 }
 
@@ -196,6 +175,7 @@ struct KBOTeamInfoFirstItem: View {
     }
     
     var body: some View {
+        let team = kboTeamInfoStore.baseInfo.displayModel.team
         let teamNameDic = kboTeamInfoStore.baseInfo.teamNameDictionary
         
         MovingCapsuleItemContainer(
@@ -203,15 +183,13 @@ struct KBOTeamInfoFirstItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
         ) {
-            if let team = kboTeamInfoStore.baseInfo.displayModel?.team {
-                URLImage(url: KBOUtil.teamLogoURL(id: team.id))
-                    .opacity(showContents ? 1 : 0)
-                
-                Text(teamNameDic["full_\(team.id)"] ?? team.teamName)
-                    .font(.system(size: 16))
-                    .fontWeight(.medium)
-                    .opacity(showContents ? 1 : 0)
-            }
+            URLImage(url: KBOUtil.teamLogoURL(id: team.id))
+                .opacity(showContents ? 1 : 0)
+            
+            Text(teamNameDic["full_\(team.id)"] ?? team.teamName)
+                .font(.system(size: 16))
+                .fontWeight(.medium)
+                .opacity(showContents ? 1 : 0)
         }
     }
 }
@@ -240,43 +218,43 @@ struct KBOTeamInfoSecondItem: View {
     }
     
     var body: some View {
+        let team = kboTeamInfoStore.baseInfo.displayModel.team
+        
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            if let team = kboTeamInfoStore.baseInfo.displayModel?.team {
-                HStack(spacing: 0) {
-                    Text("창단연도: ")
-                        .font(.system(size: 15))
-                    
-                    Text(String(team.yearFounded))
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                }
-                .opacity(showContents ? 1 : 0)
+            HStack(spacing: 0) {
+                Text("창단연도: ")
+                    .font(.system(size: 15))
                 
-                (
-                    Text("연고지: ")
-                        .font(.system(size: 15))
-                    + Text(team.city)
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                )
-                .multilineTextAlignment(.leading)
-                .opacity(showContents ? 1 : 0)
-                
-                HStack(spacing: 0) {
-                    Text("감독: ")
-                        .font(.system(size: 15))
-                    
-                    Text(team.coach)
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                }
-                .opacity(showContents ? 1 : 0)
+                Text(String(team.yearFounded))
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
             }
+            .opacity(showContents ? 1 : 0)
+            
+            (
+                Text("연고지: ")
+                    .font(.system(size: 15))
+                + Text(team.city)
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+            )
+            .multilineTextAlignment(.leading)
+            .opacity(showContents ? 1 : 0)
+            
+            HStack(spacing: 0) {
+                Text("감독: ")
+                    .font(.system(size: 15))
+                
+                Text(team.coach)
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+            }
+            .opacity(showContents ? 1 : 0)
         }
     }
 }
@@ -305,7 +283,9 @@ struct KBOTeamInfoThirdItem: View {
     }
     
     var body: some View {
+        let displayModel = kboTeamInfoStore.baseInfo.displayModel
         let teamNameDic = kboTeamInfoStore.baseInfo.teamNameDictionary
+        let venue = displayModel.venue
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
@@ -313,39 +293,35 @@ struct KBOTeamInfoThirdItem: View {
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            if let displayModel = kboTeamInfoStore.baseInfo.displayModel {
-                let venue = displayModel.venue
+            (
+                Text("홈구장: ")
+                    .font(.system(size: 15))
+                + Text(teamNameDic["venue_\(displayModel.team.id)"] ?? venue.name)
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+            )
+            .multilineTextAlignment(.leading)
+            .opacity(showContents ? 1 : 0)
+            
+            HStack(spacing: 0) {
+                Text("좌석수: ")
+                    .font(.system(size: 15))
                 
-                (
-                    Text("홈구장: ")
-                        .font(.system(size: 15))
-                    + Text(teamNameDic["venue_\(displayModel.team.id)"] ?? venue.name)
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                )
-                .multilineTextAlignment(.leading)
-                .opacity(showContents ? 1 : 0)
-                
-                HStack(spacing: 0) {
-                    Text("좌석수: ")
-                        .font(.system(size: 15))
-                    
-                    Text(String(venue.capacity))
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                }
-                .opacity(showContents ? 1 : 0)
-                
-                HStack(spacing: 0) {
-                    Text("개장: ")
-                        .font(.system(size: 15))
-                    
-                    Text(String(venue.opened))
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                }
-                .opacity(showContents ? 1 : 0)
+                Text(String(venue.capacity))
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
             }
+            .opacity(showContents ? 1 : 0)
+            
+            HStack(spacing: 0) {
+                Text("개장: ")
+                    .font(.system(size: 15))
+                
+                Text(String(venue.opened))
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+            }
+            .opacity(showContents ? 1 : 0)
         }
     }
 }
@@ -377,17 +353,15 @@ struct KBOTeamInfoFourthItem: View {
     }
     
     var body: some View {
-        let team = kboTeamInfoStore.baseInfo.displayModel?.team
-        let stats = kboTeamInfoStore.baseInfo.displayModel?.stats
+        let team = kboTeamInfoStore.baseInfo.displayModel.team
+        let stats = kboTeamInfoStore.baseInfo.displayModel.stats
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                if let team {
-                    searchStore.send(.showTeamStats(teamId: team.id))
-                }
+                kboTeamInfoStore.send(.showTeamStats)
             }
         ) {
             BaseballLeagueTitle(
@@ -470,20 +444,21 @@ struct KBOTeamInfoFifthItem: View {
     
     var body: some View {
         let teamNameDic = kboTeamInfoStore.baseInfo.teamNameDictionary
+        let lastGame = kboTeamInfoStore.baseInfo.displayModel.lastGame
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "previous"))
+                kboTeamInfoStore.send(.showGameStats(isPrevious: false))
             }
         ) {
             Text("최근경기")
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
             
-            if let lastGame = kboTeamInfoStore.baseInfo.displayModel?.lastGame {
+            if let lastGame {
                 let homeTeamScore = Int(lastGame.lineScore?.home.r ?? "0") ?? 0
                 let awayTeamScore = Int(lastGame.lineScore?.away.r ?? "0") ?? 0
                 
@@ -553,6 +528,7 @@ struct KBOTeamInfoSixthItem: View {
     }
     
     var body: some View {
+        let nextGame = kboTeamInfoStore.baseInfo.displayModel.nextGame
         let teamNameDic = kboTeamInfoStore.baseInfo.teamNameDictionary
         
         MovingCapsuleItemContainer(
@@ -560,14 +536,14 @@ struct KBOTeamInfoSixthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "next"))
+                kboTeamInfoStore.send(.showGameStats())
             }
         ) {
             Text("다음경기")
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
             
-            if let nextGame = kboTeamInfoStore.baseInfo.displayModel?.nextGame {
+            if let nextGame {
                 HStack {
                     Text(teamNameDic["short_\(nextGame.gameInfo?.homeTeamId ?? 0)"] ?? "")
                         .font(.system(size: 15))

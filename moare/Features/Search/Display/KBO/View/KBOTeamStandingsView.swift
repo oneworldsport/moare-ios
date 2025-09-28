@@ -9,107 +9,86 @@ import SwiftUI
 import ComposableArchitecture
 
 struct KBOTeamStandingsView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var kboTeamStandingsStore: StoreOf<KBOTeamStandingsStore>? = nil
-    
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: KBOTeamStandingsDisplayModel
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<KBOTeamStandingsStore>
+    let didPop: Bool
     
     private let columnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 60, 60, 50, 50, 50, 70]
     
+    @State private var show = false
+    
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            let teamStandings: [StandingsItemState] = kboTeamStandingsStore?.standings.map {
-                let rankData = $0.stats.rankData
-                let hitterData = $0.stats.hitterData
-                let pitcherData = $0.stats.pitcherData
-                let runnerData = $0.stats.runnerData
-                
-                return StandingsItemState(
-                    id: $0.team.id,
-                    imageUrl: KBOUtil.teamLogoURL(id: $0.team.id),
-                    name: kboTeamStandingsStore?.baseTeamStandings.teamNameDictionary["short_\($0.team.id)"] ?? $0.team.teamName,
-                    dataList: [
-                        rankData.gb,
-                        rankData.winpct,
-                        rankData.wins,
-                        rankData.losses,
-                        rankData.gp,
-                        rankData.streak,
-                        hitterData.avg,
-                        hitterData.h,
-                        hitterData.hr,
-                        hitterData.slg,
-                        hitterData.r,
-                        pitcherData.era,
-                        pitcherData.avg,
-                        pitcherData.h,
-                        pitcherData.hr,
-                        pitcherData.r,
-                        runnerData.sbPercent
-                    ]
-                )
-            } ?? []
+        let teamStandings: [StandingsItemState] = store.standings.map {
+            let rankData = $0.stats.rankData
+            let hitterData = $0.stats.hitterData
+            let pitcherData = $0.stats.pitcherData
+            let runnerData = $0.stats.runnerData
             
-            // NOTE: Wrapped with VStack for store initializing
-            VStack {
-                if let kboTeamStandingsStore {
-                    StandingsViewContainer(
-                        state: StandingsContainerState(
-                            secondCategories: StringConstants.KBO.teamStandingsCategories,
-                            standings: teamStandings,
-                            secondCategorySelectedIndex: kboTeamStandingsStore.baseTeamStandings.secondCategorySelectedIndex,
-                            firstColumnWidth: 100,
-                            columnWidthList: columnWidthList
-                        ),
-                        actions: StandingsContainerActions(
-                            secondCategoryButtonAction: { index, _ in
-                                kboTeamStandingsStore.send(.baseTeamStandings(.selectSecondCategory(index)))
-                            },
-                            itemButtonAction: { id in
-                                searchStore.send(.showTeamStats(teamId: id))
-                            }
-                        ),
-                        titleContent: {
-                            BaseballLeagueTitle(
-                                logoUrl: KBOUtil.kboLogoUrl,
-                                name: "KBO",
-                                season: kboTeamStandingsStore.standings.first?.stats.season
-                            )
+            return StandingsItemState(
+                id: $0.team.id,
+                imageUrl: KBOUtil.teamLogoURL(id: $0.team.id),
+                name: store.baseStandings.teamNameDictionary["short_\($0.team.id)"] ?? $0.team.teamName,
+                dataList: [
+                    rankData.gb,
+                    rankData.winpct,
+                    rankData.wins,
+                    rankData.losses,
+                    rankData.gp,
+                    rankData.streak,
+                    hitterData.avg,
+                    hitterData.h,
+                    hitterData.hr,
+                    hitterData.slg,
+                    hitterData.r,
+                    pitcherData.era,
+                    pitcherData.avg,
+                    pitcherData.h,
+                    pitcherData.hr,
+                    pitcherData.r,
+                    runnerData.sbPercent
+                ]
+            )
+        }
+        
+        // NOTE: Wrapped with VStack for store initializing
+        VStack {
+            if show {
+                StandingsViewContainer(
+                    state: StandingsContainerState(
+                        secondCategories: StringConstants.KBO.teamStandingsCategories,
+                        standings: teamStandings,
+                        secondCategorySelectedIndex: store.baseStandings.categorySelectedIndex,
+                        firstColumnWidth: 100,
+                        columnWidthList: columnWidthList
+                    ),
+                    actions: StandingsContainerActions(
+                        secondCategoryButtonAction: { index, _ in
+                            store.send(.baseStandings(.selectCategory(index: index)))
                         },
-                        customListContent: { _ in }
-                    )
-                }
+                        itemButtonAction: { id in
+                            store.send(.showTeamStats(id: id))
+                        }
+                    ),
+                    titleContent: {
+                        BaseballLeagueTitle(
+                            logoUrl: KBOUtil.kboLogoUrl,
+                            name: "KBO",
+                            season: store.standings.first?.stats.season
+                        )
+                    },
+                    customListContent: { _ in }
+                )
             }
-            .onAppear {
-                // init KBOTeamStandingsStore
-                let kboTeamStandingsStore: StoreOf<KBOTeamStandingsStore> = storeManager.getStore(forKey: StoreKeys.kboTeamStandingsStore) ?? {
-                    let newStore = Store(initialState: KBOTeamStandingsStore.State()) { KBOTeamStandingsStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.kboTeamStandingsStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.kboTeamStandingsStore = kboTeamStandingsStore
-                }
-                
-                if searchStore.poppedView == nil {
-                    kboTeamStandingsStore.send(.baseTeamStandings(.initData(displayModel: displayModel)))
-                }
+        }
+        .onAppear {
+            if !didPop {
+                store.send(.baseStandings(.initData))
             }
-            .onChange(of: displayModel) {
-                if case .kboTeamStandings = searchStore.poppedView {
-                    kboTeamStandingsStore?.send(.baseTeamStandings(.initData(displayModel: displayModel)))
-                }
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
-        } // if let searchStore
+        }
     }
 }
 

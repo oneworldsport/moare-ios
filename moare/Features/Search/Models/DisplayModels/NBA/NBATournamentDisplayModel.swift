@@ -10,6 +10,6 @@ struct NBATournamentDisplayModel: SportDisplayModel {
     let keywords: [Keyword]
     let entityInfo: [EntityInfo]
     let season: Int
-    let yearMonthList: [String]
-    var games: [NBAGame]
+    let scheduleType: ScheduleType
+    var games: [NBAGameForSchedule]
 }

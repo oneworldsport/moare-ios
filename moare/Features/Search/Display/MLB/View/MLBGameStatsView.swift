@@ -9,171 +9,145 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MLBGameStatsView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var mlbGameStatsStore: StoreOf<MLBGameStatsStore>? = nil
-    
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: MLBGameStatsDisplayModel
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<MLBGameStatsStore>
+    let didPop: Bool
     
     private let firstStatsColumnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50, 50, 50]
     private let secondStatsColumnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50]
     
+    @State private var show = false
+    
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            let game = displayModel.game
-            let playerNameDic = mlbGameStatsStore?.baseGameStats.playerNameDictionary
-            let teamNameDic = mlbGameStatsStore?.baseGameStats.teamNameDictionary
+        let displayModel = store.baseGameStats.displayModel
+        let game = displayModel.game
+        let playerNameDic = store.baseGameStats.playerNameDictionary
+        let teamNameDic = store.baseGameStats.teamNameDictionary
+        
+        let teamIds = [game.teams.home.id, game.teams.away.id]
+        let teamCategories: [GameStatsTeamState] = teamIds.map {
+            return GameStatsTeamState(
+                name: teamNameDic["short_\($0)"] ?? "",
+                imageUrl: MLBUtil.teamLogoURL(id: $0)
+            )
+        }
+        
+        let hitterList: [StandingsItemState] = store.teamHitters.map {
+            let playerData = $0.1
+            let playerBatting = playerData.stats?.batting
             
-            let teamIds = [game.teams.home.id, game.teams.away.id]
-            let teamCategories: [GameStatsTeamState] = teamIds.map {
-                return GameStatsTeamState(
-                    name: teamNameDic?["short_\($0)"] ?? "",
-                    imageUrl: MLBUtil.teamLogoURL(id: $0)
-                )
-            }
+            return StandingsItemState(
+                numInfo: Int(playerData.battingOrder.prefix(1)),
+                imageUrl: MLBUtil.playerPhotoURL(id: Int($0.0.trimmingPrefix("ID"))),
+                name: playerNameDic["\(playerData.person?.id ?? 0)"] ?? (playerData.person?.fullName ?? ""),
+                extraInfo: playerData.position?.abbreviation,
+                dataList: [
+                    String(playerBatting?.atBats ?? 0),
+                    String(playerBatting?.hits ?? 0),
+                    String(playerBatting?.homeRuns ?? 0),
+                    String(playerBatting?.rbi ?? 0),
+                    String(playerBatting?.runs ?? 0),
+                    String(playerBatting?.stolenBases ?? 0),
+                    String(playerBatting?.baseOnBalls ?? 0),
+                    String(playerBatting?.strikeOuts ?? 0)
+                ]
+            )
+        }
+        let pitcherList: [StandingsItemState] = store.teamPitchers.map {
+            let playerData = $0.1
+            let playerPitching = playerData.stats?.pitching
             
-            let hitterList: [StandingsItemState] = mlbGameStatsStore?.teamHitters.map {
-                let playerData = $0.1
-                let playerBatting = playerData.stats?.batting
-                
-                return StandingsItemState(
-                    numInfo: Int(playerData.battingOrder.prefix(1)),
-                    imageUrl: MLBUtil.playerPhotoURL(id: Int($0.0.trimmingPrefix("ID"))),
-                    name: playerNameDic?["\(playerData.person?.id ?? 0)"] ?? (playerData.person?.fullName ?? ""),
-                    extraInfo: playerData.position?.abbreviation,
-                    dataList: [
-                        String(playerBatting?.atBats ?? 0),
-                        String(playerBatting?.hits ?? 0),
-                        String(playerBatting?.homeRuns ?? 0),
-                        String(playerBatting?.rbi ?? 0),
-                        String(playerBatting?.runs ?? 0),
-                        String(playerBatting?.stolenBases ?? 0),
-                        String(playerBatting?.baseOnBalls ?? 0),
-                        String(playerBatting?.strikeOuts ?? 0)
-                    ]
-                )
-            } ?? []
-            let pitcherList: [StandingsItemState] = mlbGameStatsStore?.teamPitchers.map {
-                let playerData = $0.1
-                let playerPitching = playerData.stats?.pitching
-                
-                return StandingsItemState(
-                    imageUrl: MLBUtil.playerPhotoURL(id: Int($0.0.trimmingPrefix("ID"))),
-                    name: playerNameDic?["\(playerData.person?.id ?? 0)"] ?? (playerData.person?.fullName ?? ""),
-                    dataList: [
-                        playerPitching?.inningsPitched ?? "0.0",
-                        String(playerPitching?.runs ?? 0),
-                        String(playerPitching?.earnedRuns ?? 0),
-                        String(playerPitching?.baseOnBalls ?? 0),
-                        String(playerPitching?.strikeOuts ?? 0),
-                        String(playerPitching?.hits ?? 0)
-                    ]
-                )
-            } ?? []
-            
-            let gameDetailTitle = "날짜: \n\n장소: \n관중수: \n심판: "
-            let gameDetailContent: String = {
-                let officials = game.boxscore?.officials ?? []
-                var result = ""
-                result += "\(CalendarUtil.formatDate(date: game.gameInfo.gameDate).split(separator: " ").first ?? "")\n"
-                result += "\(CalendarUtil.formatDate(date: game.gameInfo.gameDate, formatType: .ampm))\n"
-                result += "\(teamNameDic?["venue_\(game.teams.home.id)"] ?? "")\n"
-                result += "\(game.gameInfo.attendance)\n"
-                result += officials.map { "• \($0.official.fullName)" }.joined(separator: "\n")
-                return result
-            }()
-            
-            VStack {
-                if let mlbGameStatsStore {
-                    GameStatsViewContainer(
-                        state: GameStatsContainerState(
-                            shouldShowStats: game.status.detailedState != StringConstants.MLB.gameScheduled,
-                            shouldShowRefreshButton: game.status.detailedState == StringConstants.MLB.gameLive,
-                            teamCategories: teamCategories,
-                            teamCategorySelectedIndex: mlbGameStatsStore.baseGameStats.selectedTeamIndex,
-                            gameDetailTitle: gameDetailTitle,
-                            gameDetailContent: gameDetailContent,
-                            firstStatsTitle: "타자",
-                            firstStatsCategories: StringConstants.MLB.gameStatsHittingCategories,
-                            firstStatsCategorySelectedIndex: mlbGameStatsStore.baseGameStats.firstCategorySelectedIndex,
-                            firstStatsColumnWidthList: firstStatsColumnWidthList,
-                            firstStatsPlayerList: hitterList,
-                            secondStatsTitle: "투수",
-                            secondStatsCategories: StringConstants.MLB.gameStatsPitchingCategories,
-                            secondStatsCategorySelectedIndex: mlbGameStatsStore.baseGameStats.secondCategorySelectedIndex,
-                            secondStatsColumnWidthList: secondStatsColumnWidthList,
-                            secondStatsPlayerList: pitcherList
-                        ),
-                        actions: GameStatsContainerActions(
-                            teamCategoryButtonAction: { index in
-                                mlbGameStatsStore.send(.baseGameStats(.selectTeam(index)))
-                            },
-                            firstStatsCategoryButtonAction: { index in
-                                mlbGameStatsStore.send(.baseGameStats(.selectFirstCategory(index)))
-                            },
-                            secondStatsCategoryButtonAction: { index in
-                                mlbGameStatsStore.send(.baseGameStats(.selectSecondCategory(index)))
-                            },
-                            refreshButtonAction: {
-                                searchStore.send(.refreshGame(season: displayModel.season, category: "baseball"))
-                            }
-                        ),
-                        titleContent: {
-                            HStack {
-                                BaseballLeagueTitle(
-                                    logoUrl: MLBUtil.mlbLogoUrl,
-                                    name: "MLB",
-                                    season: Int(mlbGameStatsStore.baseGameStats.displayModel?.game.game.season ?? "\(CalendarUtil.currentYear)")
-                                )
-                                
-                                Spacer()
-                            }
-                            .padding(.horizontal, UIConstants.Padding.defaultHPadding)
+            return StandingsItemState(
+                imageUrl: MLBUtil.playerPhotoURL(id: Int($0.0.trimmingPrefix("ID"))),
+                name: playerNameDic["\(playerData.person?.id ?? 0)"] ?? (playerData.person?.fullName ?? ""),
+                dataList: [
+                    playerPitching?.inningsPitched ?? "0.0",
+                    String(playerPitching?.runs ?? 0),
+                    String(playerPitching?.earnedRuns ?? 0),
+                    String(playerPitching?.baseOnBalls ?? 0),
+                    String(playerPitching?.strikeOuts ?? 0),
+                    String(playerPitching?.hits ?? 0)
+                ]
+            )
+        }
+        
+        let gameDetailTitle = "날짜: \n\n장소: \n관중수: \n심판: "
+        let gameDetailContent: String = {
+            let officials = game.boxscore?.officials ?? []
+            var result = ""
+            result += "\(CalendarUtil.formatDate(date: game.gameInfo.gameDate).split(separator: " ").first ?? "")\n"
+            result += "\(CalendarUtil.formatDate(date: game.gameInfo.gameDate, formatType: .ampm))\n"
+            result += "\(teamNameDic["venue_\(game.teams.home.id)"] ?? "")\n"
+            result += "\(game.gameInfo.attendance)\n"
+            result += officials.map { "• \($0.official.fullName)" }.joined(separator: "\n")
+            return result
+        }()
+        
+        VStack {
+            if show {
+                GameStatsViewContainer(
+                    state: GameStatsContainerState(
+                        shouldShowStats: game.status.detailedState != StringConstants.MLB.gameScheduled,
+                        shouldShowRefreshButton: game.status.detailedState == StringConstants.MLB.gameLive,
+                        teamCategories: teamCategories,
+                        teamCategorySelectedIndex: store.baseGameStats.teamCategorySelectedIndex,
+                        gameDetailTitle: gameDetailTitle,
+                        gameDetailContent: gameDetailContent,
+                        firstStatsTitle: "타자",
+                        firstStatsCategories: StringConstants.MLB.gameStatsHittingCategories,
+                        firstStatsCategorySelectedIndex: store.baseGameStats.firstCategorySelectedIndex,
+                        firstStatsColumnWidthList: firstStatsColumnWidthList,
+                        firstStatsPlayerList: hitterList,
+                        secondStatsTitle: "투수",
+                        secondStatsCategories: StringConstants.MLB.gameStatsPitchingCategories,
+                        secondStatsCategorySelectedIndex: store.baseGameStats.secondCategorySelectedIndex,
+                        secondStatsColumnWidthList: secondStatsColumnWidthList,
+                        secondStatsPlayerList: pitcherList
+                    ),
+                    actions: GameStatsContainerActions(
+                        teamCategoryButtonAction: { index in
+                            store.send(.baseGameStats(.selectTeam(index: index)))
                         },
-                        gameContent: {
+                        firstStatsTitleCategoryAction: {
+                            store.send(.sortByBattingOrder)
+                        },
+                        firstStatsCategoryButtonAction: { index in
+                            store.send(.baseGameStats(.selectFirstCategory(index)))
+                        },
+                        secondStatsCategoryButtonAction: { index in
+                            store.send(.baseGameStats(.selectSecondCategory(index)))
+                        },
+                        refreshButtonAction: {
+                            store.send(.refreshGame())
+                        }
+                    ),
+                    titleContent: {
+                        BaseballLeagueTitleForGameStats(
+                            logoUrl: MLBUtil.mlbLogoUrl,
+                            name: "MLB",
+                            season: Int(store.baseGameStats.displayModel.game.game.season)
+                        )
+                    },
+                    gameContent: {
 //                            if game.status.detailedState == StringConstants.MLB.gameScheduled {
-//                                
+//
 //                            } else {
 //                                MLBGameStatsScoreInfoItem(mlbGameStatsStore: mlbGameStatsStore)
 //                            }
-                            MLBGameStatsScoreInfoItem(mlbGameStatsStore: mlbGameStatsStore)
-                        }
-                    )
-                }
+                        MLBGameStatsScoreInfoItem(mlbGameStatsStore: store)
+                    }
+                )
             }
-            .onAppear {
-                // init MLBGameStatsStore
-                let mlbGameStatsStore: StoreOf<MLBGameStatsStore> = storeManager.getStore(forKey: StoreKeys.mlbGameStatsStore) ?? {
-                    let newStore = Store(initialState: MLBGameStatsStore.State()) { MLBGameStatsStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.mlbGameStatsStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.mlbGameStatsStore = mlbGameStatsStore
-                }
-                
-                if searchStore.poppedView == nil {
-                    mlbGameStatsStore.send(.baseGameStats(.initData(displayModel: displayModel)))
-                }
-            } // onAppear
-            .onChange(of: displayModel) {
-                if case .mlbGameStats = searchStore.poppedView {
-                    mlbGameStatsStore?.send(.baseGameStats(.initData(displayModel: displayModel)))
-                }
-                
-                if case .mlbGameStats = searchStore.viewStack.last {
-                    mlbGameStatsStore?.send(.baseGameStats(.initData(displayModel: displayModel)))
-                }
+        }
+        .onAppear {
+            if !didPop {
+                store.send(.baseGameStats(.initData))
             }
-        } // if let searchStore
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
+            }
+        }
     }
 }
 
@@ -184,34 +158,11 @@ struct MLBGameStatsScoreInfoItem: View {
     
     var body: some View {
         let displayModel = mlbGameStatsStore.baseGameStats.displayModel
-        let game = displayModel?.game
-        let homeTeamId = game?.teams.home.id
-        let awayTeamId = game?.teams.away.id
+        let game = displayModel.game
+        let homeTeamId = game.teams.home.id
+        let awayTeamId = game.teams.away.id
         let teamNameDic = mlbGameStatsStore.baseGameStats.teamNameDictionary
-        let gameStatus = game?.status.detailedState
-        
-        let gameStatusText: String = {
-            switch gameStatus {
-            case StringConstants.MLB.gameScheduled:
-                return StringConstants.gameNotStartedStr
-            case StringConstants.MLB.gameLive:
-                return "\(game?.linescore?.currentInning ?? 1)회\((game?.linescore?.isTopInning ?? true) ? "초" : "말")"
-            case StringConstants.MLB.gamePostponed:
-                return StringConstants.gamePostponedStr
-            case let status? where StringConstants.MLB.gameFinishedList.contains(status):
-                return StringConstants.gameFinishedStr
-            default:
-                return ""
-            }
-        }()
-        
-        let gameStatusColor: Color = {
-            if gameStatus == StringConstants.MLB.gameLive {
-                return .moare
-            } else {
-                return .secondary
-            }
-        }()
+        let gameStatus = game.status.detailedState
         
         HStack(alignment: .bottom) {
             VStack(spacing: 0) {
@@ -232,15 +183,15 @@ struct MLBGameStatsScoreInfoItem: View {
                         size: .small
                     )
                     
-                    Text(teamNameDic["short_\(awayTeamId ?? 0)"] ?? "")
+                    Text(teamNameDic["short_\(awayTeamId)"] ?? "")
                         .font(.system(size: 13))
                         .lineLimit(2)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
                 CapsuleButton(
-                    text: gameStatusText,
-                    color: gameStatusColor
+                    text: Constants.GameStatus.mlbGameStatusText(status: gameStatus, linescore: game.linescore),
+                    color: Constants.GameStatus.gameStatusColor(leagueId: Constants.Ids.mlb, status: gameStatus)
                 ) {
                 }
                 .disabled(true)
@@ -261,7 +212,7 @@ struct MLBGameStatsScoreInfoItem: View {
                         size: .small
                     )
                     
-                    Text(teamNameDic["short_\(homeTeamId ?? 0)"] ?? "")
+                    Text(teamNameDic["short_\(homeTeamId)"] ?? "")
                         .font(.system(size: 13))
                         .lineLimit(2)
                 }
@@ -280,82 +231,81 @@ struct MLBGameStatsLineScoreContainer: View {
     @Bindable var mlbGameStatsStore: StoreOf<MLBGameStatsStore>
     
     var body: some View {
-        if let game = mlbGameStatsStore.baseGameStats.displayModel?.game {
-            let isGameScheduled = game.status.detailedState == StringConstants.MLB.gameScheduled
-            let lineScore = game.linescore
-            let homeTeamLineScore = lineScore?.teams.home.runs ?? 0
-            let awayTeamLineScore = lineScore?.teams.away.runs ?? 0
-            
-            HStack(alignment: .bottom, spacing: 0) {
-                VStack(spacing: 0) {
-                    if !isGameScheduled {
-                        Text("\(awayTeamLineScore)")
-                            .frame(width: 30, height: 50)
-                            .fontWeight(.medium)
-                            .padding(.leading, 4)
-                            .padding(.trailing, 8)
-                            .foregroundStyle(awayTeamLineScore >= homeTeamLineScore ? .moare : .primary)
-                    } else {
-                        Text("-")
-                            .frame(width: 30, height: 50)
-                            .fontWeight(.medium)
-                            .padding(.leading, 4)
-                            .padding(.trailing, 8)
-                            .foregroundStyle(.primary)
-                    }
-                    
-                    Capsule()
-                        .fill(.secondary)
-                        .frame(width: 42, height: 1)  // width: 30 + 8 + 4
-                        .opacity(0.5)
-                    
-                    if !isGameScheduled {
-                        Text("\(homeTeamLineScore)")
-                            .frame(width: 30, height: 50)
-                            .fontWeight(.medium)
-                            .padding(.leading, 4)
-                            .padding(.trailing, 8)
-                            .foregroundStyle(
-                                homeTeamLineScore >= awayTeamLineScore ? .moare : .primary
-                            )
-                    } else {
-                        Text("-")
-                            .frame(width: 30, height: 50)
-                            .fontWeight(.medium)
-                            .padding(.leading, 4)
-                            .padding(.trailing, 8)
-                            .foregroundStyle(.primary)
-                    }
+        let game = mlbGameStatsStore.baseGameStats.displayModel.game
+        let isGameScheduled = game.status.detailedState == StringConstants.MLB.gameScheduled
+        let lineScore = game.linescore
+        let homeTeamLineScore = lineScore?.teams.home.runs ?? 0
+        let awayTeamLineScore = lineScore?.teams.away.runs ?? 0
+        
+        HStack(alignment: .bottom, spacing: 0) {
+            VStack(spacing: 0) {
+                if !isGameScheduled {
+                    Text("\(awayTeamLineScore)")
+                        .frame(width: 30, height: 50)
+                        .fontWeight(.medium)
+                        .padding(.leading, 4)
+                        .padding(.trailing, 8)
+                        .foregroundStyle(awayTeamLineScore >= homeTeamLineScore ? .moare : .primary)
+                } else {
+                    Text("-")
+                        .frame(width: 30, height: 50)
+                        .fontWeight(.medium)
+                        .padding(.leading, 4)
+                        .padding(.trailing, 8)
+                        .foregroundStyle(.primary)
                 }
                 
-                VStack(spacing: 0) {
-                    MLBGameStatsLineScoreTitle(lineScoreInnings: lineScore?.innings ?? [])
-                    
-                    Capsule()
-                        .fill(.secondary)
-                        .frame(height: 1)
-                        .opacity(0.5)
-                    
-                    MLBGameStatsLineScoreItem(
-                        mlbGameStatsStore: mlbGameStatsStore,
-                        isHome: false,
-                        lineScoreInnings: lineScore?.innings ?? []
-                    )
-                    
-                    Capsule()
-                        .fill(.secondary)
-                        .frame(height: 1)
-                        .opacity(0.5)
-                    
-                    MLBGameStatsLineScoreItem(
-                        mlbGameStatsStore: mlbGameStatsStore,
-                        isHome: true,
-                        lineScoreInnings: lineScore?.innings ?? []
-                    )
+                Capsule()
+                    .fill(.secondary)
+                    .frame(width: 42, height: 1)  // width: 30 + 8 + 4
+                    .opacity(0.5)
+                
+                if !isGameScheduled {
+                    Text("\(homeTeamLineScore)")
+                        .frame(width: 30, height: 50)
+                        .fontWeight(.medium)
+                        .padding(.leading, 4)
+                        .padding(.trailing, 8)
+                        .foregroundStyle(
+                            homeTeamLineScore >= awayTeamLineScore ? .moare : .primary
+                        )
+                } else {
+                    Text("-")
+                        .frame(width: 30, height: 50)
+                        .fontWeight(.medium)
+                        .padding(.leading, 4)
+                        .padding(.trailing, 8)
+                        .foregroundStyle(.primary)
                 }
             }
-            .frame(height: 127) // 25 + 1 + 50 + 1 + 50
+            
+            VStack(spacing: 0) {
+                MLBGameStatsLineScoreTitle(lineScoreInnings: lineScore?.innings ?? [])
+                
+                Capsule()
+                    .fill(.secondary)
+                    .frame(height: 1)
+                    .opacity(0.5)
+                
+                MLBGameStatsLineScoreItem(
+                    mlbGameStatsStore: mlbGameStatsStore,
+                    isHome: false,
+                    lineScoreInnings: lineScore?.innings ?? []
+                )
+                
+                Capsule()
+                    .fill(.secondary)
+                    .frame(height: 1)
+                    .opacity(0.5)
+                
+                MLBGameStatsLineScoreItem(
+                    mlbGameStatsStore: mlbGameStatsStore,
+                    isHome: true,
+                    lineScoreInnings: lineScore?.innings ?? []
+                )
+            }
         }
+        .frame(height: 127) // 25 + 1 + 50 + 1 + 50
     }
 }
 

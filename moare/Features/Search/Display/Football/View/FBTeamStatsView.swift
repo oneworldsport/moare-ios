@@ -9,83 +9,62 @@ import SwiftUI
 import ComposableArchitecture
 
 struct FBTeamStatsView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var fbTeamStatsStore: StoreOf<FBTeamStatsStore>? = nil
-    
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: FBTeamStatsDisplayModel
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<FBTeamStatsStore>
+    let didPop: Bool
     
     var startOffset = CGSize(width: 0, height: UIScreen.main.bounds.height / 2)
     
+    @State private var show = false
+    
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            ScrollView {
-                InfoViewContainer(
-                    itemCount: (fbTeamStatsStore?.displayModel?.stats.count ?? 0) + 1,
-                    shouldShowMeasureContent: true,
-                    measureContent: { scope in
-                        if let fbTeamStatsStore {
-                            FBTeamStatsTeamInfoItem(fbTeamStatsStore: fbTeamStatsStore)
-                                .background(
-                                    GeometryReader { geometry in
-                                        Color.clear.onAppear {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
-                                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                            scope.updateItemFrame(index: 0, geometry: geometry)
-                                        }
+        ScrollView {
+            InfoViewContainer(
+                itemCount: store.baseStats.displayModel.stats.count + 1,
+                shouldShowMeasureContent: true,
+                measureContent: { scope in
+                    if show {
+                        FBTeamStatsTeamInfoItem(fbTeamStatsStore: store)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear.onAppear {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
                                     }
-                                )
-                            
-                            FBTeamStatsList(fbTeamStatsStore: fbTeamStatsStore, scope: scope)
-                        }
-                    }, displayContent: { scope in
-                        if let fbTeamStatsStore {
-                            // team info
-                            FBTeamStatsTeamInfoItem(
-                                fbTeamStatsStore: fbTeamStatsStore,
-                                isAniItem: true,
-                                itemOffset: scope.computedOffset(for: 0, startOffset: startOffset),
-                                showContents: scope.showContents
+                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                        scope.updateItemFrame(index: 0, geometry: geometry)
+                                    }
+                                }
                             )
-                            
-                            // stats list
-                            FBTeamStatsList(
-                                fbTeamStatsStore: fbTeamStatsStore,
-                                isAniItem: true,
-                                scope: scope
-                            )
-                        }
+                        
+                        FBTeamStatsList(fbTeamStatsStore: store, scope: scope)
                     }
-                )
-            } // ScrollView
-            .onAppear {
-                // init FBTeamStatsStore
-                let fbTeamStatsStore: StoreOf<FBTeamStatsStore> = storeManager.getStore(forKey: StoreKeys.fbTeamStatsStore) ?? {
-                    let newStore = Store(initialState: FBTeamStatsStore.State()) { FBTeamStatsStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.fbTeamStatsStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    self.fbTeamStatsStore = fbTeamStatsStore
+                }, displayContent: { scope in
+                    if show {
+                        // team info
+                        FBTeamStatsTeamInfoItem(
+                            fbTeamStatsStore: store,
+                            isAniItem: true,
+                            itemOffset: scope.computedOffset(for: 0, startOffset: startOffset),
+                            showContents: scope.showContents
+                        )
+                        
+                        // stats list
+                        FBTeamStatsList(
+                            fbTeamStatsStore: store,
+                            isAniItem: true,
+                            scope: scope
+                        )
+                    }
                 }
-                
-                if searchStore.poppedView == nil {
-                    fbTeamStatsStore.send(.initData(displayModel: displayModel))
-                }
+            )
+        } // ScrollView
+        .onAppear {
+            if !didPop {
+                store.send(.baseStats(.initData))
             }
-            .onChange(of: displayModel) {
-                if case .fbTeamStats = searchStore.poppedView {
-                    fbTeamStatsStore?.send(.initData(displayModel: displayModel))
-                }
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
         }
     }
@@ -111,49 +90,49 @@ struct FBTeamStatsTeamInfoItem: View {
     }
     
     var body: some View {
-        let teamNameDic = fbTeamStatsStore.teamNameDictionary
+        let teamNameDic = fbTeamStatsStore.baseStats.teamNameDictionary
+        let team = fbTeamStatsStore.baseStats.displayModel.team
+        let venue = fbTeamStatsStore.baseStats.displayModel.venue
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemOffset: itemOffset
         ) {
-            if let team = fbTeamStatsStore.team, let venue = fbTeamStatsStore.venue {
-                HStack {
-                    URLImage(url: team.logo)
+            HStack {
+                URLImage(url: team.logo)
+                
+                VStack(alignment: .leading) {
+                    Text(teamNameDic["full_\(team.id)"] ?? team.name)
+                        .font(.system(size: 16))
+                        .fontWeight(.medium)
                     
-                    VStack(alignment: .leading) {
-                        Text(teamNameDic["full_\(team.id)"] ?? team.name)
+                    Text("\(team.name)")
+                        .font(.system(size: 15))
+                        .fontWeight(.light)
+                        .lineLimit(2)
+                }
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    (
+                        Text("연고지: ")
+                            .font(.system(size: 15))
+                        + Text(venue.city)
                             .font(.system(size: 16))
                             .fontWeight(.medium)
-                        
-                        Text("\(team.name)")
-                            .font(.system(size: 15))
-                            .fontWeight(.light)
-                            .lineLimit(2)
-                    }
+                    )
+                    .multilineTextAlignment(.leading)
                     
-                    VStack(alignment: .leading, spacing: 8) {
-                        (
-                            Text("연고지: ")
-                                .font(.system(size: 15))
-                            + Text(venue.city)
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        )
-                        .multilineTextAlignment(.leading)
-                        
-                        (
-                            Text("홈구장: ")
-                                .font(.system(size: 15))
-                            + Text(teamNameDic["venue_\(team.id)"] ?? venue.name)
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                        )
-                        .multilineTextAlignment(.leading)
-                    }
+                    (
+                        Text("홈구장: ")
+                            .font(.system(size: 15))
+                        + Text(teamNameDic["venue_\(team.id)"] ?? venue.name)
+                            .font(.system(size: 16))
+                            .fontWeight(.medium)
+                    )
+                    .multilineTextAlignment(.leading)
                 }
-                .opacity(showContents ? 1 : 0)
             }
+            .opacity(showContents ? 1 : 0)
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
@@ -266,7 +245,7 @@ struct FBTeamStatsItem: View {
     
     var body: some View {
         // league / team
-        LeagueTitle(
+        FBLeagueTitle(
             url: stats.league.logo,
             leagueName: stats.league.name,
             leagueSeason: stats.league.season

@@ -26,12 +26,12 @@ struct SportSearchEngine_iOSApp: App {
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-    @StateObject private var storeManager = StoreManager()
+    let appStore = Store(initialState: AppStore.State()) { AppStore() }
     
     @State var isSplashFinished = false
     @State private var didInitialLoad = false
     
-//    var viewForTest: SportDisplayType? = SportDisplayType.kboGameStats
+//    var viewForTest: SportDisplayType? = SportDisplayType.nbaTournament
     var viewForTest: SportDisplayType? = nil
     
     enum Screen {
@@ -56,14 +56,20 @@ struct SportSearchEngine_iOSApp: App {
         WindowGroup {
             Group {
                 if viewForTest != nil && didInitialLoad {
-                    SearchView(viewForTest: viewForTest)
-                        .environmentObject(storeManager)
-                        .preferredColorScheme(.light) // force light mode
+                    SearchView(
+                        appStore: appStore,
+                        searchStore: appStore.scope(state: \.search, action: \.search),
+                        viewForTest: viewForTest
+                    )
+                    .preferredColorScheme(.light) // force light mode
                 } else {
                     if isSplashFinished && didInitialLoad {
                         TabView(selection: $selection) {
-                            SearchView()
-                                .environmentObject(storeManager)
+                            SearchView(
+                            appStore: appStore,
+                            searchStore: appStore.scope(state: \.search, action: \.search)
+                        )
+                        .preferredColorScheme(.light) // force light mode
                                 .tabItem {
                                     Image(systemName: "magnifyingglass")
                                     if selection == .search {
