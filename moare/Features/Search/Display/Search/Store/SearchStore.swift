@@ -75,7 +75,6 @@ struct SearchStore {
         //
         
         case updateTrendingKeywordsVisibleState(Bool)
-        case selectNBATournamentRound(gameList: [NBAGame])
         
         /* ---------------------
            private
@@ -506,33 +505,6 @@ struct SearchStore {
                 }
                 
                 return .none
-                
-            case .selectNBATournamentRound(let gameList):
-                let dataModel: SportDecodableModel
-                
-                switch state.viewStack.last {
-                case .nbaTournament(_, _):
-                    let teamScheduleResponseModel = NBAGameScheduleResponseModel(scheduleType: ScheduleType.teamFlat, scheduledMonths: nil, schedule: ModelConverter.nbaGameListToGameScheduleListConverter(gameList: gameList))
-                    
-                    dataModel = .nbaLeagueSchedule(
-                        teamScheduleResponseModel,
-                        modelConverter.nbaLeagueScheduleConverter(response: teamScheduleResponseModel)
-                    )
-                    
-                default: return .none // Make it do nothing
-                }
-                
-                state.resultVisibleState = false
-                
-                return .run { send in
-                    await send(.delegate(.push(model: dataModel)))
-                    
-                    // wait for before view's removing animation
-                    // NOTE: 0.1 for temporary
-                    try await Task.sleep(for: .seconds(0.1))
-                    
-                    await send(.updateResultVisibleState(bool: true))
-                }
                 
             case .updateSearchStateWithAni(let bool):
 //                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {

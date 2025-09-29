@@ -17,6 +17,8 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
     
     @Binding var itemHeights: [RoundSeriesKey: CGFloat]
     
+    let selectSeries: (([GameForSchedule<T>]) -> Void)?
+    
     @State private var itemHeight: CGFloat = 0
     @State private var isScoreOpened = false
     
@@ -82,32 +84,39 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
                         .padding(.bottom, 2)
                         
                         if isScoreOpened {
-                            ForEach(games.indices, id: \.self) { index in
-                                let game = games[index]
-                                let homeTeamScore = game.homeTeamScore
-                                let awayTeamScore = game.awayTeamScore
-                                let isBeforeGame = Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
-                                
-                                VStack(spacing: 0) {
-                                    Text("Game \(index + 1) - \(CalendarUtil.formatDate(date: game.date).split(separator: " ").first ?? "")")
-                                        .font(.system(size: 12, weight: .light))
-                                        .padding(.top, 4)
-                                    
-                                    HStack(spacing: 0) {
-                                        Text(isBeforeGame ? "-" : "\(homeTeamScore)")
-                                            .font(.system(size: 14, weight: .medium))
-                                            .frame(width: 30)
-                                            .foregroundStyle(isBeforeGame ? Color.primary : (homeTeamScore >= awayTeamScore ? Color.moare : Color.primary))
-                                            
-                                        Text("-")
+                            Button(action: {
+                                selectSeries?(games)
+                            }) {
+                                VStack(spacing: 4) {
+                                    ForEach(games.indices, id: \.self) { index in
+                                        let game = games[index]
+                                        let homeTeamScore = game.homeTeamScore
+                                        let awayTeamScore = game.awayTeamScore
+                                        let isBeforeGame = Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
                                         
-                                        Text(isBeforeGame ? "-" : "\(awayTeamScore)")
-                                            .font(.system(size: 14, weight: .medium))
-                                            .frame(width: 30)
-                                            .foregroundStyle(isBeforeGame ? Color.primary : (awayTeamScore >= homeTeamScore ? Color.moare : Color.primary))
+                                        VStack(spacing: 0) {
+                                            Text("Game \(index + 1) - \(CalendarUtil.formatDate(date: game.date).split(separator: " ").first ?? "")")
+                                                .font(.system(size: 12, weight: .light))
+                                                .padding(.top, 4)
+                                            
+                                            HStack(spacing: 0) {
+                                                Text(isBeforeGame ? "-" : "\(homeTeamScore)")
+                                                    .font(.system(size: 14, weight: .medium))
+                                                    .frame(width: 30)
+                                                    .foregroundStyle(isBeforeGame ? Color.primary : (homeTeamScore >= awayTeamScore ? Color.moare : Color.primary))
+                                                    
+                                                Text("-")
+                                                
+                                                Text(isBeforeGame ? "-" : "\(awayTeamScore)")
+                                                    .font(.system(size: 14, weight: .medium))
+                                                    .frame(width: 30)
+                                                    .foregroundStyle(isBeforeGame ? Color.primary : (awayTeamScore >= homeTeamScore ? Color.moare : Color.primary))
+                                            }
+                                        }
                                     }
                                 }
                             }
+                            .foregroundStyle(.primary)
                         }
                         
                         Button(action: {
@@ -243,6 +252,8 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
     
     @Binding var itemHeights: [RoundSeriesKey: CGFloat]
     
+    let selectSeries: (([GameForSchedule<T>]) -> Void)?
+    
     @State private var itemHeight: CGFloat = 0
     @State private var isScoreOpened = false
     
@@ -319,32 +330,39 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
                         .padding(.bottom, 2)
                         
                         if isScoreOpened {
-                            ForEach(games.indices, id: \.self) { index in
-                                let game = games[index]
-                                let homeTeamScore = game.homeTeamScore
-                                let awayTeamScore = game.awayTeamScore
-                                let isBeforeGame = Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
-                                
-                                VStack(spacing: 0) {
-                                    Text("Game \(index + 1) - \(CalendarUtil.formatDate(date: game.date).split(separator: " ").first ?? "")")
-                                        .font(.system(size: 12, weight: .light))
-                                        .padding(.top, 4)
-                                    
-                                    HStack(spacing: 0) {
-                                        Text(isBeforeGame ? "-" : "\(homeTeamScore)")
-                                            .font(.system(size: 14, weight: .medium))
-                                            .frame(width: 30)
-                                            .foregroundStyle(isBeforeGame ? Color.primary : (homeTeamScore >= awayTeamScore ? Color.moare : Color.primary))
-                                            
-                                        Text("-")
+                            Button(action: {
+                                selectSeries?(games)
+                            }) {
+                                VStack(spacing: 4) {
+                                    ForEach(games.indices, id: \.self) { index in
+                                        let game = games[index]
+                                        let homeTeamScore = game.homeTeamScore
+                                        let awayTeamScore = game.awayTeamScore
+                                        let isBeforeGame = Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
                                         
-                                        Text(isBeforeGame ? "-" : "\(awayTeamScore)")
-                                            .font(.system(size: 14, weight: .medium))
-                                            .frame(width: 30)
-                                            .foregroundStyle(isBeforeGame ? Color.primary : (awayTeamScore >= homeTeamScore ? Color.moare : Color.primary))
+                                        VStack(spacing: 0) {
+                                            Text("Game \(index + 1) - \(CalendarUtil.formatDate(date: game.date).split(separator: " ").first ?? "")")
+                                                .font(.system(size: 12, weight: .light))
+                                                .padding(.top, 4)
+                                            
+                                            HStack(spacing: 0) {
+                                                Text(isBeforeGame ? "-" : "\(homeTeamScore)")
+                                                    .font(.system(size: 14, weight: .medium))
+                                                    .frame(width: 30)
+                                                    .foregroundStyle(isBeforeGame ? Color.primary : (homeTeamScore >= awayTeamScore ? Color.moare : Color.primary))
+                                                    
+                                                Text("-")
+                                                
+                                                Text(isBeforeGame ? "-" : "\(awayTeamScore)")
+                                                    .font(.system(size: 14, weight: .medium))
+                                                    .frame(width: 30)
+                                                    .foregroundStyle(isBeforeGame ? Color.primary : (awayTeamScore >= homeTeamScore ? Color.moare : Color.primary))
+                                            }
+                                        }
                                     }
                                 }
                             }
+                            .foregroundStyle(.primary)
                         }
                         
                         Button(action: {
@@ -464,6 +482,8 @@ struct TournamentSeriesFinalGameItem<T: Decodable & Equatable>: View {
     let teamNameDic: [String: String]
     let games: [GameForSchedule<T>]
     
+    let selectSeries: (([GameForSchedule<T>]) -> Void)?
+    
     @State private var isScoreOpened = false
     
     var body: some View {
@@ -526,32 +546,39 @@ struct TournamentSeriesFinalGameItem<T: Decodable & Equatable>: View {
             .padding(.bottom, 2)
             
             if isScoreOpened {
-                ForEach(games.indices, id: \.self) { index in
-                    let game = games[index]
-                    let homeTeamScore = game.homeTeamScore
-                    let awayTeamScore = game.awayTeamScore
-                    let isBeforeGame = Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
-                    
-                    VStack(spacing: 0) {
-                        Text("Game \(index + 1) - \(CalendarUtil.formatDate(date: game.date).split(separator: " ").first ?? "")")
-                            .font(.system(size: 12, weight: .light))
-                            .padding(.top, 4)
-                        
-                        HStack(spacing: 0) {
-                            Text(isBeforeGame ? "-" : "\(homeTeamScore)")
-                                .font(.system(size: 14, weight: .medium))
-                                .frame(width: 30)
-                                .foregroundStyle(isBeforeGame ? Color.primary : (homeTeamScore >= awayTeamScore ? Color.moare : Color.primary))
-                                
-                            Text("-")
+                Button(action: {
+                    selectSeries?(games)
+                }) {
+                    VStack(spacing: 4) {
+                        ForEach(games.indices, id: \.self) { index in
+                            let game = games[index]
+                            let homeTeamScore = game.homeTeamScore
+                            let awayTeamScore = game.awayTeamScore
+                            let isBeforeGame = Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
                             
-                            Text(isBeforeGame ? "-" : "\(awayTeamScore)")
-                                .font(.system(size: 14, weight: .medium))
-                                .frame(width: 30)
-                                .foregroundStyle(isBeforeGame ? Color.primary : (awayTeamScore >= homeTeamScore ? Color.moare : Color.primary))
+                            VStack(spacing: 0) {
+                                Text("Game \(index + 1) - \(CalendarUtil.formatDate(date: game.date).split(separator: " ").first ?? "")")
+                                    .font(.system(size: 12, weight: .light))
+                                    .padding(.top, 4)
+                                
+                                HStack(spacing: 0) {
+                                    Text(isBeforeGame ? "-" : "\(homeTeamScore)")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .frame(width: 30)
+                                        .foregroundStyle(isBeforeGame ? Color.primary : (homeTeamScore >= awayTeamScore ? Color.moare : Color.primary))
+                                        
+                                    Text("-")
+                                    
+                                    Text(isBeforeGame ? "-" : "\(awayTeamScore)")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .frame(width: 30)
+                                        .foregroundStyle(isBeforeGame ? Color.primary : (awayTeamScore >= homeTeamScore ? Color.moare : Color.primary))
+                                }
+                            }
                         }
                     }
                 }
+                .foregroundStyle(.primary)
             }
             
             Button(action: {

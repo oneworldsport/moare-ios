@@ -35,6 +35,14 @@ struct MLBTournamentStore {
     
     enum Action {
         case baseTournament(BaseTournament.Action)
+        
+        case selectSeries(gameList: [MLBGameForSchedule])
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case showLeagueSchedule(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -157,7 +165,24 @@ struct MLBTournamentStore {
                 
                 return .none
                 
+            case let .selectSeries(gameList):
+                let responseModel = MLBGameScheduleResponseModel(
+                    scheduleType: .teamFlat,
+                    scheduledMonths: nil,
+                    schedule: gameList
+                )
+                
+                let dataModel: SportDecodableModel = .mlbLeagueSchedule(
+                    responseModel,
+                    ModelConverter.shared.mlbLeagueScheduleConverter(response: responseModel)
+                )
+                
+                return .send(.delegate(.showLeagueSchedule(model: dataModel)))
+                
             case .baseTournament:
+                return .none
+                
+            case .delegate:
                 return .none
             } // switch action
             

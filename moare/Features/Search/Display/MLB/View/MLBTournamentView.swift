@@ -27,6 +27,11 @@ struct MLBTournamentView: View {
                         gameListTuple: store.gameListTuple,
                         isConference: true,
                         isSeries: true
+                    ),
+                    action: TournamentContainerAction(
+                        selectSeries: { gameList in
+                            store.send(.selectSeries(gameList: gameList))
+                        }
                     )
                 )
             }

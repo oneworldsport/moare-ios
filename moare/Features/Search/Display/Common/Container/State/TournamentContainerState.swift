@@ -24,11 +24,6 @@ struct TournamentDrawContainerState<T: Decodable & Equatable> {
     let isSeries: Bool
 }
 
-//struct TournamentDrawGameState {
-//    let homeTeamId: Int
-//    let awayTeamId: Int
-//    let homeTeamScore: Int
-//    let awayTeamScore: Int
-//    let gameStatus: String
-//    let date: String
-//}
+struct TournamentContainerAction<T: Decodable & Equatable> {
+    var selectSeries: (([GameForSchedule<T>]) -> Void)? = nil
+}

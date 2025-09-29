@@ -14,6 +14,7 @@ struct RoundSeriesKey: Hashable {
 
 struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
     let state: TournamentBracketContainerState<T>
+    let action: TournamentContainerAction<T>
     
     @State var leftItemHeights: [RoundSeriesKey: CGFloat] = [:]
     @State var rightItemHeights: [RoundSeriesKey: CGFloat] = [:]
@@ -51,7 +52,8 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                             games: games,
                                             itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
                                             shouldDrawHBar: !isMLB || roundIndexForPosition != 2, // mlb 2라운드만
-                                            itemHeights: $leftItemHeights
+                                            itemHeights: $leftItemHeights,
+                                            selectSeries: action.selectSeries
                                         )
                                         .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, true))
                                     } else {
@@ -80,7 +82,8 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                     TournamentSeriesFinalGameItem(
                                         leagueId: state.leagueId,
                                         teamNameDic: state.teamNameDic,
-                                        games: games
+                                        games: games,
+                                        selectSeries: action.selectSeries
                                     )
                                 }
                             }
@@ -101,7 +104,8 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                                 games: games,
                                                 itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
                                                 shouldDrawHBar: !isMLB || roundIndexForPosition != 6, // mlb 2라운드만
-                                                itemHeights: $rightItemHeights
+                                                itemHeights: $rightItemHeights,
+                                                selectSeries: action.selectSeries
                                             )
                                             .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, false))
                                         } else {

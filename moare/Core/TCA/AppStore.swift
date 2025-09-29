@@ -435,6 +435,26 @@ struct AppStore {
                 }
                 
                 return .none
+            
+            case let .path(.element(id: _, action: .nbaTournament(.delegate(.showLeagueSchedule(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .nbaLeagueSchedule(_, let displayModel) = model {
+                    state.path.append(.nbaLeagueSchedule(NBALeagueScheduleStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .mlbTournament(.delegate(.showLeagueSchedule(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if case .mlbLeagueSchedule(_, let displayModel) = model {
+                    state.path.append(.mlbLeagueSchedule(MLBLeagueScheduleStore.State(displayModel: displayModel)))
+                }
+                
+                return .none
                 
             case .path:
                 return .none

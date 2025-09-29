@@ -229,7 +229,7 @@
 		DA9E42342E4AB9430074B1F2 /* mlb_player_stats.json in Resources */ = {isa = PBXBuildFile; fileRef = DA9E420D2E4AB9430074B1F2 /* mlb_player_stats.json */; };
 		DA9E42352E4AB9430074B1F2 /* nba_player_info.json in Resources */ = {isa = PBXBuildFile; fileRef = DA9E42152E4AB9430074B1F2 /* nba_player_info.json */; };
 		DA9E42362E4AB9430074B1F2 /* football_player_info.json in Resources */ = {isa = PBXBuildFile; fileRef = DA9E41F92E4AB9430074B1F2 /* football_player_info.json */; };
-		DA9E42372E4AB9430074B1F2 /* nba_league_tournament.json in Resources */ = {isa = PBXBuildFile; fileRef = DA9E42142E4AB9430074B1F2 /* nba_league_tournament.json */; };
+		DA9E42372E4AB9430074B1F2 /* nba_tournament.json in Resources */ = {isa = PBXBuildFile; fileRef = DA9E42142E4AB9430074B1F2 /* nba_tournament.json */; };
 		DA9E42382E4AB9430074B1F2 /* kbo_player_info.json in Resources */ = {isa = PBXBuildFile; fileRef = DA9E42022E4AB9430074B1F2 /* kbo_player_info.json */; };
 		DA9E42392E4AB9430074B1F2 /* mlb_player_standings.json in Resources */ = {isa = PBXBuildFile; fileRef = DA9E420C2E4AB9430074B1F2 /* mlb_player_standings.json */; };
 		DA9E423A2E4AB9430074B1F2 /* kbo_player_standings.json in Resources */ = {isa = PBXBuildFile; fileRef = DA9E42032E4AB9430074B1F2 /* kbo_player_standings.json */; };
@@ -539,7 +539,7 @@
 		DA9E42112E4AB9430074B1F2 /* mlb_team_stats.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = mlb_team_stats.json; sourceTree = "<group>"; };
 		DA9E42122E4AB9430074B1F2 /* nba_game_stats.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = nba_game_stats.json; sourceTree = "<group>"; };
 		DA9E42132E4AB9430074B1F2 /* nba_league_schedule.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = nba_league_schedule.json; sourceTree = "<group>"; };
-		DA9E42142E4AB9430074B1F2 /* nba_league_tournament.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = nba_league_tournament.json; sourceTree = "<group>"; };
+		DA9E42142E4AB9430074B1F2 /* nba_tournament.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = nba_tournament.json; sourceTree = "<group>"; };
 		DA9E42152E4AB9430074B1F2 /* nba_player_info.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = nba_player_info.json; sourceTree = "<group>"; };
 		DA9E42162E4AB9430074B1F2 /* nba_player_standings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = nba_player_standings.json; sourceTree = "<group>"; };
 		DA9E42172E4AB9430074B1F2 /* nba_player_stats.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = nba_player_stats.json; sourceTree = "<group>"; };
@@ -1301,7 +1301,7 @@
 				DA9E42112E4AB9430074B1F2 /* mlb_team_stats.json */,
 				DA9E42122E4AB9430074B1F2 /* nba_game_stats.json */,
 				DA9E42132E4AB9430074B1F2 /* nba_league_schedule.json */,
-				DA9E42142E4AB9430074B1F2 /* nba_league_tournament.json */,
+				DA9E42142E4AB9430074B1F2 /* nba_tournament.json */,
 				DA9E42152E4AB9430074B1F2 /* nba_player_info.json */,
 				DA9E42162E4AB9430074B1F2 /* nba_player_standings.json */,
 				DA9E42172E4AB9430074B1F2 /* nba_player_stats.json */,
@@ -1675,7 +1675,7 @@
 				DA9E42342E4AB9430074B1F2 /* mlb_player_stats.json in Resources */,
 				DA9E42352E4AB9430074B1F2 /* nba_player_info.json in Resources */,
 				DA9E42362E4AB9430074B1F2 /* football_player_info.json in Resources */,
-				DA9E42372E4AB9430074B1F2 /* nba_league_tournament.json in Resources */,
+				DA9E42372E4AB9430074B1F2 /* nba_tournament.json in Resources */,
 				DA9E42382E4AB9430074B1F2 /* kbo_player_info.json in Resources */,
 				DA9E42392E4AB9430074B1F2 /* mlb_player_standings.json in Resources */,
 				DA9E423A2E4AB9430074B1F2 /* kbo_player_standings.json in Resources */,

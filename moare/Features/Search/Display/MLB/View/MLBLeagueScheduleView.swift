@@ -16,10 +16,14 @@ struct MLBLeagueScheduleView: View {
     @State private var show = false
     
     var body: some View {
+        let displayModel = store.baseSchedule.displayModel
+        
         VStack {
             if show {
                 ScheduleViewContainer(
                     state: ScheduleContainerState(
+                        shouldShowCalendar: displayModel.scheduleType != .teamFlat,
+                        shouldFetchSchedule:  displayModel.scheduleType == ScheduleType.league,
                         displayDataState: store.baseSchedule.displayDataState,
                         calendarUiState: CalendarUiState(
                             yearMonthList: store.baseSchedule.yearMonthList,
@@ -102,6 +106,7 @@ struct MLBLeagueScheduleListItem: View {
     @State private var isResultOpened = false
     
     var body: some View {
+        let displayModel = mlbLeagueScheduleStore.baseSchedule.displayModel
         let gameId = data.gameId
         let homeTeamId = data.homeTeamId
         let awayTeamId = data.awayTeamId
@@ -123,6 +128,7 @@ struct MLBLeagueScheduleListItem: View {
                 isCapsuleButtonDisabled: !StringConstants.MLB.gameFinishedList.contains(gameStatus),
                 date: data.date,
                 venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
+                shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
                 isSvgLogo: true
             ),
             actions: ScheduleGameItemActions(
