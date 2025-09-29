@@ -402,6 +402,8 @@ struct PathView: View {
             if let s = store.scope(state: \.mlbLeagueSchedule, action: \.mlbLeagueSchedule) { MLBLeagueScheduleView(searchStore: searchStore, store: s, didPop: didPop) }
         case .mlbGameStats:
             if let s = store.scope(state: \.mlbGameStats, action: \.mlbGameStats) { MLBGameStatsView(searchStore: searchStore, store: s, didPop: didPop) }
+        case .mlbTournament:
+            if let s = store.scope(state: \.mlbTournament, action: \.mlbTournament) { MLBTournamentView(searchStore: searchStore, store: s, didPop: didPop) }
         }
     }
 }

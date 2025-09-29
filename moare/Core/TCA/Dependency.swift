@@ -83,7 +83,7 @@ struct TrieTupleClient {
 }
 
 struct TournamentTeamsClient {
-    var wait: () async throws -> [String: [Int]]
+    var wait: () async throws -> [String: [Int?]]
 }
 
 // TODO: class 이름 고민

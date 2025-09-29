@@ -115,6 +115,8 @@ struct AppStore {
                     state.path.append(.mlbLeagueSchedule(MLBLeagueScheduleStore.State(displayModel: displayModel)))
                 case .mlbGameStats(_, let displayModel):
                     state.path.append(.mlbGameStats(MLBGameStatsStore.State(displayModel: displayModel)))
+                case .mlbTournament(_, let displayModel):
+                    state.path.append(.mlbTournament(MLBTournamentStore.State(displayModel: displayModel)))
                 default: break
                 }
                 
@@ -489,6 +491,7 @@ struct AppStore {
             case mlbTeamStandings(MLBTeamStandingsStore.State)
             case mlbLeagueSchedule(MLBLeagueScheduleStore.State)
             case mlbGameStats(MLBGameStatsStore.State)
+            case mlbTournament(MLBTournamentStore.State)
         }
         
         enum Action {
@@ -534,6 +537,7 @@ struct AppStore {
             case mlbTeamStandings(MLBTeamStandingsStore.Action)
             case mlbLeagueSchedule(MLBLeagueScheduleStore.Action)
             case mlbGameStats(MLBGameStatsStore.Action)
+            case mlbTournament(MLBTournamentStore.Action)
         }
         
         var body: some Reducer<State, Action> {
@@ -570,6 +574,7 @@ struct AppStore {
             Scope(state: \.mlbTeamStandings, action: \.mlbTeamStandings) { MLBTeamStandingsStore() }
             Scope(state: \.mlbLeagueSchedule, action: \.mlbLeagueSchedule) { MLBLeagueScheduleStore() }
             Scope(state: \.mlbGameStats, action: \.mlbGameStats) { MLBGameStatsStore() }
+            Scope(state: \.mlbTournament, action: \.mlbTournament) { MLBTournamentStore() }
         }
     }
 }

@@ -18,6 +18,11 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
     @State var leftItemHeights: [RoundSeriesKey: CGFloat] = [:]
     @State var rightItemHeights: [RoundSeriesKey: CGFloat] = [:]
     
+    private let leftBracketTitles = ["서부", "NL"]
+    private let rightBracketTitles = ["동부", "AL"]
+    private let finalBracketTitles = ["NBA", "월드"]
+    private let mlbBracketTitles = ["NL", "AL"]
+    
     var body: some View {
         ScrollView(.horizontal) {
             ScrollView(.vertical) {
@@ -27,9 +32,10 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                         let roundIndexForPosition = roundIndex + 1
                         let gameList = item.gameList
                         let title = item.title
-                        let shouldShow = state.isConference ? title.contains("서부") : true
+                        let shouldShow = state.isConference ? leftBracketTitles.contains(String(title.split(separator: " ").first ?? "")) : true
+                        let isMLB = state.leagueId == Constants.Ids.mlb
                         
-                        // default or west
+                        // default or left
                         if shouldShow {
                             VStack(spacing: 0) {
                                 Text(title)
@@ -44,11 +50,12 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                             teamNameDic: state.teamNameDic,
                                             games: games,
                                             itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
+                                            shouldDrawHBar: !isMLB || roundIndexForPosition != 2, // mlb 2라운드만
                                             itemHeights: $leftItemHeights
                                         )
                                         .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, true))
                                     } else {
-                                        if let game = games.first {
+                                        if let game = games?.first {
                                             TournamentSingleGameItem(state: TournamentGameItemState(
                                                 homeTeamLogo: FBUtil.teamLogoURL(id: game.homeTeamId),
                                                 homeTeamName: "",
@@ -68,8 +75,8 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                         
                         if state.isConference {
                             // final
-                            if title.contains("NBA 파이널") {
-                                if let games = gameList.first {
+                            if finalBracketTitles.contains(String(title.split(separator: " ").first ?? "")) {
+                                if let games = gameList.first, let games {
                                     TournamentSeriesFinalGameItem(
                                         leagueId: state.leagueId,
                                         teamNameDic: state.teamNameDic,
@@ -78,8 +85,8 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                 }
                             }
                             
-                            // east
-                            if title.contains("동부") {
+                            // right
+                            if rightBracketTitles.contains(String(title.split(separator: " ").first ?? "")) {
                                 VStack(spacing: 0) {
                                     Text(item.title)
                                     
@@ -93,11 +100,12 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                                 teamNameDic: state.teamNameDic,
                                                 games: games,
                                                 itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
+                                                shouldDrawHBar: !isMLB || roundIndexForPosition != 6, // mlb 2라운드만
                                                 itemHeights: $rightItemHeights
                                             )
                                             .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, false))
                                         } else {
-                                            if let game = games.first {
+                                            if let game = games?.first {
                                                 TournamentSingleGameItem(state: TournamentGameItemState(
                                                     homeTeamLogo: FBUtil.teamLogoURL(id: game.homeTeamId),
                                                     homeTeamName: "",

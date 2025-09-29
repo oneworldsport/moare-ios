@@ -700,6 +700,17 @@ final class ModelConverter {
         )
     }
     
+    func mlbTournamentConverter(response: MLBGameScheduleResponseModel) -> MLBTournamentDisplayModel {
+        return MLBTournamentDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.mlb,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            season: season,
+            scheduleType: response.scheduleType ?? .tournamentBracket,
+            games: response.schedule
+        )
+    }
+    
     // Not used in DataModel
     // football
     static func fbGameToGameScheduleConverter(game: FBGame) -> FBGameForSchedule {

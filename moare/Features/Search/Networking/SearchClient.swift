@@ -102,6 +102,8 @@ struct SearchClient {
             filePath = "mlb_team_schedule"
         case .mlbGameStats:
             filePath = "mlb_game_stats"
+        case .mlbTournament:
+            filePath = "mlb_tournament"
         default:
             filePath = "football_player_info"
         }

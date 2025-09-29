@@ -41,7 +41,7 @@ enum SportDisplayType: Hashable, CaseIterable {
     // kbo
     case kboPlayerInfo, kboPlayerStats, kboPlayerStandings, kboTeamInfo, kboTeamStats, kboTeamStandings, kboLeagueSchedule, kboGameStats, kboTournament
     // mlb
-    case mlbPlayerInfo, mlbPlayerStats, mlbPlayerStandings, mlbTeamInfo, mlbTeamStats, mlbTeamStandings, mlbLeagueSchedule, mlbGameStats
+    case mlbPlayerInfo, mlbPlayerStats, mlbPlayerStandings, mlbTeamInfo, mlbTeamStats, mlbTeamStandings, mlbLeagueSchedule, mlbGameStats, mlbTournament
     case unknown
     
     // VStack안에서 view를 그릴때 순서가 필요한 경우에 사용
@@ -96,6 +96,7 @@ indirect enum SportDecodableModel: Equatable {
     case mlbTeamStandings(MLBTeamStandingsResponseModel, MLBTeamStandingsDisplayModel)
     case mlbLeagueSchedule(MLBGameScheduleResponseModel, MLBLeagueScheduleDisplayModel)
     case mlbGameStats(MLBGameStatsResponseModel, MLBGameStatsDisplayModel)
+    case mlbTournament(MLBGameScheduleResponseModel, MLBTournamentDisplayModel)
     
     case unknown
     
@@ -136,6 +137,7 @@ indirect enum SportDecodableModel: Equatable {
             (.mlbTeamStandings, .mlbTeamStandings),
             (.mlbLeagueSchedule, .mlbLeagueSchedule),
             (.mlbGameStats, .mlbGameStats),
+            (.mlbTournament, .mlbTournament),
             (.unknown, .unknown):
             return true
         default:
@@ -506,10 +508,9 @@ extension DataModel {
                 let displayModel = modelConverter.kboTournamentConverter(response: responseModel)
                 self.data = .kboTournament(responseModel, displayModel)
             } else if leagueId == Constants.Ids.mlb {
-//                let responseModel = try container.decode(MLBGameScheduleResponseModel.self, forKey: .data)
-//                let displayModel = modelConverter.mlbTournamentConverter(response: responseModel)
-//                self.data = .mlbTournament(responseModel, displayModel)
-                self.data = .unknown
+                let responseModel = try container.decode(MLBGameScheduleResponseModel.self, forKey: .data)
+                let displayModel = modelConverter.mlbTournamentConverter(response: responseModel)
+                self.data = .mlbTournament(responseModel, displayModel)
             } else {
                 self.data = .unknown
             }
