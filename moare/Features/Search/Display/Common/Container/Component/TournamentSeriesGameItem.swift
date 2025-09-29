@@ -120,9 +120,9 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
                         }
                         
                         Button(action: {
-        //                        withAnimation(.easeInOut(duration: 0.3)) {
+                            withAnimation(.easeInOut(duration: 0.3)) {
                                 isScoreOpened.toggle()
-        //                        }
+                            }
                         }) {
                             HStack(spacing: 3) {
                                 Text("\(isScoreOpened ? "경기결과 숨기기" : "경기결과 보기")")
@@ -159,8 +159,10 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
                     }
                     .frame(width: 150)
                     .readSize { size in
-                        itemHeight = size.height
-                        itemHeights[itemPosition] = size.height
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            itemHeight = size.height
+                            itemHeights[itemPosition] = size.height
+                        }
                     }
                     
                     // bar
@@ -366,9 +368,9 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
                         }
                         
                         Button(action: {
-        //                        withAnimation(.easeInOut(duration: 0.3)) {
+                            withAnimation(.easeInOut(duration: 0.3)) {
                                 isScoreOpened.toggle()
-        //                        }
+                            }
                         }) {
                             HStack(spacing: 3) {
                                 Text("\(isScoreOpened ? "경기결과 숨기기" : "경기결과 보기")")
@@ -405,8 +407,10 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
                     }
                     .frame(width: 150)
                     .readSize { size in
-                        itemHeight = size.height
-                        itemHeights[itemPosition] = size.height
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            itemHeight = size.height
+                            itemHeights[itemPosition] = size.height
+                        }
                     }
                 }
                 
@@ -582,9 +586,9 @@ struct TournamentSeriesFinalGameItem<T: Decodable & Equatable>: View {
             }
             
             Button(action: {
-//                        withAnimation(.easeInOut(duration: 0.3)) {
+                withAnimation(.easeInOut(duration: 0.3)) {
                     isScoreOpened.toggle()
-//                        }
+                }
             }) {
                 HStack(spacing: 3) {
                     Text("\(isScoreOpened ? "경기결과 숨기기" : "경기결과 보기")")
