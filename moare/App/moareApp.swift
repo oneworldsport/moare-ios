@@ -81,7 +81,7 @@ struct SportSearchEngine_iOSApp: App {
                                 .tag(Screen.search)
                             
                             MoatView()
-                                .environmentObject(storeManager)
+//                                .environmentObject(storeManager)
                                 .tabItem {
                                     Image(systemName: "bubble.left")
                                     if selection == .moat {
@@ -93,7 +93,7 @@ struct SportSearchEngine_iOSApp: App {
                                 .tag(Screen.moat)
                             
                             UserProfileView()
-                                .environmentObject(storeManager)
+//                                .environmentObject(storeManager)
                                 .tabItem {
                                     Image(systemName: "person.crop.circle")
                                     if selection == .profile {
