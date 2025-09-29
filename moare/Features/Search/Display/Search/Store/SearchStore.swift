@@ -456,24 +456,26 @@ struct SearchStore {
                     do {
                         let dataModel: SportDecodableModel
                         
-                        // Postponed된 경기는 DB에 데이터 없어서 MLBGameForSchedule을 사용해 MLBGameStatsView를 보여준다.
-                        if game.gameStatus == StringConstants.MLB.gamePostponed {
-                            let game = ModelConverter.mlbGameScheduleToGameConverter(game: game)
-                            
-                            let responseModel = MLBGameStatsResponseModel(game: game)
-                            dataModel = .mlbGameStats(responseModel, modelConverter.mlbGameStatsConverter(response: responseModel))
-                        } else {
-                            let result = try await searchClient.fetchById(
-                                season: season,
-                                category: "baseball",
-                                date: game.date,
-                                dataType: "baseball_game_stats",
-                                leagueId: Constants.Ids.mlb,
-                                id: game.gameId
-                            )
-                            
-                            dataModel = result.data
-                        }
+                        // NOTE: Postponed된 경기는 DB에 데이터 없어서 MLBGameForSchedule을 사용해 MLBGameStatsView를 보여준다.
+                        // -> 일단은 임시로 클릭 안되게 처리함 (2025.09.29)
+//                        if game.gameStatus == StringConstants.MLB.gamePostponed {
+//                            let game = ModelConverter.mlbGameScheduleToGameConverter(game: game)
+//                            
+//                            let responseModel = MLBGameStatsResponseModel(game: game)
+//                            dataModel = .mlbGameStats(responseModel, modelConverter.mlbGameStatsConverter(response: responseModel))
+//                        } else {
+//                        }
+                        
+                        let result = try await searchClient.fetchById(
+                            season: season,
+                            category: "baseball",
+                            date: game.date,
+                            dataType: "baseball_game_stats",
+                            leagueId: Constants.Ids.mlb,
+                            id: game.gameId
+                        )
+                        
+                        dataModel = result.data
                         
                         await send(.delegate(.push(model: dataModel)))
                     } catch {

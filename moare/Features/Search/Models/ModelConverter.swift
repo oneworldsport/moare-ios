@@ -795,7 +795,11 @@ final class ModelConverter {
         let awayTeamId = game.teams.away.id
         let homeTeamScore = game.linescore?.teams.home.runs
         let awayTeamScore = game.linescore?.teams.away.runs
-        let gameInfo = MLBGameInfoForSchedule(currentInning: "\(game.linescore?.currentInning ?? 1)회\((game.linescore?.isTopInning ?? true) ? "초" : "말")")
+        let gameInfo = MLBGameInfoForSchedule(
+            currentInning: "\(game.linescore?.currentInning ?? 1)회\((game.linescore?.isTopInning ?? true) ? "초" : "말")",
+            seriesDescription: game.game.seriesDescription,
+            seriesStatus: game.game.seriesStatus
+        )
         
         return MLBGameForSchedule(
             itemKey: date != nil ? "\(date!)#\(game.game.pk)" : "",

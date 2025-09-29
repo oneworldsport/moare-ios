@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ScheduleGameItemState {
+    let leagueId: Int
     var isClickEnabled: Bool = true
     var homeTeamLogo: String?
     var homeTeamName: String
@@ -20,17 +21,15 @@ struct ScheduleGameItemState {
     var gameStatusColor: Color
     var isCapsuleButtonDisabled: Bool = false
     var date: String
-    var venue: String
     var gameType: String? = nil
     var referee: String? = nil
     var shouldShowOnlyDateTime: Bool = true
-    var shouldShowVenue: Bool = false
     var shouldShowGameType: Bool = true
     var shouldShowReferee: Bool = false
     var shouldShowHomeLabel: Bool = false
     var shouldShowAwayLabel: Bool = false
     var isSvgLogo: Bool = false
-    // TODO: GameForSchedule 모델 사용?
+    // TODO: GameForSchedule 모델로 바꿔야함
 }
 
 struct ScheduleGameItemActions {

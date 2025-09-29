@@ -87,39 +87,40 @@ struct Constants {
         }
         
         // mlb teams
+        // MLBTeamInfo의 abbreviation 사용
         struct MLBTeam {
             static let ath = 133
             static let pit = 134
-            static let sdn = 135
+            static let sd = 135
             static let sea = 136
-            static let sfn = 137
-            static let sln = 138
-            static let tba = 139
+            static let sf = 137
+            static let stl = 138
+            static let tb = 139
             static let tex = 140
             static let tor = 141
             static let min = 142
             static let phi = 143
             static let atl = 144
-            static let cha = 145
+            static let cws = 145
             static let mia = 146
-            static let nya = 147
+            static let nyy = 147
             static let mil = 158
-            static let ana = 108
-            static let ari = 109
+            static let laa = 108
+            static let az = 109
             static let bal = 110
             static let bos = 111
-            static let chn = 112
+            static let chc = 112
             static let cin = 113
             static let cle = 114
             static let col = 115
             static let det = 116
             static let hou = 117
-            static let kca = 118
-            static let lan = 119
-            static let was = 120
-            static let nyn = 121
-            static let alConference = [ath, sea, tba, tex, tor, min, cha, nya, ana, bal, bos, cle, det, hou, kca]
-            static let nlConference = [pit, sdn, sfn, sln, phi, atl, mia, mil, ari, chn, cin, col, lan, was, nyn]
+            static let kc = 118
+            static let lad = 119
+            static let wsh = 120
+            static let nym = 121
+            static let alConference = [ath, sea, tb, tex, tor, min, cws, nyy, laa, bal, bos, cle, det, hou, kc]
+            static let nlConference = [pit, sd, sf, stl, phi, atl, mia, mil, az, chc, cin, col, lad, wsh, nym]
             static let all = alConference + nlConference
         }
         

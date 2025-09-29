@@ -102,11 +102,13 @@ struct BaseballLeagueTitleForGameStats: View {
     let logoUrl: String
     let name: String
     let season: Int
+    let seriesDescription: String
     
-    init(logoUrl: String, name: String, season: Int?) {
+    init(logoUrl: String, name: String, season: Int?, seriesDescription: String = "") {
         self.logoUrl = logoUrl
         self.name = name
         self.season = season ?? 2025
+        self.seriesDescription = seriesDescription
     }
     
     var body: some View {
@@ -116,6 +118,11 @@ struct BaseballLeagueTitleForGameStats: View {
         
             Text("\(name) " + String(season))
                 .font(.system(size: 14))
+            
+            if !seriesDescription.isEmpty {
+                Text(" - \(seriesDescription)")
+                    .font(.system(size: 14))
+            }
             
             Spacer()
         }

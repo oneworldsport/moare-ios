@@ -133,6 +133,7 @@ struct KBOLeagueScheduleListItem: View {
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
+                leagueId: Constants.Ids.kbo,
                 isClickEnabled: data.gameStatus != Constants.GameStatus.KBO.canceled, // 취소된 경기는 클릭 안되게
                 homeTeamLogo: KBOUtil.teamLogoURL(id: data.homeTeamId),
                 homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
@@ -144,8 +145,7 @@ struct KBOLeagueScheduleListItem: View {
                 gameStatusText: gameStatusText,
                 gameStatusColor: gameStatusColor,
                 isCapsuleButtonDisabled: gameStatus != StringConstants.KBO.gameFinal,
-                date: data.date,
-                venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
+                date: data.date
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {

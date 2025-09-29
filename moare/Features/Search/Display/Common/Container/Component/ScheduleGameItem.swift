@@ -87,18 +87,10 @@ struct ScheduleGameItem: View {
                         .padding(.bottom, 2)
                 }
                 
-                // venue
-                if state.shouldShowVenue {
-                    Text("장소: \(state.venue)")
-                        .font(.system(size: 12, weight: .light))
-                        .lineLimit(1)
-                    .padding(.bottom, 2)
-                }
-                
                 // game type
                 // TODO: 나중에 작업
-                if state.gameType != nil && state.shouldShowGameType {
-                    Text(state.gameType!)
+                if let gameType = state.gameType, !gameType.isEmpty, state.shouldShowGameType {
+                    Text(gameType)
                         .font(.system(size: 12, weight: .light))
                         .lineLimit(1)
                 }

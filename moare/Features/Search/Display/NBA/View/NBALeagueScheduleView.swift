@@ -155,6 +155,7 @@ struct NBALeagueScheduleListItem: View {
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
+                leagueId: Constants.Ids.nba,
                 homeTeamLogo: NBAUtil.teamLogoURL(id: homeTeamId),
                 homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
                 homeTeamScore: data.homeTeamScore,
@@ -166,7 +167,6 @@ struct NBALeagueScheduleListItem: View {
                 gameStatusColor: gameStatusColor,
                 isCapsuleButtonDisabled: gameStatus != StringConstants.NBA.gameFinal,
                 date: data.date,
-                venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
                 shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
                 isSvgLogo: true
             ),

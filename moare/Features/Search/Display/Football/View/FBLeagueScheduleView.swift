@@ -192,6 +192,7 @@ struct FBLeagueScheduleListItem: View {
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
+                leagueId: Constants.Ids.epl, // TODO: 임시
                 isClickEnabled: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
                 homeTeamLogo: FBUtil.teamLogoURL(id: homeTeamId),
                 homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
@@ -204,7 +205,6 @@ struct FBLeagueScheduleListItem: View {
                 gameStatusColor: gameStatusColor,
                 isCapsuleButtonDisabled: (isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true) || !StringConstants.Football.gameFinishedList.contains(gameStatus),
                 date: data.date,
-                venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
                 gameType: MatchDescriptionConverter.convert(input: data.gameInfo?.round ?? ""),
                 shouldShowOnlyDateTime: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
                 shouldShowGameType: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,

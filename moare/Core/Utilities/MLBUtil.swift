@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct MLBUtil {
     static let mlbLogoUrl = "https://www.mlbstatic.com/team-logos/league-on-dark/1.svg"
@@ -23,6 +24,12 @@ struct MLBUtil {
         Constants.Ids.nationalLeagueWest: "내셔널 서부",
         Constants.Ids.nationalLeagueEast: "내셔널 동부",
         Constants.Ids.nationalLeagueCentral: "내셔널 중부",
+    ]
+    
+    static let teamMap: [Int: String] = [
+        133: "ATH", 134: "PIT", 135: "SD", 136: "SEA", 137: "SF", 138: "STL", 139: "TB", 140: "TEX", 141: "TOR", 142: "MIN",
+        143: "PHI", 144: "ATL", 145: "CWS", 146: "MIA", 147: "NYY", 158: "MIL", 108: "LAA", 109: "AZ", 110: "BAL", 111: "BOS",
+        112: "CHC", 113: "CIN", 114: "CLE", 115: "COL", 116: "DET", 117: "HOU", 118: "KC", 119: "LAD", 120: "WSH", 121: "NYM"
     ]
     
     static func playerPhotoURL(id: Int?) -> String? {
@@ -76,5 +83,51 @@ struct MLBUtil {
         } else {
             return 0.0
         }
+    }
+    
+    static func formatSeriesResult(
+        seriesStatus: String,
+        homeTeamId: Int,
+        awayTeamId: Int,
+        teamNameDic: [String: String]
+    ) -> Text? {
+        // seriesStatus 예시: "STL wins 3-0", "Series tied 2-2"
+        let parts = seriesStatus.split(separator: " ")
+        guard parts.count == 3 else { return nil }
+        
+        let score = String(parts[2])
+        let scoreParts = score.split(separator: "-")
+        
+        if parts[0].lowercased() == "series" {
+            return Text("시리즈 스코어: ")
+            + Text(teamNameDic["short_\(awayTeamId)"] ?? "")
+            + Text(" \(scoreParts[0])").foregroundStyle(.moare)
+            + Text(" - ")
+            + Text("\(scoreParts[1]) ").foregroundStyle(.moare)
+            + Text(teamNameDic["short_\(homeTeamId)"] ?? "")
+        }
+        
+        let winnerCode = String(parts[0])
+        
+        let homeCode = teamMap[homeTeamId]!
+//        let awayCode = teamMap[awayTeamId]!
+        
+        let homeScore: Int
+        let awayScore: Int
+        
+        if homeCode == winnerCode {
+            homeScore = Int(scoreParts[0]) ?? 0
+            awayScore = Int(scoreParts[1]) ?? 0
+        } else {
+            homeScore = Int(scoreParts[1]) ?? 0
+            awayScore = Int(scoreParts[0]) ?? 0
+        }
+        
+        return Text("시리즈 스코어: ")
+        + Text(teamNameDic["short_\(awayTeamId)"] ?? "")
+        + Text(" \(awayScore)").foregroundStyle(awayScore >= homeScore ? .moare : .primary)
+        + Text(" - ")
+        + Text("\(homeScore) ").foregroundStyle(homeScore > awayScore ? .moare : .primary)
+        + Text(teamNameDic["short_\(homeTeamId)"] ?? "")
     }
 }
