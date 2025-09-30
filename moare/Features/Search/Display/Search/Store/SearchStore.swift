@@ -45,8 +45,6 @@ struct SearchStore {
            --------------------- */
         var trie: Trie?
         
-        var viewStack: [SportDecodableModel] = []
-        
         var trendingKeywords: OrderedDictionary<String, KeywordInfo> = [:]
         var noticeList: [NoticeModel] = []
         var searchExample = ""
