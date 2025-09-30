@@ -57,7 +57,13 @@ struct FBLeagueScheduleStore {
         case setDisplayModel(FBLeagueScheduleDisplayModel)
         
         case updateFilteredGames
-        case updateSelectedGame
+        case updateSelectedGame // FBGameStatsView에서 새로고침 했을때 사용되는 action
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case showGameStats(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -236,10 +242,21 @@ struct FBLeagueScheduleStore {
                 
             case let .selectGame(game):
                 state.selectedGame = game
-                
                 state.filteredGames[state.baseSchedule.selectedDayIndex] = [game]
                 
-                return .send(.updateResultOpenedState(gameId: game.gameId, isOpened: true))
+                return .run { [displayModel = state.baseSchedule.displayModel] send in
+                    let result = try await searchClient.fetchById(
+                        season: displayModel.season,
+                        category: "football",
+                        date: game.date,
+                        dataType: "football_game_stats",
+                        leagueId: displayModel.leagueId,
+                        id: game.gameId
+                    )
+                    
+                    await send(.delegate(.showGameStats(model: result.data)))
+                    await send(.updateResultOpenedState(gameId: game.gameId, isOpened: true))
+                }
                 
             case .updateDisplayDataState(let fetchState):
                 state.baseSchedule.displayDataState = fetchState
@@ -277,6 +294,9 @@ struct FBLeagueScheduleStore {
                 return .none
                 
             case .baseSchedule:
+                return .none
+                
+            case .delegate:
                 return .none
             } // switch action
         }

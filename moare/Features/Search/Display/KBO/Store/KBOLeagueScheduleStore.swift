@@ -38,6 +38,7 @@ struct KBOLeagueScheduleStore {
         case selectYearMonth(yearMonth: String, selectedIndex: Int)
         case toggleAllResult
         case updateResultOpenedState(itemKey: String, isOpened: Bool) // NOTE: 더블헤더가 있는 날에 취소된 경기가 있으면 gameId가 같은 경우가 있어 gameId 대신에 itemKey를 사용
+        case selectGame(game: KBOGameForSchedule)
         
         /* ---------------------
            private
@@ -49,6 +50,12 @@ struct KBOLeagueScheduleStore {
         case setDisplayModel(displayModel: KBOLeagueScheduleDisplayModel)
         
         case updateFilteredGames
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case showGameStats(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -220,6 +227,21 @@ struct KBOLeagueScheduleStore {
                     }
                 }
                 
+            case let .selectGame(game):
+                return .run { [displayModel = state.baseSchedule.displayModel] send in
+                    let result = try await searchClient.fetchById(
+                        season: displayModel.season,
+                        category: "baseball",
+                        date: game.date,
+                        dataType: "baseball_game_stats",
+                        leagueId: displayModel.leagueId,
+                        id: game.gameId
+                    )
+                    
+                    await send(.delegate(.showGameStats(model: result.data)))
+                    await send(.updateResultOpenedState(itemKey: game.itemKey, isOpened: true))
+                }
+                
             case .updateDisplayDataState(let fetchState):
                 state.baseSchedule.displayDataState = fetchState
                 
@@ -242,7 +264,10 @@ struct KBOLeagueScheduleStore {
                 
             case .baseSchedule(_):
                 return .none
-            }
+                
+            case .delegate:
+                return .none
+            } // switch action
         }
     }
 }

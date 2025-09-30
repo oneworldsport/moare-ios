@@ -65,13 +65,6 @@ struct SearchStore {
         case updateTextFieldVisibleState(Bool)
         case performSearch(searchType: SearchType = .query, aniDuration: CGFloat = 0)
         
-        // TODO: 각자의 Store로 옮겨야함
-        case selectFBGame(game: FBGameForSchedule, season: Int, leagueId: Int?)
-        case selectNBAGame(game: NBAGameForSchedule, season: Int)
-        case selectKBOGame(game: KBOGameForSchedule, season: Int)
-        case selectMLBGame(game: MLBGameForSchedule, season: Int)
-        //
-        
         case updateTrendingKeywordsVisibleState(Bool)
         
         /* ---------------------
@@ -390,96 +383,6 @@ struct SearchStore {
                     state.searchDataState = dataState
                 }
                 return .none
-                
-            case .selectFBGame(let game, let season, let leagueId):
-                return .run { send in
-                    let result = try await searchClient.fetchById(
-                        season: season,
-                        category: "football",
-                        date: game.date,
-                        dataType: "football_game_stats",
-                        leagueId: leagueId ?? Constants.Ids.epl,
-                        id: game.gameId
-                    )
-                    
-                    await send(.delegate(.push(model: result.data)))
-                }
-                
-            case .selectNBAGame(let game, let season):
-                return .run { send in
-                    let result = try await searchClient.fetchById(
-                        season: season,
-                        category: "basketball",
-                        date: game.date,
-                        dataType: "basketball_game_stats",
-                        leagueId: Constants.Ids.nba,
-                        id: game.gameId
-                    )
-                    
-                    await send(.delegate(.push(model: result.data)))
-                }
-                
-            case .selectKBOGame(let game, let season):
-                return .run { send in
-                    do {
-                        let dataModel: SportDecodableModel
-                        
-                        // 취소된 경기는 DB에 데이터 없어서 KBOGameForSchedule을 사용해 KBOGameStatsView를 보여준다.
-                        if Int(game.gameStatus) == StringConstants.KBO.gameCanceled {
-                            let game = ModelConverter.kboGameScheduleToGameConverter(game: game)
-                            
-                            let responseModel = KBOGameStatsResponseModel(game: game)
-                            dataModel = .kboGameStats(responseModel, modelConverter.kboGameStatsConverter(response: responseModel))
-                        } else {
-                            let result = try await searchClient.fetchById(
-                                season: season,
-                                category: "baseball",
-                                date: game.date,
-                                dataType: "baseball_game_stats",
-                                leagueId: Constants.Ids.kbo,
-                                id: game.gameId
-                            )
-                            
-                            dataModel = result.data
-                        }
-                        
-                        await send(.delegate(.push(model: dataModel)))
-                    } catch {
-                        print("\(error)")
-                    }
-                }
-                
-            case .selectMLBGame(let game, let season):
-                return .run { send in
-                    do {
-                        let dataModel: SportDecodableModel
-                        
-                        // NOTE: Postponed된 경기는 DB에 데이터 없어서 MLBGameForSchedule을 사용해 MLBGameStatsView를 보여준다.
-                        // -> 일단은 임시로 클릭 안되게 처리함 (2025.09.29)
-//                        if game.gameStatus == StringConstants.MLB.gamePostponed {
-//                            let game = ModelConverter.mlbGameScheduleToGameConverter(game: game)
-//                            
-//                            let responseModel = MLBGameStatsResponseModel(game: game)
-//                            dataModel = .mlbGameStats(responseModel, modelConverter.mlbGameStatsConverter(response: responseModel))
-//                        } else {
-//                        }
-                        
-                        let result = try await searchClient.fetchById(
-                            season: season,
-                            category: "baseball",
-                            date: game.date,
-                            dataType: "baseball_game_stats",
-                            leagueId: Constants.Ids.mlb,
-                            id: game.gameId
-                        )
-                        
-                        dataModel = result.data
-                        
-                        await send(.delegate(.push(model: dataModel)))
-                    } catch {
-                        print("\(error)")
-                    }
-                }
                 
             case .updateIsFocused(let bool):
                 state.isFocused = bool

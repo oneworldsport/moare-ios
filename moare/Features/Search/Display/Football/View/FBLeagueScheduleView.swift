@@ -214,9 +214,6 @@ struct FBLeagueScheduleListItem: View {
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
                     if let fbLeagueScheduleStore {
-                        let displayModel = fbLeagueScheduleStore.baseSchedule.displayModel
-                        searchStore.send(.selectFBGame(game: data, season: displayModel.season, leagueId: displayModel.leagueId))
-                        
                         fbLeagueScheduleStore.send(.selectGame(game: data))
                     }
                 },

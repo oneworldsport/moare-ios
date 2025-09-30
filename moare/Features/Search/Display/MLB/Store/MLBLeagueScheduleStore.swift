@@ -38,6 +38,7 @@ struct MLBLeagueScheduleStore {
         case selectYearMonth(yearMonth: String, selectedIndex: Int)
         case toggleAllResult
         case updateResultOpenedState(gameId: String, isOpened: Bool)
+        case selectGame(game: MLBGameForSchedule)
         
         /* ---------------------
            private
@@ -49,6 +50,12 @@ struct MLBLeagueScheduleStore {
         case setDisplayModel(displayModel: MLBLeagueScheduleDisplayModel)
         
         case updateFilteredGames
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case showGameStats(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -233,6 +240,21 @@ struct MLBLeagueScheduleStore {
                     }
                 }
                 
+            case let .selectGame(game):
+                return .run { [displayModel = state.baseSchedule.displayModel] send in
+                    let result = try await searchClient.fetchById(
+                        season: displayModel.season,
+                        category: "baseball",
+                        date: game.date,
+                        dataType: "baseball_game_stats",
+                        leagueId: displayModel.leagueId,
+                        id: game.gameId
+                    )
+                    
+                    await send(.delegate(.showGameStats(model: result.data)))
+                    await send(.updateResultOpenedState(gameId: game.gameId, isOpened: true))
+                }
+                
             case .updateDisplayDataState(let fetchState):
                 state.baseSchedule.displayDataState = fetchState
                 
@@ -260,6 +282,9 @@ struct MLBLeagueScheduleStore {
                 return .none
                 
             case .baseSchedule:
+                return .none
+                
+            case .delegate:
                 return .none
             }
         }

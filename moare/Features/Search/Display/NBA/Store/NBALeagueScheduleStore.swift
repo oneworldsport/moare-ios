@@ -41,6 +41,7 @@ struct NBALeagueScheduleStore {
         case selectYearMonth(yearMonth: String, selectedIndex: Int)
         case toggleAllResult
         case updateResultOpenedState(gameId: String, isOpened: Bool)
+        case selectGame(game: NBAGameForSchedule)
         
         /* ---------------------
            private
@@ -52,6 +53,12 @@ struct NBALeagueScheduleStore {
         case setDisplayModel(displayModel: NBALeagueScheduleDisplayModel)
         
         case updateFilteredGames
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case showGameStats(model: SportDecodableModel)
     }
     
     @Dependency(\.translatedNameProvider) var nameProvider
@@ -237,6 +244,21 @@ struct NBALeagueScheduleStore {
                     }
                 }
                 
+            case let .selectGame(game):
+                return .run { [displayModel = state.baseSchedule.displayModel] send in
+                    let result = try await searchClient.fetchById(
+                        season: displayModel.season,
+                        category: "basketball",
+                        date: game.date,
+                        dataType: "basketball_game_stats",
+                        leagueId: displayModel.leagueId,
+                        id: game.gameId
+                    )
+                    
+                    await send(.delegate(.showGameStats(model: result.data)))
+                    await send(.updateResultOpenedState(gameId: game.gameId, isOpened: true))
+                }
+                
             case .updateDisplayDataState(let fetchState):
                 state.baseSchedule.displayDataState = fetchState
                 
@@ -264,6 +286,9 @@ struct NBALeagueScheduleStore {
                 return .none
                 
             case .baseSchedule:
+                return .none
+                
+            case .delegate:
                 return .none
             } // switch action
         }

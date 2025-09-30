@@ -168,12 +168,30 @@ struct AppStore {
                 let .path(.element(id: _, action: .fbTeamInfo(.delegate(.showGameStats(model))))),
                 let .path(.element(id: _, action: .nbaPlayerInfo(.delegate(.showGameStats(model))))),
                 let .path(.element(id: _, action: .nbaTeamInfo(.delegate(.showGameStats(model))))),
+                let .path(.element(id: _, action: .nbaLeagueSchedule(.delegate(.showGameStats(model))))),
                 let .path(.element(id: _, action: .mlbPlayerInfo(.delegate(.showGameStats(model))))),
                 let .path(.element(id: _, action: .mlbTeamInfo(.delegate(.showGameStats(model))))),
+                let .path(.element(id: _, action: .mlbLeagueSchedule(.delegate(.showGameStats(model))))),
                 let .path(.element(id: _, action: .kboPlayerInfo(.delegate(.showGameStats(model))))),
-                let .path(.element(id: _, action: .kboTeamInfo(.delegate(.showGameStats(model))))):
+                let .path(.element(id: _, action: .kboTeamInfo(.delegate(.showGameStats(model))))),
+                let .path(.element(id: _, action: .kboLeagueSchedule(.delegate(.showGameStats(model))))):
                 state.didPop = false
                 state.includesPreviousView = false
+                
+                if let route = model.gameStatsRoute {
+                    state.path.append(route)
+                }
+                
+                return .none
+                
+            case let .path(.element(id: _, action: .fbLeagueSchedule(.delegate(.showGameStats(model))))):
+                // FBLeagueScheduleView에서 아이템 클릭으로 FBGameStatsView보여줄때 state.includesPreviousView = true로 설정해 줘야 함.
+                state.didPop = false
+                if let pathId = state.path.ids.suffix(2).first {
+                    if case .fbLeagueSchedule = state.path[id: pathId] {
+                        state.includesPreviousView = true
+                    }
+                }
                 
                 if let route = model.gameStatsRoute {
                     state.path.append(route)
@@ -223,12 +241,6 @@ struct AppStore {
             state.path.append(.fbLeagueSchedule(FBLeagueScheduleStore.State(displayModel: displayModel)))
         case .fbGameStats(_, let displayModel):
             state.path.append(.fbGameStats(FBGameStatsStore.State(displayModel: displayModel)))
-            // NOTE: 이전 화면이 .fbLeagueSchedule일때만
-            if let pathId = state.path.ids.suffix(2).first {
-                if case .fbLeagueSchedule = state.path[id: pathId] {
-                    state.includesPreviousView = true
-                }
-            }
         case .fbTournament(_, let displayModel):
             state.path.append(.fbTournament(FBTournamentStore.State(displayModel: displayModel)))
             
