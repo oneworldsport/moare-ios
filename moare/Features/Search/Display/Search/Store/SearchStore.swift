@@ -109,7 +109,7 @@ struct SearchStore {
     
     enum Delegate {
         case push(model: SportDecodableModel)
-        case pop(searchState: Bool)
+        case pop
     }
     
     @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
@@ -330,7 +330,7 @@ struct SearchStore {
                 return .send(.delegate(.push(model: model.data)))
                 
             case .pop:
-                return .send(.delegate(.pop(searchState: state.searchState)))
+                return .send(.delegate(.pop))
                 
             case .showPreviousView:
                 state.textFieldVisibleState = false

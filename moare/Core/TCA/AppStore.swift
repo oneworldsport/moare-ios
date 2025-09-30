@@ -34,10 +34,14 @@ struct AppStore {
             case .search(.delegate(.push(let model))):
                 return handleRoute(&state, model)
                 
-            case let .search(.delegate(.pop(searchState))):
-                if !searchState {
-                    // If searchBar is Opened and there are stack, don't pop and show the previous view.
-                    return .send(.search(.showPreviousView))
+            case .search(.delegate(.pop)):
+                if !state.search.searchState {
+                    if state.path.isEmpty {
+                        return .none
+                    } else {
+                        // If searchBar is Opened and there are stack, don't pop and show the previous view.
+                        return .send(.search(.showPreviousView))
+                    }
                 } else {
                     state.didPop = true
                     // NOTE: .fbGameStatsView로 뒤로갔을때(.fbLeagueSchedule -> .fbGameStats인 경우) includesPreviousView가 true여야 하지만 false여도
