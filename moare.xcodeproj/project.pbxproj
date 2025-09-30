@@ -94,7 +94,6 @@
 		DA3235172E78619C00DE36CA /* TournamentBracketViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3235162E78618900DE36CA /* TournamentBracketViewContainer.swift */; };
 		DA3235192E78620D00DE36CA /* TournamentContainerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3235182E7861FD00DE36CA /* TournamentContainerState.swift */; };
 		DA32351B2E786CAF00DE36CA /* TournamentSingleGameItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA32351A2E786C8E00DE36CA /* TournamentSingleGameItem.swift */; };
-		DA32351D2E786CDD00DE36CA /* TournamentGameItemState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA32351C2E786CD200DE36CA /* TournamentGameItemState.swift */; };
 		DA4777232DA7B67A00F3459C /* NBATeamStandingsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777222DA7B67A00F3459C /* NBATeamStandingsResponseModel.swift */; };
 		DA4777252DA7B67C00F3459C /* NBATeamInfoResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777242DA7B67C00F3459C /* NBATeamInfoResponseModel.swift */; };
 		DA4777272DA7B67E00F3459C /* NBAPlayerStandingsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777262DA7B67E00F3459C /* NBAPlayerStandingsResponseModel.swift */; };
@@ -401,7 +400,6 @@
 		DA3235162E78618900DE36CA /* TournamentBracketViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TournamentBracketViewContainer.swift; sourceTree = "<group>"; };
 		DA3235182E7861FD00DE36CA /* TournamentContainerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TournamentContainerState.swift; sourceTree = "<group>"; };
 		DA32351A2E786C8E00DE36CA /* TournamentSingleGameItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TournamentSingleGameItem.swift; sourceTree = "<group>"; };
-		DA32351C2E786CD200DE36CA /* TournamentGameItemState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TournamentGameItemState.swift; sourceTree = "<group>"; };
 		DA4777222DA7B67A00F3459C /* NBATeamStandingsResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamStandingsResponseModel.swift; sourceTree = "<group>"; };
 		DA4777242DA7B67C00F3459C /* NBATeamInfoResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamInfoResponseModel.swift; sourceTree = "<group>"; };
 		DA4777262DA7B67E00F3459C /* NBAPlayerStandingsResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAPlayerStandingsResponseModel.swift; sourceTree = "<group>"; };
@@ -1329,7 +1327,6 @@
 		DABF24B02DE99E570098A504 /* State */ = {
 			isa = PBXGroup;
 			children = (
-				DA32351C2E786CD200DE36CA /* TournamentGameItemState.swift */,
 				DA3235182E7861FD00DE36CA /* TournamentContainerState.swift */,
 				DAD3FAEE2DF561CC009B367D /* StandingsContainerState.swift */,
 				DABF24BB2DE9D3400098A504 /* ScheduleContainerState.swift */,
@@ -1849,7 +1846,6 @@
 				DA252B3D2DEF790100006AB8 /* MLBTeamStatsDisplayModel.swift in Sources */,
 				DA252B3E2DEF790100006AB8 /* MLBTeamInfoDisplayModel.swift in Sources */,
 				DA252B3F2DEF790100006AB8 /* MLBPlayerStatsDisplayModel.swift in Sources */,
-				DA32351D2E786CDD00DE36CA /* TournamentGameItemState.swift in Sources */,
 				DADE295B2DF051BD0099A0DD /* KBOLeagueScheduleView.swift in Sources */,
 				DA252B402DEF790100006AB8 /* MLBPlayerStandingsDisplayModel.swift in Sources */,
 				DA30E71D2DF7BE3A000639AD /* MLBTeamInfoStore.swift in Sources */,

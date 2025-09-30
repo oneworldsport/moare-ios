@@ -26,8 +26,8 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
     
     var body: some View {
         if let games {
-            let topSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, id: games.first!.homeTeamId) : nil
-            let lowerSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, id: games.first!.awayTeamId) : nil
+            let topSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, teamId: games.first!.homeTeamId) : nil
+            let lowerSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, teamId: games.first!.awayTeamId) : nil
             let isSeriesStarted = topSeedTeamId != nil && lowerSeedTeamId != nil
             
             let (topSeedTeamSeriesScore, lowerSeedTeamSeriesScore) = games.reduce((0, 0)) { partial, game in
@@ -263,8 +263,8 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
     
     var body: some View {
         if let games {
-            let topSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, id: games.first!.homeTeamId) : nil
-            let lowerSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, id: games.first!.awayTeamId) : nil
+            let topSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, teamId: games.first!.homeTeamId) : nil
+            let lowerSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, teamId: games.first!.awayTeamId) : nil
             let isSeriesStarted = topSeedTeamId != nil && lowerSeedTeamId != nil
             
             let (topSeedTeamSeriesScore, lowerSeedTeamSeriesScore) = games.reduce((0, 0)) { partial, game in
@@ -486,13 +486,16 @@ struct TournamentSeriesFinalGameItem<T: Decodable & Equatable>: View {
     let teamNameDic: [String: String]
     let games: [GameForSchedule<T>]
     
+    @Binding var itemHeights: [RoundSeriesKey: CGFloat]
+    
     let selectSeries: (([GameForSchedule<T>]) -> Void)?
     
     @State private var isScoreOpened = false
+    @State private var itemTopPadding: CGFloat = 0 // 아이템 Y 위치
     
     var body: some View {
-        let topSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, id: games.first!.homeTeamId) : nil
-        let lowerSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, id: games.first!.awayTeamId) : nil
+        let topSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, teamId: games.first!.homeTeamId) : nil
+        let lowerSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, teamId: games.first!.awayTeamId) : nil
         let isSeriesStarted = topSeedTeamId != nil && lowerSeedTeamId != nil
         
         let (topSeedTeamSeriesScore, lowerSeedTeamSeriesScore) = games.reduce((0, 0)) { partial, game in
@@ -612,8 +615,17 @@ struct TournamentSeriesFinalGameItem<T: Decodable & Equatable>: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(.moare, lineWidth: 1)
         }
-        .padding(.top, 280) // 게임 오픈 안했을때 게임 높이가 대략 89로 측정됨
+//        .padding(.top, itemTopPadding)
+        .padding(.top, 200)
         .padding(.horizontal, 8)
+        .onAppear {
+            // TODO: onAppear할때 값이 아직 없음..
+//            itemTopPadding = h(1, 1) + h(2, 1) + h(3, 1)
+        }
+    }
+    
+    private func h(_ r: Int, _ s: Int) -> CGFloat {
+        itemHeights[RoundSeriesKey(round: r, series: s)] ?? 0
     }
 }
 

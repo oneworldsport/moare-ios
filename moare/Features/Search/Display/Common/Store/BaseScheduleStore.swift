@@ -62,10 +62,10 @@ struct BaseScheduleStore<T> {
                 state.isAllResultOpened = false
                 state.scrollCalendar = true
                 
+                state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
+                
                 if let displayModel = state.displayModel as? SportDisplayModel {
                     switch displayModel.leagueId {
-                    case let id where Constants.Ids.footballLeagues.contains(id):
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                     case Constants.Ids.nba:
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
                     case Constants.Ids.kbo:

@@ -719,7 +719,12 @@ final class ModelConverter {
         let awayTeamId = game.teams.away.id
         let homeTeamScore = game.goals.home
         let awayTeamScore = game.goals.away
-        let gameInfo = FBGameInfoForSchedule(round: game.league.round, elapsed: game.fixture.status.elapsed)
+        let gameInfo = FBGameInfoForSchedule(
+            round: game.league.round,
+            elapsed: game.fixture.status.elapsed,
+            homeTeamPenaltyScore: game.score.penalty._home, // TODO: Optional이 필요해서 임시로 _home, _away 사용. 추후 개선 필요.ㄸ
+            awayTeamPenaltyScore: game.score.penalty._away
+        )
         
         return FBGameForSchedule(
             itemKey: date != nil ? "\(date!)#\(game.fixture.id)" : "",

@@ -108,6 +108,7 @@ struct FBLeagueScheduleList: View {
                         searchStore: searchStore,
                         fbLeagueScheduleStore: fbLeagueScheduleStore,
                         data: value,
+                        leagueId: fbLeagueScheduleStore.baseSchedule.displayModel.leagueId,
                         teamNameDic: teamNameDic
                     )
                     .padding(.vertical, 8)
@@ -148,7 +149,7 @@ struct FBLeagueScheduleListItem: View {
     
     let data: FBGameForSchedule
     // FBLeagueScheduleStore이 한번도 초기화 된적 없이 FBGameStatsView에서 해당 구조체가 호출될때 teamNameDictionary를 fbLeagueScheduleStore에서 가져올수가 없어 추가.
-    // TODO: 그러면 결국 fbLeagueScheduleStore는 Optional이어도 된다는건데..?
+    let leagueId: Int
     let teamNameDic: [String: String]
     
     /* ---------------------
@@ -158,53 +159,20 @@ struct FBLeagueScheduleListItem: View {
     
     var body: some View {
         let gameId = data.gameId
-        let homeTeamId = data.homeTeamId
-        let awayTeamId = data.awayTeamId
         let gameStatus = data.gameStatus
         // FBLeagueScheduleView가 아닌 FBPlayerInfoView나 FBTeamInfoView 등에서 보여질때 사용되는 flag
         let isFromSchedule = fbLeagueScheduleStore != nil
         
-        let gameStatusText: String = {
-            switch gameStatus {
-            case StringConstants.Football.gameNotStarted:
-                return StringConstants.gameNotStartedStr
-            case StringConstants.Football.gameFirstHalf:
-                return StringConstants.Football.gameFirstHalfStr
-            case StringConstants.Football.gameHalftime:
-                return StringConstants.Football.gameHalftimeStr
-            case StringConstants.Football.gameSecondHalf:
-                return StringConstants.Football.gameSecondHalfStr
-            case let status where StringConstants.Football.gameFinishedList.contains(status):
-                return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
-            default:
-                return ""
-            }
-        }()
-        
-        let gameStatusColor: Color = {
-            switch gameStatus {
-            case let status where StringConstants.Football.gameLiveList.contains(status):
-                return .moare
-            default:
-                return .secondary
-            }
-        }()
-        
         ScheduleGameItem(
             state:ScheduleGameItemState(
-                leagueId: Constants.Ids.epl, // TODO: 임시
+                leagueId: leagueId,
+                game: data,
+                teamNameDic: teamNameDic,
                 isClickEnabled: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
-                homeTeamLogo: FBUtil.teamLogoURL(id: homeTeamId),
-                homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
-                homeTeamScore: data.homeTeamScore,
-                awayTeamLogo: FBUtil.teamLogoURL(id: awayTeamId),
-                awayTeamName: teamNameDic["short_\(awayTeamId)"] ?? "",
-                awayTeamScore: data.awayTeamScore,
                 isResultOpened: isResultOpened,
-                gameStatusText: gameStatusText,
-                gameStatusColor: gameStatusColor,
+                gameStatusText: Constants.GameStatus.gameStatusText(leagueId: leagueId, status: data.gameStatus, isResultOpened: isResultOpened),
+                gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: data.gameStatus),
                 isCapsuleButtonDisabled: (isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true) || !StringConstants.Football.gameFinishedList.contains(gameStatus),
-                date: data.date,
                 gameType: MatchDescriptionConverter.convert(input: data.gameInfo?.round ?? ""),
                 shouldShowOnlyDateTime: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
                 shouldShowGameType: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,

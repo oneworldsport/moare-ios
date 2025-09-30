@@ -188,19 +188,14 @@ struct FBLeague: Decodable, Equatable {
 }
 
 struct FBHomeAwayIntStats: Decodable, Equatable {
-    private let _home: Int?
-    private let _away: Int?
+    // TODO: ModelConverter에서 필요해서 임시로 private 제거
+    let _home: Int?
+    let _away: Int?
     private let _total: Int?
     
-    var home: Int {
-        return _home ?? 0
-    }
-    var away: Int {
-        return _away ?? 0
-    }
-    var total: Int {
-        return _total ?? 0
-    }
+    var home: Int { _home ?? 0 }
+    var away: Int { _away ?? 0 }
+    var total: Int { _total ?? 0 }
     
     private enum CodingKeys: String, CodingKey {
         case _home = "home"

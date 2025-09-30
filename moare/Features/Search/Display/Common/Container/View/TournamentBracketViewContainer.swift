@@ -40,6 +40,10 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                         if shouldShow {
                             VStack(spacing: 0) {
                                 Text(title)
+                                    .fontWeight(.medium)
+                                HCapsuleBar()
+                                    .padding(.top, 6)
+                                    .padding(.bottom, 12)
                                 
                                 ForEach(gameList.indices, id: \.self) { seriesIndex in
                                     let games = gameList[seriesIndex]
@@ -58,17 +62,18 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                         .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, true))
                                     } else {
                                         if let game = games?.first {
-                                            TournamentSingleGameItem(state: TournamentGameItemState(
-                                                homeTeamLogo: FBUtil.teamLogoURL(id: game.homeTeamId),
-                                                homeTeamName: "",
-                                                homeTeamScore: game.homeTeamScore,
-                                                awayTeamLogo: FBUtil.teamLogoURL(id: game.awayTeamId),
-                                                awayTeamName: "",
-                                                awayTeamScore: game.awayTeamScore,
-                                                gameStatusText: "",
-                                                gameStatusColor: Color.moare,
-                                                date: game.date)
-                                            )
+                                            // TODO: Barcket인데 단판인 경우 생기면 작업
+//                                            TournamentSingleGameItem(state: TournamentGameItemState(
+//                                                homeTeamLogo: FBUtil.teamLogoURL(id: game.homeTeamId),
+//                                                homeTeamName: "",
+//                                                homeTeamScore: game.homeTeamScore,
+//                                                awayTeamLogo: FBUtil.teamLogoURL(id: game.awayTeamId),
+//                                                awayTeamName: "",
+//                                                awayTeamScore: game.awayTeamScore,
+//                                                gameStatusText: "",
+//                                                gameStatusColor: Color.moare,
+//                                                date: game.date)
+//                                            )
                                         }
                                     }
                                 }
@@ -83,6 +88,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                         leagueId: state.leagueId,
                                         teamNameDic: state.teamNameDic,
                                         games: games,
+                                        itemHeights: $leftItemHeights,
                                         selectSeries: action.selectSeries
                                     )
                                 }
@@ -91,7 +97,11 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                             // right
                             if rightBracketTitles.contains(String(title.split(separator: " ").first ?? "")) {
                                 VStack(spacing: 0) {
-                                    Text(item.title)
+                                    Text(title)
+                                        .fontWeight(.medium)
+                                    HCapsuleBar()
+                                        .padding(.top, 6)
+                                        .padding(.bottom, 12)
                                     
                                     ForEach(gameList.indices, id: \.self) { seriesIndex in
                                         let games = gameList[seriesIndex]
@@ -110,17 +120,18 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                             .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, false))
                                         } else {
                                             if let game = games?.first {
-                                                TournamentSingleGameItem(state: TournamentGameItemState(
-                                                    homeTeamLogo: FBUtil.teamLogoURL(id: game.homeTeamId),
-                                                    homeTeamName: "",
-                                                    homeTeamScore: game.homeTeamScore,
-                                                    awayTeamLogo: FBUtil.teamLogoURL(id: game.awayTeamId),
-                                                    awayTeamName: "",
-                                                    awayTeamScore: game.awayTeamScore,
-                                                    gameStatusText: "",
-                                                    gameStatusColor: Color.moare,
-                                                    date: game.date)
-                                                )
+                                                // TODO: Barcket인데 단판인 경우 생기면 작업
+//                                                TournamentSingleGameItem(state: TournamentGameItemState(
+//                                                    homeTeamLogo: FBUtil.teamLogoURL(id: game.homeTeamId),
+//                                                    homeTeamName: "",
+//                                                    homeTeamScore: game.homeTeamScore,
+//                                                    awayTeamLogo: FBUtil.teamLogoURL(id: game.awayTeamId),
+//                                                    awayTeamName: "",
+//                                                    awayTeamScore: game.awayTeamScore,
+//                                                    gameStatusText: "",
+//                                                    gameStatusColor: Color.moare,
+//                                                    date: game.date)
+//                                                )
                                             }
                                         }
                                     }

@@ -108,29 +108,21 @@ struct MLBLeagueScheduleListItem: View {
     var body: some View {
         let displayModel = mlbLeagueScheduleStore.baseSchedule.displayModel
         let gameId = data.gameId
-        let homeTeamId = Constants.Ids.checkTeamId(leagueId: Constants.Ids.mlb, id: data.homeTeamId)
-        let awayTeamId = Constants.Ids.checkTeamId(leagueId: Constants.Ids.mlb, id: data.awayTeamId)
         let gameStatus = data.gameStatus
         let teamNameDic = mlbLeagueScheduleStore.baseSchedule.teamNameDictionary
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
                 leagueId: Constants.Ids.mlb,
+                game: data,
+                teamNameDic: teamNameDic,
                 isClickEnabled: gameStatus != Constants.GameStatus.MLB.postponed, // 연기된 경기는 클릭 안되게
-                homeTeamLogo: MLBUtil.teamLogoURL(id: homeTeamId),
-                homeTeamName: homeTeamId == nil ? "미정" : (teamNameDic["short_\(homeTeamId ?? 0)"] ?? ""), // TODO: 그냥 id가 오류로 없는 경우도 "미정"이라고 나올 수 있음
-                homeTeamScore: data.homeTeamScore,
-                awayTeamLogo: MLBUtil.teamLogoURL(id: awayTeamId),
-                awayTeamName: awayTeamId == nil ? "미정" : (teamNameDic["short_\(awayTeamId ?? 0)"] ?? ""),
-                awayTeamScore: data.awayTeamScore,
                 isResultOpened: isResultOpened,
                 gameStatusText: Constants.GameStatus.mlbGameStatusText(status: gameStatus, currentInning: data.gameInfo?.currentInning, isResultOpened: isResultOpened),
                 gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: Constants.Ids.mlb, status: gameStatus),
                 isCapsuleButtonDisabled: !StringConstants.MLB.gameFinishedList.contains(gameStatus),
-                date: data.date,
                 gameType: data.gameInfo?.seriesDescription,
                 shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
-                isSvgLogo: true
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
