@@ -12,7 +12,7 @@ struct NoticeBox: View {
 
     @Binding var height: CGFloat
     
-    private var maxHeight: CGFloat = 240
+    private let maxHeight: CGFloat = 240
     
     var body: some View {
         ScrollView {
