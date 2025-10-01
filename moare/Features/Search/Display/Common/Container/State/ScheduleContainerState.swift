@@ -6,6 +6,7 @@
 //
 
 struct ScheduleContainerState {
+    let leagueId: Int
     var shouldShowCalendar: Bool = true
     var shouldShowAllResultToggleButton: Bool = true
     var shouldFetchSchedule: Bool = true
@@ -13,9 +14,11 @@ struct ScheduleContainerState {
 //    var shouldFillBelow: Bool = true
     var calendarUiState: CalendarUiState? = nil
     var isAllResultOpened: Bool = false
+    var shouldShowTournamentButton: Bool = false
 }
 
 struct ScheduleContainerActions {
     var calendarUiActions: CalendarUiActions?
     var allResultButtonAction: () -> Void
+    var tournamentButtonAction: (() -> Void)? = nil
 }

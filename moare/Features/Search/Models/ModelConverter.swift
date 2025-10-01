@@ -7,17 +7,24 @@
 
 import Foundation
 
-struct ModelConverter {
-    let keywords: [Keyword]
-    let entityInfo: [EntityInfo]
-    let leagueId: Int?
-    let season: Int
+final class ModelConverter {
+    static let shared = ModelConverter()
+    private init() {}
     
-    init(keywords: [Keyword] = [], entityInfo: [EntityInfo] = []) {
+    private(set) var keywords: [Keyword] = []
+    private(set) var entityInfo: [EntityInfo] = []
+    private(set) var leagueId: Int? = nil
+    private(set) var season: Int = CalendarUtil.currentYear
+    
+    func configure(
+        keywords: [Keyword],
+        entityInfo: [EntityInfo],
+        season: Int
+    ) {
         self.keywords = keywords
         self.entityInfo = entityInfo
         self.leagueId = entityInfo.first?.leagueId
-        self.season = Calendar.current.component(.year, from: Date())
+        self.season = season
     }
     
     /* ---------------------
@@ -119,26 +126,50 @@ struct ModelConverter {
     
     func fbTeamStandingsConverter(response: FBTeamStandingsResponseModel) -> FBTeamStandingsDisplayModel {
         var league: FBLeague? = nil
+        var standingsDisplay: [FBTeamStandingsDisplay] = []
         
-        let standings: [FBTeamStandingsDisplay] = response.standings.compactMap { teamInfo in
-            let stats = teamInfo.statistics
-            
-            for item in stats {
-                if item.league.id == leagueId {
-                    if league == nil {
-                        league = item.league
+        if case let .db(standings) = response.standings {
+            standingsDisplay = standings.compactMap { teamInfo in
+                let stats = teamInfo.statistics
+                
+                for item in stats {
+                    if item.league.id == leagueId {
+                        if league == nil {
+                            league = item.league
+                        }
+                        
+                        return FBTeamStandingsDisplay(
+                            team: item.team,
+                            homeAwayStats: item.fixtures,
+                            goalsFor: item.goals.teamGoalsFor.total,
+                            goalsAgainst: item.goals.teamGoalsAgainst.total
+                        )
                     }
-                    
-                    return FBTeamStandingsDisplay(
-                        team: item.team,
-                        homeAwayStats: item.fixtures,
-                        goalsFor: item.goals.teamGoalsFor.total,
-                        goalsAgainst: item.goals.teamGoalsAgainst.total
-                    )
                 }
+                
+                return nil
             }
+        } else if case let .external(standings) = response.standings {
+            league = standings.first?.league
             
-            return nil
+            standingsDisplay = standings.compactMap { teamInfo in
+                let all = teamInfo.all
+                let home = teamInfo.home
+                let away = teamInfo.away
+                let homeAwayStats = FBTeamStatsFixtures(
+                    played: FBHomeAwayIntStats(home: home.played, away: away.played, total: all.played),
+                    wins: FBHomeAwayIntStats(home: home.win, away: away.win, total: all.win),
+                    draws: FBHomeAwayIntStats(home: home.draw, away: away.draw, total: all.draw),
+                    loses: FBHomeAwayIntStats(home: home.lose, away: away.lose, total: all.lose)
+                )
+                
+                return FBTeamStandingsDisplay(
+                    team: teamInfo.team,
+                    homeAwayStats: homeAwayStats,
+                    goalsFor: FBHomeAwayIntStats(home: home.goals.goalsFor, away: away.goals.goalsFor, total: all.goals.goalsFor),
+                    goalsAgainst: FBHomeAwayIntStats(home: home.goals.goalsAgainst, away: away.goals.goalsAgainst, total: all.goals.goalsAgainst)
+                )
+            }
         }
         
         return FBTeamStandingsDisplayModel(
@@ -147,7 +178,7 @@ struct ModelConverter {
             entityInfo: entityInfo,
             season: season,
             league: league,
-            standings: standings
+            standings: standingsDisplay
         )
     }
     
@@ -178,6 +209,17 @@ struct ModelConverter {
             entityInfo: entityInfo,
             season: season,
             game: game
+        )
+    }
+    
+    func fbTournamentConverter(response: FBGameScheduleResponseModel) -> FBTournamentDisplayModel {
+        return FBTournamentDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.epl,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            season: season,
+            scheduleType: response.scheduleType ?? .tournamentDraw,
+            games: response.schedule
         )
     }
     
@@ -334,13 +376,13 @@ struct ModelConverter {
         )
     }
     
-    func nbaLeagueTournamentConverter(response: NBAGameListResponseModel) -> NBATournamentDisplayModel {
+    func nbaTournamentConverter(response: NBAGameScheduleResponseModel) -> NBATournamentDisplayModel {
         return NBATournamentDisplayModel(
             leagueId: leagueId ?? Constants.Ids.nba,
             keywords: keywords,
             entityInfo: entityInfo,
             season: season,
-            yearMonthList: [],
+            scheduleType: response.scheduleType ?? .tournamentBracket,
             games: response.schedule
         )
     }
@@ -499,6 +541,17 @@ struct ModelConverter {
         )
     }
     
+    func kboTournamentConverter(response: KBOGameScheduleResponseModel) -> KBOTournamentDisplayModel {
+        return KBOTournamentDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.kbo,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            season: season,
+            scheduleType: response.scheduleType ?? .tournamentBracket,
+            games: response.schedule
+        )
+    }
+    
     /* ---------------------
        mlb
        --------------------- */
@@ -507,7 +560,7 @@ struct ModelConverter {
         
         let stats = info.statistics.first { $0.type == "season" }
         let teamId: Int? = {
-            if let id = stats?.hitting?.team.id {
+            if let id = stats?.hitting?.team?.id {
                 return id
             } else if let id = stats?.fielding?.team.id {
                 return id
@@ -546,7 +599,7 @@ struct ModelConverter {
         
         let stats = info.statistics.first { $0.type == "season" }
         var teamId: Int? {
-            if let id = stats?.hitting?.team.id {
+            if let id = stats?.hitting?.team?.id {
                 return id
             } else if let id = stats?.fielding?.team.id {
                 return id
@@ -671,14 +724,31 @@ struct ModelConverter {
         )
     }
     
+    func mlbTournamentConverter(response: MLBGameScheduleResponseModel) -> MLBTournamentDisplayModel {
+        return MLBTournamentDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.mlb,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            season: season,
+            scheduleType: response.scheduleType ?? .tournamentBracket,
+            games: response.schedule
+        )
+    }
+    
     // Not used in DataModel
+    // football
     static func fbGameToGameScheduleConverter(game: FBGame) -> FBGameForSchedule {
         let date = game.fixture.date.split(separator: "+").first
         let homeTeamId = game.teams.home.id
         let awayTeamId = game.teams.away.id
         let homeTeamScore = game.goals.home
         let awayTeamScore = game.goals.away
-        let gameInfo = FBGameInfoForSchedule(round: game.league.round, elapsed: game.fixture.status.elapsed)
+        let gameInfo = FBGameInfoForSchedule(
+            round: game.league.round,
+            elapsed: game.fixture.status.elapsed,
+            homeTeamPenaltyScore: game.score.penalty._home, // TODO: Optional이 필요해서 임시로 _home, _away 사용. 추후 개선 필요.ㄸ
+            awayTeamPenaltyScore: game.score.penalty._away
+        )
         
         return FBGameForSchedule(
             itemKey: date != nil ? "\(date!)#\(game.fixture.id)" : "",
@@ -691,6 +761,22 @@ struct ModelConverter {
         )
     }
     
+    static func fbGameDisplayToLeagueScheduleDisplayConverter(
+        gameStatsDisplayModel: FBGameStatsDisplayModel,
+        leagueScheduleDisplayModel: FBLeagueScheduleDisplayModel
+    ) -> FBLeagueScheduleDisplayModel {
+        let game = gameStatsDisplayModel.game
+        let newGames = leagueScheduleDisplayModel.games.map {
+            $0.gameId == String(game.fixture.id) ? fbGameToGameScheduleConverter(game: game) : $0
+        }
+        
+        var newDisplayModel = leagueScheduleDisplayModel
+        newDisplayModel.games = newGames
+        
+        return newDisplayModel
+    }
+    
+    // nba
     static func nbaGameListToGameScheduleListConverter(gameList: [NBAGame]) -> [NBAGameForSchedule] {
         return gameList.compactMap { game in
             return nbaGameToGameScheduleConverter(game: game)
@@ -716,23 +802,58 @@ struct ModelConverter {
         )
     }
     
+    static func nbaGameDisplayToLeagueScheduleDisplayConverter(
+        gameStatsDisplayModel: NBAGameStatsDisplayModel,
+        leagueScheduleDisplayModel: NBALeagueScheduleDisplayModel
+    ) -> NBALeagueScheduleDisplayModel {
+        let game = gameStatsDisplayModel.game
+        let newGames = leagueScheduleDisplayModel.games.map {
+            $0.gameId == game.gameSummary?.gameId ? ModelConverter.nbaGameToGameScheduleConverter(game: game) : $0
+        }
+        
+        var newDisplayModel = leagueScheduleDisplayModel
+        newDisplayModel.games = newGames
+        
+        return newDisplayModel
+    }
+    
+    // mlb
     static func mlbGameToGameScheduleConverter(game: MLBGame) -> MLBGameForSchedule {
         let date = game.gameInfo.gameDate.split(separator: "+").first
         let homeTeamId = game.teams.home.id
         let awayTeamId = game.teams.away.id
         let homeTeamScore = game.linescore?.teams.home.runs
         let awayTeamScore = game.linescore?.teams.away.runs
-        let gameInfo = MLBGameInfoForSchedule(currentInning: "\(game.linescore?.currentInning ?? 1)회\((game.linescore?.isTopInning ?? true) ? "초" : "말")")
+        let gameInfo = MLBGameInfoForSchedule(
+            currentInning: "\(game.linescore?.currentInning ?? 1)회\((game.linescore?.isTopInning ?? true) ? "초" : "말")",
+            seriesDescription: game.game.seriesDescription,
+            seriesStatus: game.game.seriesStatus
+        )
         
         return MLBGameForSchedule(
-            itemKey: date != nil ? "\(date!)#\(game.game.id)" : "",
+            itemKey: date != nil ? "\(date!)#\(game.game.pk)" : "",
             homeTeamId: homeTeamId,
             awayTeamId: awayTeamId,
             homeTeamScore: homeTeamScore,
             awayTeamScore: awayTeamScore,
-            gameStatus: game.status.statusCode,
+            gameStatus: game.status.detailedState,
             gameInfo: gameInfo
         )
+    }
+    
+    static func mlbGameDisplayToLeagueScheduleDisplayConverter(
+        gameStatsDisplayModel: MLBGameStatsDisplayModel,
+        leagueScheduleDisplayModel: MLBLeagueScheduleDisplayModel
+    ) -> MLBLeagueScheduleDisplayModel {
+        let game = gameStatsDisplayModel.game
+        let newGames = leagueScheduleDisplayModel.games.map {
+            $0.gameId == String(game.game.pk) ? ModelConverter.mlbGameToGameScheduleConverter(game: game) : $0
+        }
+        
+        var newDisplayModel = leagueScheduleDisplayModel
+        newDisplayModel.games = newGames
+        
+        return newDisplayModel
     }
     
     static func mlbGameScheduleToGameConverter(game: MLBGameForSchedule) -> MLBGame {
@@ -756,6 +877,7 @@ struct ModelConverter {
         )
     }
     
+    // kbo
     static func kboGameToGameScheduleConverter(game: KBOGame) -> KBOGameForSchedule {
         let date = game.gameInfo?.date.split(separator: "+").first
         let homeTeamId = game.gameInfo?.homeTeamId ?? 0
@@ -773,6 +895,22 @@ struct ModelConverter {
             gameStatus: game.gameInfo?.gameStatus,
             gameInfo: gameInfo
         )
+    }
+    
+    static func kboGameDisplayToLeagueScheduleDisplayConverter(
+        gameStatsDisplayModel: KBOGameStatsDisplayModel,
+        leagueScheduleDisplayModel: KBOLeagueScheduleDisplayModel
+    ) -> KBOLeagueScheduleDisplayModel {
+        let game = gameStatsDisplayModel.game
+        let itemKey = "\(game.gameInfo?.date.split(separator: "+").first ?? "")#\(game.gameInfo?.gameId ?? "")"
+        let newGames = leagueScheduleDisplayModel.games.map {
+            $0.itemKey == itemKey ? ModelConverter.kboGameToGameScheduleConverter(game: game) : $0
+        }
+        
+        var newDisplayModel = leagueScheduleDisplayModel
+        newDisplayModel.games = newGames
+        
+        return newDisplayModel
     }
     
     static func kboGameScheduleToGameConverter(game: KBOGameForSchedule) -> KBOGame {

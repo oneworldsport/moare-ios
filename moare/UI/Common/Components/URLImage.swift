@@ -11,14 +11,12 @@ import SDWebImageSwiftUI
 
 struct URLImage: View {
     let url: String?
-    let size: URLImageSize
     let isSvg: Bool // TODO: contains(".svg") 사용하는걸로 변경
     
     private let imageSize: CGSize
     
     init(url: String?, size: URLImageSize = .medium, customSize: CGSize? = nil, isSvg: Bool = false) {
         self.url = url
-        self.size = size
         self.isSvg = isSvg
         
         if let customSize {

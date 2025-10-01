@@ -9,94 +9,70 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MLBLeagueScheduleView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var mlbLeagueScheduleStore: StoreOf<MLBLeagueScheduleStore>? = nil
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<MLBLeagueScheduleStore>
+    let didPop: Bool
     
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: MLBLeagueScheduleDisplayModel
+    @State private var show = false
     
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            VStack(spacing: 0) {
-                if let mlbLeagueScheduleStore {
-                    ScheduleViewContainer(
-                        state: ScheduleContainerState(
-                            displayDataState: mlbLeagueScheduleStore.baseSchedule.displayDataState,
-                            calendarUiState: CalendarUiState(
-                                yearMonthList: mlbLeagueScheduleStore.baseSchedule.yearMonthList,
-                                days: mlbLeagueScheduleStore.baseSchedule.days,
-                                selectedYearMonthIndex: mlbLeagueScheduleStore.baseSchedule.selectedYearMonthIndex,
-                                selectedDayIndex: mlbLeagueScheduleStore.baseSchedule.selectedDayIndex
-                            ),
-                            isAllResultOpened: mlbLeagueScheduleStore.baseSchedule.isAllResultOpened
+        let displayModel = store.baseSchedule.displayModel
+        
+        VStack {
+            if show {
+                ScheduleViewContainer(
+                    state: ScheduleContainerState(
+                        leagueId: displayModel.leagueId,
+                        shouldShowCalendar: displayModel.scheduleType != .teamFlat,
+                        shouldFetchSchedule:  displayModel.scheduleType == ScheduleType.league,
+                        displayDataState: store.baseSchedule.displayDataState,
+                        calendarUiState: CalendarUiState(
+                            yearMonthList: store.baseSchedule.yearMonthList,
+                            days: store.baseSchedule.days,
+                            selectedYearMonthIndex: store.baseSchedule.selectedYearMonthIndex,
+                            selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
-                        actions: ScheduleContainerActions(
-                            calendarUiActions: CalendarUiActions(
-                                onSelectYearMonth: { yearMonth, index in
-                                    mlbLeagueScheduleStore.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
-                                },
-                                onSelectDay: { day, index in
-                                    mlbLeagueScheduleStore.send(.baseSchedule(.selectDay(day, index)))
-                                }
-                            ),
-                            allResultButtonAction: {
-                                mlbLeagueScheduleStore.send(.toggleAllResult)
+                        isAllResultOpened: store.baseSchedule.isAllResultOpened,
+                        shouldShowTournamentButton: store.baseSchedule.selectedMonth >= 10,
+                    ),
+                    actions: ScheduleContainerActions(
+                        calendarUiActions: CalendarUiActions(
+                            onSelectYearMonth: { yearMonth, index in
+                                store.send(.baseSchedule(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index)))
+                            },
+                            onSelectDay: { day, index in
+                                store.send(.baseSchedule(.selectDay(day, index)))
                             }
                         ),
-                        titleContent: {},
-                        gameListContent: {
-                            MLBLeagueScheduleList(
-                                searchStore: searchStore,
-                                mlbLeagueScheduleStore: mlbLeagueScheduleStore
-                            )
+                        allResultButtonAction: {
+                            store.send(.toggleAllResult)
+                        },
+                        tournamentButtonAction: {
+                            store.send(.showTournament)
                         }
-                    )
-                }
+                    ),
+                    titleContent: {},
+                    gameListContent: {
+                        MLBLeagueScheduleList(
+                            searchStore: searchStore,
+                            mlbLeagueScheduleStore: store
+                        )
+                    }
+                )
             }
-            .onAppear {
-                // init MLBLeagueScheduleStore
-                let mlbLeagueScheduleStore: StoreOf<MLBLeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.mlbLeagueScheduleStore) ?? {
-                    let newStore = Store(initialState: MLBLeagueScheduleStore.State()) { MLBLeagueScheduleStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.mlbLeagueScheduleStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.mlbLeagueScheduleStore = mlbLeagueScheduleStore
-                }
-                
-                if searchStore.poppedView == nil {
-                    mlbLeagueScheduleStore.send(.baseSchedule(.initData(displayModel: displayModel)))
-                }
+        }
+        .onAppear {
+            if !didPop {
+                store.send(.baseSchedule(.initData))
+            } else {
+                // TODO: MLBGameStatsView에서 뒤로왔을때만 실행하게 개선 필요
+                store.send(.updateFilteredGames)
             }
-            .onChange(of: displayModel) {
-                if case .mlbLeagueSchedule = searchStore.poppedView {
-                    mlbLeagueScheduleStore?.send(.baseSchedule(.initData(displayModel: displayModel)))
-                }
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
-            .onChange(of: searchStore.viewStack) {
-                guard let lastItem = searchStore.viewStack.last,
-                      case .mlbLeagueSchedule = lastItem,
-                      let poppedView = searchStore.poppedView,
-                      case .mlbGameStats = searchStore.poppedView else {
-                    return
-                }
-                
-                mlbLeagueScheduleStore?.send(.updateGamesData(mlbLeagueScheduleData: lastItem, mlbGameStatsData: poppedView))
-            }
-            .onChange(of: mlbLeagueScheduleStore?.dataForViewStack) {
-                if let data = mlbLeagueScheduleStore?.dataForViewStack {
-                    searchStore.send(.updateLastViewStack(data: data))
-                }
-            }
-        } // if let searchStore
+        }
     }
 }
 
@@ -104,9 +80,9 @@ struct MLBLeagueScheduleList: View {
     @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var mlbLeagueScheduleStore: StoreOf<MLBLeagueScheduleStore>
     
-    @State var gameListToDisplay: [MLBGameForSchedule] = []
-    
     var body: some View {
+        let gameListToDisplay = mlbLeagueScheduleStore.filteredGames[mlbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+        
         ScrollView {
             LazyVStack(spacing: 8) {
                 ForEach(gameListToDisplay, id: \.gameId) { item in
@@ -120,17 +96,6 @@ struct MLBLeagueScheduleList: View {
             }
         }
         .frame(maxHeight: .infinity)
-        .onAppear {
-            gameListToDisplay = mlbLeagueScheduleStore.filteredGames[mlbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
-        .onChange(of: mlbLeagueScheduleStore.baseSchedule.selectedDayIndex) {
-            gameListToDisplay = mlbLeagueScheduleStore.filteredGames[mlbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
-        .onChange(of: mlbLeagueScheduleStore.filteredGames) {
-            // TODO: Has to think about better structure, because 'gameListToDisplay' could be set multiple times.
-            // Has to find if there are cases like here from other .onChange()
-            gameListToDisplay = mlbLeagueScheduleStore.filteredGames[mlbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
     }
 }
 
@@ -146,59 +111,27 @@ struct MLBLeagueScheduleListItem: View {
     @State private var isResultOpened = false
     
     var body: some View {
+        let displayModel = mlbLeagueScheduleStore.baseSchedule.displayModel
         let gameId = data.gameId
-        let homeTeamId = data.homeTeamId
-        let awayTeamId = data.awayTeamId
         let gameStatus = data.gameStatus
         let teamNameDic = mlbLeagueScheduleStore.baseSchedule.teamNameDictionary
         
-        let gameStatusText: String = {
-            switch gameStatus {
-            case StringConstants.MLB.gameScheduled:
-                return StringConstants.gameNotStartedStr
-            case StringConstants.MLB.gameLive:
-                return data.gameInfo?.currentInning ?? StringConstants.gameLiveStr
-            case StringConstants.MLB.gamePostponed:
-                return StringConstants.gamePostponedStr
-            case let status where StringConstants.MLB.gameFinishedList.contains(status):
-                return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
-            default:
-                return ""
-            }
-        }()
-        
-        let gameStatusColor: Color = {
-            if gameStatus == StringConstants.MLB.gameLive {
-                return .moare
-            } else {
-                return .secondary
-            }
-        }()
-        
         ScheduleGameItem(
             state:ScheduleGameItemState(
-                homeTeamLogo: MLBUtil.teamLogoURL(id: homeTeamId),
-                homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
-                homeTeamScore: data.homeTeamScore,
-                awayTeamLogo: MLBUtil.teamLogoURL(id: awayTeamId),
-                awayTeamName: teamNameDic["short_\(awayTeamId)"] ?? "",
-                awayTeamScore: data.awayTeamScore,
+                leagueId: Constants.Ids.mlb,
+                game: data,
+                teamNameDic: teamNameDic,
+                isClickEnabled: gameStatus != Constants.GameStatus.MLB.postponed, // 연기된 경기는 클릭 안되게
                 isResultOpened: isResultOpened,
-                gameStatusText: gameStatusText,
-                gameStatusColor: gameStatusColor,
+                gameStatusText: Constants.GameStatus.mlbGameStatusText(status: gameStatus, currentInning: data.gameInfo?.currentInning, isResultOpened: isResultOpened),
+                gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: Constants.Ids.mlb, status: gameStatus),
                 isCapsuleButtonDisabled: !StringConstants.MLB.gameFinishedList.contains(gameStatus),
-                date: data.date,
-                venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
-                isSvgLogo: true
+                gameType: data.gameInfo?.seriesDescription,
+                shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
-                    if let displayModel = mlbLeagueScheduleStore.baseSchedule.displayModel {
-                        searchStore.send(.selectMLBGame(game: data, season: displayModel.season))
-                    }
-                    
-                    // set selected game's isOpened true
-                    mlbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: true))
+                    mlbLeagueScheduleStore.send(.selectGame(game: data))
                 },
                 onCapsuleButtonClick: {
                     mlbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: !isResultOpened))

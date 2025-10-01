@@ -7,13 +7,19 @@
 
 import SwiftUI
 
-struct ScheduleGameItem: View {
-    let state: ScheduleGameItemState
+struct ScheduleGameItem<T: Decodable & Equatable>: View {
+    let state: ScheduleGameItemState<T>
     let actions: ScheduleGameItemActions
     
     var body: some View {
-        let homeTeamScore = state.homeTeamScore
-        let awayTeamScore = state.awayTeamScore
+        let game = state.game
+        let teamNameDic = state.teamNameDic
+        let homeTeamId = Constants.Ids.checkTeamId(leagueId: state.leagueId, teamId: game.homeTeamId)
+        let awayTeamId = Constants.Ids.checkTeamId(leagueId: state.leagueId, teamId: game.awayTeamId)
+        let homeTeamScore = game.homeTeamScore
+        let awayTeamScore = game.awayTeamScore
+        let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
+        let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
         
         HStack(spacing: 0) {
             /* ---------------------
@@ -24,9 +30,10 @@ struct ScheduleGameItem: View {
 //                searchStore.send(.performSearch())
             }) {
                 VStack(spacing: 2) {
-                    URLImage(url: state.homeTeamLogo, size: .small, isSvg: state.isSvgLogo)
+                    URLImage(url: Util.teamLogoURL(leagueId: state.leagueId, teamId: homeTeamId), size: .small)
                     
-                    Text(state.homeTeamName)
+                    // TODO: 그냥 id가 오류로 없는 경우도 "미정"이라고 나올 수 있음
+                    Text(homeTeamId == nil ? "미정" : (teamNameDic["short_\(homeTeamId ?? 0)"] ?? ""))
                         .font(.system(size: 13))
                         .lineLimit(2)
                     
@@ -50,10 +57,21 @@ struct ScheduleGameItem: View {
 //                .contentShape(Rectangle())
             
             // score
-            Text("\(homeTeamScore)")
-                .frame(width: 60)
-                .opacity(state.isResultOpened ? 1 : 0) // TODO: onTapGesture is not triggered when opacity is 0
-                .foregroundStyle(homeTeamScore >= awayTeamScore ? .moare : .primary)
+            VStack(spacing: 2) {
+                // 축구 패널티킥 경기는 일반 스코어 검정색
+                let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (homeTeamScore >= awayTeamScore ? .moare : .primary)
+                
+                Text("\(homeTeamScore)")
+                    .foregroundStyle(scoreColor)
+                
+                if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
+                    Text("\(homeTeamPenaltyScore)")
+                        .font(.system(size: 12))
+                        .foregroundStyle(homeTeamPenaltyScore >= awayTeamPenaltyScore ? .moare : .primary)
+                }
+            }
+            .frame(width: 60)
+            .opacity(state.isResultOpened ? 1 : 0) // TODO: onTapGesture is not triggered when opacity is 0
             
 //            Spacer()
 //                .frame(maxHeight: 80)
@@ -74,31 +92,23 @@ struct ScheduleGameItem: View {
                 
                 // game date
                 if state.shouldShowOnlyDateTime {
-                    Text(CalendarUtil.formatDate(date: state.date, formatType: .ampm))
+                    Text(CalendarUtil.formatDate(date: state.game.date, formatType: .ampm))
                         .font(.system(size: 12))
                         .padding(.vertical, 2)
                 } else {
-                    Text(CalendarUtil.formatDate(date: state.date).split(separator: " ").first ?? "")
+                    Text(CalendarUtil.formatDate(date: state.game.date).split(separator: " ").first ?? "")
                         .font(.system(size: 12))
                         .padding(.top, 2)
                     
-                    Text(CalendarUtil.formatDate(date: state.date, formatType: .ampm))
+                    Text(CalendarUtil.formatDate(date: state.game.date, formatType: .ampm))
                         .font(.system(size: 12))
                         .padding(.bottom, 2)
                 }
                 
-                // venue
-                if state.shouldShowVenue {
-                    Text("장소: \(state.venue)")
-                        .font(.system(size: 12, weight: .light))
-                        .lineLimit(1)
-                    .padding(.bottom, 2)
-                }
-                
                 // game type
                 // TODO: 나중에 작업
-                if state.gameType != nil && state.shouldShowGameType {
-                    Text(state.gameType!)
+                if let gameType = state.gameType, !gameType.isEmpty, state.shouldShowGameType {
+                    Text(gameType)
                         .font(.system(size: 12, weight: .light))
                         .lineLimit(1)
                 }
@@ -120,10 +130,21 @@ struct ScheduleGameItem: View {
                away
                --------------------- */
             // socre
-            Text("\(awayTeamScore)")
-                .frame(width: 60)
-                .opacity(state.isResultOpened ? 1 : 0)
-                .foregroundStyle(awayTeamScore >= homeTeamScore ? .moare : .primary)
+            VStack(spacing: 2) {
+                // 축구 패널티킥 경기는 일반 스코어 검정색
+                let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (awayTeamScore >= homeTeamScore ? .moare : .primary)
+                
+                Text("\(awayTeamScore)")
+                    .foregroundStyle(scoreColor)
+                
+                if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
+                    Text("\(awayTeamPenaltyScore)")
+                        .font(.system(size: 12))
+                        .foregroundStyle(awayTeamPenaltyScore >= homeTeamPenaltyScore ? .moare : .primary)
+                }
+            }
+            .frame(width: 60)
+            .opacity(state.isResultOpened ? 1 : 0)
             
 //            Spacer()
 //                .frame(maxHeight: 80)
@@ -134,9 +155,9 @@ struct ScheduleGameItem: View {
 //                searchStore.send(.performSearch())
             }) {
                 VStack(spacing: 2) {
-                    URLImage(url: state.awayTeamLogo, size: .small, isSvg: state.isSvgLogo)
+                    URLImage(url: Util.teamLogoURL(leagueId: state.leagueId, teamId: awayTeamId), size: .small)
                     
-                    Text(state.awayTeamName)
+                    Text(awayTeamId == nil ? "미정" : (teamNameDic["short_\(awayTeamId ?? 0)"] ?? ""))
                         .font(.system(size: 13))
                         .lineLimit(2)
                     

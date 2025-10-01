@@ -9,174 +9,153 @@ import SwiftUI
 import ComposableArchitecture
 
 struct FBPlayerInfoView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var fbPlayerInfoStore: StoreOf<FBPlayerInfoStore>? = nil
+    let searchStore: StoreOf<SearchStore> // TODO: 구조 고민 필요
+    let store: StoreOf<FBPlayerInfoStore>
+    let didPop: Bool
     
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: FBPlayerInfoDisplayModel
+    @State private var show = false // NOTE: Store 리팩토링 후 처음 오픈 시 애니메이션이 안먹어서 만듬
     
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            InfoViewContainer(itemCount: 6, measureContent: { scope in
-                if let fbPlayerInfoStore {
-                    HStack(alignment: .top) {
-                        FBPlayerInfoFirstItem(fbPlayerInfoStore: fbPlayerInfoStore)
-                            .frame(maxWidth: .infinity)
-                            .background(
-                                GeometryReader { geometry in
-                                    // NOTE: 처음 오픈 시 animation이 적용되기 때문에 onAppear가 아니라 onChange로 해야함
-                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                        scope.updateItemFrame(index: 0, geometry: geometry)
-                                    }
+        InfoViewContainer(itemCount: 6, measureContent: { scope in
+            if show {
+                HStack(alignment: .top) {
+                    FBPlayerInfoFirstItem(fbPlayerInfoStore: store)
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            GeometryReader { geometry in
+                                // NOTE: 처음 오픈 시 animation이 적용되기 때문에 onAppear가 아니라 onChange로 해야함
+                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                    scope.updateItemFrame(index: 0, geometry: geometry)
                                 }
-                            )
-                        
-                        FBPlayerInfoSecondItem(fbPlayerInfoStore: fbPlayerInfoStore)
-                            .frame(maxWidth: .infinity)
-                            .background(
-                                GeometryReader { geometry in
-                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                        scope.updateItemFrame(index: 1, geometry: geometry)
-                                    }
+                            }
+                        )
+                    
+                    FBPlayerInfoSecondItem(fbPlayerInfoStore: store)
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            GeometryReader { geometry in
+                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                    scope.updateItemFrame(index: 1, geometry: geometry)
                                 }
-                            )
-                        
-                        FBPlayerInfoThirdItem(fbPlayerInfoStore: fbPlayerInfoStore)
-                            .frame(maxWidth: .infinity)
-                            .background(
-                                GeometryReader { geometry in
-                                    Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                        scope.updateItemFrame(index: 2, geometry: geometry)
-                                    }
+                            }
+                        )
+                    
+                    FBPlayerInfoThirdItem(fbPlayerInfoStore: store)
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            GeometryReader { geometry in
+                                Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                                    scope.updateItemFrame(index: 2, geometry: geometry)
                                 }
-                            )
+                            }
+                        )
+                }
+                
+                FBPlayerInfoFourthItem(
+                    searchStore: searchStore,
+                    fbPlayerInfoStore: store
+                )
+                .background(
+                    GeometryReader { geometry in
+                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                            scope.updateItemFrame(index: 3, geometry: geometry)
+                        }
                     }
-                    
-                    FBPlayerInfoFourthItem(
-                        searchStore: searchStore,
-                        fbPlayerInfoStore: fbPlayerInfoStore
-                    )
-                    .background(
-                        GeometryReader { geometry in
-                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                scope.updateItemFrame(index: 3, geometry: geometry)
-                            }
-                        }
-                    )
-                    
-                    FBPlayerInfoFifthItem(
-                        searchStore: searchStore,
-                        fbPlayerInfoStore: fbPlayerInfoStore
-                    )
-                    .background(
-                        GeometryReader { geometry in
-                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                scope.updateItemFrame(index: 4, geometry: geometry)
-                            }
-                        }
-                    )
-                    
-                    FBPlayerInfoSixthItem(
-                        searchStore: searchStore,
-                        fbPlayerInfoStore: fbPlayerInfoStore
-                    )
-                    .background(
-                        GeometryReader { geometry in
-                            Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
-                                scope.updateItemFrame(index: 5, geometry: geometry)
-                            }
-                        }
-                    )
-                } // if let fbPlayerInfoStore
-            }, displayContent: { scope in
-                if let fbPlayerInfoStore {
-                    // photo, name
-                    FBPlayerInfoFirstItem(
-                        fbPlayerInfoStore: fbPlayerInfoStore,
-                        isAniItem: true,
-                        itemSize: scope.itemSizes[0],
-                        itemOffset: scope.computedOffset(for: 0),
-                        showContents: scope.showContents
-                    )
-                    
-                    // age, birth, nationality
-                    FBPlayerInfoSecondItem(
-                        fbPlayerInfoStore: fbPlayerInfoStore,
-                        isAniItem: true,
-                        itemSize: scope.itemSizes[1],
-                        itemOffset: scope.computedOffset(for: 1),
-                        showContents: scope.showContents
-                    )
-                    
-                    // weight, height
-                    FBPlayerInfoThirdItem(
-                        fbPlayerInfoStore: fbPlayerInfoStore,
-                        isAniItem: true,
-                        itemSize: scope.itemSizes[2],
-                        itemOffset: scope.computedOffset(for: 2),
-                        showContents: scope.showContents
-                    )
-                    
-                    // league stats
-                    FBPlayerInfoFourthItem(
-                        searchStore: searchStore,
-                        fbPlayerInfoStore: fbPlayerInfoStore,
-                        isAniItem: true,
-                        itemSize: scope.itemSizes[3],
-                        itemOffset: scope.computedOffset(for: 3),
-                        showContents: scope.showContents
-                    )
-                    
-                    // last game stats
-                    FBPlayerInfoFifthItem(
-                        searchStore: searchStore,
-                        fbPlayerInfoStore: fbPlayerInfoStore,
-                        isAniItem: true,
-                        itemSize: scope.itemSizes[4],
-                        itemOffset: scope.computedOffset(for: 4),
-                        showContents: scope.showContents
-                    )
-                    
-                    // next game
-                    FBPlayerInfoSixthItem(
-                        searchStore: searchStore,
-                        fbPlayerInfoStore: fbPlayerInfoStore,
-                        isAniItem: true,
-                        itemSize: scope.itemSizes[5],
-                        itemOffset: scope.computedOffset(for: 5),
-                        showContents: scope.showContents
-                    )
-                }
-            })
-            .onAppear {
-                // init FBPlayerInfoStore
-                let fbPlayerInfoStore: StoreOf<FBPlayerInfoStore> = storeManager.getStore(forKey: StoreKeys.fbPlayerInfoStore) ?? {
-                    let newStore = Store(initialState: FBPlayerInfoStore.State()) { FBPlayerInfoStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.fbPlayerInfoStore)
-                    
-                    return newStore
-                }()
+                )
                 
-                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    self.fbPlayerInfoStore = fbPlayerInfoStore
-                }
+                FBPlayerInfoFifthItem(
+                    searchStore: searchStore,
+                    fbPlayerInfoStore: store
+                )
+                .background(
+                    GeometryReader { geometry in
+                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                            scope.updateItemFrame(index: 4, geometry: geometry)
+                        }
+                    }
+                )
                 
-                if searchStore.poppedView == nil {
-                    fbPlayerInfoStore.send(.baseInfo(.initData(displayModel: displayModel)))
-                }
+                FBPlayerInfoSixthItem(
+                    searchStore: searchStore,
+                    fbPlayerInfoStore: store
+                )
+                .background(
+                    GeometryReader { geometry in
+                        Color.clear.onChange(of: geometry.frame(in: .named(scope.coordinateSpaceName)).origin) {
+                            scope.updateItemFrame(index: 5, geometry: geometry)
+                        }
+                    }
+                )
             }
-            .onChange(of: displayModel) {
-                if case .fbPlayerInfo = searchStore.poppedView {
-                    fbPlayerInfoStore?.send(.baseInfo(.initData(displayModel: displayModel)))
-                }
+        }, displayContent: { scope in
+            if show {
+                // photo, name
+                FBPlayerInfoFirstItem(
+                    fbPlayerInfoStore: store,
+                    isAniItem: true,
+                    itemSize: scope.itemSizes[0],
+                    itemOffset: scope.computedOffset(for: 0),
+                    showContents: scope.showContents
+                )
+                
+                // age, birth, nationality
+                FBPlayerInfoSecondItem(
+                    fbPlayerInfoStore: store,
+                    isAniItem: true,
+                    itemSize: scope.itemSizes[1],
+                    itemOffset: scope.computedOffset(for: 1),
+                    showContents: scope.showContents
+                )
+                
+                // weight, height
+                FBPlayerInfoThirdItem(
+                    fbPlayerInfoStore: store,
+                    isAniItem: true,
+                    itemSize: scope.itemSizes[2],
+                    itemOffset: scope.computedOffset(for: 2),
+                    showContents: scope.showContents
+                )
+                
+                // league stats
+                FBPlayerInfoFourthItem(
+                    searchStore: searchStore,
+                    fbPlayerInfoStore: store,
+                    isAniItem: true,
+                    itemSize: scope.itemSizes[3],
+                    itemOffset: scope.computedOffset(for: 3),
+                    showContents: scope.showContents
+                )
+                
+                // last game stats
+                FBPlayerInfoFifthItem(
+                    searchStore: searchStore,
+                    fbPlayerInfoStore: store,
+                    isAniItem: true,
+                    itemSize: scope.itemSizes[4],
+                    itemOffset: scope.computedOffset(for: 4),
+                    showContents: scope.showContents
+                )
+                
+                // next game
+                FBPlayerInfoSixthItem(
+                    searchStore: searchStore,
+                    fbPlayerInfoStore: store,
+                    isAniItem: true,
+                    itemSize: scope.itemSizes[5],
+                    itemOffset: scope.computedOffset(for: 5),
+                    showContents: scope.showContents
+                )
             }
-        } // if let searchStore
+        })
+        .onAppear {
+            if !didPop {
+                store.send(.baseInfo(.initData))
+            }
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
+            }
+        }
     }
 }
 
@@ -204,27 +183,26 @@ struct FBPlayerInfoFirstItem: View {
     
     var body: some View {
         let playerNameDic = fbPlayerInfoStore.baseInfo.playerNameDictionary
+        let player = fbPlayerInfoStore.baseInfo.displayModel.info
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
         ) {
-            if let player = fbPlayerInfoStore.baseInfo.displayModel?.info {
-                URLImage(url: player.photo)
-                    .opacity(showContents ? 1 : 0)
-                
-                Text(playerNameDic["\(player.id)"] ?? (player.name))
-                    .font(.system(size: 16))
-                    .fontWeight(.medium)
-                    .opacity(showContents ? 1 : 0)
-                
-                Text(player.name)
-                    .font(.system(size: 12))
-                    .fontWeight(.light)
-                    .lineLimit(2)
-                    .opacity(showContents ? 1 : 0)
-            }
+            URLImage(url: player.photo)
+                .opacity(showContents ? 1 : 0)
+            
+            Text(playerNameDic["\(player.id)"] ?? (player.name))
+                .font(.system(size: 16))
+                .fontWeight(.medium)
+                .opacity(showContents ? 1 : 0)
+            
+            Text(player.name)
+                .font(.system(size: 12))
+                .fontWeight(.light)
+                .lineLimit(2)
+                .opacity(showContents ? 1 : 0)
         }
     }
 }
@@ -252,43 +230,43 @@ struct FBPlayerInfoSecondItem: View {
     }
     
     var body: some View {
+        let player = fbPlayerInfoStore.baseInfo.displayModel.info
+        
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            if let player = fbPlayerInfoStore.baseInfo.displayModel?.info {
-                (
-                    Text("국적: ")
-                        .font(.system(size: 15))
-                    + Text(player.nationality)
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                )
-                .multilineTextAlignment(.leading)
-                .opacity(showContents ? 1 : 0)
+            (
+                Text("국적: ")
+                    .font(.system(size: 15))
+                + Text(player.nationality)
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+            )
+            .multilineTextAlignment(.leading)
+            .opacity(showContents ? 1 : 0)
+            
+            (
+                Text("출생: ")
+                    .font(.system(size: 15))
+                + Text(player.birth.date)
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+            )
+            .multilineTextAlignment(.leading)
+            .opacity(showContents ? 1 : 0)
+            
+            HStack(spacing: 0) {
+                Text("나이: ")
+                    .font(.system(size: 15))
                 
-                (
-                    Text("출생: ")
-                        .font(.system(size: 15))
-                    + Text(player.birth.date)
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                )
-                .multilineTextAlignment(.leading)
-                .opacity(showContents ? 1 : 0)
-                
-                HStack(spacing: 0) {
-                    Text("나이: ")
-                        .font(.system(size: 15))
-                    
-                    Text("\(player.age)")
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                }
-                .opacity(showContents ? 1 : 0)
+                Text("\(player.age)")
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
             }
+            .opacity(showContents ? 1 : 0)
         }
     }
 }
@@ -316,33 +294,33 @@ struct FBPlayerInfoThirdItem: View {
     }
     
     var body: some View {
+        let player = fbPlayerInfoStore.baseInfo.displayModel.info
+        
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
             horizontalAlignment: .leading
         ) {
-            if let player = fbPlayerInfoStore.baseInfo.displayModel?.info {
-                HStack(spacing: 0) {
-                    Text("키: ")
-                        .font(.system(size: 15))
-                    
-                    Text(player.height)
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                }
-                .opacity(showContents ? 1 : 0)
+            HStack(spacing: 0) {
+                Text("키: ")
+                    .font(.system(size: 15))
                 
-                HStack(spacing: 0) {
-                    Text("몸무게: ")
-                        .font(.system(size: 15))
-                    
-                    Text(player.weight)
-                        .font(.system(size: 16))
-                        .fontWeight(.medium)
-                }
-                .opacity(showContents ? 1 : 0)
+                Text(player.height)
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
             }
+            .opacity(showContents ? 1 : 0)
+            
+            HStack(spacing: 0) {
+                Text("몸무게: ")
+                    .font(.system(size: 15))
+                
+                Text(player.weight)
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+            }
+            .opacity(showContents ? 1 : 0)
         }
     }
 }
@@ -374,7 +352,7 @@ struct FBPlayerInfoFourthItem: View {
     
     var body: some View {
         let teamNameDic = fbPlayerInfoStore.baseInfo.teamNameDictionary
-        let stats = fbPlayerInfoStore.baseInfo.displayModel?.stats
+        let stats = fbPlayerInfoStore.baseInfo.displayModel.stats
         let team = stats?.team
         
         MovingCapsuleItemContainer(
@@ -382,13 +360,11 @@ struct FBPlayerInfoFourthItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                if let player = fbPlayerInfoStore.baseInfo.displayModel?.info {
-                    searchStore.send(.showPlayerStats(playerId: player.id))
-                }
+                fbPlayerInfoStore.send(.showPlayerStats)
             }
         ) {
             if let league = stats?.league {
-                LeagueTitle(
+                FBLeagueTitle(
                     url: league.logo,
                     leagueName: league.name,
                     leagueSeason: league.season
@@ -457,13 +433,15 @@ struct FBPlayerInfoFifthItem: View {
     
     var body: some View {
         let teamNameDic = fbPlayerInfoStore.baseInfo.teamNameDictionary
+        let lastGame = fbPlayerInfoStore.baseInfo.displayModel.lastGame
+        let lastGamePlayerStats = fbPlayerInfoStore.baseInfo.displayModel.lastGamePlayerStats
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "previous"))
+                fbPlayerInfoStore.send(.showGameStats())
             }
         ) {
             Text("최근경기")
@@ -471,7 +449,7 @@ struct FBPlayerInfoFifthItem: View {
                 .opacity(showContents ? 1 : 0)
             
             HStack {
-                if let lastGame = fbPlayerInfoStore.baseInfo.displayModel?.lastGame {
+                if let lastGame {
                     VStack {
                         HStack(spacing: 0) {
                             HStack(spacing: 0) {
@@ -512,7 +490,7 @@ struct FBPlayerInfoFifthItem: View {
                     .frame(width: UIScreen.main.bounds.width * 0.45) // NOTE: 너비를 화면 전체 너비중 45%로 고정
                 }
                 
-                if let lastGamePlayerStats = fbPlayerInfoStore.baseInfo.displayModel?.lastGamePlayerStats {
+                if let lastGamePlayerStats {
                     HStack {
                         StatsDivider()
                         FBStatDataItem(
@@ -562,20 +540,21 @@ struct FBPlayerInfoSixthItem: View {
     
     var body: some View {
         let teamNameDic = fbPlayerInfoStore.baseInfo.teamNameDictionary
+        let nextGame = fbPlayerInfoStore.baseInfo.displayModel.nextGame
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
             onClick: {
-                searchStore.send(.showGameStats(gameType: "next"))
+                fbPlayerInfoStore.send(.showGameStats(isPrevious: false))
             }
         ) {
             Text("다음경기")
                 .fontWeight(.medium)
                 .opacity(showContents ? 1 : 0)
             
-            if let nextGame = fbPlayerInfoStore.baseInfo.displayModel?.nextGame {
+            if let nextGame {
                 HStack {
                     Text(teamNameDic["short_\(nextGame.teams.home.id)"] ?? nextGame.teams.home.name)
                         .font(.system(size: 16))

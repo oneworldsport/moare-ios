@@ -25,51 +25,48 @@ struct FBLeagueScheduleStore {
         /* ---------------------
            data state
            --------------------- */
-        var baseSchedule = BaseSchedule.State()
+        var baseSchedule: BaseSchedule.State
+        
+        var league: FBLeague? = nil // FBGameStatsView에서 title 정보에 사용
+        
         var filteredGames: [Int: [FBGameForSchedule]] = [:]
-        
-        /* ---------------------
-           ui state
-           --------------------- */
         var gameResultOpenedStateList: [String: Bool] = [:]
+        var selectedGame: FBGameForSchedule? = nil
         
-        /* ---------------------
-           etc
-           --------------------- */
-        var dataForViewStack: SportDecodableModel? = nil
+        // .onChange(of: store.baseSchedule.displayModel)이 실행될때 updateSelectedGame 액션이 실행되는데,
+        // 내부에서 displayModel이 바뀌었을때는 실행되면 안되고 FBGameStatsView에서 새로고침 했을때만 실행되게 하기 위해 만든 flag.
+        var shouldUpdateSelectedGame: Bool = true
+        
+        init(displayModel: FBLeagueScheduleDisplayModel) {
+            self.baseSchedule = BaseSchedule.State(displayModel: displayModel)
+        }
     }
     
     enum Action {
         case baseSchedule(BaseSchedule.Action)
         
-        /* ---------------------
-           view action
-           --------------------- */
-        case selectYearMonth(yearMonth: String, selectedIndex: Int)
         case toggleAllResult
         case updateResultOpenedState(gameId: String, isOpened: Bool)
-        case updateGamesData(
-            fbLeagueScheduleData: SportDecodableModel,
-            fbGameStatsData: SportDecodableModel
-        )
+        case selectGame(game: FBGameForSchedule)
         
-        /* ---------------------
-           private
-           --------------------- */
         case setDays(isInit: Bool = false)
         case fetchGames
         
-        case updateViewStack(data: SportDecodableModel)
-        case resetDataForViewStack
-        
         case updateDisplayDataState(fetchState: ApiFetchState)
         case setDisplayModel(FBLeagueScheduleDisplayModel)
+        
+        case updateFilteredGames
+        case updateSelectedGame // FBGameStatsView에서 새로고침 했을때 사용되는 action
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case showGameStats(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
-        Scope(state: \.baseSchedule, action: \.baseSchedule) {
-            BaseSchedule()
-        }
+        Scope(state: \.baseSchedule, action: \.baseSchedule) { BaseSchedule() }
         
         Reduce { state, action in
             switch action {
@@ -77,24 +74,21 @@ struct FBLeagueScheduleStore {
                 // init with default value
                 state.filteredGames = [:]
                 state.gameResultOpenedStateList = [:]
-                state.dataForViewStack = nil
                 
                 // init data
-                if let yearMonthList = state.baseSchedule.displayModel?.yearMonthList {
-                    state.baseSchedule.yearMonthList = yearMonthList
-                }
+                state.baseSchedule.yearMonthList = state.baseSchedule.displayModel.yearMonthList
                 
                 // select default yearMonth
-                switch state.baseSchedule.displayModel?.scheduleType {
+                switch state.baseSchedule.displayModel.scheduleType {
                 case .league:
-                    if let date = state.baseSchedule.displayModel?.games.first?.date {
+                    if let date = state.baseSchedule.displayModel.games.first?.date {
                         return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
                     }
                     
                     return .send(.setDays(isInit: true))
                     
                 case .team:
-                    let upcomingGame = state.baseSchedule.displayModel?.games.first { game in
+                    let upcomingGame = state.baseSchedule.displayModel.games.first { game in
                         CalendarUtil.isUpcomingDay(date: game.date)
                     }
                     
@@ -102,7 +96,7 @@ struct FBLeagueScheduleStore {
                     if let upcomingGame {
                         return .send(.baseSchedule(.setDefaultYearMonth(date: upcomingGame.date)))
                     } else {
-                        if let date = state.baseSchedule.displayModel?.games.last?.date {
+                        if let date = state.baseSchedule.displayModel.games.last?.date {
                             return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
                         }
                     }
@@ -112,24 +106,19 @@ struct FBLeagueScheduleStore {
                 default:
                     return .none
                 }
-                                
-            case .baseSchedule(.setDefaultYearMonth(_)):
-                return .send(.setDays(isInit: true))
                 
-            case .baseSchedule(_):
-                return .none
-                
-            case .selectYearMonth(let yearMonth, let selectedIndex):
-                state.baseSchedule.selectedYearMonth = yearMonth
-                state.baseSchedule.selectedYearMonthIndex = selectedIndex
-                
-                switch state.baseSchedule.displayModel?.scheduleType {
-                case .league:
-                    return .send(.fetchGames)
-                case .team:
-                    return .send(.setDays())
-                default :
-                    return .none
+            case let .baseSchedule(.selectYearMonth(_, _, isInit)):
+                if isInit {
+                    return .send(.setDays(isInit: isInit))
+                } else {
+                    switch state.baseSchedule.displayModel.scheduleType {
+                    case .league:
+                        return .send(.fetchGames)
+                    case .team:
+                        return .send(.setDays())
+                    default :
+                        return .none
+                    }
                 }
                 
             case .toggleAllResult:
@@ -158,7 +147,7 @@ struct FBLeagueScheduleStore {
                     days = days.enumerated().compactMap { index, day in
                         var newDay = day
                         
-                        let games = state.baseSchedule.displayModel?.games.filter { game in
+                        let games = state.baseSchedule.displayModel.games.filter { game in
                             CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: day.day)
                         }
 
@@ -166,7 +155,7 @@ struct FBLeagueScheduleStore {
                         
                         newFilteredGame[index] = games ?? []
                         
-                        if games?.isEmpty == true {
+                        if games.isEmpty == true {
                             newDay.isDataEmpty = true
                         }
                         
@@ -225,7 +214,7 @@ struct FBLeagueScheduleStore {
                         let selectedYearMonth = selectedYearMonth.split(separator: "/")
                         let yearMonth = selectedYearMonth[0] + selectedYearMonth[1]
                         
-                        let entity = displayModel?.entityInfo.first ?? EntityInfo(
+                        let entity = displayModel.entityInfo.first ?? EntityInfo(
                             entityId: 39,
                             entityName: "프리미어리그",
                             category: "football",
@@ -235,12 +224,11 @@ struct FBLeagueScheduleStore {
                             playerId: nil
                         )
                         
-                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel?.season, yearMonth: String(yearMonth))
+                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel.season, yearMonth: String(yearMonth))
                         
                         
                         if case .fbLeagueSchedule(_, let displayModel) = result.data {
                             await send(.setDisplayModel(displayModel))
-                            await send(.updateViewStack(data: result.data))
                             await send(.setDays())
                         }
                     } catch {
@@ -249,43 +237,23 @@ struct FBLeagueScheduleStore {
                     }
                 }
                 
-            case .updateGamesData(let fbLeagueScheduleData, let fbGameStatsData):
-                guard case let .fbLeagueSchedule(leagueScheduleResponseModel, leagueScheduleDisplayModel) = fbLeagueScheduleData,
-                        case let .fbGameStats(_, gameStatsDisplayModel) = fbGameStatsData else {
-                    return .none
+            case let .selectGame(game):
+                state.selectedGame = game
+                state.filteredGames[state.baseSchedule.selectedDayIndex] = [game]
+                
+                return .run { [displayModel = state.baseSchedule.displayModel] send in
+                    let result = try await searchClient.fetchById(
+                        season: displayModel.season,
+                        category: "football",
+                        date: game.date,
+                        dataType: "football_game_stats",
+                        leagueId: displayModel.leagueId,
+                        id: game.gameId
+                    )
+                    
+                    await send(.delegate(.showGameStats(model: result.data)))
+                    await send(.updateResultOpenedState(gameId: game.gameId, isOpened: true))
                 }
-                
-                let game = gameStatsDisplayModel.game
-                let newGames = leagueScheduleDisplayModel.games.map {
-                    $0.gameId == String(game.fixture.id) ? ModelConverter.fbGameToGameScheduleConverter(game: game) : $0
-                }
-                
-                var newDisplayModel = leagueScheduleDisplayModel
-                newDisplayModel.games = newGames
-                state.baseSchedule.displayModel = newDisplayModel
-                
-                var newFilteredGames = state.filteredGames
-                newFilteredGames[state.baseSchedule.selectedDayIndex] = newDisplayModel.games.filter { game in
-                    CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: state.baseSchedule.selectedDayIndex + 1)
-                }
-                
-                state.filteredGames = newFilteredGames
-                
-                return .send(.updateViewStack(data: SportDecodableModel.fbLeagueSchedule(leagueScheduleResponseModel, newDisplayModel)))
-                
-            case .updateViewStack(let data):
-                state.dataForViewStack = data
-                
-                return .run { send in
-                    await send(.resetDataForViewStack)
-                }
-                
-            case .resetDataForViewStack:
-                // Set nil for next update. Because the data is same as SportDecodableModel, .onChange() is not triggered.
-                // Has to figure out better structrue.
-                state.dataForViewStack = nil
-                
-                return .none
                 
             case .updateDisplayDataState(let fetchState):
                 state.baseSchedule.displayDataState = fetchState
@@ -293,8 +261,39 @@ struct FBLeagueScheduleStore {
                 return .none
                 
             case .setDisplayModel(let displayModel):
+                state.shouldUpdateSelectedGame = false
                 state.baseSchedule.displayModel = displayModel
                 
+                return .none
+                
+            case .updateSelectedGame:
+                if state.shouldUpdateSelectedGame {
+                    if let gameId = state.selectedGame?.gameId {
+                        if let game = state.baseSchedule.displayModel.games.first(where: { $0.gameId == gameId }) {
+                            state.filteredGames[state.baseSchedule.selectedDayIndex] = [game]
+                        }
+                    }
+                }
+                
+                state.shouldUpdateSelectedGame = true
+                
+                return .none
+                
+            case .updateFilteredGames:
+                var newFilteredGames = state.filteredGames
+                newFilteredGames[state.baseSchedule.selectedDayIndex] = state.baseSchedule.displayModel.games.filter { game in
+                    CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: state.baseSchedule.selectedDayIndex + 1)
+                }
+                
+                state.filteredGames = newFilteredGames
+                state.selectedGame = nil // 해당 액션은 뒤로왔을때 실행되므로 선택된 게임은 없앤다.
+                
+                return .none
+                
+            case .baseSchedule:
+                return .none
+                
+            case .delegate:
                 return .none
             } // switch action
         }

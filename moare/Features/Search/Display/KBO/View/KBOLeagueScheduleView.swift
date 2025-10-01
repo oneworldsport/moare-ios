@@ -9,94 +9,70 @@ import SwiftUI
 import ComposableArchitecture
 
 struct KBOLeagueScheduleView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var kboLeagueScheduleStore: StoreOf<KBOLeagueScheduleStore>? = nil
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<KBOLeagueScheduleStore>
+    let didPop: Bool
     
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: KBOLeagueScheduleDisplayModel
+    @State private var show = false
     
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            VStack(spacing: 0) {
-                if let kboLeagueScheduleStore {
-                    ScheduleViewContainer(
-                        state: ScheduleContainerState(
-                            displayDataState: kboLeagueScheduleStore.baseSchedule.displayDataState,
-                            calendarUiState: CalendarUiState(
-                                yearMonthList: kboLeagueScheduleStore.baseSchedule.yearMonthList,
-                                days: kboLeagueScheduleStore.baseSchedule.days,
-                                selectedYearMonthIndex: kboLeagueScheduleStore.baseSchedule.selectedYearMonthIndex,
-                                selectedDayIndex: kboLeagueScheduleStore.baseSchedule.selectedDayIndex
-                            ),
-                            isAllResultOpened: kboLeagueScheduleStore.baseSchedule.isAllResultOpened
+        let displayModel = store.baseSchedule.displayModel
+        
+        VStack {
+            if show {
+                ScheduleViewContainer(
+                    state: ScheduleContainerState(
+                        leagueId: displayModel.leagueId,
+                        shouldShowCalendar: displayModel.scheduleType != .teamFlat,
+                        shouldFetchSchedule:  displayModel.scheduleType == ScheduleType.league,
+                        displayDataState: store.baseSchedule.displayDataState,
+                        calendarUiState: CalendarUiState(
+                            yearMonthList: store.baseSchedule.yearMonthList,
+                            days: store.baseSchedule.days,
+                            selectedYearMonthIndex: store.baseSchedule.selectedYearMonthIndex,
+                            selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
-                        actions: ScheduleContainerActions(
-                            calendarUiActions: CalendarUiActions(
-                                onSelectYearMonth: { yearMonth, index in
-                                    kboLeagueScheduleStore.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
-                                },
-                                onSelectDay: { day, index in
-                                    kboLeagueScheduleStore.send(.baseSchedule(.selectDay(day, index)))
-                                }
-                            ),
-                            allResultButtonAction: {
-                                kboLeagueScheduleStore.send(.toggleAllResult)
+                        isAllResultOpened: store.baseSchedule.isAllResultOpened,
+                        shouldShowTournamentButton: store.baseSchedule.selectedMonth >= 10,
+                    ),
+                    actions: ScheduleContainerActions(
+                        calendarUiActions: CalendarUiActions(
+                            onSelectYearMonth: { yearMonth, index in
+                                store.send(.baseSchedule(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index)))
+                            },
+                            onSelectDay: { day, index in
+                                store.send(.baseSchedule(.selectDay(day, index)))
                             }
                         ),
-                        titleContent: {},
-                        gameListContent: {
-                            KBOLeagueScheduleList(
-                                searchStore: searchStore,
-                                kboLeagueScheduleStore: kboLeagueScheduleStore
-                            )
+                        allResultButtonAction: {
+                            store.send(.toggleAllResult)
+                        },
+                        tournamentButtonAction: {
+                            store.send(.showTournament)
                         }
-                    )
-                }
+                    ),
+                    titleContent: {},
+                    gameListContent: {
+                        KBOLeagueScheduleList(
+                            searchStore: searchStore,
+                            kboLeagueScheduleStore: store
+                        )
+                    }
+                )
             }
-            .onAppear {
-                // init KBOLeagueScheduleStore
-                let kboLeagueScheduleStore: StoreOf<KBOLeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.kboLeagueScheduleStore) ?? {
-                    let newStore = Store(initialState: KBOLeagueScheduleStore.State()) { KBOLeagueScheduleStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.kboLeagueScheduleStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.kboLeagueScheduleStore = kboLeagueScheduleStore
-                }
-                
-                if searchStore.poppedView == nil {
-                    kboLeagueScheduleStore.send(.baseSchedule(.initData(displayModel: displayModel)))
-                }
+        }
+        .onAppear {
+            if !didPop {
+                store.send(.baseSchedule(.initData))
+            } else {
+                // TODO: KBOGameStatsView에서 뒤로왔을때만 실행하게 개선 필요
+                store.send(.updateFilteredGames)
             }
-            .onChange(of: displayModel) {
-                if case .kboLeagueSchedule = searchStore.poppedView {
-                    kboLeagueScheduleStore?.send(.baseSchedule(.initData(displayModel: displayModel)))
-                }
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
-            .onChange(of: searchStore.viewStack) {
-                guard let lastItem = searchStore.viewStack.last,
-                      case .kboLeagueSchedule = lastItem,
-                      let poppedView = searchStore.poppedView,
-                      case .kboGameStats = searchStore.poppedView else {
-                    return
-                }
-                
-                kboLeagueScheduleStore?.send(.updateGamesData(kboLeagueScheduleData: lastItem, kboGameStatsData: poppedView))
-            }
-            .onChange(of: kboLeagueScheduleStore?.dataForViewStack) {
-                if let data = kboLeagueScheduleStore?.dataForViewStack {
-                    searchStore.send(.updateLastViewStack(data: data))
-                }
-            }
-        } // if let searchStore
+        }
     }
 }
 
@@ -104,9 +80,9 @@ struct KBOLeagueScheduleList: View {
     @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var kboLeagueScheduleStore: StoreOf<KBOLeagueScheduleStore>
     
-    @State var gameListToDisplay: [KBOGameForSchedule] = []
-    
     var body: some View {
+        let gameListToDisplay = kboLeagueScheduleStore.filteredGames[kboLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+        
         ScrollView {
             LazyVStack(spacing: 8) {
                 ForEach(gameListToDisplay, id: \.itemKey) { item in
@@ -120,17 +96,6 @@ struct KBOLeagueScheduleList: View {
             }
         }
         .frame(maxHeight: .infinity)
-        .onAppear {
-            gameListToDisplay = kboLeagueScheduleStore.filteredGames[kboLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
-        .onChange(of: kboLeagueScheduleStore.baseSchedule.selectedDayIndex) { newValue in
-            gameListToDisplay = kboLeagueScheduleStore.filteredGames[newValue] ?? []
-        }
-        .onChange(of: kboLeagueScheduleStore.filteredGames) {
-            // TODO: Has to think about better structure, because 'gameListToDisplay' could be set multiple times.
-            // Has to find if there are cases like here from other .onChange()
-            gameListToDisplay = kboLeagueScheduleStore.filteredGames[kboLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
     }
 }
 
@@ -146,10 +111,9 @@ struct KBOLeagueScheduleListItem: View {
     @State private var isResultOpened = false
     
     var body: some View {
+        let displayModel = kboLeagueScheduleStore.baseSchedule.displayModel
         let itemKey = data.itemKey
-        let homeTeamId = data.homeTeamId
-        let awayTeamId = data.awayTeamId
-        let gameStatus = Int(data.gameStatus)
+        let gameStatus = Int(data.gameStatus) // TODO: String으로 사용
         let teamNameDic = kboLeagueScheduleStore.baseSchedule.teamNameDictionary
         
         let gameStatusText: String = {
@@ -177,27 +141,19 @@ struct KBOLeagueScheduleListItem: View {
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
-                homeTeamLogo: KBOUtil.teamLogoURL(id: data.homeTeamId),
-                homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
-                homeTeamScore: data.homeTeamScore,
-                awayTeamLogo: KBOUtil.teamLogoURL(id: data.awayTeamId),
-                awayTeamName: teamNameDic["short_\(awayTeamId)"] ?? "",
-                awayTeamScore: data.awayTeamScore,
+                leagueId: Constants.Ids.kbo,
+                game: data,
+                teamNameDic: teamNameDic,
+                isClickEnabled: data.gameStatus != Constants.GameStatus.KBO.canceled, // 취소된 경기는 클릭 안되게
                 isResultOpened: isResultOpened,
                 gameStatusText: gameStatusText,
                 gameStatusColor: gameStatusColor,
                 isCapsuleButtonDisabled: gameStatus != StringConstants.KBO.gameFinal,
-                date: data.date,
-                venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
+                shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
-                    if let displayModel = kboLeagueScheduleStore.baseSchedule.displayModel {
-                        searchStore.send(.selectKBOGame(game: data, season: displayModel.season))
-                    }
-                    
-                    // set selected game's isOpened true
-                    kboLeagueScheduleStore.send(.updateResultOpenedState(itemKey: itemKey, isOpened: true))
+                    kboLeagueScheduleStore.send(.selectGame(game: data))
                 },
                 onCapsuleButtonClick: {
                     kboLeagueScheduleStore.send(.updateResultOpenedState(itemKey: itemKey, isOpened: !isResultOpened))

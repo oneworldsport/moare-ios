@@ -1,0 +1,129 @@
+//
+//  TournamentSingleGameItem.swift
+//  moare
+//
+//  Created by Mohwa Yoon on 9/16/25.
+//
+
+import SwiftUI
+
+struct TournamentSingleGameItem<T: Decodable & Equatable>: View {
+    let leagueId: Int
+    let game: GameForSchedule<T>
+    let teamNameDic: [String: String]
+    
+    var body: some View {
+        let homeTeamId = game.homeTeamId
+        let awayTeamId = game.awayTeamId
+        let homeTeamScore = game.homeTeamScore
+        let awayTeamScore = game.awayTeamScore
+        let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
+        let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
+        let gameStatusText = Constants.GameStatus.gameStatusText(leagueId: leagueId, status: game.gameStatus)
+        let shouldShowScore = !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
+        let isFinished = gameStatusText == StringConstants.gameFinishedStr
+        
+        var isHomeWinner: Bool {
+            if let homePenalty = homeTeamPenaltyScore,
+               let awayPenalty = awayTeamPenaltyScore {
+                return homePenalty > awayPenalty
+            }
+            
+            return homeTeamScore > awayTeamScore
+        }
+        
+        HStack(spacing: 0) {
+            Button(action: {
+            }) {
+                VStack(spacing: 2) {
+                    if isFinished && isHomeWinner {
+                        HCapsuleBar()
+                            .padding(.bottom, 4)
+                    }
+                    
+                    URLImage(url: Util.teamLogoURL(leagueId: leagueId, teamId: homeTeamId), size: .small)
+                    
+                    Text(teamNameDic["short_\(homeTeamId)"] ?? "")
+                        .font(.system(size: 13))
+                        .lineLimit(2)
+                }
+            }
+            .frame(width: 80)
+            .foregroundStyle(.primary)
+            .opacity((isFinished && !isHomeWinner) ? 0.3 : 1)
+            
+            if shouldShowScore {
+                VStack(spacing: 2) {
+                    // 축구 패널티킥 경기는 일반 스코어 검정색
+                    let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (homeTeamScore >= awayTeamScore ? .moare : .primary)
+                    
+                    Text("\(homeTeamScore)")
+                        .frame(width: 30)
+                        .foregroundStyle(scoreColor)
+                    
+                    if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
+                        Text("\(homeTeamPenaltyScore)")
+                            .font(.system(size: 12))
+                            .foregroundStyle(homeTeamPenaltyScore >= awayTeamPenaltyScore ? .moare : .primary)
+                    }
+                }
+            }
+            
+            VStack(spacing: 0) {
+                // game status
+                CapsuleButton(
+                    text: gameStatusText,
+                    color: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: game.gameStatus)
+                ) {
+                    
+                }
+                
+                // game date
+                Text(CalendarUtil.formatDate(date: game.date).split(separator: " ").first ?? "")
+                    .font(.system(size: 12))
+                    .padding(.top, 2)
+                
+                Text(CalendarUtil.formatDate(date: game.date, formatType: .ampm))
+                    .font(.system(size: 12))
+                    .padding(.bottom, 2)
+            }
+            .frame(width: 110)
+            
+            if shouldShowScore {
+                VStack(spacing: 2) {
+                    // 축구 패널티킥 경기는 일반 스코어 검정색
+                    let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (awayTeamScore >= homeTeamScore ? .moare : .primary)
+                    
+                    Text("\(awayTeamScore)")
+                        .frame(width: 30)
+                        .foregroundStyle(scoreColor)
+                    
+                    if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
+                        Text("\(awayTeamPenaltyScore)")
+                            .font(.system(size: 12))
+                            .foregroundStyle(awayTeamPenaltyScore >= homeTeamPenaltyScore ? .moare : .primary)
+                    }
+                }
+            }
+            
+            Button(action: {
+            }) {
+                VStack(spacing: 2) {
+                    if isFinished && !isHomeWinner {
+                        HCapsuleBar()
+                            .padding(.bottom, 4)
+                    }
+                    
+                    URLImage(url: Util.teamLogoURL(leagueId: leagueId, teamId: awayTeamId), size: .small)
+                    
+                    Text(teamNameDic["short_\(awayTeamId)"] ?? "")
+                        .font(.system(size: 13))
+                        .lineLimit(2)
+                }
+            }
+            .frame(width: 80)
+            .foregroundStyle(.primary)
+            .opacity((isFinished && isHomeWinner) ? 0.3 : 1)
+        }
+    }
+}

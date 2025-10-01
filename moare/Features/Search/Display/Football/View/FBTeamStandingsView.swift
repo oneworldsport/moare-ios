@@ -9,105 +9,81 @@ import SwiftUI
 import ComposableArchitecture
 
 struct FBTeamStandingsView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var fbTeamStandingsStore: StoreOf<FBTeamStandingsStore>? = nil
-    
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: FBTeamStandingsDisplayModel
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<FBTeamStandingsStore>
+    let didPop: Bool
     
     private let columnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50, 50, 50, 100, 100]
-    
     private let headerCategories = ["서부 컨퍼런스", "동부 컨퍼런스"]
     
+    @State private var show = false
+    
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            let teamStandings: [StandingsItemState] = fbTeamStandingsStore?.standings.map {
-                return StandingsItemState(
-                    id: $0.team.id,
-                    imageUrl: $0.team.logo,
-                    name: fbTeamStandingsStore?.teamNameDictionary["short_\($0.team.id)"] ?? $0.team.name,
-                    dataList: [
-                        calculatePoints(data: $0.homeAwayStats),
-                        String($0.homeAwayStats.wins.total),
-                        String($0.homeAwayStats.draws.total),
-                        String($0.homeAwayStats.loses.total),
-                        String($0.homeAwayStats.played.total),
-                        String($0.goalsFor.total),
-                        String($0.goalsAgainst.total),
-                        String($0.goalsFor.total - $0.goalsAgainst.total),
-                        getRecordString(data: $0.homeAwayStats),
-                        getRecordString(data: $0.homeAwayStats, isHome: false)
-                    ]
-                )
-            } ?? []
-            
-            VStack {
-                if let fbTeamStandingsStore {
-                    StandingsViewContainer(
-                        state: StandingsContainerState(
-                            headerCategories: fbTeamStandingsStore.isMLS ? headerCategories : nil,
-                            secondCategories: StringConstants.Football.teamStandingsCategories,
-                            standings: teamStandings,
-                            headerCategorySelectedIndex: fbTeamStandingsStore.selectedConferenceIndex,
-                            secondCategorySelectedIndex: fbTeamStandingsStore.selectedCategoryIndex,
-                            columnWidthList: columnWidthList
-                        ),
-                        actions: StandingsContainerActions(
-                            headerCategoryButtonAction: { index in
-                                fbTeamStandingsStore.send(.selectConference(index: index))
-                            },
-                            secondCategoryButtonAction: { index, _ in
-                                fbTeamStandingsStore.send(.selectCategory(index: index))
-                            },
-                            itemButtonAction: { id in
-                                searchStore.send(.showTeamStats(teamId: id))
-                            }
-                        ),
-                        titleContent: {
-                            if let league = fbTeamStandingsStore.league {
-                                LeagueTitle(
-                                    url: league.logo,
-                                    leagueName: league.name,
-                                    leagueSeason: league.season
-                                )
-                            }
+        let teamStandings: [StandingsItemState] = store.standings.map {
+            return StandingsItemState(
+                id: $0.team.id,
+                imageUrl: $0.team.logo,
+                name: store.baseStandings.teamNameDictionary["short_\($0.team.id)"] ?? $0.team.name,
+                dataList: [
+                    calculatePoints(data: $0.homeAwayStats),
+                    String($0.homeAwayStats.wins.total),
+                    String($0.homeAwayStats.draws.total),
+                    String($0.homeAwayStats.loses.total),
+                    String($0.homeAwayStats.played.total),
+                    String($0.goalsFor.total),
+                    String($0.goalsAgainst.total),
+                    String($0.goalsFor.total - $0.goalsAgainst.total),
+                    getRecordString(data: $0.homeAwayStats),
+                    getRecordString(data: $0.homeAwayStats, isHome: false)
+                ]
+            )
+        }
+        
+        VStack {
+            if show {
+                StandingsViewContainer(
+                    state: StandingsContainerState(
+                        headerCategories: store.isMLS ? headerCategories : nil,
+                        secondCategories: StringConstants.Football.teamStandingsCategories,
+                        standings: teamStandings,
+                        headerCategorySelectedIndex: store.baseStandings.headerCategorySelectedIndex,
+                        secondCategorySelectedIndex: store.baseStandings.categorySelectedIndex,
+                        columnWidthList: columnWidthList
+                    ),
+                    actions: StandingsContainerActions(
+                        headerCategoryButtonAction: { index in
+                            store.send(.baseStandings(.selectHeaderCategory(index: index)))
                         },
-                        customListContent: { _ in }
-                    )
-                }
+                        secondCategoryButtonAction: { index, _ in
+                            store.send(.baseStandings(.selectCategory(index: index)))
+                        },
+                        itemButtonAction: { id in
+                            // TODO: UEFA 리그는 showTeamStats가 안돼서 Button disabled 처리 해야함.
+                            store.send(.showTeamStats(id: id))
+                        }
+                    ),
+                    titleContent: {
+                        if let league = store.league {
+                            FBLeagueTitle(
+                                url: league.logo,
+                                leagueName: league.name,
+                                leagueSeason: league.season
+                            )
+                        }
+                    },
+                    customListContent: { _ in }
+                )
             }
-            .onAppear {
-                // init FBTeamStandingsStore
-                let fbTeamStandingsStore: StoreOf<FBTeamStandingsStore> = storeManager.getStore(forKey: StoreKeys.fbTeamStandingsStore) ?? {
-                    let newStore = Store(initialState: FBTeamStandingsStore.State()) { FBTeamStandingsStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.fbTeamStandingsStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.fbTeamStandingsStore = fbTeamStandingsStore
-                }
-                
-                if searchStore.poppedView == nil {
-                    fbTeamStandingsStore.send(.initData(displayModel: displayModel))
-                }
+        }
+        .onAppear {
+            if !didPop {
+                store.send(.baseStandings(.initData))
             }
-            .onChange(of: displayModel) {
-                // NOTE: When come to this view(go back action) from same type of view(FBTeamStandingsView), .onAppear is not triggered.
-                // So this .onChange is used to execute .initData. Should think about better structure.
-                // And still has problem about some properties in store like some ui states, not sustaining its before value.
-                if case .fbTeamStandings = searchStore.poppedView {
-                    fbTeamStandingsStore?.send(.initData(displayModel: displayModel))
-                }
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
-        } // if let searchStore
+        }
     }
     
     private func calculatePoints(data: FBTeamStatsFixtures) -> String {

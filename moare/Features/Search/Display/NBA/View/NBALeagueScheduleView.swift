@@ -9,101 +9,70 @@ import SwiftUI
 import ComposableArchitecture
 
 struct NBALeagueScheduleView: View {
-    /* ---------------------
-       store
-       --------------------- */
-    @EnvironmentObject var storeManager: StoreManager
-    @State var nbaLeagueScheduleStore: StoreOf<NBALeagueScheduleStore>? = nil
+    let searchStore: StoreOf<SearchStore>
+    let store: StoreOf<NBALeagueScheduleStore>
+    let didPop: Bool
     
-    /* ---------------------
-       data
-       --------------------- */
-    let displayModel: NBALeagueScheduleDisplayModel
-    
-    /* ---------------------
-       ui state
-       --------------------- */
-    @State var shouldScrollCalendar = true
+    @State private var show = false
     
     var body: some View {
-        if let searchStore: StoreOf<SearchStore> = storeManager.getStore(forKey: StoreKeys.searchStore) {
-            VStack(spacing: 0) {
-                if let nbaLeagueScheduleStore {
-                    ScheduleViewContainer(
-                        state: ScheduleContainerState(
-                            shouldShowCalendar: displayModel.scheduleType != ScheduleType.teamFlat,
-                            shouldFetchSchedule:  displayModel.scheduleType == ScheduleType.league,
-                            displayDataState: nbaLeagueScheduleStore.baseSchedule.displayDataState,
-                            calendarUiState: CalendarUiState(
-                                yearMonthList: nbaLeagueScheduleStore.baseSchedule.yearMonthList,
-                                days: nbaLeagueScheduleStore.baseSchedule.days,
-                                selectedYearMonthIndex: nbaLeagueScheduleStore.baseSchedule.selectedYearMonthIndex,
-                                selectedDayIndex: nbaLeagueScheduleStore.baseSchedule.selectedDayIndex
-                            ),
-                            isAllResultOpened: nbaLeagueScheduleStore.baseSchedule.isAllResultOpened
+        let displayModel = store.baseSchedule.displayModel
+        
+        VStack {
+            if show {
+                ScheduleViewContainer(
+                    state: ScheduleContainerState(
+                        leagueId: displayModel.leagueId,
+                        shouldShowCalendar: displayModel.scheduleType != ScheduleType.teamFlat,
+                        shouldFetchSchedule:  displayModel.scheduleType == ScheduleType.league,
+                        displayDataState: store.baseSchedule.displayDataState,
+                        calendarUiState: CalendarUiState(
+                            yearMonthList: store.baseSchedule.yearMonthList,
+                            days: store.baseSchedule.days,
+                            selectedYearMonthIndex: store.baseSchedule.selectedYearMonthIndex,
+                            selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
-                        actions: ScheduleContainerActions(
-                            calendarUiActions: CalendarUiActions(
-                                onSelectYearMonth: { yearMonth, index in
-                                    nbaLeagueScheduleStore.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
-                                },
-                                onSelectDay: { day, index in
-                                    nbaLeagueScheduleStore.send(.baseSchedule(.selectDay(day, index)))
-                                }
-                            ),
-                            allResultButtonAction: {
-                                nbaLeagueScheduleStore.send(.toggleAllResult)
+                        isAllResultOpened: store.baseSchedule.isAllResultOpened,
+                        shouldShowTournamentButton: store.baseSchedule.selectedMonth >= 4 && store.baseSchedule.selectedMonth <= 6,
+                    ),
+                    actions: ScheduleContainerActions(
+                        calendarUiActions: CalendarUiActions(
+                            onSelectYearMonth: { yearMonth, index in
+                                store.send(.baseSchedule(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index)))
+                            },
+                            onSelectDay: { day, index in
+                                store.send(.baseSchedule(.selectDay(day, index)))
                             }
                         ),
-                        titleContent: {},
-                        gameListContent: {
-                            NBALeagueScheduleList(
-                                searchStore: searchStore,
-                                nbaLeagueScheduleStore: nbaLeagueScheduleStore
-                            )
+                        allResultButtonAction: {
+                            store.send(.toggleAllResult)
+                        },
+                        tournamentButtonAction: {
+                            store.send(.showTournament)
                         }
-                    )
-                }
-            } // VStack
-            .onAppear {
-                // init NBALeagueScheduleStore
-                let nbaLeagueScheduleStore: StoreOf<NBALeagueScheduleStore> = storeManager.getStore(forKey: StoreKeys.nbaLeagueScheduleStore) ?? {
-                    let newStore = Store(initialState: NBALeagueScheduleStore.State()) { NBALeagueScheduleStore() }
-                    
-                    storeManager.setStore(newStore, forKey: StoreKeys.nbaLeagueScheduleStore)
-                    
-                    return newStore
-                }()
-                
-                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                    self.nbaLeagueScheduleStore = nbaLeagueScheduleStore
-                }
-                
-                if searchStore.poppedView == nil {
-                    nbaLeagueScheduleStore.send(.baseSchedule(.initData(displayModel: displayModel)))
-                }
+                    ),
+                    titleContent: {},
+                    gameListContent: {
+                        NBALeagueScheduleList(
+                            searchStore: searchStore,
+                            nbaLeagueScheduleStore: store
+                        )
+                    }
+                )
             }
-            .onChange(of: displayModel) {
-                if case .nbaLeagueSchedule = searchStore.poppedView {
-                    nbaLeagueScheduleStore?.send(.baseSchedule(.initData(displayModel: displayModel)))
-                }
+        } // VStack
+        .onAppear {
+            if !didPop {
+                store.send(.baseSchedule(.initData))
+            } else {
+                // TODO: NBAGameStatsView에서 뒤로왔을때만 실행하게 개선 필요
+                store.send(.updateFilteredGames)
             }
-            .onChange(of: searchStore.viewStack) {
-                guard let lastItem = searchStore.viewStack.last,
-                      case .nbaLeagueSchedule = lastItem,
-                      let poppedView = searchStore.poppedView,
-                      case .nbaGameStats = searchStore.poppedView else {
-                    return
-                }
-                
-                nbaLeagueScheduleStore?.send(.updateGamesData(nbaLeagueScheduleData: lastItem, nbaGameStatsData: poppedView))
+            
+            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                show = true
             }
-            .onChange(of: nbaLeagueScheduleStore?.dataForViewStack) {
-                if let data = nbaLeagueScheduleStore?.dataForViewStack {
-                    searchStore.send(.updateLastViewStack(data: data))
-                }
-            }
-        } // if let searchStore
+        }
     }
 }
 
@@ -111,9 +80,9 @@ struct NBALeagueScheduleList: View {
     @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var nbaLeagueScheduleStore: StoreOf<NBALeagueScheduleStore>
     
-    @State var gameListToDisplay: [NBAGameForSchedule] = []
-    
     var body: some View {
+        let gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+        
         ScrollView {
             LazyVStack(spacing: 8) {
                 ForEach(gameListToDisplay, id: \.gameId) { item in
@@ -127,17 +96,6 @@ struct NBALeagueScheduleList: View {
             }
         }
         .frame(maxHeight: .infinity)
-        .onAppear {
-            gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
-        .onChange(of: nbaLeagueScheduleStore.baseSchedule.selectedDayIndex) {
-            gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
-        .onChange(of: nbaLeagueScheduleStore.filteredGames) {
-            // TODO: Has to think about better structure, because 'gameListToDisplay' could be set multiple times.
-            // Has to find if there are cases like here from other .onChange()
-            gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        }
     }
 }
 
@@ -157,7 +115,7 @@ struct NBALeagueScheduleListItem: View {
         let homeTeamId = data.homeTeamId
         let awayTeamId = data.awayTeamId
         let gameStatus = Int(data.gameStatus)
-        let teamNameDic = nbaLeagueScheduleStore.teamNameDictionary
+        let teamNameDic = nbaLeagueScheduleStore.baseSchedule.teamNameDictionary
         
         let gameStatusText: String = {
             guard isResultOpened else { return StringConstants.resultOpen }
@@ -202,32 +160,21 @@ struct NBALeagueScheduleListItem: View {
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
-                homeTeamLogo: NBAUtil.teamLogoURL(id: homeTeamId),
-                homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
-                homeTeamScore: data.homeTeamScore,
-                awayTeamLogo: NBAUtil.teamLogoURL(id: awayTeamId),
-                awayTeamName: teamNameDic["short_\(awayTeamId)"] ?? "",
-                awayTeamScore: data.awayTeamScore,
+                leagueId: Constants.Ids.nba,
+                game: data,
+                teamNameDic: teamNameDic,
                 isResultOpened: isResultOpened,
                 gameStatusText: gameStatusText,
                 gameStatusColor: gameStatusColor,
                 isCapsuleButtonDisabled: gameStatus != StringConstants.NBA.gameFinal,
-                date: data.date,
-                venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
-                shouldShowOnlyDateTime: displayModel?.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
-                isSvgLogo: true
+                shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
-                    if let displayModel {
-                        searchStore.send(.selectNBAGame(game: data, season: displayModel.season))
-                    }
-                    
-                    // set selected game's isOpened true
-                    nbaLeagueScheduleStore.send(.updateResultOpenedState(gameCode: data.gameId, isOpened: true))
+                    nbaLeagueScheduleStore.send(.selectGame(game: data))
                 },
                 onCapsuleButtonClick: {
-                    nbaLeagueScheduleStore.send(.updateResultOpenedState(gameCode: data.gameId, isOpened: !isResultOpened))
+                    nbaLeagueScheduleStore.send(.updateResultOpenedState(gameId: data.gameId, isOpened: !isResultOpened))
                 }
             )
         )
