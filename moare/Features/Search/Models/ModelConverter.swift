@@ -126,26 +126,50 @@ final class ModelConverter {
     
     func fbTeamStandingsConverter(response: FBTeamStandingsResponseModel) -> FBTeamStandingsDisplayModel {
         var league: FBLeague? = nil
+        var standingsDisplay: [FBTeamStandingsDisplay] = []
         
-        let standings: [FBTeamStandingsDisplay] = response.standings.compactMap { teamInfo in
-            let stats = teamInfo.statistics
-            
-            for item in stats {
-                if item.league.id == leagueId {
-                    if league == nil {
-                        league = item.league
+        if case let .db(standings) = response.standings {
+            standingsDisplay = standings.compactMap { teamInfo in
+                let stats = teamInfo.statistics
+                
+                for item in stats {
+                    if item.league.id == leagueId {
+                        if league == nil {
+                            league = item.league
+                        }
+                        
+                        return FBTeamStandingsDisplay(
+                            team: item.team,
+                            homeAwayStats: item.fixtures,
+                            goalsFor: item.goals.teamGoalsFor.total,
+                            goalsAgainst: item.goals.teamGoalsAgainst.total
+                        )
                     }
-                    
-                    return FBTeamStandingsDisplay(
-                        team: item.team,
-                        homeAwayStats: item.fixtures,
-                        goalsFor: item.goals.teamGoalsFor.total,
-                        goalsAgainst: item.goals.teamGoalsAgainst.total
-                    )
                 }
+                
+                return nil
             }
+        } else if case let .external(standings) = response.standings {
+            league = standings.first?.league
             
-            return nil
+            standingsDisplay = standings.compactMap { teamInfo in
+                let all = teamInfo.all
+                let home = teamInfo.home
+                let away = teamInfo.away
+                let homeAwayStats = FBTeamStatsFixtures(
+                    played: FBHomeAwayIntStats(home: home.played, away: away.played, total: all.played),
+                    wins: FBHomeAwayIntStats(home: home.win, away: away.win, total: all.win),
+                    draws: FBHomeAwayIntStats(home: home.draw, away: away.draw, total: all.draw),
+                    loses: FBHomeAwayIntStats(home: home.lose, away: away.lose, total: all.lose)
+                )
+                
+                return FBTeamStandingsDisplay(
+                    team: teamInfo.team,
+                    homeAwayStats: homeAwayStats,
+                    goalsFor: FBHomeAwayIntStats(home: home.goals.goalsFor, away: away.goals.goalsFor, total: all.goals.goalsFor),
+                    goalsAgainst: FBHomeAwayIntStats(home: home.goals.goalsAgainst, away: away.goals.goalsAgainst, total: all.goals.goalsAgainst)
+                )
+            }
         }
         
         return FBTeamStandingsDisplayModel(
@@ -154,7 +178,7 @@ final class ModelConverter {
             entityInfo: entityInfo,
             season: season,
             league: league,
-            standings: standings
+            standings: standingsDisplay
         )
     }
     

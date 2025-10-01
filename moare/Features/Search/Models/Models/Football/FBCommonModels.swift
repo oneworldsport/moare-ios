@@ -202,6 +202,12 @@ struct FBHomeAwayIntStats: Decodable, Equatable {
         case _away = "away"
         case _total = "total"
     }
+    
+    init(home: Int?, away: Int?, total: Int?) {
+        self._home = home
+        self._away = away
+        self._total = total
+    }
 }
 
 struct FBHomeAwayStringStats: Decodable, Equatable {
