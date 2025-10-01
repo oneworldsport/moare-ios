@@ -97,60 +97,86 @@ struct MLBTournamentStore {
                 }
                 
                 //
-                let games = displayModel.games
+                var games = displayModel.games
                 
                 var nlFirstRound: [[MLBGameForSchedule]?] = nlFirstRoundPairedTeamIds.map { pair in
                     let set = Set(pair.prefix(2))
-                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
+                    let filtered = games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
+                    // filter된 게임은 추후 filter할때 필요없으므로 games에서 지운다. 그렇지 않으면 다음라운드에서 set에 nil이 있는경우에 중복으로 game이 filter됨.
+                    games.removeAll { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
+                    return filtered
                 }
-                nlFirstRound.insert(nil, at: 1)
+                nlFirstRound.insert(nil, at: 1) // TournamentBracket화면에서 와일드카드 시리즈는 한시리즈를 비워놔야해서 추가
                 var alFirstRound: [[MLBGameForSchedule]?] = alFirstRoundPairedTeamIds.map { pair in
                     let set = Set(pair.prefix(2))
-                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
+                    let filtered = games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
+                    games.removeAll { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
+                    return filtered
                 }
-                alFirstRound.insert(nil, at: 1)
+                alFirstRound.insert(nil, at: 1) // TournamentBracket화면에서 와일드카드 시리즈는 한시리즈를 비워놔야해서 추가
                 
                 let nlSecondRound: [[MLBGameForSchedule]] = nlSecondRoundPairedTeamIds.map { pair in
                     let set = Set(pair.prefix(2))
-                    return games.filter {
+                    // NOTE: set에 nil이 있다면(아직 상대가 안정해짐) game에 awayTeamId나 homeTeamId중 하나만 있어도 filter
+                    let filtered = games.filter {
                         (set.contains($0.homeTeamId) && set.contains($0.awayTeamId)) ||
-                        (set.contains($0.homeTeamId) && set.contains(nil)) ||
-                        (set.contains(nil) && set.contains($0.awayTeamId))
+                        (set.contains(nil) ? (set.contains($0.homeTeamId) || set.contains($0.awayTeamId)) : false)
                     }
+                    games.removeAll {
+                        (set.contains($0.homeTeamId) && set.contains($0.awayTeamId)) ||
+                        (set.contains(nil) ? (set.contains($0.homeTeamId) || set.contains($0.awayTeamId)) : false)
+                    }
+                    return filtered
                 }
                 let alSecondRound: [[MLBGameForSchedule]] = alSecondRoundPairedTeamIds.map { pair in
                     let set = Set(pair.prefix(2))
-                    return games.filter {
+                    let filtered = games.filter {
                         (set.contains($0.homeTeamId) && set.contains($0.awayTeamId)) ||
-                        (set.contains($0.homeTeamId) && set.contains(nil)) ||
-                        (set.contains(nil) && set.contains($0.awayTeamId))
+                        (set.contains(nil) ? (set.contains($0.homeTeamId) || set.contains($0.awayTeamId)) : false)
                     }
+                    games.removeAll {
+                        (set.contains($0.homeTeamId) && set.contains($0.awayTeamId)) ||
+                        (set.contains(nil) ? (set.contains($0.homeTeamId) || set.contains($0.awayTeamId)) : false)
+                    }
+                    return filtered
                 }
                 
                 let nlThirdRound: [[MLBGameForSchedule]] = nlThirdRoundPairedTeamIds.map { pair in
                     let set = Set(pair.prefix(2))
-                    return games.filter {
+                    let filtered = games.filter {
                         (set.contains($0.homeTeamId) && set.contains($0.awayTeamId)) ||
-                        (set.contains($0.homeTeamId) && set.contains(nil)) ||
-                        (set.contains(nil) && set.contains($0.awayTeamId))
+                        (set.contains(nil) ? (set.contains($0.homeTeamId) || set.contains($0.awayTeamId)) : false)
                     }
+                    games.removeAll {
+                        (set.contains($0.homeTeamId) && set.contains($0.awayTeamId)) ||
+                        (set.contains(nil) ? (set.contains($0.homeTeamId) || set.contains($0.awayTeamId)) : false)
+                    }
+                    return filtered
                 }
                 let alThirdRound: [[MLBGameForSchedule]] = alThirdRoundPairedTeamIds.map { pair in
                     let set = Set(pair.prefix(2))
-                    return games.filter {
+                    let filtered = games.filter {
                         (set.contains($0.homeTeamId) && set.contains($0.awayTeamId)) ||
-                        (set.contains($0.homeTeamId) && set.contains(nil)) ||
-                        (set.contains(nil) && set.contains($0.awayTeamId))
+                        (set.contains(nil) ? (set.contains($0.homeTeamId) || set.contains($0.awayTeamId)) : false)
                     }
+                    games.removeAll {
+                        (set.contains($0.homeTeamId) && set.contains($0.awayTeamId)) ||
+                        (set.contains(nil) ? (set.contains($0.homeTeamId) || set.contains($0.awayTeamId)) : false)
+                    }
+                    return filtered
                 }
                 
                 let fourthRound: [[MLBGameForSchedule]] = fourthRoundPairedTeamIds.map { pair in
                     let set = Set(pair.prefix(2))
-                    return games.filter {
+                    let filtered = games.filter {
                         (set.contains($0.homeTeamId) && set.contains($0.awayTeamId)) ||
-                        (set.contains($0.homeTeamId) && set.contains(nil)) ||
-                        (set.contains(nil) && set.contains($0.awayTeamId))
+                        (set.contains(nil) ? (set.contains($0.homeTeamId) || set.contains($0.awayTeamId)) : false)
                     }
+                    games.removeAll {
+                        (set.contains($0.homeTeamId) && set.contains($0.awayTeamId)) ||
+                        (set.contains(nil) ? (set.contains($0.homeTeamId) || set.contains($0.awayTeamId)) : false)
+                    }
+                    return filtered
                 }
                 
                 state.gameListTuple = [

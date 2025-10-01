@@ -19,7 +19,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
     @State var leftItemHeights: [RoundSeriesKey: CGFloat] = [:]
     @State var rightItemHeights: [RoundSeriesKey: CGFloat] = [:]
     
-    private let leftBracketTitles = ["서부", "NL"]
+    private let leftBracketTitles = ["서부", "NL", "와일드카드", "준플레이오프", "플레이오프", "한국시리즈"]
     private let rightBracketTitles = ["동부", "AL"]
     private let finalBracketTitles = ["NBA", "월드"]
     private let mlbBracketTitles = ["NL", "AL"]
@@ -35,6 +35,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                         let title = item.title
                         let shouldShow = state.isConference ? leftBracketTitles.contains(String(title.split(separator: " ").first ?? "")) : true
                         let isMLB = state.leagueId == Constants.Ids.mlb
+                        let isKBO = state.leagueId == Constants.Ids.kbo
                         
                         // default or left
                         if shouldShow {
@@ -55,7 +56,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                             teamNameDic: state.teamNameDic,
                                             games: games,
                                             itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
-                                            shouldDrawHBar: !isMLB || roundIndexForPosition != 2, // mlb 2라운드만
+                                            shouldRemoveHBar: isKBO || (isMLB && roundIndexForPosition == 2), // mlb 2라운드, kbo
                                             itemHeights: $leftItemHeights,
                                             selectSeries: action.selectSeries
                                         )
@@ -113,7 +114,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                                 teamNameDic: state.teamNameDic,
                                                 games: games,
                                                 itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
-                                                shouldDrawHBar: !isMLB || roundIndexForPosition != 6, // mlb 2라운드만
+                                                shouldRemoveHBar: isMLB && roundIndexForPosition == 6, // mlb 2라운드만
                                                 itemHeights: $rightItemHeights,
                                                 selectSeries: action.selectSeries
                                             )

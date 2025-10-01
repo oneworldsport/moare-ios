@@ -16,10 +16,14 @@ struct KBOLeagueScheduleView: View {
     @State private var show = false
     
     var body: some View {
+        let displayModel = store.baseSchedule.displayModel
+        
         VStack {
             if show {
                 ScheduleViewContainer(
                     state: ScheduleContainerState(
+                        shouldShowCalendar: displayModel.scheduleType != .teamFlat,
+                        shouldFetchSchedule:  displayModel.scheduleType == ScheduleType.league,
                         displayDataState: store.baseSchedule.displayDataState,
                         calendarUiState: CalendarUiState(
                             yearMonthList: store.baseSchedule.yearMonthList,
@@ -102,9 +106,8 @@ struct KBOLeagueScheduleListItem: View {
     @State private var isResultOpened = false
     
     var body: some View {
+        let displayModel = kboLeagueScheduleStore.baseSchedule.displayModel
         let itemKey = data.itemKey
-        let homeTeamId = data.homeTeamId
-        let awayTeamId = data.awayTeamId
         let gameStatus = Int(data.gameStatus) // TODO: String으로 사용
         let teamNameDic = kboLeagueScheduleStore.baseSchedule.teamNameDictionary
         
@@ -140,7 +143,8 @@ struct KBOLeagueScheduleListItem: View {
                 isResultOpened: isResultOpened,
                 gameStatusText: gameStatusText,
                 gameStatusColor: gameStatusColor,
-                isCapsuleButtonDisabled: gameStatus != StringConstants.KBO.gameFinal
+                isCapsuleButtonDisabled: gameStatus != StringConstants.KBO.gameFinal,
+                shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {

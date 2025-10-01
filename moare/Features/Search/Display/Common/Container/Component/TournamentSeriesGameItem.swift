@@ -13,7 +13,7 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
     let games: [GameForSchedule<T>]?
     let itemPosition: RoundSeriesKey // ui상에서 시리즈의 위치 ex) 1라운드의 첫번째 시리즈면 1_1
     
-    var shouldDrawHBar = true // NOTE: MLB의 경우 이전 라운드에 시리즈가 하나 없으면 HBar가 필요없는 경우가 있음.
+    var shouldRemoveHBar = false // NOTE: MLB의 경우 이전 라운드에 시리즈가 하나 없으면 하단에 HBar가 필요없는 경우가 있음. KBO는 그냥 필요없음.
     
     @Binding var itemHeights: [RoundSeriesKey: CGFloat]
     
@@ -51,7 +51,7 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
             }
             
             VStack(spacing: 0) {
-                if itemPosition.round == 2 || itemPosition.round == 3 {
+                if itemPosition.round > 1  {
                     HStack {
                         VStack(alignment: .trailing, spacing: 0) {
                             TournamentHBar(width: 75)
@@ -182,7 +182,7 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
                         VStack(alignment: .trailing, spacing: 0) {
                             TournamentVBar(height: bottomHeight())
                             
-                            if shouldDrawHBar {
+                            if !shouldRemoveHBar {
                                 TournamentHBar(width: 75)
                             }
                         }
@@ -211,7 +211,8 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
         switch (itemPosition.round, itemPosition.series) {
         case (2, 1): return h(1, 1) / 2
         case (2, 2): return h(1, 3) / 2
-        case (3, 1): return (h(2, 1) / 2) + h(1, 1)
+        case (3, 1): return h(1, 1) + (h(2, 1) / 2)
+        case (4, 1): return h(1, 1) + h(2, 1) + (h(3, 1) / 2)
         default: return 0
         }
     }
@@ -220,7 +221,8 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
         switch (itemPosition.round, itemPosition.series) {
         case (2, 1): return h(1, 1) / 2
         case (2, 2): return h(1, 3) / 2
-        case (3, 1): return (h(2, 1) / 2) + h(1, 2)
+        case (3, 1): return h(1, 2) + (h(2, 1) / 2)
+        case (4, 1): return h(3, 1) / 2 // NOTE: 일단은 KBO의 경우만 고려
         default: return 0
         }
     }
@@ -229,7 +231,7 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
         switch (itemPosition.round, itemPosition.series) {
         case (2, 1): return h(1, 2) / 2
         case (2, 2): return h(1, 4) / 2
-        case (3, 1): return (h(2, 2) / 2) + h(1, 4)
+        case (3, 1): return h(1, 4) + (h(2, 2) / 2)
         default: return 0
         }
     }
@@ -238,7 +240,7 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
         switch (itemPosition.round, itemPosition.series) {
         case (2, 1): return h(1, 2) / 2
         case (2, 2): return h(1, 4) / 2
-        case (3, 1): return (h(2, 2) / 2) + h(1, 3)
+        case (3, 1): return h(1, 3) + (h(2, 2) / 2)
         default: return 0
         }
     }
@@ -250,7 +252,7 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
     let games: [GameForSchedule<T>]?
     let itemPosition: RoundSeriesKey // ui상에서 시리즈의 위치 ex) 1라운드의 첫번째 시리즈면 1_1
     
-    var shouldDrawHBar = true // NOTE: MLB의 경우 이전 라운드에 시리즈가 하나 없으면 HBar가 필요없는 경우가 있음.
+    var shouldRemoveHBar = false // NOTE: MLB의 경우 이전 라운드에 시리즈가 하나 없으면 HBar가 필요없는 경우가 있음.
     
     @Binding var itemHeights: [RoundSeriesKey: CGFloat]
     
@@ -421,7 +423,7 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
                         VStack(alignment: .leading, spacing: 0) {
                             TournamentVBar(height: bottomHeight())
                             
-                            if shouldDrawHBar {
+                            if !shouldRemoveHBar {
                                 TournamentHBar(width: 75)
                             }
                         }
@@ -448,7 +450,7 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
         switch (itemPosition.round, itemPosition.series) {
         case (6, 1): return h(7, 1) / 2
         case (6, 2): return h(7, 3) / 2
-        case (5, 1): return (h(6, 1) / 2) + h(7, 1)
+        case (5, 1): return h(7, 1) + (h(6, 1) / 2)
         default: return 0
         }
     }
@@ -457,7 +459,7 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
         switch (itemPosition.round, itemPosition.series) {
         case (6, 1): return h(7, 1) / 2
         case (6, 2): return h(7, 3) / 2
-        case (5, 1): return (h(6, 1) / 2) + h(7, 2)
+        case (5, 1): return h(7, 2) + (h(6, 1) / 2)
         default: return 0
         }
     }
@@ -466,7 +468,7 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
         switch (itemPosition.round, itemPosition.series) {
         case (6, 1): return h(7, 2) / 2
         case (6, 2): return h(7, 4) / 2
-        case (5, 1): return (h(6, 2) / 2) + h(7, 4)
+        case (5, 1): return h(7, 4) + (h(6, 2) / 2)
         default: return 0
         }
     }
@@ -475,7 +477,7 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
         switch (itemPosition.round, itemPosition.series) {
         case (6, 1): return h(7, 2) / 2
         case (6, 2): return h(7, 4) / 2
-        case (5, 1): return (h(6, 2) / 2) + h(7, 3)
+        case (5, 1): return h(7, 3) + (h(6, 2) / 2)
         default: return 0
         }
     }

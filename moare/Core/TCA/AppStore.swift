@@ -200,7 +200,8 @@ struct AppStore {
                 return .none
             
             case let .path(.element(id: _, action: .nbaTournament(.delegate(.showLeagueSchedule(model))))),
-                let .path(.element(id: _, action: .mlbTournament(.delegate(.showLeagueSchedule(model))))):
+                let .path(.element(id: _, action: .mlbTournament(.delegate(.showLeagueSchedule(model))))),
+                let .path(.element(id: _, action: .kboTournament(.delegate(.showLeagueSchedule(model))))):
                 state.didPop = false
                 state.includesPreviousView = false
                 
@@ -469,10 +470,10 @@ extension SportDecodableModel {
     
     var leagueScheduleRoute: AppStore.Path.State? {
         switch self {
-//        case let .fbGameStats(_, displayModel):  return .fbGameStats(.init(displayModel: displayModel))
+//        case let .fbLeagueSchedule(_, displayModel):  return .fbLeagueSchedule(.init(displayModel: displayModel))
         case let .nbaLeagueSchedule(_, displayModel): return .nbaLeagueSchedule(.init(displayModel: displayModel))
         case let .mlbLeagueSchedule(_, displayModel): return .mlbLeagueSchedule(.init(displayModel: displayModel))
-//        case let .kboGameStats(_, displayModel): return .kboGameStats(.init(displayModel: displayModel))
+        case let .kboLeagueSchedule(_, displayModel): return .kboLeagueSchedule(.init(displayModel: displayModel))
         default: return nil
         }
     }

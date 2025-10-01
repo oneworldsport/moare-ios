@@ -18,14 +18,20 @@ struct KBOTournamentView: View {
     var body: some View {
         VStack {
             if show {
-//                    TournamentDrawViewContainer(
-//                        state: TournamentDrawContainerState(
-//                            leagueId: displayModel.leagueId,
-//                            teamNameDic: kboTournamentStore.baseTournament.teamNameDic,
-//                            gameListTuple: kboTournamentStore.gameListTuple,
-//                            isSeries: true
-//                        )
-//                    )
+                TournamentBracketViewContainer(
+                    state: TournamentBracketContainerState(
+                        leagueId: store.baseTournament.displayModel.leagueId,
+                        teamNameDic: store.baseTournament.teamNameDic,
+                        gameListTuple: store.gameListTuple,
+                        isConference: false,
+                        isSeries: true
+                    ),
+                    action: TournamentContainerAction(
+                        selectSeries: { gameList in
+                            store.send(.selectSeries(gameList: gameList))
+                        }
+                    )
+                )
             }
         }
         .onAppear {
