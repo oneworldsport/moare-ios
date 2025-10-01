@@ -25,6 +25,7 @@ struct NBATournamentView: View {
                         leagueId: displayModel.leagueId,
                         teamNameDic: store.baseTournament.teamNameDic,
                         gameListTuple: store.gameListTuple,
+                        seedIdTupleList: store.seedIdTupleList,
                         isConference: true,
                         isSeries: true
                     ),

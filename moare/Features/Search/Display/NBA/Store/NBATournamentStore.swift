@@ -26,7 +26,8 @@ struct NBATournamentStore {
            --------------------- */
         var baseTournament: BaseTournament.State
         
-        var gameListTuple: [(title: String, gameList: [[NBAGameForSchedule]])] = []
+        var gameListTuple: [(title: String, gameList: [[NBAGameForSchedule]?])] = []
+        var seedIdTupleList: [[(topSeedId: Int?, lowerSeedId: Int?)]] = []
         
         init(displayModel: NBATournamentDisplayModel) {
             self.baseTournament = BaseTournament.State(displayModel: displayModel)
@@ -51,14 +52,17 @@ struct NBATournamentStore {
         Reduce { state, action in
             switch action {
             case .baseTournament(.initTournamentTeams):
+                //            let topSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, teamId: games.first!.homeTeamId) : nil
+                //            let lowerSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, teamId: games.first!.awayTeamId) : nil
                 let tournamentTeams = state.baseTournament.tournamentTeams
                 let displayModel = state.baseTournament.displayModel
                 let leagueId = displayModel.leagueId
-                let season = displayModel.season
+//                let season = displayModel.season
+                let season = 2024
                 
                 // 시드 순서를 유지해야해서 다음과 같은 로직 적용
                 let firstRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_16"] ?? []
-                let westFristRoundTeamIds = Array(firstRoundTeamIds.prefix(8))
+                let westFirstRoundTeamIds = Array(firstRoundTeamIds.prefix(8))
                 let eastFirstRoundTeamIds = Array(firstRoundTeamIds.suffix(8))
                 
                 let secondRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_8"] ?? []
@@ -71,64 +75,23 @@ struct NBATournamentStore {
                 
                 let fourthRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_2"] ?? []
                 
-                let westFirstRoundPairedTeamIds = stride(from: 0, to: westFristRoundTeamIds.count, by: 2).map {
-                    Array(westFristRoundTeamIds[$0 ..< min($0 + 2, westFristRoundTeamIds.count)])
-                }
-                let eastFirstRoundPairedTeamIds = stride(from: 0, to: eastFirstRoundTeamIds.count, by: 2).map {
-                    Array(eastFirstRoundTeamIds[$0 ..< min($0 + 2, eastFirstRoundTeamIds.count)])
-                }
+                let westFirstRoundPairedTeamIds = westFirstRoundTeamIds.chunked(by: 2)
+                let eastFirstRoundPairedTeamIds = eastFirstRoundTeamIds.chunked(by: 2)
+                let westSecondRoundPairedTeamIds = westSecondRoundTeamIds.chunked(by: 2)
+                let eastSecondRoundPairedTeamIds = eastSecondRoundTeamIds.chunked(by: 2)
+                let westThirdRoundPairedTeamIds = westThirdRoundTeamIds.chunked(by: 2)
+                let eastThirdRoundPairedTeamIds = eastThirdRoundTeamIds.chunked(by: 2)
+                let fourthRoundPairedTeamIds = fourthRoundTeamIds.chunked(by: 2)
                 
-                let westSecondRoundPairedTeamIds = stride(from: 0, to: westSecondRoundTeamIds.count, by: 2).map {
-                    Array(westSecondRoundTeamIds[$0 ..< min($0 + 2, westSecondRoundTeamIds.count)])
-                }
-                let eastSecondRoundPairedTeamIds = stride(from: 0, to: eastSecondRoundTeamIds.count, by: 2).map {
-                    Array(eastSecondRoundTeamIds[$0 ..< min($0 + 2, eastSecondRoundTeamIds.count)])
-                }
+                var games = displayModel.games
                 
-                let westThirdRoundPairedTeamIds = stride(from: 0, to: westThirdRoundTeamIds.count, by: 2).map {
-                    Array(westThirdRoundTeamIds[$0 ..< min($0 + 2, westThirdRoundTeamIds.count)])
-                }
-                let eastThirdRoundPairedTeamIds = stride(from: 0, to: eastThirdRoundTeamIds.count, by: 2).map {
-                    Array(eastThirdRoundTeamIds[$0 ..< min($0 + 2, eastThirdRoundTeamIds.count)])
-                }
-                
-                let fourthRoundPairedTeamIds = stride(from: 0, to: fourthRoundTeamIds.count, by: 2).map {
-                    Array(fourthRoundTeamIds[$0 ..< min($0 + 2, fourthRoundTeamIds.count)])
-                }
-                
-                let games = displayModel.games
-                
-                let westFirstRound: [[NBAGameForSchedule]] = westFirstRoundPairedTeamIds.map { pair in
-                    let set = Set(pair.prefix(2))
-                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                }
-                let eastFirstRound: [[NBAGameForSchedule]] = eastFirstRoundPairedTeamIds.map { pair in
-                    let set = Set(pair.prefix(2))
-                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                }
-                
-                let westSecondRound: [[NBAGameForSchedule]] = westSecondRoundPairedTeamIds.map { pair in
-                    let set = Set(pair.prefix(2))
-                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                }
-                let eastSecondRound: [[NBAGameForSchedule]] = eastSecondRoundPairedTeamIds.map { pair in
-                    let set = Set(pair.prefix(2))
-                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                }
-                
-                let westThirdRound: [[NBAGameForSchedule]] = westThirdRoundPairedTeamIds.map { pair in
-                    let set = Set(pair.prefix(2))
-                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                }
-                let eastThirdRound: [[NBAGameForSchedule]] = eastThirdRoundPairedTeamIds.map { pair in
-                    let set = Set(pair.prefix(2))
-                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                }
-                
-                let fourthRound: [[NBAGameForSchedule]] = fourthRoundPairedTeamIds.map { pair in
-                    let set = Set(pair.prefix(2))
-                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                }
+                let (westFirstRoundSeedTuple, westFirstRound) =  Util.collectRound(from: westFirstRoundPairedTeamIds, games: &games)
+                let (eastFirstRoundSeedTuple, eastFirstRound) =  Util.collectRound(from: eastFirstRoundPairedTeamIds, games: &games)
+                let (westSecondRoundSeedTuple, westSecondRound) =  Util.collectRound(from: westSecondRoundPairedTeamIds, games: &games)
+                let (eastSecondRoundSeedTuple, eastSecondRound) =  Util.collectRound(from: eastSecondRoundPairedTeamIds, games: &games)
+                let (westThirdRoundSeedTuple, westThirdRound) =  Util.collectRound(from: westThirdRoundPairedTeamIds, games: &games)
+                let (eastThirdRoundSeedTuple, eastThirdRound) =  Util.collectRound(from: eastThirdRoundPairedTeamIds, games: &games)
+                let (fourthRoundSeedTuple, fourthRound) =  Util.collectRound(from: fourthRoundPairedTeamIds, games: &games)
                 
                 state.gameListTuple = [
                     ("서부 컨퍼런스 1라운드", westFirstRound),
@@ -139,6 +102,15 @@ struct NBATournamentStore {
                     ("동부 컨퍼런스 세미파이널", eastSecondRound),
                     ("동부 컨퍼런스 1라운드", eastFirstRound)
                 ]
+                
+                // gameListTuple에 추가되는 순서대로 추가
+                state.seedIdTupleList.append(westFirstRoundSeedTuple)
+                state.seedIdTupleList.append(westSecondRoundSeedTuple)
+                state.seedIdTupleList.append(westThirdRoundSeedTuple)
+                state.seedIdTupleList.append(fourthRoundSeedTuple)
+                state.seedIdTupleList.append(eastThirdRoundSeedTuple)
+                state.seedIdTupleList.append(eastSecondRoundSeedTuple)
+                state.seedIdTupleList.append(eastFirstRoundSeedTuple)
                 
                 return .none
                 
@@ -162,12 +134,6 @@ struct NBATournamentStore {
             case .delegate:
                 return .none
             } // switch action
-            
-            func getGameSeries(gameList: [NBAGame]?) -> NBAGame? {
-                return gameList?.max(by: {
-                    (($0.seasonSeries?.homeTeamWins ?? 0) + ($0.seasonSeries?.homeTeamLosses ?? 0)) < (($1.seasonSeries?.homeTeamWins ?? 0) + ($1.seasonSeries?.homeTeamLosses ?? 0))
-                })
-            }
         }
     }
 }

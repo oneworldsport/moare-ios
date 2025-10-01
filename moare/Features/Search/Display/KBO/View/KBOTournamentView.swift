@@ -23,6 +23,7 @@ struct KBOTournamentView: View {
                         leagueId: store.baseTournament.displayModel.leagueId,
                         teamNameDic: store.baseTournament.teamNameDic,
                         gameListTuple: store.gameListTuple,
+                        seedIdTupleList: store.seedIdTupleList,
                         isConference: false,
                         isSeries: true
                     ),

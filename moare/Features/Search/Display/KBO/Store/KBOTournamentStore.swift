@@ -17,6 +17,7 @@ struct KBOTournamentStore {
         var baseTournament: BaseTournament.State
         
         var gameListTuple: [(title: String, gameList: [[KBOGameForSchedule]?])] = []
+        var seedIdTupleList: [[(topSeedId: Int?, lowerSeedId: Int?)]] = []
         
         init(displayModel: KBOTournamentDisplayModel) {
             self.baseTournament = BaseTournament.State(displayModel: displayModel)
@@ -55,59 +56,26 @@ struct KBOTournamentStore {
                     secondRoundTeamIds.count == 2 &&
                     thirdRoundTeamIds.count == 2 &&
                     fourthRoundTeamIds.count == 2 {
-                    let firstRoundSet = Set(Array(firstRoundTeamIds.prefix(2)))
-                    let secondRoundSet = Set(Array(secondRoundTeamIds.prefix(2)))
-                    let thirdRoundSet = Set(Array(thirdRoundTeamIds.prefix(2)))
-                    let fourthRoundSet = Set(Array(fourthRoundTeamIds.prefix(2)))
                     
                     var games = displayModel.games
                     
-                    let firstRound: [[KBOGameForSchedule]] = [
-                        games.filter { firstRoundSet.contains($0.homeTeamId) && firstRoundSet.contains($0.awayTeamId) }
-                    ]
-                    // filter된 게임은 추후 filter할때 필요없으므로 games에서 지운다. 그렇지 않으면 다음라운드에서 set에 nil이 있는경우에 중복으로 game이 filter됨.
-                    games.removeAll { firstRoundSet.contains($0.homeTeamId) && firstRoundSet.contains($0.awayTeamId) }
+                    var (firstRoundSeedTuple, firstRound) = Util.collectRound(from: [firstRoundTeamIds], games: &games)
+                    var (secondRoundSeedTuple, secondRound) = Util.collectRound(from: [secondRoundTeamIds], games: &games)
+                    var (thirdRoundSeedTuple, thirdRound) = Util.collectRound(from: [thirdRoundTeamIds], games: &games)
+                    var (fourthRoundSeedTuple, fourthRound) = Util.collectRound(from: [fourthRoundTeamIds], games: &games)
                     
-                    let secondRound: [[KBOGameForSchedule]] = [
-                        // NOTE: set에 nil이 있다면(아직 상대가 안정해짐) game에 awayTeamId나 homeTeamId중 하나만 있어도 filter
-                        games.filter {
-                            (secondRoundSet.contains($0.homeTeamId) && secondRoundSet.contains($0.awayTeamId)) ||
-                            (secondRoundSet.contains(nil) ? (secondRoundSet.contains($0.homeTeamId) || secondRoundSet.contains($0.awayTeamId)) : false)
-                        }
-                    ]
-                    games.removeAll {
-                        (secondRoundSet.contains($0.homeTeamId) && secondRoundSet.contains($0.awayTeamId)) ||
-                        (secondRoundSet.contains(nil) ? (secondRoundSet.contains($0.homeTeamId) || secondRoundSet.contains($0.awayTeamId)) : false)
-                    }
-                    
-                    let thirdRound: [[KBOGameForSchedule]] = [
-                        games.filter {
-                            (thirdRoundSet.contains($0.homeTeamId) && thirdRoundSet.contains($0.awayTeamId)) ||
-                            (thirdRoundSet.contains(nil) ? (thirdRoundSet.contains($0.homeTeamId) || thirdRoundSet.contains($0.awayTeamId)) : false)
-                        }
-                    ]
-                    games.removeAll {
-                        (thirdRoundSet.contains($0.homeTeamId) && thirdRoundSet.contains($0.awayTeamId)) ||
-                        (thirdRoundSet.contains(nil) ? (thirdRoundSet.contains($0.homeTeamId) || thirdRoundSet.contains($0.awayTeamId)) : false)
-                    }
-                    
-                    let fourthRound: [[KBOGameForSchedule]] = [
-                        games.filter {
-                            (fourthRoundSet.contains($0.homeTeamId) && fourthRoundSet.contains($0.awayTeamId)) ||
-                            (fourthRoundSet.contains(nil) ? (fourthRoundSet.contains($0.homeTeamId) || fourthRoundSet.contains($0.awayTeamId)) : false)
-                        }
-                    ]
-                    games.removeAll {
-                        (fourthRoundSet.contains($0.homeTeamId) && fourthRoundSet.contains($0.awayTeamId)) ||
-                        (fourthRoundSet.contains(nil) ? (fourthRoundSet.contains($0.homeTeamId) || fourthRoundSet.contains($0.awayTeamId)) : false)
-                    }
-                        
                     state.gameListTuple = [
                         ("와일드카드 결정전", firstRound),
                         ("준플레이오프", secondRound),
                         ("플레이오프", thirdRound),
                         ("한국시리즈", fourthRound)
                     ]
+                    
+                    // gameListTuple에 추가되는 순서대로 추가
+                    state.seedIdTupleList.append(firstRoundSeedTuple)
+                    state.seedIdTupleList.append(secondRoundSeedTuple)
+                    state.seedIdTupleList.append(thirdRoundSeedTuple)
+                    state.seedIdTupleList.append(fourthRoundSeedTuple)
                 }
                 
                 return .none

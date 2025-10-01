@@ -11,6 +11,7 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let teamNameDic: [String: String]
     let games: [GameForSchedule<T>]?
+    let seedIdTuple: (topSeedId: Int?, lowerSeedId: Int?)
     let itemPosition: RoundSeriesKey // ui상에서 시리즈의 위치 ex) 1라운드의 첫번째 시리즈면 1_1
     
     var shouldRemoveHBar = false // NOTE: MLB의 경우 이전 라운드에 시리즈가 하나 없으면 하단에 HBar가 필요없는 경우가 있음. KBO는 그냥 필요없음.
@@ -26,24 +27,26 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
     
     var body: some View {
         if let games {
-            let topSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, teamId: games.first!.homeTeamId) : nil
-            let lowerSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, teamId: games.first!.awayTeamId) : nil
+            let topSeedTeamId = seedIdTuple.topSeedId
+            let lowerSeedTeamId = seedIdTuple.lowerSeedId
             let isSeriesStarted = topSeedTeamId != nil && lowerSeedTeamId != nil
             
             let (topSeedTeamSeriesScore, lowerSeedTeamSeriesScore) = games.reduce((0, 0)) { partial, game in
                 var (top, lower) = partial
                 
-                if game.homeTeamId == topSeedTeamId {
+                if game.homeTeamId == topSeedTeamId && game.awayTeamId == lowerSeedTeamId {
+                    // 홈팀이 topSeed인경우
                     if game.homeTeamScore > game.awayTeamScore {
                         top += 1
                     } else if game.awayTeamScore > game.homeTeamScore {
                         lower += 1
                     }
-                } else {
-                    if game.homeTeamScore > game.awayTeamScore {
-                        lower += 1
-                    } else if game.awayTeamScore > game.homeTeamScore {
+                } else if game.homeTeamId == lowerSeedTeamId && game.awayTeamId == topSeedTeamId {
+                    // 홈팀이 lowerSeed인경우
+                    if game.awayTeamScore > game.homeTeamScore {
                         top += 1
+                    } else if game.homeTeamScore > game.awayTeamScore {
+                        lower += 1
                     }
                 }
                 
@@ -90,8 +93,8 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
                                 VStack(spacing: 4) {
                                     ForEach(games.indices, id: \.self) { index in
                                         let game = games[index]
-                                        let homeTeamScore = game.homeTeamScore
-                                        let awayTeamScore = game.awayTeamScore
+                                        let topSeedScore = game.homeTeamId == topSeedTeamId ? game.homeTeamScore : game.awayTeamScore
+                                        let lowerSeedScore = game.homeTeamId == lowerSeedTeamId ? game.homeTeamScore : game.awayTeamScore
                                         let isBeforeGame = Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
                                         
                                         VStack(spacing: 0) {
@@ -100,17 +103,17 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
                                                 .padding(.top, 4)
                                             
                                             HStack(spacing: 0) {
-                                                Text(isBeforeGame ? "-" : "\(homeTeamScore)")
+                                                Text(isBeforeGame ? "-" : "\(topSeedScore)")
                                                     .font(.system(size: 14, weight: .medium))
                                                     .frame(width: 30)
-                                                    .foregroundStyle(isBeforeGame ? Color.primary : (homeTeamScore >= awayTeamScore ? Color.moare : Color.primary))
+                                                    .foregroundStyle(isBeforeGame ? Color.primary : (topSeedScore >= lowerSeedScore ? Color.moare : Color.primary))
                                                     
                                                 Text("-")
                                                 
-                                                Text(isBeforeGame ? "-" : "\(awayTeamScore)")
+                                                Text(isBeforeGame ? "-" : "\(lowerSeedScore)")
                                                     .font(.system(size: 14, weight: .medium))
                                                     .frame(width: 30)
-                                                    .foregroundStyle(isBeforeGame ? Color.primary : (awayTeamScore >= homeTeamScore ? Color.moare : Color.primary))
+                                                    .foregroundStyle(isBeforeGame ? Color.primary : (lowerSeedScore >= topSeedScore ? Color.moare : Color.primary))
                                             }
                                         }
                                     }
@@ -250,6 +253,7 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let teamNameDic: [String: String]
     let games: [GameForSchedule<T>]?
+    let seedIdTuple: (topSeedId: Int?, lowerSeedId: Int?)
     let itemPosition: RoundSeriesKey // ui상에서 시리즈의 위치 ex) 1라운드의 첫번째 시리즈면 1_1
     
     var shouldRemoveHBar = false // NOTE: MLB의 경우 이전 라운드에 시리즈가 하나 없으면 HBar가 필요없는 경우가 있음.
@@ -265,24 +269,26 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
     
     var body: some View {
         if let games {
-            let topSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, teamId: games.first!.homeTeamId) : nil
-            let lowerSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, teamId: games.first!.awayTeamId) : nil
+            let topSeedTeamId = seedIdTuple.topSeedId
+            let lowerSeedTeamId = seedIdTuple.lowerSeedId
             let isSeriesStarted = topSeedTeamId != nil && lowerSeedTeamId != nil
             
             let (topSeedTeamSeriesScore, lowerSeedTeamSeriesScore) = games.reduce((0, 0)) { partial, game in
                 var (top, lower) = partial
                 
-                if game.homeTeamId == topSeedTeamId {
+                if game.homeTeamId == topSeedTeamId && game.awayTeamId == lowerSeedTeamId {
+                    // 홈팀이 topSeed인경우
                     if game.homeTeamScore > game.awayTeamScore {
                         top += 1
                     } else if game.awayTeamScore > game.homeTeamScore {
                         lower += 1
                     }
-                } else {
-                    if game.homeTeamScore > game.awayTeamScore {
-                        lower += 1
-                    } else if game.awayTeamScore > game.homeTeamScore {
+                } else if game.homeTeamId == lowerSeedTeamId && game.awayTeamId == topSeedTeamId {
+                    // 홈팀이 lowerSeed인경우
+                    if game.awayTeamScore > game.homeTeamScore {
                         top += 1
+                    } else if game.homeTeamScore > game.awayTeamScore {
+                        lower += 1
                     }
                 }
                 
@@ -340,8 +346,8 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
                                 VStack(spacing: 4) {
                                     ForEach(games.indices, id: \.self) { index in
                                         let game = games[index]
-                                        let homeTeamScore = game.homeTeamScore
-                                        let awayTeamScore = game.awayTeamScore
+                                        let topSeedScore = game.homeTeamId == topSeedTeamId ? game.homeTeamScore : game.awayTeamScore
+                                        let lowerSeedScore = game.homeTeamId == lowerSeedTeamId ? game.homeTeamScore : game.awayTeamScore
                                         let isBeforeGame = Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
                                         
                                         VStack(spacing: 0) {
@@ -350,17 +356,17 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
                                                 .padding(.top, 4)
                                             
                                             HStack(spacing: 0) {
-                                                Text(isBeforeGame ? "-" : "\(homeTeamScore)")
+                                                Text(isBeforeGame ? "-" : "\(topSeedScore)")
                                                     .font(.system(size: 14, weight: .medium))
                                                     .frame(width: 30)
-                                                    .foregroundStyle(isBeforeGame ? Color.primary : (homeTeamScore >= awayTeamScore ? Color.moare : Color.primary))
+                                                    .foregroundStyle(isBeforeGame ? Color.primary : (topSeedScore >= lowerSeedScore ? Color.moare : Color.primary))
                                                     
                                                 Text("-")
                                                 
-                                                Text(isBeforeGame ? "-" : "\(awayTeamScore)")
+                                                Text(isBeforeGame ? "-" : "\(lowerSeedScore)")
                                                     .font(.system(size: 14, weight: .medium))
                                                     .frame(width: 30)
-                                                    .foregroundStyle(isBeforeGame ? Color.primary : (awayTeamScore >= homeTeamScore ? Color.moare : Color.primary))
+                                                    .foregroundStyle(isBeforeGame ? Color.primary : (lowerSeedScore >= topSeedScore ? Color.moare : Color.primary))
                                             }
                                         }
                                     }
@@ -487,6 +493,7 @@ struct TournamentSeriesFinalGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let teamNameDic: [String: String]
     let games: [GameForSchedule<T>]
+    let seedIdTuple: (topSeedId: Int?, lowerSeedId: Int?)
     
     @Binding var itemHeights: [RoundSeriesKey: CGFloat]
     
@@ -496,24 +503,26 @@ struct TournamentSeriesFinalGameItem<T: Decodable & Equatable>: View {
     @State private var itemTopPadding: CGFloat = 0 // 아이템 Y 위치
     
     var body: some View {
-        let topSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, teamId: games.first!.homeTeamId) : nil
-        let lowerSeedTeamId = games.first != nil ? Constants.Ids.checkTeamId(leagueId: leagueId, teamId: games.first!.awayTeamId) : nil
+        let topSeedTeamId = seedIdTuple.topSeedId
+        let lowerSeedTeamId = seedIdTuple.lowerSeedId
         let isSeriesStarted = topSeedTeamId != nil && lowerSeedTeamId != nil
         
         let (topSeedTeamSeriesScore, lowerSeedTeamSeriesScore) = games.reduce((0, 0)) { partial, game in
             var (top, lower) = partial
             
-            if game.homeTeamId == topSeedTeamId {
+            if game.homeTeamId == topSeedTeamId && game.awayTeamId == lowerSeedTeamId {
+                // 홈팀이 topSeed인경우
                 if game.homeTeamScore > game.awayTeamScore {
                     top += 1
                 } else if game.awayTeamScore > game.homeTeamScore {
                     lower += 1
                 }
-            } else {
-                if game.homeTeamScore > game.awayTeamScore {
-                    lower += 1
-                } else if game.awayTeamScore > game.homeTeamScore {
+            } else if game.homeTeamId == lowerSeedTeamId && game.awayTeamId == topSeedTeamId {
+                // 홈팀이 lowerSeed인경우
+                if game.awayTeamScore > game.homeTeamScore {
                     top += 1
+                } else if game.homeTeamScore > game.awayTeamScore {
+                    lower += 1
                 }
             }
             
@@ -561,8 +570,8 @@ struct TournamentSeriesFinalGameItem<T: Decodable & Equatable>: View {
                     VStack(spacing: 4) {
                         ForEach(games.indices, id: \.self) { index in
                             let game = games[index]
-                            let homeTeamScore = game.homeTeamScore
-                            let awayTeamScore = game.awayTeamScore
+                            let topSeedScore = game.homeTeamId == topSeedTeamId ? game.homeTeamScore : game.awayTeamScore
+                            let lowerSeedScore = game.homeTeamId == lowerSeedTeamId ? game.homeTeamScore : game.awayTeamScore
                             let isBeforeGame = Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
                             
                             VStack(spacing: 0) {
@@ -571,17 +580,17 @@ struct TournamentSeriesFinalGameItem<T: Decodable & Equatable>: View {
                                     .padding(.top, 4)
                                 
                                 HStack(spacing: 0) {
-                                    Text(isBeforeGame ? "-" : "\(homeTeamScore)")
+                                    Text(isBeforeGame ? "-" : "\(topSeedScore)")
                                         .font(.system(size: 14, weight: .medium))
                                         .frame(width: 30)
-                                        .foregroundStyle(isBeforeGame ? Color.primary : (homeTeamScore >= awayTeamScore ? Color.moare : Color.primary))
+                                        .foregroundStyle(isBeforeGame ? Color.primary : (topSeedScore >= lowerSeedScore ? Color.moare : Color.primary))
                                         
                                     Text("-")
                                     
-                                    Text(isBeforeGame ? "-" : "\(awayTeamScore)")
+                                    Text(isBeforeGame ? "-" : "\(lowerSeedScore)")
                                         .font(.system(size: 14, weight: .medium))
                                         .frame(width: 30)
-                                        .foregroundStyle(isBeforeGame ? Color.primary : (awayTeamScore >= homeTeamScore ? Color.moare : Color.primary))
+                                        .foregroundStyle(isBeforeGame ? Color.primary : (lowerSeedScore >= topSeedScore ? Color.moare : Color.primary))
                                 }
                             }
                         }

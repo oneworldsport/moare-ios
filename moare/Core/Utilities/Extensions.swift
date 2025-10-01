@@ -51,6 +51,14 @@ extension Array {
     subscript(safe index: Index) -> Element? {
         return indices.contains(index) ? self[index] : nil
     }
+    
+    /// 배열을 지정된 크기(size)만큼 잘라서 2차원 배열로 반환.
+    func chunked(by size: Int) -> [[Element]] {
+        guard size > 0 else { return [] }
+        return stride(from: 0, to: count, by: size).map {
+            Array(self[$0 ..< Swift.min($0 + size, count)])
+        }
+    }
 }
 
 extension String {

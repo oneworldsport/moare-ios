@@ -55,6 +55,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                             leagueId: state.leagueId,
                                             teamNameDic: state.teamNameDic,
                                             games: games,
+                                            seedIdTuple: state.seedIdTupleList[roundIndex][seriesIndex],
                                             itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
                                             shouldRemoveHBar: isKBO || (isMLB && roundIndexForPosition == 2), // mlb 2라운드, kbo
                                             itemHeights: $leftItemHeights,
@@ -89,6 +90,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                         leagueId: state.leagueId,
                                         teamNameDic: state.teamNameDic,
                                         games: games,
+                                        seedIdTuple: state.seedIdTupleList[roundIndex][0],
                                         itemHeights: $leftItemHeights,
                                         selectSeries: action.selectSeries
                                     )
@@ -113,6 +115,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                                 leagueId: state.leagueId,
                                                 teamNameDic: state.teamNameDic,
                                                 games: games,
+                                                seedIdTuple: state.seedIdTupleList[roundIndex][seriesIndex],
                                                 itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
                                                 shouldRemoveHBar: isMLB && roundIndexForPosition == 6, // mlb 2라운드만
                                                 itemHeights: $rightItemHeights,
