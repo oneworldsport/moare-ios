@@ -51,6 +51,15 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
                 HStack {
                     Spacer()
                     
+                    if state.shouldShowTournamentButton {
+                        CapsuleButton(
+                            text: StringConstants.tournamentButtonText(leagueId: state.leagueId),
+                            color: .secondary
+                        ) {
+                            actions.tournamentButtonAction?()
+                        }
+                    }
+                    
                     CapsuleButton(
                         text: state.isAllResultOpened ? StringConstants.resultHide : StringConstants.resultOpen,
                         color: .secondary

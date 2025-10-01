@@ -21,6 +21,7 @@ struct FBLeagueScheduleView: View {
             if show {
                 ScheduleViewContainer(
                     state: ScheduleContainerState(
+                        leagueId: store.baseSchedule.displayModel.leagueId,
                         shouldShowCalendar: store.selectedGame == nil,
                         shouldShowAllResultToggleButton: store.selectedGame == nil,
                         displayDataState: store.baseSchedule.displayDataState,
@@ -35,7 +36,7 @@ struct FBLeagueScheduleView: View {
                     actions: ScheduleContainerActions(
                         calendarUiActions: CalendarUiActions(
                             onSelectYearMonth: { yearMonth, index in
-                                store.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
+                                store.send(.baseSchedule(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index)))
                             },
                             onSelectDay: { day, index in
                                 store.send(.baseSchedule(.selectDay(day, index)))

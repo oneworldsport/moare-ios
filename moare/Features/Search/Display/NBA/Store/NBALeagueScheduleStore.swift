@@ -38,10 +38,10 @@ struct NBALeagueScheduleStore {
         /* ---------------------
            view action
            --------------------- */
-        case selectYearMonth(yearMonth: String, selectedIndex: Int)
         case toggleAllResult
         case updateResultOpenedState(gameId: String, isOpened: Bool)
         case selectGame(game: NBAGameForSchedule)
+        case showTournament
         
         /* ---------------------
            private
@@ -59,6 +59,7 @@ struct NBALeagueScheduleStore {
     
     enum Delegate {
         case showGameStats(model: SportDecodableModel)
+        case showTournament(model: SportDecodableModel)
     }
     
     @Dependency(\.translatedNameProvider) var nameProvider
@@ -117,20 +118,18 @@ struct NBALeagueScheduleStore {
                     return .none
                 }
                 
-            case .baseSchedule(.setDefaultYearMonth(_)):
-                return .send(.setDays(isInit: true))
-                
-            case .selectYearMonth(let yearMonth, let selectedIndex):
-                state.baseSchedule.selectedYearMonth = yearMonth
-                state.baseSchedule.selectedYearMonthIndex = selectedIndex
-                
-                switch state.baseSchedule.displayModel.scheduleType {
-                case .league:
-                    return .send(.fetchGames)
-                case .team:
-                    return .send(.setDays())
-                default :
-                    return .none
+            case let .baseSchedule(.selectYearMonth(_, _, isInit)):
+                if isInit {
+                    return .send(.setDays(isInit: isInit))
+                } else {
+                    switch state.baseSchedule.displayModel.scheduleType {
+                    case .league:
+                        return .send(.fetchGames)
+                    case .team:
+                        return .send(.setDays())
+                    default :
+                        return .none
+                    }
                 }
                 
             case .toggleAllResult:
@@ -257,6 +256,30 @@ struct NBALeagueScheduleStore {
                     
                     await send(.delegate(.showGameStats(model: result.data)))
                     await send(.updateResultOpenedState(gameId: game.gameId, isOpened: true))
+                }
+                
+            case .showTournament:
+                return .run { send in
+                    let keywordInfo = KeywordInfo(
+                        keyword: "NBA 플레이오프",
+                        weight: 100,
+                        keywords: [Keyword(keyword: "플레이오프", id: "tournament", priority: 2)],
+                        entities: [
+                            EntityInfo(
+                                entityId: Constants.Ids.nba,
+                                entityName: "NBA",
+                                category: "basketball",
+                                entityType: "league",
+                                leagueId: Constants.Ids.nba,
+                                teamId: nil,
+                                playerId: nil
+                            )
+                        ]
+                    )
+                    
+                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                    
+                    await send(.delegate(.showTournament(model: result.data)))
                 }
                 
             case .updateDisplayDataState(let fetchState):

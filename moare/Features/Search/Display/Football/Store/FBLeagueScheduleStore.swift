@@ -45,7 +45,6 @@ struct FBLeagueScheduleStore {
     enum Action {
         case baseSchedule(BaseSchedule.Action)
         
-        case selectYearMonth(yearMonth: String, selectedIndex: Int)
         case toggleAllResult
         case updateResultOpenedState(gameId: String, isOpened: Bool)
         case selectGame(game: FBGameForSchedule)
@@ -107,21 +106,19 @@ struct FBLeagueScheduleStore {
                 default:
                     return .none
                 }
-                                
-            case .baseSchedule(.setDefaultYearMonth(_)):
-                return .send(.setDays(isInit: true))
                 
-            case .selectYearMonth(let yearMonth, let selectedIndex):
-                state.baseSchedule.selectedYearMonth = yearMonth
-                state.baseSchedule.selectedYearMonthIndex = selectedIndex
-                
-                switch state.baseSchedule.displayModel.scheduleType {
-                case .league:
-                    return .send(.fetchGames)
-                case .team:
-                    return .send(.setDays())
-                default :
-                    return .none
+            case let .baseSchedule(.selectYearMonth(_, _, isInit)):
+                if isInit {
+                    return .send(.setDays(isInit: isInit))
+                } else {
+                    switch state.baseSchedule.displayModel.scheduleType {
+                    case .league:
+                        return .send(.fetchGames)
+                    case .team:
+                        return .send(.setDays())
+                    default :
+                        return .none
+                    }
                 }
                 
             case .toggleAllResult:

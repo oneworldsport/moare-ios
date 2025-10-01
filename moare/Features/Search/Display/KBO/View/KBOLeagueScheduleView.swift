@@ -22,6 +22,7 @@ struct KBOLeagueScheduleView: View {
             if show {
                 ScheduleViewContainer(
                     state: ScheduleContainerState(
+                        leagueId: displayModel.leagueId,
                         shouldShowCalendar: displayModel.scheduleType != .teamFlat,
                         shouldFetchSchedule:  displayModel.scheduleType == ScheduleType.league,
                         displayDataState: store.baseSchedule.displayDataState,
@@ -31,12 +32,13 @@ struct KBOLeagueScheduleView: View {
                             selectedYearMonthIndex: store.baseSchedule.selectedYearMonthIndex,
                             selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
-                        isAllResultOpened: store.baseSchedule.isAllResultOpened
+                        isAllResultOpened: store.baseSchedule.isAllResultOpened,
+                        shouldShowTournamentButton: store.baseSchedule.selectedMonth >= 10,
                     ),
                     actions: ScheduleContainerActions(
                         calendarUiActions: CalendarUiActions(
                             onSelectYearMonth: { yearMonth, index in
-                                store.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
+                                store.send(.baseSchedule(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index)))
                             },
                             onSelectDay: { day, index in
                                 store.send(.baseSchedule(.selectDay(day, index)))
@@ -44,6 +46,9 @@ struct KBOLeagueScheduleView: View {
                         ),
                         allResultButtonAction: {
                             store.send(.toggleAllResult)
+                        },
+                        tournamentButtonAction: {
+                            store.send(.showTournament)
                         }
                     ),
                     titleContent: {},
