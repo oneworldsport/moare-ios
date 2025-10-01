@@ -15,12 +15,12 @@ class AWSManager {
     
     private(set) var trendingKeywords: TrendingKeywords?
     private(set) var noticeList: [NoticeModel]?
-    private(set) var tournamentTeams: [String: [Int]]?
+    private(set) var tournamentTeams: [String: [Int?]]?
     
     private let trendingKeywordsPromise = AsyncPromise<TrendingKeywords>()
     private let triePromise = AsyncPromise<(Trie, [KeywordInfo])>()
     private let noticeListPromise = AsyncPromise<[NoticeModel]>()
-    private let tournamentTeamsPromise = AsyncPromise<[String: [Int]]>()
+    private let tournamentTeamsPromise = AsyncPromise<[String: [Int?]]>()
     
     private init() {
         configureAWS()
@@ -64,7 +64,7 @@ class AWSManager {
         async let trendingKeywords: TrendingKeywords = loadJsonFromS3(s3Key: "trending_keywords/trending_keywords.json", eTagKey: "trendingKeywordsETag")
         async let autoCompleteData: [KeywordInfo] = loadJsonFromS3(s3Key: "autocomplete/autocomplete.json", eTagKey: "autoCompleteETag")
         async let noticeList: [NoticeModel] = loadJsonFromS3(s3Key: "notice/main_notice.json", eTagKey: "mainNoticeETag")
-        async let tournamentTeams: [String: [Int]] = loadJsonFromS3(s3Key: "tournament/tournament_teams.json", eTagKey: "tournamentTeamsETag")
+        async let tournamentTeams: [String: [Int?]] = loadJsonFromS3(s3Key: "tournament/tournament_teams.json", eTagKey: "tournamentTeamsETag")
         
         async let eplPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/epl_player_name_dictionary.json", eTagKey: "eplPlayerNameDictionaryETag")
         async let footballTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/football_team_name_dictionary.json", eTagKey: "footballTeamNameDictionaryETag")
@@ -259,7 +259,7 @@ class AWSManager {
         try await noticeListPromise.value
     }
     
-    func waitForTournamentTeams() async throws -> [String: [Int]] {
+    func waitForTournamentTeams() async throws -> [String: [Int?]] {
         try await tournamentTeamsPromise.value
     }
 }

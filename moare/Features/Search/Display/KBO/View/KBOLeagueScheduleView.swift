@@ -16,10 +16,15 @@ struct KBOLeagueScheduleView: View {
     @State private var show = false
     
     var body: some View {
+        let displayModel = store.baseSchedule.displayModel
+        
         VStack {
             if show {
                 ScheduleViewContainer(
                     state: ScheduleContainerState(
+                        leagueId: displayModel.leagueId,
+                        shouldShowCalendar: displayModel.scheduleType != .teamFlat,
+                        shouldFetchSchedule:  displayModel.scheduleType == ScheduleType.league,
                         displayDataState: store.baseSchedule.displayDataState,
                         calendarUiState: CalendarUiState(
                             yearMonthList: store.baseSchedule.yearMonthList,
@@ -27,12 +32,13 @@ struct KBOLeagueScheduleView: View {
                             selectedYearMonthIndex: store.baseSchedule.selectedYearMonthIndex,
                             selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
-                        isAllResultOpened: store.baseSchedule.isAllResultOpened
+                        isAllResultOpened: store.baseSchedule.isAllResultOpened,
+                        shouldShowTournamentButton: store.baseSchedule.selectedMonth >= 10,
                     ),
                     actions: ScheduleContainerActions(
                         calendarUiActions: CalendarUiActions(
                             onSelectYearMonth: { yearMonth, index in
-                                store.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
+                                store.send(.baseSchedule(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index)))
                             },
                             onSelectDay: { day, index in
                                 store.send(.baseSchedule(.selectDay(day, index)))
@@ -40,6 +46,9 @@ struct KBOLeagueScheduleView: View {
                         ),
                         allResultButtonAction: {
                             store.send(.toggleAllResult)
+                        },
+                        tournamentButtonAction: {
+                            store.send(.showTournament)
                         }
                     ),
                     titleContent: {},
@@ -102,9 +111,8 @@ struct KBOLeagueScheduleListItem: View {
     @State private var isResultOpened = false
     
     var body: some View {
+        let displayModel = kboLeagueScheduleStore.baseSchedule.displayModel
         let itemKey = data.itemKey
-        let homeTeamId = data.homeTeamId
-        let awayTeamId = data.awayTeamId
         let gameStatus = Int(data.gameStatus) // TODO: String으로 사용
         let teamNameDic = kboLeagueScheduleStore.baseSchedule.teamNameDictionary
         
@@ -133,26 +141,19 @@ struct KBOLeagueScheduleListItem: View {
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
+                leagueId: Constants.Ids.kbo,
+                game: data,
+                teamNameDic: teamNameDic,
                 isClickEnabled: data.gameStatus != Constants.GameStatus.KBO.canceled, // 취소된 경기는 클릭 안되게
-                homeTeamLogo: KBOUtil.teamLogoURL(id: data.homeTeamId),
-                homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
-                homeTeamScore: data.homeTeamScore,
-                awayTeamLogo: KBOUtil.teamLogoURL(id: data.awayTeamId),
-                awayTeamName: teamNameDic["short_\(awayTeamId)"] ?? "",
-                awayTeamScore: data.awayTeamScore,
                 isResultOpened: isResultOpened,
                 gameStatusText: gameStatusText,
                 gameStatusColor: gameStatusColor,
                 isCapsuleButtonDisabled: gameStatus != StringConstants.KBO.gameFinal,
-                date: data.date,
-                venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
+                shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
-                    searchStore.send(.selectKBOGame(game: data, season: kboLeagueScheduleStore.baseSchedule.displayModel.season))
-                    
-                    // set selected game's isOpened true
-                    kboLeagueScheduleStore.send(.updateResultOpenedState(itemKey: itemKey, isOpened: true))
+                    kboLeagueScheduleStore.send(.selectGame(game: data))
                 },
                 onCapsuleButtonClick: {
                     kboLeagueScheduleStore.send(.updateResultOpenedState(itemKey: itemKey, isOpened: !isResultOpened))

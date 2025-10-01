@@ -1,16 +1,16 @@
 //
-//  NBATournamentView.swift
+//  MLBTournamentView.swift
 //  moare
 //
-//  Created by Mohwa Yoon on 4/21/25.
+//  Created by Mohwa Yoon on 9/29/25.
 //
 
 import SwiftUI
 import ComposableArchitecture
 
-struct NBATournamentView: View {
+struct MLBTournamentView: View {
     let searchStore: StoreOf<SearchStore>
-    let store: StoreOf<NBATournamentStore>
+    let store: StoreOf<MLBTournamentStore>
     let didPop: Bool
     
     @State private var show = false
@@ -48,4 +48,3 @@ struct NBATournamentView: View {
         }
     }
 }
-

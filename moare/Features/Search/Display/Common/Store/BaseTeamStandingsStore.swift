@@ -50,21 +50,11 @@ struct BaseTeamStandingsStore<T> {
                 state.headerCategorySelectedIndex = 0
                 state.categorySelectedIndex = 0
                 
+                state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                 var teamStandingsCategories = StringConstants.Football.teamStandingsCategories
+                
                 if let displayModel = state.displayModel as? SportDisplayModel {
                     switch displayModel.leagueId {
-                    case Constants.Ids.epl:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                    case Constants.Ids.laliga:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                    case Constants.Ids.bundesliga:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                    case Constants.Ids.ligue1:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                    case Constants.Ids.seriea:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                    case Constants.Ids.mls:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                     case Constants.Ids.nba:
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
                         teamStandingsCategories = StringConstants.NBA.teamStandingsCategories

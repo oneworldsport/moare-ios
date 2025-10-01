@@ -13,7 +13,7 @@ struct BaseTournamentStore<T> {
     struct State {
         var displayModel: T
         
-        var tournamentTeams: [String: [Int]] = [:]
+        var tournamentTeams: [String: [Int?]] = [:]
         
         var teamNameDic: [String: String] = [:]
         
@@ -24,7 +24,7 @@ struct BaseTournamentStore<T> {
     
     enum Action {
         case initData
-        case initTournamentTeams([String: [Int]])
+        case initTournamentTeams([String: [Int?]])
     }
     
     @Dependency(\.translatedNameProvider) var nameProvider

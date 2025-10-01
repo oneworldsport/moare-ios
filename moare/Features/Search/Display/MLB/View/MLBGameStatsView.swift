@@ -23,8 +23,11 @@ struct MLBGameStatsView: View {
         let game = displayModel.game
         let playerNameDic = store.baseGameStats.playerNameDictionary
         let teamNameDic = store.baseGameStats.teamNameDictionary
+        let homeTeamId = game.teams.home.id
+        let awayTeamId = game.teams.away.id
+        let seriesStatus = displayModel.game.game.seriesStatus
         
-        let teamIds = [game.teams.home.id, game.teams.away.id]
+        let teamIds = [homeTeamId, awayTeamId]
         let teamCategories: [GameStatsTeamState] = teamIds.map {
             return GameStatsTeamState(
                 name: teamNameDic["short_\($0)"] ?? "",
@@ -122,11 +125,27 @@ struct MLBGameStatsView: View {
                         }
                     ),
                     titleContent: {
-                        BaseballLeagueTitleForGameStats(
-                            logoUrl: MLBUtil.mlbLogoUrl,
-                            name: "MLB",
-                            season: Int(store.baseGameStats.displayModel.game.game.season)
-                        )
+                        VStack(alignment: .leading, spacing: 0) {
+                            BaseballLeagueTitleForGameStats(
+                                logoUrl: MLBUtil.mlbLogoUrl,
+                                name: "MLB",
+                                season: Int(displayModel.game.game.season),
+                                seriesDescription: displayModel.game.game.seriesDescription
+                            )
+                            
+                            if !seriesStatus.isEmpty {
+                                if let formattedText = MLBUtil.formatSeriesResult(
+                                    seriesStatus: seriesStatus,
+                                    homeTeamId: homeTeamId,
+                                    awayTeamId: awayTeamId,
+                                    teamNameDic: teamNameDic
+                                ) {
+                                    formattedText
+                                        .font(.system(size: 14))
+                                        .padding(.leading, UIConstants.Padding.defaultHPadding)
+                                }
+                            }
+                        }
                     },
                     gameContent: {
 //                            if game.status.detailedState == StringConstants.MLB.gameScheduled {

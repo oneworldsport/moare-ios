@@ -25,6 +25,7 @@ struct BaseScheduleStore<T> {
            ui state
            --------------------- */
         var selectedYearMonth = ""
+        var selectedMonth = 0
         var selectedDay: DayInfo? = nil
         var selectedYearMonthIndex = 0
         var selectedDayIndex = 0
@@ -41,6 +42,7 @@ struct BaseScheduleStore<T> {
     enum Action {
         case initData
         case selectDay(DayInfo, Int)
+        case selectYearMonth(yearMonth: String, selectedIndex: Int, isInit: Bool = false)
         case setDefaultYearMonth(date: String)
     }
     
@@ -56,16 +58,17 @@ struct BaseScheduleStore<T> {
                 state.days = []
                 
                 state.selectedYearMonth = ""
+                state.selectedMonth = 0
                 state.selectedDay = nil
                 state.selectedYearMonthIndex = 0
                 state.selectedDayIndex = 0
                 state.isAllResultOpened = false
                 state.scrollCalendar = true
                 
+                state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
+                
                 if let displayModel = state.displayModel as? SportDisplayModel {
                     switch displayModel.leagueId {
-                    case let id where Constants.Ids.footballLeagues.contains(id):
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                     case Constants.Ids.nba:
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
                     case Constants.Ids.kbo:
@@ -78,17 +81,25 @@ struct BaseScheduleStore<T> {
                 
                 return .none
                 
-            case .selectDay(let day, let index):
+            case let .selectDay(day, index):
                 state.selectedDay = day
                 state.selectedDayIndex = index
+                
+                return .none
+                
+            case let .selectYearMonth(yearMonth, selectedIndex, _):
+                state.selectedYearMonth = yearMonth
+                state.selectedYearMonthIndex = selectedIndex
+                
+                let monthStr = yearMonth.components(separatedBy: "/").last
+                state.selectedMonth = Int(monthStr ?? "0") ?? 0
                 
                 return .none
                 
             case .setDefaultYearMonth(let date):
                 let defaultYearMonth = CalendarUtil.formatDate(date:date, formatType: .yearMonth)
                 if let defaultYearMonthIndex = state.yearMonthList.firstIndex(where: { $0 == defaultYearMonth }) {
-                    state.selectedYearMonth = defaultYearMonth
-                    state.selectedYearMonthIndex = defaultYearMonthIndex
+                    return .send(.selectYearMonth(yearMonth: defaultYearMonth, selectedIndex: defaultYearMonthIndex, isInit: true))
                 } else {
                     print("Index not found.")
                 }

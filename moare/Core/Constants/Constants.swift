@@ -49,7 +49,7 @@ struct Constants {
         static let coppaItalia = 137
         static let footballTournamentLeagues = [championsLeague, europaLeague, conferenceLeague, faCup, eflCup, dfbPokal, coupeDeFrance, copaDelRey, coppaItalia]
         
-        // nba team
+        // nba teams
         struct NBATeam {
             static let atl = 1610612737
             static let bos = 1610612738
@@ -83,9 +83,48 @@ struct Constants {
             static let cha = 1610612766
             static let eastConference = [cle, bos, nyk, ind, mil, det, orl, atl, chi, mia, tor, bkn, phi, cha, was]
             static let westConference = [nop, dal, den, gsw, hou, lac, lal, min, phx, por, sac, sas, okc, uta, mem]
+            static let all = eastConference + westConference
         }
         
-        // mls team
+        // mlb teams
+        // MLBTeamInfo의 abbreviation 사용
+        struct MLBTeam {
+            static let ath = 133
+            static let pit = 134
+            static let sd = 135
+            static let sea = 136
+            static let sf = 137
+            static let stl = 138
+            static let tb = 139
+            static let tex = 140
+            static let tor = 141
+            static let min = 142
+            static let phi = 143
+            static let atl = 144
+            static let cws = 145
+            static let mia = 146
+            static let nyy = 147
+            static let mil = 158
+            static let laa = 108
+            static let az = 109
+            static let bal = 110
+            static let bos = 111
+            static let chc = 112
+            static let cin = 113
+            static let cle = 114
+            static let col = 115
+            static let det = 116
+            static let hou = 117
+            static let kc = 118
+            static let lad = 119
+            static let wsh = 120
+            static let nym = 121
+            static let alConference = [ath, sea, tb, tex, tor, min, cws, nyy, laa, bal, bos, cle, det, hou, kc]
+            static let nlConference = [pit, sd, sf, stl, phi, atl, mia, mil, az, chc, cin, col, lad, wsh, nym]
+            static let all = alConference + nlConference
+        }
+        
+        // mls teams
         struct MLSTeam {
             static let sea = 1595
             static let jos = 1596
@@ -119,6 +158,7 @@ struct Constants {
             static let san = 25484
             static let eastConference = [orl, phi, tor, yor, nyk, chi, atl, eng, col, mon, uni, cin, mia, nas, cha]
             static let westConference = [sea, jos, dal, hou, van, ang, sal, cor, kan, min, laf, por, aus, stl, san]
+            static let all = eastConference + westConference
         }
         
         // mlb league, division
@@ -130,7 +170,22 @@ struct Constants {
         static let nationalLeagueWest = 203
         static let nationalLeagueEast = 204
         static let nationalLeagueCentral = 205
-    }
+        
+        static func checkTeamId(leagueId: Int, teamId: Int) -> Int? {
+            switch leagueId {
+            case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
+                return teamId
+            case Constants.Ids.nba:
+                return Constants.Ids.NBATeam.all.contains(teamId) ? teamId : nil
+            case Constants.Ids.mlb:
+                return Constants.Ids.MLBTeam.all.contains(teamId) ? teamId : nil
+            case Constants.Ids.kbo:
+                return teamId
+            default :
+                return nil
+            }
+        }
+    } // Ids
     
     struct GameStatus {
         struct Football {
@@ -143,7 +198,7 @@ struct Constants {
             static let penaltyShootout = "P" // 승부차기
             static let finished = "FT"
             static let finishedAfterExtraTime = "AET" // 승부차기 없이 연장전 후 경기 종료
-            static let finishedAfterPenaltyShootout = "PET" // 승부차기 후 경기 종료
+            static let finishedAfterPenaltyShootout = "PEN" // 승부차기 후 경기 종료
             static let postponed = "PST"
             static let cancelled = "CANC"
             static let liveList = [firstHalf, halftime, secondHalf, extraTime, breakTime, penaltyShootout]
@@ -176,7 +231,11 @@ struct Constants {
             static let canceled = "4"
         }
         
-        static func gameStatusText(leagueId: Int, status: String) -> String {
+        static func gameStatusText(
+            leagueId: Int,
+            status: String,
+            isResultOpened: Bool = true
+        ) -> String {
             switch leagueId {
             case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
                 switch status {
@@ -189,7 +248,7 @@ struct Constants {
                 case Football.secondHalf:
                     return StringConstants.Football.gameSecondHalfStr
                 case let status where Football.finishedList.contains(status):
-                    return StringConstants.gameFinishedStr
+                    return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
                 default:
                     return ""
                 }
@@ -258,6 +317,37 @@ struct Constants {
                 }
             case Constants.Ids.kbo:
                 if status == KBO.live {
+                    return true
+                } else {
+                    return false
+                }
+            default :
+                return false
+            }
+        }
+        
+        static func isBeforeGame(leagueId: Int, status: String) -> Bool {
+            switch leagueId {
+            case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
+                if status == Football.notStarted {
+                    return true
+                } else {
+                    return false
+                }
+            case Constants.Ids.nba:
+                if status == String(NBA.notStarted) {
+                    return true
+                } else {
+                    return false
+                }
+            case Constants.Ids.mlb:
+                if MLB.beforeGameList.contains(status) {
+                    return true
+                } else {
+                    return false
+                }
+            case Constants.Ids.kbo:
+                if status == KBO.scheduled {
                     return true
                 } else {
                     return false

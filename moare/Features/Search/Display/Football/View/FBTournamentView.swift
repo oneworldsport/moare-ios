@@ -21,7 +21,7 @@ struct FBTournamentView: View {
         VStack {
             if show {
                 if displayModel.scheduleType == .tournamentBracket {
-                    
+                    // TODO: 축구에서 Bracket생기면 작업
                 } else {
                     TournamentDrawViewContainer(
                         state: TournamentDrawContainerState(

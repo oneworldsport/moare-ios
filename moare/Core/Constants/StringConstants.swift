@@ -130,4 +130,19 @@ struct StringConstants {
     static func viewPreparingAdviseText(type: String) -> String {
         return "\(type) 화면은 더 나은 서비스 제공을 위해 현재 개선 작업 중입니다. 이용에 불편을 드려 죄송합니다."
     }
+    
+    static func tournamentButtonText(leagueId: Int) -> String {
+        switch leagueId {
+        case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
+            return ""
+        case Constants.Ids.nba:
+            return "플레이오프 대진표"
+        case Constants.Ids.mlb:
+            return "포스트시즌 대진표"
+        case Constants.Ids.kbo:
+            return "가을야구 대진표"
+        default :
+            return ""
+        }
+    }
 }

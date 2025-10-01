@@ -129,3 +129,54 @@ struct FBTeamStatsPenaltyPercentage: Decodable, Equatable {
     }
 }
 
+// football api response로 오는 standings 전용 모델들
+struct FBTeamForStandings: Decodable, Equatable {
+    // NOTE: 일단은 필요한 프로퍼티만 만들어놓음.
+    let team: FBTeamInfo
+    let league: FBLeague?
+    let all: FBTeamStandingsGameStats
+    let home: FBTeamStandingsGameStats
+    let away: FBTeamStandingsGameStats
+    private let _update: String?
+    
+    var update: String { _update ?? "" }
+    
+    private enum CodingKeys: String, CodingKey {
+        case team, league, all, home, away
+        case _update = "update"
+    }
+}
+
+struct FBTeamStandingsGameStats: Decodable, Equatable {
+    private let _played: Int?
+    private let _win: Int?
+    private let _draw: Int?
+    private let _lose: Int?
+    let goals: FBTeamStandingsGoalStats
+    
+    var played: Int { _played ?? 0 }
+    var win: Int { _win ?? 0 }
+    var draw: Int { _draw ?? 0 }
+    var lose: Int { _lose ?? 0 }
+    
+    private enum CodingKeys: String, CodingKey {
+        case goals
+        case _played = "played"
+        case _win = "win"
+        case _draw = "draw"
+        case _lose = "lose"
+    }
+}
+
+struct FBTeamStandingsGoalStats: Decodable, Equatable {
+    private let _for: Int?
+    private let _against: Int?
+    
+    var goalsFor: Int { _for ?? 0 }
+    var goalsAgainst: Int { _against ?? 0 }
+    
+    private enum CodingKeys: String, CodingKey {
+        case _for = "for"
+        case _against = "against"
+    }
+}

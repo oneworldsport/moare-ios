@@ -11,11 +11,9 @@ struct TournamentDrawViewContainer<T: Decodable & Equatable>: View {
     let state: TournamentDrawContainerState<T>
     
     var body: some View {
-        let leagueId = state.leagueId
-        
         ScrollView(.horizontal) {
             ScrollView(.vertical) {
-                HStack {
+                HStack(alignment: .top) {
                     ForEach(state.gameListTuple.indices, id: \.self) { roundIndex in
                         let item = state.gameListTuple[roundIndex]
                         let gameList = item.gameList
@@ -24,36 +22,37 @@ struct TournamentDrawViewContainer<T: Decodable & Equatable>: View {
                         VStack(spacing: 0) {
                             Text(title)
                                 .font(.system(size: 20, weight: .medium))
+                                .frame(width: 270)
                             HCapsuleBar()
-                                .padding(.top, 4)
-                                .padding(.bottom, 8)
+                                .padding(.top, 6)
+                                .padding(.bottom, 12)
                             
                             ForEach(gameList.indices, id: \.self) { index in
                                 let games = gameList[index]
                                 
                                 if state.isSeries {
+                                    // TODO: 추첨인데 시리즈인 경우가 생기면 작업
                                     ForEach(games, id: \.gameId) { game in
                                         
                                     }
                                 } else {
                                     if let game = games.first {
-                                        let shouldShowScore = game.gameStatus != Constants.GameStatus.Football.notStarted
-                                        
-                                        TournamentSingleGameItem(state: TournamentGameItemState(
-                                            homeTeamLogo: Util.teamLogoURL(leagueId: leagueId, teamId: game.homeTeamId),
-                                            homeTeamName: state.teamNameDic["short_\(game.homeTeamId)"] ?? "",
-                                            homeTeamScore: shouldShowScore ? game.homeTeamScore : nil,
-                                            awayTeamLogo: Util.teamLogoURL(leagueId: leagueId, teamId: game.awayTeamId),
-                                            awayTeamName: state.teamNameDic["short_\(game.awayTeamId)"] ?? "",
-                                            awayTeamScore: shouldShowScore ? game.awayTeamScore : nil,
-                                            gameStatusText: Constants.GameStatus.gameStatusText(leagueId: leagueId, status: game.gameStatus),
-                                            gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: game.gameStatus),
-                                            date: game.date)
+                                        TournamentSingleGameItem(
+                                            leagueId: state.leagueId,
+                                            game: game,
+                                            teamNameDic: state.teamNameDic
                                         )
-                                        .padding(.bottom, 8)
+                                        .padding(.bottom, 12)
                                     }
                                 }
                             }
+                        }
+                        
+                        if roundIndex != state.gameListTuple.count - 1 {
+                            VCapsuleBar()
+                                .padding(.top, 40)
+                                .padding(.bottom, 12)
+                                .opacity(0.5)
                         }
                     }
                 }

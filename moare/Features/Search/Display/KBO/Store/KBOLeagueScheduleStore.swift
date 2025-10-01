@@ -35,9 +35,10 @@ struct KBOLeagueScheduleStore {
         /* ---------------------
            view action
            --------------------- */
-        case selectYearMonth(yearMonth: String, selectedIndex: Int)
         case toggleAllResult
         case updateResultOpenedState(itemKey: String, isOpened: Bool) // NOTE: 더블헤더가 있는 날에 취소된 경기가 있으면 gameId가 같은 경우가 있어 gameId 대신에 itemKey를 사용
+        case selectGame(game: KBOGameForSchedule)
+        case showTournament
         
         /* ---------------------
            private
@@ -49,6 +50,13 @@ struct KBOLeagueScheduleStore {
         case setDisplayModel(displayModel: KBOLeagueScheduleDisplayModel)
         
         case updateFilteredGames
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case showGameStats(model: SportDecodableModel)
+        case showTournament(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -57,24 +65,26 @@ struct KBOLeagueScheduleStore {
         Reduce { state, action in
             switch action {
             case .baseSchedule(.initData):
+                let displayModel = state.baseSchedule.displayModel
+                
                 // init with default value
                 state.filteredGames = [:]
                 state.gameResultOpenedStateList = [:]
                 
                 // init data
-                state.baseSchedule.yearMonthList = state.baseSchedule.displayModel.yearMonthList
+                state.baseSchedule.yearMonthList = displayModel.yearMonthList
                 
                 // select default yearMonth
-                switch state.baseSchedule.displayModel.scheduleType {
+                switch displayModel.scheduleType {
                 case .league:
-                    if let date = state.baseSchedule.displayModel.games.first?.date {
+                    if let date = displayModel.games.first?.date {
                         return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
                     }
                     
                     return .send(.setDays(isInit: true))
                     
                 case .team:
-                    let upcomingGame = state.baseSchedule.displayModel.games.first { game in
+                    let upcomingGame = displayModel.games.first { game in
                         CalendarUtil.isUpcomingDay(date: game.date)
                     }
                     
@@ -82,31 +92,40 @@ struct KBOLeagueScheduleStore {
                     if let upcomingGame {
                         return .send(.baseSchedule(.setDefaultYearMonth(date: upcomingGame.date)))
                     } else {
-                        if let date = state.baseSchedule.displayModel.games.last?.date {
+                        if let date = displayModel.games.last?.date {
                             return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
                         }
                     }
                     
                     return .send(.setDays(isInit: true))
+                    
+                case .teamFlat:
+                    // filteredGames 초기화
+                    state.filteredGames = [0: displayModel.games]
+                    
+                    // gameResultOpenedStateList 초기화
+                    state.gameResultOpenedStateList = displayModel.games.reduce(into: [String: Bool]()) { dict, game in
+                        dict[game.itemKey] = false
+                    }
+                    
+                    return .none
     
                 default:
                     return .none
                 }
                 
-            case .baseSchedule(.setDefaultYearMonth(_)):
-                return .send(.setDays(isInit: true))
-                
-            case .selectYearMonth(let yearMonth, let selectedIndex):
-                state.baseSchedule.selectedYearMonth = yearMonth
-                state.baseSchedule.selectedYearMonthIndex = selectedIndex
-                
-                switch state.baseSchedule.displayModel.scheduleType {
-                case .league:
-                    return .send(.fetchGames)
-                case .team:
-                    return .send(.setDays())
-                default :
-                    return .none
+            case let .baseSchedule(.selectYearMonth(_, _, isInit)):
+                if isInit {
+                    return .send(.setDays(isInit: isInit))
+                } else {
+                    switch state.baseSchedule.displayModel.scheduleType {
+                    case .league:
+                        return .send(.fetchGames)
+                    case .team:
+                        return .send(.setDays())
+                    default :
+                        return .none
+                    }
                 }
                 
             case .toggleAllResult:
@@ -220,6 +239,45 @@ struct KBOLeagueScheduleStore {
                     }
                 }
                 
+            case let .selectGame(game):
+                return .run { [displayModel = state.baseSchedule.displayModel] send in
+                    let result = try await searchClient.fetchById(
+                        season: displayModel.season,
+                        category: "baseball",
+                        date: game.date,
+                        dataType: "baseball_game_stats",
+                        leagueId: displayModel.leagueId,
+                        id: game.gameId
+                    )
+                    
+                    await send(.delegate(.showGameStats(model: result.data)))
+                    await send(.updateResultOpenedState(itemKey: game.itemKey, isOpened: true))
+                }
+                
+            case .showTournament:
+                return .run { send in
+                    let keywordInfo = KeywordInfo(
+                        keyword: "KBO 가을야구",
+                        weight: 100,
+                        keywords: [Keyword(keyword: "가을야구", id: "tournament", priority: 2)],
+                        entities: [
+                            EntityInfo(
+                                entityId: Constants.Ids.kbo,
+                                entityName: "KBO",
+                                category: "baseball",
+                                entityType: "league",
+                                leagueId: Constants.Ids.kbo,
+                                teamId: nil,
+                                playerId: nil
+                            )
+                        ]
+                    )
+                    
+                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                    
+                    await send(.delegate(.showTournament(model: result.data)))
+                }
+                
             case .updateDisplayDataState(let fetchState):
                 state.baseSchedule.displayDataState = fetchState
                 
@@ -231,18 +289,27 @@ struct KBOLeagueScheduleStore {
                 return .none
                 
             case .updateFilteredGames:
-                var newFilteredGames = state.filteredGames
-                newFilteredGames[state.baseSchedule.selectedDayIndex] = state.baseSchedule.displayModel.games.filter { game in
-                    CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: state.baseSchedule.selectedDayIndex + 1)
-                }
+                let displayModel = state.baseSchedule.displayModel
                 
-                state.filteredGames = newFilteredGames
+                if displayModel.scheduleType == .teamFlat {
+                    state.filteredGames = [0: displayModel.games]
+                } else {
+                    var newFilteredGames = state.filteredGames
+                    newFilteredGames[state.baseSchedule.selectedDayIndex] = displayModel.games.filter { game in
+                        CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: state.baseSchedule.selectedDayIndex + 1)
+                    }
+                    
+                    state.filteredGames = newFilteredGames
+                }
                 
                 return .none
                 
             case .baseSchedule(_):
                 return .none
-            }
+                
+            case .delegate:
+                return .none
+            } // switch action
         }
     }
 }
