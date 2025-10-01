@@ -12,6 +12,8 @@ struct NoticeBox: View {
 
     @Binding var height: CGFloat
     
+    private var maxHeight: CGFloat = 240
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
@@ -32,10 +34,10 @@ struct NoticeBox: View {
                 Group {
                     GeometryReader { proxy in
                         Color.clear
-                            .onAppear { height = min(proxy.size.height, 240) }
+                            .onAppear { height = min(proxy.size.height, maxHeight) }
                             .onChange(of: proxy.size.height) {
                                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                                    height = min(proxy.size.height, 240)
+                                    height = min(proxy.size.height, maxHeight)
                                 }
                             }
                     }

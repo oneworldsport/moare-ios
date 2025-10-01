@@ -30,8 +30,8 @@ struct SearchView: View {
     
     var body: some View {
         // notice 아이콘 y 위치
-        // y: (전체 컨텐츠 높이(박스 높이(noticeBoxHeight) + 아이콘 높이(17) + spacing(6))) / 2 + (검색창 높이(50) + 트렌딩 키워드 높이(40)) / 2 + 추가 패딩 6
-        let noticeYOffset = ((noticeBoxHeight + 17 + 6) / 2) + ((50 + 40) / 2) + 6
+        // y: (전체 컨텐츠 높이(박스 높이(noticeBoxHeight) + 아이콘 높이(17) + padding(6))) / 2 + (검색창 높이(50) + 트렌딩 키워드 높이(40)) / 2 + 추가 패딩 8
+        let noticeYOffset = ((noticeBoxHeight + 17 + 6) / 2) + (((50 + 40) / 2) + 8)
         
         ZStack {
             /* ---------------------
@@ -61,7 +61,7 @@ struct SearchView: View {
              --------------------- */
             HStack(alignment: .bottom) {
                 if isSearchExampleButtonVisible {
-                    VStack(alignment: .leading, spacing: 6) {
+                    VStack(alignment: .leading, spacing: 0) {
                         SearchExampleBox(text: searchStore.searchExample)
                             .opacity(isSearchExampleOpened ? 1 : 0)
                             .padding(.trailing, 25)
@@ -77,13 +77,14 @@ struct SearchView: View {
                                 .opacity(0.7)
                         }
                         .foregroundStyle(.secondary)
+                        .padding(.top, 6)
                     }
                 }
                 
                 Spacer()
                 
                 if isNoticeIconVisible {
-                    VStack(alignment: .trailing, spacing: 6) {
+                    VStack(alignment: .trailing, spacing: 0) {
                         NoticeBox(noticeList: searchStore.noticeList, height: $noticeBoxHeight)
                             .opacity(isNoticeOpened ? 1 : 0)
                         
@@ -97,6 +98,7 @@ struct SearchView: View {
                                 .tint(.secondary)
                                 .opacity(0.7)
                         }
+                        .padding(.top, 6)
                     }
                 }
             }
