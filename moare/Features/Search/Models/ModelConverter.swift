@@ -884,7 +884,7 @@ final class ModelConverter {
         let awayTeamId = game.gameInfo?.awayTeamId ?? 0
         let homeTeamScore = game.lineScore?.home.r ?? "0"
         let awayTeamScore = game.lineScore?.away.r ?? "0"
-        let gameInfo = KBOGameInfoForSchedule(currentInning: game.lineScore?.currentInning)
+        let gameInfo = KBOGameInfoForSchedule(currentInning: game.lineScore?.currentInning, seriesDescription: game.gameInfo?.seriesDescription)
         
         return KBOGameForSchedule(
             itemKey: date != nil ? "\(date!)#\(game.gameInfo?.gameId ?? "")" : "",
