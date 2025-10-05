@@ -161,6 +161,20 @@ struct Constants {
             static let all = eastConference + westConference
         }
         
+        struct KBOTeam {
+            static let lg = 5
+            static let lt = 2
+            static let hh = 4
+            static let ss = 3
+            static let kt = 9
+            static let sk = 10
+            static let ht = 6
+            static let ob = 1
+            static let nc = 8
+            static let wo = 7
+            static let all = [lg, lt, hh, ss, kt, sk, ht, ob, nc, wo]
+        }
+        
         // mlb league, division
         static let americanLeague = 103
         static let nationalLeague = 104
@@ -171,7 +185,9 @@ struct Constants {
         static let nationalLeagueEast = 204
         static let nationalLeagueCentral = 205
         
-        static func checkTeamId(leagueId: Int, teamId: Int) -> Int? {
+        static func checkTeamId(leagueId: Int, teamId: Int?) -> Int? {
+            guard let teamId else { return nil }
+            
             switch leagueId {
             case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
                 return teamId
@@ -180,7 +196,7 @@ struct Constants {
             case Constants.Ids.mlb:
                 return Constants.Ids.MLBTeam.all.contains(teamId) ? teamId : nil
             case Constants.Ids.kbo:
-                return teamId
+                return Constants.Ids.KBOTeam.all.contains(teamId) ? teamId : nil
             default :
                 return nil
             }

@@ -108,11 +108,14 @@ struct KBOGameStatsView: View {
                         }
                     ),
                     titleContent: {
-                        BaseballLeagueTitleForGameStats(
-                            logoUrl: KBOUtil.kboLogoUrl,
-                            name: "KBO",
-                            season: displayModel.season
-                        )
+                        VStack(alignment: .leading, spacing: 0) {
+                            BaseballLeagueTitleForGameStats(
+                                logoUrl: KBOUtil.kboLogoUrl,
+                                name: "KBO",
+                                season: displayModel.season,
+                                seriesDescription: displayModel.game.gameInfo?.seriesDescription ?? ""
+                            )
+                        }
                     },
                     gameContent: {
 //                            if game.gameInfo?.gameStatus.toIntOrNil() == StringConstants.KBO.gameScheduled ||
@@ -147,8 +150,8 @@ struct KBOGameStatsScoreInfoItem: View {
     var body: some View {
         let displayModel = kboGameStatsStore.baseGameStats.displayModel
         let game = displayModel.game
-        let homeTeamId = game.gameInfo?.homeTeamId
-        let awayTeamId = game.gameInfo?.awayTeamId
+        let homeTeamId = Constants.Ids.checkTeamId(leagueId: Constants.Ids.kbo, teamId: game.gameInfo?.homeTeamId)
+        let awayTeamId = Constants.Ids.checkTeamId(leagueId: Constants.Ids.kbo, teamId: game.gameInfo?.awayTeamId)
         let teamNameDic = kboGameStatsStore.baseGameStats.teamNameDictionary
         let gameStatus = Int(game.gameInfo?.gameStatus ?? "0") ?? 0
         
@@ -194,7 +197,7 @@ struct KBOGameStatsScoreInfoItem: View {
                         size: .small
                     )
                     
-                    Text(teamNameDic["short_\(awayTeamId ?? 0)"] ?? "")
+                    Text(awayTeamId == nil ? "미정" : (teamNameDic["short_\(awayTeamId ?? 0)"] ?? ""))
                         .font(.system(size: 13))
                         .lineLimit(2)
                 }
@@ -223,7 +226,7 @@ struct KBOGameStatsScoreInfoItem: View {
                         size: .small
                     )
                     
-                    Text(teamNameDic["short_\(homeTeamId ?? 0)"] ?? "")
+                    Text(homeTeamId == nil ? "미정" : (teamNameDic["short_\(homeTeamId ?? 0)"] ?? ""))
                         .font(.system(size: 13))
                         .lineLimit(2)
                 }
