@@ -23,7 +23,6 @@ struct AppStore {
         case search(SearchStore.Action)
         case path(StackActionOf<Path>)
         case pop
-//        case show(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -34,7 +33,7 @@ struct AppStore {
             case .search(.delegate(.push(let model))):
                 return handleRoute(&state, model)
                 
-            case .search(.delegate(.pop)):
+            case .pop:
                 if !state.search.searchState {
                     if state.path.isEmpty {
                         return .none
@@ -44,7 +43,7 @@ struct AppStore {
                     }
                 } else {
                     state.didPop = true
-                    // NOTE: .fbGameStatsView로 뒤로갔을때(.fbLeagueSchedule -> .fbGameStats인 경우) includesPreviousView가 true여야 하지만 false여도
+                    // NOTE: .fbGameStats로 뒤로갔을때(.fbLeagueSchedule -> .fbGameStats인 경우) includesPreviousView가 true여야 하지만 false여도
                     // 그냥 .fbGameStats 화면이 잘 나오기 때문에 상관없음
                     state.includesPreviousView = false
                     
@@ -56,11 +55,9 @@ struct AppStore {
             case .search:
                 return .none
                 
-            case .pop:
-                return .none
-                
             case let .path(.element(id: elementId, action: .fbGameStats(.delegate(.didRefreshGame(model))))):
                 if case .fbGameStats(_, let displayModel) = model {
+                    // 현재 화면인 .fbGameStats의 이전 화면인 .fbLeagueSchedule을 찾아서 필요한 state를 업데이트 시키고 해당 state를 path에 재배치한다.
                     if let idx = state.path.ids.firstIndex(of: elementId) {
                         for previousId in state.path.ids[..<idx].reversed() {
                             if case .fbLeagueSchedule(var leagueState) = state.path[id: previousId] {
@@ -185,9 +182,9 @@ struct AppStore {
                 return .none
                 
             case let .path(.element(id: _, action: .fbLeagueSchedule(.delegate(.showGameStats(model))))):
-                // FBLeagueScheduleView에서 아이템 클릭으로 FBGameStatsView보여줄때 state.includesPreviousView = true로 설정해 줘야 함.
                 state.didPop = false
-                if let pathId = state.path.ids.suffix(2).first {
+                // FBLeagueScheduleView에서 아이템 클릭으로 FBGameStatsView보여줄때 state.includesPreviousView = true로 설정해 줘야 함.
+                if let pathId = state.path.ids.last {
                     if case .fbLeagueSchedule = state.path[id: pathId] {
                         state.includesPreviousView = true
                     }

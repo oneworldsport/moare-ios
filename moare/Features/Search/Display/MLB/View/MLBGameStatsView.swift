@@ -178,8 +178,8 @@ struct MLBGameStatsScoreInfoItem: View {
     var body: some View {
         let displayModel = mlbGameStatsStore.baseGameStats.displayModel
         let game = displayModel.game
-        let homeTeamId = game.teams.home.id
-        let awayTeamId = game.teams.away.id
+        let homeTeamId = Constants.Ids.checkTeamId(leagueId: Constants.Ids.mlb, teamId: game.teams.home.id)
+        let awayTeamId = Constants.Ids.checkTeamId(leagueId: Constants.Ids.mlb, teamId: game.teams.away.id)
         let teamNameDic = mlbGameStatsStore.baseGameStats.teamNameDictionary
         let gameStatus = game.status.detailedState
         
@@ -202,7 +202,7 @@ struct MLBGameStatsScoreInfoItem: View {
                         size: .small
                     )
                     
-                    Text(teamNameDic["short_\(awayTeamId)"] ?? "")
+                    Text(awayTeamId == nil ? "미정" : (teamNameDic["short_\(awayTeamId ?? 0)"] ?? ""))
                         .font(.system(size: 13))
                         .lineLimit(2)
                 }
@@ -231,7 +231,7 @@ struct MLBGameStatsScoreInfoItem: View {
                         size: .small
                     )
                     
-                    Text(teamNameDic["short_\(homeTeamId)"] ?? "")
+                    Text(homeTeamId == nil ? "미정" : (teamNameDic["short_\(homeTeamId ?? 0)"] ?? ""))
                         .font(.system(size: 13))
                         .lineLimit(2)
                 }

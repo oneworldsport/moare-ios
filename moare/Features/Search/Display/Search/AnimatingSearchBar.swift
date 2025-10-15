@@ -109,6 +109,7 @@ struct AnimatingSearchBar: View {
                         searchStore.send(.toggleSearchBar)
                         
                         DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.medium) {
+                            searchStore.send(.updateTextFieldVisibleState(true))
                             focusState.toggle()
                         }
                     }

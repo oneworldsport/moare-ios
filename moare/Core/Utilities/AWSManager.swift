@@ -78,11 +78,14 @@ class AWSManager {
         async let ligue1PlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/ligue1_player_name_dictionary.json", eTagKey: "ligue1PlayerNameDictionaryETag")
         async let serieaPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/seriea_player_name_dictionary.json", eTagKey: "serieaPlayerNameDictionaryETag")
         async let mlsPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/mls_player_name_dictionary.json", eTagKey: "mlsPlayerNameDictionaryETag")
-        
-        self.trendingKeywords = try? await trendingKeywords
-        if let trendingKeywords = self.trendingKeywords {
+                
+        do {
+            let trendingKeywords = try await trendingKeywords
+            self.trendingKeywords = trendingKeywords
 //            try? await Task.sleep(for: .seconds(5))
             await trendingKeywordsPromise.fulfill(with: trendingKeywords)
+        } catch {
+            await trendingKeywordsPromise.fulfill(with: TrendingKeywords(date: "", keywords: []))
         }
         
         do {
@@ -97,73 +100,142 @@ class AWSManager {
             
             await triePromise.fulfill(with: (trie, autoCompleteData))
         } catch {
+            await triePromise.fulfill(with: (Trie(), []))
             print("🚨 autoCompleteData fetch error: \(error)")
         }
         
         // test
-//        let url = Bundle.main.url(forResource: "main_notice_test", withExtension: "json")
 //        let decoder = JSONDecoder()
-//        if let data = try? Data(contentsOf: url!) {
-//            if let noticeList = try? decoder.decode([NoticeModel].self, from: data) {
+//        if let url = Bundle.main.url(forResource: "main_notice_test", withExtension: "json"),
+//           let data = try? Data(contentsOf: url) {
+//            do {
+//                let noticeList = try decoder.decode([NoticeModel].self, from: data)
 //                await noticeListPromise.fulfill(with: noticeList)
+//            } catch {
+//                // 실패하더라도 await -> 빈 값이라도 넘겨주기
+//                await noticeListPromise.fulfill(with: [])
+//                print("noticeList load failed:", error)
 //            }
+//        } else {
+//            await noticeListPromise.fulfill(with: [])
+//            print("noticeList load failed")
 //        }
-        self.noticeList = try? await noticeList
-        if let noticeList = self.noticeList {
-            await noticeListPromise.fulfill(with: noticeList)
+                
+        do {
+            let value = try await noticeList
+            self.noticeList = value
+            await noticeListPromise.fulfill(with: value)
+        } catch {
+            // 실패하더라도 await -> 빈 값이라도 넘겨주기
+            await noticeListPromise.fulfill(with: [])
+            print("noticeList load failed:", error)
         }
         
-        self.tournamentTeams = try? await tournamentTeams
-        if let tournamentTeams = self.tournamentTeams {
-            await tournamentTeamsPromise.fulfill(with: tournamentTeams)
+        do {
+            let value = try await tournamentTeams
+            self.tournamentTeams = value
+            await tournamentTeamsPromise.fulfill(with: value)
+        } catch {
+            self.tournamentTeams = [:]
+            await tournamentTeamsPromise.fulfill(with: [:])
+            
+            print("tournamentTeams load failed:", error)
         }
         
-        if let eplPlayerNameDictionary = try? await eplPlayerNameDictionary {
+        do {
+            let eplPlayerNameDictionary = try await eplPlayerNameDictionary
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.eplPlayerDic, nameMap: eplPlayerNameDictionary)
+        } catch {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.eplPlayerDic, nameMap: [:])
+            print("eplPlayerNameDictionary load failed:", error)
         }
         
-        if let footballTeamNameDictionary = try? await footballTeamNameDictionary {
+        do {
+            let footballTeamNameDictionary = try await footballTeamNameDictionary
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.footballTeamDic, nameMap: footballTeamNameDictionary)
+        } catch {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.footballTeamDic, nameMap: [:])
+            print("footballTeamNameDictionary load failed:", error)
         }
         
-        if let nbaPlayerNameDictionary = try? await nbaPlayerNameDictionary {
+        do {
+            let nbaPlayerNameDictionary = try await nbaPlayerNameDictionary
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.nbaPlayerDic, nameMap: nbaPlayerNameDictionary)
+        } catch {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.nbaPlayerDic, nameMap: [:])
+            print("nbaPlayerNameDictionary load failed:", error)
         }
         
-        if let nbaTeamNameDictionary = try? await nbaTeamNameDictionary {
+        do {
+            let nbaTeamNameDictionary = try await nbaTeamNameDictionary
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.nbaTeamDic, nameMap: nbaTeamNameDictionary)
+        } catch {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.nbaTeamDic, nameMap: [:])
+            print("nbaTeamNameDictionary load failed:", error)
         }
         
-        if let kboTeamNameDictionary = try? await kboTeamNameDictionary {
+        do {
+            let kboTeamNameDictionary = try await kboTeamNameDictionary
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.kboTeamDic, nameMap: kboTeamNameDictionary)
+        } catch {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.kboTeamDic, nameMap: [:])
+            print("kboTeamNameDictionary load failed:", error)
         }
         
-        if let mlbPlayerNameDictionary = try? await mlbPlayerNameDictionary {
+        do {
+            let mlbPlayerNameDictionary = try await mlbPlayerNameDictionary
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlbPlayerDic, nameMap: mlbPlayerNameDictionary)
+        } catch {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlbPlayerDic, nameMap: [:])
+            print("mlbPlayerNameDictionary load failed:", error)
         }
         
-        if let mlbTeamNameDictionary = try? await mlbTeamNameDictionary {
+        do {
+            let mlbTeamNameDictionary = try await mlbTeamNameDictionary
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlbTeamDic, nameMap: mlbTeamNameDictionary)
+        } catch {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlbTeamDic, nameMap: [:])
+            print("mlbTeamNameDictionary load failed:", error)
         }
         
-        if let laligaPlayerNameDictionary = try? await laligaPlayerNameDictionary {
+        do {
+            let laligaPlayerNameDictionary = try await laligaPlayerNameDictionary
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.laligaPlayerDic, nameMap: laligaPlayerNameDictionary)
+        } catch {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.laligaPlayerDic, nameMap: [:])
+            print("laligaPlayerNameDictionary load failed:", error)
         }
         
-        if let bundesligaPlayerNameDictionary = try? await bundesligaPlayerNameDictionary {
+        do {
+            let bundesligaPlayerNameDictionary = try await bundesligaPlayerNameDictionary
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.bundesligaPlayerDic, nameMap: bundesligaPlayerNameDictionary)
+        } catch {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.bundesligaPlayerDic, nameMap: [:])
+            print("bundesligaPlayerNameDictionary load failed:", error)
         }
         
-        if let ligue1PlayerNameDictionary = try? await ligue1PlayerNameDictionary {
+        do {
+            let ligue1PlayerNameDictionary = try await ligue1PlayerNameDictionary
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.ligue1PlayerDic, nameMap: ligue1PlayerNameDictionary)
+        } catch {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.ligue1PlayerDic, nameMap: [:])
+            print("ligue1PlayerNameDictionary load failed:", error)
         }
         
-        if let serieaPlayerNameDictionary = try? await serieaPlayerNameDictionary {
+        do {
+            let serieaPlayerNameDictionary = try await serieaPlayerNameDictionary
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.serieaPlayerDic, nameMap: serieaPlayerNameDictionary)
+        } catch {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.serieaPlayerDic, nameMap: [:])
+            print("serieaPlayerNameDictionary load failed:", error)
         }
         
-        if let mlsPlayerNameDictionary = try? await mlsPlayerNameDictionary {
+        do {
+            let mlsPlayerNameDictionary = try await mlsPlayerNameDictionary
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlsPlayerDic, nameMap: mlsPlayerNameDictionary)
+        } catch {
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlsPlayerDic, nameMap: [:])
+            print("mlsPlayerNameDictionary load failed:", error)
         }
     }
     

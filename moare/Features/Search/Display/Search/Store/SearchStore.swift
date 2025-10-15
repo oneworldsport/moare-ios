@@ -87,8 +87,6 @@ struct SearchStore {
 
         case updateSearchStateWithAni(bool: Bool)
         
-        
-        case pop
         case showPreviousView
         case popView(lastPath: AppStore.Path.State?, isEmpty: Bool)
         case delegate(Delegate)
@@ -102,7 +100,6 @@ struct SearchStore {
     
     enum Delegate {
         case push(model: SportDecodableModel)
-        case pop
     }
     
     @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
@@ -321,9 +318,6 @@ struct SearchStore {
                 state.resultVisibleState = true
                 
                 return .send(.delegate(.push(model: model.data)))
-                
-            case .pop:
-                return .send(.delegate(.pop))
                 
             case .showPreviousView:
                 state.textFieldVisibleState = false

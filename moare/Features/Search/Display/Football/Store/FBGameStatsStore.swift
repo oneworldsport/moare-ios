@@ -72,26 +72,10 @@ struct FBGameStatsStore {
                 state.lineups = nil
                 state.coach = nil
                 state.playerTotalStats = nil
-
-                let displayModel = state.baseGameStats.displayModel
                 
-                // set current(home) team's players stats
-                let homeTeamId = displayModel.game.teams.home.id
-                let playersStats = displayModel.game.players.first { $0.team.id == homeTeamId }?.players
-                state.playerStats = playersStats ?? []
+                return .send(.baseGameStats(.selectTeam(isInit: true, index: 0)))
                 
-                // set current(home) team's coach, lineups
-                let lineups = displayModel.game.lineups.first { $0.team.id == homeTeamId }
-                state.lineups = lineups
-                state.coach = lineups?.coach
-                
-                return .run { send in
-                    await send(.setPlayersTotalStats)
-                    await send(.sortPlayers)
-                    await send(.refreshGame(shouldFetch: false)) // NOTE: 이걸 안해주면 새로고침 누르기 전에는 FBLeagueSchedule 데이터가 업데이트 안됨.
-                }
-                
-            case let .baseGameStats(.selectTeam(_, index)):
+            case let .baseGameStats(.selectTeam(isInit, index)):
                 let displayModel = state.baseGameStats.displayModel
                 
                 // set selected team's players stats
@@ -112,6 +96,9 @@ struct FBGameStatsStore {
                 return .run { send in
                     await send(.setPlayersTotalStats)
                     await send(.sortPlayers)
+                    if isInit {
+                        await send(.refreshGame(shouldFetch: false)) // NOTE: 이걸 안해주면 새로고침 누르기 전에는 FBLeagueSchedule 데이터가 업데이트 안됨.
+                    }
                 }
                 
             case .baseGameStats(.selectFirstCategory):

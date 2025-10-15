@@ -20,6 +20,7 @@ struct KBOGameInfo: Decodable, Equatable {
     private let _homeTeamId: Int?
     private let _remark: String?
     private let _gameStatus: String?
+    private let _seriesDescription: String?
 
     var awayTeamId: Int { _awayTeamId ?? 0 }
     var date: String { _date ?? "" }
@@ -27,6 +28,7 @@ struct KBOGameInfo: Decodable, Equatable {
     var homeTeamId: Int { _homeTeamId ?? 0 }
     var remark: String { _remark ?? "" }
     var gameStatus: String { _gameStatus ?? "" }
+    var seriesDescription: String { _seriesDescription ?? "" }
 
     private enum CodingKeys: String, CodingKey {
         case _awayTeamId = "awayTeamId"
@@ -35,6 +37,7 @@ struct KBOGameInfo: Decodable, Equatable {
         case _homeTeamId = "homeTeamId"
         case _remark = "remark"
         case _gameStatus = "gameStatus"
+        case _seriesDescription = "seriesDescription"
     }
     
     init(
@@ -43,7 +46,8 @@ struct KBOGameInfo: Decodable, Equatable {
         gameId: String?,
         homeTeamId: Int?,
         remark: String?,
-        gameStatus: String?
+        gameStatus: String?,
+        seriesDescription: String? = nil,
     ) {
         self._awayTeamId = awayTeamId
         self._date = date
@@ -51,6 +55,7 @@ struct KBOGameInfo: Decodable, Equatable {
         self._homeTeamId = homeTeamId
         self._remark = remark
         self._gameStatus = gameStatus
+        self._seriesDescription = seriesDescription
     }
 }
 
@@ -291,17 +296,26 @@ struct KBOGamePitcherStats: Decodable, Equatable {
     
     private func parseInningString(_ text: String) -> Double {
         let parts = text.split(separator: " ")
+        let first = String(parts[0])
         
-        guard let wholePart = Int(parts[0]) else {
+        // 토큰이 하나일 때: ex) "1/3" or "2"
+        if parts.count == 1 {
+            switch first {
+            case "1/3":
+                return 0.1
+            case "2/3":
+                return 0.2
+            default:
+                return Double(first) ?? 0.0
+            }
+        }
+        
+        // 토큰이 두 개 이상일 때: "2 1/3"
+        guard let wholePart = Int(first) else {
             return 0.0
         }
         
-        if parts.count == 1 {
-            // ex: "2" -> 2.0
-            return Double(wholePart)
-        }
-        
-        let fraction = parts[1]
+        let fraction = String(parts[1])
         switch fraction {
         case "1/3":
             return Double(wholePart) + 0.1
@@ -315,17 +329,22 @@ struct KBOGamePitcherStats: Decodable, Equatable {
 
 struct KBOGameInfoForSchedule: Decodable, Equatable {
     private let _currentInning: String?
+    private let _seriesDescription: String?
 
     var currentInning: String { _currentInning ?? StringConstants.gameLiveStr }
+    var seriesDescription: String { _seriesDescription ?? "" }
 
     private enum CodingKeys: String, CodingKey {
         case _currentInning = "currentInning"
+        case _seriesDescription = "seriesDescription"
     }
     
     init(
-        currentInning: String?
+        currentInning: String?,
+        seriesDescription: String?,
     ) {
         self._currentInning = currentInning
+        self._seriesDescription = seriesDescription
     }
 }
 

@@ -88,12 +88,12 @@ struct MLBGameStatsStore {
                 return .run { send in
                     if isInit {
                         await send(.sortByBattingOrder)
+                        await send(.refreshGame(shouldFetch: false))
                     } else {
                         await send(.sortHitters)
                     }
                     await send(.sortPitchers)
                     await send(.setPlayersTotalStats)
-                    await send(.refreshGame(shouldFetch: false))
                 }
                 
             case .baseGameStats(.selectFirstCategory):

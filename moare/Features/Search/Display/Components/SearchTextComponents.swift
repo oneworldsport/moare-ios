@@ -107,7 +107,7 @@ struct BaseballLeagueTitleForGameStats: View {
     init(logoUrl: String, name: String, season: Int?, seriesDescription: String = "") {
         self.logoUrl = logoUrl
         self.name = name
-        self.season = season ?? 2025
+        self.season = season ?? CalendarUtil.currentYear
         self.seriesDescription = seriesDescription
     }
     

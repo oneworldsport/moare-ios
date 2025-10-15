@@ -86,12 +86,12 @@ struct NBAGameStatsStore {
                 
                 if let _ = displayModel.game.boxScoreTraditional {
                     // set current(home) team's players stats
-                    return .send(.baseGameStats(.selectTeam(index: 0)))
+                    return .send(.baseGameStats(.selectTeam(isInit: true, index: 0)))
                 }
                 
                 return .none
                 
-            case let .baseGameStats(.selectTeam(_, index)):
+            case let .baseGameStats(.selectTeam(isInit, index)):
                 
                 // set selected team's players stats
                 state.playerStats = if index == 0 {
@@ -103,7 +103,9 @@ struct NBAGameStatsStore {
                 return .run { send in
                     await send(.sortPlayers)
                     await send(.setPlayersTotalStats)
-                    await send(.refreshGame(shouldFetch: false))
+                    if isInit {
+                        await send(.refreshGame(shouldFetch: false))
+                    }
                 }
                 
             case .baseGameStats(.selectFirstCategory):

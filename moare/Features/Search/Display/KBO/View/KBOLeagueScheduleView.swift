@@ -149,6 +149,7 @@ struct KBOLeagueScheduleListItem: View {
                 gameStatusText: gameStatusText,
                 gameStatusColor: gameStatusColor,
                 isCapsuleButtonDisabled: gameStatus != StringConstants.KBO.gameFinal,
+                gameType: data.gameInfo?.seriesDescription,
                 shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
             ),
             actions: ScheduleGameItemActions(
