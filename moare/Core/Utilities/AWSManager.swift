@@ -100,6 +100,7 @@ class AWSManager {
             
             await triePromise.fulfill(with: (trie, autoCompleteData))
         } catch {
+            await triePromise.fulfill(with: (Trie(), []))
             print("🚨 autoCompleteData fetch error: \(error)")
         }
         

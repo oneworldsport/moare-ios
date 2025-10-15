@@ -57,12 +57,12 @@ struct KBOTournamentStore {
                     thirdRoundTeamIds.count == 2 &&
                     fourthRoundTeamIds.count == 2 {
                     
-                    var games = displayModel.games
+                    var games = displayModel.games.filter { $0.gameStatus != Constants.GameStatus.KBO.canceled }
                     
-                    var (firstRoundSeedTuple, firstRound) = Util.collectRound(from: [firstRoundTeamIds], games: &games)
-                    var (secondRoundSeedTuple, secondRound) = Util.collectRound(from: [secondRoundTeamIds], games: &games)
-                    var (thirdRoundSeedTuple, thirdRound) = Util.collectRound(from: [thirdRoundTeamIds], games: &games)
-                    var (fourthRoundSeedTuple, fourthRound) = Util.collectRound(from: [fourthRoundTeamIds], games: &games)
+                    let (firstRoundSeedTuple, firstRound) = Util.collectRound(from: [firstRoundTeamIds], games: &games)
+                    let (secondRoundSeedTuple, secondRound) = Util.collectRound(from: [secondRoundTeamIds], games: &games)
+                    let (thirdRoundSeedTuple, thirdRound) = Util.collectRound(from: [thirdRoundTeamIds], games: &games)
+                    let (fourthRoundSeedTuple, fourthRound) = Util.collectRound(from: [fourthRoundTeamIds], games: &games)
                     
                     state.gameListTuple = [
                         ("와일드카드 결정전", firstRound),

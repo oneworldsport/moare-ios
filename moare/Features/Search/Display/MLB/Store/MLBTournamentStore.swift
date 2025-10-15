@@ -80,7 +80,7 @@ struct MLBTournamentStore {
                 let alThirdRoundPairedTeamIds = alThirdRoundTeamIds.chunked(by: 2)
                 let fourthRoundPairedTeamIds = fourthRoundTeamIds.chunked(by: 2)
                 
-                var games = displayModel.games
+                var games = displayModel.games.filter { $0.gameStatus != Constants.GameStatus.MLB.postponed }
                 
                 var (nlFirstRoundSeedTuple, nlFirstRound) = Util.collectRound(from: nlFirstRoundPairedTeamIds, games: &games)
                 var (alFirstRoundSeedTuple, alFirstRound) =  Util.collectRound(from: alFirstRoundPairedTeamIds, games: &games)

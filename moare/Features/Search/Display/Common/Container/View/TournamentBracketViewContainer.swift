@@ -85,15 +85,23 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                         if state.isConference {
                             // final
                             if finalBracketTitles.contains(String(title.split(separator: " ").first ?? "")) {
-                                if let games = gameList.first, let games {
-                                    TournamentSeriesFinalGameItem(
-                                        leagueId: state.leagueId,
-                                        teamNameDic: state.teamNameDic,
-                                        games: games,
-                                        seedIdTuple: state.seedIdTupleList[roundIndex][0],
-                                        itemHeights: $leftItemHeights,
-                                        selectSeries: action.selectSeries
-                                    )
+                                VStack(spacing: 0) {
+                                    Text(title)
+                                        .fontWeight(.medium)
+                                    HCapsuleBar()
+                                        .padding(.top, 6)
+                                        .padding(.bottom, 12)
+                                    
+                                    if let games = gameList.first, let games {
+                                        TournamentSeriesFinalGameItem(
+                                            leagueId: state.leagueId,
+                                            teamNameDic: state.teamNameDic,
+                                            games: games,
+                                            seedIdTuple: state.seedIdTupleList[roundIndex][0],
+                                            itemHeights: $leftItemHeights,
+                                            selectSeries: action.selectSeries
+                                        )
+                                    }
                                 }
                             }
                             

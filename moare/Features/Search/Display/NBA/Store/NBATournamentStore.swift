@@ -57,8 +57,7 @@ struct NBATournamentStore {
                 let tournamentTeams = state.baseTournament.tournamentTeams
                 let displayModel = state.baseTournament.displayModel
                 let leagueId = displayModel.leagueId
-//                let season = displayModel.season
-                let season = 2024
+                let season = displayModel.season
                 
                 // 시드 순서를 유지해야해서 다음과 같은 로직 적용
                 let firstRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_16"] ?? []
