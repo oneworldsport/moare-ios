@@ -289,6 +289,35 @@ struct Constants {
             }
         }
         
+        static func fbGameStatusText(
+            status: String,
+            elapsed: Int?,
+            isResultOpened: Bool = true
+        ) -> String {
+            switch status {
+            case Football.notStarted:
+                return StringConstants.gameNotStartedStr
+            case Football.firstHalf:
+                if let elapsed {
+                    return "전반\(elapsed)'"
+                } else {
+                    return StringConstants.Football.gameFirstHalfStr
+                }
+            case Football.halftime:
+                return StringConstants.Football.gameHalftimeStr
+            case Football.secondHalf:
+                if let elapsed {
+                    return "후반\(elapsed)'"
+                } else {
+                    return StringConstants.Football.gameSecondHalfStr
+                }
+            case let status where Football.finishedList.contains(status):
+                return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
+            default:
+                return ""
+            }
+        }
+        
         static func mlbGameStatusText(
             status: String,
             currentInning: String? = nil,
