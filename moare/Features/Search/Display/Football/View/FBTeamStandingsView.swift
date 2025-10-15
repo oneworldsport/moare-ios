@@ -58,6 +58,7 @@ struct FBTeamStandingsView: View {
                             store.send(.baseStandings(.selectCategory(index: index)))
                         },
                         itemButtonAction: { id in
+                            // TODO: UEFA 리그는 showTeamStats가 안돼서 Button disabled 처리 해야함.
                             store.send(.showTeamStats(id: id))
                         }
                     ),

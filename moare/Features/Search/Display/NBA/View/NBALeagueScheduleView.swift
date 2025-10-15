@@ -22,6 +22,7 @@ struct NBALeagueScheduleView: View {
             if show {
                 ScheduleViewContainer(
                     state: ScheduleContainerState(
+                        leagueId: displayModel.leagueId,
                         shouldShowCalendar: displayModel.scheduleType != ScheduleType.teamFlat,
                         shouldFetchSchedule:  displayModel.scheduleType == ScheduleType.league,
                         displayDataState: store.baseSchedule.displayDataState,
@@ -31,12 +32,13 @@ struct NBALeagueScheduleView: View {
                             selectedYearMonthIndex: store.baseSchedule.selectedYearMonthIndex,
                             selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
-                        isAllResultOpened: store.baseSchedule.isAllResultOpened
+                        isAllResultOpened: store.baseSchedule.isAllResultOpened,
+                        shouldShowTournamentButton: store.baseSchedule.selectedMonth >= 4 && store.baseSchedule.selectedMonth <= 6,
                     ),
                     actions: ScheduleContainerActions(
                         calendarUiActions: CalendarUiActions(
                             onSelectYearMonth: { yearMonth, index in
-                                store.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
+                                store.send(.baseSchedule(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index)))
                             },
                             onSelectDay: { day, index in
                                 store.send(.baseSchedule(.selectDay(day, index)))
@@ -44,6 +46,9 @@ struct NBALeagueScheduleView: View {
                         ),
                         allResultButtonAction: {
                             store.send(.toggleAllResult)
+                        },
+                        tournamentButtonAction: {
+                            store.send(.showTournament)
                         }
                     ),
                     titleContent: {},
@@ -155,27 +160,18 @@ struct NBALeagueScheduleListItem: View {
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
-                homeTeamLogo: NBAUtil.teamLogoURL(id: homeTeamId),
-                homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
-                homeTeamScore: data.homeTeamScore,
-                awayTeamLogo: NBAUtil.teamLogoURL(id: awayTeamId),
-                awayTeamName: teamNameDic["short_\(awayTeamId)"] ?? "",
-                awayTeamScore: data.awayTeamScore,
+                leagueId: Constants.Ids.nba,
+                game: data,
+                teamNameDic: teamNameDic,
                 isResultOpened: isResultOpened,
                 gameStatusText: gameStatusText,
                 gameStatusColor: gameStatusColor,
                 isCapsuleButtonDisabled: gameStatus != StringConstants.NBA.gameFinal,
-                date: data.date,
-                venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
                 shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
-                isSvgLogo: true
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
-                    searchStore.send(.selectNBAGame(game: data, season: displayModel.season))
-                    
-                    // set selected game's isOpened true
-                    nbaLeagueScheduleStore.send(.updateResultOpenedState(gameId: data.gameId, isOpened: true))
+                    nbaLeagueScheduleStore.send(.selectGame(game: data))
                 },
                 onCapsuleButtonClick: {
                     nbaLeagueScheduleStore.send(.updateResultOpenedState(gameId: data.gameId, isOpened: !isResultOpened))

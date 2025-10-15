@@ -12,6 +12,8 @@ struct NoticeBox: View {
 
     @Binding var height: CGFloat
     
+    private let maxHeight: CGFloat = 240
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
@@ -29,16 +31,14 @@ struct NoticeBox: View {
             }
             .padding(6)
             .background(
-                Group {
-                    GeometryReader { proxy in
-                        Color.clear
-                            .onAppear { height = min(proxy.size.height, 240) }
-                            .onChange(of: proxy.size.height) {
-                                withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                                    height = min(proxy.size.height, 240)
-                                }
+                GeometryReader { proxy in
+                    Color.clear
+                        .onAppear { height = min(proxy.size.height, maxHeight) }
+                        .onChange(of: proxy.size.height) {
+                            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+                                height = min(proxy.size.height, maxHeight)
                             }
-                    }
+                        }
                 }
             )
         }
@@ -92,6 +92,8 @@ struct NoticeSection: View {
 struct SearchExampleBox: View {
     let text: String
     
+    @Binding var height: CGFloat
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text(text)
@@ -102,6 +104,12 @@ struct SearchExampleBox: View {
         .background(
             RoundedRectangle(cornerRadius: UIConstants.CornerRadius.small)
                 .fill(.white)
+        )
+        .background(
+            GeometryReader { proxy in
+                Color.clear
+                    .onAppear { height = proxy.size.height }
+            }
         )
         .overlay(
             RoundedRectangle(cornerRadius: UIConstants.CornerRadius.small)

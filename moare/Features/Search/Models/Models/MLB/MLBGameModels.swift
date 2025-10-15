@@ -178,6 +178,8 @@ struct MLBGameData: Decodable, Equatable {
     private let _seasonDisplay: String?
     private let _tiebreaker: String?
     private let _type: String?
+    private let _seriesDescription: String?
+    private let _seriesStatus: String?
 
     var calendarEventID: String { _calendarEventID ?? "" }
     var doubleHeader: String { _doubleHeader ?? "" }
@@ -189,6 +191,8 @@ struct MLBGameData: Decodable, Equatable {
     var seasonDisplay: String { _seasonDisplay ?? "" }
     var tiebreaker: String { _tiebreaker ?? "" }
     var type: String { _type ?? "" }
+    var seriesDescription: String { _seriesDescription ?? "" }
+    var seriesStatus: String { _seriesStatus ?? "" }
 
     private enum CodingKeys: String, CodingKey {
         case _calendarEventID = "calendarEventID"
@@ -201,6 +205,8 @@ struct MLBGameData: Decodable, Equatable {
         case _seasonDisplay = "seasonDisplay"
         case _tiebreaker = "tiebreaker"
         case _type = "type"
+        case _seriesDescription = "seriesDescription"
+        case _seriesStatus = "seriesStatus"
     }
     
     init(
@@ -213,7 +219,9 @@ struct MLBGameData: Decodable, Equatable {
         season: String? = nil,
         seasonDisplay: String? = nil,
         tiebreaker: String? = nil,
-        type: String? = nil
+        type: String? = nil,
+        seriesDescription: String? = nil,
+        seriesStatus: String? = nil
     ) {
         self._calendarEventID = calendarEventID
         self._doubleHeader = doubleHeader
@@ -225,6 +233,8 @@ struct MLBGameData: Decodable, Equatable {
         self._seasonDisplay = seasonDisplay
         self._tiebreaker = tiebreaker
         self._type = type
+        self._seriesDescription = seriesDescription
+        self._seriesStatus = seriesStatus
     }
 }
 
@@ -620,17 +630,27 @@ struct MLBGameWeather: Decodable, Equatable {
 
 struct MLBGameInfoForSchedule: Decodable, Equatable {
     private let _currentInning: String?
+    private let _seriesDescription: String?
+    private let _seriesStatus: String?
 
     var currentInning: String { _currentInning ?? StringConstants.gameLiveStr }
+    var seriesDescription: String { _seriesDescription ?? "" }
+    var seriesStatus: String { _seriesStatus ?? "" }
 
     private enum CodingKeys: String, CodingKey {
         case _currentInning = "currentInning"
+        case _seriesDescription = "seriesDescription"
+        case _seriesStatus = "seriesStatus"
     }
     
     init(
-        currentInning: String?
+        currentInning: String?,
+        seriesDescription: String?,
+        seriesStatus: String?
     ) {
         self._currentInning = currentInning
+        self._seriesDescription = seriesDescription
+        self._seriesStatus = seriesStatus
     }
 }
 

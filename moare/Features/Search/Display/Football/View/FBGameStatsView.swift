@@ -144,6 +144,7 @@ struct FBGameStatsView: View {
                             searchStore: searchStore,
                             fbLeagueScheduleStore: nil,
                             data: ModelConverter.fbGameToGameScheduleConverter(game: game),
+                            leagueId: displayModel.leagueId,
                             teamNameDic: teamNameDic
                         )
                     }

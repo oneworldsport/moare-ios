@@ -45,8 +45,6 @@ struct SearchStore {
            --------------------- */
         var trie: Trie?
         
-        var viewStack: [SportDecodableModel] = []
-        
         var trendingKeywords: OrderedDictionary<String, KeywordInfo> = [:]
         var noticeList: [NoticeModel] = []
         var searchExample = ""
@@ -67,15 +65,7 @@ struct SearchStore {
         case updateTextFieldVisibleState(Bool)
         case performSearch(searchType: SearchType = .query, aniDuration: CGFloat = 0)
         
-        // TODO: 각자의 Store로 옮겨야함
-        case selectFBGame(game: FBGameForSchedule, season: Int, leagueId: Int?)
-        case selectNBAGame(game: NBAGameForSchedule, season: Int)
-        case selectKBOGame(game: KBOGameForSchedule, season: Int)
-        case selectMLBGame(game: MLBGameForSchedule, season: Int)
-        //
-        
         case updateTrendingKeywordsVisibleState(Bool)
-        case selectNBATournamentRound(gameList: [NBAGame])
         
         /* ---------------------
            private
@@ -112,7 +102,7 @@ struct SearchStore {
     
     enum Delegate {
         case push(model: SportDecodableModel)
-        case pop(searchState: Bool)
+        case pop
     }
     
     @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
@@ -319,7 +309,7 @@ struct SearchStore {
                         .kboLeagueSchedule, .kboGameStats, .kboTournament,
                         .mlbPlayerInfo, .mlbPlayerStats, .mlbPlayerStandings,
                         .mlbTeamInfo, .mlbTeamStats, .mlbTeamStandings,
-                        .mlbLeagueSchedule, .mlbGameStats: break
+                        .mlbLeagueSchedule, .mlbGameStats, .mlbTournament: break
                 default:
                     // TODO: animation is applied by the animation below. Should be modified
                     // TODO: 여기서 안하고 AppStore에서 하게 개선 필요
@@ -333,7 +323,7 @@ struct SearchStore {
                 return .send(.delegate(.push(model: model.data)))
                 
             case .pop:
-                return .send(.delegate(.pop(searchState: state.searchState)))
+                return .send(.delegate(.pop))
                 
             case .showPreviousView:
                 state.textFieldVisibleState = false
@@ -394,94 +384,6 @@ struct SearchStore {
                 }
                 return .none
                 
-            case .selectFBGame(let game, let season, let leagueId):
-                return .run { send in
-                    let result = try await searchClient.fetchById(
-                        season: season,
-                        category: "football",
-                        date: game.date,
-                        dataType: "football_game_stats",
-                        leagueId: leagueId ?? Constants.Ids.epl,
-                        id: game.gameId
-                    )
-                    
-                    await send(.delegate(.push(model: result.data)))
-                }
-                
-            case .selectNBAGame(let game, let season):
-                return .run { send in
-                    let result = try await searchClient.fetchById(
-                        season: season,
-                        category: "basketball",
-                        date: game.date,
-                        dataType: "basketball_game_stats",
-                        leagueId: Constants.Ids.nba,
-                        id: game.gameId
-                    )
-                    
-                    await send(.delegate(.push(model: result.data)))
-                }
-                
-            case .selectKBOGame(let game, let season):
-                return .run { send in
-                    do {
-                        let dataModel: SportDecodableModel
-                        
-                        // 취소된 경기는 DB에 데이터 없어서 KBOGameForSchedule을 사용해 KBOGameStatsView를 보여준다.
-                        if Int(game.gameStatus) == StringConstants.KBO.gameCanceled {
-                            let game = ModelConverter.kboGameScheduleToGameConverter(game: game)
-                            
-                            let responseModel = KBOGameStatsResponseModel(game: game)
-                            dataModel = .kboGameStats(responseModel, modelConverter.kboGameStatsConverter(response: responseModel))
-                        } else {
-                            let result = try await searchClient.fetchById(
-                                season: season,
-                                category: "baseball",
-                                date: game.date,
-                                dataType: "baseball_game_stats",
-                                leagueId: Constants.Ids.kbo,
-                                id: game.gameId
-                            )
-                            
-                            dataModel = result.data
-                        }
-                        
-                        await send(.delegate(.push(model: dataModel)))
-                    } catch {
-                        print("\(error)")
-                    }
-                }
-                
-            case .selectMLBGame(let game, let season):
-                return .run { send in
-                    do {
-                        let dataModel: SportDecodableModel
-                        
-                        // Postponed된 경기는 DB에 데이터 없어서 MLBGameForSchedule을 사용해 MLBGameStatsView를 보여준다.
-                        if game.gameStatus == StringConstants.MLB.gamePostponed {
-                            let game = ModelConverter.mlbGameScheduleToGameConverter(game: game)
-                            
-                            let responseModel = MLBGameStatsResponseModel(game: game)
-                            dataModel = .mlbGameStats(responseModel, modelConverter.mlbGameStatsConverter(response: responseModel))
-                        } else {
-                            let result = try await searchClient.fetchById(
-                                season: season,
-                                category: "baseball",
-                                date: game.date,
-                                dataType: "baseball_game_stats",
-                                leagueId: Constants.Ids.mlb,
-                                id: game.gameId
-                            )
-                            
-                            dataModel = result.data
-                        }
-                        
-                        await send(.delegate(.push(model: dataModel)))
-                    } catch {
-                        print("\(error)")
-                    }
-                }
-                
             case .updateIsFocused(let bool):
                 state.isFocused = bool
                 
@@ -506,33 +408,6 @@ struct SearchStore {
                 }
                 
                 return .none
-                
-            case .selectNBATournamentRound(let gameList):
-                let dataModel: SportDecodableModel
-                
-                switch state.viewStack.last {
-                case .nbaTournament(_, _):
-                    let teamScheduleResponseModel = NBAGameScheduleResponseModel(scheduleType: ScheduleType.teamFlat, scheduledMonths: nil, schedule: ModelConverter.nbaGameListToGameScheduleListConverter(gameList: gameList))
-                    
-                    dataModel = .nbaLeagueSchedule(
-                        teamScheduleResponseModel,
-                        modelConverter.nbaLeagueScheduleConverter(response: teamScheduleResponseModel)
-                    )
-                    
-                default: return .none // Make it do nothing
-                }
-                
-                state.resultVisibleState = false
-                
-                return .run { send in
-                    await send(.delegate(.push(model: dataModel)))
-                    
-                    // wait for before view's removing animation
-                    // NOTE: 0.1 for temporary
-                    try await Task.sleep(for: .seconds(0.1))
-                    
-                    await send(.updateResultVisibleState(bool: true))
-                }
                 
             case .updateSearchStateWithAni(let bool):
 //                withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {

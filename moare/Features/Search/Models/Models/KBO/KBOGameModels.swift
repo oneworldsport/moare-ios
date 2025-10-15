@@ -20,6 +20,7 @@ struct KBOGameInfo: Decodable, Equatable {
     private let _homeTeamId: Int?
     private let _remark: String?
     private let _gameStatus: String?
+    private let _seriesDescription: String?
 
     var awayTeamId: Int { _awayTeamId ?? 0 }
     var date: String { _date ?? "" }
@@ -27,6 +28,7 @@ struct KBOGameInfo: Decodable, Equatable {
     var homeTeamId: Int { _homeTeamId ?? 0 }
     var remark: String { _remark ?? "" }
     var gameStatus: String { _gameStatus ?? "" }
+    var seriesDescription: String { _seriesDescription ?? "" }
 
     private enum CodingKeys: String, CodingKey {
         case _awayTeamId = "awayTeamId"
@@ -35,6 +37,7 @@ struct KBOGameInfo: Decodable, Equatable {
         case _homeTeamId = "homeTeamId"
         case _remark = "remark"
         case _gameStatus = "gameStatus"
+        case _seriesDescription = "seriesDescription"
     }
     
     init(
@@ -43,7 +46,8 @@ struct KBOGameInfo: Decodable, Equatable {
         gameId: String?,
         homeTeamId: Int?,
         remark: String?,
-        gameStatus: String?
+        gameStatus: String?,
+        seriesDescription: String? = nil,
     ) {
         self._awayTeamId = awayTeamId
         self._date = date
@@ -51,6 +55,7 @@ struct KBOGameInfo: Decodable, Equatable {
         self._homeTeamId = homeTeamId
         self._remark = remark
         self._gameStatus = gameStatus
+        self._seriesDescription = seriesDescription
     }
 }
 
@@ -315,17 +320,22 @@ struct KBOGamePitcherStats: Decodable, Equatable {
 
 struct KBOGameInfoForSchedule: Decodable, Equatable {
     private let _currentInning: String?
+    private let _seriesDescription: String?
 
     var currentInning: String { _currentInning ?? StringConstants.gameLiveStr }
+    var seriesDescription: String { _seriesDescription ?? "" }
 
     private enum CodingKeys: String, CodingKey {
         case _currentInning = "currentInning"
+        case _seriesDescription = "seriesDescription"
     }
     
     init(
-        currentInning: String?
+        currentInning: String?,
+        seriesDescription: String?,
     ) {
         self._currentInning = currentInning
+        self._seriesDescription = seriesDescription
     }
 }
 

@@ -16,10 +16,15 @@ struct MLBLeagueScheduleView: View {
     @State private var show = false
     
     var body: some View {
+        let displayModel = store.baseSchedule.displayModel
+        
         VStack {
             if show {
                 ScheduleViewContainer(
                     state: ScheduleContainerState(
+                        leagueId: displayModel.leagueId,
+                        shouldShowCalendar: displayModel.scheduleType != .teamFlat,
+                        shouldFetchSchedule:  displayModel.scheduleType == ScheduleType.league,
                         displayDataState: store.baseSchedule.displayDataState,
                         calendarUiState: CalendarUiState(
                             yearMonthList: store.baseSchedule.yearMonthList,
@@ -27,12 +32,13 @@ struct MLBLeagueScheduleView: View {
                             selectedYearMonthIndex: store.baseSchedule.selectedYearMonthIndex,
                             selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
-                        isAllResultOpened: store.baseSchedule.isAllResultOpened
+                        isAllResultOpened: store.baseSchedule.isAllResultOpened,
+                        shouldShowTournamentButton: store.baseSchedule.selectedMonth >= 10,
                     ),
                     actions: ScheduleContainerActions(
                         calendarUiActions: CalendarUiActions(
                             onSelectYearMonth: { yearMonth, index in
-                                store.send(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index))
+                                store.send(.baseSchedule(.selectYearMonth(yearMonth: yearMonth, selectedIndex: index)))
                             },
                             onSelectDay: { day, index in
                                 store.send(.baseSchedule(.selectDay(day, index)))
@@ -40,6 +46,9 @@ struct MLBLeagueScheduleView: View {
                         ),
                         allResultButtonAction: {
                             store.send(.toggleAllResult)
+                        },
+                        tournamentButtonAction: {
+                            store.send(.showTournament)
                         }
                     ),
                     titleContent: {},
@@ -102,35 +111,27 @@ struct MLBLeagueScheduleListItem: View {
     @State private var isResultOpened = false
     
     var body: some View {
+        let displayModel = mlbLeagueScheduleStore.baseSchedule.displayModel
         let gameId = data.gameId
-        let homeTeamId = data.homeTeamId
-        let awayTeamId = data.awayTeamId
         let gameStatus = data.gameStatus
         let teamNameDic = mlbLeagueScheduleStore.baseSchedule.teamNameDictionary
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
+                leagueId: Constants.Ids.mlb,
+                game: data,
+                teamNameDic: teamNameDic,
                 isClickEnabled: gameStatus != Constants.GameStatus.MLB.postponed, // 연기된 경기는 클릭 안되게
-                homeTeamLogo: MLBUtil.teamLogoURL(id: homeTeamId),
-                homeTeamName: teamNameDic["short_\(homeTeamId)"] ?? "",
-                homeTeamScore: data.homeTeamScore,
-                awayTeamLogo: MLBUtil.teamLogoURL(id: awayTeamId),
-                awayTeamName: teamNameDic["short_\(awayTeamId)"] ?? "",
-                awayTeamScore: data.awayTeamScore,
                 isResultOpened: isResultOpened,
                 gameStatusText: Constants.GameStatus.mlbGameStatusText(status: gameStatus, currentInning: data.gameInfo?.currentInning, isResultOpened: isResultOpened),
                 gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: Constants.Ids.mlb, status: gameStatus),
                 isCapsuleButtonDisabled: !StringConstants.MLB.gameFinishedList.contains(gameStatus),
-                date: data.date,
-                venue: teamNameDic["venue_\(homeTeamId)"] ?? "",
-                isSvgLogo: true
+                gameType: data.gameInfo?.seriesDescription,
+                shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
-                    searchStore.send(.selectMLBGame(game: data, season: mlbLeagueScheduleStore.baseSchedule.displayModel.season))
-                    
-                    // set selected game's isOpened true
-                    mlbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: true))
+                    mlbLeagueScheduleStore.send(.selectGame(game: data))
                 },
                 onCapsuleButtonClick: {
                     mlbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: !isResultOpened))

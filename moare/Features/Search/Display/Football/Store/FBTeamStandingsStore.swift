@@ -152,15 +152,19 @@ struct FBTeamStandingsStore {
                 return .none
                 
             case let .showTeamStats(id):
-                let team = state.responseModel.standings.first { $0.team.id == id }
-                let responseModel = FBTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
+                if case let .db(standings) = state.responseModel.standings {
+                    let team = standings.first { $0.team.id == id }
+                    let responseModel = FBTeamInfoResponseModel(info: team, lastGame: nil, nextGame: nil)
+                    
+                    let dataModel: SportDecodableModel = .fbTeamStats(
+                        responseModel,
+                        ModelConverter.shared.fbTeamStatsConverter(response: responseModel)
+                    )
+                    
+                    return .send(.delegate(.showTeamStats(model: dataModel)))
+                }
                 
-                let dataModel: SportDecodableModel = .fbTeamStats(
-                    responseModel,
-                    ModelConverter.shared.fbTeamStatsConverter(response: responseModel)
-                )
-                
-                return .send(.delegate(.showTeamStats(model: dataModel)))
+                return .none
                 
             case .delegate:
                 return .none

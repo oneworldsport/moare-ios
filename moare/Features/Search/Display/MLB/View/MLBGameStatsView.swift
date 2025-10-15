@@ -23,8 +23,11 @@ struct MLBGameStatsView: View {
         let game = displayModel.game
         let playerNameDic = store.baseGameStats.playerNameDictionary
         let teamNameDic = store.baseGameStats.teamNameDictionary
+        let homeTeamId = game.teams.home.id
+        let awayTeamId = game.teams.away.id
+        let seriesStatus = displayModel.game.game.seriesStatus
         
-        let teamIds = [game.teams.home.id, game.teams.away.id]
+        let teamIds = [homeTeamId, awayTeamId]
         let teamCategories: [GameStatsTeamState] = teamIds.map {
             return GameStatsTeamState(
                 name: teamNameDic["short_\($0)"] ?? "",
@@ -122,11 +125,27 @@ struct MLBGameStatsView: View {
                         }
                     ),
                     titleContent: {
-                        BaseballLeagueTitleForGameStats(
-                            logoUrl: MLBUtil.mlbLogoUrl,
-                            name: "MLB",
-                            season: Int(store.baseGameStats.displayModel.game.game.season)
-                        )
+                        VStack(alignment: .leading, spacing: 0) {
+                            BaseballLeagueTitleForGameStats(
+                                logoUrl: MLBUtil.mlbLogoUrl,
+                                name: "MLB",
+                                season: Int(displayModel.game.game.season),
+                                seriesDescription: displayModel.game.game.seriesDescription
+                            )
+                            
+                            if !seriesStatus.isEmpty {
+                                if let formattedText = MLBUtil.formatSeriesResult(
+                                    seriesStatus: seriesStatus,
+                                    homeTeamId: homeTeamId,
+                                    awayTeamId: awayTeamId,
+                                    teamNameDic: teamNameDic
+                                ) {
+                                    formattedText
+                                        .font(.system(size: 14))
+                                        .padding(.leading, UIConstants.Padding.defaultHPadding)
+                                }
+                            }
+                        }
                     },
                     gameContent: {
 //                            if game.status.detailedState == StringConstants.MLB.gameScheduled {
@@ -159,8 +178,8 @@ struct MLBGameStatsScoreInfoItem: View {
     var body: some View {
         let displayModel = mlbGameStatsStore.baseGameStats.displayModel
         let game = displayModel.game
-        let homeTeamId = game.teams.home.id
-        let awayTeamId = game.teams.away.id
+        let homeTeamId = Constants.Ids.checkTeamId(leagueId: Constants.Ids.mlb, teamId: game.teams.home.id)
+        let awayTeamId = Constants.Ids.checkTeamId(leagueId: Constants.Ids.mlb, teamId: game.teams.away.id)
         let teamNameDic = mlbGameStatsStore.baseGameStats.teamNameDictionary
         let gameStatus = game.status.detailedState
         
@@ -183,7 +202,7 @@ struct MLBGameStatsScoreInfoItem: View {
                         size: .small
                     )
                     
-                    Text(teamNameDic["short_\(awayTeamId)"] ?? "")
+                    Text(awayTeamId == nil ? "미정" : (teamNameDic["short_\(awayTeamId ?? 0)"] ?? ""))
                         .font(.system(size: 13))
                         .lineLimit(2)
                 }
@@ -212,7 +231,7 @@ struct MLBGameStatsScoreInfoItem: View {
                         size: .small
                     )
                     
-                    Text(teamNameDic["short_\(homeTeamId)"] ?? "")
+                    Text(homeTeamId == nil ? "미정" : (teamNameDic["short_\(homeTeamId ?? 0)"] ?? ""))
                         .font(.system(size: 13))
                         .lineLimit(2)
                 }
