@@ -43,7 +43,7 @@ struct SearchView: View {
             VStack {
                 HStack {
                     Button(action: {
-                        searchStore.send(.pop)
+                        appStore.send(.pop)
                     }) {
                         Image(systemName: "chevron.backward")
                             .font(.system(size: 22))
@@ -292,7 +292,7 @@ struct SearchView: View {
                     .onEnded { _ in
                         if !appStore.path.ids.isEmpty {
                             if dragOffset > dragMaxOffset {
-                                searchStore.send(.pop)
+                                appStore.send(.pop)
                             }
                             
                             dragOffset = 0

@@ -47,22 +47,22 @@ struct KBOTournamentStore {
                 let leagueId = displayModel.leagueId
                 let season = displayModel.season
                 
-                let firstRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_16"] ?? []
-                let secondRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_8"] ?? []
-                let thirdRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_4"] ?? []
-                let fourthRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_2"] ?? []
+                let firstRoundTeams = tournamentTeams["\(leagueId)_\(season)_16"] ?? []
+                let secondRoundTeams = tournamentTeams["\(leagueId)_\(season)_8"] ?? []
+                let thirdRoundTeams = tournamentTeams["\(leagueId)_\(season)_4"] ?? []
+                let fourthRoundTeams = tournamentTeams["\(leagueId)_\(season)_2"] ?? []
                 
-                if firstRoundTeamIds.count == 2 &&
-                    secondRoundTeamIds.count == 2 &&
-                    thirdRoundTeamIds.count == 2 &&
-                    fourthRoundTeamIds.count == 2 {
+                if firstRoundTeams.count == 2 &&
+                    secondRoundTeams.count == 2 &&
+                    thirdRoundTeams.count == 2 &&
+                    fourthRoundTeams.count == 2 {
                     
                     var games = displayModel.games.filter { $0.gameStatus != Constants.GameStatus.KBO.canceled }
                     
-                    let (firstRoundSeedTuple, firstRound) = Util.collectRound(from: [firstRoundTeamIds], games: &games)
-                    let (secondRoundSeedTuple, secondRound) = Util.collectRound(from: [secondRoundTeamIds], games: &games)
-                    let (thirdRoundSeedTuple, thirdRound) = Util.collectRound(from: [thirdRoundTeamIds], games: &games)
-                    let (fourthRoundSeedTuple, fourthRound) = Util.collectRound(from: [fourthRoundTeamIds], games: &games)
+                    let (firstRoundSeedTuple, firstRound) = Util.collectRound(from: [firstRoundTeams], games: &games)
+                    let (secondRoundSeedTuple, secondRound) = Util.collectRound(from: [secondRoundTeams], games: &games)
+                    let (thirdRoundSeedTuple, thirdRound) = Util.collectRound(from: [thirdRoundTeams], games: &games)
+                    let (fourthRoundSeedTuple, fourthRound) = Util.collectRound(from: [fourthRoundTeams], games: &games)
                     
                     state.gameListTuple = [
                         ("와일드카드 결정전", firstRound),

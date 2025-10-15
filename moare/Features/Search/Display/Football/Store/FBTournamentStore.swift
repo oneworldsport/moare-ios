@@ -16,7 +16,7 @@ struct FBTournamentStore {
     struct State {
         var baseTournament: BaseTournament.State
         
-        var gameListTuple: [(title: String, gameList: [[FBGameForSchedule]])] = []
+        var gameListTuple: [(title: String, gameList: [[FBGameForSchedule]?])] = []
         
         init(displayModel: FBTournamentDisplayModel) {
             self.baseTournament = BaseTournament.State(displayModel: displayModel)
@@ -38,52 +38,27 @@ struct FBTournamentStore {
                 let leagueId = displayModel.leagueId
                 let season = displayModel.season
                 
-                let firstRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_32"] ?? []
-                let secondRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_16"] ?? []
-                let thirdRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_8"] ?? []
-                let fourthRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_4"] ?? []
-                let fifthRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_2"] ?? []
+                let firstRoundTeams = tournamentTeams["\(leagueId)_\(season)_32"] ?? []
+                let secondRoundTeams = tournamentTeams["\(leagueId)_\(season)_16"] ?? []
+                let thirdRoundTeams = tournamentTeams["\(leagueId)_\(season)_8"] ?? []
+                let fourthRoundTeams = tournamentTeams["\(leagueId)_\(season)_4"] ?? []
+                let fifthRoundTeams = tournamentTeams["\(leagueId)_\(season)_2"] ?? []
                 
-                let firstRoundPairedTeamIds = stride(from: 0, to: firstRoundTeamIds.count, by: 2).map {
-                    Array(firstRoundTeamIds[$0 ..< min($0 + 2, firstRoundTeamIds.count)])
-                }
-                let secondRoundPairedTeamIds = stride(from: 0, to: secondRoundTeamIds.count, by: 2).map {
-                    Array(secondRoundTeamIds[$0 ..< min($0 + 2, secondRoundTeamIds.count)])
-                }
-                let thirdRoundPairedTeamIds = stride(from: 0, to: thirdRoundTeamIds.count, by: 2).map {
-                    Array(thirdRoundTeamIds[$0 ..< min($0 + 2, thirdRoundTeamIds.count)])
-                }
-                let fourthRoundPairedTeamIds = stride(from: 0, to: fourthRoundTeamIds.count, by: 2).map {
-                    Array(fourthRoundTeamIds[$0 ..< min($0 + 2, fourthRoundTeamIds.count)])
-                }
-                let fifthRoundPairedTeamIds = stride(from: 0, to: fifthRoundTeamIds.count, by: 2).map {
-                    Array(fifthRoundTeamIds[$0 ..< min($0 + 2, fifthRoundTeamIds.count)])
-                }
+                let firstRoundPairedTeams = firstRoundTeams.chunked(by: 2)
+                let secondRoundPairedTeams = secondRoundTeams.chunked(by: 2)
+                let thirdRoundPairedTeams = thirdRoundTeams.chunked(by: 2)
+                let fourthRoundPairedTeams = fourthRoundTeams.chunked(by: 2)
+                let fifthRoundPairedTeams = fifthRoundTeams.chunked(by: 2)
                 
-                let games = displayModel.games
+                var games = displayModel.games
                 
-                let firstRound: [[FBGameForSchedule]] = firstRoundPairedTeamIds.map { pair in
-                    let set = Set(pair.prefix(2))
-                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                }
-                let secondRound: [[FBGameForSchedule]] = secondRoundPairedTeamIds.map { pair in
-                    let set = Set(pair.prefix(2))
-                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                }
-                let thirdRound: [[FBGameForSchedule]] = thirdRoundPairedTeamIds.map { pair in
-                    let set = Set(pair.prefix(2))
-                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                }
-                let fourthRound: [[FBGameForSchedule]] = fourthRoundPairedTeamIds.map { pair in
-                    let set = Set(pair.prefix(2))
-                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                }
-                let fifthRound: [[FBGameForSchedule]] = fifthRoundPairedTeamIds.map { pair in
-                    let set = Set(pair.prefix(2))
-                    return games.filter { set.contains($0.homeTeamId) && set.contains($0.awayTeamId) }
-                }
+                let (_, firstRound) =  Util.collectRound(from: firstRoundPairedTeams, games: &games)
+                let (_, secondRound) =  Util.collectRound(from: secondRoundPairedTeams, games: &games)
+                let (_, thirdRound) =  Util.collectRound(from: thirdRoundPairedTeams, games: &games)
+                let (_, fourthRound) =  Util.collectRound(from: fourthRoundPairedTeams, games: &games)
+                let (_, fifthRound) =  Util.collectRound(from: fifthRoundPairedTeams, games: &games)
                 
-                let rounds: [(title: String, gameList: [[FBGameForSchedule]])] = [
+                let rounds: [(title: String, gameList: [[FBGameForSchedule]?])] = [
                     ("32강", firstRound),
                     ("16강", secondRound),
                     ("8강", thirdRound),

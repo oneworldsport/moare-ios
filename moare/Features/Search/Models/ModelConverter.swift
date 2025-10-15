@@ -746,7 +746,7 @@ final class ModelConverter {
         let gameInfo = FBGameInfoForSchedule(
             round: game.league.round,
             elapsed: game.fixture.status.elapsed,
-            homeTeamPenaltyScore: game.score.penalty._home, // TODO: Optional이 필요해서 임시로 _home, _away 사용. 추후 개선 필요.ㄸ
+            homeTeamPenaltyScore: game.score.penalty._home, // TODO: Optional이 필요해서 임시로 _home, _away 사용. 추후 개선 필요.
             awayTeamPenaltyScore: game.score.penalty._away
         )
         
