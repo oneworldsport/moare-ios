@@ -107,7 +107,6 @@
 		DA47773A2DA7B7EF00F3459C /* NBAPlayerInfoDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA47772C2DA7B7EF00F3459C /* NBAPlayerInfoDisplayModel.swift */; };
 		DA47773B2DA7B7EF00F3459C /* NBAGameStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777342DA7B7EF00F3459C /* NBAGameStatsDisplayModel.swift */; };
 		DA47773D2DA7B7EF00F3459C /* NBALeagueScheduleDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777322DA7B7EF00F3459C /* NBALeagueScheduleDisplayModel.swift */; };
-		DA4E1A9C2E9F100F0045F7D1 /* main_notice_test.json in Resources */ = {isa = PBXBuildFile; fileRef = DA7EA80C2E8855FA00B587A4 /* main_notice_test.json */; };
 		DA531B3F2D64A8A400DB87CB /* moareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B3C2D64A8A400DB87CB /* moareApp.swift */; };
 		DA531B402D64A8A400DB87CB /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B3D2D64A8A400DB87CB /* SplashView.swift */; };
 		DA531B942D64A8CA00DB87CB /* FBStatDataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B452D64A8CA00DB87CB /* FBStatDataItem.swift */; };
@@ -1604,7 +1603,6 @@
 			files = (
 				DADA395D2D3A1AC9000D15E0 /* Preview Assets.xcassets in Resources */,
 				DA531C122D64B88F00DB87CB /* .gitignore in Resources */,
-				DA4E1A9C2E9F100F0045F7D1 /* main_notice_test.json in Resources */,
 				DAF974D72E61CF8F0046CE59 /* GoogleService-Info.plist in Resources */,
 				DADA39592D3A1AC9000D15E0 /* Assets.xcassets in Resources */,
 			);
