@@ -127,7 +127,7 @@ struct MLBUtil {
         + Text(teamNameDic["short_\(awayTeamId)"] ?? "")
         + Text(" \(awayScore)").foregroundStyle(awayScore >= homeScore ? .moare : .primary)
         + Text(" - ")
-        + Text("\(homeScore) ").foregroundStyle(homeScore > awayScore ? .moare : .primary)
+        + Text("\(homeScore) ").foregroundStyle(homeScore >= awayScore ? .moare : .primary)
         + Text(teamNameDic["short_\(homeTeamId)"] ?? "")
     }
 }

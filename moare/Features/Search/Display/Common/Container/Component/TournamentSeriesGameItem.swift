@@ -23,8 +23,6 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
     @State private var itemHeight: CGFloat = 0
     @State private var isScoreOpened = false
     
-    @State private var initialItemHeight: CGFloat = 0 // NOTE: 첫번째 라운드에 시리즈가 없는 경우, 빈 아이템 만큼의 최초 높이가 필요해서 추가함.
-    
     var body: some View {
         if let games {
             let topSeedTeamId = seedIdTuple.topSeedId
@@ -199,10 +197,6 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
         } else {
             // NOTE: MLB의 경우 첫번째 라운드에 시리즈가 없는 경우가 있어, 해당 경우 비워놔야해서 추가.
             VStack {}
-                .frame(height: initialItemHeight)
-                .onAppear {
-                    initialItemHeight = h(1, 1)
-                }
         }
     } // View
     
@@ -264,8 +258,6 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
     
     @State private var itemHeight: CGFloat = 0
     @State private var isScoreOpened = false
-    
-    @State private var initialItemHeight: CGFloat = 0 // NOTE: 첫번째 라운드에 시리즈가 없는 경우, 빈 아이템 만큼의 최초 높이가 필요해서 추가함.
     
     var body: some View {
         if let games {
@@ -441,10 +433,6 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
         } else {
             // NOTE: MLB의 경우 첫번째 라운드에 시리즈가 없는 경우가 있어, 해당 경우 비워놔야해서 추가.
             VStack {}
-                .frame(height: initialItemHeight)
-                .onAppear {
-                    initialItemHeight = h(7, 1)
-                }
         }
     } // View
     

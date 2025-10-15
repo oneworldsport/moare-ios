@@ -48,6 +48,7 @@ struct Constants {
         static let copaDelRey = 143
         static let coppaItalia = 137
         static let footballTournamentLeagues = [championsLeague, europaLeague, conferenceLeague, faCup, eflCup, dfbPokal, coupeDeFrance, copaDelRey, coppaItalia]
+        static let footballAll = footballLeagues + footballTournamentLeagues // TODO: 이걸로 refactoring 필요
         
         // nba teams
         struct NBATeam {
@@ -288,6 +289,35 @@ struct Constants {
             }
         }
         
+        static func fbGameStatusText(
+            status: String,
+            elapsed: Int?,
+            isResultOpened: Bool = true
+        ) -> String {
+            switch status {
+            case Football.notStarted:
+                return StringConstants.gameNotStartedStr
+            case Football.firstHalf:
+                if let elapsed {
+                    return "전반\(elapsed)'"
+                } else {
+                    return StringConstants.Football.gameFirstHalfStr
+                }
+            case Football.halftime:
+                return StringConstants.Football.gameHalftimeStr
+            case Football.secondHalf:
+                if let elapsed {
+                    return "후반\(elapsed)'"
+                } else {
+                    return StringConstants.Football.gameSecondHalfStr
+                }
+            case let status where Football.finishedList.contains(status):
+                return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
+            default:
+                return ""
+            }
+        }
+        
         static func mlbGameStatusText(
             status: String,
             currentInning: String? = nil,
@@ -317,26 +347,13 @@ struct Constants {
         static func isLive(leagueId: Int, status: String) -> Bool {
             switch leagueId {
             case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
-                switch status {
-                case let status where Football.liveList.contains(status):
-                    return true
-                default:
-                    return false
-                }
+                return Football.liveList.contains(status)
             case Constants.Ids.nba:
                 return false
             case Constants.Ids.mlb:
-                if status == MLB.live {
-                    return true
-                } else {
-                    return false
-                }
+                return status == MLB.live
             case Constants.Ids.kbo:
-                if status == KBO.live {
-                    return true
-                } else {
-                    return false
-                }
+                return status == KBO.live
             default :
                 return false
             }
@@ -345,29 +362,13 @@ struct Constants {
         static func isBeforeGame(leagueId: Int, status: String) -> Bool {
             switch leagueId {
             case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
-                if status == Football.notStarted {
-                    return true
-                } else {
-                    return false
-                }
+                return status == Football.notStarted
             case Constants.Ids.nba:
-                if status == String(NBA.notStarted) {
-                    return true
-                } else {
-                    return false
-                }
+                return status == String(NBA.notStarted)
             case Constants.Ids.mlb:
-                if MLB.beforeGameList.contains(status) {
-                    return true
-                } else {
-                    return false
-                }
+                return MLB.beforeGameList.contains(status)
             case Constants.Ids.kbo:
-                if status == KBO.scheduled {
-                    return true
-                } else {
-                    return false
-                }
+                return status == KBO.scheduled
             default :
                 return false
             }

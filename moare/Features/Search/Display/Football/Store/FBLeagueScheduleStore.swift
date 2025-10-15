@@ -27,7 +27,9 @@ struct FBLeagueScheduleStore {
            --------------------- */
         var baseSchedule: BaseSchedule.State
         
-        var league: FBLeague? = nil // FBGameStatsView에서 title 정보에 사용
+        // FBGameStatsView에서 title 정보에 사용
+        // FBGameStatsStore에서 .didRefreshGame을 실행하면, AppStore에서 설정됨.
+        var league: FBLeague? = nil
         
         var filteredGames: [Int: [FBGameForSchedule]] = [:]
         var gameResultOpenedStateList: [String: Bool] = [:]
