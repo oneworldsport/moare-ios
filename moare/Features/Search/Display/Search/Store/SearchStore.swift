@@ -153,6 +153,7 @@ struct SearchStore {
                 return .none
                 
             case .initTrendingKeywords(let keywords):
+                // TODO: 같은 키워드도 처리할 수 있게 수정
                 state.trendingKeywords = OrderedDictionary(uniqueKeysWithValues: keywords.map { ($0.keyword, $0) })
                 state.trendingKeywordList = Array(state.trendingKeywords.keys)
                 
