@@ -11,10 +11,10 @@ struct NBAGame: Decodable, Equatable {
     let boxScoreTraditional: NBABoxScoreTraditional?
     let gameInfo: NBAGameInfo?
     let gameSummary: NBAGameSummary?
-    let inactivePlayers: [NBAPlayerForInactive]
+    let inactivePlayers: [NBAPlayerForInactive]?
     let lastMeeting: NBALastMeeting?
-    let lineScore: [NBALineScore]
-    let officials: [NBAOfficial]
+    let lineScore: [NBALineScore]?
+    let officials: [NBAOfficial]?
     let otherStats: [NBAOtherStats]?
     let seasonSeries: NBASeasonSeries?
 }
@@ -243,56 +243,62 @@ struct NBAGameInfo: Decodable, Equatable {
 
 struct NBAGameSummary: Decodable, Equatable {
     private let _gameId: String?
-    private let _date: String?
+    private let _gameDate: String?
+    private let _homeTeamId: Int?
+    private let _awayTeamId: Int?
+    private let _gameStatus: Int?
     private let _weekNumber: Int?
     private let _weekName: String?
     private let _seriesGameNumber: String?
     private let _gameLabel: String?
     private let _gameSubLabel: String?
     private let _seriesText: String?
+    private let _duration: Int?
     private let _gameCode: String?
-    private let _gameStatusId: Int?
     private let _gameStatusText: String?
-    private let _homeTeamId: Int?
-    private let _livePeriod: Int?
-    private let _season: String?
-    private let _visitorTeamId: Int?
-    private let _whStatus: Int?
+    private let _regulationPeriods: Int?
+    private let _period: Int?
+    private let _gameClock: String?
+    private let _attendance: Int?
 
     var gameId: String { _gameId ?? "" }
-    var date: String { _date ?? "" }
+    var gameDate: String { _gameDate ?? "" }
+    var homeTeamId: Int { _homeTeamId ?? 0 }
+    var awayTeamId: Int { _awayTeamId ?? 0 }
+    var gameStatus: Int { _gameStatus ?? 0 }
     var weekNumber: Int { _weekNumber ?? 0 }
     var weekName: String { _weekName ?? "" }
     var seriesGameNumber: String { _seriesGameNumber ?? "" }
     var gameLabel: String { _gameLabel ?? "" }
     var gameSubLabel: String { _gameSubLabel ?? "" }
     var seriesText: String { _seriesText ?? "" }
+    var duration: Int { _duration ?? 0 }
     var gameCode: String { _gameCode ?? "" }
-    var gameStatusId: Int { _gameStatusId ?? 0 }
     var gameStatusText: String { _gameStatusText ?? "" }
-    var homeTeamId: Int { _homeTeamId ?? 0 }
-    var livePeriod: Int { _livePeriod ?? 0 }
-    var season: String { _season ?? "" }
-    var visitorTeamId: Int { _visitorTeamId ?? 0 }
-    var whStatus: Int { _whStatus ?? 0 }
+    var regulationPeriods: Int { _regulationPeriods ?? 0 }
+    var period: Int { _period ?? 0 }
+    var gameClock: String { _gameClock ?? "" }
+    var attendance: Int { _attendance ?? 0 }
 
     private enum CodingKeys: String, CodingKey {
         case _gameId = "gameId"
-        case _date = "date"
+        case _gameDate = "gameDate"
+        case _homeTeamId = "homeTeamId"
+        case _awayTeamId = "awayTeamId"
+        case _gameStatus = "gameStatus"
         case _weekNumber = "weekNumber"
         case _weekName = "weekName"
         case _seriesGameNumber = "seriesGameNumber"
         case _gameLabel = "gameLabel"
         case _gameSubLabel = "gameSubLabel"
         case _seriesText = "seriesText"
-        case _gameCode = "gamecode"
-        case _gameStatusId = "gameStatusId"
+        case _duration = "duration"
+        case _gameCode = "gameCode"
         case _gameStatusText = "gameStatusText"
-        case _homeTeamId = "homeTeamId"
-        case _livePeriod = "livePeriod"
-        case _season = "season"
-        case _visitorTeamId = "visitorTeamId"
-        case _whStatus = "whStatus"
+        case _regulationPeriods = "regulationPeriods"
+        case _period = "period"
+        case _gameClock = "gameClock"
+        case _attendance = "attendance"
     }
 }
 
@@ -438,21 +444,21 @@ struct NBALineScore: Decodable, Equatable {
 }
 
 struct NBAOfficial: Decodable, Equatable {
-    private let _firstName: String?
+    private let _personId: Int?
+    private let _name: String?
     private let _jerseyNum: String?
-    private let _lastName: String?
-    private let _officialId: Int?
+    private let _assignment: String?
 
-    var firstName: String { _firstName ?? "" }
-    var jerseyNum: String { _jerseyNum?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "" }
-    var lastName: String { _lastName ?? "" }
-    var officialId: Int { _officialId ?? 0 }
+    var personId: Int { _personId ?? 0 }
+    var name: String { _name ?? "" }
+    var jerseyNum: String { _jerseyNum ?? "" }
+    var assignment: String { _assignment ?? "" }
 
     private enum CodingKeys: String, CodingKey {
-        case _firstName = "firstName"
+        case _personId = "personId"
+        case _name = "name"
         case _jerseyNum = "jerseyNum"
-        case _lastName = "lastName"
-        case _officialId = "officialId"
+        case _assignment = "assignment"
     }
 }
 

@@ -785,11 +785,11 @@ final class ModelConverter {
     
     static func nbaGameToGameScheduleConverter(game: NBAGame) -> NBAGameForSchedule {
         let gameSummary = game.gameSummary
-        let date = gameSummary?.date.split(separator: "+").first
+        let date = gameSummary?.gameDate.split(separator: "+").first
         let homeTeamId = gameSummary?.homeTeamId
-        let awayTeamId = gameSummary?.visitorTeamId
-        let homeTeamScore = game.lineScore.first { $0.teamId == homeTeamId }?.pts ?? 0
-        let awayTeamScore = game.lineScore.first { $0.teamId == awayTeamId }?.pts ?? 0
+        let awayTeamId = gameSummary?.awayTeamId
+        let homeTeamScore = game.lineScore?.first { $0.teamId == homeTeamId }?.pts ?? 0
+        let awayTeamScore = game.lineScore?.first { $0.teamId == awayTeamId }?.pts ?? 0
         
         return NBAGameForSchedule(
             itemKey: date != nil ? "\(date!)#\(gameSummary?.gameId ?? "")" : "",
@@ -797,7 +797,7 @@ final class ModelConverter {
             awayTeamId: awayTeamId,
             homeTeamScore: homeTeamScore,
             awayTeamScore: awayTeamScore,
-            gameStatus: gameSummary != nil ? String(gameSummary!.gameStatusId) : nil,
+            gameStatus: gameSummary != nil ? String(gameSummary!.gameStatus) : nil,
             gameInfo: gameSummary
         )
     }
