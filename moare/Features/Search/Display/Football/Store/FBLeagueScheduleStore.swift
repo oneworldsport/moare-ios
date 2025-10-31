@@ -50,6 +50,7 @@ struct FBLeagueScheduleStore {
         case toggleAllResult
         case updateResultOpenedState(gameId: String, isOpened: Bool)
         case selectGame(game: FBGameForSchedule)
+        case showTournament
         
         case setDays(isInit: Bool = false)
         case fetchGames
@@ -65,6 +66,7 @@ struct FBLeagueScheduleStore {
     
     enum Delegate {
         case showGameStats(model: SportDecodableModel)
+        case showTournament(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -73,24 +75,26 @@ struct FBLeagueScheduleStore {
         Reduce { state, action in
             switch action {
             case .baseSchedule(.initData):
+                let displayModel = state.baseSchedule.displayModel
+                
                 // init with default value
                 state.filteredGames = [:]
                 state.gameResultOpenedStateList = [:]
                 
                 // init data
-                state.baseSchedule.yearMonthList = state.baseSchedule.displayModel.yearMonthList
+                state.baseSchedule.yearMonthList = displayModel.yearMonthList
                 
                 // select default yearMonth
-                switch state.baseSchedule.displayModel.scheduleType {
+                switch displayModel.scheduleType {
                 case .league:
-                    if let date = state.baseSchedule.displayModel.games.first?.date {
+                    if let date = displayModel.games.first?.date {
                         return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
                     }
                     
                     return .send(.setDays(isInit: true))
                     
                 case .team:
-                    let upcomingGame = state.baseSchedule.displayModel.games.first { game in
+                    let upcomingGame = displayModel.games.first { game in
                         CalendarUtil.isUpcomingDay(date: game.date)
                     }
                     
@@ -98,12 +102,23 @@ struct FBLeagueScheduleStore {
                     if let upcomingGame {
                         return .send(.baseSchedule(.setDefaultYearMonth(date: upcomingGame.date)))
                     } else {
-                        if let date = state.baseSchedule.displayModel.games.last?.date {
+                        if let date = displayModel.games.last?.date {
                             return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
                         }
                     }
                     
                     return .send(.setDays(isInit: true))
+                    
+                case .teamFlat:
+                    // filteredGames 초기화
+                    state.filteredGames = [0: displayModel.games]
+                    
+                    // gameResultOpenedStateList 초기화
+                    state.gameResultOpenedStateList = displayModel.games.reduce(into: [String: Bool]()) { dict, game in
+                        dict[game.gameId] = false
+                    }
+                    
+                    return .none
                     
                 default:
                     return .none
@@ -257,6 +272,30 @@ struct FBLeagueScheduleStore {
                     await send(.updateResultOpenedState(gameId: game.gameId, isOpened: true))
                 }
                 
+            case .showTournament:
+                return .run { send in
+                    let keywordInfo = KeywordInfo(
+                        keyword: "MLS 플레이오프",
+                        weight: 100,
+                        keywords: [Keyword(keyword: "플레이오프", id: "tournament", priority: 2)],
+                        entities: [
+                            EntityInfo(
+                                entityId: Constants.Ids.mls,
+                                entityName: "MLS",
+                                category: "football",
+                                entityType: "league",
+                                leagueId: Constants.Ids.mls,
+                                teamId: nil,
+                                playerId: nil
+                            )
+                        ]
+                    )
+                    
+                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                    
+                    await send(.delegate(.showTournament(model: result.data)))
+                }
+                
             case .updateDisplayDataState(let fetchState):
                 state.baseSchedule.displayDataState = fetchState
                 
@@ -282,12 +321,19 @@ struct FBLeagueScheduleStore {
                 return .none
                 
             case .updateFilteredGames:
-                var newFilteredGames = state.filteredGames
-                newFilteredGames[state.baseSchedule.selectedDayIndex] = state.baseSchedule.displayModel.games.filter { game in
-                    CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: state.baseSchedule.selectedDayIndex + 1)
+                let displayModel = state.baseSchedule.displayModel
+                
+                if displayModel.scheduleType == .teamFlat {
+                    state.filteredGames = [0: displayModel.games]
+                } else {
+                    var newFilteredGames = state.filteredGames
+                    newFilteredGames[state.baseSchedule.selectedDayIndex] = state.baseSchedule.displayModel.games.filter { game in
+                        CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: state.baseSchedule.selectedDayIndex + 1)
+                    }
+                    
+                    state.filteredGames = newFilteredGames
                 }
                 
-                state.filteredGames = newFilteredGames
                 state.selectedGame = nil // 해당 액션은 뒤로왔을때 실행되므로 선택된 게임은 없앤다.
                 
                 return .none

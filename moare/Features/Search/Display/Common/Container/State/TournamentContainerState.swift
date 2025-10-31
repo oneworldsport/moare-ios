@@ -27,4 +27,5 @@ struct TournamentDrawContainerState<T: Decodable & Equatable> {
 
 struct TournamentContainerAction<T: Decodable & Equatable> {
     var selectSeries: (([GameForSchedule<T>]) -> Void)? = nil
+    var selectGame: ((GameForSchedule<T>) -> Void)? = nil
 }

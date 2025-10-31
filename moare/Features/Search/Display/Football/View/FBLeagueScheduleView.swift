@@ -17,13 +17,17 @@ struct FBLeagueScheduleView: View {
     @State private var show = false
     
     var body: some View {
+        let displayModel = store.baseSchedule.displayModel
+        let leagueId = displayModel.leagueId
+        
         VStack {
             if show {
                 ScheduleViewContainer(
                     state: ScheduleContainerState(
-                        leagueId: store.baseSchedule.displayModel.leagueId,
-                        shouldShowCalendar: store.selectedGame == nil,
+                        leagueId: leagueId,
+                        shouldShowCalendar: (displayModel.scheduleType != .teamFlat) && (store.selectedGame == nil),
                         shouldShowAllResultToggleButton: store.selectedGame == nil,
+                        shouldFetchSchedule:  displayModel.scheduleType == ScheduleType.league,
                         displayDataState: store.baseSchedule.displayDataState,
                         calendarUiState: CalendarUiState(
                             yearMonthList: store.baseSchedule.yearMonthList,
@@ -31,7 +35,8 @@ struct FBLeagueScheduleView: View {
                             selectedYearMonthIndex: store.baseSchedule.selectedYearMonthIndex,
                             selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
-                        isAllResultOpened: store.baseSchedule.isAllResultOpened
+                        isAllResultOpened: store.baseSchedule.isAllResultOpened,
+                        shouldShowTournamentButton: (leagueId == Constants.Ids.mls) && (store.baseSchedule.selectedMonth >= 10),
                     ),
                     actions: ScheduleContainerActions(
                         calendarUiActions: CalendarUiActions(
@@ -44,6 +49,9 @@ struct FBLeagueScheduleView: View {
                         ),
                         allResultButtonAction: {
                             store.send(.toggleAllResult)
+                        },
+                        tournamentButtonAction: {
+                            store.send(.showTournament)
                         }
                     ),
                     titleContent: {
@@ -163,6 +171,7 @@ struct FBLeagueScheduleListItem: View {
         let gameStatus = data.gameStatus
         // FBLeagueScheduleView가 아닌 FBPlayerInfoView나 FBTeamInfoView 등에서 보여질때 사용되는 flag
         let isFromSchedule = fbLeagueScheduleStore != nil
+        let displayModel = fbLeagueScheduleStore?.baseSchedule.displayModel
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
@@ -175,7 +184,9 @@ struct FBLeagueScheduleListItem: View {
                 gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: data.gameStatus),
                 isCapsuleButtonDisabled: (isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true) || !Constants.GameStatus.Football.finishedList.contains(gameStatus),
                 gameType: MatchDescriptionConverter.convert(input: data.gameInfo?.round ?? ""),
-                shouldShowOnlyDateTime: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
+                shouldShowOnlyDateTime: isFromSchedule ? (
+                    (displayModel?.scheduleType != ScheduleType.teamFlat) && (fbLeagueScheduleStore?.selectedGame == nil)
+                ) : false, // Schedule일때는 (리그, 팀)일정 화면이고 selectedGame이 없을때만 true
                 shouldShowGameType: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
                 shouldShowHomeLabel: isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true,
                 shouldShowAwayLabel: isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true,
