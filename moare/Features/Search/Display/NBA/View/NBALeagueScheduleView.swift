@@ -112,51 +112,8 @@ struct NBALeagueScheduleListItem: View {
     
     var body: some View {
         let displayModel = nbaLeagueScheduleStore.baseSchedule.displayModel
-        let homeTeamId = data.homeTeamId
-        let awayTeamId = data.awayTeamId
         let gameStatus = Int(data.gameStatus)
         let teamNameDic = nbaLeagueScheduleStore.baseSchedule.teamNameDictionary
-        
-        let gameStatusText: String = {
-            guard isResultOpened else { return StringConstants.resultOpen }
-
-            switch gameStatus {
-            case StringConstants.NBA.gameScheduled:
-                return StringConstants.gameNotStartedStr
-            case StringConstants.NBA.gameLive:
-                return StringConstants.gameLiveStr
-//                guard let first = data.lineScore.first else { return "" }
-//                if first.ptsOt3 != nil {
-//                    return StringConstants.NBA.gameOt3
-//                } else if first.ptsOt2 != nil {
-//                    return StringConstants.NBA.gameOt2
-//                } else if first.ptsOt1 != nil {
-//                    return StringConstants.NBA.gameOt1
-//                } else if first.ptsQtr4 != nil {
-//                    return StringConstants.NBA.gameQtr4
-//                } else if first.ptsQtr3 != nil {
-//                    return StringConstants.NBA.gameQtr3
-//                } else if first.ptsQtr2 != nil {
-//                    return StringConstants.NBA.gameQtr2
-//                } else if first.ptsQtr1 != nil {
-//                    return StringConstants.NBA.gameQtr1
-//                } else {
-//                    return ""
-//                }
-            case StringConstants.NBA.gameFinal:
-                return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
-            default:
-                return ""
-            }
-        }()
-        
-        let gameStatusColor: Color = {
-            if gameStatus == StringConstants.NBA.gameLive {
-                return .moare
-            } else {
-                return .secondary
-            }
-        }()
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
@@ -164,9 +121,10 @@ struct NBALeagueScheduleListItem: View {
                 game: data,
                 teamNameDic: teamNameDic,
                 isResultOpened: isResultOpened,
-                gameStatusText: gameStatusText,
-                gameStatusColor: gameStatusColor,
+                gameStatusText: Constants.GameStatus.nbaGameStatusText(status: data.gameStatus, period: data.gameInfo?.period, isResultOpened: isResultOpened),
+                gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: Constants.Ids.nba, status: data.gameStatus),
                 isCapsuleButtonDisabled: gameStatus != StringConstants.NBA.gameFinal,
+                gameType: NBAUtil.gameType(gameSummary: data.gameInfo),
                 shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
             ),
             actions: ScheduleGameItemActions(

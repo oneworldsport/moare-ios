@@ -318,6 +318,28 @@ struct Constants {
             }
         }
         
+        static func nbaGameStatusText(
+            status: String,
+            period: Int? = nil,
+            isResultOpened: Bool = true
+        ) -> String {
+            let intStatus = Int(status)
+            switch intStatus {
+            case NBA.notStarted:
+                return StringConstants.gameNotStartedStr
+            case NBA.live:
+                if let period {
+                    return "\(period)쿼터"
+                } else {
+                    return StringConstants.gameLiveStr
+                }
+            case NBA.finished:
+                return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
+            default:
+                return ""
+            }
+        }
+        
         static func mlbGameStatusText(
             status: String,
             currentInning: String? = nil,
@@ -349,7 +371,7 @@ struct Constants {
             case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
                 return Football.liveList.contains(status)
             case Constants.Ids.nba:
-                return false
+                return status == String(NBA.live)
             case Constants.Ids.mlb:
                 return status == MLB.live
             case Constants.Ids.kbo:

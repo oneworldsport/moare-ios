@@ -79,6 +79,21 @@ class AWSManager {
         async let serieaPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/seriea_player_name_dictionary.json", eTagKey: "serieaPlayerNameDictionaryETag")
         async let mlsPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/mls_player_name_dictionary.json", eTagKey: "mlsPlayerNameDictionaryETag")
                 
+//        let decoder = JSONDecoder()
+//        if let url = Bundle.main.url(forResource: "trending_keywords_test", withExtension: "json"),
+//           let data = try? Data(contentsOf: url) {
+//            do {
+//                let value = try decoder.decode(TrendingKeywords.self, from: data)
+//                await trendingKeywordsPromise.fulfill(with: value)
+//            } catch {
+//                // 실패하더라도 await -> 빈 값이라도 넘겨주기
+//                await trendingKeywordsPromise.fulfill(with: TrendingKeywords(date: "", keywords: []))
+//                print("noticeList load failed:", error)
+//            }
+//        } else {
+//            await trendingKeywordsPromise.fulfill(with: TrendingKeywords(date: "", keywords: []))
+//            print("noticeList load failed")
+//        }
         do {
             let trendingKeywords = try await trendingKeywords
             self.trendingKeywords = trendingKeywords

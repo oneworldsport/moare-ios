@@ -246,6 +246,7 @@
 		DAEEC7422DEDD53C0053E0A6 /* KBOPlayerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEEC7412DEDD53C0053E0A6 /* KBOPlayerModels.swift */; };
 		DAEEC7442DEDD5490053E0A6 /* KBOTeamModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEEC7432DEDD5490053E0A6 /* KBOTeamModels.swift */; };
 		DAEEC7462DEDD5570053E0A6 /* KBOGameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEEC7452DEDD5570053E0A6 /* KBOGameModels.swift */; };
+		DAF149562EB287360067EA06 /* TournamentBracketSingleGameItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF149552EB287360067EA06 /* TournamentBracketSingleGameItem.swift */; };
 		DAF974D72E61CF8F0046CE59 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAF974D62E61CF8F0046CE59 /* GoogleService-Info.plist */; };
 		DAF974DA2E61D04F0046CE59 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = DAF974D92E61D04F0046CE59 /* FirebaseAnalytics */; };
 		DAFCB4192DADC8E700839653 /* AWSManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFCB4182DADC8E700839653 /* AWSManager.swift */; };
@@ -462,6 +463,7 @@
 		DA7D42A82E7A090A00D844F9 /* KBOTournamentDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOTournamentDisplayModel.swift; sourceTree = "<group>"; };
 		DA7EA80A2E87E5E600B587A4 /* OptionalButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalButton.swift; sourceTree = "<group>"; };
 		DA7EA80C2E8855FA00B587A4 /* main_notice_test.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = main_notice_test.json; sourceTree = "<group>"; };
+		DA7EB7742EA1D3BB005A37C4 /* trending_keywords_test.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = trending_keywords_test.json; sourceTree = "<group>"; };
 		DA8DED8E2DF6AA2300AAB34B /* StandingsFirstCategoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandingsFirstCategoryItem.swift; sourceTree = "<group>"; };
 		DA8DED902DF6AB3700AAB34B /* StandingsRankItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandingsRankItem.swift; sourceTree = "<group>"; };
 		DA911BAF2DF9B8DF0055B982 /* KBOTeamStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOTeamStatsView.swift; sourceTree = "<group>"; };
@@ -549,6 +551,7 @@
 		DAEEC7412DEDD53C0053E0A6 /* KBOPlayerModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOPlayerModels.swift; sourceTree = "<group>"; };
 		DAEEC7432DEDD5490053E0A6 /* KBOTeamModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOTeamModels.swift; sourceTree = "<group>"; };
 		DAEEC7452DEDD5570053E0A6 /* KBOGameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOGameModels.swift; sourceTree = "<group>"; };
+		DAF149552EB287360067EA06 /* TournamentBracketSingleGameItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TournamentBracketSingleGameItem.swift; sourceTree = "<group>"; };
 		DAF974D62E61CF8F0046CE59 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DAFCB4182DADC8E700839653 /* AWSManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSManager.swift; sourceTree = "<group>"; };
 		DAFCB41A2DADCEAD00839653 /* AsyncPromise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncPromise.swift; sourceTree = "<group>"; };
@@ -1226,6 +1229,7 @@
 		DA9E421C2E4AB9430074B1F2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DA7EB7742EA1D3BB005A37C4 /* trending_keywords_test.json */,
 				DAB702752E8A6E2D0048DBD1 /* mlb_tournament.json */,
 				DA7EA80C2E8855FA00B587A4 /* main_notice_test.json */,
 				DA9E41F72E4AB9430074B1F2 /* football_game_stats.json */,
@@ -1272,6 +1276,7 @@
 		DABF24AF2DE99E4C0098A504 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				DAF149552EB287360067EA06 /* TournamentBracketSingleGameItem.swift */,
 				DAE7293C2E7B329600C5E6F0 /* TournamentSeriesGameItem.swift */,
 				DA32351A2E786C8E00DE36CA /* TournamentSingleGameItem.swift */,
 				DA8DED902DF6AB3700AAB34B /* StandingsRankItem.swift */,
@@ -1852,6 +1857,7 @@
 				DA531BBB2D64A8CA00DB87CB /* FBPlayerInfoResponseModel.swift in Sources */,
 				DA531BE72D64A8F200DB87CB /* AutoCompleteTrie.swift in Sources */,
 				DA531BE62D64A8F200DB87CB /* StoreManager.swift in Sources */,
+				DAF149562EB287360067EA06 /* TournamentBracketSingleGameItem.swift in Sources */,
 				DA531BBC2D64A8CA00DB87CB /* FBPlayerStandingsResponseModel.swift in Sources */,
 				DAC1EBD52E55BDA70031221C /* GameStatsViewContainer.swift in Sources */,
 				DAFCB41B2DADCEAD00839653 /* AsyncPromise.swift in Sources */,
@@ -2016,7 +2022,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = moare/moare.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_ASSET_PATHS = "\"moare/Preview Content\"";
 				DEVELOPMENT_TEAM = W3QMDDLKW5;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2038,7 +2044,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.1;
-				MARKETING_VERSION = 1.0.7;
+				MARKETING_VERSION = 1.0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.moare.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -2057,7 +2063,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = moare/moare.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_ASSET_PATHS = "\"moare/Preview Content\"";
 				DEVELOPMENT_TEAM = W3QMDDLKW5;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2079,7 +2085,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.1;
-				MARKETING_VERSION = 1.0.7;
+				MARKETING_VERSION = 1.0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.moare.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;

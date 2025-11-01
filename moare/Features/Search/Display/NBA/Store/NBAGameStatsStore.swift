@@ -77,12 +77,12 @@ struct NBAGameStatsStore {
                 
                 if let gameSummary = displayModel.game.gameSummary {
                     state.homeTeamId = gameSummary.homeTeamId
-                    state.awayTeamId = gameSummary.visitorTeamId
+                    state.awayTeamId = gameSummary.awayTeamId
                 }
                 
                 // set lineScore
-                state.homeTeamLineScore = displayModel.game.lineScore.first { $0.teamId == state.homeTeamId }
-                state.awayTeamLineScore = displayModel.game.lineScore.first { $0.teamId == state.awayTeamId }
+                state.homeTeamLineScore = displayModel.game.lineScore?.first { $0.teamId == state.homeTeamId }
+                state.awayTeamLineScore = displayModel.game.lineScore?.first { $0.teamId == state.awayTeamId }
                 
                 if let _ = displayModel.game.boxScoreTraditional {
                     // set current(home) team's players stats
@@ -222,7 +222,7 @@ struct NBAGameStatsStore {
                             let result = try await searchClient.fetchById(
                                 season: displayModel.season,
                                 category: "basketball",
-                                date: gameSummary.date,
+                                date: gameSummary.gameDate,
                                 dataType: "basketball_game_stats",
                                 leagueId: Constants.Ids.nba,
                                 id: boxScoreTraditional.gameId
