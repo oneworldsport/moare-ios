@@ -32,19 +32,41 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
             let (topSeedTeamSeriesScore, lowerSeedTeamSeriesScore) = games.reduce((0, 0)) { partial, game in
                 var (top, lower) = partial
                 
+                let homeTeamScore = game.homeTeamScore
+                let awayTeamScore = game.awayTeamScore
+                let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
+                let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
+                
+                var isHomeWinner: Bool {
+                    if let homePenalty = homeTeamPenaltyScore,
+                       let awayPenalty = awayTeamPenaltyScore {
+                        return homePenalty > awayPenalty
+                    }
+                    
+                    return homeTeamScore > awayTeamScore
+                }
+                var isAwayWinner: Bool {
+                    if let homePenalty = homeTeamPenaltyScore,
+                       let awayPenalty = awayTeamPenaltyScore {
+                        return awayPenalty > homePenalty
+                    }
+                    
+                    return awayTeamScore > homeTeamScore
+                }
+                
                 if game.homeTeamId == topSeedTeamId && game.awayTeamId == lowerSeedTeamId {
                     // 홈팀이 topSeed인경우
-                    if game.homeTeamScore > game.awayTeamScore {
+                    if isHomeWinner {
                         top += 1
-                    } else if game.awayTeamScore > game.homeTeamScore {
+                    } else if isAwayWinner {
                         lower += 1
                     }
                 } else if game.homeTeamId == lowerSeedTeamId && game.awayTeamId == topSeedTeamId {
                     // 홈팀이 lowerSeed인경우
-                    if game.awayTeamScore > game.homeTeamScore {
-                        top += 1
-                    } else if game.homeTeamScore > game.awayTeamScore {
+                    if isHomeWinner {
                         lower += 1
+                    } else if isAwayWinner {
+                        top += 1
                     }
                 }
                 
@@ -268,19 +290,41 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
             let (topSeedTeamSeriesScore, lowerSeedTeamSeriesScore) = games.reduce((0, 0)) { partial, game in
                 var (top, lower) = partial
                 
+                let homeTeamScore = game.homeTeamScore
+                let awayTeamScore = game.awayTeamScore
+                let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
+                let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
+                
+                var isHomeWinner: Bool {
+                    if let homePenalty = homeTeamPenaltyScore,
+                       let awayPenalty = awayTeamPenaltyScore {
+                        return homePenalty > awayPenalty
+                    }
+                    
+                    return homeTeamScore > awayTeamScore
+                }
+                var isAwayWinner: Bool {
+                    if let homePenalty = homeTeamPenaltyScore,
+                       let awayPenalty = awayTeamPenaltyScore {
+                        return awayPenalty > homePenalty
+                    }
+                    
+                    return awayTeamScore > homeTeamScore
+                }
+                
                 if game.homeTeamId == topSeedTeamId && game.awayTeamId == lowerSeedTeamId {
                     // 홈팀이 topSeed인경우
-                    if game.homeTeamScore > game.awayTeamScore {
+                    if isHomeWinner {
                         top += 1
-                    } else if game.awayTeamScore > game.homeTeamScore {
+                    } else if isAwayWinner {
                         lower += 1
                     }
                 } else if game.homeTeamId == lowerSeedTeamId && game.awayTeamId == topSeedTeamId {
                     // 홈팀이 lowerSeed인경우
-                    if game.awayTeamScore > game.homeTeamScore {
-                        top += 1
-                    } else if game.homeTeamScore > game.awayTeamScore {
+                    if isHomeWinner {
                         lower += 1
+                    } else if isAwayWinner {
+                        top += 1
                     }
                 }
                 
@@ -498,19 +542,41 @@ struct TournamentSeriesFinalGameItem<T: Decodable & Equatable>: View {
         let (topSeedTeamSeriesScore, lowerSeedTeamSeriesScore) = games.reduce((0, 0)) { partial, game in
             var (top, lower) = partial
             
+            let homeTeamScore = game.homeTeamScore
+            let awayTeamScore = game.awayTeamScore
+            let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
+            let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
+            
+            var isHomeWinner: Bool {
+                if let homePenalty = homeTeamPenaltyScore,
+                   let awayPenalty = awayTeamPenaltyScore {
+                    return homePenalty > awayPenalty
+                }
+                
+                return homeTeamScore > awayTeamScore
+            }
+            var isAwayWinner: Bool {
+                if let homePenalty = homeTeamPenaltyScore,
+                   let awayPenalty = awayTeamPenaltyScore {
+                    return awayPenalty > homePenalty
+                }
+                
+                return awayTeamScore > homeTeamScore
+            }
+            
             if game.homeTeamId == topSeedTeamId && game.awayTeamId == lowerSeedTeamId {
                 // 홈팀이 topSeed인경우
-                if game.homeTeamScore > game.awayTeamScore {
+                if isHomeWinner {
                     top += 1
-                } else if game.awayTeamScore > game.homeTeamScore {
+                } else if isAwayWinner {
                     lower += 1
                 }
             } else if game.homeTeamId == lowerSeedTeamId && game.awayTeamId == topSeedTeamId {
                 // 홈팀이 lowerSeed인경우
-                if game.awayTeamScore > game.homeTeamScore {
-                    top += 1
-                } else if game.homeTeamScore > game.awayTeamScore {
+                if isHomeWinner {
                     lower += 1
+                } else if isAwayWinner {
+                    top += 1
                 }
             }
             

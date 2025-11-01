@@ -21,7 +21,24 @@ struct FBTournamentView: View {
         VStack {
             if show {
                 if displayModel.scheduleType == .tournamentBracket {
-                    // TODO: 축구에서 Bracket생기면 작업
+                    TournamentBracketViewContainer(
+                        state: TournamentBracketContainerState(
+                            leagueId: displayModel.leagueId,
+                            teamNameDic: store.baseTournament.teamNameDic,
+                            gameListTuple: store.gameListTuple,
+                            seedIdTupleList: store.seedIdTupleList,
+                            isConference: true,
+                            isSeries: false
+                        ),
+                        action: TournamentContainerAction(
+                            selectSeries: { gameList in
+                                store.send(.selectSeries(gameList: gameList))
+                            },
+                            selectGame: { game in
+                                store.send(.selectGame(game: game))
+                            }
+                        )
+                    )
                 } else {
                     TournamentDrawViewContainer(
                         state: TournamentDrawContainerState(
