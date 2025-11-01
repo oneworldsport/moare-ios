@@ -171,43 +171,6 @@ struct NBAGameStatsScoreInfoItem: View {
         let awayTeamLineScore = nbaGameStatsStore.awayTeamLineScore
         let teamNameDic = nbaGameStatsStore.baseGameStats.teamNameDictionary
         
-        let gameStatusText: String = {
-            switch game.gameSummary?.gameStatus {
-            case Constants.GameStatus.NBA.notStarted:
-                return StringConstants.gameNotStartedStr
-            case Constants.GameStatus.NBA.live:
-                if homeTeamLineScore?.ptsOt3 != nil {
-                    return StringConstants.NBA.gameOt3
-                } else if homeTeamLineScore?.ptsOt2 != nil {
-                    return StringConstants.NBA.gameOt2
-                } else if homeTeamLineScore?.ptsOt1 != nil {
-                    return StringConstants.NBA.gameOt1
-                } else if homeTeamLineScore?.ptsQtr4 != nil {
-                    return StringConstants.NBA.gameQtr4
-                } else if homeTeamLineScore?.ptsQtr3 != nil {
-                    return StringConstants.NBA.gameQtr3
-                } else if homeTeamLineScore?.ptsQtr2 != nil {
-                    return StringConstants.NBA.gameQtr2
-                } else if homeTeamLineScore?.ptsQtr1 != nil {
-                    return StringConstants.NBA.gameQtr1
-                } else {
-                    return ""
-                }
-            case Constants.GameStatus.NBA.finished:
-                return StringConstants.gameFinishedStr
-            default:
-                return ""
-            }
-        }()
-        
-        let gameStatusColor: Color = {
-            if game.gameSummary?.gameStatus == Constants.GameStatus.NBA.live {
-                return .moare
-            } else {
-                return .secondary
-            }
-        }()
-        
         HStack(alignment: .bottom) {
             VStack(spacing: 0) {
                 HStack(spacing: 0) {
@@ -232,8 +195,8 @@ struct NBAGameStatsScoreInfoItem: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
                 CapsuleButton(
-                    text: gameStatusText,
-                    color: gameStatusColor
+                    text: Constants.GameStatus.nbaGameStatusText(status: String(game.gameSummary?.gameStatus ?? 0), period: game.gameSummary?.period),
+                    color: Constants.GameStatus.gameStatusColor(leagueId: Constants.Ids.nba, status: String(game.gameSummary?.gameStatus ?? 0))
                 ) {
                 }
                 .disabled(true)
