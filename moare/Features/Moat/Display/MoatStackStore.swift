@@ -32,23 +32,39 @@ struct MoatStackStore {
         
         Reduce { state, action in
             switch action {
-            case .push(let moatTypeEnum):
-                switch moatTypeEnum {
+            case .push(let viewType),
+                let .path(.element(id: _, action: .moat(.delegate(.push(viewType))))):
+                switch viewType {
                 case .timeline:
                     state.path.append(.moat(MoatStore.State()))
-                    return .none
-                    
-                case .detail:
-                    return .none
                     
                 case .form:
-                    return .none
+                    state.path.append(.form(FormStore.State()))
                     
                 case .userProfile:
                     return .none
                     
+                default: break
                 }
+                
+                return .none
+                
             case .pop:
+//                state.didPop = true
+//                state.includesPreviousView = false
+                
+                if let id = state.path.ids.last {
+                    if case .moat(let state) = state.path[id: id] {
+                        if case .detail = state.currentViewType {
+                            return .send(.path(.element(id: id, action: .moat(.goBack))))
+                        }
+                    }
+                }
+                
+                if state.path.count > 1 {
+                    let _ = state.path.popLast()
+                }
+                
                 return .none
                 
             case .path:

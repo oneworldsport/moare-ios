@@ -178,32 +178,32 @@ struct SearchView: View {
                         VStack(spacing: 0) {
                             if searchStackStore.includesPreviousView {
                                 if let id = searchStackStore.path.ids.suffix(2).first {
-                                  if let store = searchStackStore.scope(
-                                    state: \.path[id: id],
-                                    action: \.path[id: id]
-                                  ) {
-                                      PathView(
-                                        searchStore: searchStore,
-                                        store: store,
-                                        didPop: true,
-                                        isCombinedView: true
-                                      )
-                                  }
+                                    if let store = searchStackStore.scope(
+                                        state: \.path[id: id],
+                                        action: \.path[id: id]
+                                    ) {
+                                        PathView(
+                                            searchStore: searchStore,
+                                            store: store,
+                                            didPop: true,
+                                            isCombinedView: true
+                                        )
+                                    }
                                 }
                             }
                             
                             if let id = searchStackStore.path.ids.last {
-                              if let store = searchStackStore.scope(
-                                state: \.path[id: id],
-                                action: \.path[id: id]
-                              ) {
-                                PathView(
-                                  searchStore: searchStore,
-                                  store: store,
-                                  didPop: searchStackStore.didPop,
-                                  isCombinedView: searchStackStore.includesPreviousView
-                                )
-                              }
+                                if let store = searchStackStore.scope(
+                                    state: \.path[id: id],
+                                    action: \.path[id: id]
+                                ) {
+                                    PathView(
+                                        searchStore: searchStore,
+                                        store: store,
+                                        didPop: searchStackStore.didPop,
+                                        isCombinedView: searchStackStore.includesPreviousView
+                                    )
+                                }
                             }
                         }
                         .padding(.top, UIConstants.Padding.defaultPadding)

@@ -83,7 +83,7 @@ struct SportSearchEngine_iOSApp: App {
                             }
                             .tag(Screen.search)
                             
-                            MoatView(
+                            MoatDisplayView(
                                 moatStackStore: moatStackStore
                             )
                             .tabItem {

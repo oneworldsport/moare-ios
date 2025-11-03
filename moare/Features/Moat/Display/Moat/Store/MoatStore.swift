@@ -39,7 +39,14 @@ struct MoatStore {
         case updateSelectedMoat(isComment: Bool, moatDetailResponse: MoatDetailResponse)
         
         case addViewStack(viewType: MoatViewType)
+        case showForm
         case goBack
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case push(MoatViewType)
     }
     
     var body: some Reducer<State, Action> {
@@ -158,6 +165,12 @@ struct MoatStore {
                     state.timelineMoats = state.originalTimelineMoats
                 }
                 
+                return .none
+                
+            case .showForm:
+                return .send(.delegate(.push(.form)))
+                
+            case .delegate:
                 return .none
             }
         }

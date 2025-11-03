@@ -216,6 +216,7 @@
 		DA919CB22E6D7B3F003151B6 /* MoatResponseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA919CB12E6D7B3A003151B6 /* MoatResponseModels.swift */; };
 		DA9202192DA8E10000BB6B15 /* NBAUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9202182DA8E10000BB6B15 /* NBAUtil.swift */; };
 		DA92D0782EB87EFF002FAFC1 /* MoatStackStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA92D0772EB87EF8002FAFC1 /* MoatStackStore.swift */; };
+		DA92D07B2EB89A3C002FAFC1 /* MoatDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA92D07A2EB89A34002FAFC1 /* MoatDisplayView.swift */; };
 		DA9B63E02E70182F009BD706 /* CommentComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9B63DF2E701762009BD706 /* CommentComposer.swift */; };
 		DA9B63E22E7040E9009BD706 /* PlaceholderTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9B63E12E7040D8009BD706 /* PlaceholderTextEditor.swift */; };
 		DA9B63E42E70929D009BD706 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9B63E32E709294009BD706 /* BackButton.swift */; };
@@ -511,6 +512,7 @@
 		DA919CB12E6D7B3A003151B6 /* MoatResponseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoatResponseModels.swift; sourceTree = "<group>"; };
 		DA9202182DA8E10000BB6B15 /* NBAUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAUtil.swift; sourceTree = "<group>"; };
 		DA92D0772EB87EF8002FAFC1 /* MoatStackStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoatStackStore.swift; sourceTree = "<group>"; };
+		DA92D07A2EB89A34002FAFC1 /* MoatDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoatDisplayView.swift; sourceTree = "<group>"; };
 		DA9B63DF2E701762009BD706 /* CommentComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentComposer.swift; sourceTree = "<group>"; };
 		DA9B63E12E7040D8009BD706 /* PlaceholderTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderTextEditor.swift; sourceTree = "<group>"; };
 		DA9B63E32E709294009BD706 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
@@ -839,6 +841,7 @@
 		DA531B412D64A8CA00DB87CB /* Display */ = {
 			isa = PBXGroup;
 			children = (
+				DA92D07A2EB89A34002FAFC1 /* MoatDisplayView.swift */,
 				DA92D0772EB87EF8002FAFC1 /* MoatStackStore.swift */,
 				DAED2C442E6BEDD400BDAE67 /* Common */,
 				DAED2C492E6C021900BDAE67 /* Components */,
@@ -1883,6 +1886,7 @@
 				DA919CAE2E6D4A2E003151B6 /* MoatClient.swift in Sources */,
 				DA531BC62D64A8CA00DB87CB /* KeywordInfo.swift in Sources */,
 				DAED2C4F2E6D16F200BDAE67 /* FormView.swift in Sources */,
+				DA92D07B2EB89A3C002FAFC1 /* MoatDisplayView.swift in Sources */,
 				DA531B9D2D64A8CA00DB87CB /* FBTeamStandingsStore.swift in Sources */,
 				DA531B942D64A8CA00DB87CB /* FBStatDataItem.swift in Sources */,
 				DA531BA32D64A8CA00DB87CB /* FBPlayerStatsView.swift in Sources */,
