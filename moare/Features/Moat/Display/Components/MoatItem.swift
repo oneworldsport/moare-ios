@@ -22,6 +22,7 @@ struct MoatItem: View {
     let profileImageURL: String
     let nickname: String
     let timeAgo: String
+    let settingsTapped: () -> Void
     let action: () -> Void
     
     let height: CGFloat
@@ -46,6 +47,7 @@ struct MoatItem: View {
         profileImageURL: String = "",
         nickname: String,
         createdAt: String,
+        settingsTapped: @escaping () -> Void = {},
         action: @escaping () -> Void = {}
     ) {
         self.moatType = moatType
@@ -58,6 +60,7 @@ struct MoatItem: View {
         self.profileImageURL = profileImageURL
         self.nickname = nickname
         self.timeAgo = CalendarUtil.timeAgoString(from: createdAt)
+        self.settingsTapped = settingsTapped
         self.action = action
         
         switch moatType {
@@ -157,28 +160,29 @@ struct MoatItem: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                         
                         // TODO: comment일때 실제 내부 높이는(time까지 합쳐서) height(80) 넘음
+                        
                         VStack(spacing: 0) {
-                            VStack(spacing: 0) {
-                                Text("🔥")
-                                    .font(.system(size: iconFontSize))
-                                    .padding(.bottom, 2)
+                                VStack(spacing: 0) {
+                                    Text("🔥")
+                                        .font(.system(size: iconFontSize))
+                                        .padding(.bottom, 2)
+                                    
+                                    Text("\(fireCount)")
+                                        .font(.system(size: iconCountFontSize))
+                                }
+                                .padding(.bottom, moatType == .detail ? 8 : 4)
                                 
-                                Text("\(fireCount)")
-                                    .font(.system(size: iconCountFontSize))
+                                VStack(spacing: 0) {
+                                    Image(systemName: "bubble.left")
+                                        .font(.system(size: iconFontSize))
+                                        .padding(.bottom, 2)
+                                    
+                                    Text("\(commentCount)")
+                                        .font(.system(size: iconCountFontSize))
+                                }
                             }
-                            .padding(.bottom, moatType == .detail ? 8 : 4)
-                            
-                            VStack(spacing: 0) {
-                                Image(systemName: "bubble.left")
-                                    .font(.system(size: iconFontSize))
-                                    .padding(.bottom, 2)
-                                
-                                Text("\(commentCount)")
-                                    .font(.system(size: iconCountFontSize))
-                            }
+                            .frame(maxHeight: .infinity, alignment: .bottom)
                         }
-                        .frame(maxHeight: .infinity, alignment: .bottom)
-                    }
                     
                     if moatType != .userProfile {
                         HStack {
@@ -221,6 +225,22 @@ struct MoatItem: View {
                 }
             }
         }
+        .overlay(alignment: .topTrailing) {
+            if moatType == .detail {
+                VStack(spacing: 0) {
+                    Button(action: {
+                        settingsTapped()
+                    }) {
+                        Text("⋮")
+                            .font(.system(size: 30, weight: .bold))
+                            .contentShape(Rectangle())
+                    }
+//                    .buttonStyle(.plain)
+                    .tint(.primary)
+                    .padding(.trailing, 16)
+                }
+            }
+        }
     }
 }
 
@@ -256,15 +276,15 @@ struct MoatItemSideBar: View {
 }
 
 
-#Preview {
-    MoatItem(
-        moatType: .detail,
-        title: "test",
-        content: "testetstest",
-        hashtagList: ["#축구"],
-        fireCount: 0,
-        commentCount: 0,
-        nickname: "test",
-        createdAt: "2025-08-16T20:10:00.666666"
-    )
-}
+//#Preview {
+//    MoatItem(
+//        moatType: .userProfile,
+//        title: "test",
+//        content: "testetstest",
+//        hashtagList: ["#축구"],
+//        fireCount: 0,
+//        commentCount: 0,
+//        nickname: "test",
+//        createdAt: "2025-08-16T20:10:00.666666"
+//    )
+//}

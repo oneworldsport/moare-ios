@@ -15,6 +15,10 @@ struct MoatView: View {
     @AppStorage("accessToken") private var accessToken: String = ""
     
     @State var text = ""
+    @State private var settingsShowing = false
+    @State private var reportShowing = false
+    @State private var selectedMoatId: String? = nil
+    @State private var inputText = ""
     
     // TODO: store에서 action을 통해 애니메이션을 주는걸로 바꿔야함
     @State private var commentsToDisplay: [MoatResponse] = []
@@ -54,9 +58,14 @@ struct MoatView: View {
                                             commentCount: moat.commentCount,
                                             nickname: moat.nickname,
                                             createdAt: moat.createdAt,
-                                        ) {
-                                            moatStore.send(.selectMoat(moatId: moat.moatId))
-                                        }
+                                            settingsTapped: {
+                                                selectedMoatId = moat.moatId
+                                                settingsShowing = true
+                                            },
+                                            action: {
+                                                moatStore.send(.selectMoat(moatId: moat.moatId))
+                                            }
+                                        )
                                     }
                                 }
                                 .padding(.top, 10)
@@ -80,6 +89,7 @@ struct MoatView: View {
                                                 commentCount: moat.commentCount,
                                                 nickname: moat.nickname,
                                                 createdAt: moat.createdAt,
+                                                settingsTapped: {}
                                             ) {
                                                 moatStore.send(.selectMoat(isComment: true, moatId: moat.moatId))
                                             }
@@ -113,6 +123,15 @@ struct MoatView: View {
                             .environmentObject(storeManager)
                     }
                 }
+                .overlay(alignment : .topTrailing) {
+                    if settingsShowing {
+                        SettingWindow(reportTapped: {
+                            reportShowing = true
+                            settingsShowing = false
+                        })
+                        .padding(.top, 10)
+                    }
+                }
             }
         }
         .onAppear {
@@ -133,5 +152,8 @@ struct MoatView: View {
             moatStore.send(.getTimelineMoats)
 //            moatStore.send(.deleteToken)
         }
+        .background(
+            TextFieldAlert(isPresented: $reportShowing, text: $inputText, title: "모트 신고하기")
+        )
     }
 }

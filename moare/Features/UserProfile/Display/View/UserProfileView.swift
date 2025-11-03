@@ -12,6 +12,12 @@ struct UserProfileView: View {
     @EnvironmentObject var storeManager: StoreManager
     @State var userProfileStore: StoreOf<UserProfileStore>? = nil
     
+    @State var text = ""
+    @State private var settingsShowing = false
+    @State private var reportShowing = false
+    @State private var selectedMoatId: String? = nil
+    @State private var inputText = ""
+    
     var body: some View {
         VStack(spacing: 0) {
             if let userProfileStore {
@@ -78,6 +84,10 @@ struct UserProfileView: View {
                                     commentCount: moat.commentCount,
                                     nickname: moat.nickname,
                                     createdAt: moat.createdAt,
+                                    settingsTapped: {
+                                        selectedMoatId = moat.moatId
+                                        settingsShowing = true
+                                    }
                                 ) {
                                     userProfileStore.send(.selectMoat(moatId: moat.moatId))
                                 }
@@ -103,6 +113,9 @@ struct UserProfileView: View {
                                         commentCount: moat.commentCount,
                                         nickname: moat.nickname,
                                         createdAt: moat.createdAt,
+                                        settingsTapped: {
+                                            
+                                        }
                                     ) {
                                         userProfileStore.send(.selectMoat(isComment: true, moatId: moat.moatId))
                                     }
@@ -114,6 +127,15 @@ struct UserProfileView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .overlay(alignment : .topTrailing) {
+                    if settingsShowing {
+                        SettingWindow(reportTapped: {
+                            reportShowing = true
+                            settingsShowing = false
+                        })
+                        .padding(.top, 10)
+                    }
+                }
             }
         }
         .onAppear {
@@ -133,6 +155,9 @@ struct UserProfileView: View {
             
             userProfileStore.send(.getUserProfile)
         }
+        .background(
+            TextFieldAlert(isPresented: $reportShowing, text: $inputText, title: "모트 신고하기")
+        )
     }
 }
 
