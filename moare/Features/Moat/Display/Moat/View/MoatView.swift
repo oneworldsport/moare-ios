@@ -10,7 +10,7 @@ import ComposableArchitecture
 
 struct MoatView: View {
     let moatStackStore: StoreOf<MoatStackStore>
-    let moatStore: StoreOf<MoatStore>
+    @State private var moatStore: StoreOf<MoatStore>? = nil
     
     @AppStorage("accessToken") private var accessToken: String = ""
     
@@ -26,7 +26,7 @@ struct MoatView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            if show {
+            if let moatStore {
                 HStack {
                     BackButton {
                         moatStore.send(.goBack)
@@ -135,12 +135,25 @@ struct MoatView: View {
             }
         }
         .onAppear {
-            withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                show = true
-            }
+            moatStackStore.send(.push(MoatViewType.timeline))
             
-            moatStore.send(.getTimelineMoats)
-//            moatStore.send(.deleteToken)
+            if let id = moatStackStore.path.ids.first {
+                if let store = moatStackStore.scope(
+                    state: \.path[id: id],
+                    action: \.path[id: id]
+                ) {
+                    if case .moat = store.state {
+                        if let moatStore = store.scope(state: \.moat, action: \.moat) {
+                            withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
+                                self.moatStore = moatStore
+                            }
+                            
+                            moatStore.send(.getTimelineMoats)
+//                            moatStore.send(.deleteToken)
+                        }
+                    }
+                }
+            }
         }
         .background(
             TextFieldAlert(isPresented: $reportShowing, text: $inputText, title: "모트 신고하기")

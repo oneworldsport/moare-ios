@@ -8,10 +8,6 @@
 import SwiftUI
 import ComposableArchitecture
 
-enum MoatViewType {
-    case timeline, detail, form // createForm, updateForm
-}
-
 @Reducer
 struct MoatStore {
     let moatClient = MoatClient()

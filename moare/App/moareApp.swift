@@ -84,8 +84,7 @@ struct SportSearchEngine_iOSApp: App {
                             .tag(Screen.search)
                             
                             MoatView(
-                                moatStackStore: moatStackStore,
-                                moatStore: moatStackStore.scope(state: \.moat, action: \.moat)
+                                moatStackStore: moatStackStore
                             )
                             .tabItem {
                                 Image(systemName: "bubble.left")
