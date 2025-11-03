@@ -23,7 +23,7 @@ struct NBAGameStatsView: View {
         let playerNameDic = store.baseGameStats.playerNameDictionary
         let teamNameDic = store.baseGameStats.teamNameDictionary
         
-        let teamIds = [game.gameSummary?.homeTeamId, game.gameSummary?.visitorTeamId]
+        let teamIds = [game.gameSummary?.homeTeamId, game.gameSummary?.awayTeamId]
         let teamCategories: [GameStatsTeamState] = teamIds.map {
             return GameStatsTeamState(
                 name: teamNameDic["short_\($0 ?? 0)"] ?? "",
@@ -68,13 +68,17 @@ struct NBAGameStatsView: View {
         
         let gameDetailTitle = "날짜: \n\n장소: \n관중수: \n심판: "
         let gameDetailContent: String = {
-            let officials = game.officials
             var result = ""
-            result += "\(CalendarUtil.formatDate(date: game.gameSummary?.date).split(separator: " ").first ?? "")\n"
-            result += "\(CalendarUtil.formatDate(date: game.gameSummary?.date, formatType: .ampm))\n"
+            result += "\(CalendarUtil.formatDate(date: game.gameSummary?.gameDate).split(separator: " ").first ?? "")\n"
+            result += "\(CalendarUtil.formatDate(date: game.gameSummary?.gameDate, formatType: .ampm))\n"
             result += "\(teamNameDic["venue_\(game.gameSummary?.homeTeamId ?? 0)"] ?? "")\n"
-            result += "\(game.gameInfo?.attendance ?? 0)\n"
-            result += officials.map { "• \($0.firstName + $0.lastName)" }.joined(separator: "\n")
+            result += "\(game.gameSummary?.attendance ?? 0)\n"
+            
+            if let officials = game.officials {
+//                result += officials.map { "• \($0.firstName + $0.lastName)" }.joined(separator: "\n")
+                result += officials.map { "• \($0.name)" }.joined(separator: "\n")
+            }
+            
             return result
         }()
         
@@ -82,8 +86,8 @@ struct NBAGameStatsView: View {
             if show {
                 GameStatsViewContainer(
                     state: GameStatsContainerState(
-                        shouldShowStats: game.gameSummary?.gameStatusId != Constants.GameStatus.NBA.notStarted,
-                        shouldShowRefreshButton: game.gameSummary?.gameStatusId == Constants.GameStatus.NBA.live,
+                        shouldShowStats: game.gameSummary?.gameStatus != Constants.GameStatus.NBA.notStarted,
+                        shouldShowRefreshButton: game.gameSummary?.gameStatus == Constants.GameStatus.NBA.live,
                         teamCategories: teamCategories,
                         teamCategorySelectedIndex: store.baseGameStats.teamCategorySelectedIndex,
                         gameDetailTitle: gameDetailTitle,
@@ -108,8 +112,9 @@ struct NBAGameStatsView: View {
                         HStack(spacing: 0) {
                             NBATitle(
                                 leagueName: "NBA",
-                                leagueSeason: game.gameSummary?.season.split(separator: "-").first.flatMap { Int(String($0)) } // TODO: 이 문법으로 다른 비슷한 코드도 다 바꾸기
+                                leagueSeason: displayModel.season
                             )
+//                            game.gameSummary?.season.split(separator: "-").first.flatMap { Int(String($0)) } // TODO: 이 문법으로 다른 비슷한 코드도 다 바꾸기
                             
                             Text(" | ")
                                 .font(.system(size: 14))
@@ -166,43 +171,6 @@ struct NBAGameStatsScoreInfoItem: View {
         let awayTeamLineScore = nbaGameStatsStore.awayTeamLineScore
         let teamNameDic = nbaGameStatsStore.baseGameStats.teamNameDictionary
         
-        let gameStatusText: String = {
-            switch game.gameSummary?.gameStatusId {
-            case Constants.GameStatus.NBA.notStarted:
-                return StringConstants.gameNotStartedStr
-            case Constants.GameStatus.NBA.live:
-                if homeTeamLineScore?.ptsOt3 != nil {
-                    return StringConstants.NBA.gameOt3
-                } else if homeTeamLineScore?.ptsOt2 != nil {
-                    return StringConstants.NBA.gameOt2
-                } else if homeTeamLineScore?.ptsOt1 != nil {
-                    return StringConstants.NBA.gameOt1
-                } else if homeTeamLineScore?.ptsQtr4 != nil {
-                    return StringConstants.NBA.gameQtr4
-                } else if homeTeamLineScore?.ptsQtr3 != nil {
-                    return StringConstants.NBA.gameQtr3
-                } else if homeTeamLineScore?.ptsQtr2 != nil {
-                    return StringConstants.NBA.gameQtr2
-                } else if homeTeamLineScore?.ptsQtr1 != nil {
-                    return StringConstants.NBA.gameQtr1
-                } else {
-                    return ""
-                }
-            case Constants.GameStatus.NBA.finished:
-                return StringConstants.gameFinishedStr
-            default:
-                return ""
-            }
-        }()
-        
-        let gameStatusColor: Color = {
-            if game.gameSummary?.gameStatusId == Constants.GameStatus.NBA.live {
-                return .moare
-            } else {
-                return .secondary
-            }
-        }()
-        
         HStack(alignment: .bottom) {
             VStack(spacing: 0) {
                 HStack(spacing: 0) {
@@ -227,8 +195,8 @@ struct NBAGameStatsScoreInfoItem: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
                 CapsuleButton(
-                    text: gameStatusText,
-                    color: gameStatusColor
+                    text: Constants.GameStatus.nbaGameStatusText(status: String(game.gameSummary?.gameStatus ?? 0), period: game.gameSummary?.period),
+                    color: Constants.GameStatus.gameStatusColor(leagueId: Constants.Ids.nba, status: String(game.gameSummary?.gameStatus ?? 0))
                 ) {
                 }
                 .disabled(true)
@@ -403,7 +371,7 @@ struct NBAGameStatsLineScoreItem: View {
                 .frame(maxWidth: .infinity)
             VCapsuleBar()
                 .opacity(0.5)
-            Text(lineScore.ptsQtr1.displayOrDash)
+            Text(lineScore.ptsQtr4.displayOrDash)
                 .fontWeight(.medium)
                 .frame(maxWidth: .infinity)
             

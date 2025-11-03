@@ -46,7 +46,7 @@ struct SearchView: View {
                     //         searchStore.send(.goBack)
                     //     }
                     Button(action: {
-                        searchStore.send(.pop)
+                        appStore.send(.pop)
                     }) {
                         Image(systemName: "chevron.backward")
                             .font(.system(size: 22))
@@ -82,9 +82,9 @@ struct SearchView: View {
                                 .frame(height: 17, alignment: .bottom)
                                 .tint(.secondary)
                                 .opacity(0.7)
+                                .padding(.top, 6)
                         }
                         .foregroundStyle(.secondary)
-                        .padding(.top, 6)
                     }
                 }
                 
@@ -93,6 +93,7 @@ struct SearchView: View {
                 if isNoticeIconVisible {
                     VStack(alignment: .trailing, spacing: 0) {
                         NoticeBox(noticeList: searchStore.noticeList, height: $noticeBoxHeight)
+                            .padding(.trailing, 12)
                             .opacity(isNoticeOpened ? 1 : 0)
                         
                         Button(action: {
@@ -104,13 +105,15 @@ struct SearchView: View {
                                 .frame(height: 17)
                                 .tint(.secondary)
                                 .opacity(0.7)
+                                .padding(.top, 6)
+                                .padding(.leading, 10) // NOTE: 버튼 클릭 영역때문에 추가.
+                                .padding(.trailing, 12) // NOTE: 버튼 클릭 영역때문에 밖에서 여기로 이동해줌.
                         }
-                        .padding(.top, 6)
                     }
                 }
             }
             .frame(maxWidth: .infinity)
-            .padding(.horizontal, 12)
+            .padding(.leading, 12)
             .offset(x: 0, y: -noticeYOffset)
             .zIndex(1)
             
@@ -295,7 +298,7 @@ struct SearchView: View {
                     .onEnded { _ in
                         if !appStore.path.ids.isEmpty {
                             if dragOffset > dragMaxOffset {
-                                searchStore.send(.pop)
+                                appStore.send(.pop)
                             }
                             
                             dragOffset = 0

@@ -99,6 +99,7 @@ struct TournamentSingleGameItem<T: Decodable & Equatable>: View {
                         .foregroundStyle(scoreColor)
                     
                     if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
+                        // TODO: 유령 버그..? 로직은 문제 없는데 스코어가 안나옴. 중간에 이상한 Text하나 추가하면 나옴...
                         Text("\(awayTeamPenaltyScore)")
                             .font(.system(size: 12))
                             .foregroundStyle(awayTeamPenaltyScore >= homeTeamPenaltyScore ? .moare : .primary)
