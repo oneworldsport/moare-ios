@@ -32,11 +32,8 @@ struct TournamentDrawViewContainer<T: Decodable & Equatable>: View {
                                 
                                 if state.isSeries {
                                     // TODO: 추첨인데 시리즈인 경우가 생기면 작업
-                                    ForEach(games, id: \.gameId) { game in
-                                        
-                                    }
                                 } else {
-                                    if let game = games.first {
+                                    if let game = games?.first {
                                         TournamentSingleGameItem(
                                             leagueId: state.leagueId,
                                             game: game,

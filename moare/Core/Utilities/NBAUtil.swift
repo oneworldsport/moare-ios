@@ -38,7 +38,7 @@ struct NBAUtil {
         guard let gameSummary else { return "" }
         
         if gameSummary.seriesGameNumber.isEmpty {
-            return "정규시즌"
+            return gameSummary.weekName
         } else if gameSummary.gameLabel.lowercased().contains("play-in") {
             return "플레이인 토너먼트"
         } else if !gameSummary.seriesGameNumber.isEmpty {
@@ -57,10 +57,10 @@ struct NBAUtil {
                     return isShort ? "플레이오프-\(conference) 결승 \(subLabel)" : "플레이오프 - \(conference) 컨퍼런스 결승 \(subLabel)"
                 }
             } else {
-                return "정규시즌"
+                return gameSummary.weekName
             }
         } else {
-            return "정규시즌"
+            return gameSummary.weekName
         }
     }
     

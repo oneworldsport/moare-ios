@@ -58,43 +58,43 @@ struct MLBTournamentStore {
                 let season = displayModel.season
                 
                 // 시드 순서를 유지해야해서 다음과 같은 로직 적용
-                let firstRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_16"] ?? []
-                let nlFirstRoundTeamIds = Array(firstRoundTeamIds.prefix(4))
-                let alFirstRoundTeamIds = Array(firstRoundTeamIds.suffix(4))
+                let firstRoundTeams = tournamentTeams["\(leagueId)_\(season)_16"] ?? []
+                let nlFirstRoundTeams = Array(firstRoundTeams.prefix(4))
+                let alFirstRoundTeams = Array(firstRoundTeams.suffix(4))
                 
-                let secondRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_8"] ?? []
-                let nlSecondRoundTeamIds = Array(secondRoundTeamIds.prefix(4))
-                let alSecondRoundTeamIds = Array(secondRoundTeamIds.suffix(4))
+                let secondRoundTeams = tournamentTeams["\(leagueId)_\(season)_8"] ?? []
+                let nlSecondRoundTeams = Array(secondRoundTeams.prefix(4))
+                let alSecondRoundTeams = Array(secondRoundTeams.suffix(4))
                 
-                let thirdRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_4"] ?? []
-                let nlThirdRoundTeamIds = Array(thirdRoundTeamIds.prefix(2))
-                let alThirdRoundTeamIds = Array(thirdRoundTeamIds.suffix(2))
+                let thirdRoundTeams = tournamentTeams["\(leagueId)_\(season)_4"] ?? []
+                let nlThirdRoundTeams = Array(thirdRoundTeams.prefix(2))
+                let alThirdRoundTeams = Array(thirdRoundTeams.suffix(2))
                 
-                let fourthRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_2"] ?? []
+                let fourthRoundTeams = tournamentTeams["\(leagueId)_\(season)_2"] ?? []
                 
-                let nlFirstRoundPairedTeamIds = nlFirstRoundTeamIds.chunked(by: 2)
-                let alFirstRoundPairedTeamIds = alFirstRoundTeamIds.chunked(by: 2)
-                let nlSecondRoundPairedTeamIds = nlSecondRoundTeamIds.chunked(by: 2)
-                let alSecondRoundPairedTeamIds = alSecondRoundTeamIds.chunked(by: 2)
-                let nlThirdRoundPairedTeamIds = nlThirdRoundTeamIds.chunked(by: 2)
-                let alThirdRoundPairedTeamIds = alThirdRoundTeamIds.chunked(by: 2)
-                let fourthRoundPairedTeamIds = fourthRoundTeamIds.chunked(by: 2)
+                let nlFirstRoundPairedTeams = nlFirstRoundTeams.chunked(by: 2)
+                let alFirstRoundPairedTeams = alFirstRoundTeams.chunked(by: 2)
+                let nlSecondRoundPairedTeams = nlSecondRoundTeams.chunked(by: 2)
+                let alSecondRoundPairedTeams = alSecondRoundTeams.chunked(by: 2)
+                let nlThirdRoundPairedTeams = nlThirdRoundTeams.chunked(by: 2)
+                let alThirdRoundPairedTeams = alThirdRoundTeams.chunked(by: 2)
+                let fourthRoundPairedTeams = fourthRoundTeams.chunked(by: 2)
                 
-                var games = displayModel.games
+                var games = displayModel.games.filter { $0.gameStatus != Constants.GameStatus.MLB.postponed }
                 
-                var (nlFirstRoundSeedTuple, nlFirstRound) = Util.collectRound(from: nlFirstRoundPairedTeamIds, games: &games)
-                var (alFirstRoundSeedTuple, alFirstRound) =  Util.collectRound(from: alFirstRoundPairedTeamIds, games: &games)
+                var (nlFirstRoundSeedTuple, nlFirstRound) = Util.collectRound(from: nlFirstRoundPairedTeams, games: &games)
+                var (alFirstRoundSeedTuple, alFirstRound) =  Util.collectRound(from: alFirstRoundPairedTeams, games: &games)
                 // TournamentBracket화면에서 와일드카드 시리즈는 한시리즈를 비워놔야해서 추가
                 nlFirstRound.insert(nil, at: 1)
                 nlFirstRoundSeedTuple.insert((topSeedId: nil, lowerSeedId: nil), at: 1)
                 alFirstRound.insert(nil, at: 1)
                 alFirstRoundSeedTuple.insert((topSeedId: nil, lowerSeedId: nil), at: 1)
                 
-                let (nlSecondRoundSeedTuple, nlSecondRound) =  Util.collectRound(from: nlSecondRoundPairedTeamIds, games: &games)
-                let (alSecondRoundSeedTuple, alSecondRound) =  Util.collectRound(from: alSecondRoundPairedTeamIds, games: &games)
-                let (nlThirdRoundSeedTuple, nlThirdRound) =  Util.collectRound(from: nlThirdRoundPairedTeamIds, games: &games)
-                let (alThirdRoundSeedTuple, alThirdRound) =  Util.collectRound(from: alThirdRoundPairedTeamIds, games: &games)
-                let (fourthRoundSeedTuple, fourthRound) =  Util.collectRound(from: fourthRoundPairedTeamIds, games: &games)
+                let (nlSecondRoundSeedTuple, nlSecondRound) =  Util.collectRound(from: nlSecondRoundPairedTeams, games: &games)
+                let (alSecondRoundSeedTuple, alSecondRound) =  Util.collectRound(from: alSecondRoundPairedTeams, games: &games)
+                let (nlThirdRoundSeedTuple, nlThirdRound) =  Util.collectRound(from: nlThirdRoundPairedTeams, games: &games)
+                let (alThirdRoundSeedTuple, alThirdRound) =  Util.collectRound(from: alThirdRoundPairedTeams, games: &games)
+                let (fourthRoundSeedTuple, fourthRound) =  Util.collectRound(from: fourthRoundPairedTeams, games: &games)
                 
                 state.gameListTuple = [
                     ("NL 와일드카드 시리즈", nlFirstRound),

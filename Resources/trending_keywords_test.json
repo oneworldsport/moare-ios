@@ -1,0 +1,172 @@
+{
+    "date": "2025-08-25",
+    "keywords": [
+        {
+            "entities": [
+                {
+                    "entityName": "MLB",
+                    "entityId": 90102,
+                    "category": "baseball",
+                    "entityType": "league",
+                    "leagueId": 90102
+                }
+            ],
+            "keyword": "MLB 포스트시즌",
+            "keywords": [
+                {
+                    "keyword": "포스트시즌",
+                    "id": "tournament",
+                    "priority": 2
+                }
+            ]
+        },
+        {
+            "entities": [
+                {
+                    "entityName": "MLB",
+                    "entityId": 90102,
+                    "category": "baseball",
+                    "entityType": "league",
+                    "leagueId": 90102
+                }
+            ],
+            "keyword": "MLB 포스트시즌",
+            "keywords": [
+                {
+                    "keyword": "포스트시즌",
+                    "id": "tournament",
+                    "priority": 2
+                }
+            ]
+        },
+        {
+            "entities": [
+                {
+                    "entityName": "KBO",
+                    "entityId": 90101,
+                    "category": "baseball",
+                    "entityType": "league",
+                    "leagueId": 90101
+                }
+            ],
+            "keyword": "KBO 가을야구",
+            "keywords": [
+                {
+                    "keyword": "가을야구",
+                    "id": "tournament",
+                    "priority": 2
+                }
+            ]
+        },
+        {
+            "entities": [
+                {
+                    "entityName": "프리미어리그",
+                    "entityId": 39,
+                    "category": "football",
+                    "entityType": "league",
+                    "leagueId": 39
+                }
+            ],
+            "keyword": "프리미어리그 일정",
+            "keywords": [
+                {
+                    "id": "schedule",
+                    "keyword": "일정",
+                    "priority": 1
+                }
+            ]
+        },
+        {
+            "entities": [
+                {
+                    "entityName": "MLS",
+                    "entityId": 253,
+                    "category": "football",
+                    "entityType": "league",
+                    "leagueId": 253
+                }
+            ],
+            "keyword": "MLS 일정",
+            "keywords": [
+                {
+                    "id": "schedule",
+                    "keyword": "일정",
+                    "priority": 1
+                }
+            ]
+        },
+        {
+            "entities": [
+                {
+                    "entityName": "프리미어리그",
+                    "entityId": 39,
+                    "category": "football",
+                    "entityType": "league",
+                    "leagueId": 39
+                }
+            ],
+            "keyword": "프리미어리그 순위",
+            "keywords": [
+                {
+                    "id": "standings",
+                    "keyword": "순위",
+                    "priority": 1
+                }
+            ]
+        },
+        {
+            "entities": [
+                {
+                    "entityName": "MLB",
+                    "entityId": 90102,
+                    "category": "baseball",
+                    "entityType": "league",
+                    "leagueId": 90102
+                }
+            ],
+            "keyword": "MLB 일정",
+            "keywords": [
+                {
+                    "id": "schedule",
+                    "keyword": "일정",
+                    "priority": 1
+                }
+            ]
+        },
+        {
+            "entities": [
+                {
+                    "entityName": "KBO",
+                    "entityId": 90101,
+                    "category": "baseball",
+                    "entityType": "league",
+                    "leagueId": 90101
+                }
+            ],
+            "keyword": "KBO 일정",
+            "keywords": [
+                {
+                    "id": "schedule",
+                    "keyword": "일정",
+                    "priority": 1
+                }
+            ]
+        },
+        {
+            "entities": [
+                {
+                    "entityName": "손흥민",
+                    "entityId": 186,
+                    "category": "football",
+                    "entityType": "player",
+                    "leagueId": 253,
+                    "playerId": 186,
+                    "teamId": 1616
+                }
+            ],
+            "keyword": "손흥민",
+            "keywords": []
+        }
+    ]
+}

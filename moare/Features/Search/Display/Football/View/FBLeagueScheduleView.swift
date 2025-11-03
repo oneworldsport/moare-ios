@@ -17,13 +17,17 @@ struct FBLeagueScheduleView: View {
     @State private var show = false
     
     var body: some View {
+        let displayModel = store.baseSchedule.displayModel
+        let leagueId = displayModel.leagueId
+        
         VStack {
             if show {
                 ScheduleViewContainer(
                     state: ScheduleContainerState(
-                        leagueId: store.baseSchedule.displayModel.leagueId,
-                        shouldShowCalendar: store.selectedGame == nil,
+                        leagueId: leagueId,
+                        shouldShowCalendar: (displayModel.scheduleType != .teamFlat) && (store.selectedGame == nil),
                         shouldShowAllResultToggleButton: store.selectedGame == nil,
+                        shouldFetchSchedule:  displayModel.scheduleType == ScheduleType.league,
                         displayDataState: store.baseSchedule.displayDataState,
                         calendarUiState: CalendarUiState(
                             yearMonthList: store.baseSchedule.yearMonthList,
@@ -31,7 +35,8 @@ struct FBLeagueScheduleView: View {
                             selectedYearMonthIndex: store.baseSchedule.selectedYearMonthIndex,
                             selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
-                        isAllResultOpened: store.baseSchedule.isAllResultOpened
+                        isAllResultOpened: store.baseSchedule.isAllResultOpened,
+                        shouldShowTournamentButton: (leagueId == Constants.Ids.mls) && (store.baseSchedule.selectedMonth >= 10),
                     ),
                     actions: ScheduleContainerActions(
                         calendarUiActions: CalendarUiActions(
@@ -44,6 +49,9 @@ struct FBLeagueScheduleView: View {
                         ),
                         allResultButtonAction: {
                             store.send(.toggleAllResult)
+                        },
+                        tournamentButtonAction: {
+                            store.send(.showTournament)
                         }
                     ),
                     titleContent: {
@@ -149,8 +157,8 @@ struct FBLeagueScheduleListItem: View {
     let fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>?
     
     let data: FBGameForSchedule
-    // FBLeagueScheduleStore이 한번도 초기화 된적 없이 FBGameStatsView에서 해당 구조체가 호출될때 teamNameDictionary를 fbLeagueScheduleStore에서 가져올수가 없어 추가.
     let leagueId: Int
+    // FBLeagueScheduleStore이 한번도 초기화 된적 없이 FBGameStatsView에서 해당 구조체가 호출될때 teamNameDictionary를 fbLeagueScheduleStore에서 가져올수가 없어 추가.
     let teamNameDic: [String: String]
     
     /* ---------------------
@@ -163,6 +171,7 @@ struct FBLeagueScheduleListItem: View {
         let gameStatus = data.gameStatus
         // FBLeagueScheduleView가 아닌 FBPlayerInfoView나 FBTeamInfoView 등에서 보여질때 사용되는 flag
         let isFromSchedule = fbLeagueScheduleStore != nil
+        let displayModel = fbLeagueScheduleStore?.baseSchedule.displayModel
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
@@ -171,41 +180,41 @@ struct FBLeagueScheduleListItem: View {
                 teamNameDic: teamNameDic,
                 isClickEnabled: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
                 isResultOpened: isResultOpened,
-                gameStatusText: Constants.GameStatus.gameStatusText(leagueId: leagueId, status: data.gameStatus, isResultOpened: isResultOpened),
+                gameStatusText: Constants.GameStatus.fbGameStatusText(status: data.gameStatus, elapsed: data.gameInfo?.elapsed, isResultOpened: isResultOpened),
                 gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: data.gameStatus),
-                isCapsuleButtonDisabled: (isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true) || !StringConstants.Football.gameFinishedList.contains(gameStatus),
+                isCapsuleButtonDisabled: (isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true) || !Constants.GameStatus.Football.finishedList.contains(gameStatus),
                 gameType: MatchDescriptionConverter.convert(input: data.gameInfo?.round ?? ""),
-                shouldShowOnlyDateTime: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
+                shouldShowOnlyDateTime: isFromSchedule ? (
+                    (displayModel?.scheduleType != ScheduleType.teamFlat) && (fbLeagueScheduleStore?.selectedGame == nil)
+                ) : false, // Schedule일때는 (리그, 팀)일정 화면이고 selectedGame이 없을때만 true
                 shouldShowGameType: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
                 shouldShowHomeLabel: isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true,
                 shouldShowAwayLabel: isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true,
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
-                    if let fbLeagueScheduleStore {
-                        fbLeagueScheduleStore.send(.selectGame(game: data))
-                    }
+                    fbLeagueScheduleStore?.send(.selectGame(game: data))
                 },
                 onCapsuleButtonClick: {
-                    if let fbLeagueScheduleStore {
-                        fbLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: !isResultOpened))
-                    }
+                    fbLeagueScheduleStore?.send(.updateResultOpenedState(gameId: gameId, isOpened: !isResultOpened))
                 }
             )
         )
         .onAppear {
-            if StringConstants.Football.gameFinishedList.contains(gameStatus) {
-                if let fbLeagueScheduleStore {
+            if let fbLeagueScheduleStore {
+                if Constants.GameStatus.Football.finishedList.contains(gameStatus) {
                     isResultOpened = fbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
+                } else if gameStatus == Constants.GameStatus.Football.notStarted {
+                    isResultOpened = false
+                } else {
+                    isResultOpened = true
                 }
-            } else if gameStatus == StringConstants.Football.gameNotStarted {
-                isResultOpened = false
             } else {
                 isResultOpened = true
             }
         }
         .onChange(of: fbLeagueScheduleStore?.gameResultOpenedStateList) {
-            if let fbLeagueScheduleStore, StringConstants.Football.gameFinishedList.contains(gameStatus) {
+            if let fbLeagueScheduleStore, Constants.GameStatus.Football.finishedList.contains(gameStatus) {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                     isResultOpened = fbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
                 }

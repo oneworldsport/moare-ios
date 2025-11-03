@@ -296,17 +296,26 @@ struct KBOGamePitcherStats: Decodable, Equatable {
     
     private func parseInningString(_ text: String) -> Double {
         let parts = text.split(separator: " ")
+        let first = String(parts[0])
         
-        guard let wholePart = Int(parts[0]) else {
+        // 토큰이 하나일 때: ex) "1/3" or "2"
+        if parts.count == 1 {
+            switch first {
+            case "1/3":
+                return 0.1
+            case "2/3":
+                return 0.2
+            default:
+                return Double(first) ?? 0.0
+            }
+        }
+        
+        // 토큰이 두 개 이상일 때: "2 1/3"
+        guard let wholePart = Int(first) else {
             return 0.0
         }
         
-        if parts.count == 1 {
-            // ex: "2" -> 2.0
-            return Double(wholePart)
-        }
-        
-        let fraction = parts[1]
+        let fraction = String(parts[1])
         switch fraction {
         case "1/3":
             return Double(wholePart) + 0.1

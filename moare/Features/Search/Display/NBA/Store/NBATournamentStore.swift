@@ -57,41 +57,40 @@ struct NBATournamentStore {
                 let tournamentTeams = state.baseTournament.tournamentTeams
                 let displayModel = state.baseTournament.displayModel
                 let leagueId = displayModel.leagueId
-//                let season = displayModel.season
-                let season = 2024
+                let season = displayModel.season
                 
                 // 시드 순서를 유지해야해서 다음과 같은 로직 적용
-                let firstRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_16"] ?? []
-                let westFirstRoundTeamIds = Array(firstRoundTeamIds.prefix(8))
-                let eastFirstRoundTeamIds = Array(firstRoundTeamIds.suffix(8))
+                let firstRoundTeams = tournamentTeams["\(leagueId)_\(season)_16"] ?? []
+                let westFirstRoundTeams = Array(firstRoundTeams.prefix(8))
+                let eastFirstRoundTeams = Array(firstRoundTeams.suffix(8))
                 
-                let secondRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_8"] ?? []
-                let westSecondRoundTeamIds = Array(secondRoundTeamIds.prefix(4))
-                let eastSecondRoundTeamIds = Array(secondRoundTeamIds.suffix(4))
+                let secondRoundTeams = tournamentTeams["\(leagueId)_\(season)_8"] ?? []
+                let westSecondRoundTeams = Array(secondRoundTeams.prefix(4))
+                let eastSecondRoundTeams = Array(secondRoundTeams.suffix(4))
                 
-                let thirdRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_4"] ?? []
-                let westThirdRoundTeamIds = Array(thirdRoundTeamIds.prefix(2))
-                let eastThirdRoundTeamIds = Array(thirdRoundTeamIds.suffix(2))
+                let thirdRoundTeams = tournamentTeams["\(leagueId)_\(season)_4"] ?? []
+                let westThirdRoundTeams = Array(thirdRoundTeams.prefix(2))
+                let eastThirdRoundTeams = Array(thirdRoundTeams.suffix(2))
                 
-                let fourthRoundTeamIds = tournamentTeams["\(leagueId)_\(season)_2"] ?? []
+                let fourthRoundTeams = tournamentTeams["\(leagueId)_\(season)_2"] ?? []
                 
-                let westFirstRoundPairedTeamIds = westFirstRoundTeamIds.chunked(by: 2)
-                let eastFirstRoundPairedTeamIds = eastFirstRoundTeamIds.chunked(by: 2)
-                let westSecondRoundPairedTeamIds = westSecondRoundTeamIds.chunked(by: 2)
-                let eastSecondRoundPairedTeamIds = eastSecondRoundTeamIds.chunked(by: 2)
-                let westThirdRoundPairedTeamIds = westThirdRoundTeamIds.chunked(by: 2)
-                let eastThirdRoundPairedTeamIds = eastThirdRoundTeamIds.chunked(by: 2)
-                let fourthRoundPairedTeamIds = fourthRoundTeamIds.chunked(by: 2)
+                let westFirstRoundPairedTeams = westFirstRoundTeams.chunked(by: 2)
+                let eastFirstRoundPairedTeams = eastFirstRoundTeams.chunked(by: 2)
+                let westSecondRoundPairedTeams = westSecondRoundTeams.chunked(by: 2)
+                let eastSecondRoundPairedTeams = eastSecondRoundTeams.chunked(by: 2)
+                let westThirdRoundPairedTeams = westThirdRoundTeams.chunked(by: 2)
+                let eastThirdRoundPairedTeams = eastThirdRoundTeams.chunked(by: 2)
+                let fourthRoundPairedTeams = fourthRoundTeams.chunked(by: 2)
                 
                 var games = displayModel.games
                 
-                let (westFirstRoundSeedTuple, westFirstRound) =  Util.collectRound(from: westFirstRoundPairedTeamIds, games: &games)
-                let (eastFirstRoundSeedTuple, eastFirstRound) =  Util.collectRound(from: eastFirstRoundPairedTeamIds, games: &games)
-                let (westSecondRoundSeedTuple, westSecondRound) =  Util.collectRound(from: westSecondRoundPairedTeamIds, games: &games)
-                let (eastSecondRoundSeedTuple, eastSecondRound) =  Util.collectRound(from: eastSecondRoundPairedTeamIds, games: &games)
-                let (westThirdRoundSeedTuple, westThirdRound) =  Util.collectRound(from: westThirdRoundPairedTeamIds, games: &games)
-                let (eastThirdRoundSeedTuple, eastThirdRound) =  Util.collectRound(from: eastThirdRoundPairedTeamIds, games: &games)
-                let (fourthRoundSeedTuple, fourthRound) =  Util.collectRound(from: fourthRoundPairedTeamIds, games: &games)
+                let (westFirstRoundSeedTuple, westFirstRound) =  Util.collectRound(from: westFirstRoundPairedTeams, games: &games)
+                let (eastFirstRoundSeedTuple, eastFirstRound) =  Util.collectRound(from: eastFirstRoundPairedTeams, games: &games)
+                let (westSecondRoundSeedTuple, westSecondRound) =  Util.collectRound(from: westSecondRoundPairedTeams, games: &games)
+                let (eastSecondRoundSeedTuple, eastSecondRound) =  Util.collectRound(from: eastSecondRoundPairedTeams, games: &games)
+                let (westThirdRoundSeedTuple, westThirdRound) =  Util.collectRound(from: westThirdRoundPairedTeams, games: &games)
+                let (eastThirdRoundSeedTuple, eastThirdRound) =  Util.collectRound(from: eastThirdRoundPairedTeams, games: &games)
+                let (fourthRoundSeedTuple, fourthRound) =  Util.collectRound(from: fourthRoundPairedTeams, games: &games)
                 
                 state.gameListTuple = [
                     ("서부 컨퍼런스 1라운드", westFirstRound),

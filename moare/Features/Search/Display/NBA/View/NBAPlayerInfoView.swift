@@ -675,8 +675,8 @@ struct NBAPlayerInfoEighthItem: View {
             if let lastGame {
                 let homeTeam = lastGame.boxScoreTraditional?.homeTeam
                 let awayTeam = lastGame.boxScoreTraditional?.awayTeam
-                let homeTeamScore = lastGame.lineScore.first { $0.teamId == homeTeam?.teamId }?.pts ?? 0
-                let awayTeamScore = lastGame.lineScore.first { $0.teamId == awayTeam?.teamId }?.pts ?? 0
+                let homeTeamScore = lastGame.lineScore?.first { $0.teamId == homeTeam?.teamId }?.pts ?? 0
+                let awayTeamScore = lastGame.lineScore?.first { $0.teamId == awayTeam?.teamId }?.pts ?? 0
                 
                 HStack {
                     VStack {
@@ -712,7 +712,7 @@ struct NBAPlayerInfoEighthItem: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         
-                        Text(CalendarUtil.formatDate(date: lastGame.gameSummary?.date, formatType: .ampmWithDayOfWeekDate))
+                        Text(CalendarUtil.formatDate(date: lastGame.gameSummary?.gameDate, formatType: .ampmWithDayOfWeekDate))
                             .font(.system(size: 15))
                     }
                     .frame(width: UIScreen.main.bounds.width * 0.40) // NOTE: 너비를 화면 전체 너비중 40%로 고정
@@ -799,10 +799,11 @@ struct NBAPlayerInfoNinthItem: View {
                 .opacity(showContents ? 1 : 0)
             
             if let nextGame {
-                let lastMeeting = nextGame.lastMeeting
+                let homeTeamId = nextGame.gameSummary?.homeTeamId
+                let awayTeamId = nextGame.gameSummary?.awayTeamId
                 
                 HStack {
-                    Text(lastMeeting?.lastGameHomeTeamId == nil ? "" : teamNameDic["short_\(lastMeeting!.lastGameHomeTeamId)"] ?? lastMeeting!.lastGameHomeTeamCity)
+                    Text(homeTeamId == nil ? "" : teamNameDic["short_\(homeTeamId ?? 0)"] ?? "")
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -810,14 +811,14 @@ struct NBAPlayerInfoNinthItem: View {
                     Text(" vs ")
                         .fontWeight(.semibold)
                     
-                    Text(lastMeeting?.lastGameVisitorTeamId == nil ? "" : teamNameDic["short_\(lastMeeting!.lastGameVisitorTeamId)"] ?? lastMeeting!.lastGameVisitorTeamCity)
+                    Text(awayTeamId == nil ? "" : teamNameDic["short_\(awayTeamId ?? 0)"] ?? "")
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .opacity(showContents ? 1 : 0)
                 
-                Text(CalendarUtil.formatDate(date: nextGame.gameSummary?.date, formatType: .ampmWithDayOfWeekDate))
+                Text(CalendarUtil.formatDate(date: nextGame.gameSummary?.gameDate, formatType: .ampmWithDayOfWeekDate))
                     .font(.system(size: 15))
                     .opacity(showContents ? 1 : 0)
             } else {

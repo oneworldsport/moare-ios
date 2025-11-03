@@ -21,10 +21,11 @@ struct TournamentBracketContainerState<T: Decodable & Equatable> {
 struct TournamentDrawContainerState<T: Decodable & Equatable> {
     let leagueId: Int
     let teamNameDic: [String: String]
-    let gameListTuple: [(title: String, gameList: [[GameForSchedule<T>]])]
+    let gameListTuple: [(title: String, gameList: [[GameForSchedule<T>]?])]
     let isSeries: Bool
 }
 
 struct TournamentContainerAction<T: Decodable & Equatable> {
     var selectSeries: (([GameForSchedule<T>]) -> Void)? = nil
+    var selectGame: ((GameForSchedule<T>) -> Void)? = nil
 }

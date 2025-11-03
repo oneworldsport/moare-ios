@@ -133,8 +133,8 @@ struct StringConstants {
     
     static func tournamentButtonText(leagueId: Int) -> String {
         switch leagueId {
-        case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
-            return ""
+        case Constants.Ids.mls:
+            return "플레이오프 대진표"
         case Constants.Ids.nba:
             return "플레이오프 대진표"
         case Constants.Ids.mlb:
