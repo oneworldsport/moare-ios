@@ -9,11 +9,12 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MoatView: View {
-    @EnvironmentObject var storeManager: StoreManager
-    @State var moatStore: StoreOf<MoatStore>? = nil
+    let moatStackStore: StoreOf<MoatStackStore>
+    let moatStore: StoreOf<MoatStore>
     
     @AppStorage("accessToken") private var accessToken: String = ""
     
+    @State private var show = false
     @State var text = ""
     @State private var settingsShowing = false
     @State private var reportShowing = false
@@ -25,7 +26,7 @@ struct MoatView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            if let moatStore {
+            if show {
                 HStack {
                     BackButton {
                         moatStore.send(.goBack)
@@ -120,7 +121,6 @@ struct MoatView: View {
                         }
                     } else {
                         SignView()
-                            .environmentObject(storeManager)
                     }
                 }
                 .overlay(alignment : .topTrailing) {
@@ -135,18 +135,8 @@ struct MoatView: View {
             }
         }
         .onAppear {
-            let moatStore: StoreOf<MoatStore> = storeManager.getStore(forKey: StoreKeys.moatStore) ?? {
-                let newStore = Store(initialState: MoatStore.State()) {
-                    MoatStore()
-                }
-                
-                storeManager.setStore(newStore, forKey: StoreKeys.moatStore)
-                
-                return newStore
-            }()
-            
             withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                self.moatStore = moatStore
+                show = true
             }
             
             moatStore.send(.getTimelineMoats)

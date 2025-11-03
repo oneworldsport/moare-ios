@@ -26,7 +26,8 @@ struct SportSearchEngine_iOSApp: App {
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-    let appStore = Store(initialState: AppStore.State()) { AppStore() }
+    let searchStackStore = Store(initialState: SearchStackStore.State()) { SearchStackStore() }
+    let moatStackStore = Store(initialState: MoatStackStore.State()) { MoatStackStore() }
     
     @State var isSplashFinished = false
     @State private var didInitialLoad = false
@@ -59,8 +60,8 @@ struct SportSearchEngine_iOSApp: App {
             Group {
                 if viewForTest != nil && didInitialLoad {
                     SearchView(
-                        appStore: appStore,
-                        searchStore: appStore.scope(state: \.search, action: \.search),
+                        searchStackStore: searchStackStore,
+                        searchStore: searchStackStore.scope(state: \.search, action: \.search),
                         viewForTest: viewForTest
                     )
                     .preferredColorScheme(.light) // force light mode
@@ -68,31 +69,33 @@ struct SportSearchEngine_iOSApp: App {
                     if isSplashFinished && didInitialLoad {
                         TabView(selection: $selection) {
                             SearchView(
-                            appStore: appStore,
-                            searchStore: appStore.scope(state: \.search, action: \.search)
-                        )
-                        .preferredColorScheme(.light) // force light mode
-                                .tabItem {
-                                    Image(systemName: "magnifyingglass")
-                                    if selection == .search {
-                                        Text("검색")
-                                    } else {
-                                        Text("")
-                                    }
+                                searchStackStore: searchStackStore,
+                                searchStore: searchStackStore.scope(state: \.search, action: \.search)
+                            )
+                            .preferredColorScheme(.light) // force light mode
+                            .tabItem {
+                                Image(systemName: "magnifyingglass")
+                                if selection == .search {
+                                    Text("검색")
+                                } else {
+                                    Text("")
                                 }
-                                .tag(Screen.search)
+                            }
+                            .tag(Screen.search)
                             
-                            MoatView()
-                                .environmentObject(storeManager)
-                                .tabItem {
-                                    Image(systemName: "bubble.left")
-                                    if selection == .moat {
-                                        Text("모트")
-                                    } else {
-                                        Text("")
-                                    }
+                            MoatView(
+                                moatStackStore: moatStackStore,
+                                moatStore: moatStackStore.scope(state: \.moat, action: \.moat)
+                            )
+                            .tabItem {
+                                Image(systemName: "bubble.left")
+                                if selection == .moat {
+                                    Text("모트")
+                                } else {
+                                    Text("")
                                 }
-                                .tag(Screen.moat)
+                            }
+                            .tag(Screen.moat)
                             
                             UserProfileView()
                                 .environmentObject(storeManager)

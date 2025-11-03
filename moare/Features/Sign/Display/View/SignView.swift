@@ -9,9 +9,9 @@ import SwiftUI
 import ComposableArchitecture
 
 struct SignView: View {
-    @EnvironmentObject var storeManager: StoreManager
-    @State var signStore: StoreOf<SignStore>? = nil
+    let signStore = Store(initialState: SignStore.State()) { SignStore() }
     
+    @State private var show = false
     @State private var updateText = ""
     @State private var hstackWidth: CGFloat = UIConstants.Width.screenWidth - 16
     @State private var barWidth: CGFloat = 20
@@ -22,7 +22,7 @@ struct SignView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            if let signStore {
+            if show {
                 ZStack {
                     Text(signStore.title)
                         .font(.system(size: 16, weight: .medium))
@@ -138,23 +138,11 @@ struct SignView: View {
         }
         .padding(.horizontal, 8)
         .onAppear {
-            // init SignStore
-            let signStore: StoreOf<SignStore> = storeManager.getStore(forKey: StoreKeys.signStore) ?? {
-                let newStore = Store(initialState: SignStore.State()) {
-                    SignStore()
-                }
-                
-                storeManager.setStore(newStore, forKey: StoreKeys.signStore)
-                
-                return newStore
-            }()
-            
             withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                self.signStore = signStore
+                show = true
             }
             
             isFocused = true
-            
             updateText = signStore.text
         }
     }

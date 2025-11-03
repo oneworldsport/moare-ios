@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct SearchView: View {
-    let appStore: StoreOf<AppStore>
+    let searchStackStore: StoreOf<SearchStackStore>
     let searchStore: StoreOf<SearchStore>
 
     private let dragMaxOffset = UIConstants.Width.screenWidth / 3 + 20
@@ -46,7 +46,7 @@ struct SearchView: View {
                     //         searchStore.send(.goBack)
                     //     }
                     Button(action: {
-                        appStore.send(.pop)
+                        searchStackStore.send(.pop)
                     }) {
                         Image(systemName: "chevron.backward")
                             .font(.system(size: 22))
@@ -176,9 +176,9 @@ struct SearchView: View {
                      --------------------- */
                     if searchStore.resultVisibleState {
                         VStack(spacing: 0) {
-                            if appStore.includesPreviousView {
-                                if let id = appStore.path.ids.suffix(2).first {
-                                  if let store = appStore.scope(
+                            if searchStackStore.includesPreviousView {
+                                if let id = searchStackStore.path.ids.suffix(2).first {
+                                  if let store = searchStackStore.scope(
                                     state: \.path[id: id],
                                     action: \.path[id: id]
                                   ) {
@@ -192,16 +192,16 @@ struct SearchView: View {
                                 }
                             }
                             
-                            if let id = appStore.path.ids.last {
-                              if let store = appStore.scope(
+                            if let id = searchStackStore.path.ids.last {
+                              if let store = searchStackStore.scope(
                                 state: \.path[id: id],
                                 action: \.path[id: id]
                               ) {
                                 PathView(
                                   searchStore: searchStore,
                                   store: store,
-                                  didPop: appStore.didPop,
-                                  isCombinedView: appStore.includesPreviousView
+                                  didPop: searchStackStore.didPop,
+                                  isCombinedView: searchStackStore.includesPreviousView
                                 )
                               }
                             }
@@ -287,7 +287,7 @@ struct SearchView: View {
                 // custom back handler
                 DragGesture(minimumDistance: 3)
                     .onChanged { value in
-                        if !appStore.path.ids.isEmpty {
+                        if !searchStackStore.path.ids.isEmpty {
                             dragOffset = value.translation.width
                             
                             if dragOffset > 0 {
@@ -296,9 +296,9 @@ struct SearchView: View {
                         }
                     }
                     .onEnded { _ in
-                        if !appStore.path.ids.isEmpty {
+                        if !searchStackStore.path.ids.isEmpty {
                             if dragOffset > dragMaxOffset {
-                                appStore.send(.pop)
+                                searchStackStore.send(.pop)
                             }
                             
                             dragOffset = 0
@@ -326,14 +326,14 @@ struct SearchView: View {
 
 struct PathView: View {
     let searchStore: StoreOf<SearchStore>
-    let store: StoreOf<AppStore.Path>
-//    let previousStore: StoreOf<AppStore.Path>?
+    let store: StoreOf<SearchStackStore.Path>
+//    let previousStore: StoreOf<SearchStackStore.Path>?
     let didPop: Bool
     let isCombinedView: Bool
     
     init(
         searchStore: StoreOf<SearchStore>,
-        store: StoreOf<AppStore.Path>,
+        store: StoreOf<SearchStackStore.Path>,
         didPop: Bool,
         isCombinedView: Bool = false
     ) {

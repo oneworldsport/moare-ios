@@ -1,5 +1,5 @@
 //
-//  AppStore.swift
+//  SearchStackStore.swift
 //  moare
 //
 //  Created by Mohwa Yoon on 9/22/25.
@@ -9,7 +9,7 @@ import Foundation
 import ComposableArchitecture
 
 @Reducer
-struct AppStore {
+struct SearchStackStore {
     @ObservableState
     struct State {
         var search = SearchStore.State()
@@ -450,7 +450,7 @@ struct AppStore {
 }
 
 extension SportDecodableModel {
-    var playerStatsRoute: AppStore.Path.State? {
+    var playerStatsRoute: SearchStackStore.Path.State? {
         switch self {
         case let .fbPlayerStats(_, displayModel):  return .fbPlayerStats(.init(displayModel: displayModel))
         case let .nbaPlayerStats(_, displayModel): return .nbaPlayerStats(.init(displayModel: displayModel))
@@ -460,7 +460,7 @@ extension SportDecodableModel {
         }
     }
     
-    var teamStatsRoute: AppStore.Path.State? {
+    var teamStatsRoute: SearchStackStore.Path.State? {
         switch self {
         case let .fbTeamStats(_, displayModel):  return .fbTeamStats(.init(displayModel: displayModel))
         case let .nbaTeamStats(_, displayModel): return .nbaTeamStats(.init(displayModel: displayModel))
@@ -470,7 +470,7 @@ extension SportDecodableModel {
         }
     }
     
-    var gameStatsRoute: AppStore.Path.State? {
+    var gameStatsRoute: SearchStackStore.Path.State? {
         switch self {
         case let .fbGameStats(_, displayModel):  return .fbGameStats(.init(displayModel: displayModel))
         case let .nbaGameStats(_, displayModel): return .nbaGameStats(.init(displayModel: displayModel))
@@ -480,7 +480,7 @@ extension SportDecodableModel {
         }
     }
     
-    var leagueScheduleRoute: AppStore.Path.State? {
+    var leagueScheduleRoute: SearchStackStore.Path.State? {
         switch self {
         case let .fbLeagueSchedule(_, displayModel):  return .fbLeagueSchedule(.init(displayModel: displayModel))
         case let .nbaLeagueSchedule(_, displayModel): return .nbaLeagueSchedule(.init(displayModel: displayModel))
@@ -490,7 +490,7 @@ extension SportDecodableModel {
         }
     }
     
-    var tournamentRoute: AppStore.Path.State? {
+    var tournamentRoute: SearchStackStore.Path.State? {
         switch self {
         case let .fbTournament(_, displayModel):  return .fbTournament(.init(displayModel: displayModel))
         case let .nbaTournament(_, displayModel): return .nbaTournament(.init(displayModel: displayModel))

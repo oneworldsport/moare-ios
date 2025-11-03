@@ -88,7 +88,7 @@ struct SearchStore {
         case updateSearchStateWithAni(bool: Bool)
         
         case showPreviousView
-        case popView(lastPath: AppStore.Path.State?, isEmpty: Bool)
+        case popView(lastPath: SearchStackStore.Path.State?, isEmpty: Bool)
         case delegate(Delegate)
         
         /* ---------------------
@@ -310,7 +310,7 @@ struct SearchStore {
                         .mlbLeagueSchedule, .mlbGameStats, .mlbTournament: break
                 default:
                     // TODO: animation is applied by the animation below. Should be modified
-                    // TODO: 여기서 안하고 AppStore에서 하게 개선 필요
+                    // TODO: 여기서 안하고 SearchStackStore에서 하게 개선 필요
                     state.searchDataState = .failure("검색 결과가 없습니다.")
                     return .none
                 }

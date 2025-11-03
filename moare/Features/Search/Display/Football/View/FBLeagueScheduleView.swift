@@ -88,7 +88,7 @@ struct FBLeagueScheduleView: View {
             }
         }
         .onChange(of: store.baseSchedule.displayModel) {
-            // FBGameStatsView에서 새로고침 후 AppStore에서 FBLeagueScheduleDisplayModel이 업데이트 됐을때 해당 .onChange 실행
+            // FBGameStatsView에서 새로고침 후 SearchStackStore에서 FBLeagueScheduleDisplayModel이 업데이트 됐을때 해당 .onChange 실행
             store.send(.updateSelectedGame)
         }
     }
