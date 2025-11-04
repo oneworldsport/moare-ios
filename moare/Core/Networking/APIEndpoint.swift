@@ -18,6 +18,7 @@ enum APIEndpoint {
     case fetchTrendingKeywords
     
     // sign
+    case bootstrapSession
     case startLoginAuth(body: StartAuthRequest)
     case confirmLoginAuth(body: ConfirmAuthRequest)
     case initiateSignUp(body: SignUpInitiateRequest)
@@ -40,7 +41,7 @@ enum APIEndpoint {
     
     var defaultHTTPMethod: String {
         switch self {
-        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname, .getMoatDetail, .getUserProfile:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .bootstrapSession, .checkNickname, .getMoatDetail, .getUserProfile:
             return "GET"
         case .getLeagueSchedule, .searchByKeyword, .startLoginAuth, .confirmLoginAuth, .initiateSignUp, .verifySignUpOtp, .completeSignUp,
                 .createMoat, .getTimelineMoats, .getUserMoats:
@@ -107,6 +108,9 @@ enum APIEndpoint {
             components.path = "/keywords/trending"
             
         // sign
+        case .bootstrapSession:
+            components.path = "/auth/session"
+            
         case .startLoginAuth:
             components.path = "/auth/login/start"
             
@@ -163,7 +167,7 @@ enum APIEndpoint {
     
     var headers: [String: String]? {
         switch self {
-        case .createMoat, .updateMoat, .deleteMoat, .getMoatDetail, .getTimelineMoats, .getUserMoats, .getUserProfile, .updateUserProfile:
+        case .bootstrapSession, .createMoat, .updateMoat, .deleteMoat, .getMoatDetail, .getTimelineMoats, .getUserMoats, .getUserProfile, .updateUserProfile:
             if let token = UserDefaults.standard.string(forKey: "accessToken") {
                 return ["Authorization": "Bearer \(token)"]
             } else {
@@ -177,7 +181,7 @@ enum APIEndpoint {
     
     var httpBody: Data? {
         switch self {
-        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname, .deleteMoat, .getMoatDetail, .getUserProfile:
+        case .bootstrapSession, .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname, .deleteMoat, .getMoatDetail, .getUserProfile:
             return nil
             
         // search

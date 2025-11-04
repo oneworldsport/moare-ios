@@ -26,6 +26,8 @@ struct MoatStackStore {
         
         case push(MoatViewType)
         case pop
+        
+        case bootstrapSession
     }
     
     var body: some Reducer<State, Action> {
@@ -66,6 +68,19 @@ struct MoatStackStore {
                 }
                 
                 return .none
+                
+            case .bootstrapSession:
+                return .run { [path = state.path] send in
+                    do {
+                        let result = try await SignClient().bootstrapSession()
+                        
+                        if result.success && path.ids.isEmpty {
+                            await send(.push(.timeline))
+                        }
+                    } catch {
+                        print("\(error)")
+                    }
+                }
                 
             case .path:
                 return .none

@@ -8,17 +8,12 @@
 import Foundation
 
 struct RequestBuilder {
-    static func buildRequest(
-        endpoint: APIEndpoint
-    ) -> URLRequest? {
+    static func buildRequest(endpoint: APIEndpoint) -> URLRequest? {
         let method = endpoint.defaultHTTPMethod
-        guard let url = endpoint.url() else {
-            return nil
-        }
+        guard let url = endpoint.url() else { return nil }
         
         var request = URLRequest(url: url)
         request.httpMethod = method
-        
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         endpoint.headers?.forEach { key, value in

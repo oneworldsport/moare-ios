@@ -42,8 +42,8 @@ struct MoatDisplayView: View {
             }
         }
         .onAppear {
-            if !accessToken.isEmpty && moatStackStore.path.ids.isEmpty {
-                moatStackStore.send(.push(.timeline))
+            if !accessToken.isEmpty {
+                moatStackStore.send(.bootstrapSession)
             }
         }
     }

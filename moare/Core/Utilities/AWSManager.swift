@@ -9,6 +9,7 @@ import AWSCore
 import AWSTranslate
 import AWSS3
 import ComposableArchitecture
+import AWSCognitoIdentityProvider
 
 class AWSManager {
     static let shared = AWSManager()
@@ -348,5 +349,110 @@ class AWSManager {
     
     func waitForTournamentTeams() async throws -> [String: [Int?]] {
         try await tournamentTeamsPromise.value
+    }
+    
+    // cognito App clients에서 ALLOW_REFRESH_TOKEN_AUTH가 켜져있고 Enable refresh token rotation가 꺼져있을때는 아래 코드 사용
+//    func refreshToken() async throws -> String {
+//        guard let refresh = UserDefaults.standard.string(forKey: "refreshToken") else {
+//            throw URLError(.userAuthenticationRequired)
+//        }
+//        
+//        let req = AWSCognitoIdentityProviderInitiateAuthRequest()!
+//        req.clientId = "1uccmt8d43rqqel0hn69hscj2t"
+//        req.authFlow = .refreshTokenAuth
+//        req.authParameters = ["REFRESH_TOKEN": refresh]
+//        
+//        return try await withCheckedThrowingContinuation { cont in
+//            AWSCognitoIdentityProvider.default().initiateAuth(req) { resp, err in
+//                if let err {
+//                    print("failed to get new access token")
+//                    cont.resume(throwing: err)
+//                    return
+//                }
+//                
+//                guard let result = resp?.authenticationResult,
+//                      let newAccess = result.accessToken else {
+//                    print("failed to get new access token")
+//                    cont.resume(throwing: URLError(.badServerResponse))
+//                    return
+//                }
+//                
+//                print("new access token received!")
+//                UserDefaults.standard.set(newAccess, forKey: "accessToken")
+//                
+//                if let newRefresh = result.refreshToken, !newRefresh.isEmpty {
+//                    print("new refresh token received!")
+//                    UserDefaults.standard.set(newRefresh, forKey: "refreshToken")
+//                }
+//                
+//                cont.resume(returning: newAccess)
+//            }
+//        }
+//    }
+    
+    // TODO: struct 이름 바꾸고 다른곳으로 이동. 프로퍼티 이름도 바꿔야하나?
+    struct TokenResponse: Decodable {
+        let access_token: String
+        let id_token: String?
+        let refresh_token: String?
+        let expires_in: Int
+        let token_type: String
+    }
+    
+    // TODO: 여기에 정의하는게 적합한지 확인 필요
+    func refreshToken() async throws -> String {
+        guard let refresh = UserDefaults.standard.string(forKey: "refreshToken") else {
+            throw URLError(.userAuthenticationRequired)
+        }
+        
+        let clientId = "1uccmt8d43rqqel0hn69hscj2t"
+        let domainBase = URL(string: "https://ap-northeast-2jfrbeda09.auth.ap-northeast-2.amazoncognito.com")!
+        
+        var req = URLRequest(url: domainBase.appendingPathComponent("/oauth2/token"))
+        req.httpMethod = "POST"
+        req.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        let body = "grant_type=refresh_token&client_id=\(clientId)&refresh_token=\(refresh)"
+        req.httpBody = body.data(using: .utf8)
+        
+        let (data, resp) = try await URLSession.shared.data(for: req)
+        guard let http = resp as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
+            throw NSError(domain: "CognitoRefresh", code: (resp as? HTTPURLResponse)?.statusCode ?? -1)
+        }
+        
+        let result = try JSONDecoder().decode(TokenResponse.self, from: data)
+        
+        if !result.access_token.isEmpty {
+            print("new access token received!")
+            UserDefaults.standard.set(result.access_token, forKey: "accessToken")
+        }
+        
+        if let newRefresh = result.refresh_token, !newRefresh.isEmpty {
+            print("new refresh token received!")
+            UserDefaults.standard.set(newRefresh, forKey: "refreshToken")
+        }
+        
+        return result.access_token
+        
+//        var components = URLComponents()
+//        components.scheme = "https"
+//        components.host = "<YOUR_DOMAIN>.auth.<region>.amazoncognito.com"
+//        components.path = "/oauth2/token"
+
+//        var req = URLRequest(url: components.url!)
+//        req.httpMethod = "POST"
+//        req.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+//        let bodyParams = [
+//          "grant_type": "refresh_token",
+//          "client_id": "<YOUR_CLIENT_ID>",
+//          "refresh_token": refreshToken
+//        ]
+//        req.httpBody = bodyParams
+//                        .map { "\($0.key)=\($0.value)" }
+//                        .joined(separator: "&")
+//                        .data(using: .utf8)
+
+//        let (data, _) = try await URLSession.shared.data(for: req)
     }
 }

@@ -117,6 +117,8 @@
 		DA47773A2DA7B7EF00F3459C /* NBAPlayerInfoDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA47772C2DA7B7EF00F3459C /* NBAPlayerInfoDisplayModel.swift */; };
 		DA47773B2DA7B7EF00F3459C /* NBAGameStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777342DA7B7EF00F3459C /* NBAGameStatsDisplayModel.swift */; };
 		DA47773D2DA7B7EF00F3459C /* NBALeagueScheduleDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777322DA7B7EF00F3459C /* NBALeagueScheduleDisplayModel.swift */; };
+		DA5190942EB9FCCF00829AE1 /* AWSCognitoIdentityProvider in Frameworks */ = {isa = PBXBuildFile; productRef = DA5190932EB9FCCF00829AE1 /* AWSCognitoIdentityProvider */; };
+		DA5190962EBA009B00829AE1 /* TokenRefresher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5190952EBA009200829AE1 /* TokenRefresher.swift */; };
 		DA531B3F2D64A8A400DB87CB /* moareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B3C2D64A8A400DB87CB /* moareApp.swift */; };
 		DA531B402D64A8A400DB87CB /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B3D2D64A8A400DB87CB /* SplashView.swift */; };
 		DA531B942D64A8CA00DB87CB /* FBStatDataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B452D64A8CA00DB87CB /* FBStatDataItem.swift */; };
@@ -410,6 +412,7 @@
 		DA4777312DA7B7EF00F3459C /* NBATeamStandingsDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamStandingsDisplayModel.swift; sourceTree = "<group>"; };
 		DA4777322DA7B7EF00F3459C /* NBALeagueScheduleDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBALeagueScheduleDisplayModel.swift; sourceTree = "<group>"; };
 		DA4777342DA7B7EF00F3459C /* NBAGameStatsDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAGameStatsDisplayModel.swift; sourceTree = "<group>"; };
+		DA5190952EBA009200829AE1 /* TokenRefresher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefresher.swift; sourceTree = "<group>"; };
 		DA531B3C2D64A8A400DB87CB /* moareApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = moareApp.swift; sourceTree = "<group>"; };
 		DA531B3D2D64A8A400DB87CB /* SplashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		DA531B452D64A8CA00DB87CB /* FBStatDataItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBStatDataItem.swift; sourceTree = "<group>"; };
@@ -624,6 +627,7 @@
 				DA1701FC2DA8BBB80021EF80 /* SDWebImageSwiftUI in Frameworks */,
 				DAE5733E2D80104A009ED74D /* Kingfisher in Frameworks */,
 				DADA39862D3A2006000D15E0 /* AWSS3 in Frameworks */,
+				DA5190942EB9FCCF00829AE1 /* AWSCognitoIdentityProvider in Frameworks */,
 				DADA39882D3A2006000D15E0 /* AWSTranslate in Frameworks */,
 				DABE3D722D7EF19D0048DCAA /* Collections in Frameworks */,
 				DADA39812D3A1CEC000D15E0 /* ComposableArchitecture in Frameworks */,
@@ -826,6 +830,13 @@
 				DA252B2F2DEF78BF00006AB8 /* KBOTeamStatsDisplayModel.swift */,
 			);
 			path = KBO;
+			sourceTree = "<group>";
+		};
+		DA5190922EB9FCCF00829AE1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		DA531B3E2D64A8A400DB87CB /* App */ = {
@@ -1196,6 +1207,7 @@
 		DA531BDC2D64A8F200DB87CB /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				DA5190952EBA009200829AE1 /* TokenRefresher.swift */,
 				5B7153F52E5590DB00D74E5B /* DynamicCodableValue.swift */,
 				DAFCB4182DADC8E700839653 /* AWSManager.swift */,
 				DAFCB41A2DADCEAD00839653 /* AsyncPromise.swift */,
@@ -1463,6 +1475,7 @@
 				DADA39522D3A1AC8000D15E0 /* Products */,
 				DA9E421C2E4AB9430074B1F2 /* Resources */,
 				DA1CB7822E6ABD0B00866CEE /* Recovered References */,
+				DA5190922EB9FCCF00829AE1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1718,6 +1731,7 @@
 				DA1701FB2DA8BBB80021EF80 /* SDWebImageSwiftUI */,
 				DA1701FE2DA8BBF60021EF80 /* SDWebImageSVGCoder */,
 				DAF974D92E61D04F0046CE59 /* FirebaseAnalytics */,
+				DA5190932EB9FCCF00829AE1 /* AWSCognitoIdentityProvider */,
 			);
 			productName = moare;
 			productReference = DADA39512D3A1AC8000D15E0 /* moare.app */;
@@ -2030,6 +2044,7 @@
 				DA1C10E12DF624FC00EDA1FF /* MLBTeamStandingsStore.swift in Sources */,
 				DA531BA72D64A8CA00DB87CB /* FBTeamStatsView.swift in Sources */,
 				DA531C082D64A91900DB87CB /* CapsuleBar.swift in Sources */,
+				DA5190962EBA009B00829AE1 /* TokenRefresher.swift in Sources */,
 				DA531BBA2D64A8CA00DB87CB /* FBGameStatsResponseModel.swift in Sources */,
 				DA531BB82D64A8CA00DB87CB /* FBTeamModels.swift in Sources */,
 				DA531BC12D64A8CA00DB87CB /* DataModel.swift in Sources */,
@@ -2536,6 +2551,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DA1701FD2DA8BBF60021EF80 /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */;
 			productName = SDWebImageSVGCoder;
+		};
+		DA5190932EB9FCCF00829AE1 /* AWSCognitoIdentityProvider */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DADA39822D3A2006000D15E0 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSCognitoIdentityProvider;
 		};
 		DABE3D712D7EF19D0048DCAA /* Collections */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -364,7 +364,7 @@ struct FBGamePlayerStatsGames: Decodable, Equatable {
 
 struct FBGameInfoForSchedule: Decodable, Equatable {
     private let _round: String?
-    private let _elapsed: Int?
+    private let _elapsed: Int? // TODO: FBGameStatus로 바꿔야함
     private let _homeTeamPenaltyScore: Int?
     private let _awayTeamPenaltyScore: Int?
 
