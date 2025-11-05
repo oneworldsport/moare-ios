@@ -5,6 +5,8 @@
 //  Created by Mohwa Yoon on 11/4/25.
 //
 
+import Foundation
+
 actor TokenRefresher {
     static let shared = TokenRefresher()
 
@@ -14,6 +16,7 @@ actor TokenRefresher {
     func refreshedAccessToken() async throws -> String {
         if !isRefreshing {
             isRefreshing = true
+            
             do {
                 let newToken = try await AWSManager.shared.refreshToken()
                 waiters.forEach { $0.resume(returning: newToken) }

@@ -5,6 +5,7 @@
 //  Created by Mohwa Yoon on 11/3/25.
 //
 
+import Foundation
 import ComposableArchitecture
 
 enum MoatViewType {
