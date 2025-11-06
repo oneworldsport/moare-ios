@@ -9,9 +9,9 @@ import SwiftUI
 import ComposableArchitecture
 
 struct UserProfileView: View {
-    @EnvironmentObject var storeManager: StoreManager
-    @State var userProfileStore: StoreOf<UserProfileStore>? = nil
+    let userProfileStore: StoreOf<UserProfileStore>
     
+    @State private var show = false
     @State var text = ""
     @State private var settingsShowing = false
     @State private var reportShowing = false
@@ -20,19 +20,11 @@ struct UserProfileView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            if let userProfileStore {
+            if show {
                 let userProfile = userProfileStore.userProfile
                 let userMoats = userProfileStore.userMoats
                 let selectedMoat = userProfileStore.selectedMoat
                 let comments = selectedMoat?.commentListResponse?.moats ?? []
-                
-                HStack {
-                    BackButton {
-                        userProfileStore.send(.goBack)
-                    }
-                    
-                    Spacer()
-                }
                 
                 VStack(spacing: 0) {
                     if selectedMoat == nil {
@@ -139,18 +131,8 @@ struct UserProfileView: View {
             }
         }
         .onAppear {
-            let userProfileStore: StoreOf<UserProfileStore> = storeManager.getStore(forKey: StoreKeys.userProfileStore) ?? {
-                let newStore = Store(initialState: UserProfileStore.State()) {
-                    UserProfileStore()
-                }
-                
-                storeManager.setStore(newStore, forKey: StoreKeys.userProfileStore)
-                
-                return newStore
-            }()
-            
             withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
-                self.userProfileStore = userProfileStore
+                show = true
             }
             
             userProfileStore.send(.getUserProfile)
@@ -161,6 +143,6 @@ struct UserProfileView: View {
     }
 }
 
-#Preview {
-    UserProfileView()
-}
+//#Preview {
+//    UserProfileView()
+//}
