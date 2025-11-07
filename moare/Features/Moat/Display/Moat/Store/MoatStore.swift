@@ -26,6 +26,9 @@ struct MoatStore {
         var originalTimelineMoats: [MoatResponse] = []
         var timelineMoats: [MoatResponse] = []
         var selectedMoat: MoatDetailResponse? = nil
+        
+        var fireMap: [String: Bool] = [:]
+        var fireCountMap: [String: Int] = [:]
     }
     
     enum Action {
@@ -41,6 +44,15 @@ struct MoatStore {
         case addViewStack(viewType: MoatViewType)
         case showForm
         case goBack
+        
+        case checkFire(targetId: String)
+        case setFireMap(targetId: String, isFired: Bool)
+        case setFired(targetId: String, isFired: Bool)
+        case createFire(targetId: String, targetType: TargetType)
+        case createFireResult(targetId: String, isCreated: Bool)
+        case deleteFire(targetId: String)
+        case deleteFireResult(targetId: String, isDeleted: Bool)
+        case toggleFire(targetId: String, targetType: TargetType)
         
         case delegate(Delegate)
     }
@@ -169,6 +181,86 @@ struct MoatStore {
                 
             case .showForm:
                 return .send(.delegate(.push(.form)))
+                
+            case .checkFire(let targetId):
+                return .run { send in
+                    let result = try await moatClient.checkFire(moatId: targetId)
+                    
+                    await send(.setFireMap(targetId: targetId, isFired: result))
+                }
+                
+            case .setFireMap(let targetId, let isFired):
+                state.fireMap[targetId] = isFired
+                return .none
+                
+            case .setFired(let targetId, let isFired):
+                state.fireMap[targetId] = isFired
+                return .none
+                
+            case .createFire(let targetId, let targetType):
+                return .run { send in
+                    var isCreated: Bool = false
+                    
+                    let fireCreateRequest = FireCreateRequest(targetId: targetId, targetType: targetType)
+                    
+                    let result = try await moatClient.createFire(body: fireCreateRequest)
+                    
+                    if result != nil {
+                        isCreated = true
+                    }
+                    
+                    await send(.createFireResult(targetId: targetId, isCreated: isCreated))
+                }
+                
+            case .createFireResult(let targetId, let isCreated):
+                if !isCreated {
+                    state.fireMap[targetId] = false
+                    
+                    let firstFireCount = state.fireCountMap[targetId] ?? (state.timelineMoats.first{ $0.moatId == targetId }?.fireCount ?? 0)
+                    
+                    state.fireCountMap[targetId] = max(0, firstFireCount - 1)
+                }
+                
+                return .none
+                
+            case .deleteFire(let targetId):
+                return .run { send in
+                    var isDeleted: Bool = false
+                    
+                    let result = try await moatClient.deleteFire(moatId: targetId)
+                    
+                    if result != nil {
+                        isDeleted = true
+                    }
+                    
+                    await send(.deleteFireResult(targetId: targetId, isDeleted: isDeleted))
+                }
+                
+            case .deleteFireResult(let targetId, let isDeleted):
+                if !isDeleted {
+                    state.fireMap[targetId] = true
+                    
+                    let firstFireCount = state.fireCountMap[targetId] ?? (state.timelineMoats.first{ $0.moatId == targetId }?.fireCount ?? 0)
+                    
+                    state.fireCountMap[targetId] = firstFireCount + 1
+                }
+                
+                return .none
+                
+            case .toggleFire(let targetId, let targetType):
+                let isFired = state.fireMap[targetId] ?? false
+                state.fireMap[targetId] = !isFired
+                
+                let firstFireCount = state.fireCountMap[targetId] ?? (state.timelineMoats.first{ $0.moatId == targetId }?.fireCount ?? 0)
+                state.fireCountMap[targetId] = isFired ? max(0, firstFireCount - 1) : firstFireCount + 1
+                
+                if isFired {
+                    state.fireMap[targetId] = false
+                    return .send(.deleteFire(targetId: targetId))
+                } else {
+                    state.fireMap[targetId] = true
+                    return .send(.createFire(targetId: targetId, targetType: targetType))
+                }
                 
             case .delegate:
                 return .none

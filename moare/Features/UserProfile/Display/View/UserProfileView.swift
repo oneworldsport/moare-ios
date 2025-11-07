@@ -17,6 +17,7 @@ struct UserProfileView: View {
     @State private var reportShowing = false
     @State private var selectedMoatId: String? = nil
     @State private var inputText = ""
+    @State private var fired = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -72,6 +73,7 @@ struct UserProfileView: View {
                                     title: title,
                                     content: body,
                                     hashtagList: moat.sportType,
+                                    fired: $fired,
                                     fireCount: moat.fireCount,
                                     commentCount: moat.commentCount,
                                     nickname: moat.nickname,
@@ -79,7 +81,8 @@ struct UserProfileView: View {
                                     settingsTapped: {
                                         selectedMoatId = moat.moatId
                                         settingsShowing = true
-                                    }
+                                    },
+                                    fireTapped: {}
                                 ) {
                                     userProfileStore.send(.selectMoat(moatId: moat.moatId))
                                 }
@@ -101,13 +104,13 @@ struct UserProfileView: View {
                                         moatType: .comment,
                                         content: moat.content,
                                         hashtagList: moat.sportType,
+                                        fired: $fired,
                                         fireCount: moat.fireCount,
                                         commentCount: moat.commentCount,
                                         nickname: moat.nickname,
                                         createdAt: moat.createdAt,
-                                        settingsTapped: {
-                                            
-                                        }
+                                        settingsTapped: {},
+                                        fireTapped: {}
                                     ) {
                                         userProfileStore.send(.selectMoat(isComment: true, moatId: moat.moatId))
                                     }

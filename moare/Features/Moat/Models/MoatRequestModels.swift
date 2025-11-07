@@ -44,3 +44,34 @@ struct MoatListRequest: Encodable {
         self.nextToken = nextToken
     }
 }
+
+struct FireCreateRequest: Encodable {
+    let targetId: String
+    let targetType: TargetType
+    
+    init(
+        targetId: String,
+        targetType: TargetType
+    ) {
+        self.targetId = targetId
+        self.targetType = targetType
+    }
+}
+
+enum TargetType: String, Encodable, Equatable {
+    case moat = "moat"
+    case comment = "comment"
+}
+
+struct FireCancelRequest: Encodable {
+    let targetId: String
+    let targetType: TargetType
+    
+    init(
+        targetId: String,
+        targetType: TargetType
+    ) {
+        self.targetId = targetId
+        self.targetType = targetType
+    }
+}

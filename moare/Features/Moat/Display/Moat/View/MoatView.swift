@@ -37,13 +37,21 @@ struct MoatView: View {
                                     let title = lines.first ?? ""
                                     let body = lines.dropFirst().joined(separator: "\n")
                                     
+                                    let firedBinding = Binding<Bool>(
+                                        get: { store.state.fireMap[moat.moatId] ?? false },
+                                        set: { newValue in store.send(.setFired(targetId: moat.moatId, isFired: newValue)) }
+                                      )
+                                    
+                                    let fireCount = store.state.fireCountMap[moat.moatId] ?? moat.fireCount
+                                    
                                     MoatItem(
                                         moatType: selectedMoat != nil ? .detail : .timeline,
                                         isButtonDisabled: selectedMoat != nil,
                                         title: title,
                                         content: body,
                                         hashtagList: moat.sportType,
-                                        fireCount: moat.fireCount,
+                                        fired: firedBinding,
+                                        fireCount: fireCount,
                                         commentCount: moat.commentCount,
                                         nickname: moat.nickname,
                                         createdAt: moat.createdAt,
@@ -51,10 +59,17 @@ struct MoatView: View {
                                             selectedMoatId = moat.moatId
                                             settingsShowing = true
                                         },
+                                        fireTapped: {
+                                            print("fire tapped")
+                                            store.send(.toggleFire(targetId: moat.moatId, targetType: .moat))
+                                        },
                                         action: {
                                             store.send(.selectMoat(moatId: moat.moatId))
                                         }
                                     )
+                                    .task(id: moat.moatId) {
+                                        store.send(.checkFire(targetId: moat.moatId))
+                                    }
                                 }
                             }
                             .padding(.top, 10)
@@ -70,17 +85,32 @@ struct MoatView: View {
                             ScrollView {
                                 LazyVStack(spacing: 28) {
                                     ForEach(comments, id: \.moatId) { moat in
+                                        let firedBinding = Binding<Bool>(
+                                            get: { store.state.fireMap[moat.moatId] ?? false },
+                                            set: { newValue in store.send(.setFired(targetId: moat.moatId, isFired: newValue)) }
+                                          )
+                                        
+                                        let fireCount = store.state.fireCountMap[moat.moatId] ?? moat.fireCount
+                                        
                                         MoatItem(
                                             moatType: .comment,
                                             content: moat.content,
                                             hashtagList: moat.sportType,
-                                            fireCount: moat.fireCount,
+                                            fired: firedBinding,
+                                            fireCount: fireCount,
                                             commentCount: moat.commentCount,
                                             nickname: moat.nickname,
                                             createdAt: moat.createdAt,
-                                            settingsTapped: {}
+                                            settingsTapped: {},
+                                            fireTapped: {
+                                                print("fire tapped")
+                                                store.send(.toggleFire(targetId: moat.moatId, targetType: .comment))
+                                            },
                                         ) {
                                             store.send(.selectMoat(isComment: true, moatId: moat.moatId))
+                                        }
+                                        .task(id: moat.moatId) {
+                                            store.send(.checkFire(targetId: moat.moatId))
                                         }
                                     }
                                 }

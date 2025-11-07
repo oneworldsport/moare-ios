@@ -32,4 +32,16 @@ struct MoatClient {
     func fetchUserMoats(body: MoatListRequest) async throws -> MoatListResponse {
         return try await apiClient.fetchData(endpoint: .getUserMoats(body: body))
     }
+    
+    func createFire(body: FireCreateRequest) async throws -> FireResponse {
+        return try await apiClient.fetchData(endpoint: .createFire(body: body))
+    }
+    
+    func deleteFire(moatId: String) async throws -> MessageResponse {
+        return try await apiClient.fetchData(endpoint: .deleteFire(moatId: moatId))
+    }
+    
+    func checkFire(moatId: String) async throws -> Bool {
+        return try await apiClient.fetchData(endpoint: .checkFire(moatId: moatId))
+    }
 }

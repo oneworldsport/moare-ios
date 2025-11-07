@@ -75,3 +75,17 @@ extension StringProtocol {
         Int(self)
     }
 }
+
+extension View {
+    @ViewBuilder
+    func optionalClickable(_ apply: Bool, onTap: @escaping () -> Void) -> some View {
+        if apply {
+            self
+//                .contentShape(Rectangle()) // 빈 영역도 터치되게 (선택)
+                .onTapGesture(perform: onTap)
+                .accessibilityAddTraits(.isButton)
+        } else {
+            self
+        }
+    }
+}
