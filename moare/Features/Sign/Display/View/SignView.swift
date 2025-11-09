@@ -12,15 +12,13 @@ struct SignView: View {
     let signStore = Store(initialState: SignStore.State()) { SignStore() }
     
     @State private var show = false
-    @State private var updateText = ""
-    @State private var hstackWidth: CGFloat = UIConstants.Width.screenWidth - 16
-    @State private var barWidth: CGFloat = 20
-    @State private var barAlignment: Alignment = .bottomLeading
-    @State private var barDuration: Double = 0.5
+    @State private var text = ""
     
     @FocusState private var isFocused: Bool
 
     var body: some View {
+        let currentFlow = signStore.currentFlow
+        
         VStack(spacing: 0) {
             if show {
                 ZStack {
@@ -41,99 +39,123 @@ struct SignView: View {
                 .padding(.vertical, 8)
                 
                 IdTypeSelectButton(selectedIndex: signStore.idTypeSelectedIndex) { index in
-                    signStore.send(.selectType(index: index), animation: AnimationConstants.AnimationType.mediumDefaultAnimation)
+                    signStore.send(.selectIdType(index: index), animation: AnimationConstants.AnimationType.mediumDefaultAnimation)
                 }
                 .padding(.vertical, 8)
-                .uiState(visibleState: signStore.currentFlow == SignFlow.loginId || signStore.currentFlow == SignFlow.signUpId)
+                .uiState(visibleState: currentFlow == SignFlow.loginId || currentFlow == SignFlow.signUpId)
                 
                 HStack {
-                    TextField(signStore.placeholder, text: $updateText)
+                    TextField(signStore.placeholder, text: $text)
                         .frame(height: 50)
                         .font(.system(size: 16))
                         .focused($isFocused)
-                        .uiState(visibleState: signStore.currentFlow != SignFlow.signUpSportsInterest)
-                    
-                    Button {
-                        signStore.send(.submit)
-                    } label: {
-                        Text(signStore.submitBtnLabel)
-                            .font(.system(size: 14))
-                            .foregroundStyle(Color.white)
+                        .uiState(visibleState: currentFlow != .signUpSportsInterest)
+                        .disabled(signStore.shouldDisableTextField)
+                        .onChange(of: text) {
+                            signStore.send(.updateText(text: text))
+                        }
+                        .onChange(of: signStore.text) {
+                            let newValue = signStore.text
+                            if newValue != text {
+                                text = newValue
+                            }
+                        }
+                        .onChange(of: signStore.shouldDisableTextField) {
+                            if !signStore.shouldDisableTextField {
+                                isFocused = true
+                            }
+                        }
+
+                    ZStack {
+                        if signStore.activatedState == .allActivated || signStore.activatedState == .onlyButtonActivated {
+                            Button {
+                                signStore.send(.submit)
+                            } label: {
+                                Text(signStore.submitBtnLabel)
+                                    .font(.system(size: 14))
+                                    .foregroundStyle(Color.white)
+                                    .padding(.vertical, 6)
+                                    .padding(.horizontal, 10)
+                                    .background {
+                                        Capsule()
+                                    }
+                            }
+                            .tint(Color("moare"))
+                        } else {
+                            Text(signStore.submitBtnLabel)
+                                .font(.system(size: 14))
+                                .foregroundStyle(Color.white)
+                                .padding(.vertical, 6)
+                                .padding(.horizontal, 10)
+                                .background {
+                                    Capsule()
+                                        .foregroundStyle(.gray)
+                                        .opacity(0.7)
+                                }
+                        }
                     }
-                    .buttonStyle(.borderedProminent)
-                    .buttonBorderShape(.capsule)
-                    .tint(signStore.isValid ? Color("moare") : .gray)
                 }
                 
                 VStack {
                     if signStore.currentFlow != SignFlow.signUpSportsInterest {
                         Rectangle()
                             .fill(Color("moare"))
-                            .frame(width: barWidth, height: 2)
+                            .frame(width: signStore.barWidth, height: 2)
                             .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .animation(.easeInOut(duration: barDuration), value: barWidth)
+                            .animation(.easeInOut(duration: signStore.barDuration), value: signStore.barWidth)
                     }
                 }
-                .frame(maxWidth: .infinity, alignment: barAlignment)
+                .frame(maxWidth: .infinity, alignment: signStore.barAlignment)
                 .onChange(of: signStore.apiFetchState) {
-                    if signStore.isCheckingNickname {
-                        if signStore.apiFetchState == ApiFetchState.fetching {
-                            barWidth = hstackWidth
-                            barDuration = 4
-                        } else if case ApiFetchState.failure = signStore.apiFetchState {
-                            barWidth = 20
-                            barDuration = 0.5
-                        }
-                    } else {
-                        if signStore.apiFetchState == ApiFetchState.fetching {
-                            barAlignment = if barAlignment == Alignment.bottomLeading {
-                                Alignment.bottomTrailing
-                            } else {
-                                Alignment.bottomLeading
-                            }
-                            
-                            barWidth = 10
-                            barDuration = 4
-                        } else if signStore.apiFetchState == ApiFetchState.success {
-                            barWidth = 20
-                            barDuration = 0.5
-                        } else if case ApiFetchState.failure = signStore.apiFetchState {
-                            if [.loginOtpExpired, .loginOtpLimitExceeded, .signUpOtpExpired].contains(signStore.currentFlow) {
-                                barWidth = hstackWidth
-                                barDuration = 0.5
-                            } else {
-                                barWidth = 20
-                                barDuration = 0.5
-                            }
-                        }
-                    }
-                }
-                .onChange(of: updateText) {
-                    signStore.send(.updateText(text: updateText))
-                    
-                    if !updateText.isEmpty && !signStore.errorText.isEmpty {
-                        signStore.send(.clearErrorText)
-                    }
-                }
-                .onChange(of: signStore.text) {
-                    let newValue = signStore.text
-                    
-                    if newValue != updateText {
-                        updateText = newValue
-                    }
-                }
-                .onChange(of: signStore.isValid) {
-                    let isValid = signStore.isValid
-                    
-                    withAnimation(.easeInOut(duration: 0.5)) {
-                        barWidth = isValid ? hstackWidth : 20
-                    }
+//                    if signStore.isCheckingNickname {
+//                        if signStore.apiFetchState == ApiFetchState.fetching {
+//                            barWidth = hstackWidth
+//                            barDuration = 4
+//                        } else if case ApiFetchState.failure = signStore.apiFetchState {
+//                            barWidth = 20
+//                            barDuration = 0.5
+//                        }
+//                    } else {
+//                        if signStore.apiFetchState == ApiFetchState.fetching {
+//                            barAlignment = if barAlignment == Alignment.bottomLeading {
+//                                Alignment.bottomTrailing
+//                            } else {
+//                                Alignment.bottomLeading
+//                            }
+//                            
+//                            barWidth = 10
+//                            barDuration = 4
+//                        } else if signStore.apiFetchState == ApiFetchState.success {
+//                            barWidth = 20
+//                            barDuration = 0.5
+//                        } else if case ApiFetchState.failure = signStore.apiFetchState {
+////                            if [.loginOtpExpired, .loginOtpLimitExceeded, .signUpOtpExpired].contains(signStore.currentFlow) {
+////                                barWidth = hstackWidth
+////                                barDuration = 0.5
+////                            } else {
+////                                barWidth = 20
+////                                barDuration = 0.5
+////                            }
+//                        }
+//                    }
                 }
                 
-                Text(signStore.errorText)
-                    .frame(maxWidth: .infinity)
-                    .font(.system(size: 13))
-                    .foregroundStyle(Color("moare"))
+                ZStack {
+                    // TODO: 숫자만 포함하게 정규식 추가
+                    if (currentFlow == .loginOtp || currentFlow == .signUpOtp) &&
+                        !signStore.shouldDisableTextField &&
+                        text.count != 6 {
+                        Text("인증번호 6자리를 입력해 주세요.")
+                            .font(.system(size: 13))
+                            .foregroundStyle(.gray)
+                    }
+                    
+                    Text(signStore.errorMessage)
+                        .font(.system(size: 13))
+                        .foregroundStyle(Color("moare"))
+                }
+                .frame(height: 15)
+                .padding(.top, 8)
             }
         }
         .padding(.horizontal, 8)
@@ -143,7 +165,6 @@ struct SignView: View {
             }
             
             isFocused = true
-            updateText = signStore.text
         }
     }
 }

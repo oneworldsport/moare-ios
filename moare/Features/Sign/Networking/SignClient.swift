@@ -18,26 +18,15 @@ struct SignClient {
         return try await apiClient.fetchData(endpoint: .startLoginAuth(body: body))
     }
     
-    func confirmLoginAuth(body: ConfirmAuthRequest) async throws -> confirmLoginAuthResult {
-        let response: AuthResponse = try await apiClient.fetchData(endpoint: .confirmLoginAuth(body: body))
-        
-        switch response.type {
-        case .success:
-            let token: AuthTokenData = try response.data.decode(AuthTokenData.self)
-            return .token(token)
-        case .retry:
-            let session: AuthSessionResponse = try response.data.decode(AuthSessionResponse.self)
-                    return .session(session)
-        default:
-            return .type(response.type)
-        }
+    func confirmLoginAuth(body: ConfirmAuthRequest) async throws -> AuthTokenResponse {
+        return try await apiClient.fetchData(endpoint: .confirmLoginAuth(body: body))
     }
     
     func initiateSignUp(body: SignUpInitiateRequest) async throws -> SimpleResponse {
         return try await apiClient.fetchData(endpoint: .initiateSignUp(body: body))
     }
     
-    func verifySignUpOtp(body: SignUpVerificationRequest) async throws -> AuthResponse {
+    func verifySignUpOtp(body: SignUpVerificationRequest) async throws -> SimpleResponse {
         return try await apiClient.fetchData(endpoint: .verifySignUpOtp(body: body))
     }
     

@@ -27,6 +27,7 @@ struct MoatStackStore {
         
         case push(MoatViewType)
         case pop
+        case emptyPath
         
         case bootstrapSession
     }
@@ -82,6 +83,11 @@ struct MoatStackStore {
                         print("\(error)")
                     }
                 }
+                
+            case .emptyPath:
+                state.path.removeAll()
+                
+                return .none
                 
             case .path:
                 return .none

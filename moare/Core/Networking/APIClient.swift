@@ -12,17 +12,15 @@ struct APIClient {
         do {
             return try await send(endpoint: endpoint)
         } catch {
-            // 에러가 401 토큰 만료면 리프레시 후 1회 재시도
-            if let apiErr = error as? APIHTTPError, apiErr.isTokenExpired {
+            // 401이면서 "리프레시 가능한" 인증오류면 토큰 재발급 후 1회 재시도
+            if let apiErr = error as? APIHTTPError, apiErr.isRefreshableAuthError {
                 do {
                     print("getting new token with refresh token...")
                     _ = try await TokenRefresher.shared.refreshedAccessToken()
                 } catch {
                     print("failed refreshing token. Deleting tokens...")
                     // token 갱신 실패 시 기존 토큰 삭제
-                    UserDefaults.standard.removeObject(forKey: "accessToken")
-                    UserDefaults.standard.removeObject(forKey: "refreshToken")
-                    
+                    clearTokens()
                     throw URLError(.userAuthenticationRequired)
                 }
                 
@@ -30,46 +28,15 @@ struct APIClient {
                 return try await send(endpoint: endpoint) // 새 토큰으로 1회 재시도
             }
             
-            if isSessionInvalidating(error) {
-                print("Other errors to delete tokens. Deleting tokens...")
-                UserDefaults.standard.removeObject(forKey: "accessToken")
-                UserDefaults.standard.removeObject(forKey: "refreshToken")
-                
-                throw URLError(.userAuthenticationRequired)
-            }
+            // TODO: 다른 401은 안걸리게 처리 필요
+//            if isSessionInvalidating(error) {
+//                print("Other errors to delete tokens. Deleting tokens...")
+//                clearTokens()
+//                throw URLError(.userAuthenticationRequired)
+//            }
             
             throw error
         }
-        
-//        var data: Data? = nil
-//        
-//        let filePath: String
-//        
-//        if testQuery == "손흥민" {
-//            filePath = "football_player_info"
-//        } else if testQuery == "손흥민 기록" {
-//            filePath = "football_player_stats"
-//        } else if testQuery == "손흥민 순위" {
-//            filePath = "football_player_standings"
-//        } else if testQuery == "토트넘" {
-//            filePath = "football_team_info"
-//        } else if testQuery == "토트넘 기록" {
-//            filePath = "football_team_stats"
-//        } else if testQuery == "토트넘 순위" {
-//            filePath = "football_team_standings"
-//        } else if testQuery == "프리미어리그 일정" {
-//            filePath = "football_league_schedule"
-//        } else if testQuery == "토트넘 일정" {
-//            filePath = "football_team_schedule"
-//        } else if testQuery == "토트넘 뉴캐슬 기록" {
-//            filePath = "football_game_stats"
-//        } else {
-//            filePath = "football_player_info"
-//        }
-        
-//        let url = Bundle.main.url(forResource: filePath, withExtension: "json")
-//        data = try Data(contentsOf: url!)
-//        return try JSONDecoder().decode(T.self, from: data!)
     }
     
     private func send<T: Decodable>(endpoint: APIEndpoint) async throws -> T {
@@ -81,9 +48,16 @@ struct APIClient {
         guard let http = response as? HTTPURLResponse else { throw URLError(.badServerResponse) }
         
         guard (200..<300).contains(http.statusCode) else {
-            let msg = (try? JSONDecoder().decode(ErrorResponse.self, from: data))?.detail
+            let envelope = try? JSONDecoder().decode(APIErrorEnvelope.self, from: data)
+            let body = envelope?.error
             
-            throw APIHTTPError(code: http.statusCode, message: msg)
+            throw APIHTTPError(
+                status: http.statusCode,
+                apiCode: body?.code,
+                message: body?.message,
+                details: body?.details,
+                headers: http.allHeaderFields
+            )
         }
         
         return try JSONDecoder().decode(T.self, from: data)
@@ -91,34 +65,26 @@ struct APIClient {
     
     func isSessionInvalidating(_ error: Error) -> Bool {
         guard let e = error as? APIHTTPError else { return false }
-        // 회복 불가로 보는 케이스들만 엄격히 포함
-        switch e.code {
+        
+        switch e.status {
         case 401:
-            // 401인데 "만료"가 아니라면 서명 불일치/위조/알 수 없는 토큰 등 -> 세션 무효
-            return !e.isTokenExpired
+            // 리프레시 가능한 401은 위에서 처리. 나머지 401은 세션 무효
+            return !e.isRefreshableAuthError
         case 403:
-            // 자격은 유효하나 접근권한/상태 문제(사용자 비활성화 등) → 로그인 재유도
+            // 비활성 사용자 / 권한 없음 등
             return true
         case 400:
-            // 백엔드가 돌려주는 대표 auth 오류 예시
-//            if e.awsType == "NotAuthorizedException" { return true }
-//            if e.reason == "invalid_grant" { return true } // (주로 refresh 플로우에서)
+            // 일반 폼/비즈니스 유효성 오류는 세션 유지
+            // (예: OTP_INVALID, OTP_EXPIRED 등은 세션 무효화 아님)
             return false
         default:
-            return false // 429, 5xx, 4xx 일반 유효성 등은 세션 유지
+            // 410, 429, 404, 5xx 등은 세션 유지(로그인과 무관)
+            return false
         }
     }
-}
-
-// TODO: 다른곳으로 이동
-struct ErrorResponse: Decodable {
-    let detail: String?
-}
-
-struct APIHTTPError: Error {
-    let code: Int
-    let message: String?
-    var isTokenExpired: Bool {
-        code == 401 && (message?.lowercased().contains("token expired") == true)
+    
+    private func clearTokens() {
+        UserDefaults.standard.removeObject(forKey: "accessToken")
+        UserDefaults.standard.removeObject(forKey: "refreshToken")
     }
 }

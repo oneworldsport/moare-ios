@@ -11,17 +11,31 @@ import ComposableArchitecture
 struct MoatDisplayView: View {
     let moatStackStore: StoreOf<MoatStackStore>
     
+    // TODO: 이게 사용하기 편하니깐, Keychain으로 옮길때 그냥 flag용으로 UserDefaults도 하나 만들면 될듯?
     @AppStorage("accessToken") private var accessToken: String = ""
     
     var body: some View {
-        VStack(spacing: 0) {
-            HStack {
-                BackButton {
-                    moatStackStore.send(.pop)
+        ZStack {
+            VStack {
+                HStack {
+                    BackButton {
+                        moatStackStore.send(.pop)
+                    }
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        UserDefaults.standard.removeObject(forKey: "accessToken")
+                    }) {
+                        Text("로그아웃")
+                            .font(.system(size: 12))
+                            .padding(.trailing)
+                    }
                 }
                 
                 Spacer()
             }
+            .zIndex(1)
             
             if !accessToken.isEmpty {
                 if let id = moatStackStore.path.ids.last {
@@ -35,6 +49,7 @@ struct MoatDisplayView: View {
     //                        didPop: moatStackStore.didPop,
     //                        isCombinedView: moatStackStore.includesPreviousView
                         )
+                        .padding(.top, 30)
                     }
                 }
             } else {
@@ -44,6 +59,15 @@ struct MoatDisplayView: View {
         .onAppear {
             if !accessToken.isEmpty {
                 moatStackStore.send(.bootstrapSession)
+            }
+        }
+        .onChange(of: accessToken) {
+            if accessToken.isEmpty {
+                moatStackStore.send(.emptyPath)
+            } else {
+                if moatStackStore.path.ids.isEmpty {
+                    moatStackStore.send(.push(.timeline))
+                }
             }
         }
     }
