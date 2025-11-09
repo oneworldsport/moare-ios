@@ -40,12 +40,12 @@ struct SignUpCompleteRequest: Encodable {
 }
 
 struct UserProfileCreateRequest: Encodable {
-    let nickname: String
+    let userHandle: String
     let profileImageUrl: String? = nil
     let bio: String? = nil
     let sportsInterests: [String]? = nil
 }
 
-struct NicknameReserveRequest: Encodable {
-    let nickname: String
+struct UserHandleReserveRequest: Encodable {
+    let userHandle: String
 }

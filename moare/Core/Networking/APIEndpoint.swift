@@ -24,8 +24,8 @@ enum APIEndpoint {
     case initiateSignUp(body: SignUpInitiateRequest)
     case verifySignUpOtp(body: SignUpVerificationRequest)
     case completeSignUp(body: SignUpCompleteRequest)
-    case checkNickname(nickname: String)
-    case reserveNickname(body: NicknameReserveRequest)
+    case checkUserHandle(userHandle: String)
+    case reserveUserHandle(body: UserHandleReserveRequest)
     
     // moat
     case createMoat(body: MoatCreateRequest)
@@ -41,12 +41,12 @@ enum APIEndpoint {
     
     var defaultHTTPMethod: String {
         switch self {
-        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .bootstrapSession, .checkNickname, .getMoatDetail, .getUserProfile:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .bootstrapSession, .checkUserHandle, .getMoatDetail, .getUserProfile:
             return "GET"
         case .getLeagueSchedule, .searchByKeyword, .startLoginAuth, .confirmLoginAuth, .initiateSignUp, .verifySignUpOtp, .completeSignUp,
                 .createMoat, .getTimelineMoats, .getUserMoats:
             return "POST"
-        case .reserveNickname:
+        case .reserveUserHandle:
             return "PUT"
         case .updateMoat, .updateUserProfile:
             return "PATCH"
@@ -126,14 +126,14 @@ enum APIEndpoint {
         case .completeSignUp:
             components.path = "/auth/signup/complete"
             
-        case .checkNickname(let nickname):
-            components.path = "/auth/nickname/check"
+        case .checkUserHandle(let userHandle):
+            components.path = "/auth/user-handle/check"
             components.queryItems = [
-                URLQueryItem(name: "nickname", value: nickname)
+                URLQueryItem(name: "userHandle", value: userHandle)
             ]
             
-        case .reserveNickname:
-            components.path = "/auth/nickname/reserve"
+        case .reserveUserHandle:
+            components.path = "/auth/userHandle/reserve"
             
         // moat
         case .createMoat:
@@ -181,7 +181,7 @@ enum APIEndpoint {
     
     var httpBody: Data? {
         switch self {
-        case .bootstrapSession, .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkNickname, .deleteMoat, .getMoatDetail, .getUserProfile:
+        case .bootstrapSession, .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkUserHandle, .deleteMoat, .getMoatDetail, .getUserProfile:
             return nil
             
         // search
@@ -202,7 +202,7 @@ enum APIEndpoint {
             return try? JSONEncoder().encode(body)
         case .completeSignUp(let body):
             return try? JSONEncoder().encode(body)
-        case .reserveNickname(let body):
+        case .reserveUserHandle(let body):
             return try? JSONEncoder().encode(body)
             
         // moat

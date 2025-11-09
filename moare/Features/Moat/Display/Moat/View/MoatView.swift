@@ -45,7 +45,7 @@ struct MoatView: View {
                                         hashtagList: moat.sportType,
                                         fireCount: moat.fireCount,
                                         commentCount: moat.commentCount,
-                                        nickname: moat.nickname,
+                                        userHandle: moat.userHandle,
                                         createdAt: moat.createdAt,
                                         settingsTapped: {
                                             selectedMoatId = moat.moatId
@@ -76,7 +76,7 @@ struct MoatView: View {
                                             hashtagList: moat.sportType,
                                             fireCount: moat.fireCount,
                                             commentCount: moat.commentCount,
-                                            nickname: moat.nickname,
+                                            userHandle: moat.userHandle,
                                             createdAt: moat.createdAt,
                                             settingsTapped: {}
                                         ) {

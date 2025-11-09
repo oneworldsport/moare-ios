@@ -26,14 +26,15 @@ struct SignView: View {
                         .font(.system(size: 16, weight: .medium))
                     HStack {
                         Spacer()
-                        Button {
-                            signStore.send(.updateSignFlow(signFlow: .signUpId))
-                        } label : {
-                            Text("회원가입")
-                                .font(.system(size: 16, weight: .medium))
-                                .foregroundStyle(Color.gray)
+                        if currentFlow == .loginId || currentFlow == .signUpId {
+                            Button {
+                                signStore.send(.updateSignFlow(signFlow: .signUpId))
+                            } label : {
+                                Text(currentFlow == .loginId ? "회원가입" : "로그인")
+                                    .font(.system(size: 16, weight: .medium))
+                                    .foregroundStyle(Color.gray)
+                            }
                         }
-                        .uiState(visibleState: signStore.currentFlow == SignFlow.loginId)
                     }
                 }
                 .padding(.vertical, 8)
@@ -107,7 +108,7 @@ struct SignView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: signStore.barAlignment)
                 .onChange(of: signStore.apiFetchState) {
-//                    if signStore.isCheckingNickname {
+//                    if signStore.isCheckingUserHandle {
 //                        if signStore.apiFetchState == ApiFetchState.fetching {
 //                            barWidth = hstackWidth
 //                            barDuration = 4

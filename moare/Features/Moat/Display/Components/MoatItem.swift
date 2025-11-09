@@ -20,7 +20,7 @@ struct MoatItem: View {
     let fireCount: Int
     let commentCount: Int
     let profileImageURL: String
-    let nickname: String
+    let userHandle: String
     let timeAgo: String
     let settingsTapped: () -> Void
     let action: () -> Void
@@ -29,7 +29,7 @@ struct MoatItem: View {
     let titleFontSize: CGFloat
     let contentFontSize: CGFloat
     let profileImageSize: CGFloat
-    let nicknameFontSize: CGFloat
+    let userHandleFontSize: CGFloat
     let timeFontSize: CGFloat
     let iconFontSize: CGFloat
     let iconCountFontSize: CGFloat
@@ -45,7 +45,7 @@ struct MoatItem: View {
         fireCount: Int,
         commentCount: Int,
         profileImageURL: String = "",
-        nickname: String,
+        userHandle: String,
         createdAt: String,
         settingsTapped: @escaping () -> Void = {},
         action: @escaping () -> Void = {}
@@ -58,7 +58,7 @@ struct MoatItem: View {
         self.fireCount = fireCount
         self.commentCount = commentCount
         self.profileImageURL = profileImageURL
-        self.nickname = nickname
+        self.userHandle = userHandle
         self.timeAgo = CalendarUtil.timeAgoString(from: createdAt)
         self.settingsTapped = settingsTapped
         self.action = action
@@ -69,7 +69,7 @@ struct MoatItem: View {
             self.titleFontSize = 18
             self.contentFontSize = 18
             self.profileImageSize = 25
-            self.nicknameFontSize = 16
+            self.userHandleFontSize = 16
             self.timeFontSize = 15
             self.iconFontSize = 17
             self.iconCountFontSize = 12
@@ -78,7 +78,7 @@ struct MoatItem: View {
             self.titleFontSize = 18
             self.contentFontSize = 16
             self.profileImageSize = 25
-            self.nicknameFontSize = 16
+            self.userHandleFontSize = 16
             self.timeFontSize = 15
             self.iconFontSize = 17
             self.iconCountFontSize = 12
@@ -87,7 +87,7 @@ struct MoatItem: View {
             self.titleFontSize = 18
             self.contentFontSize = 16
             self.profileImageSize = 20
-            self.nicknameFontSize = 15
+            self.userHandleFontSize = 15
             self.timeFontSize = 14
             self.iconFontSize = 16
             self.iconCountFontSize = 11
@@ -96,7 +96,7 @@ struct MoatItem: View {
             self.titleFontSize = 17
             self.contentFontSize = 18
             self.profileImageSize = 25
-            self.nicknameFontSize = 16
+            self.userHandleFontSize = 16
             self.timeFontSize = 14
             self.iconFontSize = 16
             self.iconCountFontSize = 11
@@ -190,8 +190,8 @@ struct MoatItem: View {
                                 .fill(.moare)
                                 .frame(width: profileImageSize, height: profileImageSize)
                             
-                            Text(nickname)
-                                .font(.system(size: nicknameFontSize))
+                            Text(userHandle)
+                                .font(.system(size: userHandleFontSize))
                             
                             Spacer()
                             
@@ -284,7 +284,7 @@ struct MoatItemSideBar: View {
 //        hashtagList: ["#축구"],
 //        fireCount: 0,
 //        commentCount: 0,
-//        nickname: "test",
+//        userHandle: "test",
 //        createdAt: "2025-08-16T20:10:00.666666"
 //    )
 //}

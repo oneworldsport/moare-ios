@@ -8,7 +8,7 @@
 struct MoatResponse: Decodable, Equatable {
     let moatId: String
     let userId: String
-    let nickname: String
+    let userHandle: String
     let profileImageUrl: String?
     let content: String
     let sportType: [String]

@@ -7,7 +7,7 @@
 
 struct UserProfileResponse: Decodable {
     let userId: String
-    let nickname: String
+    let userHandle: String
     let profileImageUrl: String?
     let bio: String?
     let sportsInterests: [String]?
@@ -21,6 +21,6 @@ struct UserProfileWithMoatsResponse: Decodable {
 
 struct UserSummaryResponse: Decodable {
     let userId: String
-    let nickname: String
+    let userHandle: String
     let profileImageUrl: String?
 }

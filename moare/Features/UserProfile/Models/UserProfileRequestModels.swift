@@ -6,7 +6,7 @@
 //
 
 struct UserProfileUpdateRequest: Encodable {
-    let nickname: String?
+    let userHandle: String?
     let profileImageUrl: String?
     let bio: String?
     let sportsInterests: [String]?

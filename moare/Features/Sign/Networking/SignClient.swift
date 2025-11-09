@@ -34,13 +34,13 @@ struct SignClient {
         return try await apiClient.fetchData(endpoint: .completeSignUp(body: body))
     }
     
-    func checkNickname(nickname: String) async throws -> SimpleResponse {
-        return try await apiClient.fetchData(endpoint: .checkNickname(nickname: nickname))
+    func checkUserHandle(userHandle: String) async throws -> SimpleResponse {
+        return try await apiClient.fetchData(endpoint: .checkUserHandle(userHandle: userHandle))
     }
     
-    func reserveNickname(nickname: String) async throws -> SimpleResponse {
-        let body = NicknameReserveRequest(nickname: nickname)
+    func reserveUserHandle(userHandle: String) async throws -> SimpleResponse {
+        let body = UserHandleReserveRequest(userHandle: userHandle)
         
-        return try await apiClient.fetchData(endpoint: .reserveNickname(body: body))
+        return try await apiClient.fetchData(endpoint: .reserveUserHandle(body: body))
     }
 }

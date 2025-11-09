@@ -43,7 +43,7 @@ struct UserProfileView: View {
                             
                             VStack(alignment: .leading) {
                                 HStack {
-                                    Text(userProfile?.nickname ?? "")
+                                    Text(userProfile?.userHandle ?? "")
                                     
                                     Spacer()
                                     
@@ -82,7 +82,7 @@ struct UserProfileView: View {
                                     hashtagList: moat.sportType,
                                     fireCount: moat.fireCount,
                                     commentCount: moat.commentCount,
-                                    nickname: moat.nickname,
+                                    userHandle: moat.userHandle,
                                     createdAt: moat.createdAt,
                                     settingsTapped: {
                                         selectedMoatId = moat.moatId
@@ -111,7 +111,7 @@ struct UserProfileView: View {
                                         hashtagList: moat.sportType,
                                         fireCount: moat.fireCount,
                                         commentCount: moat.commentCount,
-                                        nickname: moat.nickname,
+                                        userHandle: moat.userHandle,
                                         createdAt: moat.createdAt,
                                         settingsTapped: {
                                             
