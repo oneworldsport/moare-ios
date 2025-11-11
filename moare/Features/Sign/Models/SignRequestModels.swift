@@ -43,7 +43,7 @@ struct UserProfileCreateRequest: Encodable {
     let userHandle: String
     let profileImageUrl: String? = nil
     let bio: String? = nil
-    let sportsInterests: [String]? = nil
+    let sportsInterests: [String]
 }
 
 struct UserHandleReserveRequest: Encodable {

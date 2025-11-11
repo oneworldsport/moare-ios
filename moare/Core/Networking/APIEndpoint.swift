@@ -133,7 +133,7 @@ enum APIEndpoint {
             ]
             
         case .reserveUserHandle:
-            components.path = "/auth/userHandle/reserve"
+            components.path = "/auth/user-handle/reserve"
             
         // moat
         case .createMoat:

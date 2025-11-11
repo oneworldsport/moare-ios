@@ -11,6 +11,8 @@ enum AuthErrorCode: String, Decodable {
     case otpAttemptLimitExceeded = "OTP_ATTEMPT_LIMIT_EXCEEDED"
     case userAlreadyExists = "USER_ALREADY_EXISTS"
     case userNotFound = "USER_NOT_FOUND"
+    case authSessionNotFound = "AUTH_SESSION_NOT_FOUND"
+    case userHandleAlreadyExists = "USER_HANDLE_ALREADY_EXISTS"
     case unknown
 }
 

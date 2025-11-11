@@ -14,13 +14,13 @@ enum SignFlow {
          signUpId,
          signUpOtp,
          signUpUserHandle,
-         signUpSportsInterest,
+         signUpSportsInterests,
          signUpSuccess
 }
 
 // SignView에 '제출 버튼'과 '하단 프로그레스바'의 활성화된 상태
 enum SignActivatedState {
-    case allActivated, onlyButtonActivated, allDeactivated
+    case allActivated, onlyButtonActivated, allDeactivated, onlyBarActivated
 }
 
 struct CheckUserHandleCancelID: Hashable {}
@@ -51,13 +51,13 @@ struct SignStore {
         var isFirstRequest = true // barAlignment 설정을 바꿀때 사용
         
         var apiFetchState: ApiFetchState = .idle
-        var isCheckingUserHandle: Bool = false
+    
         
-        var id = ""
+        var id = "" // TODO: 이것도 nil처리?
         var session: String? = nil
-        var otp = ""
+        var otp = "" // TODO: 이것도 nil처리?
         var userHandle: String? = nil
-        var sportsInterest: [String]? = nil
+        var sportsInterests: [String]? = nil
     }
     
     enum Action {
@@ -66,6 +66,7 @@ struct SignStore {
         case selectIdType(index: Int)
         case updateText(text: String)
         case submit
+        case addSport(sport: String)
         
         // private
         case checkIdValidation
@@ -79,12 +80,9 @@ struct SignStore {
         case checkUserHandle
         case checkUserHandleSuccess(result: Bool)
         case reserveUserHandle
-        case reserveUserHandleSuccess(result: Bool)
         case completeSignUp
-        case completeSignUpSuccess(result: Bool)
         
         case responseFailure(APIHTTPError)
-//        case clearErrorMessage
         
         case updateBarState
     }
@@ -138,13 +136,12 @@ struct SignStore {
                     state.placeholder = " 사용자 이름 입력"
                     state.submitBtnLabel = "다음"
                     
-                case .signUpSportsInterest:
+                case .signUpSportsInterests:
                     state.title = "스포츠 선택"
                     state.submitBtnLabel = "선택 완료"
-//                    state.isActivated = true
                     
                 case .signUpSuccess:
-                    state.title = "가입 완료!"
+                    return .none
                 }
                 
                 return .send(.updateText(text: ""))
@@ -183,7 +180,17 @@ struct SignStore {
                     }
                     
                 case .signUpUserHandle:
+                    state.activatedState = .allDeactivated
+                    // TODO: 유효성 검사쪽으로 이동 필요
+                    if state.text.isEmpty {
+                        return .merge(
+                            .cancel(id: CheckUserHandleCancelID()),
+                            .send(.updateBarState)
+                        )
+                    }
+                    
                     return .run { send in
+                        await send(.updateBarState)
                         // TODO: 유효성 검사 먼저 필요
                         // text가 바뀌면 2초 후 닉네임 중복 검사 api(.checkUserHandle) 호출.
                         // 2초 이내에 또 text가 바뀌면 이전 실행 취소하고 새로 실행.
@@ -191,10 +198,33 @@ struct SignStore {
                         await send(.checkUserHandle)
                     }
                     .cancellable(id: CheckUserHandleCancelID(), cancelInFlight: true)
+                    
                 default: break
                 }
                 
                 return .send(.updateBarState)
+                
+            case .addSport(let sport):
+                if state.sportsInterests == nil {
+                    state.sportsInterests = [sport]
+                    state.activatedState = .allActivated
+                    
+                    return .send(.updateBarState)
+                } else {
+                    if state.sportsInterests?.contains(sport) == true {
+                        state.sportsInterests?.removeAll { $0 == sport }
+                        
+                        if state.sportsInterests?.isEmpty == true {
+                            state.activatedState = .allDeactivated
+                            
+                            return .send(.updateBarState)
+                        }
+                    } else {
+                        state.sportsInterests?.append(sport)
+                    }
+                }
+                
+                return .none
                 
             case .checkIdValidation:
                 if state.idType == .email {
@@ -235,7 +265,7 @@ struct SignStore {
                     }
                 case .signUpUserHandle:
                     return .send(.reserveUserHandle)
-                case .signUpSportsInterest:
+                case .signUpSportsInterests:
                     return .send(.completeSignUp)
                 case .signUpSuccess:
                     return .none
@@ -273,15 +303,16 @@ struct SignStore {
                 return .send(.updateSignFlow(signFlow: .loginOtp))
                 
             case .confirmLoginOtp:
+                guard let session = state.session else {
+                    // TODO: 오류 처리 필요
+                    return .none
+                }
+                
                 state.otp = state.text
                 
                 state.apiFetchState = .fetching
                 state.activatedState = .allDeactivated
                 
-                guard let session = state.session else {
-                    // TODO: 오류 처리 필요
-                    return .none
-                }
                 let body = ConfirmAuthRequest(id: state.id, otp: state.otp, session: session)
                 return .run { send in
                     do {
@@ -317,7 +348,7 @@ struct SignStore {
                         
                         try await Task.sleep(for: .seconds(3))
                         
-                        let result = try await signClient.initiateSignUp(body: body)
+                        _ = try await signClient.initiateSignUp(body: body)
                         
                         await send(.sendSignUpOtpSuccess)
                     } catch {
@@ -356,83 +387,113 @@ struct SignStore {
                 }
                 
             case .checkUserHandle:
-                state.userHandle = state.text
-                state.isCheckingUserHandle = true
-                state.activatedState = .allDeactivated
+//                if let userHandle = state.userHandle,
+//                   !userHandle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+//                    // userHandle이 nil이 아니고, 공백 제거 후에도 비어있지 않음
+//                }
                 
-                if let userHandle = state.userHandle,
-                   !userHandle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    // userHandle이 nil이 아니고, 공백 제거 후에도 비어있지 않음
-                    state.apiFetchState = .fetching
-                    
-                    return .run { send in
-                        do {
-                            let result = try await signClient.checkUserHandle(userHandle: userHandle)
-                            
-                            await send(.checkUserHandleSuccess(result: result.success))
-                        } catch {
-                            
+                state.userHandle = state.text
+                
+                state.apiFetchState = .fetching
+                state.activatedState = .onlyBarActivated
+                state.shouldDisableTextField = true // 사용 가능한 userHandle인지 체크하는 동안에는 TextField를 disable
+                
+                guard let userHandle = state.userHandle else {
+                    // TODO: 오류 처리 필요
+                    return .none
+                }
+                return .run { send in
+                    do {
+                        await send(.updateBarState)
+                        
+                        try await Task.sleep(for: .seconds(3))
+                        
+                        let result = try await signClient.checkUserHandle(userHandle: userHandle)
+                        
+                        await send(.checkUserHandleSuccess(result: result.success))
+                    } catch {
+                        if let err = error as? APIHTTPError {
+                            await send(.responseFailure(err))
                         }
                     }
                 }
                 
-                return .none
-                
             case .checkUserHandleSuccess(let result):
-                state.isCheckingUserHandle = false
+                state.shouldDisableTextField = false
                 
                 if result {
                     state.apiFetchState = .success
-//                    state.isActivated = true
+                    state.activatedState = .allActivated
                 } else {
                     state.apiFetchState = .failure("")
-//                    state.isActivated = false
-                    state.errorMessage = "이미 사용중인 닉네임입니다."
+                    state.activatedState = .allDeactivated
+                    state.errorMessage = "이미 사용중인 사용자 이름입니다."
                 }
-                return .none
+                
+                return .send(.updateBarState)
                 
             case .reserveUserHandle:
-                if let userHandle = state.userHandle,
-                   !userHandle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    // userHandle이 nil이 아니고, 공백 제거 후에도 비어있지 않음
-                    state.apiFetchState = .fetching
-                    
-                    return .run { send in
-                        do {
-                            let result = try await signClient.reserveUserHandle(userHandle: userHandle)
-                            
-                            await send(.reserveUserHandleSuccess(result: result.success))
-                        } catch {
-                            print("\(error)")
+                guard let userHandle = state.userHandle else {
+                    // TODO: 오류 처리 필요
+                    return .none
+                }
+                
+                state.apiFetchState = .fetching
+                state.activatedState = .allDeactivated
+                
+                let body = UserHandleReserveRequest(userHandle: userHandle)
+                return .run { send in
+                    do {
+                        await send(.updateBarState)
+                        
+                        try await Task.sleep(for: .seconds(3))
+                        
+                        _ = try await signClient.reserveUserHandle(body: body)
+                        
+                        await send(.updateSignFlow(signFlow: .signUpSportsInterests))
+                    } catch {
+                        if let err = error as? APIHTTPError {
+                            await send(.responseFailure(err))
                         }
                     }
                 }
                 
-                return .none
-                
-            case .reserveUserHandleSuccess(let result):
-                if result {
-                    return .send(.updateSignFlow(signFlow: .signUpSportsInterest))
-                }
-                return .none
-                
             case .completeSignUp:
-                let body = SignUpCompleteRequest(id: state.id, method: state.idType, profile: UserProfileCreateRequest(userHandle: state.userHandle ?? "test"))
+                guard let userHandle = state.userHandle, let sportsInterests = state.sportsInterests else {
+                    // TODO: 오류 처리 필요
+                    return .none
+                }
                 
                 state.apiFetchState = .fetching
+                state.activatedState = .allDeactivated
                 
+                let body = SignUpCompleteRequest(
+                    id: state.id,
+                    method: state.idType,
+                    profile: UserProfileCreateRequest(
+                        userHandle: userHandle,
+                        sportsInterests: sportsInterests
+                    )
+                )
                 return .run { send in
-                    let result = try await signClient.completeSignUp(body: body)
-                    
-                    await send(.completeSignUpSuccess(result: result.success))
+                    do {
+                        await send(.updateBarState)
+                        
+                        try await Task.sleep(for: .seconds(3))
+                        
+                        let result = try await signClient.completeSignUp(body: body)
+                        
+//                        await send(.updateSignFlow(signFlow: .signUpSuccess))
+                        // 회원가입 성공 후 자동 로그인 (MoatView를 보여준다)
+                        UserDefaults.standard.set(result.idToken, forKey: "idToken")
+                        UserDefaults.standard.set(result.accessToken, forKey: "accessToken")
+                        UserDefaults.standard.set(result.refreshToken, forKey: "refreshToken")
+                    } catch {
+                        if let err = error as? APIHTTPError {
+                            await send(.responseFailure(err))
+                        }
+                    }
                 }
-                
-            case .completeSignUpSuccess(let result):
-                if result {
-                    return .send(.updateSignFlow(signFlow: .signUpSuccess))
-                }
-                
-                return .none
                 
             case .responseFailure(let apiError):
                 state.apiFetchState = .failure("")
@@ -476,6 +537,37 @@ struct SignStore {
                         state.text = ""
                         state.shouldDisableTextField = true
                     }
+                    
+                case .signUpOtp:
+                    if authErrorCode == .otpInvalid {
+                        state.submitBtnLabel = "확인"
+                        state.activatedState = .allActivated
+                    } else if authErrorCode == .otpExpired {
+                        state.submitBtnLabel = "코드 재전송"
+                        state.activatedState = .allActivated
+                        
+                        state.text = ""
+                        state.shouldDisableTextField = true
+                    } else if authErrorCode == .otpAttemptLimitExceeded {
+                        state.submitBtnLabel = "코드 재전송"
+                        state.activatedState = .allActivated
+                        
+                        state.text = ""
+                        state.shouldDisableTextField = true
+                    } else if authErrorCode == .authSessionNotFound {
+                        state.submitBtnLabel = "돌아가기"
+                        state.activatedState = .allDeactivated
+                        
+                        state.text = ""
+                    }
+                    
+                case .signUpUserHandle:
+                    state.shouldDisableTextField = false
+                    
+                    if authErrorCode == .userHandleAlreadyExists {
+                        state.activatedState = .allDeactivated
+                    }
+                    
                 default: break
                 }
                 
@@ -483,7 +575,7 @@ struct SignStore {
                 
             case .updateBarState:
                 if state.apiFetchState == .fetching {
-                    if state.isFirstRequest {
+                    if state.isFirstRequest && state.activatedState != .onlyBarActivated {
                         state.isFirstRequest = false
                         if state.barAlignment == .bottomLeading {
                             state.barAlignment = .bottomTrailing
@@ -501,7 +593,7 @@ struct SignStore {
                 case .allActivated:
                     // NOTE: 같은 크기로 state.barWidth를 바꾸면 animation이 trigger가 안됨
                     if state.barWidth == state.fullWidth {
-                        state.barWidth = state.fullWidth - 0.1
+                        state.barWidth = state.fullWidth - 0.2
                     } else {
                         state.barWidth = state.fullWidth
                     }
@@ -512,6 +604,14 @@ struct SignStore {
                     } else {
                         state.barWidth = 20
                     }
+                    
+                case .onlyBarActivated:
+                    if state.barWidth == state.fullWidth {
+                        state.barWidth = state.fullWidth - 0.1
+                    } else {
+                        state.barWidth = state.fullWidth
+                    }
+                    
                 }
                 
                 return .none

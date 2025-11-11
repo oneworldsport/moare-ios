@@ -30,7 +30,7 @@ struct SignClient {
         return try await apiClient.fetchData(endpoint: .verifySignUpOtp(body: body))
     }
     
-    func completeSignUp(body: SignUpCompleteRequest) async throws -> SimpleResponse {
+    func completeSignUp(body: SignUpCompleteRequest) async throws -> AuthTokenResponse {
         return try await apiClient.fetchData(endpoint: .completeSignUp(body: body))
     }
     
@@ -38,9 +38,7 @@ struct SignClient {
         return try await apiClient.fetchData(endpoint: .checkUserHandle(userHandle: userHandle))
     }
     
-    func reserveUserHandle(userHandle: String) async throws -> SimpleResponse {
-        let body = UserHandleReserveRequest(userHandle: userHandle)
-        
+    func reserveUserHandle(body: UserHandleReserveRequest) async throws -> SimpleResponse {
         return try await apiClient.fetchData(endpoint: .reserveUserHandle(body: body))
     }
 }

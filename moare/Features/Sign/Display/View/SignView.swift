@@ -24,6 +24,7 @@ struct SignView: View {
                 ZStack {
                     Text(signStore.title)
                         .font(.system(size: 16, weight: .medium))
+                    
                     HStack {
                         Spacer()
                         if currentFlow == .loginId || currentFlow == .signUpId {
@@ -37,35 +38,45 @@ struct SignView: View {
                         }
                     }
                 }
-                .padding(.vertical, 8)
+                .padding(.bottom, 8)
+                
+                if currentFlow == .signUpSportsInterests {
+                    Text("보는거나 하는걸 즐기는 스포츠들을 선택해 주세요")
+                        .font(.system(size: 13))
+                        .foregroundStyle(.secondary)
+                        .padding(.bottom, 8)
+                }
                 
                 IdTypeSelectButton(selectedIndex: signStore.idTypeSelectedIndex) { index in
                     signStore.send(.selectIdType(index: index), animation: AnimationConstants.AnimationType.mediumDefaultAnimation)
                 }
                 .padding(.vertical, 8)
-                .uiState(visibleState: currentFlow == SignFlow.loginId || currentFlow == SignFlow.signUpId)
+                .uiState(visibleState: currentFlow == .loginId || currentFlow == .signUpId)
                 
                 HStack {
-                    TextField(signStore.placeholder, text: $text)
-                        .frame(height: 50)
-                        .font(.system(size: 16))
-                        .focused($isFocused)
-                        .uiState(visibleState: currentFlow != .signUpSportsInterest)
-                        .disabled(signStore.shouldDisableTextField)
-                        .onChange(of: text) {
-                            signStore.send(.updateText(text: text))
-                        }
-                        .onChange(of: signStore.text) {
-                            let newValue = signStore.text
-                            if newValue != text {
-                                text = newValue
+                    if currentFlow == .signUpSportsInterests {
+                        SelectedSports(sports: signStore.sportsInterests ?? [])
+                    } else {
+                        TextField(signStore.placeholder, text: $text)
+                            .frame(height: 50)
+                            .font(.system(size: 16))
+                            .focused($isFocused)
+                            .disabled(signStore.shouldDisableTextField)
+                            .onChange(of: text) {
+                                signStore.send(.updateText(text: text))
                             }
-                        }
-                        .onChange(of: signStore.shouldDisableTextField) {
-                            if !signStore.shouldDisableTextField {
-                                isFocused = true
+                            .onChange(of: signStore.text) {
+                                let newValue = signStore.text
+                                if newValue != text {
+                                    text = newValue
+                                }
                             }
-                        }
+                            .onChange(of: signStore.shouldDisableTextField) {
+                                if !signStore.shouldDisableTextField {
+                                    isFocused = true
+                                }
+                            }
+                    }
 
                     ZStack {
                         if signStore.activatedState == .allActivated || signStore.activatedState == .onlyButtonActivated {
@@ -98,54 +109,20 @@ struct SignView: View {
                 }
                 
                 VStack {
-                    if signStore.currentFlow != SignFlow.signUpSportsInterest {
-                        Rectangle()
-                            .fill(Color("moare"))
-                            .frame(width: signStore.barWidth, height: 2)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .animation(.easeInOut(duration: signStore.barDuration), value: signStore.barWidth)
-                    }
+                    Rectangle()
+                        .fill(Color("moare"))
+                        .frame(width: signStore.barWidth, height: 2)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .animation(.easeInOut(duration: signStore.barDuration), value: signStore.barWidth)
                 }
                 .frame(maxWidth: .infinity, alignment: signStore.barAlignment)
-                .onChange(of: signStore.apiFetchState) {
-//                    if signStore.isCheckingUserHandle {
-//                        if signStore.apiFetchState == ApiFetchState.fetching {
-//                            barWidth = hstackWidth
-//                            barDuration = 4
-//                        } else if case ApiFetchState.failure = signStore.apiFetchState {
-//                            barWidth = 20
-//                            barDuration = 0.5
-//                        }
-//                    } else {
-//                        if signStore.apiFetchState == ApiFetchState.fetching {
-//                            barAlignment = if barAlignment == Alignment.bottomLeading {
-//                                Alignment.bottomTrailing
-//                            } else {
-//                                Alignment.bottomLeading
-//                            }
-//                            
-//                            barWidth = 10
-//                            barDuration = 4
-//                        } else if signStore.apiFetchState == ApiFetchState.success {
-//                            barWidth = 20
-//                            barDuration = 0.5
-//                        } else if case ApiFetchState.failure = signStore.apiFetchState {
-////                            if [.loginOtpExpired, .loginOtpLimitExceeded, .signUpOtpExpired].contains(signStore.currentFlow) {
-////                                barWidth = hstackWidth
-////                                barDuration = 0.5
-////                            } else {
-////                                barWidth = 20
-////                                barDuration = 0.5
-////                            }
-//                        }
-//                    }
-                }
                 
                 ZStack {
-                    // TODO: 숫자만 포함하게 정규식 추가
+                    // TODO: 사용 가능한 사용자 이름인지 확인중 문구 띄우기?
                     if (currentFlow == .loginOtp || currentFlow == .signUpOtp) &&
                         !signStore.shouldDisableTextField &&
                         text.count != 6 {
+                        // TODO: 숫자만 포함하게 정규식 추가
                         Text("인증번호 6자리를 입력해 주세요.")
                             .font(.system(size: 13))
                             .foregroundStyle(.gray)
@@ -157,6 +134,13 @@ struct SignView: View {
                 }
                 .frame(height: 15)
                 .padding(.top, 8)
+                
+                if currentFlow == .signUpSportsInterests {
+                    SportList(selectedSports: signStore.sportsInterests ?? []) { sport in
+                        signStore.send(.addSport(sport: sport))
+                    }
+                    .padding(.top, 8)
+                }
             }
         }
         .padding(.horizontal, 8)
