@@ -29,3 +29,14 @@ struct MoatListResponse: Decodable, Equatable {
     var moats: [MoatResponse]
     let nextToken: [String: String]?
 }
+
+struct FireResponse: Decodable, Equatable {
+    let targetId: String
+    let userId: String
+    let targetType: String
+    let createdAt: String // TODO: python에서는 datetime인데 확인해보기
+}
+
+struct MessageResponse: Decodable, Equatable {
+    let message: String
+}

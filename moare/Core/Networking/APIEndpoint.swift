@@ -34,6 +34,9 @@ enum APIEndpoint {
     case getMoatDetail(moatId: String)
     case getTimelineMoats(body: MoatListRequest)
     case getUserMoats(body: MoatListRequest)
+    case createFire(body: FireCreateRequest)
+    case deleteFire(moatId: String)
+    case checkFire(moatId: String)
     
     // user
     case getUserProfile
@@ -41,16 +44,16 @@ enum APIEndpoint {
     
     var defaultHTTPMethod: String {
         switch self {
-        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .bootstrapSession, .checkUserHandle, .getMoatDetail, .getUserProfile:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .bootstrapSession, .checkUserHandle, .getMoatDetail, .getUserProfile, .checkFire:
             return "GET"
         case .getLeagueSchedule, .searchByKeyword, .startLoginAuth, .confirmLoginAuth, .initiateSignUp, .verifySignUpOtp, .completeSignUp,
-                .createMoat, .getTimelineMoats, .getUserMoats:
+                .createMoat, .getTimelineMoats, .getUserMoats, .createFire:
             return "POST"
         case .reserveUserHandle:
             return "PUT"
         case .updateMoat, .updateUserProfile:
             return "PATCH"
-        case .deleteMoat:
+        case .deleteMoat, .deleteFire:
             return "DELETE"
         }
     }
@@ -154,6 +157,15 @@ enum APIEndpoint {
         case .getUserMoats:
             components.path = "/moats/user"
             
+        case .createFire:
+            components.path = "/fires"
+            
+        case .deleteFire(let moatId):
+            components.path = "/fires/\(moatId)"
+            
+        case .checkFire(let moatId):
+            components.path = "/fires/\(moatId)"
+            
         // user
         case .getUserProfile:
             components.path = "/users/me"
@@ -167,7 +179,7 @@ enum APIEndpoint {
     
     var headers: [String: String]? {
         switch self {
-        case .bootstrapSession, .createMoat, .updateMoat, .deleteMoat, .getMoatDetail, .getTimelineMoats, .getUserMoats, .getUserProfile, .updateUserProfile:
+        case .bootstrapSession, .createMoat, .updateMoat, .deleteMoat, .getMoatDetail, .getTimelineMoats, .getUserMoats, .getUserProfile, .updateUserProfile, .createFire, .deleteFire, .checkFire:
             if let token = UserDefaults.standard.string(forKey: "accessToken") {
                 return ["Authorization": "Bearer \(token)"]
             } else {
@@ -181,7 +193,7 @@ enum APIEndpoint {
     
     var httpBody: Data? {
         switch self {
-        case .bootstrapSession, .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkUserHandle, .deleteMoat, .getMoatDetail, .getUserProfile:
+        case .bootstrapSession, .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkUserHandle, .deleteMoat, .getMoatDetail, .getUserProfile, .deleteFire, .checkFire:
             return nil
             
         // search
@@ -213,6 +225,8 @@ enum APIEndpoint {
         case .getTimelineMoats(let body):
             return try? JSONEncoder().encode(body)
         case .getUserMoats(let body):
+            return try? JSONEncoder().encode(body)
+        case .createFire(let body):
             return try? JSONEncoder().encode(body)
             
         // user

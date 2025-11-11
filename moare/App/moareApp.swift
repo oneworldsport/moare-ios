@@ -28,6 +28,7 @@ struct SportSearchEngine_iOSApp: App {
     
     let searchStackStore = Store(initialState: SearchStackStore.State()) { SearchStackStore() }
     let moatStackStore = Store(initialState: MoatStackStore.State()) { MoatStackStore() }
+    let userProfileStackStore = Store(initialState: UserProfileStackStore.State()) { UserProfileStackStore() }
     
     @State var isSplashFinished = false
     @State private var didInitialLoad = false
@@ -35,7 +36,7 @@ struct SportSearchEngine_iOSApp: App {
 //    var viewForTest: SportDisplayType? = SportDisplayType.nbaTournament
     var viewForTest: SportDisplayType? = nil
     
-    @StateObject private var storeManager = StoreManager()
+//    @StateObject private var storeManager = StoreManager()
     
     enum Screen {
         case search, moat, profile
@@ -96,17 +97,18 @@ struct SportSearchEngine_iOSApp: App {
                             }
                             .tag(Screen.moat)
                             
-                            UserProfileView()
-                                .environmentObject(storeManager)
-                                .tabItem {
-                                    Image(systemName: "person.crop.circle")
-                                    if selection == .profile {
-                                        Text("내 프로필")
-                                    } else {
-                                        Text("")
-                                    }
+                            UserProfileDisplayView(
+                                userProfileStackStore: userProfileStackStore
+                            )
+                            .tabItem {
+                                Image(systemName: "person.crop.circle")
+                                if selection == .profile {
+                                    Text("내 프로필")
+                                } else {
+                                    Text("")
                                 }
-                                .tag(Screen.profile)
+                            }
+                            .tag(Screen.profile)
                         }
                         .preferredColorScheme(.light) // force light mode
                         .tint(Color("moare"))

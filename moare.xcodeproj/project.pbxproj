@@ -17,6 +17,8 @@
 		5B7153FA2E617CB100D74E5B /* MoatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B7153F92E617CAF00D74E5B /* MoatView.swift */; };
 		5B7153FE2E617ECE00D74E5B /* MoatStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B7153FD2E617EC200D74E5B /* MoatStore.swift */; };
 		5B97C18A2EA6195C00189ED2 /* SettingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B97C1892EA6193800189ED2 /* SettingWindow.swift */; };
+		5B97C1902EB9BDCE00189ED2 /* UserProfileDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B97C18F2EB9BDBE00189ED2 /* UserProfileDisplayView.swift */; };
+		5B97C1922EB9C23500189ED2 /* UserProfileStackStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B97C1912EB9C22700189ED2 /* UserProfileStackStore.swift */; };
 		DA081BCA2DDF2C3000034589 /* BaseInfoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA081BC92DDF2C3000034589 /* BaseInfoStore.swift */; };
 		DA081BCC2DDF386D00034589 /* SportDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA081BCB2DDF385B00034589 /* SportDisplayModel.swift */; };
 		DA081BCE2DDF408E00034589 /* BaseGameStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA081BCD2DDF408E00034589 /* BaseGameStatsStore.swift */; };
@@ -319,6 +321,8 @@
 		5B7153F92E617CAF00D74E5B /* MoatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoatView.swift; sourceTree = "<group>"; };
 		5B7153FD2E617EC200D74E5B /* MoatStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoatStore.swift; sourceTree = "<group>"; };
 		5B97C1892EA6193800189ED2 /* SettingWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingWindow.swift; sourceTree = "<group>"; };
+		5B97C18F2EB9BDBE00189ED2 /* UserProfileDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileDisplayView.swift; sourceTree = "<group>"; };
+		5B97C1912EB9C22700189ED2 /* UserProfileStackStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileStackStore.swift; sourceTree = "<group>"; };
 		DA081BC92DDF2C3000034589 /* BaseInfoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseInfoStore.swift; sourceTree = "<group>"; };
 		DA081BCB2DDF385B00034589 /* SportDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportDisplayModel.swift; sourceTree = "<group>"; };
 		DA081BCD2DDF408E00034589 /* BaseGameStatsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseGameStatsStore.swift; sourceTree = "<group>"; };
@@ -1345,6 +1349,8 @@
 		DA919CA52E6D2910003151B6 /* Display */ = {
 			isa = PBXGroup;
 			children = (
+				5B97C1912EB9C22700189ED2 /* UserProfileStackStore.swift */,
+				5B97C18F2EB9BDBE00189ED2 /* UserProfileDisplayView.swift */,
 				DA919CA82E6D3B83003151B6 /* Store */,
 				DA919CA72E6D3B7E003151B6 /* View */,
 			);
@@ -1912,6 +1918,7 @@
 				DA531BB12D64A8CA00DB87CB /* FBTeamInfoDisplayModel.swift in Sources */,
 				DA919CAE2E6D4A2E003151B6 /* MoatClient.swift in Sources */,
 				DA531BC62D64A8CA00DB87CB /* KeywordInfo.swift in Sources */,
+				5B97C1922EB9C23500189ED2 /* UserProfileStackStore.swift in Sources */,
 				DAED2C4F2E6D16F200BDAE67 /* FormView.swift in Sources */,
 				DA92D07B2EB89A3C002FAFC1 /* MoatDisplayView.swift in Sources */,
 				DA531B9D2D64A8CA00DB87CB /* FBTeamStandingsStore.swift in Sources */,
@@ -2083,6 +2090,7 @@
 				DA252B2E2DEF78B600006AB8 /* KBOTeamStandingsDisplayModel.swift in Sources */,
 				DA252B0C2DEF73AD00006AB8 /* KBOPlayerInfoResponseModel.swift in Sources */,
 				DA4777232DA7B67A00F3459C /* NBATeamStandingsResponseModel.swift in Sources */,
+				5B97C1902EB9BDCE00189ED2 /* UserProfileDisplayView.swift in Sources */,
 				DA531BA12D64A8CA00DB87CB /* FBPlayerInfoView.swift in Sources */,
 				DA531C062D64A91900DB87CB /* RoundedRectWithPathAni.swift in Sources */,
 				DABF24BA2DE9D0D00098A504 /* ScheduleViewContainer.swift in Sources */,

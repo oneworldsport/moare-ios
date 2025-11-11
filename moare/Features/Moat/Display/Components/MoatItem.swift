@@ -12,6 +12,8 @@ enum MoatType {
 }
 
 struct MoatItem: View {
+    @Binding var fired: Bool
+    
     let moatType: MoatType
     let isButtonDisabled: Bool
     let title: String?
@@ -23,6 +25,7 @@ struct MoatItem: View {
     let userHandle: String
     let timeAgo: String
     let settingsTapped: () -> Void
+    let fireTapped: () -> Void
     let action: () -> Void
     
     let height: CGFloat
@@ -42,12 +45,14 @@ struct MoatItem: View {
         title: String? = nil,
         content: String,
         hashtagList: [String]?,
+        fired: Binding<Bool>,
         fireCount: Int,
         commentCount: Int,
         profileImageURL: String = "",
         userHandle: String,
         createdAt: String,
         settingsTapped: @escaping () -> Void = {},
+        fireTapped: @escaping () -> Void = {},
         action: @escaping () -> Void = {}
     ) {
         self.moatType = moatType
@@ -55,12 +60,14 @@ struct MoatItem: View {
         self.title = moatType == .comment ? nil : title
         self.content = content
         self.hashtagList = hashtagList
+        self._fired = fired
         self.fireCount = fireCount
         self.commentCount = commentCount
         self.profileImageURL = profileImageURL
         self.userHandle = userHandle
         self.timeAgo = CalendarUtil.timeAgoString(from: createdAt)
         self.settingsTapped = settingsTapped
+        self.fireTapped = fireTapped
         self.action = action
         
         switch moatType {
@@ -104,7 +111,7 @@ struct MoatItem: View {
     }
     
     var body: some View {
-        Button(action: action) {
+        VStack(spacing: 0) {
             HStack {
                 if isSideBarShowing {
                     MoatItemSideBar(isLeft: true, height: height)
@@ -162,27 +169,43 @@ struct MoatItem: View {
                         // TODO: comment일때 실제 내부 높이는(time까지 합쳐서) height(80) 넘음
                         
                         VStack(spacing: 0) {
+                            if moatType == .detail {
                                 VStack(spacing: 0) {
-                                    Text("🔥")
-                                        .font(.system(size: iconFontSize))
-                                        .padding(.bottom, 2)
-                                    
-                                    Text("\(fireCount)")
-                                        .font(.system(size: iconCountFontSize))
-                                }
-                                .padding(.bottom, moatType == .detail ? 8 : 4)
-                                
-                                VStack(spacing: 0) {
-                                    Image(systemName: "bubble.left")
-                                        .font(.system(size: iconFontSize))
-                                        .padding(.bottom, 2)
-                                    
-                                    Text("\(commentCount)")
-                                        .font(.system(size: iconCountFontSize))
+                                    Button(action: {
+                                        settingsTapped()
+                                    }) {
+                                        Text("⋮")
+                                            .font(.system(size: 30, weight: .bold))
+                                            .contentShape(Rectangle())
+                                    }
+                                    .tint(.primary)
+                                    .padding(.bottom, 8)
                                 }
                             }
-                            .frame(maxHeight: .infinity, alignment: .bottom)
+                            VStack(spacing: 0) {
+                                Image(systemName: fired ? "flame.fill" : "flame")
+                                    .font(.system(size: iconFontSize))
+                                    .padding(.bottom, 2)
+                                    .onTapGesture {
+                                        fireTapped()
+                                    }
+                                
+                                Text("\(fireCount)")
+                                    .font(.system(size: iconCountFontSize))
+                            }
+                            .padding(.bottom, moatType == .detail ? 8 : 4)
+                            
+                            VStack(spacing: 0) {
+                                Image(systemName: "bubble.left")
+                                    .font(.system(size: iconFontSize))
+                                    .padding(.bottom, 2)
+                                
+                                Text("\(commentCount)")
+                                    .font(.system(size: iconCountFontSize))
+                            }
                         }
+                        .frame(maxHeight: .infinity, alignment: .bottom)
+                    }
                     
                     if moatType != .userProfile {
                         HStack {
@@ -210,8 +233,10 @@ struct MoatItem: View {
                 }
             }
         }
-        .disabled(isButtonDisabled)
+//        .disabled(isButtonDisabled)
         .frame(height: height)
+        .contentShape(Rectangle()) // Button에서 Vstack으로 바꿔서 추가
+        .optionalClickable(moatType != MoatType.detail, onTap: action)
         .foregroundStyle(.primary)
         .padding(.horizontal, 8)
         .onChange(of: moatType) {
@@ -222,22 +247,6 @@ struct MoatItem: View {
             } else {
                 withAnimation(.easeInOut(duration: 0.5)) {
                     isSideBarShowing = true
-                }
-            }
-        }
-        .overlay(alignment: .topTrailing) {
-            if moatType == .detail {
-                VStack(spacing: 0) {
-                    Button(action: {
-                        settingsTapped()
-                    }) {
-                        Text("⋮")
-                            .font(.system(size: 30, weight: .bold))
-                            .contentShape(Rectangle())
-                    }
-//                    .buttonStyle(.plain)
-                    .tint(.primary)
-                    .padding(.trailing, 16)
                 }
             }
         }
