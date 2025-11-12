@@ -1,5 +1,5 @@
 //
-//  MoatTimelineView.swift
+//  MoatView.swift
 //  moare
 //
 //  Created by 최지혜 on 8/29/25.
@@ -25,14 +25,14 @@ struct MoatView: View {
         VStack(spacing: 0) {
             if show {
                 ZStack(alignment: .bottomTrailing) {
-                    let timelineMoats = store.timelineMoats
+                    let trendingMoats = store.trendingMoats
                     let selectedMoat = store.selectedMoat
                     let comments = selectedMoat?.commentListResponse?.moats ?? []
                     
                     VStack(spacing: 0) {
                         ScrollView {
                             LazyVStack(spacing: 28) {
-                                ForEach(timelineMoats, id: \.moatId) { moat in
+                                ForEach(trendingMoats, id: \.moatId) { moat in
                                     let lines = moat.content.components(separatedBy: "\n")
                                     let title = lines.first ?? ""
                                     let body = lines.dropFirst().joined(separator: "\n")
@@ -45,7 +45,7 @@ struct MoatView: View {
                                     let fireCount = store.state.fireCountMap[moat.moatId] ?? moat.fireCount
                                     
                                     MoatItem(
-                                        moatType: selectedMoat != nil ? .detail : .timeline,
+                                        moatType: selectedMoat != nil ? .detail : .trending,
                                         isButtonDisabled: selectedMoat != nil,
                                         title: title,
                                         content: body,
@@ -125,7 +125,7 @@ struct MoatView: View {
                     //                            }
                     //                        }
                     
-                    if store.currentViewType == .timeline {
+                    if store.currentViewType == .trending {
                         FloatingAddButton {
                             store.send(.showForm)
                         }
@@ -152,7 +152,7 @@ struct MoatView: View {
                 show = true
             }
             
-            store.send(.getTimelineMoats)
+            store.send(.getTrendingMoats)
 //            store.send(.deleteToken)
         }
         .background(

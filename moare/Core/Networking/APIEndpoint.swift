@@ -32,7 +32,7 @@ enum APIEndpoint {
     case updateMoat(moatId: String, body: MoatUpdateRequest)
     case deleteMoat(moatId: String)
     case getMoatDetail(moatId: String)
-    case getTimelineMoats(body: MoatListRequest)
+    case getTrendingMoats(body: MoatListRequest)
     case getUserMoats(body: MoatListRequest)
     case createFire(body: FireCreateRequest)
     case deleteFire(moatId: String)
@@ -47,7 +47,7 @@ enum APIEndpoint {
         case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .bootstrapSession, .checkUserHandle, .getMoatDetail, .getUserProfile, .checkFire:
             return "GET"
         case .getLeagueSchedule, .searchByKeyword, .startLoginAuth, .confirmLoginAuth, .initiateSignUp, .verifySignUpOtp, .completeSignUp,
-                .createMoat, .getTimelineMoats, .getUserMoats, .createFire:
+                .createMoat, .getTrendingMoats, .getUserMoats, .createFire:
             return "POST"
         case .reserveUserHandle:
             return "PUT"
@@ -151,8 +151,8 @@ enum APIEndpoint {
         case .getMoatDetail(let moatId):
             components.path = "/moats/\(moatId)"
             
-        case .getTimelineMoats:
-            components.path = "/moats/timeline"
+        case .getTrendingMoats:
+            components.path = "/moats/trending"
             
         case .getUserMoats:
             components.path = "/moats/user"
@@ -179,7 +179,7 @@ enum APIEndpoint {
     
     var headers: [String: String]? {
         switch self {
-        case .bootstrapSession, .createMoat, .updateMoat, .deleteMoat, .getMoatDetail, .getTimelineMoats, .getUserMoats, .getUserProfile, .updateUserProfile, .createFire, .deleteFire, .checkFire:
+        case .bootstrapSession, .createMoat, .updateMoat, .deleteMoat, .getMoatDetail, .getTrendingMoats, .getUserMoats, .getUserProfile, .updateUserProfile, .createFire, .deleteFire, .checkFire:
             if let token = UserDefaults.standard.string(forKey: "accessToken") {
                 return ["Authorization": "Bearer \(token)"]
             } else {
@@ -222,7 +222,7 @@ enum APIEndpoint {
             return try? JSONEncoder().encode(body)
         case .updateMoat(_, let body):
             return try? JSONEncoder().encode(body)
-        case .getTimelineMoats(let body):
+        case .getTrendingMoats(let body):
             return try? JSONEncoder().encode(body)
         case .getUserMoats(let body):
             return try? JSONEncoder().encode(body)

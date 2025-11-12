@@ -66,8 +66,6 @@ struct FormView: View {
             withAnimation(AnimationConstants.AnimationType.mediumDefaultAnimation) {
                 show = true
             }
-            
-//            moatTimelineStore.send(.deleteToken)
         }
     }
 }

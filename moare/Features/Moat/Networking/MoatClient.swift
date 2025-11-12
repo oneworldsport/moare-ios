@@ -25,8 +25,8 @@ struct MoatClient {
         return try await apiClient.fetchData(endpoint: .getMoatDetail(moatId: moatId))
     }
     
-    func fetchTimelineMoats(body: MoatListRequest) async throws -> MoatListResponse {
-        return try await apiClient.fetchData(endpoint: .getTimelineMoats(body: body))
+    func fetchTrendingMoats(body: MoatListRequest) async throws -> MoatListResponse {
+        return try await apiClient.fetchData(endpoint: .getTrendingMoats(body: body))
     }
     
     func fetchUserMoats(body: MoatListRequest) async throws -> MoatListResponse {

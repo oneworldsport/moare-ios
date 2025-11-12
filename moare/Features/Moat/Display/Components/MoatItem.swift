@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum MoatType {
-    case timeline, detail, comment, userProfile
+    case trending, detail, comment, userProfile
 }
 
 struct MoatItem: View {
@@ -40,7 +40,7 @@ struct MoatItem: View {
     @State private var isSideBarShowing: Bool = true
     
     init(
-        moatType: MoatType = .timeline,
+        moatType: MoatType = .trending,
         isButtonDisabled: Bool = false,
         title: String? = nil,
         content: String,
@@ -71,7 +71,7 @@ struct MoatItem: View {
         self.action = action
         
         switch moatType {
-        case .timeline:
+        case .trending:
             self.height = 100
             self.titleFontSize = 18
             self.contentFontSize = 18

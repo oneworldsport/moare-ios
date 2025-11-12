@@ -66,7 +66,7 @@ struct MoatDisplayView: View {
                 moatStackStore.send(.emptyPath)
             } else {
                 if moatStackStore.path.ids.isEmpty {
-                    moatStackStore.send(.push(.timeline))
+                    moatStackStore.send(.push(.trending))
                 }
             }
         }

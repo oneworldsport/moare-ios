@@ -68,7 +68,7 @@ struct UserProfileView: View {
                                 let body = lines.dropFirst().joined(separator: "\n")
                                 
                                 MoatItem(
-                                    moatType: selectedMoat != nil ? .detail : .timeline,
+                                    moatType: selectedMoat != nil ? .detail : .trending,
                                     isButtonDisabled: selectedMoat != nil,
                                     title: title,
                                     content: body,

@@ -36,8 +36,6 @@ struct SportSearchEngine_iOSApp: App {
 //    var viewForTest: SportDisplayType? = SportDisplayType.nbaTournament
     var viewForTest: SportDisplayType? = nil
     
-//    @StateObject private var storeManager = StoreManager()
-    
     enum Screen {
         case search, moat, profile
     }

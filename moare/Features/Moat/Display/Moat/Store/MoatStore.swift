@@ -1,5 +1,5 @@
 //
-//  MoatTimelineStore.swift
+//  MoatStore.swift
 //  moare
 //
 //  Created by 최지혜 on 8/29/25.
@@ -18,13 +18,13 @@ struct MoatStore {
         var accessToken: String? = nil
         var refreshToken: String? = nil
         
-        var currentViewType: MoatViewType = .timeline
+        var currentViewType: MoatViewType = .trending
         var viewStack: [MoatViewType] = []
         var poppedView: MoatViewType? = nil
         
         var moatListResponse: MoatListResponse? = nil
-        var originalTimelineMoats: [MoatResponse] = []
-        var timelineMoats: [MoatResponse] = []
+        var originalTrendingMoats: [MoatResponse] = []
+        var trendingMoats: [MoatResponse] = []
         var selectedMoat: MoatDetailResponse? = nil
         
         var fireMap: [String: Bool] = [:]
@@ -34,11 +34,11 @@ struct MoatStore {
     enum Action {
         case deleteToken
         
-        case getTimelineMoats
+        case getTrendingMoats
         case selectMoat(isComment: Bool = false, moatId: String)
         case createMoat(content: String)
         
-        case updateTimelineMoats(moatListResponse: MoatListResponse)
+        case updateTrendingMoats(moatListResponse: MoatListResponse)
         case updateSelectedMoat(isComment: Bool, moatDetailResponse: MoatDetailResponse)
         
         case addViewStack(viewType: MoatViewType)
@@ -71,12 +71,12 @@ struct MoatStore {
                 
                 return .none
                 
-            case .getTimelineMoats:
+            case .getTrendingMoats:
                 return .run { [moatListReponse = state.moatListResponse] send in
                     let moatListRequest = MoatListRequest(nextToken: moatListReponse?.nextToken)
                     
-                    let result = try await moatClient.fetchTimelineMoats(body: moatListRequest)
-                    await send(.updateTimelineMoats(moatListResponse: result))
+                    let result = try await moatClient.fetchTrendingMoats(body: moatListRequest)
+                    await send(.updateTrendingMoats(moatListResponse: result))
                 }
                 
             case .selectMoat(let isComment, let moatId):
@@ -93,7 +93,7 @@ struct MoatStore {
                     moat = state.selectedMoat,
                     currentViewType = state.currentViewType,
                     moatListResponse = state.moatListResponse,
-                    originalTimeLineMoats = state.originalTimelineMoats
+                    originalTrendingMoats = state.originalTrendingMoats
                 ] send in
                     if currentViewType == .detail, let moat {
                         let moatRequest = MoatCreateRequest(content: content, sportType: ["#축구"], parentMoatId: moat.moat.moatId)
@@ -116,31 +116,31 @@ struct MoatStore {
                         await send(.goBack)
                         
                         if let moatListResponse {
-                            var timelineMoats = originalTimeLineMoats
-                            timelineMoats.append(result)
+                            var trendingMoats = originalTrendingMoats
+                            trendingMoats.append(result)
                             
                             var moatList = moatListResponse
-                            moatList.moats = timelineMoats
+                            moatList.moats = trendingMoats
                             
-                            await send(.updateTimelineMoats(moatListResponse: moatList))
+                            await send(.updateTrendingMoats(moatListResponse: moatList))
                         }
                     }
                 }
                 
-            case .updateTimelineMoats(let moatListResponse):
+            case .updateTrendingMoats(let moatListResponse):
                 state.moatListResponse = moatListResponse
-                state.originalTimelineMoats = moatListResponse.moats
-                state.timelineMoats = moatListResponse.moats
+                state.originalTrendingMoats = moatListResponse.moats
+                state.trendingMoats = moatListResponse.moats
                 
                 return .none
                 
             case .updateSelectedMoat(let isComment, let moatDetailResponse):
                 if isComment {
                     state.selectedMoat = moatDetailResponse
-                    state.timelineMoats = [moatDetailResponse.moat]
+                    state.trendingMoats = [moatDetailResponse.moat]
                 } else {
                     state.selectedMoat = moatDetailResponse
-                    state.timelineMoats = state.timelineMoats.filter {
+                    state.trendingMoats = state.trendingMoats.filter {
                         $0.moatId == moatDetailResponse.moat.moatId
                     }
                 }
@@ -171,10 +171,10 @@ struct MoatStore {
                     }
                 } else {
                     // 뒤로갈 뷰가 없는 경우. 즉, 메인 화면으로 이동하는 경우.
-                    state.currentViewType = .timeline
+                    state.currentViewType = .trending
                     
                     state.selectedMoat = nil
-                    state.timelineMoats = state.originalTimelineMoats
+                    state.trendingMoats = state.originalTrendingMoats
                 }
                 
                 return .none
@@ -216,7 +216,7 @@ struct MoatStore {
                 if !isCreated {
                     state.fireMap[targetId] = false
                     
-                    let firstFireCount = state.fireCountMap[targetId] ?? (state.timelineMoats.first{ $0.moatId == targetId }?.fireCount ?? 0)
+                    let firstFireCount = state.fireCountMap[targetId] ?? (state.trendingMoats.first{ $0.moatId == targetId }?.fireCount ?? 0)
                     
                     state.fireCountMap[targetId] = max(0, firstFireCount - 1)
                 }
@@ -240,7 +240,7 @@ struct MoatStore {
                 if !isDeleted {
                     state.fireMap[targetId] = true
                     
-                    let firstFireCount = state.fireCountMap[targetId] ?? (state.timelineMoats.first{ $0.moatId == targetId }?.fireCount ?? 0)
+                    let firstFireCount = state.fireCountMap[targetId] ?? (state.trendingMoats.first{ $0.moatId == targetId }?.fireCount ?? 0)
                     
                     state.fireCountMap[targetId] = firstFireCount + 1
                 }
@@ -251,7 +251,7 @@ struct MoatStore {
                 let isFired = state.fireMap[targetId] ?? false
                 state.fireMap[targetId] = !isFired
                 
-                let firstFireCount = state.fireCountMap[targetId] ?? (state.timelineMoats.first{ $0.moatId == targetId }?.fireCount ?? 0)
+                let firstFireCount = state.fireCountMap[targetId] ?? (state.trendingMoats.first{ $0.moatId == targetId }?.fireCount ?? 0)
                 state.fireCountMap[targetId] = isFired ? max(0, firstFireCount - 1) : firstFireCount + 1
                 
                 if isFired {

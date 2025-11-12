@@ -9,7 +9,7 @@ import Foundation
 import ComposableArchitecture
 
 enum MoatViewType {
-    case timeline, detail, form, userProfile // createForm, updateForm
+    case trending, detail, form, userProfile // createForm, updateForm
 }
 
 @Reducer
@@ -39,7 +39,7 @@ struct MoatStackStore {
             case .push(let viewType),
                 let .path(.element(id: _, action: .moat(.delegate(.push(viewType))))):
                 switch viewType {
-                case .timeline:
+                case .trending:
                     state.path.append(.moat(MoatStore.State()))
                     
                 case .form:
@@ -77,7 +77,7 @@ struct MoatStackStore {
                         let result = try await SignClient().bootstrapSession()
                         
                         if result.success && path.ids.isEmpty {
-                            await send(.push(.timeline))
+                            await send(.push(.trending))
                         }
                     } catch {
                         print("\(error)")
