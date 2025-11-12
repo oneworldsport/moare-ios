@@ -11,7 +11,7 @@ struct MoatResponse: Decodable, Equatable {
     let userHandle: String
     let profileImageUrl: String?
     let content: String
-    let sportType: [String]
+    let sportTags: [String]
     let parentMoatId: String?
     let targetType: String
     let createdAt: String // TODO: python에서는 datetime인데 확인해보기

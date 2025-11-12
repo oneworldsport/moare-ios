@@ -72,7 +72,7 @@ struct UserProfileView: View {
                                     isButtonDisabled: selectedMoat != nil,
                                     title: title,
                                     content: body,
-                                    hashtagList: moat.sportType,
+                                    hashtagList: moat.sportTags,
                                     fired: $fired,
                                     fireCount: moat.fireCount,
                                     commentCount: moat.commentCount,
@@ -103,7 +103,7 @@ struct UserProfileView: View {
                                     MoatItem(
                                         moatType: .comment,
                                         content: moat.content,
-                                        hashtagList: moat.sportType,
+                                        hashtagList: moat.sportTags,
                                         fired: $fired,
                                         fireCount: moat.fireCount,
                                         commentCount: moat.commentCount,

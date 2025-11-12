@@ -49,7 +49,7 @@ struct MoatView: View {
                                         isButtonDisabled: selectedMoat != nil,
                                         title: title,
                                         content: body,
-                                        hashtagList: moat.sportType,
+                                        hashtagList: moat.sportTags,
                                         fired: firedBinding,
                                         fireCount: fireCount,
                                         commentCount: moat.commentCount,
@@ -95,7 +95,7 @@ struct MoatView: View {
                                         MoatItem(
                                             moatType: .comment,
                                             content: moat.content,
-                                            hashtagList: moat.sportType,
+                                            hashtagList: moat.sportTags,
                                             fired: firedBinding,
                                             fireCount: fireCount,
                                             commentCount: moat.commentCount,

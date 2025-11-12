@@ -46,7 +46,7 @@ struct FormView: View {
                     
                     // 만들기, 생성하기, 올리기, 공유하기, 작성하기
                     Button(action: {
-//                        store.send(.createMoat(content: text))
+                        store.send(.createMoat(content: text))
                     }) {
                         Text("작성하기")
                             .padding(5)

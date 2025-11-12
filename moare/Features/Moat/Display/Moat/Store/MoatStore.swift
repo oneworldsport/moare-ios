@@ -73,7 +73,10 @@ struct MoatStore {
                 
             case .getTrendingMoats:
                 return .run { [moatListReponse = state.moatListResponse] send in
-                    let moatListRequest = MoatListRequest(nextToken: moatListReponse?.nextToken)
+                    let moatListRequest = MoatListRequest(
+                        sportTags: ["축구", "야구"],
+                        nextToken: moatListReponse?.nextToken
+                    )
                     
                     let result = try await moatClient.fetchTrendingMoats(body: moatListRequest)
                     await send(.updateTrendingMoats(moatListResponse: result))
@@ -96,7 +99,7 @@ struct MoatStore {
                     originalTrendingMoats = state.originalTrendingMoats
                 ] send in
                     if currentViewType == .detail, let moat {
-                        let moatRequest = MoatCreateRequest(content: content, sportType: ["#축구"], parentMoatId: moat.moat.moatId)
+                        let moatRequest = MoatCreateRequest(content: content, sportTags: ["#축구"], parentMoatId: moat.moat.moatId)
                         let result = try await moatClient.createMoat(body: moatRequest)
                         
                         var comments = moat.commentListResponse?.moats ?? []
@@ -110,7 +113,7 @@ struct MoatStore {
                         
                         await send(.updateSelectedMoat(isComment: false, moatDetailResponse: newMoatDetail))
                     } else if currentViewType == .form {
-                        let moatRequest = MoatCreateRequest(content: content, sportType: ["#축구"])
+                        let moatRequest = MoatCreateRequest(content: content, sportTags: ["#축구"])
                         let result = try await moatClient.createMoat(body: moatRequest)
                         
                         await send(.goBack)

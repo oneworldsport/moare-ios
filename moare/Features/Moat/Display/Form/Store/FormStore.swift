@@ -30,7 +30,7 @@ struct FormStore {
             case .createMoat(let content):
 //                return .run { [moat = state.moatForCreate] send in
                 return .run { send in
-                    let moat = MoatCreateRequest(content: content, sportType: ["#축구"])
+                    let moat = MoatCreateRequest(content: content, sportTags: ["#축구"])
                     
 //                    if let moat {
                         let _ = try await moatClient.createMoat(body: moat)
