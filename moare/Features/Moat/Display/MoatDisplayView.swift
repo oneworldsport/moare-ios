@@ -93,10 +93,12 @@ struct MoatPathView: View {
     
     var body: some View {
         switch store.state {
-        case .moat:
-            if let s = store.scope(state: \.moat, action: \.moat) { MoatView(store: s) }
+        case .trending:
+            if let s = store.scope(state: \.trending, action: \.trending) { MoatView(store: s) }
         case .form:
             if let s = store.scope(state: \.form, action: \.form) { FormView(store: s) }
+        case .detail:
+            if let s = store.scope(state: \.detail, action: \.detail) { MoatView(store: s).id(UUID()) }
         }
     }
 }

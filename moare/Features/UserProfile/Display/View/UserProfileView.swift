@@ -9,7 +9,9 @@ import SwiftUI
 import ComposableArchitecture
 
 struct UserProfileView: View {
-    let userProfileStore: StoreOf<UserProfileStore>
+    let store: StoreOf<UserProfileStore>
+    
+    @Binding var userHandle: String
     
     @State private var show = false
     @State var text = ""
@@ -22,39 +24,62 @@ struct UserProfileView: View {
     var body: some View {
         VStack(spacing: 0) {
             if show {
-                let userProfile = userProfileStore.userProfile
-                let userMoats = userProfileStore.userMoats
-                let selectedMoat = userProfileStore.selectedMoat
+                let userProfile = store.userProfile
+                let userMoats = store.userMoats
+                let selectedMoat = store.selectedMoat
                 let comments = selectedMoat?.commentListResponse?.moats ?? []
                 
                 VStack(spacing: 0) {
                     if selectedMoat == nil {
-                        HStack(alignment: .top) {
-                            Circle()
-                                .fill(.moare)
-                                .frame(width: 80, height: 80)
+                        HStack {
+                            DefaultProfileImage()
                             
-                            VStack(alignment: .leading) {
-                                HStack {
-                                    Text(userProfile?.userHandle ?? "")
-                                    
-                                    Spacer()
-                                    
-                                    Image(systemName: "gearshape")
-                                        .font(.system(size: 24))
+                            if let bio = userProfile?.bio {
+                                // TODO: 더보기 버튼 만들어서 클릭 시 늘어나게?
+                                Text(bio)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+//                                    .multilineTextAlignment(.leading)
+                                    .lineLimit(3)
+                            }
+                            
+                            VStack {
+                                Menu {
+                                    Button(action: {
+                                        
+                                    }) {
+                                        Text("프로필 수정")
+                                    }
+                                } label: {
+                                    Image(systemName: "ellipsis")
+                                        .frame(width: 24, height: 24)
                                 }
+                                .foregroundStyle(.primary)
                                 
                                 Spacer()
-                                
-                                if let sports = userProfile?.sportsInterests, !sports.isEmpty {
-                                    ForEach(sports, id: \.self) { sport in
-                                        Text(sport)
-                                    }
-                                }
                             }
                         }
                         .frame(height: 80)
                         .padding(.horizontal, 8)
+                        
+                        if let sports = userProfile?.sportsInterests, !sports.isEmpty {
+                            HStack {
+                                ForEach(sports.indices, id: \.self) { index in
+                                    let sport = sports[index]
+                                    
+                                    Text(sport)
+                                    
+                                    if index != sports.count - 1 {
+                                        Capsule()
+                                            .frame(width: 2, height: 15)
+                                            .foregroundColor(.primary)
+                                    }
+                                }
+                                
+                                Spacer()
+                            }
+                            .padding(.top, 8)
+                            .padding(.horizontal, 8)
+                        }
                         
                         HDivider()
                             .padding(.top, 8)
@@ -84,7 +109,7 @@ struct UserProfileView: View {
                                     },
                                     fireTapped: {}
                                 ) {
-                                    userProfileStore.send(.selectMoat(moatId: moat.moatId))
+                                    store.send(.selectMoat(moatId: moat.moatId))
                                 }
                             }
                         }
@@ -112,7 +137,7 @@ struct UserProfileView: View {
                                         settingsTapped: {},
                                         fireTapped: {}
                                     ) {
-                                        userProfileStore.send(.selectMoat(isComment: true, moatId: moat.moatId))
+                                        store.send(.selectMoat(moatId: moat.moatId))
                                     }
                                 }
                             }
@@ -138,7 +163,13 @@ struct UserProfileView: View {
                 show = true
             }
             
-            userProfileStore.send(.getUserProfile)
+            // TODO: 다른 view 갔다오면 불필요하게 실행될 여지 있음. 개선 필요함.
+            if store.originalUserMoats.isEmpty {
+                store.send(.getUserProfile)
+            }
+        }
+        .onChange(of: store.userProfile?.userHandle) {
+            userHandle = store.userProfile?.userHandle ?? ""
         }
         .background(
             TextFieldAlert(isPresented: $reportShowing, text: $inputText, title: "모트 신고하기")

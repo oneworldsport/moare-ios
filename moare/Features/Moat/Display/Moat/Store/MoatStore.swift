@@ -14,13 +14,8 @@ struct MoatStore {
     
     @ObservableState
     struct State {
-        var idToken: String? = nil
-        var accessToken: String? = nil
-        var refreshToken: String? = nil
-        
-        var currentViewType: MoatViewType = .trending
-        var viewStack: [MoatViewType] = []
-        var poppedView: MoatViewType? = nil
+        let moatId: String?
+        var isDetail: Bool // moatId가 있거나, selectedMoat가 있으면 detail 화면임. 사용하기 편하려고 만든 프로퍼티.
         
         var moatListResponse: MoatListResponse? = nil
         var originalTrendingMoats: [MoatResponse] = []
@@ -29,21 +24,21 @@ struct MoatStore {
         
         var fireMap: [String: Bool] = [:]
         var fireCountMap: [String: Int] = [:]
+        
+        init(moatId: String? = nil) {
+            self.moatId = moatId
+            self.isDetail = moatId != nil
+        }
     }
     
     enum Action {
-        case deleteToken
-        
         case getTrendingMoats
-        case selectMoat(isComment: Bool = false, moatId: String)
+        case selectMoat(moatId: String)
+        case getMoatDetail(moatId: String)
         case createMoat(content: String)
         
         case updateTrendingMoats(moatListResponse: MoatListResponse)
-        case updateSelectedMoat(isComment: Bool, moatDetailResponse: MoatDetailResponse)
-        
-        case addViewStack(viewType: MoatViewType)
-        case showForm
-        case goBack
+        case updateSelectedMoat(moatDetailResponse: MoatDetailResponse)
         
         case checkFire(targetId: String)
         case setFireMap(targetId: String, isFired: Bool)
@@ -54,23 +49,19 @@ struct MoatStore {
         case deleteFireResult(targetId: String, isDeleted: Bool)
         case toggleFire(targetId: String, targetType: TargetType)
         
+        case showForm
+        case showTrending
+        
         case delegate(Delegate)
     }
     
     enum Delegate {
-        case push(MoatViewType)
+        case push(viewType: MoatViewType, moatId: String? = nil)
     }
     
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .deleteToken:
-                UserDefaults.standard.removeObject(forKey: "idToken")
-                UserDefaults.standard.removeObject(forKey: "accessToken")
-                UserDefaults.standard.removeObject(forKey: "refreshToken")
-                
-                return .none
-                
             case .getTrendingMoats:
                 return .run { [moatListReponse = state.moatListResponse] send in
                     let moatListRequest = MoatListRequest(
@@ -82,23 +73,26 @@ struct MoatStore {
                     await send(.updateTrendingMoats(moatListResponse: result))
                 }
                 
-            case .selectMoat(let isComment, let moatId):
+            case .selectMoat(let moatId):
+                if state.isDetail {
+                    return .send(.delegate(.push(viewType: .detail, moatId: moatId)))
+                } else {
+                    return .send(.getMoatDetail(moatId: moatId))
+                }
+                
+            case .getMoatDetail(let moatId):
                 return .run { send in
                     let result = try await moatClient.fetchMoatDetail(moatId: moatId)
-                    await send(.updateSelectedMoat(isComment: isComment, moatDetailResponse: result), animation: AnimationConstants.AnimationType.mediumDefaultAnimation)
                     
-                    // TODO: 화면 먼저 보여주고 결과 띄워야하기때문에 실행시점 고민 필요
-                    await send(.addViewStack(viewType: .detail))
+                    await send(.updateSelectedMoat(moatDetailResponse: result), animation: AnimationConstants.AnimationType.mediumDefaultAnimation)
                 }
                 
             case .createMoat(let content):
                 return .run { [
-                    moat = state.selectedMoat,
-                    currentViewType = state.currentViewType,
-                    moatListResponse = state.moatListResponse,
-                    originalTrendingMoats = state.originalTrendingMoats
+                    isDetail = state.isDetail,
+                    moat = state.selectedMoat
                 ] send in
-                    if currentViewType == .detail, let moat {
+                    if isDetail, let moat {
                         let moatRequest = MoatCreateRequest(content: content, sportTags: ["#축구"], parentMoatId: moat.moat.moatId)
                         let result = try await moatClient.createMoat(body: moatRequest)
                         
@@ -111,23 +105,22 @@ struct MoatStore {
                         var newMoatDetail = moat
                         newMoatDetail.commentListResponse = commentListResponse
                         
-                        await send(.updateSelectedMoat(isComment: false, moatDetailResponse: newMoatDetail))
-                    } else if currentViewType == .form {
-                        let moatRequest = MoatCreateRequest(content: content, sportTags: ["#축구"])
-                        let result = try await moatClient.createMoat(body: moatRequest)
-                        
-                        await send(.goBack)
-                        
-                        if let moatListResponse {
-                            var trendingMoats = originalTrendingMoats
-                            trendingMoats.append(result)
-                            
-                            var moatList = moatListResponse
-                            moatList.moats = trendingMoats
-                            
-                            await send(.updateTrendingMoats(moatListResponse: moatList))
-                        }
+                        await send(.updateSelectedMoat(moatDetailResponse: newMoatDetail))
                     }
+//                    if currentViewType == .form {
+//                        let moatRequest = MoatCreateRequest(content: content, sportTags: ["#축구"])
+//                        let result = try await moatClient.createMoat(body: moatRequest)
+//                        
+//                        if let moatListResponse {
+//                            var trendingMoats = originalTrendingMoats
+//                            trendingMoats.append(result)
+//                            
+//                            var moatList = moatListResponse
+//                            moatList.moats = trendingMoats
+//                            
+//                            await send(.updateTrendingMoats(moatListResponse: moatList))
+//                        }
+//                    }
                 }
                 
             case .updateTrendingMoats(let moatListResponse):
@@ -137,12 +130,13 @@ struct MoatStore {
                 
                 return .none
                 
-            case .updateSelectedMoat(let isComment, let moatDetailResponse):
-                if isComment {
-                    state.selectedMoat = moatDetailResponse
+            case .updateSelectedMoat(let moatDetailResponse):
+                state.selectedMoat = moatDetailResponse
+                state.isDetail = true
+                
+                if state.isDetail {
                     state.trendingMoats = [moatDetailResponse.moat]
                 } else {
-                    state.selectedMoat = moatDetailResponse
                     state.trendingMoats = state.trendingMoats.filter {
                         $0.moatId == moatDetailResponse.moat.moatId
                     }
@@ -150,40 +144,15 @@ struct MoatStore {
                 
                 return .none
                 
-            case .addViewStack(let viewType):
-                state.viewStack.append(viewType)
-                state.currentViewType = viewType
-                
-                return .none
-                
-            case .goBack:
-                let lastView = state.viewStack.popLast()
-                state.poppedView = lastView
-                
-                let viewToShow = state.viewStack.last
-                
-                if let viewToShow {
-                    switch viewToShow {
-                    case .detail:
-                        state.currentViewType = viewToShow
-                        // TODO: 이전 selectedMoat를 다 저장해서 처리해줘야함.
-                        
-                    case .form:
-                        state.currentViewType = viewToShow
-                    default: break
-                    }
-                } else {
-                    // 뒤로갈 뷰가 없는 경우. 즉, 메인 화면으로 이동하는 경우.
-                    state.currentViewType = .trending
-                    
-                    state.selectedMoat = nil
-                    state.trendingMoats = state.originalTrendingMoats
-                }
+            case .showTrending:
+                state.selectedMoat = nil
+                state.isDetail = false
+                state.trendingMoats = state.originalTrendingMoats
                 
                 return .none
                 
             case .showForm:
-                return .send(.delegate(.push(.form)))
+                return .send(.delegate(.push(viewType: .form)))
                 
             case .checkFire(let targetId):
                 return .run { send in

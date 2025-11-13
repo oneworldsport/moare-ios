@@ -36,11 +36,10 @@ struct MoatStackStore {
         
         Reduce { state, action in
             switch action {
-            case .push(let viewType),
-                let .path(.element(id: _, action: .moat(.delegate(.push(viewType))))):
+            case .push(let viewType):
                 switch viewType {
                 case .trending:
-                    state.path.append(.moat(MoatStore.State()))
+                    state.path.append(.trending(MoatStore.State()))
                     
                 case .form:
                     state.path.append(.form(FormStore.State()))
@@ -53,15 +52,25 @@ struct MoatStackStore {
                 
                 return .none
                 
+            case let .path(.element(id: _, action: .trending(.delegate(.push(viewType, moatId))))),
+                let .path(.element(id: _, action: .detail(.delegate(.push(viewType, moatId))))):
+                switch viewType {
+                case .detail:
+                    state.path.append(.detail(MoatStore.State(moatId: moatId)))
+                    
+                default: break
+                }
+                
+                return .none
+                
             case .pop:
 //                state.didPop = true
 //                state.includesPreviousView = false
                 
+                // MoatViewType이 .trending이면 MoatStore의 .showTrending을 실행하고, .detail이면 기본 뒤로가기 동작을 실행한다
                 if let id = state.path.ids.last {
-                    if case .moat(let state) = state.path[id: id] {
-                        if case .detail = state.currentViewType {
-                            return .send(.path(.element(id: id, action: .moat(.goBack))))
-                        }
+                    if case .trending(_) = state.path[id: id] {
+                        return .send(.path(.element(id: id, action: .trending(.showTrending))))
                     }
                 }
                 
@@ -102,18 +111,21 @@ struct MoatStackStore {
     struct Path {
         @ObservableState
         enum State {
-            case moat(MoatStore.State)
+            case trending(MoatStore.State)
             case form(FormStore.State)
+            case detail(MoatStore.State)
         }
         
         enum Action {
-            case moat(MoatStore.Action)
+            case trending(MoatStore.Action)
             case form(FormStore.Action)
+            case detail(MoatStore.Action)
         }
         
         var body: some Reducer<State, Action> {
-            Scope(state: \.moat, action: \.moat) { MoatStore() }
+            Scope(state: \.trending, action: \.trending) { MoatStore() }
             Scope(state: \.form, action: \.form) { FormStore() }
+            Scope(state: \.detail, action: \.detail) { MoatStore() }
         }
     }
 }

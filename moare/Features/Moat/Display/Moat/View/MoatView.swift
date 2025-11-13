@@ -107,7 +107,7 @@ struct MoatView: View {
                                                 store.send(.toggleFire(targetId: moat.moatId, targetType: .comment))
                                             },
                                         ) {
-                                            store.send(.selectMoat(isComment: true, moatId: moat.moatId))
+                                            store.send(.selectMoat(moatId: moat.moatId))
                                         }
                                         .task(id: moat.moatId) {
                                             store.send(.checkFire(targetId: moat.moatId))
@@ -125,15 +125,15 @@ struct MoatView: View {
                     //                            }
                     //                        }
                     
-                    if store.currentViewType == .trending {
+                    if store.isDetail {
+                        CommentComposer(text: $text) {
+                            store.send(.createMoat(content: text))
+                        }
+                    } else {
                         FloatingAddButton {
                             store.send(.showForm)
                         }
                         .padding(10)
-                    } else if store.currentViewType == .detail {
-                        CommentComposer(text: $text) {
-                            store.send(.createMoat(content: text))
-                        }
                     }
                 }
                 .overlay(alignment : .topTrailing) {
@@ -152,8 +152,14 @@ struct MoatView: View {
                 show = true
             }
             
-            store.send(.getTrendingMoats)
-//            store.send(.deleteToken)
+            if let moatId = store.moatId {
+                // TODO: 뒤로가기를 통해 detail로 왔을때도 불필요하게 실행됨. 불필요한게 아닐수도 있지만 그래도 고민은 해봐야 할 것 같음.
+                store.send(.getMoatDetail(moatId: moatId))
+            } else {
+                if store.originalTrendingMoats.isEmpty {
+                    store.send(.getTrendingMoats)
+                }
+            }
         }
         .background(
             TextFieldAlert(isPresented: $reportShowing, text: $inputText, title: "모트 신고하기")
