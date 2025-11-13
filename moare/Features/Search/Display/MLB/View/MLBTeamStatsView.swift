@@ -98,7 +98,7 @@ struct MLBTeamStatsPlayerInfoItem: View {
             itemOffset: itemOffset
         ) {
             HStack {
-                URLImage(url: MLBUtil.teamLogoURL(id: team.id), isSvg: true)
+                URLImage(url: MLBUtil.teamLogoURL(id: team.id))
                 
                 // name, state and city
                 VStack(alignment: .leading) {

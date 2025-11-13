@@ -97,7 +97,7 @@ struct KBOTeamStatsPlayerInfoItem: View {
             itemOffset: itemOffset
         ) {
             HStack {
-                URLImage(url: KBOUtil.teamLogoURL(id: team.id), isSvg: true)
+                URLImage(url: KBOUtil.teamLogoURL(id: team.id))
                 
                 // name, city
                 VStack(alignment: .leading) {

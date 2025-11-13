@@ -122,7 +122,7 @@ struct NBAPlayerStatsPlayerInfoItem: View {
                     }
                 }
                 
-                URLImage(url: NBAUtil.teamLogoURL(id: player.teamId), isSvg: true)
+                URLImage(url: NBAUtil.teamLogoURL(id: player.teamId))
                 
                 // nationality, team, jersey, position
                 VStack(alignment: .leading) {

@@ -268,7 +268,7 @@ struct MLBPlayerInfoSecondItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset
         ) {
-            URLImage(url: MLBUtil.teamLogoURL(id: displayModel.teamId), isSvg: true)
+            URLImage(url: MLBUtil.teamLogoURL(id: displayModel.teamId))
                 .opacity(showContents ? 1 : 0)
             
             Text(teamNameDic["full_\(displayModel.teamId ?? 0)"] ?? "")

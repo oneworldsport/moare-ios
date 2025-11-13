@@ -119,10 +119,7 @@ struct MLBPlayerStatsPlayerInfoItem: View {
                     .multilineTextAlignment(.leading)
                 }
                 
-                URLImage(
-                    url: MLBUtil.teamLogoURL(id: displayModel.teamId),
-                    isSvg: true
-                )
+                URLImage(url: MLBUtil.teamLogoURL(id: displayModel.teamId))
 
                 // team, jersey, position
                 VStack(alignment: .leading) {

@@ -98,7 +98,7 @@ struct NBATeamStatsTeamInfoItem: View {
             itemOffset: itemOffset
         ) {
             HStack(spacing: 8) {
-                URLImage(url: NBAUtil.teamLogoURL(id: team.id), isSvg: true)
+                URLImage(url: NBAUtil.teamLogoURL(id: team.id))
                 
                 // name, state and city
                 VStack(alignment: .leading) {

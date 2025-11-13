@@ -193,7 +193,7 @@ struct NBATeamInfoFirstItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
         ) {
-            URLImage(url: NBAUtil.teamLogoURL(id: team.id), isSvg: true)
+            URLImage(url: NBAUtil.teamLogoURL(id: team.id))
                 .opacity(showContents ? 1 : 0)
             
             Text(nbaTeamInfoStore.baseInfo.teamNameDictionary["full_\(team.id)"] ?? team.fullName)

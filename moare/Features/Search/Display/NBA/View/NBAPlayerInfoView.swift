@@ -297,7 +297,7 @@ struct NBAPlayerInfoSecondItem: View {
             itemSize: itemSize,
             itemOffset: itemOffset,
         ) {
-            URLImage(url: NBAUtil.teamLogoURL(id: player.teamId), isSvg: true)
+            URLImage(url: NBAUtil.teamLogoURL(id: player.teamId))
                 .opacity(showContents ? 1 : 0)
             
             Text(teamNameDic["full_\(player.teamId)"] ?? "\(player.teamCity) \(player.teamName)")
