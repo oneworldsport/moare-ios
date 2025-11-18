@@ -12,30 +12,37 @@ struct UserProfileDisplayView: View {
     let userProfileStackStore: StoreOf<UserProfileStackStore>
     
     @State private var userHandle = ""
+    @State private var currentViewType: UserProfileViewType = .userProfile
     
     @AppStorage("accessToken") private var accessToken: String = ""
     
     var body: some View {
         ZStack {
-            VStack {
-                HStack {
-                    BackButton {
-                        userProfileStackStore.send(.pop)
+            if currentViewType != .userProfileImageEdit {
+                VStack {
+                    HStack {
+                        BackButton {
+                            userProfileStackStore.send(.pop)
+                        }
+                        
+                        if currentViewType != .userProfileUpdateForm {
+                            Text(userHandle)
+                                .font(.system(size: 20, weight: .medium))
+                                .padding(.horizontal, 8)
+                        }
+                        
+                        Spacer()
+                        
+                        if currentViewType != .userProfileUpdateForm {
+                            Image(systemName: "gearshape")
+                                .padding(.trailing, 8)
+                        }
                     }
                     
-                    Text(userHandle)
-                        .font(.system(size: 20, weight: .medium))
-                        .padding(.horizontal, 8)
-                    
                     Spacer()
-                    
-                    Image(systemName: "gearshape")
-                        .padding(.trailing, 8)
                 }
-                
-                Spacer()
+                .zIndex(1)
             }
-            .zIndex(1)
             
             if !accessToken.isEmpty {
                 if let id = userProfileStackStore.path.ids.last {
@@ -47,7 +54,7 @@ struct UserProfileDisplayView: View {
                             store: store,
                             userHandle: $userHandle
                         )
-                        .padding(.top, 30)
+                        .padding(.top, currentViewType != .userProfileImageEdit ? 30 : 0)
                     }
                 }
             } else {
@@ -65,6 +72,21 @@ struct UserProfileDisplayView: View {
             } else {
                 if userProfileStackStore.path.ids.isEmpty {
                     userProfileStackStore.send(.push(.userProfile))
+                }
+            }
+        }
+        .onChange(of: userProfileStackStore.path.ids.last) {
+            if let id = userProfileStackStore.path.ids.last {
+                if let store = userProfileStackStore.scope(
+                    state: \.path[id: id],
+                    action: \.path[id: id]
+                ) {
+                    currentViewType = switch store.state {
+                    case .userProfile: .userProfile
+                    case .moatDetail: .moatDetail
+                    case .userProfileUpdateForm: .userProfileUpdateForm
+                    case .userProfileImageEdit: .userProfileImageEdit
+                    }
                 }
             }
         }
@@ -93,6 +115,14 @@ struct UserProfilePathView: View {
         case .moatDetail:
             if let s = store.scope(state: \.moatDetail, action: \.moatDetail) {
                 MoatView(store: s).id(UUID())
+            }
+        case .userProfileUpdateForm:
+            if let s = store.scope(state: \.userProfileUpdateForm, action: \.userProfileUpdateForm) {
+                UserProfileUpdateFormView(store: s)
+            }
+        case .userProfileImageEdit:
+            if let s = store.scope(state: \.userProfileImageEdit, action: \.userProfileImageEdit) {
+                UserProfileImageEditView(store: s)
             }
         }
     }

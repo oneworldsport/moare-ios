@@ -25,7 +25,7 @@ struct UserProfileStore {
     
     enum Action {
         case getUserProfile
-        case updateUserProfile
+        case showUserProfileUpdateForm
         
         case setUserProfile(userProfile: UserProfileWithMoatsResponse)
         case selectMoat(moatId: String)
@@ -38,7 +38,7 @@ struct UserProfileStore {
     }
     
     enum Delegate {
-        case push(viewType: UserProfileViewType, moatId: String? = nil)
+        case push(viewType: UserProfileViewType, moatId: String? = nil, userProfile: UserProfileResponse? = nil)
     }
     
     var body: some Reducer<State, Action> {
@@ -50,8 +50,8 @@ struct UserProfileStore {
                     await send(.setUserProfile(userProfile: result))
                 }
                 
-            case .updateUserProfile:
-                return .none
+            case .showUserProfileUpdateForm:
+                return .send(.delegate(.push(viewType: .userProfileUpdateForm, userProfile: state.userProfile)))
                 
             case .setUserProfile(let userProfile):
                 state.userProfile = userProfile.userProfile

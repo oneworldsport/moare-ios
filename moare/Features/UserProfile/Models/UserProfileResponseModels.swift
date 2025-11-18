@@ -10,7 +10,7 @@ struct UserProfileResponse: Decodable {
     let userHandle: String
     let profileImageUrl: String?
     let bio: String?
-    let sportsInterests: [String]?
+    let sportsInterests: [String]
     let joinedAt: String
 }
 

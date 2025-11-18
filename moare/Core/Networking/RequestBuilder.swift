@@ -20,7 +20,7 @@ struct RequestBuilder {
             request.setValue(value, forHTTPHeaderField: key)
         }
         
-        if method == "POST" || method == "PUT" {
+        if method == "POST" || method == "PUT" || method == "PATCH" {
             request.httpBody = endpoint.httpBody
         }
         

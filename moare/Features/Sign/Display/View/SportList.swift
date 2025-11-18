@@ -12,14 +12,14 @@ struct SportList: View {
     private let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
     
     let selectedSports: [String]
-    let onItemSelected: (String) -> ()
+    let onItemSelect: (String) -> ()
     
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 16) {
                 ForEach(sports, id: \.self) { item in
                     Button(action: {
-                        onItemSelected(item)
+                        onItemSelect(item)
                     }) {
                         VStack(spacing: 0) {
                             HCapsuleBar(color: .secondary)

@@ -6,8 +6,8 @@
 //
 
 struct UserProfileUpdateRequest: Encodable {
-    let userHandle: String?
-    let profileImageUrl: String?
-    let bio: String?
-    let sportsInterests: [String]?
+    var userHandle: String? = nil
+    var profileImageUrl: String? = nil
+    var bio: String? = nil
+    var sportsInterests: [String]? = nil
 }

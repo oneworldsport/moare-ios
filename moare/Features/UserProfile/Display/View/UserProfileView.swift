@@ -28,11 +28,12 @@ struct UserProfileView: View {
                 let userMoats = store.userMoats
                 let selectedMoat = store.selectedMoat
                 let comments = selectedMoat?.commentListResponse?.moats ?? []
+                let profileImageUrl = userProfile?.profileImageUrl != nil ? "https://moare-sns-profile-images.s3.ap-northeast-2.amazonaws.com/\(userProfile!.profileImageUrl!)" : nil
                 
                 VStack(spacing: 0) {
                     if selectedMoat == nil {
                         HStack {
-                            DefaultProfileImage()
+                            ProfileImage(url: profileImageUrl)
                             
                             if let bio = userProfile?.bio {
                                 // TODO: 더보기 버튼 만들어서 클릭 시 늘어나게?
@@ -45,7 +46,7 @@ struct UserProfileView: View {
                             VStack {
                                 Menu {
                                     Button(action: {
-                                        
+                                        store.send(.showUserProfileUpdateForm)
                                     }) {
                                         Text("프로필 수정")
                                     }

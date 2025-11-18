@@ -455,4 +455,31 @@ class AWSManager {
 
 //        let (data, _) = try await URLSession.shared.data(for: req)
     }
+    
+    func uploadImage(
+        fileURL: URL,
+        key: String,
+        completion: @escaping (Result<String, Error>) -> Void
+    ) {
+        let expression = AWSS3TransferUtilityUploadExpression()
+        expression.progressBlock = { task, progress in
+            print("upload progress: \(progress.fractionCompleted)")
+        }
+        
+        let transferUtility = AWSS3TransferUtility.default()
+        transferUtility.uploadFile(
+            fileURL,
+            bucket: "moare-sns-profile-images",
+            key: key,
+            contentType: "image/jpeg",
+            expression: expression
+        ) { task, error in
+            if let error {
+                completion(.failure(error))
+            } else {
+//                let url = URL(string: "")!
+                completion(.success(key))
+            }
+        }
+    }
 }
