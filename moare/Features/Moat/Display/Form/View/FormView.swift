@@ -9,12 +9,17 @@ import SwiftUI
 import ComposableArchitecture
 
 struct FormView: View {
-    let store: StoreOf<FormStore>
+    @Bindable var store: StoreOf<FormStore>
     
     @State private var show = false
     @State var text = ""
     
     private let hashtagList: [String] = ["#축구", "#농구", "#야구", "#테니스"]
+    
+//    private var isEditing: Bool {
+//       if case .update = store.moatMode { return true }
+//       return false
+//     }
     
     var body: some View {
         VStack {
@@ -26,7 +31,7 @@ struct FormView: View {
                         .font(.system(size: 12))
                         .foregroundStyle(.secondary)
                     
-                    TextEditor(text: $text)
+                    TextEditor(text: $store.content)
                         .frame(height: 100)
                         .overlay {
                             RoundedRectangle(cornerRadius: 8)
@@ -46,7 +51,7 @@ struct FormView: View {
                     
                     // 만들기, 생성하기, 올리기, 공유하기, 작성하기
                     Button(action: {
-                        store.send(.createMoat(content: text))
+                        store.send(.submitTapped)
                     }) {
                         Text("작성하기")
                             .padding(5)

@@ -58,9 +58,30 @@ struct MoatStackStore {
                 case .detail:
                     state.path.append(.detail(MoatStore.State(moatId: moatId)))
                     
+                case .form:
+                    state.path.append(.form(FormStore.State()))
+                    
                 default: break
                 }
                 
+                return .none
+                
+            case let .path(.element(id: _, action: .form(.delegate(.created(moat))))):
+                // 마지막이 form이면 그 자리를 detail로 교체
+                if let lastId = state.path.ids.last,
+                   case .form = state.path[id: lastId] {
+                    state.path[id: lastId] = .detail(MoatStore.State(moatId: moat.moatId))
+                }
+                
+                // 1) 기존 path에서 '트렌딩' 엘리먼트 id 찾기 (뒤에서부터)
+                if let trendingId = state.path.ids.reversed().first(where: {
+                    if case .trending = state.path[id: $0] { return true } else { return false }
+                }) {
+                    if case .trending(_) = state.path[id: trendingId] {
+                        return .send(.path(.element(id: trendingId, action: .trending(.updateTrending(moat)))))
+                    }
+                }
+                            
                 return .none
                 
             case .pop:

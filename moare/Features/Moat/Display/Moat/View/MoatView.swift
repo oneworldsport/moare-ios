@@ -9,12 +9,10 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MoatView: View {
-    let store: StoreOf<MoatStore>
+    @Bindable var store: StoreOf<MoatStore>
     
     @State private var show = false
     @State var text = ""
-    @State private var settingsShowing = false
-    @State private var reportShowing = false
     @State private var selectedMoatId: String? = nil
     @State private var inputText = ""
     
@@ -44,6 +42,11 @@ struct MoatView: View {
                                     
                                     let fireCount = store.state.fireCountMap[moat.moatId] ?? moat.fireCount
                                     
+                                    let onSettings: (SettingItems) -> Void = { item in
+                                        selectedMoatId = moat.moatId
+                                        store.send(.settingItemsTapped(item: item, moatId: moat.moatId))
+                                    }
+                                    
                                     MoatItem(
                                         moatType: selectedMoat != nil ? .detail : .trending,
                                         isButtonDisabled: selectedMoat != nil,
@@ -55,10 +58,7 @@ struct MoatView: View {
                                         commentCount: moat.commentCount,
                                         userHandle: moat.userHandle,
                                         createdAt: moat.createdAt,
-                                        settingsTapped: {
-                                            selectedMoatId = moat.moatId
-                                            settingsShowing = true
-                                        },
+                                        settingsTapped: onSettings,
                                         fireTapped: {
                                             print("fire tapped")
                                             store.send(.toggleFire(targetId: moat.moatId, targetType: .moat))
@@ -67,9 +67,6 @@ struct MoatView: View {
                                             store.send(.selectMoat(moatId: moat.moatId))
                                         }
                                     )
-                                    .task(id: moat.moatId) {
-                                        store.send(.checkFire(targetId: moat.moatId))
-                                    }
                                 }
                             }
                             .padding(.top, 10)
@@ -101,16 +98,14 @@ struct MoatView: View {
                                             commentCount: moat.commentCount,
                                             userHandle: moat.userHandle,
                                             createdAt: moat.createdAt,
-                                            settingsTapped: {},
+                                            settingsTapped: { item in
+                                            },
                                             fireTapped: {
                                                 print("fire tapped")
                                                 store.send(.toggleFire(targetId: moat.moatId, targetType: .comment))
                                             },
                                         ) {
                                             store.send(.selectMoat(moatId: moat.moatId))
-                                        }
-                                        .task(id: moat.moatId) {
-                                            store.send(.checkFire(targetId: moat.moatId))
                                         }
                                     }
                                 }
@@ -136,15 +131,6 @@ struct MoatView: View {
                         .padding(10)
                     }
                 }
-                .overlay(alignment : .topTrailing) {
-                    if settingsShowing {
-                        SettingWindow(reportTapped: {
-                            reportShowing = true
-                            settingsShowing = false
-                        })
-                        .padding(.top, 10)
-                    }
-                }
             }
         }
         .onAppear {
@@ -162,7 +148,7 @@ struct MoatView: View {
             }
         }
         .background(
-            TextFieldAlert(isPresented: $reportShowing, text: $inputText, title: "모트 신고하기")
+            TextFieldAlert(isPresented: $store.reportPresenting, text: $inputText, title: "모트 신고하기")
         )
     }
 }

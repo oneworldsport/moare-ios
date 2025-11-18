@@ -16,7 +16,7 @@ struct UserProfileView: View {
     @State private var show = false
     @State var text = ""
     @State private var settingsShowing = false
-    @State private var reportShowing = false
+    
     @State private var selectedMoatId: String? = nil
     @State private var inputText = ""
     @State private var fired = false
@@ -103,7 +103,7 @@ struct UserProfileView: View {
                                     commentCount: moat.commentCount,
                                     userHandle: moat.userHandle,
                                     createdAt: moat.createdAt,
-                                    settingsTapped: {
+                                    settingsTapped: { item in
                                         selectedMoatId = moat.moatId
                                         settingsShowing = true
                                     },
@@ -134,7 +134,8 @@ struct UserProfileView: View {
                                         commentCount: moat.commentCount,
                                         userHandle: moat.userHandle,
                                         createdAt: moat.createdAt,
-                                        settingsTapped: {},
+                                        settingsTapped: { item in
+                                        },
                                         fireTapped: {}
                                     ) {
                                         store.send(.selectMoat(moatId: moat.moatId))
@@ -147,15 +148,15 @@ struct UserProfileView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .overlay(alignment : .topTrailing) {
-                    if settingsShowing {
-                        SettingWindow(reportTapped: {
-                            reportShowing = true
-                            settingsShowing = false
-                        })
-                        .padding(.top, 10)
-                    }
-                }
+//                .overlay(alignment : .topTrailing) {
+//                    if settingsShowing {
+//                        SettingWindow(reportTapped: {
+//                            reportShowing = true
+//                            settingsShowing = false
+//                        })
+//                        .padding(.top, 10)
+//                    }
+//                }
             }
         }
         .onAppear {
@@ -171,9 +172,9 @@ struct UserProfileView: View {
         .onChange(of: store.userProfile?.userHandle) {
             userHandle = store.userProfile?.userHandle ?? ""
         }
-        .background(
-            TextFieldAlert(isPresented: $reportShowing, text: $inputText, title: "모트 신고하기")
-        )
+//        .background(
+//            TextFieldAlert(isPresented: $reportShowing, text: $inputText, title: "모트 신고하기")
+//        )
     }
 }
 

@@ -7,31 +7,17 @@
 import SwiftUI
 import UIKit
 
-enum SettingItems: CaseIterable {
-    case report, one, two, three
-}
-
-struct SettingWindow: View {
-    // 타임라인이랑 내 프로필일때 설정 다르게...
-    let reportTapped: () -> Void
-
-    var body: some View {
-        ZStack {
-            VStack {
-                ForEach(SettingItems.allCases, id: \.self) { item in
-                    Button(action : {
-                        reportTapped()
-                    }) {
-                        Text("\(item)")
-                    }
-                    .frame(maxWidth: .infinity, minHeight: 48)
-                }
-            }
-            .background(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Color(.secondarySystemBackground))
-            )
-            .padding(.horizontal, 30)
+enum SettingItems: String, CaseIterable, Equatable, Identifiable {
+    case report, updateMoat, deleteMoat, three
+    
+    var id: Self { self }
+    
+    var title: String {
+        switch self {
+        case .report: "신고하기"
+        case .updateMoat: "모트 수정하기"
+        case .deleteMoat: "모트 삭제하기"
+        default: "^^"
         }
     }
 }

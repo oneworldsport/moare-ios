@@ -24,7 +24,7 @@ struct MoatItem: View {
     let profileImageURL: String
     let userHandle: String
     let timeAgo: String
-    let settingsTapped: () -> Void
+    let settingsTapped: (SettingItems) -> Void
     let fireTapped: () -> Void
     let action: () -> Void
     
@@ -51,7 +51,7 @@ struct MoatItem: View {
         profileImageURL: String = "",
         userHandle: String,
         createdAt: String,
-        settingsTapped: @escaping () -> Void = {},
+        settingsTapped: @escaping (SettingItems) -> Void = {_ in },
         fireTapped: @escaping () -> Void = {},
         action: @escaping () -> Void = {}
     ) {
@@ -171,17 +171,34 @@ struct MoatItem: View {
                         VStack(spacing: 0) {
                             if moatType == .detail {
                                 VStack(spacing: 0) {
-                                    Button(action: {
-                                        settingsTapped()
-                                    }) {
-                                        Text("⋮")
-                                            .font(.system(size: 30, weight: .bold))
-                                            .contentShape(Rectangle())
+//                                    Button(action: {
+//                                        settingsTapped()
+//                                        print(">>> settingsTapped")
+//                                    }) {
+//                                        Text("⋮")
+//                                            .font(.system(size: 30, weight: .bold))
+//                                            .contentShape(Rectangle())
+//                                    }
+//                                    .tint(.primary)
+//                                    .padding(.bottom, 8)
+                                    Menu {
+                                        ForEach(SettingItems.allCases, id: \.self) { item in
+                                            Button(action: {
+                                                settingsTapped(item)
+                                            }) {
+                                                Text("\(item.title)")
+                                            }
+                                        }
+                                    } label: {
+                                        Image(systemName: "ellipsis")
+                                            .frame(width: 24, height: 24) // TODO: 나중에 fire랑 통일
+                                            .font(.system(size: iconFontSize))
                                     }
-                                    .tint(.primary)
-                                    .padding(.bottom, 8)
                                 }
                             }
+                            
+                            Spacer()
+                            
                             VStack(spacing: 0) {
                                 Image(systemName: fired ? "flame.fill" : "flame")
                                     .font(.system(size: iconFontSize))
