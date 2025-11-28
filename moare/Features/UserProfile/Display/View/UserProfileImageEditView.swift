@@ -47,7 +47,7 @@ struct UserProfileImageEditView: View {
                                 scale: scale,
                                 offset: exportOffset
                             )
-                            store.send(.onComplete(cropped))
+                            store.send(.complete(cropped))
                         } else {
                             store.send(.goBack)
                         }

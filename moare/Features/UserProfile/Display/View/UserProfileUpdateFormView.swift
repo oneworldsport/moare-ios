@@ -19,7 +19,6 @@ struct UserProfileUpdateFormView: View {
     
     @FocusState var userHandleFocusState: Bool
     
-    private let sportList = ["축구", "야구", "농구", "테니스", "F1", "배구", "골프"]
     private let rows: [GridItem] = Array(repeating: .init(.flexible()), count: 2)
     
     var body: some View {
@@ -65,6 +64,7 @@ struct UserProfileUpdateFormView: View {
                 }
                 .padding(.bottom, 8)
                 
+                // TODO: HStack, VStack 사용하게 구조 수정
                 if case .failure(let err) = store.userHandleCheckState {
                     HStack(spacing: 0) {
                         // 옆에 띄우기 위한 코드

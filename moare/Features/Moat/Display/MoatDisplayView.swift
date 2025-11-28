@@ -15,6 +15,7 @@ struct MoatDisplayView: View {
     @AppStorage("accessToken") private var accessToken: String = ""
     
     var body: some View {
+        // TODO: SignView때문에 ZStack으로하고 BackButton 만든건데, BackButton을 SignView에 따로 만들고 아래 뷰는 VStack으로 바꾸기
         ZStack {
             VStack {
                 HStack {

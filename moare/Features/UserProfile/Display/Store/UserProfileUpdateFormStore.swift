@@ -99,12 +99,7 @@ struct UserProfileUpdateFormStore {
                 
             case let .updateUserHandleCheckState(checkState, newUserHandle):
                 state.userHandleCheckState = checkState
-                
-                if checkState == .fetching {
-                    state.isUserHandleTextFieldDisabled = true
-                } else {
-                    state.isUserHandleTextFieldDisabled = false
-                }
+                state.isUserHandleTextFieldDisabled = checkState == .fetching
                 
                 if let newUserHandle, checkState == .success {
                     state.userProfileUpdate.userHandle = newUserHandle
@@ -159,6 +154,7 @@ struct UserProfileUpdateFormStore {
                     tempImageUrl == nil {
                     // 바뀐값이 하나도 없으면 그냥 return
                     // TODO: 버튼 비활성화로 애초에 실행이 안되게 수정 필요
+                    // TODO: sportsInterests가 빈 리스트여도 안됨
                     return .none
                 }
                 

@@ -29,7 +29,11 @@ struct SignView: View {
                         Spacer()
                         if currentFlow == .loginId || currentFlow == .signUpId {
                             Button {
-                                signStore.send(.updateSignFlow(signFlow: .signUpId))
+                                if currentFlow == .loginId {
+                                    signStore.send(.updateSignFlow(signFlow: .signUpId))
+                                } else if currentFlow == .signUpId {
+                                    signStore.send(.updateSignFlow(signFlow: .loginId))
+                                }
                             } label : {
                                 Text(currentFlow == .loginId ? "회원가입" : "로그인")
                                     .font(.system(size: 16, weight: .medium))
@@ -78,22 +82,10 @@ struct SignView: View {
                             }
                     }
 
-                    ZStack {
-                        if signStore.activatedState == .allActivated || signStore.activatedState == .onlyButtonActivated {
-                            Button {
-                                signStore.send(.submit)
-                            } label: {
-                                Text(signStore.submitBtnLabel)
-                                    .font(.system(size: 14))
-                                    .foregroundStyle(Color.white)
-                                    .padding(.vertical, 6)
-                                    .padding(.horizontal, 10)
-                                    .background {
-                                        Capsule()
-                                    }
-                            }
-                            .tint(Color("moare"))
-                        } else {
+                    if signStore.activatedState == .allActivated || signStore.activatedState == .onlyButtonActivated {
+                        Button {
+                            signStore.send(.submit)
+                        } label: {
                             Text(signStore.submitBtnLabel)
                                 .font(.system(size: 14))
                                 .foregroundStyle(Color.white)
@@ -101,10 +93,20 @@ struct SignView: View {
                                 .padding(.horizontal, 10)
                                 .background {
                                     Capsule()
-                                        .foregroundStyle(.gray)
-                                        .opacity(0.7)
                                 }
                         }
+                        .tint(Color("moare"))
+                    } else {
+                        Text(signStore.submitBtnLabel)
+                            .font(.system(size: 14))
+                            .foregroundStyle(Color.white)
+                            .padding(.vertical, 6)
+                            .padding(.horizontal, 10)
+                            .background {
+                                Capsule()
+                                    .foregroundStyle(.gray)
+                                    .opacity(0.7)
+                            }
                     }
                 }
                 

@@ -679,19 +679,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5B7153E72E52FF7800D74E5B /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				5B7153F72E5D7E9200D74E5B /* IdTypeSelectButton.swift */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
 		5B7153E82E52FF9100D74E5B /* View */ = {
 			isa = PBXGroup;
 			children = (
-				DAE8EEA92EC0F10C006EF2A3 /* SportList.swift */,
-				DAE8EEA72EC0F09D006EF2A3 /* SelectedSports.swift */,
 				5B7153E92E52FFD000D74E5B /* SignView.swift */,
 			);
 			path = View;
@@ -1164,7 +1154,7 @@
 		DA531B902D64A8CA00DB87CB /* Display */ = {
 			isa = PBXGroup;
 			children = (
-				5B7153E72E52FF7800D74E5B /* Common */,
+				DA8250372ED75F5A00A54198 /* Components */,
 				5B7153E82E52FF9100D74E5B /* View */,
 				DA531B8F2D64A8CA00DB87CB /* Store */,
 			);
@@ -1357,6 +1347,16 @@
 			name = UI;
 			path = moare/UI;
 			sourceTree = SOURCE_ROOT;
+		};
+		DA8250372ED75F5A00A54198 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				DAE8EEA92EC0F10C006EF2A3 /* SportList.swift */,
+				DAE8EEA72EC0F09D006EF2A3 /* SelectedSports.swift */,
+				5B7153F72E5D7E9200D74E5B /* IdTypeSelectButton.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
 		};
 		DA919CA42E6D290A003151B6 /* Models */ = {
 			isa = PBXGroup;

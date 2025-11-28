@@ -22,7 +22,7 @@ struct UserProfileImageEditStore {
     }
     
     enum Action {
-        case onComplete(UIImage)
+        case complete(UIImage)
         case goBack
         
         case delegate(Delegate)
@@ -35,7 +35,7 @@ struct UserProfileImageEditStore {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .onComplete(let image):
+            case .complete(let image):
                 let userId = state.userId
                 return .run { send in
                     guard let imageData = image.jpegData(compressionQuality: 0.7) else {

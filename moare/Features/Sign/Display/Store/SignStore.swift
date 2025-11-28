@@ -99,13 +99,9 @@ struct SignStore {
                 switch signFlow {
                 case .loginId:
                     state.title = "로그인"
-                    state.placeholder = " 이메일 입력"
                     state.submitBtnLabel = "코드 전송"
                     
-                    return .run { send in
-                        await send(.selectIdType(index: 0))
-                        await send(.updateText(text: ""))
-                    }
+                    return .send(.selectIdType(index: 0))
                     
                 case .loginOtp:
                     state.title = "코드 인증"
@@ -114,17 +110,13 @@ struct SignStore {
                     
                 case .signUpId:
                     state.title = "회원가입"
-                    state.placeholder = " 이메일 입력"
                     state.submitBtnLabel = "코드 전송"
                     
                     state.id = ""
                     state.session = nil
                     state.otp = ""
                     
-                    return .run { send in
-                        await send(.selectIdType(index: 0))
-                        await send(.updateText(text: ""))
-                    }
+                    return .send(.selectIdType(index: 0))
                     
                 case .signUpOtp:
                     state.title = "코드 인증"
@@ -526,13 +518,7 @@ struct SignStore {
                         
                         state.submitBtnLabel = "확인"
                         state.activatedState = .allActivated
-                    } else if authErrorCode == .otpExpired {
-                        state.submitBtnLabel = "코드 재전송"
-                        state.activatedState = .allActivated
-                        
-                        state.text = ""
-                        state.shouldDisableTextField = true
-                    } else if authErrorCode == .otpAttemptLimitExceeded {
+                    } else if (authErrorCode == .otpExpired || authErrorCode == .otpAttemptLimitExceeded) {
                         state.submitBtnLabel = "코드 재전송"
                         state.activatedState = .allActivated
                         
@@ -544,13 +530,7 @@ struct SignStore {
                     if authErrorCode == .otpInvalid {
                         state.submitBtnLabel = "확인"
                         state.activatedState = .allActivated
-                    } else if authErrorCode == .otpExpired {
-                        state.submitBtnLabel = "코드 재전송"
-                        state.activatedState = .allActivated
-                        
-                        state.text = ""
-                        state.shouldDisableTextField = true
-                    } else if authErrorCode == .otpAttemptLimitExceeded {
+                    } else if (authErrorCode == .otpExpired || authErrorCode == .otpAttemptLimitExceeded) {
                         state.submitBtnLabel = "코드 재전송"
                         state.activatedState = .allActivated
                         
@@ -592,7 +572,7 @@ struct SignStore {
                 }
                 
                 switch state.activatedState {
-                case .allActivated:
+                case .allActivated, .onlyBarActivated:
                     // NOTE: 같은 크기로 state.barWidth를 바꾸면 animation이 trigger가 안됨
                     if state.barWidth == state.fullWidth {
                         state.barWidth = state.fullWidth - 0.2
@@ -606,14 +586,6 @@ struct SignStore {
                     } else {
                         state.barWidth = 20
                     }
-                    
-                case .onlyBarActivated:
-                    if state.barWidth == state.fullWidth {
-                        state.barWidth = state.fullWidth - 0.1
-                    } else {
-                        state.barWidth = state.fullWidth
-                    }
-                    
                 }
                 
                 return .none
