@@ -11,6 +11,7 @@ struct AuthTokenResponse: Decodable {
     let idToken: String
     let accessToken: String
     let refreshToken: String
+    let userId: String
 }
 
 struct AuthSessionResponse: Decodable {

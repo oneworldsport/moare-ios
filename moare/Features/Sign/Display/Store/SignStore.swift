@@ -326,6 +326,7 @@ struct SignStore {
                         UserDefaults.standard.set(result.idToken, forKey: "idToken")
                         UserDefaults.standard.set(result.accessToken, forKey: "accessToken")
                         UserDefaults.standard.set(result.refreshToken, forKey: "refreshToken")
+                        UserDefaults.standard.set(result.userId, forKey: "userId")
                     } catch {
                         if let err = error as? APIHTTPError {
                             await send(.responseFailure(err))
@@ -488,6 +489,7 @@ struct SignStore {
                         UserDefaults.standard.set(result.idToken, forKey: "idToken")
                         UserDefaults.standard.set(result.accessToken, forKey: "accessToken")
                         UserDefaults.standard.set(result.refreshToken, forKey: "refreshToken")
+                        UserDefaults.standard.set(result.userId, forKey: "userId")
                     } catch {
                         if let err = error as? APIHTTPError {
                             await send(.responseFailure(err))

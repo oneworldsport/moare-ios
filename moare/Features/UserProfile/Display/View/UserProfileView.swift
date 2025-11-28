@@ -94,6 +94,7 @@ struct UserProfileView: View {
                                 let body = lines.dropFirst().joined(separator: "\n")
                                 
                                 MoatItem(
+                                    moatUserId: moat.userId,
                                     moatType: selectedMoat != nil ? .detail : .trending,
                                     isButtonDisabled: selectedMoat != nil,
                                     title: title,
@@ -127,6 +128,7 @@ struct UserProfileView: View {
                             LazyVStack(spacing: 28) {
                                 ForEach(comments, id: \.moatId) { moat in
                                     MoatItem(
+                                        moatUserId: moat.userId,
                                         moatType: .comment,
                                         content: moat.content,
                                         hashtagList: moat.sportTags,
