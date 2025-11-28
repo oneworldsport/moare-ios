@@ -47,26 +47,37 @@ struct MoatView: View {
                                         store.send(.settingItemsTapped(item: item, moatId: moat.moatId))
                                     }
                                     
-                                    MoatItem(
-                                        moatType: selectedMoat != nil ? .detail : .trending,
-                                        isButtonDisabled: selectedMoat != nil,
-                                        title: title,
-                                        content: body,
-                                        hashtagList: moat.sportTags,
-                                        fired: firedBinding,
-                                        fireCount: fireCount,
-                                        commentCount: moat.commentCount,
-                                        userHandle: moat.userHandle,
-                                        createdAt: moat.createdAt,
-                                        settingsTapped: onSettings,
-                                        fireTapped: {
-                                            print("fire tapped")
-                                            store.send(.toggleFire(targetId: moat.moatId, targetType: .moat))
-                                        },
-                                        action: {
-                                            store.send(.selectMoat(moatId: moat.moatId))
-                                        }
-                                    )
+//                                    let isSelectedMoatDeleted = store.isDetail && store.isDeletedMoat
+//                                    
+//                                    if isSelectedMoatDeleted {
+//                                        DeletedMoatItem()
+//                                            .frame(maxWidth: .infinity, alignment: .center)
+//                                    } else {
+                                        MoatItem(
+                                            moatUserId: moat.userId,
+                                            moatType: selectedMoat != nil ? .detail : .trending,
+                                            isButtonDisabled: selectedMoat != nil,
+                                            title: title,
+                                            content: body,
+                                            hashtagList: moat.sportTags,
+                                            fired: firedBinding,
+                                            fireCount: fireCount,
+                                            commentCount: moat.commentCount,
+                                            userHandle: moat.userHandle,
+                                            createdAt: moat.createdAt,
+                                            settingsTapped: { item in
+                                                    selectedMoatId = moat.moatId
+                                                    store.send(.settingItemsTapped(item: item, moatId: moat.moatId))
+                                            },
+                                            fireTapped: {
+                                                print("fire tapped")
+                                                store.send(.toggleFire(targetId: moat.moatId, targetType: .moat))
+                                            },
+                                            action: {
+                                                store.send(.selectMoat(moatId: moat.moatId))
+                                            }
+                                        )
+//                                    }
                                 }
                             }
                             .padding(.top, 10)
@@ -90,6 +101,7 @@ struct MoatView: View {
                                         let fireCount = store.state.fireCountMap[moat.moatId] ?? moat.fireCount
                                         
                                         MoatItem(
+                                            moatUserId: moat.userId,
                                             moatType: .comment,
                                             content: moat.content,
                                             hashtagList: moat.sportTags,

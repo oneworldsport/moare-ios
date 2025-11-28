@@ -20,6 +20,8 @@ struct MoatStackStore {
         
         var didPop: Bool = false
         var includesPreviousView: Bool = false
+        
+        var createdMoat: MoatResponse? = nil
     }
     
     enum Action {
@@ -30,6 +32,7 @@ struct MoatStackStore {
         case emptyPath
         
         case bootstrapSession
+
     }
     
     var body: some Reducer<State, Action> {
@@ -73,15 +76,24 @@ struct MoatStackStore {
                     state.path[id: lastId] = .detail(MoatStore.State(moatId: moat.moatId))
                 }
                 
-                // 1) 기존 path에서 '트렌딩' 엘리먼트 id 찾기 (뒤에서부터)
-                if let trendingId = state.path.ids.reversed().first(where: {
-                    if case .trending = state.path[id: $0] { return true } else { return false }
-                }) {
-                    if case .trending(_) = state.path[id: trendingId] {
-                        return .send(.path(.element(id: trendingId, action: .trending(.updateTrending(moat)))))
+                // 방금 작성한 모트를 일단 담아두기
+                state.createdMoat = moat
+            
+                return .none
+                
+            case let .path(.element(id: _, action: .detail(.delegate(.deleted(moatId))))),
+                let .path(.element(id: _, action: .trending(.delegate(.deleted(moatId))))):
+                
+                if state.path.count > 1 {
+                    let _ = state.path.popLast()
+
+                } else {
+                    if let id = state.path.ids.last {
+                        if case .trending(_) = state.path[id: id] {
+                            return .send(.path(.element(id: id, action: .trending(.deleteDetailMoat(moatId: moatId)))))
+                        }
                     }
                 }
-                            
                 return .none
                 
             case .pop:
@@ -97,6 +109,19 @@ struct MoatStackStore {
                 
                 if state.path.count > 1 {
                     let _ = state.path.popLast()
+                }
+                
+                // 뒤로가기를 했을 때 트렌딩에 보이도록
+                if state.createdMoat != nil {
+                    // 1) 기존 path에서 '트렌딩' 엘리먼트 id 찾기 (뒤에서부터)
+                    if let trendingId = state.path.ids.reversed().first(where: {
+                        if case .trending = state.path[id: $0] { return true } else { return false }
+                    }) {
+                        if case .trending(_) = state.path[id: trendingId] {
+                            return .send(.path(.element(id: trendingId, action: .trending(.updateTrending(state.createdMoat!)))))
+                        }
+                    }
+                    state.createdMoat = nil
                 }
                 
                 return .none

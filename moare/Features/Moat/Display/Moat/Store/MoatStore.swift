@@ -16,7 +16,7 @@ struct MoatStore {
     struct State {
         var reportPresenting: Bool = false
         
-        let moatId: String?
+        var moatId: String?
         var isDetail: Bool // moatId가 있거나, selectedMoat가 있으면 detail 화면임. 사용하기 편하려고 만든 프로퍼티.
         
         var moatListResponse: MoatListResponse? = nil
@@ -45,7 +45,7 @@ struct MoatStore {
         case updateSelectedMoat(moatDetailResponse: MoatDetailResponse)
         
         case updateTrending(MoatResponse)
-        case deleteMoatComment
+        case deleteDetailMoat(moatId: String)
         
         case setFireMap(targetId: String, isFired: Bool)
         case setFired(targetId: String, isFired: Bool)
@@ -56,9 +56,11 @@ struct MoatStore {
         case toggleFire(targetId: String, targetType: TargetType)
         
         case showForm
+        case showUpdateForm(moatId: String)
         case showTrending
         
         case settingItemsTapped(item: SettingItems, moatId: String)
+        case deleteMoatResponse(result: Result<MessageResponse, Error>, moatId: String)
         case showReport(Bool)
         
         case delegate(Delegate)
@@ -66,6 +68,7 @@ struct MoatStore {
     
     enum Delegate {
         case push(viewType: MoatViewType, moatId: String? = nil)
+        case deleted(moatId: String)
     }
     
     var body: some Reducer<State, Action> {
@@ -165,6 +168,10 @@ struct MoatStore {
             case .showForm:
                 return .send(.delegate(.push(viewType: .form)))
                 
+            case .showUpdateForm(let moatId):
+                
+                return .none
+                
             case .updateTrending(let moat):
                 // ① 원본 리스트 갱신
                 var newOriginal = state.originalTrendingMoats
@@ -175,20 +182,27 @@ struct MoatStore {
                 var newTrending = state.trendingMoats
                 newTrending.removeAll { $0.moatId == moat.moatId }
                 newTrending.insert(moat, at: 0)
-                
-                // ③ 통째 교체 핸들러 재사용
-                let newMoatListResponse = MoatListResponse(
-                    moats: newOriginal,
-                    nextToken: state.moatListResponse?.nextToken
-                )
-                
-                // updateTrendingMoats에서 both(원본/화면) 세팅
-                state.moatListResponse = newMoatListResponse
+
                 state.originalTrendingMoats = newOriginal
                 state.trendingMoats = newTrending
                 return .none
                 
-            case .deleteMoatComment:
+            case .deleteDetailMoat(let moatId):
+                var newOriginal = state.originalTrendingMoats
+                newOriginal.removeAll { $0.moatId == moatId }
+                
+                let newMoatListResponse = MoatListResponse(
+                    moats: newOriginal,
+                    nextToken: state.moatListResponse?.nextToken
+                )
+
+                state.moatListResponse = newMoatListResponse
+                state.originalTrendingMoats = newOriginal
+                state.trendingMoats = newOriginal
+                
+                state.selectedMoat = nil
+                state.isDetail = false
+                                
                 return .none
                 
             case .setFireMap(let targetId, let isFired):
@@ -273,15 +287,25 @@ struct MoatStore {
                     return .send(.showReport(true))
                     
                 case .updateMoat:
-                    return .send(.showForm)
+                    return .send(.showUpdateForm(moatId: moatId))
                     
-                case .deleteMoat:
-                    return .run { _ in
-                        try await moatClient.deleteMoat(moatId: moatId)
+                case .deleteMoat:                    
+                    return .run { send in
+                        let result = try await moatClient.deleteMoat(moatId: moatId)
+                        
+                        await send(.deleteMoatResponse(result: .success(result), moatId: moatId))
                     }
                 default:
                     return .none
                 }
+                
+            case .deleteMoatResponse(.success(let result), let moatId):
+                
+                return .send(.delegate(.deleted(moatId: moatId)))
+                
+            case .deleteMoatResponse(.failure, let moatId):
+                
+                return .none
                 
             case .showReport(let show):
                 state.reportPresenting = show

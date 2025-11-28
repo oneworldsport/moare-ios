@@ -12,8 +12,11 @@ enum MoatType {
 }
 
 struct MoatItem: View {
+    @AppStorage("userId") private var userId: String = ""
+    
     @Binding var fired: Bool
     
+    let moatUserId: String
     let moatType: MoatType
     let isButtonDisabled: Bool
     let title: String?
@@ -40,6 +43,7 @@ struct MoatItem: View {
     @State private var isSideBarShowing: Bool = true
     
     init(
+        moatUserId: String,
         moatType: MoatType = .trending,
         isButtonDisabled: Bool = false,
         title: String? = nil,
@@ -55,6 +59,7 @@ struct MoatItem: View {
         fireTapped: @escaping () -> Void = {},
         action: @escaping () -> Void = {}
     ) {
+        self.moatUserId = moatUserId
         self.moatType = moatType
         self.isButtonDisabled = isButtonDisabled
         self.title = moatType == .comment ? nil : title
@@ -170,19 +175,21 @@ struct MoatItem: View {
                         
                         VStack(spacing: 0) {
                             if moatType == .detail {
+                                let isOwner = (userId == moatUserId)
+                                
+                                let itemsToShow: [SettingItems] = {
+                                    if isOwner {
+                                        // 내 모트: 수정/삭제만 보이기
+                                        return [.updateMoat, .deleteMoat]
+                                    } else {
+                                        // 남의 모트: 신고만 보이기
+                                        return [.report]
+                                    }
+                                }()
+                                
                                 VStack(spacing: 0) {
-//                                    Button(action: {
-//                                        settingsTapped()
-//                                        print(">>> settingsTapped")
-//                                    }) {
-//                                        Text("⋮")
-//                                            .font(.system(size: 30, weight: .bold))
-//                                            .contentShape(Rectangle())
-//                                    }
-//                                    .tint(.primary)
-//                                    .padding(.bottom, 8)
                                     Menu {
-                                        ForEach(SettingItems.allCases, id: \.self) { item in
+                                        ForEach(itemsToShow, id: \.self) { item in
                                             Button(action: {
                                                 settingsTapped(item)
                                             }) {
@@ -256,7 +263,7 @@ struct MoatItem: View {
         .optionalClickable(moatType != MoatType.detail, onTap: action)
         .foregroundStyle(.primary)
         .padding(.horizontal, 8)
-        .onChange(of: moatType) {
+        .onChange(of: moatType) { // 이거 생각해야됨
             if moatType == .detail {
                 withAnimation(.easeInOut(duration: 0.5)) {
                     isSideBarShowing = false
@@ -301,6 +308,11 @@ struct MoatItemSideBar: View {
     }
 }
 
+struct DeletedMoatItem: View {
+    var body: some View {
+        Text("삭제된 모트입니다.")
+    }
+}
 
 //#Preview {
 //    MoatItem(

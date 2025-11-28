@@ -16,7 +16,7 @@ struct MoatClient {
         return try await apiClient.fetchData(endpoint: .updateMoat(moatId: moatId, body: body))
     }
     
-    func deleteMoat(moatId: String) async throws -> MoatResponse {
+    func deleteMoat(moatId: String) async throws -> MessageResponse {
         return try await apiClient.fetchData(endpoint: .deleteMoat(moatId: moatId))
     }
     
