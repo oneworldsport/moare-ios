@@ -33,6 +33,7 @@ enum APIEndpoint {
     case deleteMoat(moatId: String)
     case getMoatDetail(moatId: String)
     case getTrendingMoats(body: MoatListRequest)
+    case getMoatsByHashtag(body: MoatListRequest)
     case getUserMoats(body: MoatListRequest)
     case createFire(body: FireCreateRequest)
     case deleteFire(moatId: String)
@@ -47,7 +48,7 @@ enum APIEndpoint {
         case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .bootstrapSession, .checkUserHandle, .getMoatDetail, .getUserProfile, .checkFire:
             return "GET"
         case .getLeagueSchedule, .searchByKeyword, .startLoginAuth, .confirmLoginAuth, .initiateSignUp, .verifySignUpOtp, .completeSignUp,
-                .createMoat, .getTrendingMoats, .getUserMoats, .createFire:
+                .createMoat, .getTrendingMoats, .getMoatsByHashtag, .getUserMoats, .createFire:
             return "POST"
         case .reserveUserHandle:
             return "PUT"
@@ -154,6 +155,9 @@ enum APIEndpoint {
         case .getTrendingMoats:
             components.path = "/moats/trending"
             
+        case .getMoatsByHashtag:
+            components.path = "/moats/hashtags"
+            
         case .getUserMoats:
             components.path = "/moats/user"
             
@@ -179,7 +183,7 @@ enum APIEndpoint {
     
     var headers: [String: String]? {
         switch self {
-        case .bootstrapSession, .createMoat, .updateMoat, .deleteMoat, .getMoatDetail, .getTrendingMoats, .getUserMoats, .getUserProfile, .updateUserProfile, .createFire, .deleteFire, .checkFire:
+        case .bootstrapSession, .createMoat, .updateMoat, .deleteMoat, .getMoatDetail, .getTrendingMoats, .getMoatsByHashtag, .getUserMoats, .getUserProfile, .updateUserProfile, .createFire, .deleteFire, .checkFire:
             if let token = UserDefaults.standard.string(forKey: "accessToken") {
                 return ["Authorization": "Bearer \(token)"]
             } else {
@@ -223,6 +227,8 @@ enum APIEndpoint {
         case .updateMoat(_, let body):
             return try? JSONEncoder().encode(body)
         case .getTrendingMoats(let body):
+            return try? JSONEncoder().encode(body)
+        case .getMoatsByHashtag(let body):
             return try? JSONEncoder().encode(body)
         case .getUserMoats(let body):
             return try? JSONEncoder().encode(body)

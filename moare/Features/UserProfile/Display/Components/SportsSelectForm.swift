@@ -8,58 +8,82 @@
 import SwiftUI
 
 struct SportsSelectForm: View {
-    let sportsInterests: [String]
+    private let sportsInterests: [String]
+    private let isHashTag: Bool
+    private let sportList: [String]
     
-    let onItemSelect: (String) -> Void
+    private let onItemSelect: (String) -> Void
     
     @State private var text = ""
     @State private var isSearchBarOpened = false
-    @State private var filteredSportList: [String] = ["축구", "야구", "농구", "테니스", "F1", "배구", "골프", "미식축구", "럭비", "MMA", "복싱", "하키", "수영", "육상"]
+    @State private var filteredSportList: [String] = []
     
-    @FocusState var focusState: Bool
+    @FocusState private var focusState: Bool
     
-    private let sportList = ["축구", "야구", "농구", "테니스", "F1", "배구", "골프", "미식축구", "럭비", "MMA", "복싱", "하키", "수영", "육상"]
     private let rows: [GridItem] = Array(repeating: .init(.flexible()), count: 2)
+    
+    init(
+        sportsInterests: [String],
+        isHashTag: Bool = false,
+        onItemSelect: @escaping (String) -> Void
+    ) {
+        self.sportsInterests = sportsInterests
+        self.isHashTag = isHashTag
+        self.onItemSelect = onItemSelect
+        
+        if isHashTag {
+            self.sportList = StringConstants.sportList.map { "#\($0)" }
+        } else {
+            self.sportList = StringConstants.sportList
+        }
+        
+        self.filteredSportList = self.sportList
+    }
     
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                if isSearchBarOpened {
-                    Button(action: {
-                        withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
-                            text = ""
-                            isSearchBarOpened = false
-                        }
-                    }) {
-                        Text("닫기")
-                            .font(.system(size: 15))
-                    }
-                    .foregroundStyle(.primary)
-                }
-                
                 if !isSearchBarOpened {
                     Spacer()
                 }
                 
+                // SearchBar
                 HStack {
                     if isSearchBarOpened {
-                        TextField(" 스포츠 검색", text: $text)
+                        TextField(" 스포츠 입력", text: $text)
                             .focused($focusState)
                             .font(.system(size: 15))
                             .padding(.leading, 4)
                     }
                     
-                    Button(action: {
-                        if !isSearchBarOpened {
+                    if isSearchBarOpened {
+                        Button(action: {
+                            text = ""
+                        }) {
+                            Image(systemName: "xmark.circle")
+                        }
+                        
+                        Button(action: {
+                            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                                text = ""
+                                isSearchBarOpened = false
+                            }
+                        }) {
+                            Text("닫기")
+                                .font(.system(size: 15))
+                        }
+                        .foregroundStyle(.primary)
+                    } else {
+                        Button(action: {
                             withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                                 isSearchBarOpened = true
                                 focusState = true
                             }
+                        }) {
+                           Image(systemName: "magnifyingglass")
                         }
-                    }) {
-                       Image(systemName: "magnifyingglass")
+                        .foregroundStyle(.primary)
                     }
-                    .foregroundStyle(.primary)
                 }
                 .frame(height: 32)
                 .padding(.horizontal, 8)
@@ -100,7 +124,7 @@ struct SportsSelectForm: View {
                 }
                 .padding(.trailing, 30) // 마지막 아이템 검색 버튼에 안가려지게 스크롤에 여유 공간 줌.
                 .onChange(of: text) {
-                    filteredSportList = text.isEmpty ? sportList : sportList.filter { $0.contains(text) }
+                    filteredSportList = text.isBlank ? sportList : sportList.filter { $0.contains(text) }
                 }
             }
             .frame(maxHeight: 80)

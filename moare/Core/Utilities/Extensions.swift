@@ -67,6 +67,10 @@ extension String {
         let components = self.split(separator: " ")
         return components.count > 1 ? components.dropFirst().joined(separator: " ") : self
     }
+    
+    var isBlank: Bool {
+        trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
 }
 
 /// Returns nil when String is Optional

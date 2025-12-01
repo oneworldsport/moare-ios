@@ -16,7 +16,7 @@
 		5B7153F82E5D7E9400D74E5B /* IdTypeSelectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B7153F72E5D7E9200D74E5B /* IdTypeSelectButton.swift */; };
 		5B7153FA2E617CB100D74E5B /* MoatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B7153F92E617CAF00D74E5B /* MoatView.swift */; };
 		5B7153FE2E617ECE00D74E5B /* MoatStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B7153FD2E617EC200D74E5B /* MoatStore.swift */; };
-		5B97C18A2EA6195C00189ED2 /* SettingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B97C1892EA6193800189ED2 /* SettingWindow.swift */; };
+		5B97C18A2EA6195C00189ED2 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B97C1892EA6193800189ED2 /* TextFieldAlert.swift */; };
 		5B97C1902EB9BDCE00189ED2 /* UserProfileDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B97C18F2EB9BDBE00189ED2 /* UserProfileDisplayView.swift */; };
 		5B97C1922EB9C23500189ED2 /* UserProfileStackStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B97C1912EB9C22700189ED2 /* UserProfileStackStore.swift */; };
 		DA081BCA2DDF2C3000034589 /* BaseInfoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA081BC92DDF2C3000034589 /* BaseInfoStore.swift */; };
@@ -206,6 +206,9 @@
 		DA531C0E2D64AA4300DB87CB /* AnimationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531C0D2D64AA4300DB87CB /* AnimationConstants.swift */; };
 		DA531C102D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531C0F2D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift */; };
 		DA531C122D64B88F00DB87CB /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = DA531C112D64B88F00DB87CB /* .gitignore */; };
+		DA68674D2EDDDD3D002DCF2F /* SearchHashtagList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA68674C2EDDDD0A002DCF2F /* SearchHashtagList.swift */; };
+		DA68674F2EDDDFBE002DCF2F /* MoatSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA68674E2EDDDFB4002DCF2F /* MoatSearchBar.swift */; };
+		DA6867512EDDE1C5002DCF2F /* SelectedHashtags.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6867502EDDE1BE002DCF2F /* SelectedHashtags.swift */; };
 		DA6C1EE12DB63A2B00D63246 /* NBATournamentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6C1EE02DB63A2B00D63246 /* NBATournamentView.swift */; };
 		DA6C1EE32DB63A5E00D63246 /* NBATournamentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6C1EE22DB63A5E00D63246 /* NBATournamentStore.swift */; };
 		DA75C9F12D68310800D6C14B /* NoticeBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA75C9F02D68310800D6C14B /* NoticeBox.swift */; };
@@ -326,7 +329,7 @@
 		5B7153F72E5D7E9200D74E5B /* IdTypeSelectButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTypeSelectButton.swift; sourceTree = "<group>"; };
 		5B7153F92E617CAF00D74E5B /* MoatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoatView.swift; sourceTree = "<group>"; };
 		5B7153FD2E617EC200D74E5B /* MoatStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoatStore.swift; sourceTree = "<group>"; };
-		5B97C1892EA6193800189ED2 /* SettingWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingWindow.swift; sourceTree = "<group>"; };
+		5B97C1892EA6193800189ED2 /* TextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
 		5B97C18F2EB9BDBE00189ED2 /* UserProfileDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileDisplayView.swift; sourceTree = "<group>"; };
 		5B97C1912EB9C22700189ED2 /* UserProfileStackStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileStackStore.swift; sourceTree = "<group>"; };
 		DA081BC92DDF2C3000034589 /* BaseInfoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseInfoStore.swift; sourceTree = "<group>"; };
@@ -512,6 +515,9 @@
 		DA531C0D2D64AA4300DB87CB /* AnimationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationConstants.swift; sourceTree = "<group>"; };
 		DA531C0F2D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBPlayerStatsDisplayModel.swift; sourceTree = "<group>"; };
 		DA531C112D64B88F00DB87CB /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		DA68674C2EDDDD0A002DCF2F /* SearchHashtagList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHashtagList.swift; sourceTree = "<group>"; };
+		DA68674E2EDDDFB4002DCF2F /* MoatSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoatSearchBar.swift; sourceTree = "<group>"; };
+		DA6867502EDDE1BE002DCF2F /* SelectedHashtags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedHashtags.swift; sourceTree = "<group>"; };
 		DA6C1EE02DB63A2B00D63246 /* NBATournamentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATournamentView.swift; sourceTree = "<group>"; };
 		DA6C1EE22DB63A5E00D63246 /* NBATournamentStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATournamentStore.swift; sourceTree = "<group>"; };
 		DA6C1EE42DB63F5100D63246 /* TestView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView2.swift; sourceTree = "<group>"; };
@@ -1706,7 +1712,10 @@
 		DAED2C492E6C021900BDAE67 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				5B97C1892EA6193800189ED2 /* SettingWindow.swift */,
+				DA6867502EDDE1BE002DCF2F /* SelectedHashtags.swift */,
+				DA68674E2EDDDFB4002DCF2F /* MoatSearchBar.swift */,
+				DA68674C2EDDDD0A002DCF2F /* SearchHashtagList.swift */,
+				5B97C1892EA6193800189ED2 /* TextFieldAlert.swift */,
 				DA9B63DF2E701762009BD706 /* CommentComposer.swift */,
 				DAED2C4C2E6D130300BDAE67 /* FloatingAddButton.swift */,
 				DAED2C4A2E6C022800BDAE67 /* MoatItem.swift */,
@@ -1981,6 +1990,7 @@
 				DA531BC82D64A8CA00DB87CB /* SearchClient.swift in Sources */,
 				DAFCB4192DADC8E700839653 /* AWSManager.swift in Sources */,
 				DA531B3F2D64A8A400DB87CB /* moareApp.swift in Sources */,
+				DA68674F2EDDDFBE002DCF2F /* MoatSearchBar.swift in Sources */,
 				DA081BD02DDF409B00034589 /* BasePlayerStandingsStore.swift in Sources */,
 				DA531B992D64A8CA00DB87CB /* FBPlayerStandingsStore.swift in Sources */,
 				DA6C1EE32DB63A5E00D63246 /* NBATournamentStore.swift in Sources */,
@@ -2145,7 +2155,7 @@
 				DA17023A2DA8C7120021EF80 /* NBATeamStandingsStore.swift in Sources */,
 				DADE29672DF1A36B0099A0DD /* MLBUtil.swift in Sources */,
 				DA919CB22E6D7B3F003151B6 /* MoatResponseModels.swift in Sources */,
-				5B97C18A2EA6195C00189ED2 /* SettingWindow.swift in Sources */,
+				5B97C18A2EA6195C00189ED2 /* TextFieldAlert.swift in Sources */,
 				DA531BA62D64A8CA00DB87CB /* FBTeamStandingsView.swift in Sources */,
 				DA8DED8F2DF6AA3000AAB34B /* StandingsFirstCategoryItem.swift in Sources */,
 				5B7153EC2E530AB200D74E5B /* SignStore.swift in Sources */,
@@ -2174,8 +2184,10 @@
 				DAC1EBD52E55BDA70031221C /* GameStatsViewContainer.swift in Sources */,
 				DAFCB41B2DADCEAD00839653 /* AsyncPromise.swift in Sources */,
 				DAEEC7442DEDD5490053E0A6 /* KBOTeamModels.swift in Sources */,
+				DA68674D2EDDDD3D002DCF2F /* SearchHashtagList.swift in Sources */,
 				DA30E72B2DF814AB000639AD /* KBOTeamInfoView.swift in Sources */,
 				DA531BBE2D64A8CA00DB87CB /* FBTeamStandingsResponseModel.swift in Sources */,
+				DA6867512EDDE1C5002DCF2F /* SelectedHashtags.swift in Sources */,
 				DA081BCC2DDF386D00034589 /* SportDisplayModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -78,12 +78,12 @@ struct MoatStore {
             switch action {
             case .getTrendingMoats:
                 return .run { [moatListReponse = state.moatListResponse] send in
-                    let moatListRequest = MoatListRequest(
+                    let body = MoatListRequest(
                         sportTags: ["축구", "야구"],
                         nextToken: moatListReponse?.nextToken
                     )
                     
-                    let result = try await moatClient.fetchTrendingMoats(body: moatListRequest)
+                    let result = try await moatClient.fetchTrendingMoats(body: body)
                     await send(.updateTrendingMoats(moatListResponse: result))
                 }
                 

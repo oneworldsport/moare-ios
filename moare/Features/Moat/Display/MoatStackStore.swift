@@ -14,12 +14,17 @@ enum MoatViewType {
 
 @Reducer
 struct MoatStackStore {
+    let moatClient = MoatClient()
+    
     @ObservableState
     struct State {
         var path = StackState<Path.State>()
         
         var didPop: Bool = false
         var includesPreviousView: Bool = false
+        
+        var selectedHashtags: [String] = []
+        var currentSelectedHashtags: [String] = []
         
         var createdMoat: MoatResponse? = nil
     }
@@ -33,10 +38,15 @@ struct MoatStackStore {
         
         case bootstrapSession
 
+        case updateSelectedHashtags(String)
+        case emptySelectedHashtags
+        case getMoatsWithHashtags
+        case updateMainMoats(MoatListResponse)
     }
     
     var body: some Reducer<State, Action> {
         
+        // TODO: StackStore에서 다른 Store의 state 바꾸는거 전부 action으로 바꿔야함
         Reduce { state, action in
             switch action {
             case .push(let viewType):
@@ -142,6 +152,55 @@ struct MoatStackStore {
             case .emptyPath:
                 state.path.removeAll()
                 
+                return .none
+                
+            case .updateSelectedHashtags(let hashtag):
+                if state.selectedHashtags.contains(hashtag) {
+                    state.selectedHashtags.removeAll { $0 == hashtag }
+                } else {
+                    state.selectedHashtags.append(hashtag)
+                }
+                
+                return .none
+                
+            case .emptySelectedHashtags:
+                state.selectedHashtags.removeAll()
+                
+                return .none
+                
+            case .getMoatsWithHashtags:
+                if state.selectedHashtags.isEmpty ||
+                    Set(state.selectedHashtags) == Set(state.currentSelectedHashtags)
+                {
+                    return .none
+                }
+                
+                return .run { [hastags = state.selectedHashtags] send in
+                    let sportTags = hastags.map { tag in
+                        var new = tag
+                        if new.hasPrefix("# ") {
+                            new.removeFirst(2)
+                        }
+                        return new
+                    }
+                    let body = MoatListRequest(sportTags: sportTags)
+                    
+                    do {
+                        let result = try await moatClient.fetchMoatsByHashtags(body: body)
+                        await send(.updateMainMoats(result))
+                    } catch {
+                        
+                    }
+                }
+                
+            case .updateMainMoats(let moatListResponse):
+                state.currentSelectedHashtags = state.selectedHashtags
+                
+                if let id = state.path.ids.last {
+                    if case .trending(_) = state.path[id: id] {
+                        return .send(.path(.element(id: id, action: .trending(.updateTrendingMoats(moatListResponse: moatListResponse)))))
+                    }
+                }
                 return .none
                 
             case .path:

@@ -29,6 +29,10 @@ struct MoatClient {
         return try await apiClient.fetchData(endpoint: .getTrendingMoats(body: body))
     }
     
+    func fetchMoatsByHashtags(body: MoatListRequest) async throws -> MoatListResponse {
+        return try await apiClient.fetchData(endpoint: .getMoatsByHashtag(body: body))
+    }
+    
     func fetchUserMoats(body: MoatListRequest) async throws -> MoatListResponse {
         return try await apiClient.fetchData(endpoint: .getUserMoats(body: body))
     }

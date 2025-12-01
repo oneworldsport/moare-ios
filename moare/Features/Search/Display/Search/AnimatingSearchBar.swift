@@ -152,9 +152,7 @@ struct AnimatingSearchBar: View {
     }
     
     private func performSearch() {
-        let isBlank = searchStore.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        
-        if isBlank {
+        if searchStore.query.isBlank {
             if let firstTrendingKeyword = searchStore.trendingKeywordList.first {
                 // update bar's text
                 searchStore.send(.updateTextField(firstTrendingKeyword, false))

@@ -466,6 +466,7 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
                     // 축구 패널티킥 경기는 일반 스코어 검정색
                     let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (homeTeamScore >= awayTeamScore ? .moare : .primary)
                     
+                    // TODO: homeTeamScore가 아니라 topSeedTeamScore로 바꿔야함
                     Text(shouldShowScore ? "\(homeTeamScore)" : "-")
                         .foregroundStyle(shouldShowScore ? scoreColor : .primary)
                     

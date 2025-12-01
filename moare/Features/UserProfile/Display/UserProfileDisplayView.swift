@@ -17,31 +17,26 @@ struct UserProfileDisplayView: View {
     @AppStorage("accessToken") private var accessToken: String = ""
     
     var body: some View {
-        ZStack {
+        VStack(spacing: 0) {
             if currentViewType != .userProfileImageEdit {
-                VStack {
-                    HStack {
-                        BackButton {
-                            userProfileStackStore.send(.pop)
-                        }
-                        
-                        if currentViewType != .userProfileUpdateForm {
-                            Text(userHandle)
-                                .font(.system(size: 20, weight: .medium))
-                                .padding(.horizontal, 8)
-                        }
-                        
-                        Spacer()
-                        
-                        if currentViewType != .userProfileUpdateForm {
-                            Image(systemName: "gearshape")
-                                .padding(.trailing, 8)
-                        }
+                HStack {
+                    BackButton {
+                        userProfileStackStore.send(.pop)
+                    }
+                    
+                    if currentViewType != .userProfileUpdateForm {
+                        Text(userHandle)
+                            .font(.system(size: 20, weight: .medium))
+                            .padding(.horizontal, 8)
                     }
                     
                     Spacer()
+                    
+                    if currentViewType != .userProfileUpdateForm {
+                        Image(systemName: "gearshape")
+                            .padding(.trailing, 8)
+                    }
                 }
-                .zIndex(1)
             }
             
             if !accessToken.isEmpty {

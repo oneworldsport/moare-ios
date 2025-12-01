@@ -83,7 +83,7 @@ struct SportSearchEngine_iOSApp: App {
                             .tag(Screen.search)
                             
                             MoatDisplayView(
-                                moatStackStore: moatStackStore
+                                stackStore: moatStackStore
                             )
                             .tabItem {
                                 Image(systemName: "bubble.left")

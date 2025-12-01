@@ -112,9 +112,7 @@ struct SearchStore {
         Reduce { state, action in
             switch action {
             case .binding(\.query):
-                let isBlank = state.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                
-                if isBlank {
+                if state.query.isBlank {
                     state.autoCompleteList.removeAll()
                 } else {
                     return .run { send in
@@ -208,10 +206,7 @@ struct SearchStore {
                 state.query = query
                 
                 if updateAutoCompleteList {
-                    // TODO: make it to extension
-                    let isBlank = state.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                    
-                    if isBlank {
+                    if state.query.isBlank {
                         state.autoCompleteList.removeAll()
                     } else {
                         return .run { send in

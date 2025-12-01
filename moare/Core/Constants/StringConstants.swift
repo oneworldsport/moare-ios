@@ -21,6 +21,8 @@ struct StringConstants {
     
     static let gameStatsFirstCategory = "선수 이름"
     
+    static let sportList = ["축구", "야구", "농구", "테니스", "F1", "배구", "골프", "미식축구", "럭비", "MMA", "복싱", "하키", "수영", "육상"]
+    
     struct Football {
         static let gameFirstHalfStr = "전반전"
         static let gameHalftimeStr = "전반 종료"

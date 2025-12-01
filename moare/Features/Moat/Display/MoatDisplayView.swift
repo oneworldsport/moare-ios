@@ -9,48 +9,77 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MoatDisplayView: View {
-    let moatStackStore: StoreOf<MoatStackStore>
+    let stackStore: StoreOf<MoatStackStore>
     
     // TODO: 이게 사용하기 편하니깐, Keychain으로 옮길때 그냥 flag용으로 UserDefaults도 하나 만들면 될듯?
     @AppStorage("accessToken") private var accessToken: String = ""
     
+    @State private var searchBarText = ""
+    @State private var isSearchBarOpened = false
+    
     var body: some View {
-        // TODO: SignView때문에 ZStack으로하고 BackButton 만든건데, BackButton을 SignView에 따로 만들고 아래 뷰는 VStack으로 바꾸기
-        ZStack {
-            VStack {
-                HStack {
-                    BackButton {
-                        moatStackStore.send(.pop)
-                    }
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        UserDefaults.standard.removeObject(forKey: "accessToken")
-                    }) {
-                        Text("로그아웃")
-                            .font(.system(size: 12))
-                            .padding(.trailing)
-                    }
+        VStack(spacing: 0) {
+            HStack(spacing: 0) {
+                BackButton {
+                    stackStore.send(.pop)
                 }
                 
                 Spacer()
+                
+                MoatSearchBar(text: $searchBarText, isSearchBarOpened: $isSearchBarOpened)
+                
+                Button(action: {
+                    UserDefaults.standard.removeObject(forKey: "accessToken")
+                }) {
+                    Text("로그아웃")
+                        .font(.system(size: 12))
+                        .padding(.horizontal, 8)
+                }
             }
-            .zIndex(1)
+            .frame(height: 40)
+            
+            if !stackStore.selectedHashtags.isEmpty {
+                SelectedHashtags(
+                    selectedHashTags: stackStore.selectedHashtags,
+                    deleteItem: { hashtag in
+                        // TODO: 이때도 moat 다시 가져와야함
+                        stackStore.send(.updateSelectedHashtags(hashtag))
+                    }, deleteAll: {
+                        // TODO: 이때도 moat 다시 가져와야함
+                        stackStore.send(.emptySelectedHashtags)
+                    })
+            }
+            
+            if isSearchBarOpened {
+                MoatSearchForm(
+                    text: $searchBarText,
+                    selectedHashTags: stackStore.selectedHashtags,
+                    onItemSelect: { hashtag in
+                        stackStore.send(.updateSelectedHashtags(hashtag))
+                    },
+                    onComplete: {
+                        stackStore.send(.getMoatsWithHashtags)
+                        
+                        withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                            searchBarText = ""
+                            isSearchBarOpened = false
+                        }
+                    }
+                )
+            }
             
             if !accessToken.isEmpty {
-                if let id = moatStackStore.path.ids.last {
-                    if let store = moatStackStore.scope(
+                if let id = stackStore.path.ids.last {
+                    if let store = stackStore.scope(
                         state: \.path[id: id],
                         action: \.path[id: id]
                     ) {
                         MoatPathView(
-//                                moatStackStore: moatStackStore,
+//                                stackStore: stackStore,
                             store: store,
-    //                        didPop: moatStackStore.didPop,
-    //                        isCombinedView: moatStackStore.includesPreviousView
+    //                        didPop: stackStore.didPop,
+    //                        isCombinedView: stackStore.includesPreviousView
                         )
-                        .padding(.top, 30)
                     }
                 }
             } else {
@@ -59,15 +88,15 @@ struct MoatDisplayView: View {
         }
         .onAppear {
             if !accessToken.isEmpty {
-                moatStackStore.send(.bootstrapSession)
+                stackStore.send(.bootstrapSession)
             }
         }
         .onChange(of: accessToken) {
             if accessToken.isEmpty {
-                moatStackStore.send(.emptyPath)
+                stackStore.send(.emptyPath)
             } else {
-                if moatStackStore.path.ids.isEmpty {
-                    moatStackStore.send(.push(.trending))
+                if stackStore.path.ids.isEmpty {
+                    stackStore.send(.push(.trending))
                 }
             }
         }
@@ -75,18 +104,18 @@ struct MoatDisplayView: View {
 }
 
 struct MoatPathView: View {
-//    let moatStackStore: StoreOf<MoatStackStore>
+//    let stackStore: StoreOf<MoatStackStore>
     let store: StoreOf<MoatStackStore.Path>
 //    let didPop: Bool
 //    let isCombinedView: Bool
     
     init(
-//        moatStackStore: StoreOf<MoatStackStore>,
+//        stackStore: StoreOf<MoatStackStore>,
         store: StoreOf<MoatStackStore.Path>,
 //        didPop: Bool,
 //        isCombinedView: Bool = false
     ) {
-//        self.moatStackStore = moatStackStore
+//        self.stackStore = stackStore
         self.store = store
 //        self.didPop = didPop
 //        self.isCombinedView = isCombinedView
