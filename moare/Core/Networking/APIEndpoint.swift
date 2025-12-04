@@ -38,6 +38,7 @@ enum APIEndpoint {
     case createFire(body: FireCreateRequest)
     case deleteFire(moatId: String)
     case checkFire(moatId: String)
+    case createReport(body: ReportCreateRequest)
     
     // user
     case getUserProfile
@@ -48,7 +49,7 @@ enum APIEndpoint {
         case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .bootstrapSession, .checkUserHandle, .getMoatDetail, .getUserProfile, .checkFire:
             return "GET"
         case .getLeagueSchedule, .searchByKeyword, .startLoginAuth, .confirmLoginAuth, .initiateSignUp, .verifySignUpOtp, .completeSignUp,
-                .createMoat, .getTrendingMoats, .getMoatsByHashtag, .getUserMoats, .createFire:
+                .createMoat, .getTrendingMoats, .getMoatsByHashtag, .getUserMoats, .createFire, .createReport:
             return "POST"
         case .reserveUserHandle:
             return "PUT"
@@ -170,6 +171,9 @@ enum APIEndpoint {
         case .checkFire(let moatId):
             components.path = "/fires/\(moatId)"
             
+        case .createReport:
+            components.path = "/reports"
+            
         // user
         case .getUserProfile:
             components.path = "/users/me"
@@ -183,7 +187,7 @@ enum APIEndpoint {
     
     var headers: [String: String]? {
         switch self {
-        case .bootstrapSession, .createMoat, .updateMoat, .deleteMoat, .getMoatDetail, .getTrendingMoats, .getMoatsByHashtag, .getUserMoats, .getUserProfile, .updateUserProfile, .createFire, .deleteFire, .checkFire:
+        case .bootstrapSession, .createMoat, .updateMoat, .deleteMoat, .getMoatDetail, .getTrendingMoats, .getMoatsByHashtag, .getUserMoats, .getUserProfile, .updateUserProfile, .createFire, .deleteFire, .checkFire, .createReport:
             if let token = UserDefaults.standard.string(forKey: "accessToken") {
                 return ["Authorization": "Bearer \(token)"]
             } else {
@@ -233,6 +237,8 @@ enum APIEndpoint {
         case .getUserMoats(let body):
             return try? JSONEncoder().encode(body)
         case .createFire(let body):
+            return try? JSONEncoder().encode(body)
+        case .createReport(let body):
             return try? JSONEncoder().encode(body)
             
         // user

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SportsSelectForm: View {
-    private let sportsInterests: [String]
+    private let sportsInterests: [String] // 내가 선택한 것만 색깔이 들어감.. 추후 이름 변경 필요
     private let isHashTag: Bool
     private let sportList: [String]
     
@@ -16,7 +16,7 @@ struct SportsSelectForm: View {
     
     @State private var text = ""
     @State private var isSearchBarOpened = false
-    @State private var filteredSportList: [String] = []
+    @State private var filteredSportList: [String]
     
     @FocusState private var focusState: Bool
     
@@ -32,12 +32,12 @@ struct SportsSelectForm: View {
         self.onItemSelect = onItemSelect
         
         if isHashTag {
-            self.sportList = StringConstants.sportList.map { "#\($0)" }
+            self.sportList = StringConstants.sportList.map { "# \($0)" }
         } else {
             self.sportList = StringConstants.sportList
         }
         
-        self.filteredSportList = self.sportList
+        _filteredSportList = State(initialValue: self.sportList)
     }
     
     var body: some View {

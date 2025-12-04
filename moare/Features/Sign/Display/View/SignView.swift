@@ -132,7 +132,7 @@ struct SignView: View {
                     
                     Text(signStore.errorMessage)
                         .font(.system(size: 13))
-                        .foregroundStyle(Color("moare"))
+                        .foregroundStyle(.moare)
                 }
                 .frame(height: 15)
                 .padding(.top, 8)

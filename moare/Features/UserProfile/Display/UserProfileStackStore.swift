@@ -59,7 +59,7 @@ struct UserProfileStackStore {
                 return .none
                 
             // MoatView(.detail)가 보이고 있는 상황에서 push할때 실행됨.
-            case let .path(.element(id: _, action: .moatDetail(.delegate(.push(viewType, moatId))))):
+            case let .path(.element(id: _, action: .moatDetail(.delegate(.push(viewType, moatId, moat))))):
                 switch viewType {
                 case .detail:
                     state.path.append(.moatDetail(MoatStore.State(moatId: moatId)))

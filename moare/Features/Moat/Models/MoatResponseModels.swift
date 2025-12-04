@@ -18,6 +18,7 @@ struct MoatResponse: Decodable, Equatable {
     let updatedAt: String?
     let fireCount: Int
     let commentCount: Int
+    let isFired: Bool
 }
 
 struct MoatDetailResponse: Decodable, Equatable {

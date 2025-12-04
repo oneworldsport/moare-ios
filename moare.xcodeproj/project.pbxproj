@@ -287,8 +287,8 @@
 		DAE8FEBF2EC8766D00556C7B /* UserProfileImageEditStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8FEBE2EC8766700556C7B /* UserProfileImageEditStore.swift */; };
 		DAED2C4B2E6C025400BDAE67 /* MoatItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAED2C4A2E6C022800BDAE67 /* MoatItem.swift */; };
 		DAED2C4D2E6D132800BDAE67 /* FloatingAddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAED2C4C2E6D130300BDAE67 /* FloatingAddButton.swift */; };
-		DAED2C4F2E6D16F200BDAE67 /* FormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAED2C4E2E6D16ED00BDAE67 /* FormView.swift */; };
-		DAED2C532E6D170C00BDAE67 /* FormStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAED2C522E6D170900BDAE67 /* FormStore.swift */; };
+		DAED2C4F2E6D16F200BDAE67 /* MoatFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAED2C4E2E6D16ED00BDAE67 /* MoatFormView.swift */; };
+		DAED2C532E6D170C00BDAE67 /* MoatFormStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAED2C522E6D170900BDAE67 /* MoatFormStore.swift */; };
 		DAEEC7422DEDD53C0053E0A6 /* KBOPlayerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEEC7412DEDD53C0053E0A6 /* KBOPlayerModels.swift */; };
 		DAEEC7442DEDD5490053E0A6 /* KBOTeamModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEEC7432DEDD5490053E0A6 /* KBOTeamModels.swift */; };
 		DAEEC7462DEDD5570053E0A6 /* KBOGameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEEC7452DEDD5570053E0A6 /* KBOGameModels.swift */; };
@@ -635,8 +635,8 @@
 		DAE8FEBE2EC8766700556C7B /* UserProfileImageEditStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileImageEditStore.swift; sourceTree = "<group>"; };
 		DAED2C4A2E6C022800BDAE67 /* MoatItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoatItem.swift; sourceTree = "<group>"; };
 		DAED2C4C2E6D130300BDAE67 /* FloatingAddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingAddButton.swift; sourceTree = "<group>"; };
-		DAED2C4E2E6D16ED00BDAE67 /* FormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormView.swift; sourceTree = "<group>"; };
-		DAED2C522E6D170900BDAE67 /* FormStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormStore.swift; sourceTree = "<group>"; };
+		DAED2C4E2E6D16ED00BDAE67 /* MoatFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoatFormView.swift; sourceTree = "<group>"; };
+		DAED2C522E6D170900BDAE67 /* MoatFormStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoatFormStore.swift; sourceTree = "<group>"; };
 		DAEEC7412DEDD53C0053E0A6 /* KBOPlayerModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOPlayerModels.swift; sourceTree = "<group>"; };
 		DAEEC7432DEDD5490053E0A6 /* KBOTeamModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOTeamModels.swift; sourceTree = "<group>"; };
 		DAEEC7452DEDD5570053E0A6 /* KBOGameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOGameModels.swift; sourceTree = "<group>"; };
@@ -884,12 +884,12 @@
 		DA531B412D64A8CA00DB87CB /* Display */ = {
 			isa = PBXGroup;
 			children = (
+				DAED2C492E6C021900BDAE67 /* Components */,
+				DAED2C442E6BEDD400BDAE67 /* Common */,
+				DAED2C432E6BEDCC00BDAE67 /* View */,
+				DAED2C452E6BEDDB00BDAE67 /* Store */,
 				DA92D07A2EB89A34002FAFC1 /* MoatDisplayView.swift */,
 				DA92D0772EB87EF8002FAFC1 /* MoatStackStore.swift */,
-				DAED2C442E6BEDD400BDAE67 /* Common */,
-				DAED2C492E6C021900BDAE67 /* Components */,
-				DAED2C482E6BEEE500BDAE67 /* Form */,
-				DAED2C462E6BEE7800BDAE67 /* Moat */,
 			);
 			path = Display;
 			sourceTree = "<group>";
@@ -1663,6 +1663,7 @@
 		DAED2C432E6BEDCC00BDAE67 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				DAED2C4E2E6D16ED00BDAE67 /* MoatFormView.swift */,
 				5B7153F92E617CAF00D74E5B /* MoatView.swift */,
 			);
 			path = View;
@@ -1678,18 +1679,10 @@
 		DAED2C452E6BEDDB00BDAE67 /* Store */ = {
 			isa = PBXGroup;
 			children = (
+				DAED2C522E6D170900BDAE67 /* MoatFormStore.swift */,
 				5B7153FD2E617EC200D74E5B /* MoatStore.swift */,
 			);
 			path = Store;
-			sourceTree = "<group>";
-		};
-		DAED2C462E6BEE7800BDAE67 /* Moat */ = {
-			isa = PBXGroup;
-			children = (
-				DAED2C432E6BEDCC00BDAE67 /* View */,
-				DAED2C452E6BEDDB00BDAE67 /* Store */,
-			);
-			path = Moat;
 			sourceTree = "<group>";
 		};
 		DAED2C472E6BEEB300BDAE67 /* Networking */ = {
@@ -1698,15 +1691,6 @@
 				DA919CAD2E6D4A19003151B6 /* MoatClient.swift */,
 			);
 			path = Networking;
-			sourceTree = "<group>";
-		};
-		DAED2C482E6BEEE500BDAE67 /* Form */ = {
-			isa = PBXGroup;
-			children = (
-				DAED2C502E6D16F900BDAE67 /* View */,
-				DAED2C512E6D170000BDAE67 /* Store */,
-			);
-			path = Form;
 			sourceTree = "<group>";
 		};
 		DAED2C492E6C021900BDAE67 /* Components */ = {
@@ -1721,22 +1705,6 @@
 				DAED2C4A2E6C022800BDAE67 /* MoatItem.swift */,
 			);
 			path = Components;
-			sourceTree = "<group>";
-		};
-		DAED2C502E6D16F900BDAE67 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				DAED2C4E2E6D16ED00BDAE67 /* FormView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		DAED2C512E6D170000BDAE67 /* Store */ = {
-			isa = PBXGroup;
-			children = (
-				DAED2C522E6D170900BDAE67 /* FormStore.swift */,
-			);
-			path = Store;
 			sourceTree = "<group>";
 		};
 		DAED2C542E6D21F300BDAE67 /* UserProfile */ = {
@@ -1955,7 +1923,7 @@
 				DA919CAE2E6D4A2E003151B6 /* MoatClient.swift in Sources */,
 				DA531BC62D64A8CA00DB87CB /* KeywordInfo.swift in Sources */,
 				5B97C1922EB9C23500189ED2 /* UserProfileStackStore.swift in Sources */,
-				DAED2C4F2E6D16F200BDAE67 /* FormView.swift in Sources */,
+				DAED2C4F2E6D16F200BDAE67 /* MoatFormView.swift in Sources */,
 				DA92D07B2EB89A3C002FAFC1 /* MoatDisplayView.swift in Sources */,
 				DA531B9D2D64A8CA00DB87CB /* FBTeamStandingsStore.swift in Sources */,
 				DA531B942D64A8CA00DB87CB /* FBStatDataItem.swift in Sources */,
@@ -2066,7 +2034,7 @@
 				DA252B3E2DEF790100006AB8 /* MLBTeamInfoDisplayModel.swift in Sources */,
 				DA919CB02E6D7B37003151B6 /* MoatRequestModels.swift in Sources */,
 				DA252B3F2DEF790100006AB8 /* MLBPlayerStatsDisplayModel.swift in Sources */,
-				DAED2C532E6D170C00BDAE67 /* FormStore.swift in Sources */,
+				DAED2C532E6D170C00BDAE67 /* MoatFormStore.swift in Sources */,
 				DADE295B2DF051BD0099A0DD /* KBOLeagueScheduleView.swift in Sources */,
 				DA252B402DEF790100006AB8 /* MLBPlayerStandingsDisplayModel.swift in Sources */,
 				DA30E71D2DF7BE3A000639AD /* MLBTeamInfoStore.swift in Sources */,

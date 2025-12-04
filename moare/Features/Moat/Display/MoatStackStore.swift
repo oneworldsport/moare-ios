@@ -9,7 +9,7 @@ import Foundation
 import ComposableArchitecture
 
 enum MoatViewType {
-    case trending, detail, form, userProfile // createForm, updateForm
+    case trending, detail, createForm, userProfile, updateForm // createForm,
 }
 
 @Reducer
@@ -54,8 +54,8 @@ struct MoatStackStore {
                 case .trending:
                     state.path.append(.trending(MoatStore.State()))
                     
-                case .form:
-                    state.path.append(.form(FormStore.State()))
+                case .createForm:
+                    state.path.append(.createForm(MoatFormStore.State()))
                     
                 case .userProfile:
                     return .none
@@ -65,25 +65,40 @@ struct MoatStackStore {
                 
                 return .none
                 
-            case let .path(.element(id: _, action: .trending(.delegate(.push(viewType, moatId))))),
-                let .path(.element(id: _, action: .detail(.delegate(.push(viewType, moatId))))):
+            case let .path(.element(id: _, action: .trending(.delegate(.push(viewType, moatId, moat))))),
+                let .path(.element(id: _, action: .detail(.delegate(.push(viewType, moatId, moat))))):
                 switch viewType {
                 case .detail:
                     state.path.append(.detail(MoatStore.State(moatId: moatId)))
                     
-                case .form:
-                    state.path.append(.form(FormStore.State()))
+                case .createForm:
+                    state.path.append(.createForm(MoatFormStore.State()))
+                    
+                case .updateForm:
+                    state.path.append(.updateForm(MoatFormStore.State(moat: moat)))
                     
                 default: break
                 }
                 
                 return .none
                 
-            case let .path(.element(id: _, action: .form(.delegate(.created(moat))))):
+            case let .path(.element(id: _, action: .createForm(.delegate(.createdOrUpdatedMoat(moat))))),
+                let .path(.element(id: _, action: .updateForm(.delegate(.createdOrUpdatedMoat(moat))))):
                 // 마지막이 form이면 그 자리를 detail로 교체
                 if let lastId = state.path.ids.last,
-                   case .form = state.path[id: lastId] {
-                    state.path[id: lastId] = .detail(MoatStore.State(moatId: moat.moatId))
+                   let route = state.path[id: lastId] {
+                    switch route {
+                      case .createForm:
+                        state.path[id: lastId] = .detail(MoatStore.State(moatId: moat.moatId))
+                    case .updateForm:
+                        state.path.popLast()
+                        state.path[id: lastId] = .detail(MoatStore.State(moatId: moat.moatId))
+                        
+                        
+                        
+                      default:
+                        break
+                      }
                 }
                 
                 // 방금 작성한 모트를 일단 담아두기
@@ -217,20 +232,23 @@ struct MoatStackStore {
         @ObservableState
         enum State {
             case trending(MoatStore.State)
-            case form(FormStore.State)
+            case createForm(MoatFormStore.State)
             case detail(MoatStore.State)
+            case updateForm(MoatFormStore.State)
         }
         
         enum Action {
             case trending(MoatStore.Action)
-            case form(FormStore.Action)
+            case createForm(MoatFormStore.Action)
             case detail(MoatStore.Action)
+            case updateForm(MoatFormStore.Action)
         }
         
         var body: some Reducer<State, Action> {
             Scope(state: \.trending, action: \.trending) { MoatStore() }
-            Scope(state: \.form, action: \.form) { FormStore() }
+            Scope(state: \.createForm, action: \.createForm) { MoatFormStore() }
             Scope(state: \.detail, action: \.detail) { MoatStore() }
+            Scope(state: \.updateForm, action:\.updateForm) { MoatFormStore() }
         }
     }
 }

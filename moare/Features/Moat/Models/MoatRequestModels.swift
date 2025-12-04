@@ -6,9 +6,9 @@
 //
 
 struct MoatCreateRequest: Encodable {
-    let content: String
-    let sportTags: [String]
-    let parentMoatId: String?
+    var content: String
+    var sportTags: [String]
+    var parentMoatId: String?
     
     init(
         content: String,
@@ -22,8 +22,8 @@ struct MoatCreateRequest: Encodable {
 }
 
 struct MoatUpdateRequest: Encodable {
-    let content: String?
-    let sportTags: [String]?
+    var content: String? = nil
+    var sportTags: [String]? = nil
 }
 
 struct MoatListRequest: Encodable {
@@ -47,31 +47,47 @@ struct MoatListRequest: Encodable {
 
 struct FireCreateRequest: Encodable {
     let targetId: String
-    let targetType: TargetType
+    let targetType: FireTargetType
     
     init(
         targetId: String,
-        targetType: TargetType
+        targetType: FireTargetType
     ) {
         self.targetId = targetId
         self.targetType = targetType
     }
 }
 
-enum TargetType: String, Encodable, Equatable {
+enum FireTargetType: String, Encodable, Equatable {
     case moat = "moat"
     case comment = "comment"
 }
 
 struct FireCancelRequest: Encodable {
     let targetId: String
-    let targetType: TargetType
+    let targetType: FireTargetType
     
     init(
         targetId: String,
-        targetType: TargetType
+        targetType: FireTargetType
     ) {
         self.targetId = targetId
         self.targetType = targetType
     }
+}
+
+enum ReportTargetType: String, Encodable, Equatable {
+    case moat = "MOAT"
+    case user = "USER"
+}
+
+enum ReasonCode: String, Encodable, Equatable {
+    case other = "OTHER"
+}
+
+struct ReportCreateRequest: Encodable {
+    let targetType: ReportTargetType
+    let targetId: String
+    let reasonCode: ReasonCode
+    let reasonText: String
 }

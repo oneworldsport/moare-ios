@@ -49,11 +49,11 @@ struct MoatStore {
         
         case setFireMap(targetId: String, isFired: Bool)
         case setFired(targetId: String, isFired: Bool)
-        case createFire(targetId: String, targetType: TargetType)
+        case createFire(targetId: String, targetType: FireTargetType)
         case createFireResult(targetId: String, isCreated: Bool)
         case deleteFire(targetId: String)
         case deleteFireResult(targetId: String, isDeleted: Bool)
-        case toggleFire(targetId: String, targetType: TargetType)
+        case toggleFire(targetId: String, targetType: FireTargetType)
         
         case showForm
         case showUpdateForm(moatId: String)
@@ -67,7 +67,7 @@ struct MoatStore {
     }
     
     enum Delegate {
-        case push(viewType: MoatViewType, moatId: String? = nil)
+        case push(viewType: MoatViewType, moatId: String? = nil, moat: MoatResponse? = nil)
         case deleted(moatId: String)
     }
     
@@ -166,10 +166,14 @@ struct MoatStore {
                 return .none
                 
             case .showForm:
-                return .send(.delegate(.push(viewType: .form)))
+                return .send(.delegate(.push(viewType: .createForm)))
                 
             case .showUpdateForm(let moatId):
-                
+                if let selectedMoat = state.selectedMoat,
+                   selectedMoat.moat.moatId == moatId {
+                    return .send(.delegate(.push(viewType: .updateForm, moat: selectedMoat.moat)))
+                }
+    
                 return .none
                 
             case .updateTrending(let moat):

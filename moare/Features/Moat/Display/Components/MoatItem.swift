@@ -153,7 +153,11 @@ struct MoatItem: View {
                                 
                                 HStack {
                                     if let hashtagList {
-                                        ForEach(hashtagList, id: \.self) { item in
+                                        let appendHashtag = hashtagList.map { tag in
+                                            tag.hasPrefix("#") ? tag : "# " + tag
+                                        }
+                                        
+                                        ForEach(appendHashtag, id: \.self) { item in
                                             Text(item)
                                                 .font(.system(size: 14))
                                                 .foregroundStyle(.moare)
