@@ -71,6 +71,10 @@ extension String {
     var isBlank: Bool {
         trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
+    
+    var trimmed: String {
+        trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 }
 
 /// Returns nil when String is Optional

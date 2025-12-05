@@ -400,4 +400,8 @@ struct Constants {
             isLive(leagueId: leagueId, status: status) ? .moare : .secondary
         }
     }
+    
+    struct Urls {
+        static let privacyUrl = "https://tested-belt-7f1.notion.site/28d14c819b3c8062b05bf6ebf9cbc231?pvs=74"
+    }
 }

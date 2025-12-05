@@ -15,6 +15,7 @@ enum SignFlow {
          signUpOtp,
          signUpUserHandle,
          signUpSportsInterests,
+         signUpTerms,
          signUpSuccess
 }
 
@@ -58,6 +59,7 @@ struct SignStore {
         var otp = "" // TODO: 이것도 nil처리?
         var userHandle: String? = nil
         var sportsInterests: [String]? = nil
+        var isAllTermsChecked = false
     }
     
     enum Action {
@@ -66,10 +68,11 @@ struct SignStore {
         case selectIdType(index: Int)
         case updateText(text: String)
         case submit
-        case addSport(sport: String)
+        case updateSport(sport: String)
         
         // private
         case checkIdValidation
+        case checkUserHandleValidation
         case sendLoginOtp
         case sendLoginOtpSuccess(session: String)
         case confirmLoginOtp
@@ -80,6 +83,7 @@ struct SignStore {
         case checkUserHandle
         case checkUserHandleSuccess(result: Bool)
         case reserveUserHandle
+        case updateTermsChecked(Bool)
         case completeSignUp
         
         case responseFailure(APIHTTPError)
@@ -132,6 +136,10 @@ struct SignStore {
                     state.title = "스포츠 선택"
                     state.submitBtnLabel = "선택 완료"
                     
+                case .signUpTerms:
+                    state.title = "약관 동의"
+                    state.submitBtnLabel = "가입 완료"
+                    
                 case .signUpSuccess:
                     return .none
                 }
@@ -173,7 +181,8 @@ struct SignStore {
                     
                 case .signUpUserHandle:
                     state.activatedState = .allDeactivated
-                    // TODO: 유효성 검사쪽으로 이동 필요
+                    
+                    // isEmpty면 에러 문구 없이 그냥 return
                     if state.text.isEmpty {
                         return .merge(
                             .cancel(id: CheckUserHandleCancelID()),
@@ -181,9 +190,18 @@ struct SignStore {
                         )
                     }
                     
+                    // 유효성 검사 실패 시 에러 문구 노출
+                    let trimmedText = state.text.trimmed
+                    if !UserHandleValidator.isValid(trimmedText) {
+                        return .merge(
+                            .cancel(id: CheckUserHandleCancelID()),
+                            .send(.checkUserHandleValidation)
+                        )
+                    }
+                    
                     return .run { send in
                         await send(.updateBarState)
-                        // TODO: 유효성 검사 먼저 필요
+                        
                         // text가 바뀌면 2초 후 닉네임 중복 검사 api(.checkUserHandle) 호출.
                         // 2초 이내에 또 text가 바뀌면 이전 실행 취소하고 새로 실행.
                         try await Task.sleep(for: .seconds(2))
@@ -196,7 +214,7 @@ struct SignStore {
                 
                 return .send(.updateBarState)
                 
-            case .addSport(let sport):
+            case .updateSport(let sport):
                 if state.sportsInterests == nil {
                     state.sportsInterests = [sport]
                     state.activatedState = .allActivated
@@ -213,10 +231,24 @@ struct SignStore {
                         }
                     } else {
                         state.sportsInterests?.append(sport)
+                        state.activatedState = .allActivated
+                        
+                        return .send(.updateBarState)
                     }
                 }
                 
                 return .none
+                
+            case .updateTermsChecked(let checked):
+                state.isAllTermsChecked = checked
+                
+                if checked {
+                    state.activatedState = .allActivated
+                } else {
+                    state.activatedState = .allDeactivated
+                }
+                
+                return .send(.updateBarState)
                 
             case .checkIdValidation:
                 if state.idType == .email {
@@ -230,6 +262,26 @@ struct SignStore {
                         state.activatedState = .allActivated
                     } else {
                         state.activatedState = .allDeactivated
+                    }
+                }
+                
+                return .send(.updateBarState)
+                
+            case .checkUserHandleValidation:
+                if let error = UserHandleValidator.validate(state.text) {
+                    switch error {
+                    case .empty:
+                        state.errorMessage = "사용자 이름은 3~20자이며, 공백 없이 영문 소문자, 숫자, 밑줄(_)만 사용할 수 있습니다."
+                    case .tooShort(_):
+                        state.errorMessage = "사용자 이름은 3~20자이며, 공백 없이 영문 소문자, 숫자, 밑줄(_)만 사용할 수 있습니다."
+                    case .tooLong(_):
+                        state.errorMessage = "사용자 이름은 3~20자이며, 공백 없이 영문 소문자, 숫자, 밑줄(_)만 사용할 수 있습니다."
+                    case .invalidCharacters:
+                        state.errorMessage = "사용자 이름은 3~20자이며, 공백 없이 영문 소문자, 숫자, 밑줄(_)만 사용할 수 있습니다."
+                    case .startsWithUnderscore, .endsWithUnderscore:
+                        state.errorMessage = "사용자 이름은 밑줄(_)로 시작하거나 끝날 수 없습니다."
+                    case .containsDoubleUnderscore:
+                        state.errorMessage = "밑줄(_)은 연속해서 사용할 수 없습니다."
                     }
                 }
                 
@@ -258,6 +310,8 @@ struct SignStore {
                 case .signUpUserHandle:
                     return .send(.reserveUserHandle)
                 case .signUpSportsInterests:
+                    return .send(.updateSignFlow(signFlow: .signUpTerms))
+                case .signUpTerms:
                     return .send(.completeSignUp)
                 case .signUpSuccess:
                     return .none
@@ -385,7 +439,7 @@ struct SignStore {
 //                    // userHandle이 nil이 아니고, 공백 제거 후에도 비어있지 않음
 //                }
                 
-                state.userHandle = state.text
+                state.userHandle = state.text.trimmed
                 
                 state.apiFetchState = .fetching
                 state.activatedState = .onlyBarActivated
@@ -459,6 +513,10 @@ struct SignStore {
                 
                 state.apiFetchState = .fetching
                 state.activatedState = .allDeactivated
+                state.isFirstRequest = true
+                // .signUpTerms에서 .updateBarState 할때 이미 한번 false로 설정해서 fetching할때 barAlignment 설정이 안돼서 다시 true로 해주는데..
+                // 혹시나 오류가 나서 또 .completeSignUp 요청을 하게 되면 또 true가 되어서 barAlignment가 또 바뀌겠네..?
+                // 근데 .completeSignUp을 또 요청할 경우는 적으니깐 일단은 패스...
                 
                 let body = SignUpCompleteRequest(
                     id: state.id,
@@ -569,6 +627,15 @@ struct SignStore {
                     state.barDuration = 10
                 } else {
                     state.barDuration = 0.5
+                }
+                
+                if state.currentFlow == .signUpTerms && state.isFirstRequest {
+                    state.isFirstRequest = false
+                    if state.barAlignment == .bottomLeading {
+                        state.barAlignment = .bottomTrailing
+                    } else {
+                        state.barAlignment = .bottomLeading
+                    }
                 }
                 
                 switch state.activatedState {

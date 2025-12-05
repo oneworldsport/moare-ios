@@ -13,6 +13,19 @@ struct SignView: View {
     
     @State private var show = false
     @State private var text = ""
+    @State private var tos = false
+    @State private var privacy = false
+    
+    private var allCheckedBinding: Binding<Bool> {
+        Binding(
+            get: { tos && privacy },
+            set: { newValue in
+                tos = newValue
+                privacy = newValue
+                signStore.send(.updateTermsChecked(newValue))
+            }
+        )
+    }
     
     @FocusState private var isFocused: Bool
 
@@ -44,6 +57,17 @@ struct SignView: View {
                 }
                 .padding(.bottom, 8)
                 
+                if currentFlow == .signUpTerms {
+                    SignUpTerms(tos: $tos, privacy: $privacy)
+                        .padding(.bottom, 12)
+                        .onChange(of: tos) {
+                            signStore.send(.updateTermsChecked(allCheckedBinding.wrappedValue))
+                        }
+                        .onChange(of: privacy) {
+                            signStore.send(.updateTermsChecked(allCheckedBinding.wrappedValue))
+                        }
+                }
+                
                 if currentFlow == .signUpSportsInterests {
                     Text("보는거나 하는걸 즐기는 스포츠들을 선택해 주세요")
                         .font(.system(size: 13))
@@ -60,6 +84,20 @@ struct SignView: View {
                 HStack {
                     if currentFlow == .signUpSportsInterests {
                         SelectedSports(sports: signStore.sportsInterests ?? [])
+                    } else if currentFlow == .signUpTerms {
+                        HStack {
+                            Toggle("", isOn: allCheckedBinding)
+                                .toggleStyle(CheckboxToggleStyle())
+                                .padding(.trailing, 8)
+                            
+                            Button(action: {
+                                allCheckedBinding.wrappedValue.toggle()
+                            }) {
+                                Text("전체 동의")
+                            }
+                            .foregroundStyle(.primary)
+                        }
+                        .padding(.trailing, 8)
                     } else {
                         TextField(signStore.placeholder, text: $text)
                             .frame(height: 50)
@@ -109,6 +147,7 @@ struct SignView: View {
                             }
                     }
                 }
+                .padding(.bottom, currentFlow == .signUpTerms ? 12 : 0)
                 
                 VStack {
                     Rectangle()
@@ -134,12 +173,13 @@ struct SignView: View {
                         .font(.system(size: 13))
                         .foregroundStyle(.moare)
                 }
-                .frame(height: 15)
+//                .frame(height: 15)
+                .frame(height: 33) // 2줄짜리 오류 문구 때문에 높이 늘림
                 .padding(.top, 8)
                 
                 if currentFlow == .signUpSportsInterests {
                     SportList(selectedSports: signStore.sportsInterests ?? []) { sport in
-                        signStore.send(.addSport(sport: sport))
+                        signStore.send(.updateSport(sport: sport))
                     }
                     .padding(.top, 8)
                 }
