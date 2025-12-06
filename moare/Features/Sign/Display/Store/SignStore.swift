@@ -72,7 +72,7 @@ struct SignStore {
         
         // private
         case checkIdValidation
-        case checkUserHandleValidation
+        case setUserHandleValidationError
         case sendLoginOtp
         case sendLoginOtpSuccess(session: String)
         case confirmLoginOtp
@@ -195,7 +195,7 @@ struct SignStore {
                     if !UserHandleValidator.isValid(trimmedText) {
                         return .merge(
                             .cancel(id: CheckUserHandleCancelID()),
-                            .send(.checkUserHandleValidation)
+                            .send(.setUserHandleValidationError)
                         )
                     }
                     
@@ -267,16 +267,10 @@ struct SignStore {
                 
                 return .send(.updateBarState)
                 
-            case .checkUserHandleValidation:
-                if let error = UserHandleValidator.validate(state.text) {
+            case .setUserHandleValidationError:
+                if let error = UserHandleValidator.validate(state.text.trimmed) {
                     switch error {
-                    case .empty:
-                        state.errorMessage = "사용자 이름은 3~20자이며, 공백 없이 영문 소문자, 숫자, 밑줄(_)만 사용할 수 있습니다."
-                    case .tooShort(_):
-                        state.errorMessage = "사용자 이름은 3~20자이며, 공백 없이 영문 소문자, 숫자, 밑줄(_)만 사용할 수 있습니다."
-                    case .tooLong(_):
-                        state.errorMessage = "사용자 이름은 3~20자이며, 공백 없이 영문 소문자, 숫자, 밑줄(_)만 사용할 수 있습니다."
-                    case .invalidCharacters:
+                    case .empty, .tooShort(_), .tooLong(_), .invalidCharacters:
                         state.errorMessage = "사용자 이름은 3~20자이며, 공백 없이 영문 소문자, 숫자, 밑줄(_)만 사용할 수 있습니다."
                     case .startsWithUnderscore, .endsWithUnderscore:
                         state.errorMessage = "사용자 이름은 밑줄(_)로 시작하거나 끝날 수 없습니다."

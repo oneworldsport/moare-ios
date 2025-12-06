@@ -47,7 +47,7 @@ struct UserProfileUpdateFormView: View {
                         .frame(width: 1, height: 20)
                         .padding(.trailing, 8)
                     
-                    TextField("사용자 이름 입력", text: $userHandleText)
+                    TextField(" 사용자 이름 입력", text: $userHandleText)
                         .focused($userHandleFocusState)
                         .disabled(store.isUserHandleTextFieldDisabled)
                         .onChange(of: userHandleText) {

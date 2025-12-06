@@ -43,6 +43,7 @@ struct UserProfileUpdateFormStore {
         // private
         case updateUserProfileUserHandle
         case updateUserHandleCheckState(checkState: ApiFetchState = .idle, newUserHandle: String? = nil)
+        case setUserHandleValidationError(String)
         case reserveUserHandle(String)
         case uploadImage
         case updateProfile(key: String? = nil)
@@ -67,12 +68,22 @@ struct UserProfileUpdateFormStore {
                     do {
                         await send(.updateUserHandleCheckState(checkState: .idle))
                         
-                        // TODO: 유효성 검사
+                        // isEmpty거나 기존 사용자 이름과 같으면 에러 문구 없이 그냥 return
                         if text.isEmpty || text == userHandle {
                             await send(.updateUserProfileUserHandle)
                             return
                         }
                         
+                        // 유효성 검사 실패 시 에러 문구 노출
+                        let trimmedText = text.trimmed
+                        if !UserHandleValidator.isValid(trimmedText) {
+                            await send(.updateUserProfileUserHandle)
+                            await send(.setUserHandleValidationError(trimmedText))
+                            return
+                        }
+                        
+                        // text가 바뀌면 2초 후 닉네임 중복 검사 api(checkUserHandle) 호출.
+                        // 2초 이내에 또 text가 바뀌면 이전 실행 취소하고 새로 실행.
                         try await Task.sleep(for: .seconds(2))
                         
                         await send(.updateUserHandleCheckState(checkState: .fetching), animation: AnimationConstants.AnimationType.shortDefaultAnimation)
@@ -104,6 +115,20 @@ struct UserProfileUpdateFormStore {
                 if let newUserHandle, checkState == .success {
                     state.userProfileUpdate.userHandle = newUserHandle
                     return .send(.reserveUserHandle(newUserHandle))
+                }
+                
+                return .none
+                
+            case .setUserHandleValidationError(let text):
+                if let error = UserHandleValidator.validate(text) {
+                    switch error {
+                    case .empty, .tooShort(_), .tooLong(_), .invalidCharacters:
+                        return .send(.updateUserHandleCheckState(checkState: .failure("사용자 이름은 3~20자이며, 공백 없이 영문 소문자, 숫자, 밑줄(_)만 사용할 수 있습니다.")))
+                    case .startsWithUnderscore, .endsWithUnderscore:
+                        return .send(.updateUserHandleCheckState(checkState: .failure("사용자 이름은 밑줄(_)로 시작하거나 끝날 수 없습니다.")))
+                    case .containsDoubleUnderscore:
+                        return .send(.updateUserHandleCheckState(checkState: .failure("밑줄(_)은 연속해서 사용할 수 없습니다.")))
+                    }
                 }
                 
                 return .none
