@@ -27,14 +27,6 @@ struct MoatDisplayView: View {
                 Spacer()
                 
                 MoatSearchBar(text: $searchBarText, isSearchBarOpened: $isSearchBarOpened)
-                
-                Button(action: {
-                    UserDefaults.standard.removeObject(forKey: "accessToken")
-                }) {
-                    Text("로그아웃")
-                        .font(.system(size: 12))
-                        .padding(.horizontal, 8)
-                }
             }
             .frame(height: 40)
             

@@ -456,6 +456,52 @@ class AWSManager {
 //        let (data, _) = try await URLSession.shared.data(for: req)
     }
     
+    struct CognitoError: Error {
+        let statusCode: Int
+        let body: String?
+    }
+    
+    func revokeRefreshToken() async throws {
+        guard let refresh = UserDefaults.standard.string(forKey: "refreshToken"),
+              !refresh.isEmpty else {
+            return
+        }
+
+        let clientId = "1uccmt8d43rqqel0hn69hscj2t"
+        let domainBase = URL(string: "https://ap-northeast-2jfrbeda09.auth.ap-northeast-2.amazoncognito.com")!
+
+        var req = URLRequest(url: domainBase.appendingPathComponent("/oauth2/revoke"))
+        req.httpMethod = "POST"
+        req.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+        // Cognito revoke endpoint 파라미터:
+        // token (REQUIRED), client_id (REQUIRED for public clients), token_type_hint (OPTIONAL)
+        // refresh 토큰을 넣으면 그 refresh 자체 + 그 refresh로 발급된 access/id도 함께 revoke됨
+        let body =
+//        "token=\(refresh.urlFormEncoded())" +
+        "token=\(refresh)" +
+        "&client_id=\(clientId)" +
+        "&token_type_hint=refresh_token"
+
+        req.httpBody = body.data(using: .utf8)
+
+        let (data, resp) = try await URLSession.shared.data(for: req)
+        guard let http = resp as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+
+        if !(200..<300).contains(http.statusCode) {
+            let bodyString = String(data: data, encoding: .utf8)
+            throw CognitoError(statusCode: http.statusCode, body: bodyString)
+        }
+
+        // revoke 성공했으면 로컬 토큰/캐시 삭제
+        UserDefaults.standard.removeObject(forKey: "accessToken")
+        UserDefaults.standard.removeObject(forKey: "refreshToken")
+        UserDefaults.standard.removeObject(forKey: "idToken")
+        UserDefaults.standard.removeObject(forKey: "userId")
+    }
+    
     func uploadImage(
         fileURL: URL,
         key: String,

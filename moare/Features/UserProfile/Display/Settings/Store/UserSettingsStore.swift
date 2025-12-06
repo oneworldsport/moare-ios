@@ -34,7 +34,14 @@ struct UserSettingsStore {
                     state.stack.append(node)
                     state.current = node
                     
-                case .logout: break
+                case .logout:
+                    return .run { send in
+                        do {
+                            try await AWSManager.shared.revokeRefreshToken()
+                        } catch {
+                            print("\(error)")
+                        }
+                    }
                     
                 case .withdraw: break
                     

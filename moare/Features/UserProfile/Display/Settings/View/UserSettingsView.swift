@@ -94,11 +94,12 @@ struct UserSettingsView: View {
                                         }
                                     }
                                 }
+                                .padding(.top, 8)
                             }
                         }
                         .frame(maxWidth: width, minHeight: minHeight, maxHeight: maxHeight)
                         .background(
-                            RoundedRectangle(cornerRadius: 20)
+                            RoundedRectangle(cornerRadius: 14)
                                 .fill(.white)
                         )
                     }

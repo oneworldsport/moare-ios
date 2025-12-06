@@ -73,6 +73,7 @@ struct UserProfileDisplayView: View {
         }
         .onChange(of: accessToken) {
             if accessToken.isEmpty {
+                isSettingsPresented = false
                 stackStore.send(.emptyPath)
             } else {
                 if stackStore.path.ids.isEmpty {
