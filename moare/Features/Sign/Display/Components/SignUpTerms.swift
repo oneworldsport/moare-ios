@@ -12,7 +12,7 @@ struct SignUpTerms: View {
     @Binding var privacy: Bool
     
     @State private var url = ""
-    @State private var isWebPresented = false
+    @State private var isPresented = false
     
     var body: some View {
         ZStack {
@@ -24,11 +24,9 @@ struct SignUpTerms: View {
                     
                     Button(action: {
                         url = Constants.Urls.privacyUrl
-                        withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
-                            isWebPresented = true
-                        }
+                        isPresented = true
                     }) {
-                        Text("(필수)이용 약관 동의")
+                        Text("(필수)이용약관 동의")
                         
                         Image(systemName: "chevron.right")
                     }
@@ -42,9 +40,7 @@ struct SignUpTerms: View {
                     
                     Button(action: {
                         url = Constants.Urls.privacyUrl
-                        withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
-                            isWebPresented = true
-                        }
+                        isPresented = true
                     }) {
                         Text("(필수)개인정보 수집 및 이용 동의")
                         
@@ -54,7 +50,7 @@ struct SignUpTerms: View {
                 }
             }
             
-            TermsWebView(url: url, isPresented: $isWebPresented)
+            TermsWebView(url: url, isPresented: $isPresented)
         }
     }
 }

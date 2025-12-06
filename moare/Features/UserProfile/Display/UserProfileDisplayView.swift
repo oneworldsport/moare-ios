@@ -9,70 +9,80 @@ import ComposableArchitecture
 import SwiftUI
 
 struct UserProfileDisplayView: View {
-    let userProfileStackStore: StoreOf<UserProfileStackStore>
+    let stackStore: StoreOf<UserProfileStackStore>
     
     @State private var userHandle = ""
     @State private var currentViewType: UserProfileViewType = .userProfile
+    @State private var isSettingsPresented = false
     
     @AppStorage("accessToken") private var accessToken: String = ""
     
     var body: some View {
-        VStack(spacing: 0) {
-            if currentViewType != .userProfileImageEdit {
-                HStack {
-                    BackButton {
-                        userProfileStackStore.send(.pop)
+        ZStack {
+            VStack(spacing: 0) {
+                if currentViewType != .userProfileImageEdit {
+                    HStack {
+                        BackButton {
+                            stackStore.send(.pop)
+                        }
+                        
+                        if currentViewType != .userProfileUpdateForm {
+                            Text(userHandle)
+                                .font(.system(size: 20, weight: .medium))
+                                .padding(.horizontal, 8)
+                        }
+                        
+                        Spacer()
+                        
+                        if currentViewType != .userProfileUpdateForm {
+                            Button(action: {
+                                isSettingsPresented = true
+                            }) {
+                                Image(systemName: "gearshape")
+                                    .padding(.trailing, 8)
+                            }
+                            .foregroundStyle(.primary)
+                        }
                     }
-                    
-                    if currentViewType != .userProfileUpdateForm {
-                        Text(userHandle)
-                            .font(.system(size: 20, weight: .medium))
-                            .padding(.horizontal, 8)
+                }
+                
+                if !accessToken.isEmpty {
+                    if let id = stackStore.path.ids.last {
+                        if let store = stackStore.scope(
+                            state: \.path[id: id],
+                            action: \.path[id: id]
+                        ) {
+                            UserProfilePathView(
+                                store: store,
+                                userHandle: $userHandle
+                            )
+                            .padding(.top, currentViewType != .userProfileImageEdit ? 30 : 0)
+                        }
                     }
-                    
-                    Spacer()
-                    
-                    if currentViewType != .userProfileUpdateForm {
-                        Image(systemName: "gearshape")
-                            .padding(.trailing, 8)
-                    }
+                } else {
+                    SignView()
                 }
             }
             
-            if !accessToken.isEmpty {
-                if let id = userProfileStackStore.path.ids.last {
-                    if let store = userProfileStackStore.scope(
-                        state: \.path[id: id],
-                        action: \.path[id: id]
-                    ) {
-                        UserProfilePathView(
-                            store: store,
-                            userHandle: $userHandle
-                        )
-                        .padding(.top, currentViewType != .userProfileImageEdit ? 30 : 0)
-                    }
-                }
-            } else {
-                SignView()
-            }
+            UserSettingsView(isPresented: $isSettingsPresented)
         }
         .onAppear {
             if !accessToken.isEmpty {
-                userProfileStackStore.send(.bootstrapSession)
+                stackStore.send(.bootstrapSession)
             }
         }
         .onChange(of: accessToken) {
             if accessToken.isEmpty {
-                userProfileStackStore.send(.emptyPath)
+                stackStore.send(.emptyPath)
             } else {
-                if userProfileStackStore.path.ids.isEmpty {
-                    userProfileStackStore.send(.push(.userProfile))
+                if stackStore.path.ids.isEmpty {
+                    stackStore.send(.push(.userProfile))
                 }
             }
         }
-        .onChange(of: userProfileStackStore.path.ids.last) {
-            if let id = userProfileStackStore.path.ids.last {
-                if let store = userProfileStackStore.scope(
+        .onChange(of: stackStore.path.ids.last) {
+            if let id = stackStore.path.ids.last {
+                if let store = stackStore.scope(
                     state: \.path[id: id],
                     action: \.path[id: id]
                 ) {

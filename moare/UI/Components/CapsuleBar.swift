@@ -16,7 +16,11 @@ struct HCapsuleBar: View {
     let customWidth: CGFloat?
     let color: Color
     
-    init(size: HCapsuleBarSize = .small, customWidth: CGFloat? = nil, color: Color = .moare) {
+    init(
+        size: HCapsuleBarSize = .small,
+        customWidth: CGFloat? = nil,
+        color: Color = .moare
+    ) {
         self.size = size
         self.customWidth = customWidth
         self.color = color

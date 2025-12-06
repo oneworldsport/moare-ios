@@ -131,6 +131,10 @@
 		DA5190942EB9FCCF00829AE1 /* AWSCognitoIdentityProvider in Frameworks */ = {isa = PBXBuildFile; productRef = DA5190932EB9FCCF00829AE1 /* AWSCognitoIdentityProvider */; };
 		DA5190962EBA009B00829AE1 /* TokenRefresher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5190952EBA009200829AE1 /* TokenRefresher.swift */; };
 		DA530D292EE2BF5500D17674 /* SignUpTerms.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA530D282EE2BF3A00D17674 /* SignUpTerms.swift */; };
+		DA530D2B2EE34EF600D17674 /* UserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA530D2A2EE34EC000D17674 /* UserSettingsView.swift */; };
+		DA530D2D2EE4482A00D17674 /* UserSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA530D2C2EE4482000D17674 /* UserSettingsStore.swift */; };
+		DA530D342EE44B5B00D17674 /* SettingsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA530D332EE44B5100D17674 /* SettingsNode.swift */; };
+		DA530D362EE44D8F00D17674 /* SettingsTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA530D352EE44D8100D17674 /* SettingsTree.swift */; };
 		DA531B3F2D64A8A400DB87CB /* moareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B3C2D64A8A400DB87CB /* moareApp.swift */; };
 		DA531B402D64A8A400DB87CB /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B3D2D64A8A400DB87CB /* SplashView.swift */; };
 		DA531B942D64A8CA00DB87CB /* FBStatDataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B452D64A8CA00DB87CB /* FBStatDataItem.swift */; };
@@ -445,6 +449,10 @@
 		DA4777342DA7B7EF00F3459C /* NBAGameStatsDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAGameStatsDisplayModel.swift; sourceTree = "<group>"; };
 		DA5190952EBA009200829AE1 /* TokenRefresher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefresher.swift; sourceTree = "<group>"; };
 		DA530D282EE2BF3A00D17674 /* SignUpTerms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTerms.swift; sourceTree = "<group>"; };
+		DA530D2A2EE34EC000D17674 /* UserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsView.swift; sourceTree = "<group>"; };
+		DA530D2C2EE4482000D17674 /* UserSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsStore.swift; sourceTree = "<group>"; };
+		DA530D332EE44B5100D17674 /* SettingsNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNode.swift; sourceTree = "<group>"; };
+		DA530D352EE44D8100D17674 /* SettingsTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTree.swift; sourceTree = "<group>"; };
 		DA531B3C2D64A8A400DB87CB /* moareApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = moareApp.swift; sourceTree = "<group>"; };
 		DA531B3D2D64A8A400DB87CB /* SplashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		DA531B452D64A8CA00DB87CB /* FBStatDataItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBStatDataItem.swift; sourceTree = "<group>"; };
@@ -879,6 +887,42 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DA530D2F2EE44B0A00D17674 /* UserProfile */ = {
+			isa = PBXGroup;
+			children = (
+				DA919CA72E6D3B7E003151B6 /* View */,
+				DA919CA82E6D3B83003151B6 /* Store */,
+			);
+			path = UserProfile;
+			sourceTree = "<group>";
+		};
+		DA530D302EE44B2000D17674 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				DA530D352EE44D8100D17674 /* SettingsTree.swift */,
+				DA530D332EE44B5100D17674 /* SettingsNode.swift */,
+				DA530D312EE44B3A00D17674 /* View */,
+				DA530D322EE44B3E00D17674 /* Store */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		DA530D312EE44B3A00D17674 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DA530D2A2EE34EC000D17674 /* UserSettingsView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DA530D322EE44B3E00D17674 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				DA530D2C2EE4482000D17674 /* UserSettingsStore.swift */,
+			);
+			path = Store;
 			sourceTree = "<group>";
 		};
 		DA531B3E2D64A8A400DB87CB /* App */ = {
@@ -1391,11 +1435,11 @@
 		DA919CA52E6D2910003151B6 /* Display */ = {
 			isa = PBXGroup;
 			children = (
+				DA530D302EE44B2000D17674 /* Settings */,
+				DA530D2F2EE44B0A00D17674 /* UserProfile */,
 				DA3A03892EC9B210002FA54C /* Components */,
 				5B97C1912EB9C22700189ED2 /* UserProfileStackStore.swift */,
 				5B97C18F2EB9BDBE00189ED2 /* UserProfileDisplayView.swift */,
-				DA919CA82E6D3B83003151B6 /* Store */,
-				DA919CA72E6D3B7E003151B6 /* View */,
 			);
 			path = Display;
 			sourceTree = "<group>";
@@ -1946,6 +1990,7 @@
 				DA531C0C2D64A91900DB87CB /* UIExtensions.swift in Sources */,
 				DAA9750B2E6F2744005D619E /* UserProfileRequestModels.swift in Sources */,
 				DA30E7172DF7BDEF000639AD /* MLBTeamStatsView.swift in Sources */,
+				DA530D2B2EE34EF600D17674 /* UserSettingsView.swift in Sources */,
 				DA3235132E78467400DE36CA /* FBTournamentView.swift in Sources */,
 				DA531B9E2D64A8CA00DB87CB /* FBTeamStatsStore.swift in Sources */,
 				DA531C102D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift in Sources */,
@@ -1974,6 +2019,7 @@
 				DA30E7272DF7BFBB000639AD /* KBOTeamStatsStore.swift in Sources */,
 				DA531BC82D64A8CA00DB87CB /* SearchClient.swift in Sources */,
 				DAFCB4192DADC8E700839653 /* AWSManager.swift in Sources */,
+				DA530D342EE44B5B00D17674 /* SettingsNode.swift in Sources */,
 				DA531B3F2D64A8A400DB87CB /* moareApp.swift in Sources */,
 				DA68674F2EDDDFBE002DCF2F /* MoatSearchBar.swift in Sources */,
 				DA081BD02DDF409B00034589 /* BasePlayerStandingsStore.swift in Sources */,
@@ -1987,6 +2033,7 @@
 				DA531BBD2D64A8CA00DB87CB /* FBTeamInfoResponseModel.swift in Sources */,
 				DA531BC42D64A8CA00DB87CB /* ModelConverter.swift in Sources */,
 				DA252B282DEF788A00006AB8 /* KBOPlayerStandingsDisplayModel.swift in Sources */,
+				DA530D362EE44D8F00D17674 /* SettingsTree.swift in Sources */,
 				DA252B0A2DEF739F00006AB8 /* KBOGameStatsResponseModel.swift in Sources */,
 				DABF24B82DE9B6EF0098A504 /* MovingCapsuleItemContainer.swift in Sources */,
 				DAEEC7422DEDD53C0053E0A6 /* KBOPlayerModels.swift in Sources */,
@@ -2161,6 +2208,7 @@
 				DA4329FD2EC652A7007AD2AA /* UserProfileUpdateFormStore.swift in Sources */,
 				DABF24C62DEB0D860098A504 /* NBATournamentDisplayModel.swift in Sources */,
 				DA531C0E2D64AA4300DB87CB /* AnimationConstants.swift in Sources */,
+				DA530D2D2EE4482A00D17674 /* UserSettingsStore.swift in Sources */,
 				DA2A89332DF96098002AC4E5 /* KBOPlayerStatsView.swift in Sources */,
 				DA6C1EE12DB63A2B00D63246 /* NBATournamentView.swift in Sources */,
 				DA252B222DEF785F00006AB8 /* KBOGameStatsDisplayModel.swift in Sources */,

@@ -12,14 +12,14 @@ struct TermsWebView: View {
     
     @Binding var isPresented: Bool
     
+    @State private var show = false
+    
     var body: some View {
-        if isPresented {
-            VStack(spacing: 0) {
+        VStack(spacing: 0) {
+            if show {
                 HStack {
                     Button(action: {
-                        withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
-                            isPresented = false
-                        }
+                        isPresented = false
                     }) {
                         Image(systemName: "xmark")
                             .font(.system(size: 22))
@@ -33,6 +33,11 @@ struct TermsWebView: View {
                 .frame(height: 34)
                 
                 WebView(url: URL(string: url)!)
+            }
+        }
+        .onChange(of: isPresented) {
+            withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
+                show = isPresented
             }
         }
     }

@@ -22,6 +22,7 @@ struct CheckboxToggleStyle: ToggleStyle {
             }
             .frame(width: 22, height: 22)
             .background(
+                // TODO: radius 더 늘려서 확인해보기
                 RoundedRectangle(cornerRadius: 5)
                     .fill(configuration.isOn ? .moare : .clear)
             )

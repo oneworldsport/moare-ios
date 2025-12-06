@@ -96,7 +96,7 @@ struct SportSearchEngine_iOSApp: App {
                             .tag(Screen.moat)
                             
                             UserProfileDisplayView(
-                                userProfileStackStore: userProfileStackStore
+                                stackStore: userProfileStackStore
                             )
                             .tabItem {
                                 Image(systemName: "person.crop.circle")
