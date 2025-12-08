@@ -12,10 +12,9 @@ enum MoatType {
 }
 
 struct MoatItem: View {
-    @AppStorage("userId") private var userId: String = ""
-    
     @Binding var fired: Bool
     
+    let userId: String?
     let moatUserId: String
     let moatType: MoatType
     let isButtonDisabled: Bool
@@ -43,6 +42,7 @@ struct MoatItem: View {
     @State private var isSideBarShowing: Bool = true
     
     init(
+        userId: String?,
         moatUserId: String,
         moatType: MoatType = .trending,
         isButtonDisabled: Bool = false,
@@ -59,6 +59,7 @@ struct MoatItem: View {
         fireTapped: @escaping () -> Void = {},
         action: @escaping () -> Void = {}
     ) {
+        self.userId = userId
         self.moatUserId = moatUserId
         self.moatType = moatType
         self.isButtonDisabled = isButtonDisabled

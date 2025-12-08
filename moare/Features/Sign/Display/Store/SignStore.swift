@@ -89,6 +89,12 @@ struct SignStore {
         case responseFailure(APIHTTPError)
         
         case updateBarState
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case login(access: String, refresh: String, id: String, userId: String)
     }
     
     var body: some Reducer<State, Action> {
@@ -363,10 +369,12 @@ struct SignStore {
                         let result = try await signClient.confirmLoginAuth(body: body)
                         
                         // 로그인 성공 후 MoatView를 보여준다
-                        UserDefaults.standard.set(result.idToken, forKey: "idToken")
-                        UserDefaults.standard.set(result.accessToken, forKey: "accessToken")
-                        UserDefaults.standard.set(result.refreshToken, forKey: "refreshToken")
-                        UserDefaults.standard.set(result.userId, forKey: "userId")
+                        await send(.delegate(.login(
+                            access: result.accessToken,
+                            refresh: result.refreshToken,
+                            id: result.accessToken,
+                            userId: result.userId
+                        )))
                     } catch {
                         if let err = error as? APIHTTPError {
                             await send(.responseFailure(err))
@@ -530,10 +538,12 @@ struct SignStore {
                         
 //                        await send(.updateSignFlow(signFlow: .signUpSuccess))
                         // 회원가입 성공 후 자동 로그인 (MoatView를 보여준다)
-                        UserDefaults.standard.set(result.idToken, forKey: "idToken")
-                        UserDefaults.standard.set(result.accessToken, forKey: "accessToken")
-                        UserDefaults.standard.set(result.refreshToken, forKey: "refreshToken")
-                        UserDefaults.standard.set(result.userId, forKey: "userId")
+                        await send(.delegate(.login(
+                            access: result.accessToken,
+                            refresh: result.refreshToken,
+                            id: result.accessToken,
+                            userId: result.userId
+                        )))
                     } catch {
                         if let err = error as? APIHTTPError {
                             await send(.responseFailure(err))
@@ -650,8 +660,11 @@ struct SignStore {
                 }
                 
                 return .none
-            }
-        }
+                
+            case .delegate:
+                return .none
+            } // switch
+        } // Reduce
     }
     
     func validateEmail(_ email: String) -> Bool {

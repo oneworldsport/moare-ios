@@ -10,7 +10,7 @@ import Foundation
 struct SignClient {
     private let apiClient = APIClient()
     
-    func bootstrapSession() async throws -> SimpleResponse {
+    func bootstrapSession() async throws -> BootstrapSessionResponse {
         return try await apiClient.fetchData(endpoint: .bootstrapSession)
     }
     

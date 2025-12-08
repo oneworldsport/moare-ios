@@ -135,6 +135,8 @@
 		DA530D2D2EE4482A00D17674 /* UserSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA530D2C2EE4482000D17674 /* UserSettingsStore.swift */; };
 		DA530D342EE44B5B00D17674 /* SettingsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA530D332EE44B5100D17674 /* SettingsNode.swift */; };
 		DA530D362EE44D8F00D17674 /* SettingsTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA530D352EE44D8100D17674 /* SettingsTree.swift */; };
+		DA530D382EE4D88400D17674 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA530D372EE4D87D00D17674 /* AppStore.swift */; };
+		DA530D3C2EE4E04700D17674 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA530D3B2EE4E02B00D17674 /* KeychainManager.swift */; };
 		DA531B3F2D64A8A400DB87CB /* moareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B3C2D64A8A400DB87CB /* moareApp.swift */; };
 		DA531B402D64A8A400DB87CB /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B3D2D64A8A400DB87CB /* SplashView.swift */; };
 		DA531B942D64A8CA00DB87CB /* FBStatDataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B452D64A8CA00DB87CB /* FBStatDataItem.swift */; };
@@ -453,6 +455,8 @@
 		DA530D2C2EE4482000D17674 /* UserSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsStore.swift; sourceTree = "<group>"; };
 		DA530D332EE44B5100D17674 /* SettingsNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNode.swift; sourceTree = "<group>"; };
 		DA530D352EE44D8100D17674 /* SettingsTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTree.swift; sourceTree = "<group>"; };
+		DA530D372EE4D87D00D17674 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
+		DA530D3B2EE4E02B00D17674 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		DA531B3C2D64A8A400DB87CB /* moareApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = moareApp.swift; sourceTree = "<group>"; };
 		DA531B3D2D64A8A400DB87CB /* SplashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		DA531B452D64A8CA00DB87CB /* FBStatDataItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBStatDataItem.swift; sourceTree = "<group>"; };
@@ -928,6 +932,7 @@
 		DA531B3E2D64A8A400DB87CB /* App */ = {
 			isa = PBXGroup;
 			children = (
+				DA530D372EE4D87D00D17674 /* AppStore.swift */,
 				DA531B3C2D64A8A400DB87CB /* moareApp.swift */,
 				DA531B3D2D64A8A400DB87CB /* SplashView.swift */,
 			);
@@ -1294,6 +1299,7 @@
 		DA531BDC2D64A8F200DB87CB /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				DA530D3B2EE4E02B00D17674 /* KeychainManager.swift */,
 				DA0D557B2EE1EFA600480EED /* UserHandleValidator.swift */,
 				DA843E032EDEC8220015DA1B /* WebView.swift */,
 				DA5190952EBA009200829AE1 /* TokenRefresher.swift */,
@@ -2028,6 +2034,7 @@
 				DAED2C4B2E6C025400BDAE67 /* MoatItem.swift in Sources */,
 				DA9B63E02E70182F009BD706 /* CommentComposer.swift in Sources */,
 				DA6C1EE32DB63A5E00D63246 /* NBATournamentStore.swift in Sources */,
+				DA530D382EE4D88400D17674 /* AppStore.swift in Sources */,
 				DAB702702E8A55930048DBD1 /* MLBTournamentDisplayModel.swift in Sources */,
 				DA531BB02D64A8CA00DB87CB /* FBPlayerStandingsDisplayModel.swift in Sources */,
 				DA531BBD2D64A8CA00DB87CB /* FBTeamInfoResponseModel.swift in Sources */,
@@ -2113,6 +2120,7 @@
 				DAE573402D8036D6009ED74D /* SynchronizedScrollView.swift in Sources */,
 				DA3235112E78466900DE36CA /* FBTournamentStore.swift in Sources */,
 				DA531C032D64A91900DB87CB /* BaseUIState.swift in Sources */,
+				DA530D3C2EE4E04700D17674 /* KeychainManager.swift in Sources */,
 				DA531BA42D64A8CA00DB87CB /* FBTeamInfoView.swift in Sources */,
 				DA1702272DA8C67A0021EF80 /* NBAGameStatsView.swift in Sources */,
 				DAD3FAF32DF56A7A009B367D /* KBOTeamStandingsStore.swift in Sources */,

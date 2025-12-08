@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct SignView: View {
-    let store = Store(initialState: SignStore.State()) { SignStore() }
+    let store: StoreOf<SignStore>
     
     @State private var show = false
     @State private var text = ""

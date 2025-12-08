@@ -23,6 +23,13 @@ struct UserSettingsStore {
         case tap(SettingsNode)
         case pop
         case updateWebViewPresented(Bool)
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case close
+        case logout
     }
     
     var body: some Reducer<State, Action> {
@@ -38,6 +45,8 @@ struct UserSettingsStore {
                     return .run { send in
                         do {
                             try await AWSManager.shared.revokeRefreshToken()
+                            
+                            await send(.delegate(.logout))
                         } catch {
                             print("\(error)")
                         }
@@ -66,6 +75,9 @@ struct UserSettingsStore {
             case .updateWebViewPresented(let presented):
                 state.isWebViewPresented = presented
                 
+                return .none
+                
+            case .delegate:
                 return .none
             }
         }

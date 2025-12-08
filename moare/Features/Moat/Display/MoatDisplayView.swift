@@ -10,9 +10,7 @@ import ComposableArchitecture
 
 struct MoatDisplayView: View {
     let stackStore: StoreOf<MoatStackStore>
-    
-    // TODO: 이게 사용하기 편하니깐, Keychain으로 옮길때 그냥 flag용으로 UserDefaults도 하나 만들면 될듯?
-    @AppStorage("accessToken") private var accessToken: String = ""
+    let signStore: Store<SignStore.State?, SignStore.Action>
     
     @State private var searchBarText = ""
     @State private var isSearchBarOpened = false
@@ -60,7 +58,7 @@ struct MoatDisplayView: View {
                 )
             }
             
-            if !accessToken.isEmpty {
+            if let userId = stackStore.userId {
                 if let id = stackStore.path.ids.last {
                     if let store = stackStore.scope(
                         state: \.path[id: id],
@@ -69,27 +67,32 @@ struct MoatDisplayView: View {
                         MoatPathView(
 //                                stackStore: stackStore,
                             store: store,
+                            userId: userId
     //                        didPop: stackStore.didPop,
     //                        isCombinedView: stackStore.includesPreviousView
                         )
                     }
                 }
             } else {
-                SignView()
+                IfLetStore(signStore) { store in
+                    SignView(store: store)
+                }
             }
         }
         .onAppear {
-            if !accessToken.isEmpty {
+            if let token = KeychainManager.shared.get("accessToken"), !token.isEmpty {
                 stackStore.send(.bootstrapSession)
+            } else {
+                stackStore.send(.delegate(.initSignStore))
             }
         }
-        .onChange(of: accessToken) {
-            if accessToken.isEmpty {
-                stackStore.send(.emptyPath)
-            } else {
+        .onChange(of: stackStore.userId) {
+            if let _ = stackStore.userId {
                 if stackStore.path.ids.isEmpty {
                     stackStore.send(.push(.trending))
                 }
+            } else {
+                stackStore.send(.emptyPath)
             }
         }
     }
@@ -98,17 +101,20 @@ struct MoatDisplayView: View {
 struct MoatPathView: View {
 //    let stackStore: StoreOf<MoatStackStore>
     let store: StoreOf<MoatStackStore.Path>
+    let userId: String?
 //    let didPop: Bool
 //    let isCombinedView: Bool
     
     init(
 //        stackStore: StoreOf<MoatStackStore>,
         store: StoreOf<MoatStackStore.Path>,
+        userId: String?
 //        didPop: Bool,
 //        isCombinedView: Bool = false
     ) {
 //        self.stackStore = stackStore
         self.store = store
+        self.userId = userId
 //        self.didPop = didPop
 //        self.isCombinedView = isCombinedView
     }
@@ -116,11 +122,11 @@ struct MoatPathView: View {
     var body: some View {
         switch store.state {
         case .trending:
-            if let s = store.scope(state: \.trending, action: \.trending) { MoatView(store: s) }
+            if let s = store.scope(state: \.trending, action: \.trending) { MoatView(store: s, userId: userId) }
         case .createForm:
             if let s = store.scope(state: \.createForm, action: \.createForm) { MoatFormView(store: s) }
         case .detail:
-            if let s = store.scope(state: \.detail, action: \.detail) { MoatView(store: s).id(UUID()) }
+            if let s = store.scope(state: \.detail, action: \.detail) { MoatView(store: s, userId: userId).id(UUID()) }
             
         case .updateForm:
             if let s = store.scope(state: \.updateForm, action: \.updateForm) { MoatFormView(store: s) }

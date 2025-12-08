@@ -10,6 +10,7 @@ import ComposableArchitecture
 
 struct UserProfileView: View {
     let store: StoreOf<UserProfileStore>
+    let userId: String?
     
     @Binding var userHandle: String
     
@@ -94,6 +95,7 @@ struct UserProfileView: View {
                                 let body = lines.dropFirst().joined(separator: "\n")
                                 
                                 MoatItem(
+                                    userId: userId,
                                     moatUserId: moat.userId,
                                     moatType: selectedMoat != nil ? .detail : .trending,
                                     isButtonDisabled: selectedMoat != nil,
@@ -128,6 +130,7 @@ struct UserProfileView: View {
                             LazyVStack(spacing: 28) {
                                 ForEach(comments, id: \.moatId) { moat in
                                     MoatItem(
+                                        userId: userId,
                                         moatUserId: moat.userId,
                                         moatType: .comment,
                                         content: moat.content,

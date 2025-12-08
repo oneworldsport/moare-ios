@@ -22,3 +22,7 @@ struct SimpleResponse: Decodable {
     let success: Bool
     let message: String
 }
+
+struct BootstrapSessionResponse: Decodable {
+    let userId: String
+}

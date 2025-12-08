@@ -401,7 +401,7 @@ class AWSManager {
     
     // TODO: 여기에 정의하는게 적합한지 확인 필요
     func refreshToken() async throws -> String {
-        guard let refresh = UserDefaults.standard.string(forKey: "refreshToken") else {
+        guard let refresh = KeychainManager.shared.get("refreshToken") else {
             throw URLError(.userAuthenticationRequired)
         }
         
@@ -424,12 +424,12 @@ class AWSManager {
         
         if !result.access_token.isEmpty {
             print("new access token received!")
-            UserDefaults.standard.set(result.access_token, forKey: "accessToken")
+            KeychainManager.shared.set(result.access_token, for: "accessToken")
         }
         
         if let newRefresh = result.refresh_token, !newRefresh.isEmpty {
             print("new refresh token received!")
-            UserDefaults.standard.set(newRefresh, forKey: "refreshToken")
+            KeychainManager.shared.set(newRefresh, for: "refreshToken")
         }
         
         return result.access_token
@@ -462,7 +462,7 @@ class AWSManager {
     }
     
     func revokeRefreshToken() async throws {
-        guard let refresh = UserDefaults.standard.string(forKey: "refreshToken"),
+        guard let refresh = KeychainManager.shared.get("refreshToken"),
               !refresh.isEmpty else {
             return
         }
@@ -494,12 +494,6 @@ class AWSManager {
             let bodyString = String(data: data, encoding: .utf8)
             throw CognitoError(statusCode: http.statusCode, body: bodyString)
         }
-
-        // revoke 성공했으면 로컬 토큰/캐시 삭제
-        UserDefaults.standard.removeObject(forKey: "accessToken")
-        UserDefaults.standard.removeObject(forKey: "refreshToken")
-        UserDefaults.standard.removeObject(forKey: "idToken")
-        UserDefaults.standard.removeObject(forKey: "userId")
     }
     
     func uploadImage(

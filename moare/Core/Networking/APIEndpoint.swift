@@ -188,7 +188,7 @@ enum APIEndpoint {
     var headers: [String: String]? {
         switch self {
         case .bootstrapSession, .createMoat, .updateMoat, .deleteMoat, .getMoatDetail, .getTrendingMoats, .getMoatsByHashtag, .getUserMoats, .getUserProfile, .updateUserProfile, .createFire, .deleteFire, .checkFire, .createReport:
-            if let token = UserDefaults.standard.string(forKey: "accessToken") {
+            if let token = KeychainManager.shared.get("accessToken") {
                 return ["Authorization": "Bearer \(token)"]
             } else {
                 return nil

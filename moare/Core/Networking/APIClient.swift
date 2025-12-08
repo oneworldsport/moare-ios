@@ -20,7 +20,7 @@ struct APIClient {
                 } catch {
                     print("failed refreshing token. Deleting tokens...")
                     // token 갱신 실패 시 기존 토큰 삭제
-                    clearTokens()
+                    KeychainManager.shared.deleteAllTokens() // TODO: throw한 후 store에서 받았을때 해줘야할듯?
                     throw URLError(.userAuthenticationRequired)
                 }
                 
@@ -31,7 +31,7 @@ struct APIClient {
             // TODO: 다른 401은 안걸리게 처리 필요
 //            if isSessionInvalidating(error) {
 //                print("Other errors to delete tokens. Deleting tokens...")
-//                clearTokens()
+//                KeychainManager.shared.deleteAllTokens()
 //                throw URLError(.userAuthenticationRequired)
 //            }
             
@@ -81,10 +81,5 @@ struct APIClient {
             // 410, 429, 404, 5xx 등은 세션 유지(로그인과 무관)
             return false
         }
-    }
-    
-    private func clearTokens() {
-        UserDefaults.standard.removeObject(forKey: "accessToken")
-        UserDefaults.standard.removeObject(forKey: "refreshToken")
     }
 }

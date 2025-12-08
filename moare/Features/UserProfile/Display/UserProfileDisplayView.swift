@@ -10,12 +10,12 @@ import SwiftUI
 
 struct UserProfileDisplayView: View {
     let stackStore: StoreOf<UserProfileStackStore>
+    let signStore: Store<SignStore.State?, SignStore.Action>
+    let settingsStore: StoreOf<UserSettingsStore>
     
     @State private var userHandle = ""
     @State private var currentViewType: UserProfileViewType = .userProfile
     @State private var isSettingsPresented = false
-    
-    @AppStorage("accessToken") private var accessToken: String = ""
     
     var body: some View {
         ZStack {
@@ -46,7 +46,7 @@ struct UserProfileDisplayView: View {
                     }
                 }
                 
-                if !accessToken.isEmpty {
+                if let userId = stackStore.userId {
                     if let id = stackStore.path.ids.last {
                         if let store = stackStore.scope(
                             state: \.path[id: id],
@@ -54,31 +54,36 @@ struct UserProfileDisplayView: View {
                         ) {
                             UserProfilePathView(
                                 store: store,
+                                userId: userId,
                                 userHandle: $userHandle
                             )
                             .padding(.top, currentViewType != .userProfileImageEdit ? 30 : 0)
                         }
                     }
                 } else {
-                    SignView()
+                    IfLetStore(signStore) { store in
+                        SignView(store: store)
+                    }
                 }
             }
             
-            UserSettingsView(isPresented: $isSettingsPresented)
+            UserSettingsView(store: settingsStore, isPresented: $isSettingsPresented)
         }
         .onAppear {
-            if !accessToken.isEmpty {
+            if let token = KeychainManager.shared.get("accessToken"), !token.isEmpty {
                 stackStore.send(.bootstrapSession)
+            } else {
+                stackStore.send(.delegate(.initSignStore))
             }
         }
-        .onChange(of: accessToken) {
-            if accessToken.isEmpty {
-                isSettingsPresented = false
-                stackStore.send(.emptyPath)
-            } else {
+        .onChange(of: stackStore.userId) {
+            if let _ = stackStore.userId {
                 if stackStore.path.ids.isEmpty {
                     stackStore.send(.push(.userProfile))
                 }
+            } else {
+                isSettingsPresented = false
+                stackStore.send(.emptyPath)
             }
         }
         .onChange(of: stackStore.path.ids.last) {
@@ -101,14 +106,17 @@ struct UserProfileDisplayView: View {
 
 struct UserProfilePathView: View {
     let store: StoreOf<UserProfileStackStore.Path>
+    let userId: String?
     
     @Binding var userHandle: String
     
     init (
         store: StoreOf<UserProfileStackStore.Path>,
+        userId: String?,
         userHandle: Binding<String>
     ) {
         self.store = store
+        self.userId = userId
         self._userHandle = userHandle
     }
     
@@ -116,11 +124,11 @@ struct UserProfilePathView: View {
         switch store.state {
         case .userProfile:
             if let s = store.scope(state: \.userProfile, action: \.userProfile) {
-                UserProfileView(store: s, userHandle: $userHandle)
+                UserProfileView(store: s, userId: userId, userHandle: $userHandle)
             }
         case .moatDetail:
             if let s = store.scope(state: \.moatDetail, action: \.moatDetail) {
-                MoatView(store: s).id(UUID())
+                MoatView(store: s, userId: userId).id(UUID())
             }
         case .userProfileUpdateForm:
             if let s = store.scope(state: \.userProfileUpdateForm, action: \.userProfileUpdateForm) {

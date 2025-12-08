@@ -10,6 +10,7 @@ import ComposableArchitecture
 
 struct MoatView: View {
     @Bindable var store: StoreOf<MoatStore>
+    let userId: String?
     
     @State private var show = false
     @State var text = ""
@@ -54,6 +55,7 @@ struct MoatView: View {
 //                                            .frame(maxWidth: .infinity, alignment: .center)
 //                                    } else {
                                         MoatItem(
+                                            userId: userId,
                                             moatUserId: moat.userId,
                                             moatType: selectedMoat != nil ? .detail : .trending,
                                             isButtonDisabled: selectedMoat != nil,
@@ -101,6 +103,7 @@ struct MoatView: View {
                                         let fireCount = store.state.fireCountMap[moat.moatId] ?? moat.fireCount
                                         
                                         MoatItem(
+                                            userId: userId,
                                             moatUserId: moat.userId,
                                             moatType: .comment,
                                             content: moat.content,

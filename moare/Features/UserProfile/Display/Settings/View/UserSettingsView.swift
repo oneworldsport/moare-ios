@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct UserSettingsView: View {
-    @State private var store = Store(initialState: UserSettingsStore.State()) { UserSettingsStore() }
+    let store: StoreOf<UserSettingsStore>
     
     @Binding var isPresented: Bool
     
@@ -30,12 +30,14 @@ struct UserSettingsView: View {
                                 store.send(.updateWebViewPresented(false))
                             } else {
                                 isPresented = false
+                                store.send(.delegate(.close))
                             }
                         }
                     
                     VStack(alignment: .trailing) {
                         Button(action: {
                             isPresented = false
+                            store.send(.delegate(.close))
                         }) {
                             Image(systemName: "xmark")
                                 .font(.system(size: 22))
@@ -115,9 +117,9 @@ struct UserSettingsView: View {
             }
         }
         .onChange(of: isPresented) {
-            if isPresented {
-                store = Store(initialState: UserSettingsStore.State()) { UserSettingsStore() }
-            }
+//            if isPresented {
+//                store = Store(initialState: UserSettingsStore.State()) { UserSettingsStore() }
+//            }
             
             withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                 show = isPresented

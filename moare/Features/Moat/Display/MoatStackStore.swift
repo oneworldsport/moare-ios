@@ -20,6 +20,8 @@ struct MoatStackStore {
     struct State {
         var path = StackState<Path.State>()
         
+        var userId: String?
+        
         var didPop: Bool = false
         var includesPreviousView: Bool = false
         
@@ -42,6 +44,13 @@ struct MoatStackStore {
         case emptySelectedHashtags
         case getMoatsWithHashtags
         case updateMainMoats(MoatListResponse)
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case initSignStore
+        case login(String)
     }
     
     var body: some Reducer<State, Action> {
@@ -156,8 +165,9 @@ struct MoatStackStore {
                     do {
                         let result = try await SignClient().bootstrapSession()
                         
-                        if result.success && path.ids.isEmpty {
+                        if path.ids.isEmpty {
                             await send(.push(.trending))
+                            await send(.delegate(.login(result.userId)))
                         }
                     } catch {
                         print("\(error)")
@@ -219,6 +229,9 @@ struct MoatStackStore {
                 return .none
                 
             case .path:
+                return .none
+                
+            case .delegate:
                 return .none
             }
         }

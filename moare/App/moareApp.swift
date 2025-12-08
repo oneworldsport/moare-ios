@@ -26,9 +26,11 @@ struct SportSearchEngine_iOSApp: App {
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-    let searchStackStore = Store(initialState: SearchStackStore.State()) { SearchStackStore() }
-    let moatStackStore = Store(initialState: MoatStackStore.State()) { MoatStackStore() }
-    let userProfileStackStore = Store(initialState: UserProfileStackStore.State()) { UserProfileStackStore() }
+    let store = Store(initialState: AppStore.State()) { AppStore() }
+    
+//    let searchStackStore = Store(initialState: SearchStackStore.State()) { SearchStackStore() }
+//    let moatStackStore = Store(initialState: MoatStackStore.State()) { MoatStackStore() }
+//    let userProfileStackStore = Store(initialState: UserProfileStackStore.State()) { UserProfileStackStore() }
     
     @State var isSplashFinished = false
     @State private var didInitialLoad = false
@@ -55,6 +57,12 @@ struct SportSearchEngine_iOSApp: App {
     }
     
     var body: some Scene {
+        let searchStackStore = store.scope(state: \.search, action: \.search)
+        let moatStackStore = store.scope(state: \.moat, action: \.moat)
+        let userProfileStackStore = store.scope(state: \.userProfile, action: \.userProfile)
+        let signStore = store.scope(state: \.sign, action: \.sign)
+        let settingsStore = store.scope(state: \.settings, action: \.settings)
+        
         WindowGroup {
             Group {
                 if viewForTest != nil && didInitialLoad {
@@ -83,7 +91,8 @@ struct SportSearchEngine_iOSApp: App {
                             .tag(Screen.search)
                             
                             MoatDisplayView(
-                                stackStore: moatStackStore
+                                stackStore: moatStackStore,
+                                signStore: signStore
                             )
                             .tabItem {
                                 Image(systemName: "bubble.left")
@@ -96,7 +105,9 @@ struct SportSearchEngine_iOSApp: App {
                             .tag(Screen.moat)
                             
                             UserProfileDisplayView(
-                                stackStore: userProfileStackStore
+                                stackStore: userProfileStackStore,
+                                signStore: signStore,
+                                settingsStore: settingsStore
                             )
                             .tabItem {
                                 Image(systemName: "person.crop.circle")

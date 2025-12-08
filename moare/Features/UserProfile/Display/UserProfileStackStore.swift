@@ -16,6 +16,8 @@ struct UserProfileStackStore {
     @ObservableState
     struct State {
         var path = StackState<Path.State>()
+        
+        var userId: String?
     }
     
     enum Action {
@@ -26,6 +28,13 @@ struct UserProfileStackStore {
         case emptyPath
         
         case bootstrapSession
+        
+        case delegate(Delegate)
+    }
+    
+    enum Delegate {
+        case initSignStore
+        case login(String)
     }
     
     var body: some Reducer<State, Action> {
@@ -130,8 +139,9 @@ struct UserProfileStackStore {
                     do {
                         let result = try await SignClient().bootstrapSession()
                         
-                        if result.success && path.ids.isEmpty {
+                        if path.ids.isEmpty {
                             await send(.push(.userProfile))
+                            await send(.delegate(.login(result.userId)))
                         }
                     } catch {
                         print("\(error)")
@@ -144,6 +154,9 @@ struct UserProfileStackStore {
                 return .none
                 
             case .path:
+                return .none
+                
+            case .delegate:
                 return .none
             }
         }
