@@ -48,4 +48,8 @@ struct MoatClient {
     func checkFire(moatId: String) async throws -> Bool {
         return try await apiClient.fetchData(endpoint: .checkFire(moatId: moatId))
     }
+    
+    func createReport(body: ReportCreateRequest) async throws -> SimpleResponse {
+        return try await apiClient.fetchData(endpoint: .createReport(body: body))
+    }
 }

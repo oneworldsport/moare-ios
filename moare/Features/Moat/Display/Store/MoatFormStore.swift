@@ -94,6 +94,7 @@ struct MoatFormStore {
                     }
                 } else {
                     state.moatForUpdate.content = state.content
+                    state.moatForUpdate.sportTags = state.sportTags
                     
                     if let moat = state.moat {
                         return .run { [moatForUpdate = state.moatForUpdate] send in
@@ -103,9 +104,12 @@ struct MoatFormStore {
                               }
                             
                             var body = moatForUpdate
-                            body.sportTags = noHashTagsSportTags
+                            if body.sportTags?.isEmpty == true {
+                                body.sportTags = noHashTagsSportTags
+                            }
                             
-                            let result = try await moatClient.updateMoat(moatId: moat.moatId, body: moatForUpdate)
+                            
+                            let result = try await moatClient.updateMoat(moatId: moat.moatId, body: body)
                             
                             await send(.submitResponse(.success(result)))
                         }
@@ -115,13 +119,6 @@ struct MoatFormStore {
                 return .none
                 
             case .submitResponse(.success(let result)):
-//                if state.moat == nil {
-//                    return .send(.delegate(.created(result)))
-//                } else {
-//                    state.moatForUpdate = .init()
-//                    
-//                    return .none
-//                }
                 state.moatForUpdate = .init()
                 
                 return .send(.delegate(.createdOrUpdatedMoat(result)))

@@ -19,6 +19,11 @@
 		5B97C18A2EA6195C00189ED2 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B97C1892EA6193800189ED2 /* TextFieldAlert.swift */; };
 		5B97C1902EB9BDCE00189ED2 /* UserProfileDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B97C18F2EB9BDBE00189ED2 /* UserProfileDisplayView.swift */; };
 		5B97C1922EB9C23500189ED2 /* UserProfileStackStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B97C1912EB9C22700189ED2 /* UserProfileStackStore.swift */; };
+		5BB4CB102EE2B53800DCC18B /* MoatTrendingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB4CB0F2EE2B52F00DCC18B /* MoatTrendingView.swift */; };
+		5BB4CB122EE2B54600DCC18B /* MoatTrendingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB4CB112EE2B53F00DCC18B /* MoatTrendingStore.swift */; };
+		5BB4CB142EE682BD00DCC18B /* MoatDetailStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB4CB132EE682B600DCC18B /* MoatDetailStore.swift */; };
+		5BB4CB162EE682C900DCC18B /* MoatDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB4CB152EE682C300DCC18B /* MoatDetailView.swift */; };
+		5BB4CB182EE9670400DCC18B /* FireStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB4CB172EE966FC00DCC18B /* FireStore.swift */; };
 		DA081BCA2DDF2C3000034589 /* BaseInfoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA081BC92DDF2C3000034589 /* BaseInfoStore.swift */; };
 		DA081BCC2DDF386D00034589 /* SportDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA081BCB2DDF385B00034589 /* SportDisplayModel.swift */; };
 		DA081BCE2DDF408E00034589 /* BaseGameStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA081BCD2DDF408E00034589 /* BaseGameStatsStore.swift */; };
@@ -343,6 +348,11 @@
 		5B97C1892EA6193800189ED2 /* TextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
 		5B97C18F2EB9BDBE00189ED2 /* UserProfileDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileDisplayView.swift; sourceTree = "<group>"; };
 		5B97C1912EB9C22700189ED2 /* UserProfileStackStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileStackStore.swift; sourceTree = "<group>"; };
+		5BB4CB0F2EE2B52F00DCC18B /* MoatTrendingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoatTrendingView.swift; sourceTree = "<group>"; };
+		5BB4CB112EE2B53F00DCC18B /* MoatTrendingStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoatTrendingStore.swift; sourceTree = "<group>"; };
+		5BB4CB132EE682B600DCC18B /* MoatDetailStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoatDetailStore.swift; sourceTree = "<group>"; };
+		5BB4CB152EE682C300DCC18B /* MoatDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoatDetailView.swift; sourceTree = "<group>"; };
+		5BB4CB172EE966FC00DCC18B /* FireStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStore.swift; sourceTree = "<group>"; };
 		DA081BC92DDF2C3000034589 /* BaseInfoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseInfoStore.swift; sourceTree = "<group>"; };
 		DA081BCB2DDF385B00034589 /* SportDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportDisplayModel.swift; sourceTree = "<group>"; };
 		DA081BCD2DDF408E00034589 /* BaseGameStatsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseGameStatsStore.swift; sourceTree = "<group>"; };
@@ -949,6 +959,7 @@
 				DAED2C452E6BEDDB00BDAE67 /* Store */,
 				DA92D07A2EB89A34002FAFC1 /* MoatDisplayView.swift */,
 				DA92D0772EB87EF8002FAFC1 /* MoatStackStore.swift */,
+				5BB4CB172EE966FC00DCC18B /* FireStore.swift */,
 			);
 			path = Display;
 			sourceTree = "<group>";
@@ -1728,6 +1739,8 @@
 		DAED2C432E6BEDCC00BDAE67 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				5BB4CB152EE682C300DCC18B /* MoatDetailView.swift */,
+				5BB4CB0F2EE2B52F00DCC18B /* MoatTrendingView.swift */,
 				DAED2C4E2E6D16ED00BDAE67 /* MoatFormView.swift */,
 				5B7153F92E617CAF00D74E5B /* MoatView.swift */,
 			);
@@ -1744,6 +1757,8 @@
 		DAED2C452E6BEDDB00BDAE67 /* Store */ = {
 			isa = PBXGroup;
 			children = (
+				5BB4CB132EE682B600DCC18B /* MoatDetailStore.swift */,
+				5BB4CB112EE2B53F00DCC18B /* MoatTrendingStore.swift */,
 				DAED2C522E6D170900BDAE67 /* MoatFormStore.swift */,
 				5B7153FD2E617EC200D74E5B /* MoatStore.swift */,
 			);
@@ -1946,12 +1961,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAE8FEBF2EC8766D00556C7B /* UserProfileImageEditStore.swift in Sources */,
+				5BB4CB142EE682BD00DCC18B /* MoatDetailStore.swift in Sources */,
 				DA531BAA2D64A8CA00DB87CB /* AutoCompleteList.swift in Sources */,
 				DADE29652DF178B20099A0DD /* ScheduleGameItemState.swift in Sources */,
 				DAA08A4E2E03EDD600602693 /* TestView.swift in Sources */,
 				5B7153FE2E617ECE00D74E5B /* MoatStore.swift in Sources */,
 				DA30E71F2DF7BE42000639AD /* MLBTeamStatsStore.swift in Sources */,
 				DA531BB32D64A8CA00DB87CB /* FBTeamStandingsDisplayModel.swift in Sources */,
+				5BB4CB182EE9670400DCC18B /* FireStore.swift in Sources */,
 				DA531B402D64A8A400DB87CB /* SplashView.swift in Sources */,
 				DA30E7152DF7BDE6000639AD /* MLBPlayerStatsView.swift in Sources */,
 				DA531BE82D64A8F200DB87CB /* CalendarUtil.swift in Sources */,
@@ -2000,6 +2017,7 @@
 				DA3235132E78467400DE36CA /* FBTournamentView.swift in Sources */,
 				DA531B9E2D64A8CA00DB87CB /* FBTeamStatsStore.swift in Sources */,
 				DA531C102D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift in Sources */,
+				5BB4CB102EE2B53800DCC18B /* MoatTrendingView.swift in Sources */,
 				DA531BC72D64A8CA00DB87CB /* KeywordsClient.swift in Sources */,
 				DA252B302DEF78BF00006AB8 /* KBOTeamStatsDisplayModel.swift in Sources */,
 				DA252B2C2DEF78A700006AB8 /* KBOTeamInfoDisplayModel.swift in Sources */,
@@ -2170,6 +2188,7 @@
 				DA531BAB2D64A8CA00DB87CB /* SearchView.swift in Sources */,
 				DA531BAC2D64A8CA00DB87CB /* TrendingKeywordList.swift in Sources */,
 				DA531C092D64A91900DB87CB /* CapsuleButton.swift in Sources */,
+				5BB4CB122EE2B54600DCC18B /* MoatTrendingStore.swift in Sources */,
 				DA252B2E2DEF78B600006AB8 /* KBOTeamStandingsDisplayModel.swift in Sources */,
 				DA252B0C2DEF73AD00006AB8 /* KBOPlayerInfoResponseModel.swift in Sources */,
 				DA4777232DA7B67A00F3459C /* NBATeamStandingsResponseModel.swift in Sources */,
@@ -2228,6 +2247,7 @@
 				DAC1EBD52E55BDA70031221C /* GameStatsViewContainer.swift in Sources */,
 				DAFCB41B2DADCEAD00839653 /* AsyncPromise.swift in Sources */,
 				DAEEC7442DEDD5490053E0A6 /* KBOTeamModels.swift in Sources */,
+				5BB4CB162EE682C900DCC18B /* MoatDetailView.swift in Sources */,
 				DA68674D2EDDDD3D002DCF2F /* SearchHashtagList.swift in Sources */,
 				DA30E72B2DF814AB000639AD /* KBOTeamInfoView.swift in Sources */,
 				DA531BBE2D64A8CA00DB87CB /* FBTeamStandingsResponseModel.swift in Sources */,

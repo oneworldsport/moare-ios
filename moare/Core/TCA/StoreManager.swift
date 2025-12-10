@@ -65,6 +65,9 @@ struct StoreKeys {
     // moat
     static let moatStore = "MoatStore"
     static let formStore = "MoatFormStore"
+    static let moatTrendingStore = "MoatTrendingStore"
+    static let moatDetailStore = "MoatDetailStore"
+    static let fireStore = "FireStore"
     
     // user
     static let userProfileStore = "UserProfileStore"

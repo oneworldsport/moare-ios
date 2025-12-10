@@ -16,7 +16,7 @@ struct MoatStore {
     struct State {
         var reportPresenting: Bool = false
         
-        var moatId: String?
+        var moatId: String? // isDetail에서 moat detail을 가져올때만 사용
         var isDetail: Bool // moatId가 있거나, selectedMoat가 있으면 detail 화면임. 사용하기 편하려고 만든 프로퍼티.
         
         var moatListResponse: MoatListResponse? = nil
@@ -26,6 +26,8 @@ struct MoatStore {
         
         var fireMap: [String: Bool] = [:]
         var fireCountMap: [String: Int] = [:]
+        
+//        var reportCreateRequest: ReportCreateRequest?
     
         init(moatId: String? = nil) {
             self.moatId = moatId
@@ -61,7 +63,7 @@ struct MoatStore {
         
         case settingItemsTapped(item: SettingItems, moatId: String)
         case deleteMoatResponse(result: Result<MessageResponse, Error>, moatId: String)
-        case showReport(Bool)
+        case reportSuccess(reasonText : String)
         
         case delegate(Delegate)
     }
@@ -146,6 +148,7 @@ struct MoatStore {
                 
             case .updateSelectedMoat(let moatDetailResponse):
                 state.selectedMoat = moatDetailResponse
+//                state.moatId = moatDetailResponse.moat.moatId
                 state.isDetail = true
                 
                 if state.isDetail {
@@ -159,6 +162,7 @@ struct MoatStore {
                 return .none
                 
             case .showTrending:
+                state.moatId = nil
                 state.selectedMoat = nil
                 state.isDetail = false
                 state.trendingMoats = state.originalTrendingMoats
@@ -179,16 +183,27 @@ struct MoatStore {
             case .updateTrending(let moat):
                 // ① 원본 리스트 갱신
                 var newOriginal = state.originalTrendingMoats
-                newOriginal.removeAll { $0.moatId == moat.moatId }
-                newOriginal.insert(moat, at: 0)   // ✅ 최상단 삽입
+                if let i = newOriginal.firstIndex(where: { $0.moatId == moat.moatId }) {
+                    // 수정: 같은 자리 교체
+                    newOriginal[i] = moat
+                } else {
+                    newOriginal.insert(moat, at: 0)
+                }
                 
                 // ② 화면용 리스트도 동일 규칙으로 (필터 없다는 가정)
                 var newTrending = state.trendingMoats
-                newTrending.removeAll { $0.moatId == moat.moatId }
-                newTrending.insert(moat, at: 0)
-
+                if let j = newTrending.firstIndex(where: { $0.moatId == moat.moatId }) {
+                    newTrending[j] = moat
+                } else {
+                    newTrending.insert(moat, at: 0)
+                }
+                
                 state.originalTrendingMoats = newOriginal
-                state.trendingMoats = newTrending
+                state.trendingMoats = newOriginal
+                
+                state.moatId = nil
+                state.selectedMoat = nil
+                state.isDetail = false
                 return .none
                 
             case .deleteDetailMoat(let moatId):
@@ -288,7 +303,8 @@ struct MoatStore {
             case .settingItemsTapped(let item, let moatId):
                 switch item {
                 case .report:
-                    return .send(.showReport(true))
+                    state.reportPresenting = true
+                    return .none
                     
                 case .updateMoat:
                     return .send(.showUpdateForm(moatId: moatId))
@@ -311,9 +327,20 @@ struct MoatStore {
                 
                 return .none
                 
-            case .showReport(let show):
-                state.reportPresenting = show
-                return .none
+            case .reportSuccess(let reasonText):
+                return .run { [selectedMoat = state.selectedMoat]send in
+                    if let selectedMoat {
+                        let body = ReportCreateRequest(
+                            targetType: .moat,
+                            targetId: selectedMoat.moat.moatId,
+                            reasonCode: .other,
+                            reasonText: reasonText
+                        )
+                        let result = try await moatClient.createReport(body: body)
+                        
+                        print(result)
+                    }
+                }
                 
             case .delegate:
                 return .none

@@ -12,6 +12,10 @@ struct MoatDisplayView: View {
     let stackStore: StoreOf<MoatStackStore>
     let signStore: Store<SignStore.State?, SignStore.Action>
     
+    private var fireStore: StoreOf<FireStore> {
+        stackStore.scope(state: \.fire, action: \.fire)
+    }
+    
     @State private var searchBarText = ""
     @State private var isSearchBarOpened = false
     
@@ -67,6 +71,7 @@ struct MoatDisplayView: View {
                         MoatPathView(
 //                                stackStore: stackStore,
                             store: store,
+                            fireStore: fireStore,
                             userId: userId
     //                        didPop: stackStore.didPop,
     //                        isCombinedView: stackStore.includesPreviousView
@@ -101,6 +106,7 @@ struct MoatDisplayView: View {
 struct MoatPathView: View {
 //    let stackStore: StoreOf<MoatStackStore>
     let store: StoreOf<MoatStackStore.Path>
+    let fireStore: StoreOf<FireStore>
     let userId: String?
 //    let didPop: Bool
 //    let isCombinedView: Bool
@@ -108,12 +114,14 @@ struct MoatPathView: View {
     init(
 //        stackStore: StoreOf<MoatStackStore>,
         store: StoreOf<MoatStackStore.Path>,
+        fireStore: StoreOf<FireStore>,
         userId: String?
 //        didPop: Bool,
 //        isCombinedView: Bool = false
     ) {
 //        self.stackStore = stackStore
         self.store = store
+        self.fireStore = fireStore
         self.userId = userId
 //        self.didPop = didPop
 //        self.isCombinedView = isCombinedView
@@ -122,11 +130,11 @@ struct MoatPathView: View {
     var body: some View {
         switch store.state {
         case .trending:
-            if let s = store.scope(state: \.trending, action: \.trending) { MoatView(store: s, userId: userId) }
+            if let s = store.scope(state: \.trending, action: \.trending) { MoatTrendingView(store: s, fireStore: fireStore, userId: userId) }
         case .createForm:
             if let s = store.scope(state: \.createForm, action: \.createForm) { MoatFormView(store: s) }
         case .detail:
-            if let s = store.scope(state: \.detail, action: \.detail) { MoatView(store: s, userId: userId).id(UUID()) }
+            if let s = store.scope(state: \.detail, action: \.detail) { MoatDetailView(store: s, fireStore: fireStore, userId: userId).id(UUID()) }
             
         case .updateForm:
             if let s = store.scope(state: \.updateForm, action: \.updateForm) { MoatFormView(store: s) }

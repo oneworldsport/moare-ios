@@ -20,6 +20,8 @@ struct MoatStackStore {
     struct State {
         var path = StackState<Path.State>()
         
+        var fire = FireStore.State()
+        
         var userId: String?
         
         var didPop: Bool = false
@@ -33,6 +35,8 @@ struct MoatStackStore {
     
     enum Action {
         case path(StackActionOf<Path>)
+        
+        case fire(FireStore.Action)
         
         case push(MoatViewType)
         case pop
@@ -61,7 +65,7 @@ struct MoatStackStore {
             case .push(let viewType):
                 switch viewType {
                 case .trending:
-                    state.path.append(.trending(MoatStore.State()))
+                    state.path.append(.trending(MoatTrendingStore.State()))
                     
                 case .createForm:
                     state.path.append(.createForm(MoatFormStore.State()))
@@ -74,11 +78,11 @@ struct MoatStackStore {
                 
                 return .none
                 
-            case let .path(.element(id: _, action: .trending(.delegate(.push(viewType, moatId, moat))))),
-                let .path(.element(id: _, action: .detail(.delegate(.push(viewType, moatId, moat))))):
+            case let .path(.element(id: _, action: .trending(.delegate(.push(viewType, moatId, moatDetailResponse, moat))))),
+                let .path(.element(id: _, action: .detail(.delegate(.push(viewType, moatId, moatDetailResponse, moat))))):
                 switch viewType {
                 case .detail:
-                    state.path.append(.detail(MoatStore.State(moatId: moatId)))
+                    state.path.append(.detail(MoatDetailStore.State(moatDetailResponse: moatDetailResponse)))
                     
                 case .createForm:
                     state.path.append(.createForm(MoatFormStore.State()))
@@ -93,21 +97,42 @@ struct MoatStackStore {
                 
             case let .path(.element(id: _, action: .createForm(.delegate(.createdOrUpdatedMoat(moat))))),
                 let .path(.element(id: _, action: .updateForm(.delegate(.createdOrUpdatedMoat(moat))))):
-                // 마지막이 form이면 그 자리를 detail로 교체
+                
                 if let lastId = state.path.ids.last,
                    let route = state.path[id: lastId] {
                     switch route {
-                      case .createForm:
-                        state.path[id: lastId] = .detail(MoatStore.State(moatId: moat.moatId))
+                    case .createForm: // 마지막이 form이면 그 자리를 detail로 교체
+                        state.path[id: lastId] = .detail(MoatDetailStore.State(moatResponse: moat))
                     case .updateForm:
-                        state.path.popLast()
-                        state.path[id: lastId] = .detail(MoatStore.State(moatId: moat.moatId))
+                        if let lastId = state.path.ids.last,
+                           let route = state.path[id: lastId],
+                           case .updateForm = route,
+                           let prevId = state.path.ids.dropLast().last,
+                           let prev = state.path[id: prevId] {
+                            
+                            // 1) 폼 제거
+                            state.path.popLast()
+                            
+                            // 2) 바로 전 화면의 상태만 moat 교체
+                            switch prev {
+                            case .detail(var s):
+                                // 작성하자마자 바로 수정하는 경우...?
+                                if s.moatResponse != nil {
+                                    s.moatResponse = moat
+                                    state.path[id: prevId] = .detail(s)
+                                } else {
+                                    s.moatDetailResponse?.moat = moat
+                                    state.path[id: prevId] = .detail(s)
+                                }
+                                
+                            default:
+                                break
+                            }
+                        }
                         
-                        
-                        
-                      default:
+                    default:
                         break
-                      }
+                    }
                 }
                 
                 // 방금 작성한 모트를 일단 담아두기
@@ -115,19 +140,17 @@ struct MoatStackStore {
             
                 return .none
                 
-            case let .path(.element(id: _, action: .detail(.delegate(.deleted(moatId))))),
-                let .path(.element(id: _, action: .trending(.delegate(.deleted(moatId))))):
-                
-                if state.path.count > 1 {
-                    let _ = state.path.popLast()
+            case let .path(.element(id: _, action: .detail(.delegate(.deleted(moatId))))):
 
-                } else {
-                    if let id = state.path.ids.last {
-                        if case .trending(_) = state.path[id: id] {
-                            return .send(.path(.element(id: id, action: .trending(.deleteDetailMoat(moatId: moatId)))))
-                        }
+                let _ = state.path.popLast()
+                
+                if let id = state.path.ids.last {
+                    if case .trending(_) = state.path[id: id] {
+                        return .send(.path(.element(id: id, action: .trending(.deleteDetailMoat(moatId: moatId)))))
+                        
                     }
                 }
+                
                 return .none
                 
             case .pop:
@@ -135,12 +158,12 @@ struct MoatStackStore {
 //                state.includesPreviousView = false
                 
                 // MoatViewType이 .trending이면 MoatStore의 .showTrending을 실행하고, .detail이면 기본 뒤로가기 동작을 실행한다
-                if let id = state.path.ids.last {
-                    if case .trending(_) = state.path[id: id] {
-                        return .send(.path(.element(id: id, action: .trending(.showTrending))))
-                    }
-                }
-                
+//                if let id = state.path.ids.last {
+//                    if case .trending(_) = state.path[id: id] {
+//                        return .send(.path(.element(id: id, action: .trending(.showTrending))))
+//                    }
+//                }
+                                
                 if state.path.count > 1 {
                     let _ = state.path.popLast()
                 }
@@ -233,8 +256,15 @@ struct MoatStackStore {
                 
             case .delegate:
                 return .none
+                
+            case .fire:
+                return .none
             }
         }
+        Scope(state: \.fire, action: \.fire) {
+              FireStore()
+            }
+        
         .forEach(\.path, action: \.path) {
             Path()
         }
@@ -244,23 +274,23 @@ struct MoatStackStore {
     struct Path {
         @ObservableState
         enum State {
-            case trending(MoatStore.State)
+            case trending(MoatTrendingStore.State)
             case createForm(MoatFormStore.State)
-            case detail(MoatStore.State)
+            case detail(MoatDetailStore.State)
             case updateForm(MoatFormStore.State)
         }
         
         enum Action {
-            case trending(MoatStore.Action)
+            case trending(MoatTrendingStore.Action)
             case createForm(MoatFormStore.Action)
-            case detail(MoatStore.Action)
+            case detail(MoatDetailStore.Action)
             case updateForm(MoatFormStore.Action)
         }
         
         var body: some Reducer<State, Action> {
-            Scope(state: \.trending, action: \.trending) { MoatStore() }
+            Scope(state: \.trending, action: \.trending) { MoatTrendingStore() }
             Scope(state: \.createForm, action: \.createForm) { MoatFormStore() }
-            Scope(state: \.detail, action: \.detail) { MoatStore() }
+            Scope(state: \.detail, action: \.detail) { MoatDetailStore() }
             Scope(state: \.updateForm, action:\.updateForm) { MoatFormStore() }
         }
     }

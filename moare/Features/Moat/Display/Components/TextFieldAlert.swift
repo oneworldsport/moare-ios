@@ -68,7 +68,7 @@ struct TextFieldAlert: UIViewControllerRepresentable {
     var title: String
     var message: String? = nil
     
-    var onSubmit: ((String) -> Void)? = nil
+    var onSubmit: (String) -> Void
     var onCancel: (() -> Void)? = nil
     
     func makeUIViewController(context: Context) -> UIViewController {
@@ -82,25 +82,13 @@ struct TextFieldAlert: UIViewControllerRepresentable {
         
 //        alert.addTextField { textfield in
 //            textfield.placeholder = "신고 내용"
+//            textfield.text = text
 //        }
-        
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { _ in
-            DispatchQueue.main.async { isPresented = false }
-            onCancel?()
-        }
-        
-        let ok = UIAlertAction(title: "OK", style: .default) { _ in
-            let value = ""
-            DispatchQueue.main.async {
-                text = value
-                isPresented = false
-            }
-            onSubmit?(value)
-        }
-        
         let textFieldsVC = UIViewController()
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.text = text
+        
         textFieldsVC.view.addSubview(textView)
         
         NSLayoutConstraint.activate([
@@ -114,6 +102,22 @@ struct TextFieldAlert: UIViewControllerRepresentable {
         alert.setValue(textFieldsVC, forKey: "contentViewController")
         // contentViewController 인 이유 : UIAlertController가 특수하게 인식하는 비공식 키는 contentViewController 뿐이다.
         
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            DispatchQueue.main.async { isPresented = false }
+            onCancel?()
+            text = ""
+        }
+        
+        let ok = UIAlertAction(title: "OK", style: .default) { _ in
+            let newValue = textView.text ?? text
+            DispatchQueue.main.async {
+                text = newValue
+                isPresented = false
+            }
+            onSubmit(newValue)
+            text = ""
+        }
+    
         alert.addAction(cancel)
         alert.addAction(ok)
         

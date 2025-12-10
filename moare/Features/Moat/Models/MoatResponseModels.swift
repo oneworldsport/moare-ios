@@ -13,7 +13,7 @@ struct MoatResponse: Decodable, Equatable {
     let content: String
     let sportTags: [String]
     let parentMoatId: String?
-    let targetType: String
+    let moatType: String
     let createdAt: String // TODO: python에서는 datetime인데 확인해보기
     let updatedAt: String?
     let fireCount: Int
@@ -22,7 +22,7 @@ struct MoatResponse: Decodable, Equatable {
 }
 
 struct MoatDetailResponse: Decodable, Equatable {
-    let moat: MoatResponse
+    var moat: MoatResponse
     var commentListResponse: MoatListResponse?
 }
 

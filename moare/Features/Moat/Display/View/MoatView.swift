@@ -163,7 +163,13 @@ struct MoatView: View {
             }
         }
         .background(
-            TextFieldAlert(isPresented: $store.reportPresenting, text: $inputText, title: "모트 신고하기")
+            TextFieldAlert(
+                isPresented: $store.reportPresenting,
+                text: $inputText,
+                title: "모트 신고하기",
+                onSubmit: { value in
+                    store.send(.reportSuccess(reasonText: value))
+                })
         )
     }
 }
