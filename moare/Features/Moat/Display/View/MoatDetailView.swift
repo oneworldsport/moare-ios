@@ -27,14 +27,6 @@ struct MoatDetailView: View {
         store.moatDetailResponse?.commentListResponse?.moats ?? []
     }
     
-    private func firedBinding(moat: MoatResponse, target: FireTargetType) -> Binding<Bool> {
-            Binding(
-                get: { fireStore.fireMap[moat.moatId] ?? moat.isFired },
-                set: { _ in }
-            )
-        }
-    
-    
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             VStack(spacing: 0) {
@@ -51,8 +43,8 @@ struct MoatDetailView: View {
                         title: title,
                         content: body,
                         hashtagList: moat.sportTags,
-                        fired: firedBinding(moat: moat, target: .moat),
-                        fireCount: fireStore.fireCountMap[moat.moatId] ?? moat.fireCount,
+                        fired: moat.isFired,
+                        fireCount: moat.fireCount,
                         commentCount: moat.commentCount,
                         userHandle: moat.userHandle,
                         createdAt: moat.createdAt,
@@ -61,6 +53,8 @@ struct MoatDetailView: View {
                             store.send(.settingItemsTapped(item: item, moatId: moat.moatId))
                         },
                         fireTapped: {
+                            store.send(.fireToggle(moatId: moat.moatId, targetType: .moat))
+                            
                             fireStore.send(.toggle(
                                 id: moat.moatId,
                                 targetType: .moat,
@@ -86,14 +80,16 @@ struct MoatDetailView: View {
                                 moatType: .comment,
                                 content: moat.content,
                                 hashtagList: moat.sportTags,
-                                fired: firedBinding(moat: moat, target: .comment),
-                                fireCount: fireStore.fireCountMap[moat.moatId] ?? moat.fireCount,
+                                fired: moat.isFired,
+                                fireCount: moat.fireCount,
                                 commentCount: moat.commentCount,
                                 userHandle: moat.userHandle,
                                 createdAt: moat.createdAt,
                                 settingsTapped: { item in
                                 },
                                 fireTapped: {
+                                    store.send(.fireToggle(moatId: moat.moatId, targetType: .comment))
+                                    
                                     fireStore.send(.toggle(
                                         id: moat.moatId,
                                         targetType: .comment,

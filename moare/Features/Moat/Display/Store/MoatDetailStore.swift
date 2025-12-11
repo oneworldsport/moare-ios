@@ -34,6 +34,8 @@ struct MoatDetailStore {
         case deleteMoatResponse(result: Result<MessageResponse, Error>, moatId: String)
         case reportSuccess(reasonText : String)
         
+        case fireToggle(moatId: String, targetType: FireTargetType)
+        
         case delegate(Delegate)
     }
     
@@ -140,6 +142,40 @@ struct MoatDetailStore {
                         let result = try await moatClient.createReport(body: body)
                     }
                 }
+                
+            case .fireToggle(let moatId, let targetType):
+                // api는 따로 치니까 ui 만 바꾸는 걸로
+                switch targetType {
+                case .moat:
+                    if var moatDetail = state.moatDetailResponse,
+                       moatDetail.moat.moatId == moatId {
+                        moatDetail.moat.isFired.toggle()
+                        moatDetail.moat.fireCount += moatDetail.moat.isFired ? 1 : -1
+                        state.moatDetailResponse = moatDetail
+                    }
+                    
+                    // 작성하자마자 누르는 경우
+                    if var moat = state.moatResponse,
+                       moat.moatId == moatId {
+                        moat.isFired.toggle()
+                        moat.fireCount += moat.isFired ? 1 : -1
+                        state.moatResponse = moat
+                    }
+                    
+                case .comment:
+                    if var moatDetail = state.moatDetailResponse,
+                       var commentsList = moatDetail.commentListResponse?.moats,
+                       let comment = commentsList.firstIndex(where: { $0.moatId == moatId }) {
+                        
+                        commentsList[comment].isFired.toggle()
+                        commentsList[comment].fireCount += commentsList[comment].isFired ? 1 : -1
+                        
+                        moatDetail.commentListResponse?.moats = commentsList
+                        state.moatDetailResponse = moatDetail
+                    }
+                }
+                
+                return .none
                 
             case .binding:
                 return .none

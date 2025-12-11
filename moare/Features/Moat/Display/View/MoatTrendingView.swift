@@ -19,14 +19,7 @@ struct MoatTrendingView: View {
     private var trendingMoats: [MoatResponse] {
         store.trendingMoats
     }
-    
-    private func firedBinding(moat: MoatResponse, target: FireTargetType) -> Binding<Bool> {
-            Binding(
-                get: { fireStore.fireMap[moat.moatId] ?? moat.isFired },
-                set: { _ in }
-            )
-        }
-    
+        
     var body: some View {
         VStack(spacing: 0) {
             if show {
@@ -47,7 +40,7 @@ struct MoatTrendingView: View {
                                         title: title,
                                         content: body,
                                         hashtagList: moat.sportTags,
-                                        fired: firedBinding(moat: moat, target: .moat),
+                                        fired: fireStore.fireMap[moat.moatId] ?? moat.isFired,
                                         fireCount: fireStore.fireCountMap[moat.moatId] ?? moat.fireCount,
                                         commentCount: moat.commentCount,
                                         userHandle: moat.userHandle,

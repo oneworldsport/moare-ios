@@ -16,9 +16,9 @@ struct MoatResponse: Decodable, Equatable {
     let moatType: String
     let createdAt: String // TODO: python에서는 datetime인데 확인해보기
     let updatedAt: String?
-    let fireCount: Int
+    var fireCount: Int
     let commentCount: Int
-    let isFired: Bool
+    var isFired: Bool
 }
 
 struct MoatDetailResponse: Decodable, Equatable {

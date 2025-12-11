@@ -11,9 +11,7 @@ enum MoatType {
     case trending, detail, comment, userProfile
 }
 
-struct MoatItem: View {
-    @Binding var fired: Bool
-    
+struct MoatItem: View {    
     let userId: String?
     let moatUserId: String
     let moatType: MoatType
@@ -21,6 +19,7 @@ struct MoatItem: View {
     let title: String?
     let content: String
     let hashtagList: [String]?
+    let fired: Bool
     let fireCount: Int
     let commentCount: Int
     let profileImageURL: String
@@ -49,7 +48,7 @@ struct MoatItem: View {
         title: String? = nil,
         content: String,
         hashtagList: [String]?,
-        fired: Binding<Bool>,
+        fired: Bool,
         fireCount: Int,
         commentCount: Int,
         profileImageURL: String = "",
@@ -66,7 +65,7 @@ struct MoatItem: View {
         self.title = moatType == .comment ? nil : title
         self.content = content
         self.hashtagList = hashtagList
-        self._fired = fired
+        self.fired = fired
         self.fireCount = fireCount
         self.commentCount = commentCount
         self.profileImageURL = profileImageURL

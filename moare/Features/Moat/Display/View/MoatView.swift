@@ -36,11 +36,6 @@ struct MoatView: View {
                                     let title = lines.first ?? ""
                                     let body = lines.dropFirst().joined(separator: "\n")
                                     
-                                    let firedBinding = Binding<Bool>(
-                                        get: { store.state.fireMap[moat.moatId] ?? false },
-                                        set: { newValue in store.send(.setFired(targetId: moat.moatId, isFired: newValue)) }
-                                      )
-                                    
                                     let fireCount = store.state.fireCountMap[moat.moatId] ?? moat.fireCount
                                     
                                     let onSettings: (SettingItems) -> Void = { item in
@@ -62,7 +57,7 @@ struct MoatView: View {
                                             title: title,
                                             content: body,
                                             hashtagList: moat.sportTags,
-                                            fired: firedBinding,
+                                            fired: moat.isFired,
                                             fireCount: fireCount,
                                             commentCount: moat.commentCount,
                                             userHandle: moat.userHandle,
@@ -95,10 +90,6 @@ struct MoatView: View {
                             ScrollView {
                                 LazyVStack(spacing: 28) {
                                     ForEach(comments, id: \.moatId) { moat in
-                                        let firedBinding = Binding<Bool>(
-                                            get: { store.state.fireMap[moat.moatId] ?? false },
-                                            set: { newValue in store.send(.setFired(targetId: moat.moatId, isFired: newValue)) }
-                                          )
                                         
                                         let fireCount = store.state.fireCountMap[moat.moatId] ?? moat.fireCount
                                         
@@ -108,7 +99,7 @@ struct MoatView: View {
                                             moatType: .comment,
                                             content: moat.content,
                                             hashtagList: moat.sportTags,
-                                            fired: firedBinding,
+                                            fired: moat.isFired,
                                             fireCount: fireCount,
                                             commentCount: moat.commentCount,
                                             userHandle: moat.userHandle,
