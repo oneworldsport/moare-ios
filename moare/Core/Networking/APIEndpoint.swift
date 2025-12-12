@@ -24,7 +24,7 @@ enum APIEndpoint {
     case initiateSignUp(body: SignUpInitiateRequest)
     case verifySignUpOtp(body: SignUpVerificationRequest)
     case completeSignUp(body: SignUpCompleteRequest)
-    case checkUserHandle(userHandle: String)
+    case checkUserHandle(userHandle: String, signupSessionId: String? = nil)
     case reserveUserHandle(body: UserHandleReserveRequest)
     
     // moat
@@ -134,10 +134,11 @@ enum APIEndpoint {
         case .completeSignUp:
             components.path = "/auth/signup/complete"
             
-        case .checkUserHandle(let userHandle):
+        case let .checkUserHandle(userHandle, signupSessionId):
             components.path = "/auth/user-handle/check"
             components.queryItems = [
-                URLQueryItem(name: "userHandle", value: userHandle)
+                URLQueryItem(name: "userHandle", value: userHandle),
+                URLQueryItem(name: "signupSessionId", value: signupSessionId)
             ]
             
         case .reserveUserHandle:

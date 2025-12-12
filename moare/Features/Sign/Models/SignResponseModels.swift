@@ -18,6 +18,10 @@ struct AuthSessionResponse: Decodable {
     let session: String
 }
 
+struct SignUpInitiateResponse: Decodable {
+    let sessionId: String
+}
+
 struct SimpleResponse: Decodable {
     let success: Bool
     let message: String

@@ -136,7 +136,7 @@ struct UserProfileUpdateFormStore {
             case .reserveUserHandle(let text):
                 return .run { send in
                     do {
-                        let body = UserHandleReserveRequest(userHandle: text)
+                        let body = UserHandleReserveRequest(signupSessionId: nil, userHandle: text)
                         
                         _ = try await signClient.reserveUserHandle(body: body)
                     } catch {

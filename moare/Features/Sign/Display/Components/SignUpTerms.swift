@@ -9,10 +9,10 @@ import SwiftUI
 
 struct SignUpTerms: View {
     let terms: [TermsResponse]
-    @Binding var checked: [TermKey: Bool]
     
-    @State private var url = ""
-    @State private var isPresented = false
+    @Binding var checked: [TermKey: Bool]
+    @Binding var url: String
+    @Binding var isPresented: Bool
     
     var body: some View {
         ZStack {
@@ -40,8 +40,6 @@ struct SignUpTerms: View {
                     
                 }
             }
-            
-            TermsWebView(url: url, isPresented: $isPresented)
         }
     }
 }

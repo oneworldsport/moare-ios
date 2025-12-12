@@ -54,6 +54,7 @@ struct SignStore {
         var apiFetchState: ApiFetchState = .idle
         var termsList: [TermsResponse] = []
         
+        var signupSessionId: String? = nil
         var id = "" // TODO: 이것도 nil처리?
         var session: String? = nil
         var otp = "" // TODO: 이것도 nil처리?
@@ -78,7 +79,7 @@ struct SignStore {
         case confirmLoginOtp
         
         case sendSignUpOtp
-        case sendSignUpOtpSuccess
+        case sendSignUpOtpSuccess(sessionId: String)
         case confirmSignUpOtp
         case checkUserHandle
         case checkUserHandleSuccess(result: Bool)
@@ -333,7 +334,7 @@ struct SignStore {
                 state.apiFetchState = .fetching
                 state.activatedState = .allDeactivated
                 
-                let body = StartAuthRequest(id: state.id, method: state.idType)
+                let body = StartAuthRequest(loginId: state.id, method: state.idType)
                 return .run { send in
                     do {
                         await send(.updateBarState)
@@ -367,7 +368,7 @@ struct SignStore {
                 state.apiFetchState = .fetching
                 state.activatedState = .allDeactivated
                 
-                let body = ConfirmAuthRequest(id: state.id, otp: state.otp, session: session)
+                let body = ConfirmAuthRequest(loginId: state.id, otp: state.otp, session: session)
                 return .run { send in
                     do {
                         await send(.updateBarState)
@@ -398,16 +399,16 @@ struct SignStore {
                 state.apiFetchState = .fetching
                 state.activatedState = .allDeactivated
                 
-                let body = SignUpInitiateRequest(id: state.id, method: state.idType)
+                let body = SignUpInitiateRequest(loginId: state.id, method: state.idType)
                 return .run { send in
                     do {
                         await send(.updateBarState)
                         
                         try await Task.sleep(for: .seconds(3))
                         
-                        _ = try await signClient.initiateSignUp(body: body)
+                        let result = try await signClient.initiateSignUp(body: body)
                         
-                        await send(.sendSignUpOtpSuccess)
+                        await send(.sendSignUpOtpSuccess(sessionId: result.sessionId))
                     } catch {
                         if let err = error as? APIHTTPError {
                             await send(.responseFailure(err))
@@ -415,18 +416,24 @@ struct SignStore {
                     }
                 }
                 
-            case .sendSignUpOtpSuccess:
+            case .sendSignUpOtpSuccess(let sessionId):
+                state.signupSessionId = sessionId
                 state.shouldDisableTextField = false
                 
                 return .send(.updateSignFlow(signFlow: .signUpOtp))
                 
             case .confirmSignUpOtp:
+                guard let sessionId = state.signupSessionId else {
+                    // TODO: 오류 처리 필요
+                    return .none
+                }
+                
                 state.otp = state.text
                 
                 state.apiFetchState = .fetching
                 state.activatedState = .allDeactivated
                 
-                let body = SignUpVerificationRequest(id: state.id, otp: state.otp)
+                let body = SignUpVerificationRequest(sessionId: sessionId, otp: state.otp)
                 return .run { send in
                     do {
                         await send(.updateBarState)
@@ -444,10 +451,10 @@ struct SignStore {
                 }
                 
             case .checkUserHandle:
-//                if let userHandle = state.userHandle,
-//                   !userHandle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-//                    // userHandle이 nil이 아니고, 공백 제거 후에도 비어있지 않음
-//                }
+                guard let sessionId = state.signupSessionId else {
+                    // TODO: 오류 처리 필요
+                    return .none
+                }
                 
                 state.userHandle = state.text.trimmed
                 
@@ -465,7 +472,7 @@ struct SignStore {
                         
                         try await Task.sleep(for: .seconds(3))
                         
-                        let result = try await signClient.checkUserHandle(userHandle: userHandle)
+                        let result = try await signClient.checkUserHandle(userHandle: userHandle, signupSessionId: sessionId)
                         
                         await send(.checkUserHandleSuccess(result: result.success))
                     } catch {
@@ -490,7 +497,8 @@ struct SignStore {
                 return .send(.updateBarState)
                 
             case .reserveUserHandle:
-                guard let userHandle = state.userHandle else {
+                guard let sessionId = state.signupSessionId,
+                      let userHandle = state.userHandle else {
                     // TODO: 오류 처리 필요
                     return .none
                 }
@@ -498,7 +506,7 @@ struct SignStore {
                 state.apiFetchState = .fetching
                 state.activatedState = .allDeactivated
                 
-                let body = UserHandleReserveRequest(userHandle: userHandle)
+                let body = UserHandleReserveRequest(signupSessionId: sessionId, userHandle: userHandle)
                 return .run { send in
                     do {
                         await send(.updateBarState)
@@ -541,7 +549,8 @@ struct SignStore {
                 return .send(.updateSignFlow(signFlow: .signUpTerms))
                 
             case .completeSignUp:
-                guard let userHandle = state.userHandle,
+                guard let sessionId = state.signupSessionId,
+                      let userHandle = state.userHandle,
                       let sportsInterests = state.sportsInterests,
                       !state.termsAgreements.isEmpty else {
                     // TODO: 오류 처리 필요
@@ -556,7 +565,8 @@ struct SignStore {
                 // 근데 .completeSignUp을 또 요청할 경우는 적으니깐 일단은 패스...
                 
                 let body = SignUpCompleteRequest(
-                    id: state.id,
+                    sessionId: sessionId,
+                    loginId: state.id,
                     method: state.idType,
                     profile: UserProfileCreateRequest(
                         userHandle: userHandle,
@@ -667,15 +677,6 @@ struct SignStore {
                     state.barDuration = 10
                 } else {
                     state.barDuration = 0.5
-                }
-                
-                if state.currentFlow == .signUpTerms && state.isFirstRequest {
-                    state.isFirstRequest = false
-                    if state.barAlignment == .bottomLeading {
-                        state.barAlignment = .bottomTrailing
-                    } else {
-                        state.barAlignment = .bottomLeading
-                    }
                 }
                 
                 switch state.activatedState {

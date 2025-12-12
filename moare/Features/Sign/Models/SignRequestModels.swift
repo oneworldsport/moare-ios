@@ -8,33 +8,34 @@
 import Foundation
 
 struct StartAuthRequest: Encodable {
-    let id: String
+    let loginId: String
     let method: AuthMethod
 }
 
 enum AuthMethod: String, Encodable, Equatable {
-    case email = "email"
-    case phoneNumber = "phone_number"
+    case email = "EMAIL"
+    case phoneNumber = "PHONE_NUMBER"
 }
 
 struct ConfirmAuthRequest: Encodable {
-    let id: String
+    let loginId: String
     let otp: String
     let session: String
 }
 
 struct SignUpInitiateRequest: Encodable {
-    let id: String
+    let loginId: String
     let method: AuthMethod
 }
 
 struct SignUpVerificationRequest: Encodable {
-    let id: String
+    let sessionId: String
     let otp: String
 }
 
 struct SignUpCompleteRequest: Encodable {
-    let id: String
+    let sessionId: String
+    let loginId: String
     let method: AuthMethod
     let profile: UserProfileCreateRequest
 }
@@ -48,6 +49,7 @@ struct UserProfileCreateRequest: Encodable {
 }
 
 struct UserHandleReserveRequest: Encodable {
+    let signupSessionId: String?
     let userHandle: String
 }
 
