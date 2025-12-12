@@ -44,9 +44,12 @@ enum APIEndpoint {
     case getUserProfile
     case updateUserProfile(body: UserProfileUpdateRequest)
     
+    // terms
+    case getTerms(context: String)
+    
     var defaultHTTPMethod: String {
         switch self {
-        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .bootstrapSession, .checkUserHandle, .getMoatDetail, .getUserProfile, .checkFire:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .bootstrapSession, .checkUserHandle, .getMoatDetail, .getUserProfile, .checkFire, .getTerms:
             return "GET"
         case .getLeagueSchedule, .searchByKeyword, .startLoginAuth, .confirmLoginAuth, .initiateSignUp, .verifySignUpOtp, .completeSignUp,
                 .createMoat, .getTrendingMoats, .getMoatsByHashtag, .getUserMoats, .createFire, .createReport:
@@ -180,6 +183,13 @@ enum APIEndpoint {
             
         case .updateUserProfile(_):
             components.path = "/users/me"
+            
+        // terms
+        case .getTerms(let context):
+            components.path = "/terms"
+            components.queryItems = [
+                URLQueryItem(name: "context", value: context)
+            ]
         }
         
         return components.url
@@ -201,7 +211,7 @@ enum APIEndpoint {
     
     var httpBody: Data? {
         switch self {
-        case .bootstrapSession, .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkUserHandle, .deleteMoat, .getMoatDetail, .getUserProfile, .deleteFire, .checkFire:
+        case .bootstrapSession, .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkUserHandle, .deleteMoat, .getMoatDetail, .getUserProfile, .deleteFire, .checkFire, .getTerms:
             return nil
             
         // search

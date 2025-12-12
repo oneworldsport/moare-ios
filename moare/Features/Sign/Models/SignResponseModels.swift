@@ -26,3 +26,31 @@ struct SimpleResponse: Decodable {
 struct BootstrapSessionResponse: Decodable {
     let userId: String
 }
+
+enum TermStatus: String, Decodable {
+    case active = "ACTIVE"
+    case deprecated = "DEPRECATED"
+}
+
+enum TermType: String, Codable {
+    case privacy = "PRIVACY"
+    case service = "SERVICE"
+}
+
+struct TermsResponse: Decodable {
+    let isRequired: Bool
+    let status: TermStatus
+    let termType: TermType
+    let title: String
+    let url: String
+    let version: String
+}
+
+struct TermKey: Hashable {
+    let termType: TermType
+    let version: String
+}
+
+extension TermsResponse {
+    var selfKey: TermKey { .init(termType: termType, version: version) }
+}

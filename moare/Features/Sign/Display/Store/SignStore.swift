@@ -52,14 +52,14 @@ struct SignStore {
         var isFirstRequest = true // barAlignment 설정을 바꿀때 사용
         
         var apiFetchState: ApiFetchState = .idle
-    
+        var termsList: [TermsResponse] = []
         
         var id = "" // TODO: 이것도 nil처리?
         var session: String? = nil
         var otp = "" // TODO: 이것도 nil처리?
         var userHandle: String? = nil
         var sportsInterests: [String]? = nil
-        var isAllTermsChecked = false
+        var termsAgreements: [TermsAgreementRequest] = []
     }
     
     enum Action {
@@ -83,7 +83,9 @@ struct SignStore {
         case checkUserHandle
         case checkUserHandleSuccess(result: Bool)
         case reserveUserHandle
-        case updateTermsChecked(Bool)
+        case getTermsList
+        case getTermsListSuccess(termsList: [TermsResponse])
+        case updateTermsAgreements(requiredAllChecked: Bool, termsChecked: [TermKey: Bool])
         case completeSignUp
         
         case responseFailure(APIHTTPError)
@@ -245,12 +247,18 @@ struct SignStore {
                 
                 return .none
                 
-            case .updateTermsChecked(let checked):
-                state.isAllTermsChecked = checked
-                
-                if checked {
+            case let .updateTermsAgreements(allChecked, checkedMap):
+                if allChecked {
+                    state.termsAgreements = state.termsList.map { term in
+                        return TermsAgreementRequest(
+                            termType: term.termType,
+                            version: term.version,
+                            isAgreed: checkedMap[term.selfKey] ?? false
+                        )
+                    }
                     state.activatedState = .allActivated
                 } else {
+                    state.termsAgreements = []
                     state.activatedState = .allDeactivated
                 }
                 
@@ -310,7 +318,7 @@ struct SignStore {
                 case .signUpUserHandle:
                     return .send(.reserveUserHandle)
                 case .signUpSportsInterests:
-                    return .send(.updateSignFlow(signFlow: .signUpTerms))
+                    return .send(.getTermsList)
                 case .signUpTerms:
                     return .send(.completeSignUp)
                 case .signUpSuccess:
@@ -507,8 +515,35 @@ struct SignStore {
                     }
                 }
                 
+            case .getTermsList:
+                state.apiFetchState = .fetching
+                state.activatedState = .allDeactivated
+                
+                return .run { send in
+                    do {
+                        await send(.updateBarState)
+                        
+                        try await Task.sleep(for: .seconds(3))
+                        
+                        let termsList = try await signClient.fetchTermsList()
+                        
+                        await send(.getTermsListSuccess(termsList: termsList))
+                    } catch {
+                        if let err = error as? APIHTTPError {
+                            await send(.responseFailure(err))
+                        }
+                    }
+                }
+                
+            case .getTermsListSuccess(let termsList):
+                state.termsList = termsList
+                
+                return .send(.updateSignFlow(signFlow: .signUpTerms))
+                
             case .completeSignUp:
-                guard let userHandle = state.userHandle, let sportsInterests = state.sportsInterests else {
+                guard let userHandle = state.userHandle,
+                      let sportsInterests = state.sportsInterests,
+                      !state.termsAgreements.isEmpty else {
                     // TODO: 오류 처리 필요
                     return .none
                 }
@@ -525,7 +560,8 @@ struct SignStore {
                     method: state.idType,
                     profile: UserProfileCreateRequest(
                         userHandle: userHandle,
-                        sportsInterests: sportsInterests
+                        sportsInterests: sportsInterests,
+                        termsAgreements: state.termsAgreements
                     )
                 )
                 return .run { send in

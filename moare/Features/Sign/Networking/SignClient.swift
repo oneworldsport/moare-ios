@@ -41,4 +41,8 @@ struct SignClient {
     func reserveUserHandle(body: UserHandleReserveRequest) async throws -> SimpleResponse {
         return try await apiClient.fetchData(endpoint: .reserveUserHandle(body: body))
     }
+    
+    func fetchTermsList() async throws -> [TermsResponse] {
+        return try await apiClient.fetchData(endpoint: .getTerms(context: "signup"))
+    }
 }

@@ -44,8 +44,15 @@ struct UserProfileCreateRequest: Encodable {
     let profileImageUrl: String? = nil
     let bio: String? = nil
     let sportsInterests: [String]
+    let termsAgreements: [TermsAgreementRequest]
 }
 
 struct UserHandleReserveRequest: Encodable {
     let userHandle: String
+}
+
+struct TermsAgreementRequest: Encodable {
+    let termType: TermType
+    let version: String
+    let isAgreed: Bool
 }

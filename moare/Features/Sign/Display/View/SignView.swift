@@ -13,16 +13,23 @@ struct SignView: View {
     
     @State private var show = false
     @State private var text = ""
-    @State private var tos = false
-    @State private var privacy = false
+    @State private var termsChecked: [TermKey: Bool] = [:]
     
-    private var allCheckedBinding: Binding<Bool> {
+    // TODO: 약관 동의 하는 쪽 코드 뭔가 복잡한 것 같고 이상함.. 나중에 개선 필요함.
+    private var requiredTermsAllChecked: Bool {
+        store.termsList
+            .filter { $0.isRequired }
+            .allSatisfy { termsChecked[TermKey(termType: $0.termType, version: $0.version)] == true }
+    }
+    
+    private var allRequiredTermsBinding: Binding<Bool> {
         Binding(
-            get: { tos && privacy },
+            get: { requiredTermsAllChecked },
             set: { newValue in
-                tos = newValue
-                privacy = newValue
-                store.send(.updateTermsChecked(newValue))
+                for t in store.termsList where t.isRequired {
+                    termsChecked[t.selfKey] = newValue
+                }
+                store.send(.updateTermsAgreements(requiredAllChecked: requiredTermsAllChecked, termsChecked: termsChecked))
             }
         )
     }
@@ -58,13 +65,10 @@ struct SignView: View {
                 .padding(.bottom, 8)
                 
                 if currentFlow == .signUpTerms {
-                    SignUpTerms(tos: $tos, privacy: $privacy)
+                    SignUpTerms(terms: store.termsList, checked: $termsChecked)
                         .padding(.bottom, 12)
-                        .onChange(of: tos) {
-                            store.send(.updateTermsChecked(allCheckedBinding.wrappedValue))
-                        }
-                        .onChange(of: privacy) {
-                            store.send(.updateTermsChecked(allCheckedBinding.wrappedValue))
+                        .onChange(of: termsChecked) {
+                            store.send(.updateTermsAgreements(requiredAllChecked: requiredTermsAllChecked, termsChecked: termsChecked))
                         }
                 }
                 
@@ -86,12 +90,12 @@ struct SignView: View {
                         SelectedSports(sports: store.sportsInterests ?? [])
                     } else if currentFlow == .signUpTerms {
                         HStack {
-                            Toggle("", isOn: allCheckedBinding)
+                            Toggle("", isOn: allRequiredTermsBinding)
                                 .toggleStyle(CheckboxToggleStyle())
                                 .padding(.trailing, 8)
                             
                             Button(action: {
-                                allCheckedBinding.wrappedValue.toggle()
+                                allRequiredTermsBinding.wrappedValue.toggle()
                             }) {
                                 Text("전체 동의")
                             }
