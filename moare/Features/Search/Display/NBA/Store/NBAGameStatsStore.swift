@@ -54,6 +54,8 @@ struct NBAGameStatsStore {
         case sortPlayers
         case setPlayersTotalStats
         case refreshGame(shouldFetch: Bool = true)
+        case selectTitleCategory
+        
         case updateDisplayModel(model: SportDecodableModel)
         
         case delegate(Delegate)
@@ -114,45 +116,31 @@ struct NBAGameStatsStore {
             case .sortPlayers:
                 switch state.baseGameStats.firstCategorySelectedIndex {
                 case 0:
-                    state.playerStats.sort { $0.statistics.points > $1.statistics.points }
+                    state.playerStats.sort { $0.statistics.seconds > $1.statistics.seconds }
                 case 1:
-                    state.playerStats.sort { $0.statistics.assists > $1.statistics.assists }
+                    state.playerStats.sort { $0.statistics.points > $1.statistics.points }
                 case 2:
-                    state.playerStats.sort { $0.statistics.reboundsOffensive > $1.statistics.reboundsOffensive }
+                    state.playerStats.sort { $0.statistics.assists > $1.statistics.assists }
                 case 3:
-                    state.playerStats.sort { $0.statistics.fieldGoalsAttempted > $1.statistics.fieldGoalsAttempted }
-                case 4:
-                    state.playerStats.sort { $0.statistics.fieldGoalsMade > $1.statistics.fieldGoalsMade }
+                    state.playerStats.sort { $0.statistics.reboundsTotal > $1.statistics.reboundsTotal }
                 case 5:
-                    state.playerStats.sort { $0.statistics.fieldGoalsPercentage > $1.statistics.fieldGoalsPercentage }
+                    state.playerStats.sort { $0.statistics.fieldGoalsMade > $1.statistics.fieldGoalsMade }
                 case 6:
-                    state.playerStats.sort { $0.statistics.threePointersAttempted > $1.statistics.threePointersAttempted }
-                case 7:
                     state.playerStats.sort { $0.statistics.threePointersMade > $1.statistics.threePointersMade }
-                case 8:
-                    state.playerStats.sort { $0.statistics.threePointersPercentage > $1.statistics.threePointersPercentage }
-                case 9:
-                    state.playerStats.sort { $0.statistics.freeThrowsAttempted > $1.statistics.freeThrowsAttempted }
-                case 10:
+                case 7:
                     state.playerStats.sort { $0.statistics.freeThrowsMade > $1.statistics.freeThrowsMade }
-                case 11:
-                    state.playerStats.sort { $0.statistics.freeThrowsPercentage > $1.statistics.freeThrowsPercentage }
-                case 12:
-                    state.playerStats.sort { $0.statistics.reboundsDefensive > $1.statistics.reboundsDefensive }
-                case 13:
-                    state.playerStats.sort { $0.statistics.blocks > $1.statistics.blocks }
-                case 14:
+                case 9:
                     state.playerStats.sort { $0.statistics.steals > $1.statistics.steals }
+                case 10:
+                    state.playerStats.sort { $0.statistics.blocks > $1.statistics.blocks }
+                case 12:
+                    state.playerStats.sort { $0.statistics.turnovers > $1.statistics.turnovers }
+                case 13:
+                    state.playerStats.sort { $0.statistics.foulsPersonal > $1.statistics.foulsPersonal }
                 case 15:
                     state.playerStats.sort { $0.statistics.reboundsTotal > $1.statistics.reboundsTotal }
                 case 16:
-                    state.playerStats.sort { $0.statistics.turnovers > $1.statistics.turnovers }
-                case 17:
-                    state.playerStats.sort { $0.statistics.foulsPersonal > $1.statistics.foulsPersonal }
-                case 18:
                     state.playerStats.sort { $0.statistics.plusMinusPoints > $1.statistics.plusMinusPoints }
-                case 19:
-                    state.playerStats.sort { CalendarUtil.formatHourMinuteToMinutes(time: $0.statistics.minutes) > CalendarUtil.formatHourMinuteToMinutes(time: $1.statistics.minutes) }
                 default: break
                 }
                 
@@ -171,7 +159,7 @@ struct NBAGameStatsStore {
                         let foulsPersonal = acc.foulsPersonal + stats.foulsPersonal
                         let freeThrowsAttempted = acc.freeThrowsAttempted + stats.freeThrowsAttempted
                         let freeThrowsMade = acc.freeThrowsMade + stats.freeThrowsMade
-                        let minutes = CalendarUtil.formatMinutesToHourMinute(min: CalendarUtil.formatHourMinuteToMinutes(time: acc.minutes) + CalendarUtil.formatHourMinuteToMinutes(time: stats.minutes))
+                        let minutes = CalendarUtil.formatMinutesToHourMinute(min: CalendarUtil.formatMinuteSecondToSeconds(time: acc.minutes) + CalendarUtil.formatMinuteSecondToSeconds(time: stats.minutes))
                         let points = acc.points + stats.points
                         let reboundsDefensive = acc.reboundsDefensive + stats.reboundsDefensive
                         let reboundsOffensive = acc.reboundsOffensive + stats.reboundsOffensive
@@ -244,6 +232,19 @@ struct NBAGameStatsStore {
                         await send(.delegate(.didRefreshGame(model: dataModel)))
                     }
                 }
+                
+            case .selectTitleCategory:
+                // 선발, 후보를 먼저 정렬한 후 각각 출전시간 순으로 정렬
+                state.playerStats.sort {
+                    // 1) 선발/후보
+                    if $0.starterSortKey != $1.starterSortKey {
+                        return $0.starterSortKey < $1.starterSortKey
+                    }
+                    // 2) seconds 내림차순
+                    return $0.statistics.seconds > $1.statistics.seconds
+                }
+                
+                return .send(.baseGameStats(.selectFirstCategory(-1)))
                 
             case let .updateDisplayModel(model):
                 if case .nbaGameStats(_, let displayModel) = model {

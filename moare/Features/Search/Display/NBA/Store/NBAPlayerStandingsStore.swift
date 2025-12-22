@@ -129,7 +129,7 @@ struct NBAPlayerStandingsStore {
                 case 20:
                     state.standings.sort { $0.stats.plusMinusPG > $1.stats.plusMinusPG }
                 case 22:
-                    state.standings.sort { CalendarUtil.formatHourMinuteToMinutes(time: $0.stats.minPG) > CalendarUtil.formatHourMinuteToMinutes(time: $1.stats.minPG) }
+                    state.standings.sort { CalendarUtil.formatMinuteSecondToSeconds(time: $0.stats.minPG) > CalendarUtil.formatMinuteSecondToSeconds(time: $1.stats.minPG) }
                 case 25:
                     state.standings.sort { $0.stats.winsPct > $1.stats.winsPct }
                 default:

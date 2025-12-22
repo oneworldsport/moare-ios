@@ -84,6 +84,13 @@ struct NBABoxScoreTeamPlayer: Decodable, Equatable {
     var personId: Int { _personId ?? 0 }
     var playerSlug: String { _playerSlug ?? "" }
     var position: String { _position ?? "" }
+    
+    /// 선발이면 0, 후보면 1
+    var starterSortKey: Int {
+        let pos = position.trimmingCharacters(in: .whitespacesAndNewlines)
+        return pos.isEmpty ? 1 : 0
+    }
+    var isStarter: Bool { starterSortKey == 0 }
 
     private enum CodingKeys: String, CodingKey {
         case _comment = "comment"
@@ -140,6 +147,7 @@ struct NBAGameBoxScoreStats: Decodable, Equatable {
     }
 
     var minutes: String { _minutes?.isEmpty == false ? _minutes! : "0:0" }
+    var seconds: Int { CalendarUtil.formatMinuteSecondToSeconds(time: minutes) }
 
     var plusMinusPoints: Int {
         get { _plusMinusPoints ?? 0 }

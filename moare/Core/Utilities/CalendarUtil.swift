@@ -201,7 +201,7 @@ struct CalendarUtil {
         return "\(hours):\(minutes)"
     }
     
-    static func formatHourMinuteToMinutes(time: String) -> Int {
+    static func formatMinuteSecondToSeconds(time: String) -> Int {
         let parts = time.components(separatedBy: ":")
         if parts.count == 2,
            let hours = Int(parts[0]),

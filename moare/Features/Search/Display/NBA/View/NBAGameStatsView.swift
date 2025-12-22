@@ -13,7 +13,7 @@ struct NBAGameStatsView: View {
     let store: StoreOf<NBAGameStatsStore>
     let didPop: Bool
     
-    private let columnWidthList: [CGFloat] = [50, 50, 80, 70, 70, 80, 70, 70, 80, 80, 80, 100, 80, 50, 50, 70, 50, 50, 70, 70]
+    private let columnWidthList: [CGFloat] = [70, 50, 50, 70, 50, 110, 110, 110, 50, 50, 50, 50, 50, 50, 50, 100, 70]
     
     @State private var show = false
     
@@ -39,29 +39,26 @@ struct NBAGameStatsView: View {
                 id: playerId,
                 imageUrl: NBAUtil.playerPhotoURL(id: playerId),
                 name: playerNameDic["\(playerId)"] ?? $0.nameI,
-                extraInfo: !$0.position.isEmpty ? "선발" : "후보",
+                extraInfo: $0.isStarter ? "선발" : "후보",
                 extraSubInfo: $0.position,
                 dataList: [
+                    stats.minutes,
                     String(stats.points),
                     String(stats.assists),
-                    String(stats.reboundsOffensive),
-                    String(stats.fieldGoalsAttempted),
-                    String(stats.fieldGoalsMade),
-                    String(stats.fieldGoalsPercentage),
-                    String(stats.threePointersAttempted),
-                    String(stats.threePointersMade),
-                    String(stats.threePointersPercentage),
-                    String(stats.freeThrowsAttempted),
-                    String(stats.freeThrowsMade),
-                    String(stats.freeThrowsPercentage),
-                    String(stats.reboundsDefensive),
-                    String(stats.blocks),
-                    String(stats.steals),
                     String(stats.reboundsTotal),
+                    "",
+                    "\(stats.fieldGoalsMade)/\(stats.fieldGoalsAttempted)(\(stats.fieldGoalsPercentage))",
+                    "\(stats.threePointersMade)/\(stats.threePointersAttempted)(\(stats.threePointersPercentage))",
+                    "\(stats.freeThrowsMade)/\(stats.freeThrowsAttempted)(\(stats.freeThrowsPercentage))",
+                    "",
+                    String(stats.steals),
+                    String(stats.blocks),
+                    "",
                     String(stats.turnovers),
                     String(stats.foulsPersonal),
+                    "",
+                    "\(stats.reboundsOffensive)/\(stats.reboundsDefensive)",
                     String(stats.plusMinusPoints),
-                    stats.minutes
                 ]
             )
         }
@@ -92,7 +89,7 @@ struct NBAGameStatsView: View {
                         teamCategorySelectedIndex: store.baseGameStats.teamCategorySelectedIndex,
                         gameDetailTitle: gameDetailTitle,
                         gameDetailContent: gameDetailContent,
-                        firstStatsCategories: StringConstants.NBA.gameStatsSecondCategories,
+                        firstStatsCategories: StringConstants.NBA.gameStatsCategories,
                         firstStatsCategorySelectedIndex: store.baseGameStats.firstCategorySelectedIndex,
                         firstStatsColumnWidthList: columnWidthList,
                         firstStatsPlayerList: playerList,
@@ -101,8 +98,11 @@ struct NBAGameStatsView: View {
                         teamCategoryButtonAction: { index in
                             store.send(.baseGameStats(.selectTeam(index: index)))
                         },
+                        firstStatsTitleCategoryAction: {
+                            store.send(.selectTitleCategory)
+                        },
                         firstStatsCategoryButtonAction: { index in
-                            store.send(.baseGameStats(.selectSecondCategory(index)))
+                            store.send(.baseGameStats(.selectFirstCategory(index)))
                         },
                         refreshButtonAction: {
                             store.send(.refreshGame())
