@@ -136,6 +136,9 @@ struct NBAGameBoxScoreStats: Decodable, Equatable {
         get { _fieldGoalsPercentage ?? 0.0 }
         set { _fieldGoalsPercentage = newValue }
     }
+    var fieldGoalsPercentageStr: String {
+        String(format: "%.3f", fieldGoalsPercentage)
+    }
 
     var foulsPersonal: Int { _foulsPersonal ?? 0 }
     var freeThrowsAttempted: Int { _freeThrowsAttempted ?? 0 }
@@ -144,6 +147,9 @@ struct NBAGameBoxScoreStats: Decodable, Equatable {
     var freeThrowsPercentage: Double {
         get { _freeThrowsPercentage ?? 0.0 }
         set { _freeThrowsPercentage = newValue }
+    }
+    var freeThrowsPercentageStr: String {
+        String(format: "%.3f", freeThrowsPercentage)
     }
 
     var minutes: String { _minutes?.isEmpty == false ? _minutes! : "0:0" }
@@ -165,6 +171,9 @@ struct NBAGameBoxScoreStats: Decodable, Equatable {
     var threePointersPercentage: Double {
         get { _threePointersPercentage ?? 0.0 }
         set { _threePointersPercentage = newValue }
+    }
+    var threePointersPercentageStr: String {
+        String(format: "%.3f", threePointersPercentage)
     }
 
     var turnovers: Int { _turnovers ?? 0 }
