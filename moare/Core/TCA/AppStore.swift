@@ -223,6 +223,19 @@ struct AppStore {
                 
                 return .none
                 
+            case let .path(.element(id: _, action: .fbLeagueSchedule(.delegate(.showTeamStandings(model))))),
+                let .path(.element(id: _, action: .nbaLeagueSchedule(.delegate(.showTeamStandings(model))))),
+                let .path(.element(id: _, action: .mlbLeagueSchedule(.delegate(.showTeamStandings(model))))),
+                let .path(.element(id: _, action: .kboLeagueSchedule(.delegate(.showTeamStandings(model))))):
+                state.didPop = false
+                state.includesPreviousView = false
+                
+                if let route = model.teamStandingsRoute {
+                    state.path.append(route)
+                }
+                
+                return .none
+                
             case .path:
                 return .none
             }
@@ -496,6 +509,16 @@ extension SportDecodableModel {
         case let .nbaTournament(_, displayModel): return .nbaTournament(.init(displayModel: displayModel))
         case let .mlbTournament(_, displayModel): return .mlbTournament(.init(displayModel: displayModel))
         case let .kboTournament(_, displayModel): return .kboTournament(.init(displayModel: displayModel))
+        default: return nil
+        }
+    }
+    
+    var teamStandingsRoute: AppStore.Path.State? {
+        switch self {
+        case let .fbTeamStandings(responseModel, displayModel):  return .fbTeamStandings(.init(responseModel: responseModel, displayModel: displayModel))
+        case let .nbaTeamStandings(responseModel, displayModel): return .nbaTeamStandings(.init(responseModel: responseModel, displayModel: displayModel))
+        case let .mlbTeamStandings(responseModel, displayModel): return .mlbTeamStandings(.init(responseModel: responseModel, displayModel: displayModel))
+        case let .kboTeamStandings(responseModel, displayModel): return .kboTeamStandings(.init(responseModel: responseModel, displayModel: displayModel))
         default: return nil
         }
     }

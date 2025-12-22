@@ -14,6 +14,15 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
     @ViewBuilder let gameListContent: () -> GameListContent
     
     @State private var shouldScrollCalendar = true
+    
+    private var isSameYearMonth: Bool {
+        guard let calendarState = state.calendarUiState else {
+            return false
+        }
+        
+        let selectedYearMonth = calendarState.yearMonthList[calendarState.selectedYearMonthIndex]
+        return CalendarUtil.isSameYearMonth(yearMonth: selectedYearMonth)
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -38,7 +47,8 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
                     dateList: calendarState.days,
                     calendarType: .day,
                     selectedIndex: calendarState.selectedDayIndex,
-                    shouldScroll: $shouldScrollCalendar
+                    shouldScroll: $shouldScrollCalendar,
+                    containsToday: isSameYearMonth
                 ) { day, index in
                     shouldScrollCalendar = false
                     calendarActions.onSelectDay(day, index)
@@ -48,7 +58,7 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
             
             // all result open button
             if state.shouldShowAllResultToggleButton {
-                HStack {
+                HStack(spacing: 8) {
                     Spacer()
                     
                     if state.shouldShowTournamentButton {
@@ -61,13 +71,20 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
                     }
                     
                     CapsuleButton(
+                        text: StringConstants.leagueStandings,
+                        color: .secondary
+                    ) {
+                        actions.teamStandingsButtonAction()
+                    }
+                    
+                    CapsuleButton(
                         text: state.isAllResultOpened ? StringConstants.resultHide : StringConstants.resultOpen,
                         color: .secondary
                     ) {
                         actions.allResultButtonAction()
                     }
-                    .padding(.trailing, 8)
                 }
+                .padding(.horizontal, 8)
             }
             
             ZStack {

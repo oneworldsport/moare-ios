@@ -51,6 +51,7 @@ struct FBLeagueScheduleStore {
         case updateResultOpenedState(gameId: String, isOpened: Bool)
         case selectGame(game: FBGameForSchedule)
         case showTournament
+        case showTeamStandings
         
         case setDays(isInit: Bool = false)
         case fetchGames
@@ -67,6 +68,7 @@ struct FBLeagueScheduleStore {
     enum Delegate {
         case showGameStats(model: SportDecodableModel)
         case showTournament(model: SportDecodableModel)
+        case showTeamStandings(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -294,6 +296,33 @@ struct FBLeagueScheduleStore {
                     let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
                     
                     await send(.delegate(.showTournament(model: result.data)))
+                }
+                
+            case .showTeamStandings:
+                let leagueId = state.baseSchedule.displayModel.leagueId
+                let leagueName = StringConstants.Football.leagueNameStr(leagueId: leagueId)
+                
+                return .run { send in
+                    let keywordInfo = KeywordInfo(
+                        keyword: "\(leagueName) 순위",
+                        weight: 100,
+                        keywords: [Keyword(keyword: "순위", id: "standings", priority: 1)],
+                        entities: [
+                            EntityInfo(
+                                entityId: leagueId,
+                                entityName: leagueName,
+                                category: "football",
+                                entityType: "league",
+                                leagueId: leagueId,
+                                teamId: nil,
+                                playerId: nil
+                            )
+                        ]
+                    )
+                    
+                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                    
+                    await send(.delegate(.showTeamStandings(model: result.data)))
                 }
                 
             case .updateDisplayDataState(let fetchState):

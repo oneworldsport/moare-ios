@@ -47,6 +47,9 @@ struct MLBLeagueScheduleView: View {
                         allResultButtonAction: {
                             store.send(.toggleAllResult)
                         },
+                        teamStandingsButtonAction: {
+                            store.send(.showTeamStandings)
+                        },
                         tournamentButtonAction: {
                             store.send(.showTournament)
                         }

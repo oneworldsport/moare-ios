@@ -216,20 +216,24 @@ struct NBAGameStatsStore {
             case let .refreshGame(shouldFetch):
                 if shouldFetch {
                     return .run { [displayModel = state.baseGameStats.displayModel] send in
-                        let game = displayModel.game
-                        if let gameSummary = game.gameSummary,
-                           let boxScoreTraditional = game.boxScoreTraditional {
-                            let result = try await searchClient.fetchById(
-                                season: displayModel.season,
-                                category: "basketball",
-                                date: gameSummary.gameDate,
-                                dataType: "basketball_game_stats",
-                                leagueId: Constants.Ids.nba,
-                                id: boxScoreTraditional.gameId
-                            )
-                            
-                            await send(.updateDisplayModel(model: result.data))
-                            await send(.delegate(.didRefreshGame(model: result.data)))
+                        do {
+                            let game = displayModel.game
+                            if let gameSummary = game.gameSummary,
+                               let boxScoreTraditional = game.boxScoreTraditional {
+                                let result = try await searchClient.fetchById(
+                                    season: displayModel.season,
+                                    category: "basketball",
+                                    date: gameSummary.gameDate,
+                                    dataType: "basketball_game_stats",
+                                    leagueId: Constants.Ids.nba,
+                                    id: boxScoreTraditional.gameId
+                                )
+                                
+                                await send(.updateDisplayModel(model: result.data))
+                                await send(.delegate(.didRefreshGame(model: result.data)))
+                            }
+                        } catch {
+                            print("\(error)")
                         }
                     }
                 } else {

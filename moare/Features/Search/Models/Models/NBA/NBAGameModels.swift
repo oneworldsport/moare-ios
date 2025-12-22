@@ -39,9 +39,9 @@ struct NBABoxScoreTraditional: Decodable, Equatable {
 }
 
 struct NBABoxScoreTeam: Decodable, Equatable {
-    let bench: NBAGameBoxScoreStats
+    let bench: NBAGameBoxScoreStats?
     let players: [NBABoxScoreTeamPlayer]
-    let starters: NBAGameBoxScoreStats
+    let starters: NBAGameBoxScoreStats?
     let statistics: NBAGameBoxScoreStats
     private let _teamCity: String?
     private let _teamId: Int?

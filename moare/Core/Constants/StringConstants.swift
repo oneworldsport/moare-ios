@@ -21,6 +21,8 @@ struct StringConstants {
     
     static let gameStatsFirstCategory = "선수 이름"
     
+    static let leagueStandings = "리그 순위"
+    
     struct Football {
         static let gameFirstHalfStr = "전반전"
         static let gameHalftimeStr = "전반 종료"
@@ -53,6 +55,23 @@ struct StringConstants {
         static let gameStatsDefendCategories = ["태클 시도", "볼 경합 성공/시도(%)", "가로채기"]
         static let gameStatsCommonCategories = ["패스 시도", "얻은 파울", "파울", "경고", "퇴장", "출전시간(분)", "평점"]
         static let gameStatsSecondCategories = gameStatsAttackCategories + gameStatsDefendCategories + gameStatsCommonCategories
+        
+        static func leagueNameStr(leagueId: Int) -> String {
+            switch leagueId {
+            case Constants.Ids.epl:
+                return "EPL"
+            case Constants.Ids.laliga:
+                return "라리가"
+            case Constants.Ids.bundesliga:
+                return "분데스리가"
+            case Constants.Ids.seriea:
+                return "세리에A"
+            case Constants.Ids.ligue1:
+                return "리그1"
+            default :
+                return ""
+            }
+        }
     }
     
     struct NBA {
