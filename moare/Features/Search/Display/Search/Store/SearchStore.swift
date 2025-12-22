@@ -153,9 +153,15 @@ struct SearchStore {
                 return .none
                 
             case .initTrendingKeywords(let keywords):
-                // TODO: 같은 키워드도 처리할 수 있게 수정
-                state.trendingKeywords = OrderedDictionary(uniqueKeysWithValues: keywords.map { ($0.keyword, $0) })
-                state.trendingKeywordList = Array(state.trendingKeywords.keys)
+                // NOTE: 중복 키워드는 덮어쓰기
+                var dict = OrderedDictionary<String, KeywordInfo>()
+                for info in keywords {
+                    dict[info.keyword] = info
+                }
+                state.trendingKeywords = dict
+                
+                // NOTE: 중복 포함 + 순서 유지
+                state.trendingKeywordList = keywords.map { $0.keyword }
                 
                 return .none
                 
