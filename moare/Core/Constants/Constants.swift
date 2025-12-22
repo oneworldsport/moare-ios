@@ -329,7 +329,11 @@ struct Constants {
                 return StringConstants.gameNotStartedStr
             case NBA.live:
                 if let period {
-                    return "\(period)쿼터"
+                    if period > 4 {
+                        return "연장 \(period-4)쿼터"
+                    } else {
+                        return "\(period)쿼터"
+                    }
                 } else {
                     return StringConstants.gameLiveStr
                 }

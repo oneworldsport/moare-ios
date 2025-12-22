@@ -62,7 +62,7 @@ struct AnimatingSearchBar: View {
                             .opacity(searchStore.textFieldVisibleState ? 0 : 1)
                             .uiState(visibleState: barVisibleState) // always showing after first open
                         
-                        if !searchStore.query.isEmpty {
+                        if !searchStore.searchState && !searchStore.query.isEmpty {
                             Button(action: {
                                 searchStore.query = ""
                             }) {
