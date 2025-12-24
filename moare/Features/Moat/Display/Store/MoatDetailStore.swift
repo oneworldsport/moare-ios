@@ -30,17 +30,19 @@ struct MoatDetailStore {
         case updateSelectedMoat(moatDetailResponse: MoatDetailResponse)
         
         case showUpdateForm(moatId: String)
-        case settingItemsTapped(item: SettingItems, moatId: String)
+        case settingItemsTapped(item: MoatSettingItems, moatId: String)
         case deleteMoatResponse(result: Result<MessageResponse, Error>, moatId: String)
         case reportSuccess(reasonText : String)
         
         case fireToggle(moatId: String, targetType: FireTargetType)
         
+        case tappedProfile(userId: String)
+        
         case delegate(Delegate)
     }
     
     enum Delegate {
-        case push(viewType: MoatViewType, moatId: String? = nil, moatDetailResponse: MoatDetailResponse? = nil, moat: MoatResponse? = nil)
+        case push(viewType: MoatViewType, moatId: String? = nil, moatDetailResponse: MoatDetailResponse? = nil, moat: MoatResponse? = nil, userId: String? = nil)
         case deleted(moatId: String)
     }
     
@@ -176,6 +178,9 @@ struct MoatDetailStore {
                 }
                 
                 return .none
+                
+            case .tappedProfile(let userId):
+                return .send(.delegate(.push(viewType: .userProfile, userId: userId)))
                 
             case .binding:
                 return .none

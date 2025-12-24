@@ -12,6 +12,7 @@ struct UserProfileDisplayView: View {
     let stackStore: StoreOf<UserProfileStackStore>
     let signStore: Store<SignStore.State?, SignStore.Action>
     let settingsStore: StoreOf<UserSettingsStore>
+    let fireStore: StoreOf<FireStore>
     
     @State private var userHandle = ""
     @State private var currentViewType: UserProfileViewType = .userProfile
@@ -54,6 +55,7 @@ struct UserProfileDisplayView: View {
                         ) {
                             UserProfilePathView(
                                 store: store,
+                                fireStore: fireStore,
                                 userId: userId,
                                 userHandle: $userHandle
                             )
@@ -97,6 +99,7 @@ struct UserProfileDisplayView: View {
                     case .moatDetail: .moatDetail
                     case .userProfileUpdateForm: .userProfileUpdateForm
                     case .userProfileImageEdit: .userProfileImageEdit
+                    case .updateForm: .updateMoat
                     }
                 }
             }
@@ -106,16 +109,19 @@ struct UserProfileDisplayView: View {
 
 struct UserProfilePathView: View {
     let store: StoreOf<UserProfileStackStore.Path>
+    let fireStore: StoreOf<FireStore>
     let userId: String?
     
     @Binding var userHandle: String
     
     init (
         store: StoreOf<UserProfileStackStore.Path>,
+        fireStore: StoreOf<FireStore>,
         userId: String?,
         userHandle: Binding<String>
     ) {
         self.store = store
+        self.fireStore = fireStore
         self.userId = userId
         self._userHandle = userHandle
     }
@@ -124,11 +130,11 @@ struct UserProfilePathView: View {
         switch store.state {
         case .userProfile:
             if let s = store.scope(state: \.userProfile, action: \.userProfile) {
-                UserProfileView(store: s, userId: userId, userHandle: $userHandle)
+                UserProfileView(store: s, fireStore: fireStore, userId: userId, userHandle: $userHandle)
             }
         case .moatDetail:
             if let s = store.scope(state: \.moatDetail, action: \.moatDetail) {
-                MoatView(store: s, userId: userId).id(UUID())
+                MoatDetailView(store: s, fireStore: fireStore, userId: userId).id(UUID())
             }
         case .userProfileUpdateForm:
             if let s = store.scope(state: \.userProfileUpdateForm, action: \.userProfileUpdateForm) {
@@ -138,6 +144,8 @@ struct UserProfilePathView: View {
             if let s = store.scope(state: \.userProfileImageEdit, action: \.userProfileImageEdit) {
                 UserProfileImageEditView(store: s)
             }
+        case .updateForm:
+            if let s = store.scope(state: \.updateForm, action: \.updateForm) { MoatFormView(store: s) }
         }
     }
 }

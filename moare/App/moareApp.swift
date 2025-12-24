@@ -62,6 +62,7 @@ struct SportSearchEngine_iOSApp: App {
         let userProfileStackStore = store.scope(state: \.userProfile, action: \.userProfile)
         let signStore = store.scope(state: \.sign, action: \.sign)
         let settingsStore = store.scope(state: \.settings, action: \.settings)
+        let fireStore = store.scope(state: \.fire, action: \.fire)
         
         WindowGroup {
             Group {
@@ -92,7 +93,8 @@ struct SportSearchEngine_iOSApp: App {
                             
                             MoatDisplayView(
                                 stackStore: moatStackStore,
-                                signStore: signStore
+                                signStore: signStore,
+                                fireStore: fireStore
                             )
                             .tabItem {
                                 Image(systemName: "bubble.left")
@@ -107,7 +109,8 @@ struct SportSearchEngine_iOSApp: App {
                             UserProfileDisplayView(
                                 stackStore: userProfileStackStore,
                                 signStore: signStore,
-                                settingsStore: settingsStore
+                                settingsStore: settingsStore,
+                                fireStore: fireStore
                             )
                             .tabItem {
                                 Image(systemName: "person.crop.circle")

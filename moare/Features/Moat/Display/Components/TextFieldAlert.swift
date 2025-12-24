@@ -7,7 +7,7 @@
 import SwiftUI
 import UIKit
 
-enum SettingItems: String, CaseIterable, Equatable, Identifiable {
+enum MoatSettingItems: String, CaseIterable, Equatable, Identifiable {
     case report, updateMoat, deleteMoat, three
     
     var id: Self { self }
@@ -17,6 +17,21 @@ enum SettingItems: String, CaseIterable, Equatable, Identifiable {
         case .report: "신고하기"
         case .updateMoat: "모트 수정하기"
         case .deleteMoat: "모트 삭제하기"
+        default: "^^"
+        }
+    }
+}
+
+enum UserProfileSettingItems: String, CaseIterable, Equatable, Identifiable {
+    case report, updateProfile
+    
+    var id: Self { self }
+    
+    var title: String {
+        switch self {
+        case .report: "신고하기"
+        case .updateProfile: "프로필 수정"
+            
         default: "^^"
         }
     }

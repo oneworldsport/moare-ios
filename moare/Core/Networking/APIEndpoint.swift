@@ -43,13 +43,14 @@ enum APIEndpoint {
     // user
     case getUserProfile
     case updateUserProfile(body: UserProfileUpdateRequest)
+    case getMoatUserProfile(userId: String)
     
     // terms
     case getTerms(context: String)
     
     var defaultHTTPMethod: String {
         switch self {
-        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .bootstrapSession, .checkUserHandle, .getMoatDetail, .getUserProfile, .checkFire, .getTerms:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .bootstrapSession, .checkUserHandle, .getMoatDetail, .getUserProfile, .checkFire, .getMoatUserProfile, .getTerms:
             return "GET"
         case .getLeagueSchedule, .searchByKeyword, .startLoginAuth, .confirmLoginAuth, .initiateSignUp, .verifySignUpOtp, .completeSignUp,
                 .createMoat, .getTrendingMoats, .getMoatsByHashtag, .getUserMoats, .createFire, .createReport:
@@ -185,6 +186,9 @@ enum APIEndpoint {
         case .updateUserProfile(_):
             components.path = "/users/me"
             
+        case .getMoatUserProfile(let userId):
+            components.path = "/users/\(userId)"
+            
         // terms
         case .getTerms(let context):
             components.path = "/terms"
@@ -198,7 +202,7 @@ enum APIEndpoint {
     
     var headers: [String: String]? {
         switch self {
-        case .bootstrapSession, .createMoat, .updateMoat, .deleteMoat, .getMoatDetail, .getTrendingMoats, .getMoatsByHashtag, .getUserMoats, .getUserProfile, .updateUserProfile, .createFire, .deleteFire, .checkFire, .createReport, .checkUserHandle, .reserveUserHandle:
+        case .bootstrapSession, .createMoat, .updateMoat, .deleteMoat, .getMoatDetail, .getTrendingMoats, .getMoatsByHashtag, .getUserMoats, .getUserProfile, .updateUserProfile, .createFire, .deleteFire, .checkFire, .createReport, .checkUserHandle, .reserveUserHandle, .getMoatUserProfile:
             if let token = KeychainManager.shared.get("accessToken") {
                 return ["Authorization": "Bearer \(token)"]
             } else {
@@ -212,7 +216,7 @@ enum APIEndpoint {
     
     var httpBody: Data? {
         switch self {
-        case .bootstrapSession, .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkUserHandle, .deleteMoat, .getMoatDetail, .getUserProfile, .deleteFire, .checkFire, .getTerms:
+        case .bootstrapSession, .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .checkUserHandle, .deleteMoat, .getMoatDetail, .getUserProfile, .deleteFire, .checkFire, .getTerms, .getMoatUserProfile:
             return nil
             
         // search

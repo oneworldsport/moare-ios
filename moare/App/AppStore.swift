@@ -19,6 +19,8 @@ struct AppStore {
         var sign: SignStore.State?
         var settings = UserSettingsStore.State()
         
+        var fire = FireStore.State()
+        
         var userId: String?
     }
     
@@ -29,6 +31,8 @@ struct AppStore {
         
         case sign(SignStore.Action)
         case settings(UserSettingsStore.Action)
+        
+        case fire(FireStore.Action)
     }
     
     var body: some Reducer<State, Action> {
@@ -36,6 +40,7 @@ struct AppStore {
         Scope(state: \.moat, action: \.moat) { MoatStackStore() }
         Scope(state: \.userProfile, action: \.userProfile) { UserProfileStackStore() }
         Scope(state: \.settings, action: \.settings) { UserSettingsStore() }
+        Scope(state: \.fire, action: \.fire) { FireStore() }
         
         Reduce { state, action in
             switch action {
@@ -91,6 +96,8 @@ struct AppStore {
             case .sign:
                 return .none
             case .settings:
+                return .none
+            case .fire:
                 return .none
             }
         }

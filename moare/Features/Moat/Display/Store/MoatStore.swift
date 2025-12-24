@@ -61,7 +61,7 @@ struct MoatStore {
         case showUpdateForm(moatId: String)
         case showTrending
         
-        case settingItemsTapped(item: SettingItems, moatId: String)
+        case settingItemsTapped(item: MoatSettingItems, moatId: String)
         case deleteMoatResponse(result: Result<MessageResponse, Error>, moatId: String)
         case reportSuccess(reasonText : String)
         

@@ -25,8 +25,9 @@ struct MoatItem: View {
     let profileImageURL: String
     let userHandle: String
     let timeAgo: String
-    let settingsTapped: (SettingItems) -> Void
+    let settingsTapped: (MoatSettingItems) -> Void
     let fireTapped: () -> Void
+    let profileTapped: () -> Void
     let action: () -> Void
     
     let height: CGFloat
@@ -54,8 +55,9 @@ struct MoatItem: View {
         profileImageURL: String = "",
         userHandle: String,
         createdAt: String,
-        settingsTapped: @escaping (SettingItems) -> Void = {_ in },
+        settingsTapped: @escaping (MoatSettingItems) -> Void = {_ in },
         fireTapped: @escaping () -> Void = {},
+        profileTapped: @escaping () -> Void = {},
         action: @escaping () -> Void = {}
     ) {
         self.userId = userId
@@ -73,6 +75,7 @@ struct MoatItem: View {
         self.timeAgo = CalendarUtil.timeAgoString(from: createdAt)
         self.settingsTapped = settingsTapped
         self.fireTapped = fireTapped
+        self.profileTapped = profileTapped
         self.action = action
         
         switch moatType {
@@ -181,7 +184,7 @@ struct MoatItem: View {
                             if moatType == .detail {
                                 let isOwner = (userId == moatUserId)
                                 
-                                let itemsToShow: [SettingItems] = {
+                                let itemsToShow: [MoatSettingItems] = {
                                     if isOwner {
                                         // 내 모트: 수정/삭제만 보이기
                                         return [.updateMoat, .deleteMoat]
@@ -237,12 +240,16 @@ struct MoatItem: View {
                     
                     if moatType != .userProfile {
                         HStack {
-                            Circle()
-                                .fill(.moare)
-                                .frame(width: profileImageSize, height: profileImageSize)
-                            
-                            Text(userHandle)
-                                .font(.system(size: userHandleFontSize))
+                            HStack {
+                                Circle()
+                                    .fill(.moare)
+                                    .frame(width: profileImageSize, height: profileImageSize)
+                                
+                                Text(userHandle)
+                                    .font(.system(size: userHandleFontSize))
+                            }.onTapGesture {
+                                profileTapped()
+                            }
                             
                             Spacer()
                             

@@ -29,13 +29,15 @@ struct MoatTrendingStore {
         case selectMoat(moatId: String)
         case selectMoatResponse(Result<MoatDetailResponse, Error>)
         
+        case tappedProfile(userId: String)
+        
         case showForm
         
         case delegate(Delegate)
     }
     
     enum Delegate {
-        case push(viewType: MoatViewType, moatId: String? = nil, moatDetailResponse: MoatDetailResponse? = nil, moat: MoatResponse? = nil)
+        case push(viewType: MoatViewType, moatId: String? = nil, moatDetailResponse: MoatDetailResponse? = nil, moat: MoatResponse? = nil, userId: String? = nil)
     }
     
     var body: some Reducer<State, Action> {
@@ -103,6 +105,9 @@ struct MoatTrendingStore {
                 
             case .selectMoatResponse(.failure(_)):
                 return .none
+                
+            case .tappedProfile(let userId):
+                return .send(.delegate(.push(viewType: .userProfile, userId: userId)))
                 
             case .showForm:
                 return .send(.delegate(.push(viewType: .createForm)))

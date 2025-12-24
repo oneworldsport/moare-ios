@@ -10,7 +10,7 @@ import ComposableArchitecture
 
 struct MoatDetailView: View {
     @Bindable var store: StoreOf<MoatDetailStore>
-    @Bindable var fireStore: StoreOf<FireStore>
+    let fireStore: StoreOf<FireStore>
     
     let userId: String?
     
@@ -62,6 +62,9 @@ struct MoatDetailView: View {
                                 baseCount: moat.fireCount
                             ))
                         },
+                        profileTapped: {
+                            store.send(.tappedProfile(userId: moat.userId))
+                        },
                         action: {}
                     )
                     .padding(.top, 10)
@@ -96,6 +99,9 @@ struct MoatDetailView: View {
                                         baseIsFired: moat.isFired,
                                         baseCount: moat.fireCount
                                     ))
+                                },
+                                profileTapped: {
+                                    store.send(.tappedProfile(userId: moat.userId))
                                 },
                             ) {
                                 store.send(.selectMoat(moatId: moat.moatId))

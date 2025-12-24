@@ -78,8 +78,8 @@ struct MoatStackStore {
                 
                 return .none
                 
-            case let .path(.element(id: _, action: .trending(.delegate(.push(viewType, moatId, moatDetailResponse, moat))))),
-                let .path(.element(id: _, action: .detail(.delegate(.push(viewType, moatId, moatDetailResponse, moat))))):
+            case let .path(.element(id: _, action: .trending(.delegate(.push(viewType, moatId, moatDetailResponse, moat, userId))))),
+                let .path(.element(id: _, action: .detail(.delegate(.push(viewType, moatId, moatDetailResponse, moat, userId))))):
                 switch viewType {
                 case .detail:
                     state.path.append(.detail(MoatDetailStore.State(moatDetailResponse: moatDetailResponse)))
@@ -89,6 +89,9 @@ struct MoatStackStore {
                     
                 case .updateForm:
                     state.path.append(.updateForm(MoatFormStore.State(moat: moat)))
+                    
+                case .userProfile:
+                    state.path.append(.userProfile(UserProfileStore.State(userId: state.userId, targetUserId: userId)))
                     
                 default: break
                 }
@@ -151,6 +154,15 @@ struct MoatStackStore {
                     }
                 }
                 
+                return .none
+                
+            case let .path(.element(id: _, action: .userProfile(.delegate(.pushInUserProfile(viewType, moatDetailResponse))))):
+                switch viewType {
+                case .detail:
+                    state.path.append(.detail(MoatDetailStore.State(moatDetailResponse: moatDetailResponse)))
+                    
+                default: break
+                }
                 return .none
                 
             case .pop:
@@ -278,6 +290,7 @@ struct MoatStackStore {
             case createForm(MoatFormStore.State)
             case detail(MoatDetailStore.State)
             case updateForm(MoatFormStore.State)
+            case userProfile(UserProfileStore.State)
         }
         
         enum Action {
@@ -285,6 +298,7 @@ struct MoatStackStore {
             case createForm(MoatFormStore.Action)
             case detail(MoatDetailStore.Action)
             case updateForm(MoatFormStore.Action)
+            case userProfile(UserProfileStore.Action)
         }
         
         var body: some Reducer<State, Action> {
@@ -292,6 +306,7 @@ struct MoatStackStore {
             Scope(state: \.createForm, action: \.createForm) { MoatFormStore() }
             Scope(state: \.detail, action: \.detail) { MoatDetailStore() }
             Scope(state: \.updateForm, action:\.updateForm) { MoatFormStore() }
+            Scope(state: \.userProfile, action: \.userProfile) { UserProfileStore() }
         }
     }
 }

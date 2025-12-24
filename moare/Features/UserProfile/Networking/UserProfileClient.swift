@@ -15,4 +15,8 @@ struct UserProfileClient {
     func updateUserProfile(body: UserProfileUpdateRequest) async throws -> UserProfileResponse {
         return try await apiClient.fetchData(endpoint: .updateUserProfile(body: body))
     }
+    
+    func getMoatUserProfile(userId: String) async throws -> UserProfileWithMoatsResponse {
+        return try await apiClient.fetchData(endpoint: .getMoatUserProfile(userId: userId))
+    }
 }

@@ -38,7 +38,7 @@ struct MoatView: View {
                                     
                                     let fireCount = store.state.fireCountMap[moat.moatId] ?? moat.fireCount
                                     
-                                    let onSettings: (SettingItems) -> Void = { item in
+                                    let onSettings: (MoatSettingItems) -> Void = { item in
                                         selectedMoatId = moat.moatId
                                         store.send(.settingItemsTapped(item: item, moatId: moat.moatId))
                                     }
