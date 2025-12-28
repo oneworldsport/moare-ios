@@ -403,30 +403,29 @@ enum StatValue: Decodable, Equatable {
 
 struct FBGameInfoForSchedule: Decodable, Equatable {
     private let _round: String?
-    private let _elapsed: Int?
+    let status: FBGameStatus?
     private let _homeTeamPenaltyScore: Int?
     private let _awayTeamPenaltyScore: Int?
 
     var round: String { _round ?? "" }
-    var elapsed: Int { _elapsed ?? 0 }
     var homeTeamPenaltyScore: Int? { _homeTeamPenaltyScore }
     var awayTeamPenaltyScore: Int? { _awayTeamPenaltyScore }
 
     private enum CodingKeys: String, CodingKey {
+        case status
         case _round = "round"
-        case _elapsed = "elapsed"
         case _homeTeamPenaltyScore = "homeTeamPenaltyScore"
         case _awayTeamPenaltyScore = "awayTeamPenaltyScore"
     }
     
     init(
         round: String?,
-        elapsed: Int?,
+        status: FBGameStatus? = nil,
         homeTeamPenaltyScore: Int? = nil,
         awayTeamPenaltyScore: Int? = nil,
     ) {
         self._round = round
-        self._elapsed = elapsed
+        self.status = status
         self._homeTeamPenaltyScore = homeTeamPenaltyScore
         self._awayTeamPenaltyScore = awayTeamPenaltyScore
     }

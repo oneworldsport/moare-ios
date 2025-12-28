@@ -24,20 +24,41 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
         let topSeedTeamId = seedIdTuple.topSeedId
         let lowerSeedTeamId = seedIdTuple.lowerSeedId
         let gameStatus = game?.gameStatus ?? Constants.GameStatus.Football.notStarted
-        let homeTeamScore = game?.homeTeamScore ?? 0
-        let awayTeamScore = game?.awayTeamScore ?? 0
-        let elapsed = (game as? FBGameForSchedule)?.gameInfo?.elapsed
-        let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
-        let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
+        let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
         let shouldShowScore = !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: gameStatus)
         
-        var isHomeWinner: Bool {
-            if let homePenalty = homeTeamPenaltyScore,
-               let awayPenalty = awayTeamPenaltyScore {
-                return homePenalty > awayPenalty
+        let homeTeamScore = game?.homeTeamScore ?? 0
+        let awayTeamScore = game?.awayTeamScore ?? 0
+        let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
+        let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
+        
+        var topSeedTeamScore: Int {
+            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+                homeTeamScore
+            } else {
+                awayTeamScore
             }
-            
-            return homeTeamScore > awayTeamScore
+        }
+        var lowerSeedTeamScore: Int {
+            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
+                homeTeamScore
+            } else {
+                awayTeamScore
+            }
+        }
+        var topSeedTeamPenaltyScore: Int? {
+            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+                homeTeamPenaltyScore
+            } else {
+                awayTeamPenaltyScore
+            }
+        }
+        var lowerSeedTeamPenaltyScore: Int? {
+            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
+                homeTeamPenaltyScore
+            } else {
+                awayTeamPenaltyScore
+            }
         }
         
         VStack(spacing: 0) {
@@ -72,15 +93,15 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
                             .frame(width: 110)
                             
                             // 축구 패널티킥 경기는 일반 스코어 검정색
-                            let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (homeTeamScore >= awayTeamScore ? .moare : .primary)
+                            let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (topSeedTeamScore >= lowerSeedTeamScore ? .moare : .primary)
                             
-                            Text(shouldShowScore ? "\(homeTeamScore)" : "-")
+                            Text(shouldShowScore ? "\(topSeedTeamScore)" : "-")
                                 .foregroundStyle(shouldShowScore ? scoreColor : .primary)
                             
-                            if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
-                                Text("\(homeTeamPenaltyScore)")
+                            if let topSeedTeamPenaltyScore, let lowerSeedTeamPenaltyScore {
+                                Text("\(topSeedTeamPenaltyScore)")
                                     .font(.system(size: 12))
-                                    .foregroundStyle(homeTeamPenaltyScore >= awayTeamPenaltyScore ? .moare : .primary)
+                                    .foregroundStyle(topSeedTeamPenaltyScore >= lowerSeedTeamPenaltyScore ? .moare : .primary)
                             }
                         }
                         .padding(.bottom, 2)
@@ -119,15 +140,15 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
                             .frame(width: 110)
                             
                             // 축구 패널티킥 경기는 일반 스코어 검정색
-                            let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (awayTeamScore >= homeTeamScore ? .moare : .primary)
+                            let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (lowerSeedTeamScore >= topSeedTeamScore ? .moare : .primary)
                             
-                            Text(shouldShowScore ? "\(awayTeamScore)" : "-")
+                            Text(shouldShowScore ? "\(lowerSeedTeamScore)" : "-")
                                 .foregroundStyle(shouldShowScore ? scoreColor : .primary)
                             
-                            if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
-                                Text("\(awayTeamPenaltyScore)")
+                            if let topSeedTeamPenaltyScore, let lowerSeedTeamPenaltyScore {
+                                Text("\(lowerSeedTeamPenaltyScore)")
                                     .font(.system(size: 12))
-                                    .foregroundStyle(awayTeamPenaltyScore >= homeTeamPenaltyScore ? .moare : .primary)
+                                    .foregroundStyle(lowerSeedTeamPenaltyScore >= topSeedTeamPenaltyScore ? .moare : .primary)
                             }
                         }
                         .padding(.top, 2)
@@ -228,20 +249,41 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
         let topSeedTeamId = seedIdTuple.topSeedId
         let lowerSeedTeamId = seedIdTuple.lowerSeedId
         let gameStatus = game?.gameStatus ?? Constants.GameStatus.Football.notStarted
-        let homeTeamScore = game?.homeTeamScore ?? 0
-        let awayTeamScore = game?.awayTeamScore ?? 0
-        let elapsed = (game as? FBGameForSchedule)?.gameInfo?.elapsed
-        let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
-        let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
+        let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
         let shouldShowScore = !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: gameStatus)
         
-        var isHomeWinner: Bool {
-            if let homePenalty = homeTeamPenaltyScore,
-               let awayPenalty = awayTeamPenaltyScore {
-                return homePenalty > awayPenalty
+        let homeTeamScore = game?.homeTeamScore ?? 0
+        let awayTeamScore = game?.awayTeamScore ?? 0
+        let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
+        let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
+        
+        var topSeedTeamScore: Int {
+            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+                homeTeamScore
+            } else {
+                awayTeamScore
             }
-            
-            return homeTeamScore > awayTeamScore
+        }
+        var lowerSeedTeamScore: Int {
+            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
+                homeTeamScore
+            } else {
+                awayTeamScore
+            }
+        }
+        var topSeedTeamPenaltyScore: Int? {
+            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+                homeTeamPenaltyScore
+            } else {
+                awayTeamPenaltyScore
+            }
+        }
+        var lowerSeedTeamPenaltyScore: Int? {
+            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
+                homeTeamPenaltyScore
+            } else {
+                awayTeamPenaltyScore
+            }
         }
         
         VStack(spacing: 0) {
@@ -276,15 +318,15 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
                     VStack(spacing: 4) {
                         HStack(spacing: 4) {
                             // 축구 패널티킥 경기는 일반 스코어 검정색
-                            let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (homeTeamScore >= awayTeamScore ? .moare : .primary)
+                            let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (topSeedTeamScore >= lowerSeedTeamScore ? .moare : .primary)
                             
-                            Text(shouldShowScore ? "\(homeTeamScore)" : "-")
+                            Text(shouldShowScore ? "\(topSeedTeamScore)" : "-")
                                 .foregroundStyle(shouldShowScore ? scoreColor : .primary)
                             
-                            if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
-                                Text("\(homeTeamPenaltyScore)")
+                            if let topSeedTeamPenaltyScore, let lowerSeedTeamPenaltyScore {
+                                Text("\(topSeedTeamPenaltyScore)")
                                     .font(.system(size: 12))
-                                    .foregroundStyle(homeTeamPenaltyScore >= awayTeamPenaltyScore ? .moare : .primary)
+                                    .foregroundStyle(topSeedTeamPenaltyScore >= lowerSeedTeamPenaltyScore ? .moare : .primary)
                             }
                             
                             HStack {
@@ -323,15 +365,15 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
                         
                         HStack(spacing: 4) {
                             // 축구 패널티킥 경기는 일반 스코어 검정색
-                            let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (awayTeamScore >= homeTeamScore ? .moare : .primary)
+                            let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (lowerSeedTeamScore >= topSeedTeamScore ? .moare : .primary)
                             
-                            Text(shouldShowScore ? "\(awayTeamScore)" : "-")
+                            Text(shouldShowScore ? "\(lowerSeedTeamScore)" : "-")
                                 .foregroundStyle(shouldShowScore ? scoreColor : .primary)
                             
-                            if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
-                                Text("\(awayTeamPenaltyScore)")
+                            if let topSeedTeamPenaltyScore, let lowerSeedTeamPenaltyScore {
+                                Text("\(lowerSeedTeamPenaltyScore)")
                                     .font(.system(size: 12))
-                                    .foregroundStyle(awayTeamPenaltyScore >= homeTeamPenaltyScore ? .moare : .primary)
+                                    .foregroundStyle(lowerSeedTeamPenaltyScore >= topSeedTeamPenaltyScore ? .moare : .primary)
                             }
                             
                             HStack {
@@ -429,20 +471,41 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
         let topSeedTeamId = seedIdTuple.topSeedId
         let lowerSeedTeamId = seedIdTuple.lowerSeedId
         let gameStatus = game?.gameStatus ?? Constants.GameStatus.Football.notStarted
-        let homeTeamScore = game?.homeTeamScore ?? 0
-        let awayTeamScore = game?.awayTeamScore ?? 0
-        let elapsed = (game as? FBGameForSchedule)?.gameInfo?.elapsed
-        let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
-        let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
+        let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
         let shouldShowScore = !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: gameStatus)
         
-        var isHomeWinner: Bool {
-            if let homePenalty = homeTeamPenaltyScore,
-               let awayPenalty = awayTeamPenaltyScore {
-                return homePenalty > awayPenalty
+        let homeTeamScore = game?.homeTeamScore ?? 0
+        let awayTeamScore = game?.awayTeamScore ?? 0
+        let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
+        let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
+        
+        var topSeedTeamScore: Int {
+            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+                homeTeamScore
+            } else {
+                awayTeamScore
             }
-            
-            return homeTeamScore > awayTeamScore
+        }
+        var lowerSeedTeamScore: Int {
+            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
+                homeTeamScore
+            } else {
+                awayTeamScore
+            }
+        }
+        var topSeedTeamPenaltyScore: Int? {
+            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+                homeTeamPenaltyScore
+            } else {
+                awayTeamPenaltyScore
+            }
+        }
+        var lowerSeedTeamPenaltyScore: Int? {
+            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
+                homeTeamPenaltyScore
+            } else {
+                awayTeamPenaltyScore
+            }
         }
         
         Button(action: {
@@ -464,15 +527,15 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
                 
                 VStack(spacing: 2) {
                     // 축구 패널티킥 경기는 일반 스코어 검정색
-                    let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (homeTeamScore >= awayTeamScore ? .moare : .primary)
+                    let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (topSeedTeamScore >= lowerSeedTeamScore ? .moare : .primary)
                     
-                    Text(shouldShowScore ? "\(homeTeamScore)" : "-")
+                    Text(shouldShowScore ? "\(topSeedTeamScore)" : "-")
                         .foregroundStyle(shouldShowScore ? scoreColor : .primary)
                     
-                    if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
-                        Text("\(homeTeamPenaltyScore)")
+                    if let topSeedTeamPenaltyScore, let lowerSeedTeamPenaltyScore {
+                        Text("\(topSeedTeamPenaltyScore)")
                             .font(.system(size: 12))
-                            .foregroundStyle(homeTeamPenaltyScore >= awayTeamPenaltyScore ? .moare : .primary)
+                            .foregroundStyle(topSeedTeamPenaltyScore >= lowerSeedTeamPenaltyScore ? .moare : .primary)
                     }
                 }
                 
@@ -500,15 +563,15 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
                 
                 VStack(spacing: 2) {
                     // 축구 패널티킥 경기는 일반 스코어 검정색
-                    let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (awayTeamScore >= homeTeamScore ? .moare : .primary)
+                    let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (lowerSeedTeamScore >= topSeedTeamScore ? .moare : .primary)
                     
-                    Text(shouldShowScore ? "\(awayTeamScore)" : "-")
+                    Text(shouldShowScore ? "\(lowerSeedTeamScore)" : "-")
                         .foregroundStyle(shouldShowScore ? scoreColor : .primary)
                     
-                    if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
-                        Text("\(awayTeamPenaltyScore)")
+                    if let topSeedTeamPenaltyScore, let lowerSeedTeamPenaltyScore {
+                        Text("\(lowerSeedTeamPenaltyScore)")
                             .font(.system(size: 12))
-                            .foregroundStyle(awayTeamPenaltyScore >= homeTeamPenaltyScore ? .moare : .primary)
+                            .foregroundStyle(lowerSeedTeamPenaltyScore >= topSeedTeamPenaltyScore ? .moare : .primary)
                     }
                 }
                 

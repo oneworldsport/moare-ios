@@ -183,7 +183,7 @@ struct FBLeagueScheduleListItem: View {
                 teamNameDic: teamNameDic,
                 isClickEnabled: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
                 isResultOpened: isResultOpened,
-                gameStatusText: Constants.GameStatus.fbGameStatusText(status: data.gameStatus, elapsed: data.gameInfo?.elapsed, isResultOpened: isResultOpened),
+                gameStatusText: Constants.GameStatus.fbGameStatusText(status: data.gameStatus, elapsed: data.gameInfo?.status?.elapsed, isResultOpened: isResultOpened),
                 gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: data.gameStatus),
                 isCapsuleButtonDisabled: (isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true) || !Constants.GameStatus.Football.finishedList.contains(gameStatus),
                 gameType: MatchDescriptionConverter.convert(input: data.gameInfo?.round ?? ""),
