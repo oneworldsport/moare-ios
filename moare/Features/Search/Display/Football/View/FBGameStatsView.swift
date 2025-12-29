@@ -14,7 +14,7 @@ struct FBGameStatsView: View {
     let didPop: Bool
     let isCombinedView: Bool
     
-    private let columnWidthList: [CGFloat] = [50, 50, 50, 50, 60, 50, 80, 70, 70, 80, 60, 60, 60, 50, 50, 50, 80, 50]
+    private let columnWidthList: [CGFloat] = [80, 50, 50, 50, 50, 50, 70, 70, 100, 50, 70, 100, 70, 50, 80, 70, 70, 50, 50]
     
     @State private var show = false
     
@@ -36,53 +36,33 @@ struct FBGameStatsView: View {
             let stats = $0.statistics.first
             let playerId = $0.player.id
             
-            var isStarter = false
-            var position = ""
-            
-            if let lineups = store.lineups {
-                for item in lineups.startXI {
-                    if playerId == item.player.id {
-                        isStarter = true
-                        position = item.player.pos
-                        break
-                    }
-                }
-                
-                for item in lineups.substitutes {
-                    if playerId == item.player.id {
-                        isStarter = false
-                        position = item.player.pos
-                        break
-                    }
-                }
-            }
-            
             if let stats {
                 return StandingsItemState(
                     id: playerId,
                     imageUrl: $0.player.photo,
                     name: playerNameDic["\(playerId)"] ?? $0.player.name,
-                    extraInfo: isStarter ? "선발" : "후보",
-                    extraSubInfo: position,
+                    extraInfo: $0.isStarter ? "선발" : "후보",
+                    extraSubInfo: $0.position ?? "",
                     dataList: [
+                        String(stats.games.minutes),
                         String(stats.goals.total),
                         String(stats.penalty.scored),
                         String(stats.goals.assists),
+                        "",
                         String(stats.shots.total),
                         String(stats.shots.on),
-                        String(stats.passes.key),
+                        String(stats.passes.total),
                         "\(stats.dribbles.success)/\(stats.dribbles.attempts)(\(stats.dribbles.success.percentage(of: stats.dribbles.attempts, to: 1))%)",
-                        String(stats.offsides),
+                        "",
                         String(stats.tackles.total),
                         "\(stats.duels.won)/\(stats.duels.total)(\(stats.duels.won.percentage(of: stats.duels.total, to: 1))%)",
                         String(stats.tackles.interceptions),
-                        String(stats.passes.total),
+                        "",
+                        String(stats.offsides),
                         String(stats.fouls.drawn),
                         String(stats.fouls.committed),
                         String(stats.cards.yellow),
                         String(stats.cards.red),
-                        String(stats.games.minutes),
-                        stats.games.rating
                     ]
                 )
             } else {
@@ -115,7 +95,7 @@ struct FBGameStatsView: View {
                         teamCategorySelectedIndex: store.baseGameStats.teamCategorySelectedIndex,
                         gameDetailTitle: gameDetailTitle,
                         gameDetailContent: gameDetailContent,
-                        firstStatsCategories: StringConstants.Football.gameStatsSecondCategories,
+                        firstStatsCategories: StringConstants.Football.gameStatsCategories,
                         firstStatsCategorySelectedIndex: store.baseGameStats.firstCategorySelectedIndex,
                         firstStatsColumnWidthList: columnWidthList,
                         firstStatsPlayerList: playerList,
@@ -123,6 +103,9 @@ struct FBGameStatsView: View {
                     actions: GameStatsContainerActions(
                         teamCategoryButtonAction: { index in
                             store.send(.baseGameStats(.selectTeam(index: index)))
+                        },
+                        firstStatsTitleCategoryAction: {
+                            store.send(.selectTitleCategory)
                         },
                         firstStatsCategoryButtonAction: { index in
                             store.send(.baseGameStats(.selectFirstCategory(index)))

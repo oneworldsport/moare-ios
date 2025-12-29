@@ -53,6 +53,7 @@ struct StringConstants {
         static let gameStatsDefendCategories = ["태클 시도", "볼 경합 성공/시도(%)", "가로채기"]
         static let gameStatsCommonCategories = ["패스 시도", "얻은 파울", "파울", "경고", "퇴장", "출전시간(분)", "평점"]
         static let gameStatsSecondCategories = gameStatsAttackCategories + gameStatsDefendCategories + gameStatsCommonCategories
+        static let gameStatsCategories = ["출전시간(분)", "득점", "pk골", "도움", "", "슈팅", "유효슈팅", "패스 시도", "드리블\n성공/시도(%)", "", "태클 시도", "볼 경합\n성공/시도(%)", "인터셉트", "", "오프사이드", "파울 당함", "파울 범함", "경고", "퇴장"]
         
         static func leagueNameStr(leagueId: Int) -> String {
             switch leagueId {

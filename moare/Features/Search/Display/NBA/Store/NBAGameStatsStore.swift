@@ -102,12 +102,20 @@ struct NBAGameStatsStore {
                     state.baseGameStats.displayModel.game.boxScoreTraditional?.awayTeam.players ?? []
                 }
                 
-                return .run { send in
-                    await send(.sortPlayers)
-                    await send(.setPlayersTotalStats)
+                return .run { [firstCategorySelectedIndex = state.baseGameStats.firstCategorySelectedIndex] send in
                     if isInit {
+                        // TODO: 새로고침으로 updateDisplayModel > initData > selectTeam이 실행됐을때도 선택했던 정렬이 유지되게?
                         await send(.refreshGame(shouldFetch: false))
+                        await send(.selectTitleCategory)
+                    } else {
+                        if firstCategorySelectedIndex == -1 {
+                            await send(.selectTitleCategory)
+                        } else {
+                            await send(.sortPlayers)
+                        }
                     }
+                    
+                    await send(.setPlayersTotalStats)
                 }
                 
             case .baseGameStats(.selectFirstCategory):
@@ -201,6 +209,19 @@ struct NBAGameStatsStore {
                 
                 return .none
                 
+            case .selectTitleCategory:
+                // 선발, 후보를 먼저 정렬한 후 각각 출전시간 순으로 정렬
+                state.playerStats.sort {
+                    // 1) 선발/후보
+                    if $0.starterSortKey != $1.starterSortKey {
+                        return $0.starterSortKey < $1.starterSortKey
+                    }
+                    // 2) seconds 내림차순
+                    return $0.statistics.seconds > $1.statistics.seconds
+                }
+                
+                return .send(.baseGameStats(.selectFirstCategory(-1)))
+                
             case let .refreshGame(shouldFetch):
                 if shouldFetch {
                     return .run { [displayModel = state.baseGameStats.displayModel] send in
@@ -218,6 +239,7 @@ struct NBAGameStatsStore {
                                 )
                                 
                                 await send(.updateDisplayModel(model: result.data))
+                                // TODO: updateDisplayModel > initData > selectTeam > refreshGame(false) 과정에서 didRefreshGame이 실행되니깐 굳이 여기서는 해줄 필요 없는듯?
                                 await send(.delegate(.didRefreshGame(model: result.data)))
                             }
                         } catch {
@@ -232,19 +254,6 @@ struct NBAGameStatsStore {
                         await send(.delegate(.didRefreshGame(model: dataModel)))
                     }
                 }
-                
-            case .selectTitleCategory:
-                // 선발, 후보를 먼저 정렬한 후 각각 출전시간 순으로 정렬
-                state.playerStats.sort {
-                    // 1) 선발/후보
-                    if $0.starterSortKey != $1.starterSortKey {
-                        return $0.starterSortKey < $1.starterSortKey
-                    }
-                    // 2) seconds 내림차순
-                    return $0.statistics.seconds > $1.statistics.seconds
-                }
-                
-                return .send(.baseGameStats(.selectFirstCategory(-1)))
                 
             case let .updateDisplayModel(model):
                 if case .nbaGameStats(_, let displayModel) = model {

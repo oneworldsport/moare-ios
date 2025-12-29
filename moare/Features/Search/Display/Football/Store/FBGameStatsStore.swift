@@ -52,6 +52,8 @@ struct FBGameStatsStore {
         case setPlayersTotalStats
         // NOTE: shouldFetch는 최초에 FBGameStats에 진입했을때 받은 데이터로 FBLeagueSchedule데이터 업데이트 해줄때 사용.
         case refreshGame(shouldFetch: Bool = true)
+        case selectTitleCategory
+        
         case updateDisplayModel(model: SportDecodableModel)
         
         case delegate(Delegate)
@@ -93,12 +95,44 @@ struct FBGameStatsStore {
                 state.lineups = lineups
                 state.coach = lineups?.coach
                 
-                return .run { send in
-                    await send(.setPlayersTotalStats)
-                    await send(.sortPlayers)
+                // 선수들의 선발/후보, position 값 설정
+                if let lineups {
+                    let startXIByPlayerId: [Int: String] = Dictionary(
+                        uniqueKeysWithValues: lineups.startXI.map { ($0.player.id, $0.player.pos) }
+                    )
+                    let substitutesByPlayerId: [Int: String] = Dictionary(
+                        uniqueKeysWithValues: lineups.substitutes.map { ($0.player.id, $0.player.pos) }
+                    )
+                    
+                    state.playerStats = state.playerStats.map { stats in
+                        let playerId = stats.player.id
+                        var updated = stats
+                        
+                        if let pos = startXIByPlayerId[playerId] {
+                            updated.starterSortKey = 0
+                            updated.position = pos
+                        } else if let pos = substitutesByPlayerId[playerId] {
+                            updated.starterSortKey = 1
+                            updated.position = pos
+                        }
+                        
+                        return updated
+                    }
+                }
+                
+                return .run { [firstCategorySelectedIndex = state.baseGameStats.firstCategorySelectedIndex] send in
                     if isInit {
                         await send(.refreshGame(shouldFetch: false)) // NOTE: 이걸 안해주면 새로고침 누르기 전에는 FBLeagueSchedule 데이터가 업데이트 안됨.
+                        await send(.selectTitleCategory)
+                    } else {
+                        if firstCategorySelectedIndex == -1 {
+                            await send(.selectTitleCategory)
+                        } else {
+                            await send(.sortPlayers)
+                        }
                     }
+                    
+                    await send(.setPlayersTotalStats)
                 }
                 
             case .baseGameStats(.selectFirstCategory):
@@ -107,49 +141,47 @@ struct FBGameStatsStore {
             case .sortPlayers:
                 switch state.baseGameStats.firstCategorySelectedIndex {
                 case 0:
-                    state.playerStats.sort { $0.statistics.first?.goals.total ?? 0 > $1.statistics.first?.goals.total ?? 0 }
-                case 1:
-                    state.playerStats.sort { $0.statistics.first?.penalty.scored ?? 0 > $1.statistics.first?.penalty.scored ?? 0 }
-                case 2:
-                    state.playerStats.sort { $0.statistics.first?.goals.assists ?? 0 > $1.statistics.first?.goals.assists ?? 0 }
-                case 3:
-                    state.playerStats.sort { $0.statistics.first?.shots.total ?? 0 > $1.statistics.first?.shots.total ?? 0 }
-                case 4:
-                    state.playerStats.sort { $0.statistics.first?.shots.on ?? 0 > $1.statistics.first?.shots.on ?? 0 }
-                case 5:
-                    state.playerStats.sort { $0.statistics.first?.passes.key ?? 0 > $1.statistics.first?.passes.key ?? 0 }
-                case 6:
-                    if state.playerStats.allSatisfy({ $0.statistics.first != nil }) {
-                        state.playerStats.sort {
-                            $0.statistics.first!.dribbles.success.percentage(of: $0.statistics.first!.dribbles.attempts, to: 1) > $1.statistics.first!.dribbles.success.percentage(of: $1.statistics.first!.dribbles.attempts, to: 1)
-                        }
-                    }
-                case 7:
-                    state.playerStats.sort { $0.statistics.first?.offsides ?? 0 > $1.statistics.first?.offsides ?? 0 }
-                case 8:
-                    state.playerStats.sort { $0.statistics.first?.tackles.total ?? 0 > $1.statistics.first?.tackles.total ?? 0 }
-                case 9:
-                    if state.playerStats.allSatisfy({ $0.statistics.first != nil }) {
-                        state.playerStats.sort {
-                            $0.statistics.first!.duels.won.percentage(of: $0.statistics.first!.duels.total, to: 1) > $1.statistics.first!.duels.won.percentage(of: $1.statistics.first!.duels.total, to: 1)
-                        }
-                    }
-                case 10:
-                    state.playerStats.sort { $0.statistics.first?.tackles.interceptions ?? 0 > $1.statistics.first?.tackles.interceptions ?? 0 }
-                case 11:
-                    state.playerStats.sort { $0.statistics.first?.passes.total ?? 0 > $1.statistics.first?.passes.total ?? 0 }
-                case 12:
-                    state.playerStats.sort { $0.statistics.first?.fouls.drawn ?? 0 > $1.statistics.first?.fouls.drawn ?? 0 }
-                case 13:
-                    state.playerStats.sort { $0.statistics.first?.fouls.committed ?? 0 > $1.statistics.first?.fouls.committed ?? 0 }
-                case 14:
-                    state.playerStats.sort { $0.statistics.first?.cards.yellow ?? 0 > $1.statistics.first?.cards.yellow ?? 0 }
-                case 15:
-                    state.playerStats.sort { $0.statistics.first?.cards.red ?? 0 > $1.statistics.first?.cards.red ?? 0 }
-                case 16:
                     state.playerStats.sort { $0.statistics.first?.games.minutes ?? 0 > $1.statistics.first?.games.minutes ?? 0 }
+                case 1:
+                    state.playerStats.sort { $0.statistics.first?.goals.total ?? 0 > $1.statistics.first?.goals.total ?? 0 }
+                case 2:
+                    state.playerStats.sort { $0.statistics.first?.penalty.scored ?? 0 > $1.statistics.first?.penalty.scored ?? 0 }
+                case 3:
+                    state.playerStats.sort { $0.statistics.first?.goals.assists ?? 0 > $1.statistics.first?.goals.assists ?? 0 }
+                case 5:
+                    state.playerStats.sort { $0.statistics.first?.shots.total ?? 0 > $1.statistics.first?.shots.total ?? 0 }
+                case 6:
+                    state.playerStats.sort { $0.statistics.first?.shots.on ?? 0 > $1.statistics.first?.shots.on ?? 0 }
+                case 7:
+                    state.playerStats.sort { $0.statistics.first?.passes.total ?? 0 > $1.statistics.first?.passes.total ?? 0 }
+                case 8:
+//                    if state.playerStats.allSatisfy({ $0.statistics.first != nil }) {
+//                        state.playerStats.sort {
+//                            $0.statistics.first!.dribbles.success.percentage(of: $0.statistics.first!.dribbles.attempts, to: 1) > $1.statistics.first!.dribbles.success.percentage(of: $1.statistics.first!.dribbles.attempts, to: 1)
+//                        }
+//                    }
+                    state.playerStats.sort { $0.statistics.first?.dribbles.success ?? 0 > $1.statistics.first?.dribbles.success ?? 0 }
+                case 10:
+                    state.playerStats.sort { $0.statistics.first?.tackles.total ?? 0 > $1.statistics.first?.tackles.total ?? 0 }
+                case 11:
+//                    if state.playerStats.allSatisfy({ $0.statistics.first != nil }) {
+//                        state.playerStats.sort {
+//                            $0.statistics.first!.duels.won.percentage(of: $0.statistics.first!.duels.total, to: 1) > $1.statistics.first!.duels.won.percentage(of: $1.statistics.first!.duels.total, to: 1)
+//                        }
+//                    }
+                    state.playerStats.sort { $0.statistics.first?.duels.won ?? 0 > $1.statistics.first?.duels.won ?? 0 }
+                case 12:
+                    state.playerStats.sort { $0.statistics.first?.tackles.interceptions ?? 0 > $1.statistics.first?.tackles.interceptions ?? 0 }
+                case 14:
+                    state.playerStats.sort { $0.statistics.first?.offsides ?? 0 > $1.statistics.first?.offsides ?? 0 }
+                case 15:
+                    state.playerStats.sort { $0.statistics.first?.fouls.drawn ?? 0 > $1.statistics.first?.fouls.drawn ?? 0 }
+                case 16:
+                    state.playerStats.sort { $0.statistics.first?.fouls.committed ?? 0 > $1.statistics.first?.fouls.committed ?? 0 }
                 case 17:
-                    state.playerStats.sort { Double($0.statistics.first?.games.rating ?? "0") ?? 0 > Double($1.statistics.first?.games.rating ?? "0") ?? 0 }
+                    state.playerStats.sort { $0.statistics.first?.cards.yellow ?? 0 > $1.statistics.first?.cards.yellow ?? 0 }
+                case 18:
+                    state.playerStats.sort { $0.statistics.first?.cards.red ?? 0 > $1.statistics.first?.cards.red ?? 0 }
                 default: break
                 }
                 
@@ -222,6 +254,19 @@ struct FBGameStatsStore {
                     }
                 
                 return .none
+                
+            case .selectTitleCategory:
+                // 선발, 후보를 먼저 정렬한 후 각각 출전시간 순으로 정렬
+                state.playerStats.sort {
+                    // 1) 선발/후보
+                    if $0.starterSortKey != $1.starterSortKey {
+                        return $0.starterSortKey ?? 0 < $1.starterSortKey ?? 0
+                    }
+                    // 2) minutes 내림차순
+                    return $0.statistics.first?.games.minutes ?? 0 > $1.statistics.first?.games.minutes ?? 0
+                }
+                
+                return .send(.baseGameStats(.selectFirstCategory(-1)))
                 
             case let .refreshGame(shouldFetch):
                 if shouldFetch {

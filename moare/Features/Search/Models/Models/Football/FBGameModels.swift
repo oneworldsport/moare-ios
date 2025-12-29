@@ -230,6 +230,12 @@ struct FBGamePlayers: Decodable, Equatable {
 struct FBGamePlayerStats: Decodable, Equatable {
     let player: FBPerson
     let statistics: [FBGamePlayerStatsDetail]
+    
+    /// 선발이면 0, 후보면 1
+    /// 아래 프로퍼티들은 Store에서 선수들 초기화할때 설정해줌
+    var starterSortKey: Int? = nil
+    var isStarter: Bool { starterSortKey == 0 }
+    var position: String? = nil
 }
 
 struct FBGamePlayerStatsDetail: Decodable, Equatable {

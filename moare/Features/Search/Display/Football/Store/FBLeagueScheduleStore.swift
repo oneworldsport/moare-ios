@@ -261,17 +261,21 @@ struct FBLeagueScheduleStore {
                 state.filteredGames[state.baseSchedule.selectedDayIndex] = [game]
                 
                 return .run { [displayModel = state.baseSchedule.displayModel] send in
-                    let result = try await searchClient.fetchById(
-                        season: displayModel.season,
-                        category: "football",
-                        date: game.date,
-                        dataType: "football_game_stats",
-                        leagueId: displayModel.leagueId,
-                        id: game.gameId
-                    )
-                    
-                    await send(.delegate(.showGameStats(model: result.data)))
-                    await send(.updateResultOpenedState(gameId: game.gameId, isOpened: true))
+                    do {
+                        let result = try await searchClient.fetchById(
+                            season: displayModel.season,
+                            category: "football",
+                            date: game.date,
+                            dataType: "football_game_stats",
+                            leagueId: displayModel.leagueId,
+                            id: game.gameId
+                        )
+                        
+                        await send(.delegate(.showGameStats(model: result.data)))
+                        await send(.updateResultOpenedState(gameId: game.gameId, isOpened: true))
+                    } catch {
+                        print("\(error)")
+                    }
                 }
                 
             case .showTournament:
