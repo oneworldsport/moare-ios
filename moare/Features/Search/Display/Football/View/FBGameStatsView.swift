@@ -128,7 +128,7 @@ struct FBGameStatsView: View {
                             store.send(.baseGameStats(.selectFirstCategory(index)))
                         },
                         refreshButtonAction: {
-                            store.send(.refreshGame())
+                            await store.send(.refreshGame()).finish()
                         }
                     ),
                     titleContent: {

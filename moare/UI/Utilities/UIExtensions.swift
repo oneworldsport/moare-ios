@@ -22,4 +22,13 @@ extension View {
             }
         )
     }
+    
+    @ViewBuilder
+    func refreshableIf(_ enabled: Bool, action: @escaping () async -> Void) -> some View {
+        if enabled {
+            self.refreshable { await action() }
+        } else {
+            self
+        }
+    }
 }
