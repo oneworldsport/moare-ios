@@ -47,7 +47,7 @@ struct KBOLeagueScheduleView: View {
                         allResultButtonAction: {
                             store.send(.toggleAllResult)
                         },
-                        teamStandingsButtonAction: {
+                        tournamentOrteamStandingsButtonAction: {
                             store.send(.showTeamStandings)
                         },
                         tournamentButtonAction: {

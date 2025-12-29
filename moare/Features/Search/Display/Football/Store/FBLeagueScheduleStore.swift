@@ -275,23 +275,48 @@ struct FBLeagueScheduleStore {
                 }
                 
             case .showTournament:
+                let leagueId = state.baseSchedule.displayModel.leagueId
+                let isMLS = leagueId == Constants.Ids.mls
+                
                 return .run { send in
-                    let keywordInfo = KeywordInfo(
-                        keyword: "MLS 플레이오프",
-                        weight: 100,
-                        keywords: [Keyword(keyword: "플레이오프", id: "tournament", priority: 2)],
-                        entities: [
-                            EntityInfo(
-                                entityId: Constants.Ids.mls,
-                                entityName: "MLS",
-                                category: "football",
-                                entityType: "league",
-                                leagueId: Constants.Ids.mls,
-                                teamId: nil,
-                                playerId: nil
-                            )
-                        ]
-                    )
+                    let keywordInfo: KeywordInfo
+                    
+                    if isMLS {
+                        keywordInfo = KeywordInfo(
+                            keyword: "MLS 플레이오프",
+                            weight: 100,
+                            keywords: [Keyword(keyword: "플레이오프", id: "tournament", priority: 2)],
+                            entities: [
+                                EntityInfo(
+                                    entityId: Constants.Ids.mls,
+                                    entityName: "MLS",
+                                    category: "football",
+                                    entityType: "league",
+                                    leagueId: Constants.Ids.mls,
+                                    teamId: nil,
+                                    playerId: nil
+                                )
+                            ]
+                        )
+                    } else {
+                        let leagueName = StringConstants.Football.leagueNameStr(leagueId: leagueId)
+                        keywordInfo = KeywordInfo(
+                            keyword: "\(leagueName) 대진표",
+                            weight: 100,
+                            keywords: [Keyword(keyword: "대진표", id: "tournament", priority: 2)],
+                            entities: [
+                                EntityInfo(
+                                    entityId: leagueId,
+                                    entityName: leagueName,
+                                    category: "football",
+                                    entityType: "league",
+                                    leagueId: leagueId,
+                                    teamId: nil,
+                                    playerId: nil
+                                )
+                            ]
+                        )
+                    }
                     
                     let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
                     

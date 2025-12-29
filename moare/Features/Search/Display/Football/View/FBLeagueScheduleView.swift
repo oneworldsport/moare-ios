@@ -50,8 +50,12 @@ struct FBLeagueScheduleView: View {
                         allResultButtonAction: {
                             store.send(.toggleAllResult)
                         },
-                        teamStandingsButtonAction: {
-                            store.send(.showTeamStandings)
+                        tournamentOrteamStandingsButtonAction: {
+                            if Constants.Ids.footballDrawTournamentLeagues.contains(leagueId) {
+                                store.send(.showTournament)
+                            } else {
+                                store.send(.showTeamStandings)
+                            }
                         },
                         tournamentButtonAction: {
                             store.send(.showTournament)

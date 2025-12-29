@@ -21,8 +21,6 @@ struct StringConstants {
     
     static let gameStatsFirstCategory = "선수 이름"
     
-    static let leagueStandings = "리그 순위"
-    
     struct Football {
         static let gameFirstHalfStr = "전반전"
         static let gameHalftimeStr = "전반 종료"
@@ -68,6 +66,18 @@ struct StringConstants {
                 return "세리에A"
             case Constants.Ids.ligue1:
                 return "리그1"
+            case Constants.Ids.faCup:
+                return "FA컵"
+            case Constants.Ids.eflCup:
+                return "EFL컵"
+            case Constants.Ids.dfbPokal:
+                return "DFB 포칼"
+            case Constants.Ids.coupeDeFrance:
+                return "쿠프 드 프랑스"
+            case Constants.Ids.copaDelRey:
+                return "코파 델 레이"
+            case Constants.Ids.coppaItalia:
+                return "코파 이탈리아"
             default :
                 return ""
             }
@@ -163,6 +173,14 @@ struct StringConstants {
             return "가을야구 대진표"
         default :
             return ""
+        }
+    }
+    
+    static func tournamentOrStandingsText(leagueId: Int) -> String {
+        if Constants.Ids.footballDrawTournamentLeagues.contains(leagueId) {
+            return "대진표"
+        } else {
+            return "리그 순위"
         }
     }
 }
