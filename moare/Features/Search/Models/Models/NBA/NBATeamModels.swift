@@ -169,6 +169,20 @@ struct NBATeamStats: Decodable, Equatable {
     var pfdPG: Double { gp != 0 ? (Double(pfd) / Double(gp)).rounded(to: 1) : 0.0 }
     var minPG: String { gp != 0 ? CalendarUtil.formatMinutesToHourMinute(min: min) : "0:0" }
     var plusMinusPG: Double { gp != 0 ? (Double(plusMinus) / Double(gp)).rounded(to: 1) : 0.0 }
+    
+    // String with 3 decimal places
+    var winsPctStr: String {
+        String(format: "%.3f", winsPct)
+    }
+    var fgPctStr: String {
+        String(format: "%.3f", fgPct)
+    }
+    var ftPctStr: String {
+        String(format: "%.3f", ftPct)
+    }
+    var fg3PctStr: String {
+        String(format: "%.3f", fg3Pct)
+    }
 
     private enum CodingKeys: String, CodingKey {
         case _ast = "ast"
