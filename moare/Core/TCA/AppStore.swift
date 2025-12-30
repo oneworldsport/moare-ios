@@ -14,6 +14,7 @@ struct AppStore {
     struct State {
         var search = SearchStore.State()
         var path = StackState<Path.State>()
+        var queryList: [String] = []
         
         var didPop: Bool = false
         var includesPreviousView: Bool = false
@@ -36,7 +37,7 @@ struct AppStore {
             case .pop:
                 if !state.search.searchState {
                     if state.path.isEmpty {
-                        return .none
+                        return .send(.search(.updateTextField("")))
                     } else {
                         // If searchBar is Opened and there are stack, don't pop and show the previous view.
                         return .send(.search(.showPreviousView))
@@ -48,8 +49,10 @@ struct AppStore {
                     state.includesPreviousView = false
                     
                     let lastPath = state.path.popLast()
+                    let poppedQuery = state.queryList.popLast()
+                    let lastQuery = state.queryList.last ?? poppedQuery ?? ""
                     
-                    return .send(.search(.popView(lastPath: lastPath, isEmpty: state.path.isEmpty)))
+                    return .send(.search(.popView(lastPath: lastPath, isEmpty: state.path.isEmpty, lastQuery: lastQuery)))
                 }
                 
             case .search:
@@ -140,6 +143,7 @@ struct AppStore {
                 
                 if let route = model.playerStatsRoute {
                     state.path.append(route)
+                    state.queryList.append(state.search.query)
                 }
                 
                 return .none
@@ -157,6 +161,7 @@ struct AppStore {
                 
                 if let route = model.teamStatsRoute {
                     state.path.append(route)
+                    state.queryList.append(state.search.query)
                 }
                 
                 return .none
@@ -178,6 +183,7 @@ struct AppStore {
                 
                 if let route = model.gameStatsRoute {
                     state.path.append(route)
+                    state.queryList.append(state.search.query)
                 }
                 
                 return .none
@@ -193,6 +199,7 @@ struct AppStore {
                 
                 if let route = model.gameStatsRoute {
                     state.path.append(route)
+                    state.queryList.append(state.search.query)
                 }
                 
                 return .none
@@ -206,6 +213,7 @@ struct AppStore {
                 
                 if let route = model.leagueScheduleRoute {
                     state.path.append(route)
+                    state.queryList.append(state.search.query)
                 }
                 
                 return .none
@@ -219,6 +227,7 @@ struct AppStore {
                 
                 if let route = model.tournamentRoute {
                     state.path.append(route)
+                    state.queryList.append(state.search.query)
                 }
                 
                 return .none
@@ -232,6 +241,7 @@ struct AppStore {
                 
                 if let route = model.teamStandingsRoute {
                     state.path.append(route)
+                    state.queryList.append(state.search.query)
                 }
                 
                 return .none
@@ -324,6 +334,8 @@ struct AppStore {
             state.path.append(.mlbTournament(MLBTournamentStore.State(displayModel: displayModel)))
         default: break
         }
+        
+        state.queryList.append(state.search.query)
         
         return .none
     }

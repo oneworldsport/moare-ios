@@ -88,7 +88,7 @@ struct SearchStore {
         case updateSearchStateWithAni(bool: Bool)
         
         case showPreviousView
-        case popView(lastPath: AppStore.Path.State?, isEmpty: Bool)
+        case popView(lastPath: AppStore.Path.State?, isEmpty: Bool, lastQuery: String)
         case delegate(Delegate)
         
         /* ---------------------
@@ -337,11 +337,12 @@ struct SearchStore {
                     await send(.removeAutoCompleteWithAni)
                 }
                 
-            case let .popView(lastPath, isEmpty):
+            case let .popView(lastPath, isEmpty, lastQuery):
                 guard lastPath != nil else { return .none }
                 
                 if isEmpty {
                     return .run { send in
+                        await send(.updateTextField(lastQuery, false)) // NOTE: 어짜피 toggleSearchBar에서 updateTextField(query)해줘서 여기서는 두번째 인자를 false로 보냄.
                         await send(.toggleSearchBar)
                         
                         //                            try await Task.sleep(for: .seconds(0.5))
@@ -351,7 +352,7 @@ struct SearchStore {
                         await send(.updateIsFocused(true))
                     }
                 } else {
-                    return .none
+                    return .send(.updateTextField(lastQuery, false))
                 }
                 
 //                if !state.searchState {
