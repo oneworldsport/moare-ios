@@ -33,7 +33,7 @@ struct SearchStore {
         var firstOpened = false
         var query = ""
         var searchState = false // NOTE: Has to be animated when changing. SearchBar animation is effected by this property. TODO: Store 개선할때 개선 필요
-        var isFocused = false // NOTE: Doesn't have do be synchronized with SearchView's focusState. Because it is only used for updating focusState in .onChange().
+        var isFocused: Bool? = nil // NOTE: Doesn't have do be synchronized with SearchView's focusState. Because it is only used for updating focusState in .onChange().
         
         // visible state
         var textFieldVisibleState = false
@@ -81,7 +81,7 @@ struct SearchStore {
         case initTrieTuple(trieTuple: (Trie, [KeywordInfo]))
         case initNoticeList([NoticeModel])
         case updateSearchDataState(ApiFetchState)
-        case updateIsFocused(Bool)
+        case updateIsFocused(Bool?)
         case updateAutoCompleteList
         case updateResultVisibleState(bool: Bool)
 

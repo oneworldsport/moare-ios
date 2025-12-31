@@ -215,9 +215,9 @@ struct SearchView: View {
                     }
                 } // ZStack
                 .onChange(of: searchStore.isFocused) {
-                    if searchStore.isFocused {
-                        focusState.toggle()
-                        searchStore.send(.updateIsFocused(false)) // Reset searchStore's isFocused to ensure this .onChange() triggered when isFocused set true.
+                    if searchStore.isFocused != nil {
+                        focusState = searchStore.isFocused!
+                        searchStore.send(.updateIsFocused(nil)) // Reset searchStore's isFocused to ensure this .onChange() triggered when isFocused set.
                     }
                 }
             } // VStack

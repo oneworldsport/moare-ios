@@ -37,7 +37,11 @@ struct AppStore {
             case .pop:
                 if !state.search.searchState {
                     if state.path.isEmpty {
-                        return .send(.search(.updateTextField("")))
+                        if state.search.query.isEmpty {
+                            return .send(.search(.updateIsFocused(false)))
+                        } else {
+                            return .send(.search(.updateTextField("")))
+                        }
                     } else {
                         // If searchBar is Opened and there are stack, don't pop and show the previous view.
                         return .send(.search(.showPreviousView))
