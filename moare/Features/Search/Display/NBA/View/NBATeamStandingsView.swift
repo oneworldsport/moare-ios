@@ -13,7 +13,7 @@ struct NBATeamStandingsView: View {
     let store: StoreOf<NBATeamStandingsStore>
     let didPop: Bool
     
-    private let columnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80]
+    private let columnWidthList: [CGFloat] = [50, 50, 50, 50, 50, 50, 80, 80, 80, 50, 80, 70, 80, 70, 80, 80, 70, 80, 80, 70, 80]
     private let headerCategories = ["서부 컨퍼런스", "동부 컨퍼런스"]
     
     @State private var show = false
@@ -23,6 +23,7 @@ struct NBATeamStandingsView: View {
             let stats = $0.stats
             return StandingsItemState(
                 id: $0.team.id,
+                rank: stats.displayRank,
                 imageUrl: NBAUtil.teamLogoURL(id: $0.team.id),
                 name: store.baseStandings.teamNameDictionary["short_\($0.team.id)"] ?? $0.team.fullName,
                 dataList: [
@@ -31,6 +32,11 @@ struct NBATeamStandingsView: View {
                     String(stats.wins),
                     String(stats.losses),
                     String(stats.gp),
+                    stats.krCurrentStreak,
+                    stats.krL10,
+                    stats.krHome,
+                    stats.krRoad,
+                    "",
                     String(stats.ptsPG),
                     String(stats.plusMinusPG),
                     String(stats.astPG),
@@ -38,8 +44,8 @@ struct NBATeamStandingsView: View {
                     stats.fgPctStr,
                     stats.fg3PctStr,
                     stats.ftPctStr,
-                    String(stats.blkPG),
                     String(stats.stlPG),
+                    String(stats.blkPG),
                     String(stats.tovPG),
                     String(stats.pfPG)
                 ]

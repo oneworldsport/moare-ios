@@ -109,38 +109,99 @@ struct NBATeamStandingsStore {
                 let standings = state.standings
                 
                 switch state.baseStandings.categorySelectedIndex {
-                case 0:
-                    state.standings.sort { NBAUtil.calculateGamesBack(team: $0.stats, standings: standings) < NBAUtil.calculateGamesBack(team: $1.stats, standings: standings) }
-                case 1:
-                    state.standings.sort { $0.stats.winsPct > $1.stats.winsPct }
-                case 2:
+                case 0: // 게임차
+                    state.standings.sort { $0.stats.playoffRank < $1.stats.playoffRank }
+                    for i in standings.indices {
+                        state.standings[i].stats.displayRank = state.standings[i].stats.playoffRank
+                    }
+                case 1: // 승률
+                    state.standings.sort { $0.stats.playoffRank < $1.stats.playoffRank }
+                    for i in standings.indices {
+                        state.standings[i].stats.displayRank = state.standings[i].stats.playoffRank
+                    }
+                case 2: // 승
                     state.standings.sort { $0.stats.wins > $1.stats.wins }
-                case 3:
+                    state.standings.assignCompetitionRank { $0.stats.wins }
+                case 3: // 패
                     state.standings.sort { $0.stats.losses < $1.stats.losses }
-                case 4:
+                    state.standings.assignCompetitionRank { $0.stats.losses }
+                case 4: // 경기수
                     state.standings.sort { $0.stats.gp > $1.stats.gp }
-                case 5:
+                    state.standings.assignCompetitionRank { $0.stats.gp }
+                case 5: // 연속
+                    state.standings.sort { a, b in
+                        sortStreak(a, b)
+                    }
+                    state.standings.assignCompetitionRank { $0.stats.krCurrentStreak }
+                case 6: // 최근 10경기
+                    state.standings.sort { a, b in
+                        let ra = a.stats.parseRecord(a.stats.l10)
+                        let rb = b.stats.parseRecord(b.stats.l10)
+                        
+                        if ra.winPct != rb.winPct {
+                            return ra.winPct > rb.winPct          // 1) 승률 내림차순
+                        } else {
+                            return ra.wins > rb.wins              // 2) 승수 내림차순
+                        }
+                    }
+                    state.standings.assignCompetitionRank { $0.stats.krL10 }
+                case 7: // 홈성적
+                    state.standings.sort { a, b in
+                        let ra = a.stats.parseRecord(a.stats.home)
+                        let rb = b.stats.parseRecord(b.stats.home)
+                        
+                        if ra.winPct != rb.winPct {
+                            return ra.winPct > rb.winPct
+                        } else {
+                            return ra.wins > rb.wins
+                        }
+                    }
+                    state.standings.assignCompetitionRank { $0.stats.krHome }
+                case 8: // 원정성적
+                    state.standings.sort { a, b in
+                        let ra = a.stats.parseRecord(a.stats.road)
+                        let rb = b.stats.parseRecord(b.stats.road)
+                        
+                        if ra.winPct != rb.winPct {
+                            return ra.winPct > rb.winPct
+                        } else {
+                            return ra.wins > rb.wins
+                        }
+                    }
+                    state.standings.assignCompetitionRank { $0.stats.krRoad }
+                case 10: // 경기당 득점
                     state.standings.sort { $0.stats.ptsPG > $1.stats.ptsPG }
-                case 6:
+                    state.standings.assignCompetitionRank { $0.stats.ptsPG }
+                case 11: // 경기당 득실마진
                     state.standings.sort { $0.stats.plusMinusPG > $1.stats.plusMinusPG }
-                case 7:
+                    state.standings.assignCompetitionRank { $0.stats.plusMinusPG }
+                case 12: // 경기당 도움
                     state.standings.sort { $0.stats.astPG > $1.stats.astPG }
-                case 8:
+                    state.standings.assignCompetitionRank { $0.stats.astPG }
+                case 13: // 경기당 리바운드
                     state.standings.sort { $0.stats.rebPG > $1.stats.rebPG }
-                case 9:
+                    state.standings.assignCompetitionRank { $0.stats.rebPG }
+                case 14: // 야투 성공률
                     state.standings.sort { $0.stats.fgPct > $1.stats.fgPct }
-                case 10:
+                    state.standings.assignCompetitionRank { $0.stats.fgPct }
+                case 15: // 3점 성공률
                     state.standings.sort { $0.stats.fg3Pct > $1.stats.fg3Pct }
-                case 11:
+                    state.standings.assignCompetitionRank { $0.stats.fg3Pct }
+                case 16: // 자유투 성공률
                     state.standings.sort { $0.stats.ftPct > $1.stats.ftPct }
-                case 12:
-                    state.standings.sort { $0.stats.blkPG > $1.stats.blkPG }
-                case 13:
+                    state.standings.assignCompetitionRank { $0.stats.ftPct }
+                case 17: // 경기당 스틸
                     state.standings.sort { $0.stats.stlPG > $1.stats.stlPG }
-                case 14:
+                    state.standings.assignCompetitionRank { $0.stats.stlPG }
+                case 18: // 경기당 블록
+                    state.standings.sort { $0.stats.blkPG > $1.stats.blkPG }
+                    state.standings.assignCompetitionRank { $0.stats.blkPG }
+                case 19: // 경기당 턴오버
                     state.standings.sort { $0.stats.tovPG < $1.stats.tovPG }
-                case 15:
+                    state.standings.assignCompetitionRank { $0.stats.tovPG }
+                case 20: // 경기당 파울
                     state.standings.sort { $0.stats.pfPG < $1.stats.pfPG }
+                    state.standings.assignCompetitionRank { $0.stats.pfPG }
                 default:
                     break
                 }
@@ -161,6 +222,58 @@ struct NBATeamStandingsStore {
             case .delegate:
                 return .none
             } // switch action
+            
+            func sortStreak(_ a: NBATeamStandingsDisplay, _ b: NBATeamStandingsDisplay) -> Bool {
+                let aStreak = a.stats.strCurrentStreak
+                let bStreak = b.stats.strCurrentStreak
+                let aIsWin = aStreak.hasPrefix("W")
+                let bIsWin = bStreak.hasPrefix("W")
+
+                if aIsWin && bIsWin {
+                    // 둘 다 승일 때: 숫자 큰 순
+                    return extractNumber(from: aStreak) > extractNumber(from: bStreak)
+                } else if !aIsWin && !bIsWin {
+                    // 둘 다 패일 때: 숫자 작은 순
+                    return extractNumber(from: aStreak) < extractNumber(from: bStreak)
+                } else {
+                    // 승이 우선
+                    return aIsWin
+                }
+            }
+            
+            func extractNumber(from string: String) -> Int {
+                let upper = string.uppercased()
+                let digits = upper.dropFirst().filter { $0.isNumber }
+                return Int(String(digits)) ?? 0
+            }
+        }
+    }
+}
+
+// 코드가 참 어렵구만...
+extension Array where Element == NBATeamStandingsDisplay {
+    /// 이미 정렬된 상태라고 가정하고, key 값으로 공동순위 부여 (1,2,2,4 방식)
+    mutating func assignCompetitionRank<T: Equatable>(by key: (Element) -> T) {
+        guard !isEmpty else { return }
+
+        var currentRank = 1
+        var sameCount = 0
+        var lastValue: T? = nil
+
+        for i in indices {
+            let v = key(self[i])
+
+            if lastValue == nil || v != lastValue! {
+                // 값이 바뀌면: rank를 "이전 공동순위 개수만큼" 점프
+                currentRank += sameCount
+                sameCount = 1
+                lastValue = v
+            } else {
+                // 값이 같으면: 같은 rank 유지
+                sameCount += 1
+            }
+
+            self[i].stats.displayRank = currentRank
         }
     }
 }

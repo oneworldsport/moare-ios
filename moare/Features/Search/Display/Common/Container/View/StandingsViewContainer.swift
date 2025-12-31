@@ -199,7 +199,7 @@ struct StandingsViewContainer<TitleContent: View, CustomListContent: View>: View
                                             StandingsRankItem(
                                                 id: data.id,
                                                 width: state.firstColumnWidth,
-                                                rank: state.highlightState != nil ? (state.highlightState!.standingsStartIndex + index + 1) : (index + 1),
+                                                rank: state.highlightState != nil ? (state.highlightState!.standingsStartIndex + index + 1) : data.rank != nil ? data.rank! : (index + 1),
                                                 imageUrl: data.imageUrl,
                                                 name: data.name,
                                                 subName: data.subName,

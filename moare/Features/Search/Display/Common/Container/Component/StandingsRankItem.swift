@@ -48,13 +48,18 @@ struct StandingsRankItem: View {
     
     var body: some View {
         let rankWidth: CGFloat = {
-           if rank >= 100 {
-                return 30
-            } else if rank >= 10 {
-                return 22
-            } else {
-                return 15
-            }
+//           if rank >= 100 {
+//                return 30
+//            } else if rank >= 10 {
+//                return 22
+//            } else {
+//                return 15
+//            }
+            if rank >= 100 {
+                 return 30
+             } else {
+                 return 22
+             }
         }()
         
         Button(action: {
@@ -66,7 +71,7 @@ struct StandingsRankItem: View {
                 if shouldShowRank {
                     Text("\(rank)")
                         .font(.system(size: 15, weight: .medium))
-                        .frame(width: rankWidth)
+                        .frame(width: rankWidth, alignment: .leading)
                 }
 
                 URLImage(url: imageUrl, customSize: CGSize(width: 25, height: 25))
