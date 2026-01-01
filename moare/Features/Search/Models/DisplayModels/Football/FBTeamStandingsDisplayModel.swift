@@ -17,9 +17,12 @@ struct FBTeamStandingsDisplayModel: SportDisplayModel {
 }
 
 // 이름 고민 필요
-struct FBTeamStandingsDisplay: Equatable {
+struct FBTeamStandingsDisplay: Equatable, Rankable {
     let team: FBTeamInfo
     let homeAwayStats: FBTeamStatsFixtures
     let goalsFor: FBHomeAwayIntStats
     let goalsAgainst: FBHomeAwayIntStats
+    let rank: Int
+    let points: Int
+    var displayRank = 0 // 화면에서 순위 표시에 쓰이는 값
 }

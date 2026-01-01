@@ -23,14 +23,18 @@ struct FBTeamStats: Decodable, Equatable {
     let cleanSheet: FBHomeAwayIntStats?
     let failedToScore: FBHomeAwayIntStats?
     let penalty: FBTeamStatsPenalty
+    private let _rank: Int?
+    private let _points: Int?
     
-    var form: String {
-        return _form ?? ""
-    }
+    var form: String { _form ?? "" }
+    var rank: Int { _rank ?? 0 }
+    var points: Int { _points ?? 0 }
     
     enum CodingKeys: String, CodingKey {
         case league, team, fixtures, goals, biggest, penalty
         case _form = "form"
+        case _rank = "rank"
+        case _points = "points"
         case cleanSheet = "clean_sheet"
         case failedToScore = "failed_to_score"
     }
@@ -138,12 +142,21 @@ struct FBTeamForStandings: Decodable, Equatable {
     let home: FBTeamStandingsGameStats
     let away: FBTeamStandingsGameStats
     private let _update: String?
+    private let _form: String?
+    private let _rank: Int?
+    private let _points: Int?
     
     var update: String { _update ?? "" }
+    var form: String { _form ?? "" }
+    var rank: Int { _rank ?? 0 }
+    var points: Int { _points ?? 0 }
     
     private enum CodingKeys: String, CodingKey {
         case team, league, all, home, away
         case _update = "update"
+        case _form = "form"
+        case _rank = "rank"
+        case _points = "points"
     }
 }
 

@@ -142,7 +142,9 @@ final class ModelConverter {
                             team: item.team,
                             homeAwayStats: item.fixtures,
                             goalsFor: item.goals.teamGoalsFor.total,
-                            goalsAgainst: item.goals.teamGoalsAgainst.total
+                            goalsAgainst: item.goals.teamGoalsAgainst.total,
+                            rank: item.rank,
+                            points: item.points
                         )
                     }
                 }
@@ -167,7 +169,9 @@ final class ModelConverter {
                     team: teamInfo.team,
                     homeAwayStats: homeAwayStats,
                     goalsFor: FBHomeAwayIntStats(home: home.goals.goalsFor, away: away.goals.goalsFor, total: all.goals.goalsFor),
-                    goalsAgainst: FBHomeAwayIntStats(home: home.goals.goalsAgainst, away: away.goals.goalsAgainst, total: all.goals.goalsAgainst)
+                    goalsAgainst: FBHomeAwayIntStats(home: home.goals.goalsAgainst, away: away.goals.goalsAgainst, total: all.goals.goalsAgainst),
+                    rank: teamInfo.rank,
+                    points: teamInfo.points
                 )
             }
         }
@@ -745,7 +749,7 @@ final class ModelConverter {
         let awayTeamScore = game.goals.away
         let gameInfo = FBGameInfoForSchedule(
             round: game.league.round,
-            elapsed: game.fixture.status.elapsed,
+            status: game.fixture.status,
             homeTeamPenaltyScore: game.score.penalty._home, // TODO: Optional이 필요해서 임시로 _home, _away 사용. 추후 개선 필요.
             awayTeamPenaltyScore: game.score.penalty._away
         )

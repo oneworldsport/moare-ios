@@ -33,7 +33,7 @@ struct SearchStore {
         var firstOpened = false
         var query = ""
         var searchState = false // NOTE: Has to be animated when changing. SearchBar animation is effected by this property. TODO: Store 개선할때 개선 필요
-        var isFocused = false // NOTE: Doesn't have do be synchronized with SearchView's focusState. Because it is only used for updating focusState in .onChange().
+        var isFocused: Bool? = nil // NOTE: Doesn't have do be synchronized with SearchView's focusState. Because it is only used for updating focusState in .onChange().
         
         // visible state
         var textFieldVisibleState = false
@@ -81,14 +81,14 @@ struct SearchStore {
         case initTrieTuple(trieTuple: (Trie, [KeywordInfo]))
         case initNoticeList([NoticeModel])
         case updateSearchDataState(ApiFetchState)
-        case updateIsFocused(Bool)
+        case updateIsFocused(Bool?)
         case updateAutoCompleteList
         case updateResultVisibleState(bool: Bool)
 
         case updateSearchStateWithAni(bool: Bool)
         
         case showPreviousView
-        case popView(lastPath: AppStore.Path.State?, isEmpty: Bool)
+        case popView(lastPath: AppStore.Path.State?, isEmpty: Bool, lastQuery: String)
         case delegate(Delegate)
         
         /* ---------------------
@@ -153,9 +153,15 @@ struct SearchStore {
                 return .none
                 
             case .initTrendingKeywords(let keywords):
-                // TODO: 같은 키워드도 처리할 수 있게 수정
-                state.trendingKeywords = OrderedDictionary(uniqueKeysWithValues: keywords.map { ($0.keyword, $0) })
-                state.trendingKeywordList = Array(state.trendingKeywords.keys)
+                // NOTE: 중복 키워드는 덮어쓰기
+                var dict = OrderedDictionary<String, KeywordInfo>()
+                for info in keywords {
+                    dict[info.keyword] = info
+                }
+                state.trendingKeywords = dict
+                
+                // NOTE: 중복 포함 + 순서 유지
+                state.trendingKeywordList = keywords.map { $0.keyword }
                 
                 return .none
                 
@@ -331,11 +337,12 @@ struct SearchStore {
                     await send(.removeAutoCompleteWithAni)
                 }
                 
-            case let .popView(lastPath, isEmpty):
+            case let .popView(lastPath, isEmpty, lastQuery):
                 guard lastPath != nil else { return .none }
                 
                 if isEmpty {
                     return .run { send in
+                        await send(.updateTextField(lastQuery, false)) // NOTE: 어짜피 toggleSearchBar에서 updateTextField(query)해줘서 여기서는 두번째 인자를 false로 보냄.
                         await send(.toggleSearchBar)
                         
                         //                            try await Task.sleep(for: .seconds(0.5))
@@ -345,7 +352,7 @@ struct SearchStore {
                         await send(.updateIsFocused(true))
                     }
                 } else {
-                    return .none
+                    return .send(.updateTextField(lastQuery, false))
                 }
                 
 //                if !state.searchState {

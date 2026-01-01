@@ -22,10 +22,12 @@ struct FBTeamStandingsView: View {
         let teamStandings: [StandingsItemState] = store.standings.map {
             return StandingsItemState(
                 id: $0.team.id,
+                rank: $0.displayRank,
                 imageUrl: $0.team.logo,
                 name: store.baseStandings.teamNameDictionary["short_\($0.team.id)"] ?? $0.team.name,
                 dataList: [
-                    calculatePoints(data: $0.homeAwayStats),
+//                    calculatePoints(data: $0.homeAwayStats),
+                    String($0.points),
                     String($0.homeAwayStats.wins.total),
                     String($0.homeAwayStats.draws.total),
                     String($0.homeAwayStats.loses.total),

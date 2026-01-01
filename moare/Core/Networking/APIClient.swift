@@ -9,7 +9,7 @@ import Foundation
 
 struct APIClient {
     func fetchData<T: Decodable>(endpoint: APIEndpoint, testQuery: String = "") async throws -> T {
-        guard let request = RequestBuilder.buildRequest(endpoint: endpoint, method: endpoint.defaultHTTPMethod) else {
+        guard let request = RequestBuilder().buildRequest(endpoint: endpoint, method: endpoint.defaultHTTPMethod) else {
             throw URLError(.badURL)
         }
         

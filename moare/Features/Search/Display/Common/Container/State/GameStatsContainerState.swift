@@ -52,5 +52,5 @@ struct GameStatsContainerActions {
     var firstStatsTitleCategoryAction: (() -> Void)? = nil
     let firstStatsCategoryButtonAction: (Int) -> Void
     var secondStatsCategoryButtonAction: ((Int) -> Void)? = nil
-    let refreshButtonAction: () -> Void
+    let refreshButtonAction: () async -> Void
 }

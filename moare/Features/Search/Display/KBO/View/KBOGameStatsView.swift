@@ -104,7 +104,7 @@ struct KBOGameStatsView: View {
                             store.send(.baseGameStats(.selectSecondCategory(index)))
                         },
                         refreshButtonAction: {
-                            store.send(.refreshGame())
+                            await store.send(.refreshGame()).finish()
                         }
                     ),
                     titleContent: {

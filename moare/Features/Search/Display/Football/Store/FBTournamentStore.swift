@@ -101,17 +101,19 @@ struct FBTournamentStore {
                     state.seedIdTupleList.append(eastSecondRoundSeedTuple)
                     state.seedIdTupleList.append(eastFirstRoundSeedTuple)
                 } else {
-                    let firstRoundTeams = tournamentTeams["\(leagueId)_\(season)_32"] ?? []
-                    let secondRoundTeams = tournamentTeams["\(leagueId)_\(season)_16"] ?? []
-                    let thirdRoundTeams = tournamentTeams["\(leagueId)_\(season)_8"] ?? []
-                    let fourthRoundTeams = tournamentTeams["\(leagueId)_\(season)_4"] ?? []
-                    let fifthRoundTeams = tournamentTeams["\(leagueId)_\(season)_2"] ?? []
+                    let firstRoundTeams = tournamentTeams["\(leagueId)_\(season)_64"] ?? []
+                    let secondRoundTeams = tournamentTeams["\(leagueId)_\(season)_32"] ?? []
+                    let thirdRoundTeams = tournamentTeams["\(leagueId)_\(season)_16"] ?? []
+                    let fourthRoundTeams = tournamentTeams["\(leagueId)_\(season)_8"] ?? []
+                    let fifthRoundTeams = tournamentTeams["\(leagueId)_\(season)_4"] ?? []
+                    let sixthRoundTeams = tournamentTeams["\(leagueId)_\(season)_2"] ?? []
                     
                     let firstRoundPairedTeams = firstRoundTeams.chunked(by: 2)
                     let secondRoundPairedTeams = secondRoundTeams.chunked(by: 2)
                     let thirdRoundPairedTeams = thirdRoundTeams.chunked(by: 2)
                     let fourthRoundPairedTeams = fourthRoundTeams.chunked(by: 2)
                     let fifthRoundPairedTeams = fifthRoundTeams.chunked(by: 2)
+                    let sixthRoundPairedTeams = sixthRoundTeams.chunked(by: 2)
                     
                     var games = displayModel.games
                     
@@ -120,13 +122,15 @@ struct FBTournamentStore {
                     let (_, thirdRound) =  Util.collectRound(from: thirdRoundPairedTeams, games: &games)
                     let (_, fourthRound) =  Util.collectRound(from: fourthRoundPairedTeams, games: &games)
                     let (_, fifthRound) =  Util.collectRound(from: fifthRoundPairedTeams, games: &games)
+                    let (_, sixthRound) =  Util.collectRound(from: sixthRoundPairedTeams, games: &games)
                     
                     let rounds: [(title: String, gameList: [[FBGameForSchedule]?])] = [
-                        ("32강", firstRound),
-                        ("16강", secondRound),
-                        ("8강", thirdRound),
-                        ("준결승", fourthRound),
-                        ("결승", fifthRound)
+                        ("64강", firstRound),
+                        ("32강", secondRound),
+                        ("16강", thirdRound),
+                        ("8강", fourthRound),
+                        ("준결승", fifthRound),
+                        ("결승", sixthRound)
                     ]
                     
                     // 가장 먼저 비어있지 않은 라운드부터 마지막 라운드까지 할당.

@@ -48,6 +48,7 @@ struct Constants {
         static let copaDelRey = 143
         static let coppaItalia = 137
         static let footballTournamentLeagues = [championsLeague, europaLeague, conferenceLeague, faCup, eflCup, dfbPokal, coupeDeFrance, copaDelRey, coppaItalia]
+        static let footballDrawTournamentLeagues = [faCup, eflCup, dfbPokal, coupeDeFrance, copaDelRey, coppaItalia]
         static let footballAll = footballLeagues + footballTournamentLeagues // TODO: 이걸로 refactoring 필요
         
         // nba teams
@@ -329,7 +330,11 @@ struct Constants {
                 return StringConstants.gameNotStartedStr
             case NBA.live:
                 if let period {
-                    return "\(period)쿼터"
+                    if period > 4 {
+                        return "연장 \(period-4)쿼터"
+                    } else {
+                        return "\(period)쿼터"
+                    }
                 } else {
                     return StringConstants.gameLiveStr
                 }
