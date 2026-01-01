@@ -230,6 +230,12 @@ struct FBGamePlayers: Decodable, Equatable {
 struct FBGamePlayerStats: Decodable, Equatable {
     let player: FBPerson
     let statistics: [FBGamePlayerStatsDetail]
+    
+    /// 선발이면 0, 후보면 1
+    /// 아래 프로퍼티들은 Store에서 선수들 초기화할때 설정해줌
+    var starterSortKey: Int? = nil
+    var isStarter: Bool { starterSortKey == 0 }
+    var position: String? = nil
 }
 
 struct FBGamePlayerStatsDetail: Decodable, Equatable {
@@ -403,30 +409,29 @@ enum StatValue: Decodable, Equatable {
 
 struct FBGameInfoForSchedule: Decodable, Equatable {
     private let _round: String?
-    private let _elapsed: Int?
+    let status: FBGameStatus?
     private let _homeTeamPenaltyScore: Int?
     private let _awayTeamPenaltyScore: Int?
 
     var round: String { _round ?? "" }
-    var elapsed: Int { _elapsed ?? 0 }
     var homeTeamPenaltyScore: Int? { _homeTeamPenaltyScore }
     var awayTeamPenaltyScore: Int? { _awayTeamPenaltyScore }
 
     private enum CodingKeys: String, CodingKey {
+        case status
         case _round = "round"
-        case _elapsed = "elapsed"
         case _homeTeamPenaltyScore = "homeTeamPenaltyScore"
         case _awayTeamPenaltyScore = "awayTeamPenaltyScore"
     }
     
     init(
         round: String?,
-        elapsed: Int?,
+        status: FBGameStatus? = nil,
         homeTeamPenaltyScore: Int? = nil,
         awayTeamPenaltyScore: Int? = nil,
     ) {
         self._round = round
-        self._elapsed = elapsed
+        self.status = status
         self._homeTeamPenaltyScore = homeTeamPenaltyScore
         self._awayTeamPenaltyScore = awayTeamPenaltyScore
     }

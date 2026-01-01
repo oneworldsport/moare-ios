@@ -119,6 +119,11 @@ struct NBATeamStats: Decodable, Equatable {
     private let _tov: Int?
     private let _w: Int?
     private let _wPct: Double?
+    private let _playoffRank: Int?
+    private let _strCurrentStreak: String?
+    private let _home: String?
+    private let _road: String?
+    private let _l10: String?
 
     var ast: Int { _ast ?? 0 }
     var blk: Int { _blk ?? 0 }
@@ -148,6 +153,33 @@ struct NBATeamStats: Decodable, Equatable {
     var tov: Int { _tov ?? 0 }
     var wins: Int { _w ?? 0 }
     var winsPct: Double { _wPct ?? 0.0 }
+    
+    var playoffRank: Int { _playoffRank ?? 0 }
+    var strCurrentStreak: String { _strCurrentStreak ?? "" }
+    var home: String { _home ?? "" }
+    var road: String { _road ?? "" }
+    var l10: String { _l10 ?? "" }
+    
+    var krCurrentStreak: String {
+        guard let raw = _strCurrentStreak?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !raw.isEmpty
+        else { return "" }
+        
+        let upper = raw.uppercased()
+        guard let first = upper.first else { return "" }
+        
+        let digits = upper.dropFirst().filter { $0.isNumber }
+        guard !digits.isEmpty else { return raw }
+        
+        switch first {
+        case "W": return "\(String(digits))승"
+        case "L": return "\(String(digits))패"
+        default:  return raw
+        }
+    }
+    var krHome: String { recordToKr(_home) }
+    var krRoad: String { recordToKr(_road) }
+    var krL10: String { recordToKr(_l10) }
 
     // Per Game Stats
     var ptsPG: Double { gp != 0 ? (Double(pts) / Double(gp)).rounded(to: 1) : 0.0 }
@@ -169,6 +201,20 @@ struct NBATeamStats: Decodable, Equatable {
     var pfdPG: Double { gp != 0 ? (Double(pfd) / Double(gp)).rounded(to: 1) : 0.0 }
     var minPG: String { gp != 0 ? CalendarUtil.formatMinutesToHourMinute(min: min) : "0:0" }
     var plusMinusPG: Double { gp != 0 ? (Double(plusMinus) / Double(gp)).rounded(to: 1) : 0.0 }
+    
+    // String with 3 decimal places
+    var winsPctStr: String {
+        String(format: "%.3f", winsPct)
+    }
+    var fgPctStr: String {
+        String(format: "%.3f", fgPct)
+    }
+    var ftPctStr: String {
+        String(format: "%.3f", ftPct)
+    }
+    var fg3PctStr: String {
+        String(format: "%.3f", fg3Pct)
+    }
 
     private enum CodingKeys: String, CodingKey {
         case _ast = "ast"
@@ -199,5 +245,39 @@ struct NBATeamStats: Decodable, Equatable {
         case _tov = "tov"
         case _w = "w"
         case _wPct = "wPct"
+        case _playoffRank = "playoffRank"
+        case _strCurrentStreak = "strCurrentStreak"
+        case _home = "home"
+        case _road = "road"
+        case _l10 = "l10"
+    }
+    
+    private func recordToKr(_ value: String?) -> String {
+        guard let raw = value?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !raw.isEmpty else { return "" }
+
+        // 예: "5-5"
+        let parts = raw.split(separator: "-", omittingEmptySubsequences: true)
+        guard parts.count == 2 else { return raw } // 형식 이상하면 원본 반환
+
+        let win = parts[0].trimmingCharacters(in: .whitespaces)
+        let lose = parts[1].trimmingCharacters(in: .whitespaces)
+        return "\(win)승\(lose)패"
+    }
+    
+    /// 정렬/비교용: 승률 + 승수
+    func parseRecord(_ value: String?) -> (winPct: Double, wins: Int) {
+        guard let raw = value?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !raw.isEmpty else { return (0, 0) }
+
+        // 예: "5-5"
+        let parts = raw.split(separator: "-", omittingEmptySubsequences: true)
+        guard parts.count == 2,
+              let w = Int(parts[0].trimmingCharacters(in: .whitespaces)),
+              let l = Int(parts[1].trimmingCharacters(in: .whitespaces)) else { return (0, 0) }
+
+        let games = w + l
+        let pct = games == 0 ? 0 : Double(w) / Double(games)
+        return (pct, w)
     }
 }

@@ -53,6 +53,36 @@ struct StringConstants {
         static let gameStatsDefendCategories = ["태클 시도", "볼 경합 성공/시도(%)", "가로채기"]
         static let gameStatsCommonCategories = ["패스 시도", "얻은 파울", "파울", "경고", "퇴장", "출전시간(분)", "평점"]
         static let gameStatsSecondCategories = gameStatsAttackCategories + gameStatsDefendCategories + gameStatsCommonCategories
+        static let gameStatsCategories = ["출전시간(분)", "득점", "pk골", "도움", "", "슈팅", "유효슈팅", "패스 시도", "드리블\n성공/시도(%)", "", "태클 시도", "볼 경합\n성공/시도(%)", "인터셉트", "", "오프사이드", "파울 당함", "파울 범함", "경고", "퇴장"]
+        
+        static func leagueNameStr(leagueId: Int) -> String {
+            switch leagueId {
+            case Constants.Ids.epl:
+                return "EPL"
+            case Constants.Ids.laliga:
+                return "라리가"
+            case Constants.Ids.bundesliga:
+                return "분데스리가"
+            case Constants.Ids.seriea:
+                return "세리에A"
+            case Constants.Ids.ligue1:
+                return "리그1"
+            case Constants.Ids.faCup:
+                return "FA컵"
+            case Constants.Ids.eflCup:
+                return "EFL컵"
+            case Constants.Ids.dfbPokal:
+                return "DFB 포칼"
+            case Constants.Ids.coupeDeFrance:
+                return "쿠프 드 프랑스"
+            case Constants.Ids.copaDelRey:
+                return "코파 델 레이"
+            case Constants.Ids.coppaItalia:
+                return "코파 이탈리아"
+            default :
+                return ""
+            }
+        }
     }
     
     struct NBA {
@@ -72,7 +102,7 @@ struct StringConstants {
         
         // TODO: 나중에 데이터 추가되면 카테고리 추가
         //        static let teamStandingsCategories = ["게임차", "승률", "승", "패", "경기수", "홈성적", "원정성적", "경기당 득점", "경기당 득실마진", "경기당 도움", "경기당 리바운드", "야투 성공률", "3점 성공률", "자유투 성공률", "경기당 블록", "경기당 스틸", "경기당 턴오버", "경기당 파울")
-        static let teamStandingsCategories = ["게임차", "승률", "승", "패", "경기수", "경기당 득점", "경기당 득실마진", "경기당 도움", "경기당 리바운드", "야투 성공률", "3점 성공률", "자유투 성공률", "경기당 블록", "경기당 스틸", "경기당 턴오버", "경기당 파울"]
+        static let teamStandingsCategories = ["게임차", "승률", "승", "패", "경기수", "연속", "최근 10경기", "홈성적", "원정성적", "", "경기당 득점", "경기당\n득실마진", "경기당 도움", "경기당\n리바운드", "야투 성공률", "3점 성공률", "자유투\n성공률", "경기당 스틸", "경기당 블록", "경기당\n턴오버", "경기당 파울"]
         
         static let playerStandingsAttackCategories = ["경기당 득점", "경기당 도움", "경기당 공격 리바운드", "경기당 야투 시도", "경기당 야투 성공", "야투 성공률", "경기당 3점 시도", "경기당 3점 성공", "3점 성공률", "경기당 자유투 시도", "경기당 자유투 성공", "자유투 성공률"]
         static let playerStandingsDefendCategories = ["경기당 수비 리바운드", "경기당 블록", "경기당 스틸"]
@@ -83,6 +113,7 @@ struct StringConstants {
         static let gameStatsDefendCategories = ["수비 리바운드", "블록", "스틸"]
         static let gameStatsCommonCategories = ["리바운드", "턴오버", "파울", "득실마진", "출전시간"]
         static let gameStatsSecondCategories = gameStatsAttackCategories + gameStatsDefendCategories + gameStatsCommonCategories
+        static let gameStatsCategories = ["출전시간", "득점", "도움", "리바운드", "", "야투\n성공/시도(성공률)", "3점\n성공/시도(성공률)", "자유투\n성공/시도(성공률)", "", "스틸", "블록", "", "턴오버", "파울", "", "공격/수비\n리바운드", "득실마진"]
     }
     
     struct KBO {
@@ -143,6 +174,14 @@ struct StringConstants {
             return "가을야구 대진표"
         default :
             return ""
+        }
+    }
+    
+    static func tournamentOrStandingsText(leagueId: Int) -> String {
+        if Constants.Ids.footballDrawTournamentLeagues.contains(leagueId) {
+            return "대진표"
+        } else {
+            return "리그 순위"
         }
     }
 }

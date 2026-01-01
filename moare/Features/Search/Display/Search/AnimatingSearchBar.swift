@@ -35,7 +35,7 @@ struct AnimatingSearchBar: View {
         ZStack {
             HStack(spacing: 0) {
                 HStack(spacing: 0) {
-                    ZStack {
+                    ZStack(alignment: .trailing) {
                         // first show: yes ani, no delay
                         // gone: no ani, no delay
                         // show: no ani, yes delay
@@ -61,6 +61,17 @@ struct AnimatingSearchBar: View {
                             .frame(maxWidth: searchStore.searchState ? nil : .infinity, alignment: .leading)
                             .opacity(searchStore.textFieldVisibleState ? 0 : 1)
                             .uiState(visibleState: barVisibleState) // always showing after first open
+                        
+                        if !searchStore.searchState && !searchStore.query.isEmpty {
+                            Button(action: {
+                                searchStore.query = ""
+                            }) {
+                                Image(systemName: "xmark.circle")
+                                    .background(.white.opacity(0.8))
+                                    .clipShape(Circle())
+                            }
+                            .foregroundStyle(.secondary)
+                        }
                     }
                     
                     Button(action: {

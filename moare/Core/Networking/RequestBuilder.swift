@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct RequestBuilder {
-    static func buildRequest(
+class RequestBuilder {
+    func buildRequest(
         endpoint: APIEndpoint,
         method: String,
         headers: [String: String]? = nil,
@@ -28,10 +28,25 @@ struct RequestBuilder {
         
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
+        commonHeaders().forEach { key, value in
+            request.setValue(value, forHTTPHeaderField: key)
+        }
+        
         if method == "POST" {
             request.httpBody = endpoint.httpBody
         }
         
         return request
+    }
+    
+    private func commonHeaders() -> [String: String] {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "unknown"
+
+        return [
+            "X-Platform": "ios",
+            "X-App-Version": version,
+//            "X-App-Build": build
+        ]
     }
 }

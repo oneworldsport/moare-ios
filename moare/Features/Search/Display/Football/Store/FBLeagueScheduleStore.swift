@@ -51,6 +51,7 @@ struct FBLeagueScheduleStore {
         case updateResultOpenedState(gameId: String, isOpened: Bool)
         case selectGame(game: FBGameForSchedule)
         case showTournament
+        case showTeamStandings
         
         case setDays(isInit: Bool = false)
         case fetchGames
@@ -67,6 +68,7 @@ struct FBLeagueScheduleStore {
     enum Delegate {
         case showGameStats(model: SportDecodableModel)
         case showTournament(model: SportDecodableModel)
+        case showTeamStandings(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -259,32 +261,88 @@ struct FBLeagueScheduleStore {
                 state.filteredGames[state.baseSchedule.selectedDayIndex] = [game]
                 
                 return .run { [displayModel = state.baseSchedule.displayModel] send in
-                    let result = try await searchClient.fetchById(
-                        season: displayModel.season,
-                        category: "football",
-                        date: game.date,
-                        dataType: "football_game_stats",
-                        leagueId: displayModel.leagueId,
-                        id: game.gameId
-                    )
-                    
-                    await send(.delegate(.showGameStats(model: result.data)))
-                    await send(.updateResultOpenedState(gameId: game.gameId, isOpened: true))
+                    do {
+                        let result = try await searchClient.fetchById(
+                            season: displayModel.season,
+                            category: "football",
+                            date: game.date,
+                            dataType: "football_game_stats",
+                            leagueId: displayModel.leagueId,
+                            id: game.gameId
+                        )
+                        
+                        await send(.delegate(.showGameStats(model: result.data)))
+                        await send(.updateResultOpenedState(gameId: game.gameId, isOpened: true))
+                    } catch {
+                        print("\(error)")
+                    }
                 }
                 
             case .showTournament:
+                let leagueId = state.baseSchedule.displayModel.leagueId
+                let isMLS = leagueId == Constants.Ids.mls
+                
+                return .run { send in
+                    let keywordInfo: KeywordInfo
+                    
+                    if isMLS {
+                        keywordInfo = KeywordInfo(
+                            keyword: "MLS 플레이오프",
+                            weight: 100,
+                            keywords: [Keyword(keyword: "플레이오프", id: "tournament", priority: 2)],
+                            entities: [
+                                EntityInfo(
+                                    entityId: Constants.Ids.mls,
+                                    entityName: "MLS",
+                                    category: "football",
+                                    entityType: "league",
+                                    leagueId: Constants.Ids.mls,
+                                    teamId: nil,
+                                    playerId: nil
+                                )
+                            ]
+                        )
+                    } else {
+                        let leagueName = StringConstants.Football.leagueNameStr(leagueId: leagueId)
+                        keywordInfo = KeywordInfo(
+                            keyword: "\(leagueName) 대진표",
+                            weight: 100,
+                            keywords: [Keyword(keyword: "대진표", id: "tournament", priority: 2)],
+                            entities: [
+                                EntityInfo(
+                                    entityId: leagueId,
+                                    entityName: leagueName,
+                                    category: "football",
+                                    entityType: "league",
+                                    leagueId: leagueId,
+                                    teamId: nil,
+                                    playerId: nil
+                                )
+                            ]
+                        )
+                    }
+                    
+                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                    
+                    await send(.delegate(.showTournament(model: result.data)))
+                }
+                
+            case .showTeamStandings:
+                let leagueId = state.baseSchedule.displayModel.leagueId
+                let leagueName = StringConstants.Football.leagueNameStr(leagueId: leagueId)
+                
                 return .run { send in
                     let keywordInfo = KeywordInfo(
-                        keyword: "MLS 플레이오프",
+                        keyword: "\(leagueName) 순위",
                         weight: 100,
-                        keywords: [Keyword(keyword: "플레이오프", id: "tournament", priority: 2)],
+                        keywords: [Keyword(keyword: "순위", id: "standings", priority: 1)],
                         entities: [
                             EntityInfo(
-                                entityId: Constants.Ids.mls,
-                                entityName: "MLS",
+                                entityId: leagueId,
+                                entityName: leagueName,
                                 category: "football",
                                 entityType: "league",
-                                leagueId: Constants.Ids.mls,
+                                leagueId: leagueId,
                                 teamId: nil,
                                 playerId: nil
                             )
@@ -293,7 +351,7 @@ struct FBLeagueScheduleStore {
                     
                     let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
                     
-                    await send(.delegate(.showTournament(model: result.data)))
+                    await send(.delegate(.showTeamStandings(model: result.data)))
                 }
                 
             case .updateDisplayDataState(let fetchState):

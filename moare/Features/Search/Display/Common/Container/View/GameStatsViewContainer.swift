@@ -126,23 +126,23 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                     .opacity(isGameDetailVisible ? 0 : 0.6)
                                     
                                     // refresh button
-                                    if state.shouldShowRefreshButton {
-                                        // TODO: Make it component
-                                        Button(action: {
-                                            actions.refreshButtonAction()
-                                        }) {
-                                            Image(systemName: "arrow.clockwise")
-                                                .font(.system(size: 15))
-                                                .frame(width: 18, height: 18)
-                                                .padding(3)
-                                                .overlay {
-                                                    RoundedRectangle(cornerRadius: 10)
-                                                        .stroke(.secondary, lineWidth: 1)
-                                                }
-                                        }
-                                        .foregroundStyle(.secondary)
-                                        .opacity(0.6)                                        
-                                    }
+//                                    if state.shouldShowRefreshButton {
+//                                        // TODO: Make it component
+//                                        Button(action: {
+//                                            actions.refreshButtonAction()
+//                                        }) {
+//                                            Image(systemName: "arrow.clockwise")
+//                                                .font(.system(size: 15))
+//                                                .frame(width: 18, height: 18)
+//                                                .padding(3)
+//                                                .overlay {
+//                                                    RoundedRectangle(cornerRadius: 10)
+//                                                        .stroke(.secondary, lineWidth: 1)
+//                                                }
+//                                        }
+//                                        .foregroundStyle(.secondary)
+//                                        .opacity(0.6)                                        
+//                                    }
                                 }
                             }
                             
@@ -183,7 +183,12 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                 VStack(spacing: 0) {
                                     StickyHeader(coordinateSpaceName: coordinateSpaceName) {
                                         OptionalButton(action: actions.firstStatsTitleCategoryAction) {
-                                            StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory, width: state.firstColumnWidth)
+                                            ZStack(alignment: .bottom) {
+                                                StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory, width: state.firstColumnWidth)
+                                                
+                                                HCapsuleBar()
+                                                    .opacity(state.firstStatsCategorySelectedIndex < 0 ? 1 : 0)
+                                            }
                                         }
                                     }
                                     .frame(width: state.firstColumnWidth ?? 132)
@@ -224,6 +229,7 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                                                 .frame(width: firstStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
                                                         }
                                                         .foregroundStyle(.primary)
+                                                        .disabled(category.isEmpty)
                                                         .id(index)
                                                     }
                                                 }
@@ -234,7 +240,10 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                             }
                                             .onAppear {
                                                 withAnimation(.spring(duration: 0.5)) {
-                                                    if !firstStatsColumnWidthList.isEmpty {
+                                                    if state.firstStatsCategorySelectedIndex < 0 {
+                                                        let firstColumnWidth = state.firstColumnWidth ?? 132
+                                                        firstStatsCategoryBarXOffset = -(firstColumnWidth / 2) - 10
+                                                    } else if !firstStatsColumnWidthList.isEmpty {
                                                         firstStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: firstStatsColumnWidthList, index: state.firstStatsCategorySelectedIndex)
                                                     } else {
                                                         firstStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.firstStatsCategorySelectedIndex)
@@ -243,7 +252,10 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                             }
                                             .onChange(of: state.firstStatsCategorySelectedIndex) {
                                                 withAnimation(.spring(duration: 0.5)) {
-                                                    if !firstStatsColumnWidthList.isEmpty {
+                                                    if state.firstStatsCategorySelectedIndex < 0 {
+                                                        let firstColumnWidth = state.firstColumnWidth ?? 132
+                                                        firstStatsCategoryBarXOffset = -(firstColumnWidth / 2) - 10
+                                                    } else if !firstStatsColumnWidthList.isEmpty {
                                                         firstStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: firstStatsColumnWidthList, index: state.firstStatsCategorySelectedIndex)
                                                     } else {
                                                         firstStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.firstStatsCategorySelectedIndex)
@@ -385,6 +397,9 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                         .padding(.top, 8)
                     } // ScrollView
                     .coordinateSpace(name: coordinateSpaceName)
+                    .refreshableIf(state.shouldShowRefreshButton) {
+                        await actions.refreshButtonAction()
+                    }
                 } else {
                     VStack {
                         Text(state.noStatsText ?? "경기 시작 후 데이터가 업데이트됩니다.")

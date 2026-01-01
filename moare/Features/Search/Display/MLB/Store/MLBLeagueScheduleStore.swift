@@ -39,6 +39,7 @@ struct MLBLeagueScheduleStore {
         case updateResultOpenedState(gameId: String, isOpened: Bool)
         case selectGame(game: MLBGameForSchedule)
         case showTournament
+        case showTeamStandings
         
         /* ---------------------
            private
@@ -57,6 +58,7 @@ struct MLBLeagueScheduleStore {
     enum Delegate {
         case showGameStats(model: SportDecodableModel)
         case showTournament(model: SportDecodableModel)
+        case showTeamStandings(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -276,6 +278,30 @@ struct MLBLeagueScheduleStore {
                     let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
                     
                     await send(.delegate(.showTournament(model: result.data)))
+                }
+                
+            case .showTeamStandings:
+                return .run { send in
+                    let keywordInfo = KeywordInfo(
+                        keyword: "MLB 순위",
+                        weight: 100,
+                        keywords: [Keyword(keyword: "순위", id: "standings", priority: 1)],
+                        entities: [
+                            EntityInfo(
+                                entityId: Constants.Ids.mlb,
+                                entityName: "MLB",
+                                category: "baseball",
+                                entityType: "league",
+                                leagueId: Constants.Ids.mlb,
+                                teamId: nil,
+                                playerId: nil
+                            )
+                        ]
+                    )
+                    
+                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                    
+                    await send(.delegate(.showTeamStandings(model: result.data)))
                 }
                 
             case .updateDisplayDataState(let fetchState):

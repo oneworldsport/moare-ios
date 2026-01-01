@@ -18,8 +18,7 @@ enum TimeFormatType {
     case ampm, ampmWithDate, ampmWithDayOfWeekDate, yearMonth
 }
 
-// TODO: struct로 바꾸는게 맞을듯?
-class CalendarUtil {
+struct CalendarUtil {
     static let currentYear = Calendar.current.component(.year, from: Date())
     
     enum DefaultYearMonthType {
@@ -202,7 +201,7 @@ class CalendarUtil {
         return "\(hours):\(minutes)"
     }
     
-    static func formatHourMinuteToMinutes(time: String) -> Int {
+    static func formatMinuteSecondToSeconds(time: String) -> Int {
         let parts = time.components(separatedBy: ":")
         if parts.count == 2,
            let hours = Int(parts[0]),
@@ -224,5 +223,25 @@ class CalendarUtil {
         let today = Date()
         
         return gameDate >= today
+    }
+    
+    static func isSameYearMonth(yearMonth: String) -> Bool {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yy/MM"
+
+        guard let targetDate = formatter.date(from: yearMonth) else {
+            return false
+        }
+
+        let calendar = Calendar.current
+        let today = Date()
+
+        return calendar.component(.year, from: targetDate) == calendar.component(.year, from: today)
+            && calendar.component(.month, from: targetDate) == calendar.component(.month, from: today)
+    }
+    
+    static func isToday(day: Int) -> Bool {
+        let todayDay = Calendar.current.component(.day, from: Date())
+        return todayDay == day
     }
 }

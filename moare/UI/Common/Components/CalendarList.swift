@@ -15,6 +15,7 @@ struct CalendarList<T>: View {
     let dateList: [T]
     let calendarType: CalendarType
     let selectedIndex: Int
+    let containsToday: Bool // 해당 달력(일자)에 오늘이 있는지 알 수 있는 플래그
     var onItemSelected: (T, Int) -> Void
     
     private let itemWidth: CGFloat
@@ -24,11 +25,19 @@ struct CalendarList<T>: View {
     @Binding var shouldScroll: Bool
     @State private var barXOffset: CGFloat
     
-    init(dateList: [T], calendarType: CalendarType, selectedIndex: Int, shouldScroll: Binding<Bool> = .constant(false), onItemSelected: @escaping (T, Int) -> Void) {
+    init(
+        dateList: [T],
+        calendarType: CalendarType,
+        selectedIndex: Int,
+        shouldScroll: Binding<Bool> = .constant(false),
+        containsToday: Bool = false,
+        onItemSelected: @escaping (T, Int) -> Void
+    ) {
         self.dateList = dateList
         self.calendarType = calendarType
         self.selectedIndex = selectedIndex
         self.onItemSelected = onItemSelected
+        self.containsToday = containsToday
         
         self.itemWidth = switch calendarType {
         case .season: 200
@@ -64,7 +73,8 @@ struct CalendarList<T>: View {
                             CalendarListItem(
                                 date: date,
                                 calendarType: calendarType,
-                                width: itemWidth
+                                width: itemWidth,
+                                containsToday: containsToday
                             ) {
                                 onItemSelected(date, index)
                             }
@@ -107,6 +117,7 @@ struct CalendarListItem<T>: View {
     let date: T
     let calendarType: CalendarType
     let width: CGFloat
+    let containsToday: Bool
     
     var onItemSelected: () -> Void
     
@@ -146,8 +157,18 @@ struct CalendarListItem<T>: View {
                         .frame(height: 22, alignment: .bottom)
                 }
             }
+            .frame(width: width)
+            .padding(.vertical, calendarType == .day ? 2 : 0)
+            .overlay {
+                if calendarType == .day {
+                    let day = (date as! DayInfo).day
+                    if containsToday && CalendarUtil.isToday(day: day) {
+                        RoundedRectangle(cornerRadius: 5).strokeBorder(.moare, lineWidth: 1)
+//                            .padding(.vertical, -2)
+                    }
+                }
+            }
         }
-        .frame(width: width)
         .foregroundStyle(isDisabled ? .secondary : .primary)
         .opacity(isDisabled ? 0.5 : 1)
         .disabled(isDisabled)

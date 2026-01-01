@@ -20,5 +20,6 @@ struct ScheduleContainerState {
 struct ScheduleContainerActions {
     var calendarUiActions: CalendarUiActions?
     var allResultButtonAction: () -> Void
+    var tournamentOrteamStandingsButtonAction: () -> Void
     var tournamentButtonAction: (() -> Void)? = nil
 }

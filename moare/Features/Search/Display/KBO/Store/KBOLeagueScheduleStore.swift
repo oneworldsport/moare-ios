@@ -39,6 +39,7 @@ struct KBOLeagueScheduleStore {
         case updateResultOpenedState(itemKey: String, isOpened: Bool) // NOTE: 더블헤더가 있는 날에 취소된 경기가 있으면 gameId가 같은 경우가 있어 gameId 대신에 itemKey를 사용
         case selectGame(game: KBOGameForSchedule)
         case showTournament
+        case showTeamStandings
         
         /* ---------------------
            private
@@ -57,6 +58,7 @@ struct KBOLeagueScheduleStore {
     enum Delegate {
         case showGameStats(model: SportDecodableModel)
         case showTournament(model: SportDecodableModel)
+        case showTeamStandings(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -276,6 +278,30 @@ struct KBOLeagueScheduleStore {
                     let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
                     
                     await send(.delegate(.showTournament(model: result.data)))
+                }
+                
+            case .showTeamStandings:
+                return .run { send in
+                    let keywordInfo = KeywordInfo(
+                        keyword: "KBO 순위",
+                        weight: 100,
+                        keywords: [Keyword(keyword: "순위", id: "standings", priority: 1)],
+                        entities: [
+                            EntityInfo(
+                                entityId: Constants.Ids.kbo,
+                                entityName: "KBO",
+                                category: "baseball",
+                                entityType: "league",
+                                leagueId: Constants.Ids.kbo,
+                                teamId: nil,
+                                playerId: nil
+                            )
+                        ]
+                    )
+                    
+                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                    
+                    await send(.delegate(.showTeamStandings(model: result.data)))
                 }
                 
             case .updateDisplayDataState(let fetchState):

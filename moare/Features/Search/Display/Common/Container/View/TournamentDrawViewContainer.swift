@@ -16,7 +16,7 @@ struct TournamentDrawViewContainer<T: Decodable & Equatable>: View {
                 HStack(alignment: .top) {
                     ForEach(state.gameListTuple.indices, id: \.self) { roundIndex in
                         let item = state.gameListTuple[roundIndex]
-                        let gameList = item.gameList
+                        let games = item.gameList.compactMap { $0 }.flatMap { $0 }  // 중첩 배열인 gameList를(nil을 제거하고) 펼쳐서 1차원 배열로 만든다
                         let title = item.title
                         
                         VStack(spacing: 0) {
@@ -27,20 +27,18 @@ struct TournamentDrawViewContainer<T: Decodable & Equatable>: View {
                                 .padding(.top, 6)
                                 .padding(.bottom, 12)
                             
-                            ForEach(gameList.indices, id: \.self) { index in
-                                let games = gameList[index]
+                            ForEach(games.indices, id: \.self) { index in
+                                let game = games[index]
                                 
                                 if state.isSeries {
                                     // TODO: 추첨인데 시리즈인 경우가 생기면 작업
                                 } else {
-                                    if let game = games?.first {
-                                        TournamentSingleGameItem(
-                                            leagueId: state.leagueId,
-                                            game: game,
-                                            teamNameDic: state.teamNameDic
-                                        )
-                                        .padding(.bottom, 12)
-                                    }
+                                    TournamentSingleGameItem(
+                                        leagueId: state.leagueId,
+                                        game: game,
+                                        teamNameDic: state.teamNameDic
+                                    )
+                                    .padding(.bottom, 12)
                                 }
                             }
                         }
