@@ -160,7 +160,6 @@ struct NBATeamStats: Decodable, Equatable {
     var road: String { _road ?? "" }
     var l10: String { _l10 ?? "" }
     
-    var displayRank = 0 // team standings 화면에서 순위 표시에 쓰이는 값
     var krCurrentStreak: String {
         guard let raw = _strCurrentStreak?.trimmingCharacters(in: .whitespacesAndNewlines),
               !raw.isEmpty

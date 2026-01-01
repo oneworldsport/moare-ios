@@ -15,7 +15,8 @@ struct NBATeamStandingsDisplayModel: SportDisplayModel {
     let standings: [NBATeamStandingsDisplay]
 }
 
-struct NBATeamStandingsDisplay: Equatable {
+struct NBATeamStandingsDisplay: Equatable, Rankable {
     let team: NBATeamInfo
-    var stats: NBATeamStats
+    let stats: NBATeamStats
+    var displayRank = 0 // 화면에서 순위 표시에 쓰이는 값
 }

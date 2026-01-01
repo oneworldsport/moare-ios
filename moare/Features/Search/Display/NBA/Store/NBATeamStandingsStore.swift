@@ -112,12 +112,12 @@ struct NBATeamStandingsStore {
                 case 0: // 게임차
                     state.standings.sort { $0.stats.playoffRank < $1.stats.playoffRank }
                     for i in standings.indices {
-                        state.standings[i].stats.displayRank = state.standings[i].stats.playoffRank
+                        state.standings[i].displayRank = state.standings[i].stats.playoffRank
                     }
                 case 1: // 승률
                     state.standings.sort { $0.stats.playoffRank < $1.stats.playoffRank }
                     for i in standings.indices {
-                        state.standings[i].stats.displayRank = state.standings[i].stats.playoffRank
+                        state.standings[i].displayRank = state.standings[i].stats.playoffRank
                     }
                 case 2: // 승
                     state.standings.sort { $0.stats.wins > $1.stats.wins }
@@ -246,34 +246,6 @@ struct NBATeamStandingsStore {
                 let digits = upper.dropFirst().filter { $0.isNumber }
                 return Int(String(digits)) ?? 0
             }
-        }
-    }
-}
-
-// 코드가 참 어렵구만...
-extension Array where Element == NBATeamStandingsDisplay {
-    /// 이미 정렬된 상태라고 가정하고, key 값으로 공동순위 부여 (1,2,2,4 방식)
-    mutating func assignCompetitionRank<T: Equatable>(by key: (Element) -> T) {
-        guard !isEmpty else { return }
-
-        var currentRank = 1
-        var sameCount = 0
-        var lastValue: T? = nil
-
-        for i in indices {
-            let v = key(self[i])
-
-            if lastValue == nil || v != lastValue! {
-                // 값이 바뀌면: rank를 "이전 공동순위 개수만큼" 점프
-                currentRank += sameCount
-                sameCount = 1
-                lastValue = v
-            } else {
-                // 값이 같으면: 같은 rank 유지
-                sameCount += 1
-            }
-
-            self[i].stats.displayRank = currentRank
         }
     }
 }

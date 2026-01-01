@@ -75,3 +75,31 @@ extension StringProtocol {
         Int(self)
     }
 }
+
+// 코드가 참 어렵구만...
+extension Array where Element: Rankable {
+    /// 이미 정렬된 상태라고 가정하고, key 값으로 공동순위 부여 (1,2,2,4 방식)
+    mutating func assignCompetitionRank<Key: Equatable>(by key: (Element) -> Key) {
+        guard !isEmpty else { return }
+
+        var currentRank = 1
+        var sameCount = 0
+        var lastKey: Key? = nil
+
+        for i in indices {
+            let k = key(self[i])
+
+            if lastKey == nil || k != lastKey! {
+                // 값이 바뀌면: rank를 "이전 공동순위 개수만큼" 점프
+                currentRank += sameCount
+                sameCount = 1
+                lastKey = k
+            } else {
+                // 값이 같으면: 같은 rank 유지
+                sameCount += 1
+            }
+
+            self[i].displayRank = currentRank
+        }
+    }
+}

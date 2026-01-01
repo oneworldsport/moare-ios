@@ -23,7 +23,7 @@ struct NBATeamStandingsView: View {
             let stats = $0.stats
             return StandingsItemState(
                 id: $0.team.id,
-                rank: stats.displayRank,
+                rank: $0.displayRank,
                 imageUrl: NBAUtil.teamLogoURL(id: $0.team.id),
                 name: store.baseStandings.teamNameDictionary["short_\($0.team.id)"] ?? $0.team.fullName,
                 dataList: [
