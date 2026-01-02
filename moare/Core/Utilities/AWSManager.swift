@@ -13,6 +13,8 @@ import ComposableArchitecture
 class AWSManager {
     static let shared = AWSManager()
     
+    private var credentialsProvider: AWSCognitoCredentialsProvider?
+    
     private(set) var trendingKeywords: TrendingKeywords?
     private(set) var noticeList: [NoticeModel]?
     private(set) var tournamentTeams: [String: [Int?]]?
@@ -22,19 +24,22 @@ class AWSManager {
     private let noticeListPromise = AsyncPromise<[NoticeModel]>()
     private let tournamentTeamsPromise = AsyncPromise<[String: [Int?]]>()
     
+    private let didResetKey = "did_reset_cognito_identity_once" // TODO: 나중에 제거
+    
     private init() {
         configureAWS()
     }
     
     private func configureAWS() {
-        let credentialsProvider = AWSCognitoCredentialsProvider(
+        let provider = AWSCognitoCredentialsProvider(
             regionType: .APNortheast2,
             identityPoolId: "ap-northeast-2:efa201e1-412b-438a-927f-411cc4838469"
         )
+        self.credentialsProvider = provider
     
         let configuration = AWSServiceConfiguration(
             region: .APNortheast2,
-            credentialsProvider: credentialsProvider
+            credentialsProvider: provider
         )
         
         AWSServiceManager.default().defaultServiceConfiguration = configuration
@@ -100,7 +105,50 @@ class AWSManager {
 //            try? await Task.sleep(for: .seconds(5))
             await trendingKeywordsPromise.fulfill(with: trendingKeywords)
         } catch {
-            await trendingKeywordsPromise.fulfill(with: TrendingKeywords(date: "", keywords: []))
+            // HOTFIX: cognito identityId 모두 삭제해버리고 나서 생긴 문제때문에 추가.
+            // 어짜피 지금은 사용자 얼마없어서 조금만 유지했다가 나중에 지우자(sns 넣을때?).
+            func isResourceNotFound(_ error: Error) -> Bool {
+                let ns = error as NSError
+                // 1) 제일 확실한 방법: Cognito Identity 에러 도메인 + 코드
+                if ns.domain == "com.amazonaws.AWSCognitoIdentityErrorDomain", ns.code == 10 {
+                    return true
+                }
+                
+                // 2) 보조: 메시지 기반 (SDK 버전/형태 차이 대비)
+                let msg =
+                (ns.userInfo["message"] as? String)
+                ?? ns.localizedDescription
+                
+                return msg.localizedCaseInsensitiveContains("identity")
+                && msg.localizedCaseInsensitiveContains("not found")
+            }
+            
+            if isResourceNotFound(error),
+               !UserDefaults.standard.bool(forKey: didResetKey),
+               let provider = self.credentialsProvider
+            {
+                UserDefaults.standard.set(true, forKey: didResetKey)
+                
+                // ✅ Keychain/credentials clear
+                provider.clearKeychain()
+                provider.clearCredentials()
+                
+                // ✅ (권장) AWS 재등록: 새 provider 상태를 클라이언트들이 확실히 쓰게
+                self.configureAWS()
+                
+                // ✅ trendingKeywords 1회 재시도
+                do {
+                    let tk = try await trendingKeywords
+                    self.trendingKeywords = tk
+                    await trendingKeywordsPromise.fulfill(with: tk)
+                } catch {
+                    await trendingKeywordsPromise.fulfill(with: TrendingKeywords(date: "", keywords: []))
+                }
+                
+            } else {
+                // reset 대상이 아니거나 이미 한 번 reset 했으면 fallback
+                await trendingKeywordsPromise.fulfill(with: TrendingKeywords(date: "", keywords: []))
+            }
         }
         
         do {
