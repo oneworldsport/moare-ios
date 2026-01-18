@@ -15,30 +15,28 @@ struct SignUpTerms: View {
     @Binding var isPresented: Bool
     
     var body: some View {
-        ZStack {
-            VStack(alignment: .leading) {
-                ForEach(terms, id: \.selfKey) { term in
-                    let title = term.termType == TermType.privacy ? "(필수)개인정보 수집 및 이용 동의" : "(필수)이용약관 동의"
+        VStack(alignment: .leading) {
+            ForEach(terms, id: \.selfKey) { term in
+                let title = term.termType == TermType.privacy ? "(필수)개인정보 수집 및 이용 동의" : "(필수)이용약관 동의"
+                
+                HStack {
+                    Toggle("", isOn: Binding(
+                        get: { checked[term.selfKey] ?? false },
+                        set: { checked[term.selfKey] = $0 }
+                    ))
+                    .toggleStyle(CheckboxToggleStyle())
+                    .padding(.trailing, 8)
                     
-                    HStack {
-                        Toggle("", isOn: Binding(
-                            get: { checked[term.selfKey] ?? false },
-                            set: { checked[term.selfKey] = $0 }
-                        ))
-                        .toggleStyle(CheckboxToggleStyle())
-                        .padding(.trailing, 8)
-                        
-                        Button(action: {
-                            url = term.url
-                            isPresented = true
-                        }) {
-                            Text(title)
-                            Image(systemName: "chevron.right")
-                        }
-                        .foregroundStyle(.primary)
+                    Button(action: {
+                        url = term.url
+                        isPresented = true
+                    }) {
+                        Text(title)
+                        Image(systemName: "chevron.right")
                     }
-                    
+                    .foregroundStyle(.primary)
                 }
+                
             }
         }
     }

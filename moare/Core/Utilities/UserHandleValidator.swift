@@ -21,32 +21,35 @@ struct UserHandleValidator {
     static let minLength = 3
     static let maxLength = 20
     
-    static func validate(_ handle: String) -> UserHandleValidationError? {
-        // 0) empty check
+    static func validate(_ input: String) -> UserHandleValidationError? {
+        // 0) trim
+        let handle = input.trimmed
+        
+        // 1) empty check
         if handle.isBlank { return .empty }
         
-        // 1) length check
+        // 2) length check
         let count = handle.count
         if count < minLength { return .tooShort(min: minLength) }
         if count > maxLength { return .tooLong(max: maxLength) }
         
-        // 2) allowed characters check: lowercase a-z, digits 0-9, underscore _
+        // 3) allowed characters check: lowercase a-z, digits 0-9, underscore _
         let allowedRegex = "^[a-z0-9_]+$"
         if handle.range(of: allowedRegex, options: .regularExpression) == nil {
             return .invalidCharacters
         }
         
-        // 3) starts/ends with underscore check
+        // 4) starts/ends with underscore check
         if handle.hasPrefix("_") { return .startsWithUnderscore }
         if handle.hasSuffix("_") { return .endsWithUnderscore }
         
-        // 4) no double underscore
+        // 5) no double underscore
         if handle.contains("__") { return .containsDoubleUnderscore }
         
         return nil
     }
     
-    static func isValid(_ handle: String) -> Bool {
-        return validate(handle) == nil
+    static func isValid(_ input: String) -> Bool {
+        return validate(input) == nil
     }
 }

@@ -200,8 +200,7 @@ struct SignStore {
                     }
                     
                     // 유효성 검사 실패 시 에러 문구 노출
-                    let trimmedText = state.text.trimmed
-                    if !UserHandleValidator.isValid(trimmedText) {
+                    if !UserHandleValidator.isValid(state.text) {
                         return .merge(
                             .cancel(id: CheckUserHandleCancelID()),
                             .send(.setUserHandleValidationError)
@@ -283,7 +282,7 @@ struct SignStore {
                 return .send(.updateBarState)
                 
             case .setUserHandleValidationError:
-                if let error = UserHandleValidator.validate(state.text.trimmed) {
+                if let error = UserHandleValidator.validate(state.text) {
                     switch error {
                     case .empty, .tooShort(_), .tooLong(_), .invalidCharacters:
                         state.errorMessage = "사용자 이름은 3~20자이며, 공백 없이 영문 소문자, 숫자, 밑줄(_)만 사용할 수 있습니다."
