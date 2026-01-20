@@ -26,20 +26,19 @@ struct SearchView: View {
     @State private var isSearchExampleOpened = false
     @State var noticeBoxHeight: CGFloat = 0
     @State var searchExampleBoxHeight: CGFloat = 0
+    @State var leagueKeywordsComponentHeight: CGFloat = 0
     
     var viewForTest: SportDisplayType? = nil
     
     var body: some View {
         // notice 아이콘 y 위치
-        // y: (전체 컨텐츠 높이(박스 높이(boxHeight) + 아이콘 높이(17) + padding(6))) / 2 + (검색창 높이(50) + 트렌딩 키워드 높이(40)) / 2 + 추가 패딩 8
+        // y: (전체 컨텐츠 높이(박스 높이(boxHeight) + 아이콘 높이(17) + padding(6))) / 2 + (검색창 높이(50) + 트렌딩 키워드 높이(40)) / 2 + 추가 패딩 8 + leagueKeywords컴포넌트 높이 / 2
         // searchExampleBoxHeight가 noticeBoxHeight보다 높은 경우는 전체 컨텐츠 높이를 계산할때 searchExampleBoxHeight를 기준으로 해야함
-        let boxHeight = searchExampleBoxHeight > noticeBoxHeight ? searchExampleBoxHeight : noticeBoxHeight
-        let noticeYOffset = ((boxHeight + 17 + 6) / 2) + (((50 + 40) / 2) + 8)
+        let boxHeight = max(searchExampleBoxHeight, noticeBoxHeight)
+        let noticeYOffset = ((boxHeight + 17 + 6) / 2) + ((50 + 40) / 2) + 8 + (leagueKeywordsComponentHeight / 2)
         
         ZStack {
-            /* ---------------------
-             back button
-             --------------------- */
+            // back button
             VStack {
                 HStack {
                     Button(action: {
@@ -59,9 +58,7 @@ struct SearchView: View {
             }
             .zIndex(1)
             
-            /* ---------------------
-             notice, search example
-             --------------------- */
+            // notice, search example
             HStack(alignment: .bottom) {
                 if isSearchExampleButtonVisible {
                     VStack(alignment: .leading, spacing: 0) {
@@ -115,17 +112,13 @@ struct SearchView: View {
             .zIndex(1)
             
             VStack(spacing: 0) {
-                /* ---------------------
-                 search bar
-                 --------------------- */
+                // search bar
                 AnimatingSearchBar(
                     searchStore: searchStore,
                     focusState: $focusState
                 )
                 
-                /* ---------------------
-                 trending keywords
-                 --------------------- */
+                // trending keywords
                 if searchStore.trendingKeyowrdsVisibleState {
                     TrendingKeywordList(keywords: searchStore.trendingKeywordList) { keyword in
                         // update bar's text
@@ -138,10 +131,31 @@ struct SearchView: View {
                     }
                 }
                 
+                // league keywords
+                if let leagueKeywords = searchStore.leagueKeywords, searchStore.trendingKeyowrdsVisibleState {
+                    if !leagueKeywords.live.isEmpty && !leagueKeywords.recent.isEmpty {
+                        LeagueKeywordsList(leagueKeywords: leagueKeywords) { keywordInfo in
+                            // update bar's text
+                            searchStore.send(.updateTextField(keywordInfo.keyword, false))
+                            
+                            // remove textfield for bar animation
+                            searchStore.send(.updateTextFieldVisibleState(false))
+                            
+                            searchStore.send(.performSearch(searchType: .leagueKeyword(keywordInfo), aniDuration: AnimationConstants.Duration.medium))
+                        }
+                        .padding(.top, 16)
+                        .background(
+                            GeometryReader { proxy in
+                                Color.clear
+                                    .onAppear { leagueKeywordsComponentHeight = proxy.size.height }
+                                    .onChange(of: proxy.size.height) { leagueKeywordsComponentHeight = proxy.size.height }
+                            }
+                        )
+                    }
+                }
+                
                 ZStack {
-                    /* ---------------------
-                     autocomplete list
-                     --------------------- */
+                    // autocomplete list
                     if !searchStore.autoCompleteList.isEmpty {
                         AutoCompleteList(autoCompleteList: searchStore.autoCompleteList, onItemSelected: { words in
                             // update bar's text
@@ -160,17 +174,13 @@ struct SearchView: View {
                         })
                     }
                     
-                    /* ---------------------
-                     loading
-                     --------------------- */
+                    // loading
                     if searchStore.searchDataState == .fetching {
                         ProgressView()
                             .padding(.top, UIConstants.Padding.defaultPadding)
                     }
                     
-                    /* ---------------------
-                     search result
-                     --------------------- */
+                    // search result
                     if searchStore.resultVisibleState {
                         VStack(spacing: 0) {
                             if appStore.includesPreviousView {
@@ -206,9 +216,7 @@ struct SearchView: View {
                         .padding(.top, UIConstants.Padding.defaultPadding)
                     }
                     
-                    /* ---------------------
-                     error
-                     --------------------- */
+                    // error
                     if case .failure(let message) = searchStore.searchDataState {
                         Text(message)
                             .padding(.top, UIConstants.Padding.defaultPadding)

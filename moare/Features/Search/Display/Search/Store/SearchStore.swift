@@ -26,6 +26,7 @@ struct SearchStore {
         var autoCompleteList: [String] = []
         var trendingKeywordList: [String] = []
         var autoCompleteDataDic: [String: KeywordInfo] = [:]
+        var leagueKeywords: LeagueKeywords? = nil
         
         /* ---------------------
            ui state
@@ -52,6 +53,7 @@ struct SearchStore {
     
     enum SearchType {
         case query, trendingKeyword, autoComplete
+        case leagueKeyword(KeywordInfo)
     }
     
     enum Action: BindableAction {
@@ -64,6 +66,8 @@ struct SearchStore {
         case updateTextField(String, Bool = true)
         case updateTextFieldVisibleState(Bool)
         case performSearch(searchType: SearchType = .query, aniDuration: CGFloat = 0)
+        case getLeagueKeywords
+        case getLeagueKeywordsSuccess(LeagueKeywords)
         
         case updateTrendingKeywordsVisibleState(Bool)
         
@@ -144,6 +148,8 @@ struct SearchStore {
                     await send(.initTrendingKeywords(trendingKeyowrdsResult.keywords))
                     await send(.initTrieTuple(trieTuple: trieTupleResult))
                     await send(.initNoticeList(noticeListResult))
+                    
+                    await send(.getLeagueKeywords)
                 }
                 
             case .initTrieTuple(let trieTuple):
@@ -153,14 +159,14 @@ struct SearchStore {
                 return .none
                 
             case .initTrendingKeywords(let keywords):
-                // NOTE: 중복 키워드는 덮어쓰기
+                // 중복 키워드는 덮어쓰기
                 var dict = OrderedDictionary<String, KeywordInfo>()
                 for info in keywords {
                     dict[info.keyword] = info
                 }
                 state.trendingKeywords = dict
                 
-                // NOTE: 중복 포함 + 순서 유지
+                // 중복 포함 + 순서 유지
                 state.trendingKeywordList = keywords.map { $0.keyword }
                 
                 return .none
@@ -268,6 +274,9 @@ struct SearchStore {
                                     throw NSError(domain: "SearchError", code: 1)
                                 }
                                 
+                            case .leagueKeyword(let keyword):
+                                result = try await searchClient.fetchDataByKeyword(keyword: keyword)
+                                
                             case .autoComplete:
                                 if var keywordInfo = autoCompleteDataDic[query] {
                                     keywordInfo.weight = nil // To exclude field "weight" in the request body
@@ -338,7 +347,7 @@ struct SearchStore {
                 }
                 
             case let .popView(lastPath, isEmpty, lastQuery):
-                guard lastPath != nil else { return .none }
+                guard lastPath != nil else { return .none } // TODO: 지우기
                 
                 if isEmpty {
                     return .run { send in
@@ -379,6 +388,19 @@ struct SearchStore {
 //                        }
 //                    }
 //                }
+                
+            case .getLeagueKeywords:
+                return .run { send in
+                    do {
+                        let result = try await keywordsClient.fetchLeagueKeywords()
+                        await send(.getLeagueKeywordsSuccess(result))
+                    } catch {
+                    }
+                }
+                
+            case .getLeagueKeywordsSuccess(let keywords):
+                state.leagueKeywords = keywords
+                return .none
                 
             case .updateSearchDataState(let dataState):
                 withAnimation(.easeOut(duration: 0.5)) {

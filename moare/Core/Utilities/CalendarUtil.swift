@@ -204,9 +204,9 @@ struct CalendarUtil {
     static func formatMinuteSecondToSeconds(time: String) -> Int {
         let parts = time.components(separatedBy: ":")
         if parts.count == 2,
-           let hours = Int(parts[0]),
-           let minutes = Int(parts[1]) {
-            return (hours * 60) + minutes
+           let minutes = Int(parts[0]),
+           let seconds = Int(parts[1]) {
+            return (minutes * 60) + seconds
         } else {
             return 0
         }

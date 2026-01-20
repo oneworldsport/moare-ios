@@ -15,10 +15,11 @@ enum APIEndpoint {
     case searchById(season: Int, category: String, date: String?, dataType: String, leagueId: Int, id: String)
     
     case fetchTrendingKeywords
+    case fetchLeagueKeywords
     
     var defaultHTTPMethod: String {
         switch self {
-        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .fetchLeagueKeywords:
             return "GET"
         case .getLeagueSchedule, .searchByKeyword:
             return "POST"
@@ -75,6 +76,9 @@ enum APIEndpoint {
             
         case .fetchTrendingKeywords:
             components.path = "/keywords/trending"
+            
+        case .fetchLeagueKeywords:
+            components.path = "/keywords/league"
         }
         
         return components.url
@@ -82,7 +86,7 @@ enum APIEndpoint {
     
     var httpBody: Data? {
         switch self {
-        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById:
+        case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .fetchLeagueKeywords:
             return nil
         case .searchByKeyword(let keyword):
             // NOTE: nil is excluded

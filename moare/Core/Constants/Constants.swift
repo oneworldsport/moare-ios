@@ -252,24 +252,12 @@ struct Constants {
         static func gameStatusText(
             leagueId: Int,
             status: String,
+            elapsed: Int? = nil,
             isResultOpened: Bool = true
         ) -> String {
             switch leagueId {
-            case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
-                switch status {
-                case Football.notStarted:
-                    return StringConstants.gameNotStartedStr
-                case Football.firstHalf:
-                    return StringConstants.Football.gameFirstHalfStr
-                case Football.halftime:
-                    return StringConstants.Football.gameHalftimeStr
-                case Football.secondHalf:
-                    return StringConstants.Football.gameSecondHalfStr
-                case let status where Football.finishedList.contains(status):
-                    return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
-                default:
-                    return ""
-                }
+            case let id where Constants.Ids.footballAll.contains(id):
+                return fbGameStatusText(status: status, elapsed: elapsed)
             case Constants.Ids.nba:
                 return ""
             case Constants.Ids.kbo:

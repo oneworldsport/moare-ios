@@ -10,11 +10,16 @@ import Foundation
 struct KeywordInfo: Codable {
     let keyword: String
     var weight: Int? = nil
-    let keywords: [Keyword]
+    let keywords: [Keyword]?
     let entities: [EntityInfo]
 }
 
 struct TrendingKeywords: Codable {
     let date: String
     let keywords: [KeywordInfo]
+}
+
+struct LeagueKeywords: Codable {
+    let live: [KeywordInfo]
+    let recent: [KeywordInfo]
 }

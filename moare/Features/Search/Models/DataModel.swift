@@ -151,7 +151,8 @@ extension DataModel {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.dataType = try container.decode(String.self, forKey: .dataType)
-        self.keywords = try container.decode([Keyword].self, forKey: .keywords)
+        self.keywords = try container.decodeIfPresent([Keyword].self, forKey: .keywords) ?? []
+        
         self.entityInfo = try container.decode([EntityInfo].self, forKey: .entityInfo)
         self.season = try container.decode(Int.self, forKey: .season)
         
