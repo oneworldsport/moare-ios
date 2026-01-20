@@ -153,14 +153,14 @@ struct SearchStore {
                 return .none
                 
             case .initTrendingKeywords(let keywords):
-                // NOTE: 중복 키워드는 덮어쓰기
+                // 중복 키워드는 덮어쓰기
                 var dict = OrderedDictionary<String, KeywordInfo>()
                 for info in keywords {
                     dict[info.keyword] = info
                 }
                 state.trendingKeywords = dict
                 
-                // NOTE: 중복 포함 + 순서 유지
+                // 중복 포함 + 순서 유지
                 state.trendingKeywordList = keywords.map { $0.keyword }
                 
                 return .none
@@ -338,7 +338,7 @@ struct SearchStore {
                 }
                 
             case let .popView(lastPath, isEmpty, lastQuery):
-                guard lastPath != nil else { return .none }
+                guard lastPath != nil else { return .none } // TODO: 지우기
                 
                 if isEmpty {
                     return .run { send in

@@ -19,7 +19,8 @@ struct TournamentSingleGameItem<T: Decodable & Equatable>: View {
         let awayTeamScore = game.awayTeamScore
         let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
         let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
-        let gameStatusText = Constants.GameStatus.gameStatusText(leagueId: leagueId, status: game.gameStatus)
+        let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
+        let gameStatusText = Constants.GameStatus.gameStatusText(leagueId: leagueId, status: game.gameStatus, elapsed: elapsed)
         let shouldShowScore = !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
         let isFinished = gameStatusText == StringConstants.gameFinishedStr
         
