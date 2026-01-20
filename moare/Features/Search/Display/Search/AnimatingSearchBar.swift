@@ -64,7 +64,7 @@ struct AnimatingSearchBar: View {
                         
                         if !searchStore.searchState && !searchStore.query.isEmpty {
                             Button(action: {
-                                searchStore.query = ""
+                                searchStore.send(.updateTextField(""))
                             }) {
                                 Image(systemName: "xmark.circle")
                                     .background(.white.opacity(0.8))

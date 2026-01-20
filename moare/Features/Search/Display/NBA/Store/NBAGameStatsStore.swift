@@ -227,15 +227,14 @@ struct NBAGameStatsStore {
                     return .run { [displayModel = state.baseGameStats.displayModel] send in
                         do {
                             let game = displayModel.game
-                            if let gameSummary = game.gameSummary,
-                               let boxScoreTraditional = game.boxScoreTraditional {
+                            if let gameSummary = game.gameSummary {
                                 let result = try await searchClient.fetchById(
                                     season: displayModel.season,
                                     category: "basketball",
                                     date: gameSummary.gameDate,
                                     dataType: "basketball_game_stats",
                                     leagueId: Constants.Ids.nba,
-                                    id: boxScoreTraditional.gameId
+                                    id: gameSummary.gameId
                                 )
                                 
                                 await send(.updateDisplayModel(model: result.data))
