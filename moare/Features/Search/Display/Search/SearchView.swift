@@ -133,25 +133,23 @@ struct SearchView: View {
                 
                 // league keywords
                 if let leagueKeywords = searchStore.leagueKeywords, searchStore.trendingKeyowrdsVisibleState {
-                    if !leagueKeywords.live.isEmpty && !leagueKeywords.recent.isEmpty {
-                        LeagueKeywordsList(leagueKeywords: leagueKeywords) { keywordInfo in
-                            // update bar's text
-                            searchStore.send(.updateTextField(keywordInfo.keyword, false))
-                            
-                            // remove textfield for bar animation
-                            searchStore.send(.updateTextFieldVisibleState(false))
-                            
-                            searchStore.send(.performSearch(searchType: .leagueKeyword(keywordInfo), aniDuration: AnimationConstants.Duration.medium))
-                        }
-                        .padding(.top, 16)
-                        .background(
-                            GeometryReader { proxy in
-                                Color.clear
-                                    .onAppear { leagueKeywordsComponentHeight = proxy.size.height }
-                                    .onChange(of: proxy.size.height) { leagueKeywordsComponentHeight = proxy.size.height }
-                            }
-                        )
+                    LeagueKeywordsList(leagueKeywords: leagueKeywords) { keywordInfo in
+                        // update bar's text
+                        searchStore.send(.updateTextField(keywordInfo.keyword, false))
+                        
+                        // remove textfield for bar animation
+                        searchStore.send(.updateTextFieldVisibleState(false))
+                        
+                        searchStore.send(.performSearch(searchType: .leagueKeyword(keywordInfo), aniDuration: AnimationConstants.Duration.medium))
                     }
+                    .padding(.top, 16)
+                    .background(
+                        GeometryReader { proxy in
+                            Color.clear
+                                .onAppear { leagueKeywordsComponentHeight = proxy.size.height }
+                                .onChange(of: proxy.size.height) { leagueKeywordsComponentHeight = proxy.size.height }
+                        }
+                    )
                 }
                 
                 ZStack {

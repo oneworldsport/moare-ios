@@ -73,7 +73,7 @@ struct FBGameStatsView: View {
         let gameDetailTitle = "장소: \n심판: "
         let gameDetailContent: String = {
             var result = ""
-            result += "\(teamNameDic["venue_\(displayModel.game.teams.home.id)"] ?? "")\n"
+            result += "\(teamNameDic["venue_\(displayModel.game.teams.home.id)"] ?? displayModel.game.fixture.venue.name)\n"
             result += "\(displayModel.game.fixture.referee)\n"
             return result
         }()

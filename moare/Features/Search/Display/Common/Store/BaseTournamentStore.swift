@@ -37,10 +37,10 @@ struct BaseTournamentStore<T> {
                 // init with default value
                 state.tournamentTeams = [:]
                 
+                state.teamNameDic = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
+                
                 if let displayModel = state.displayModel as? SportDisplayModel {
                     switch displayModel.leagueId {
-                    case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
-                        state.teamNameDic = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                     case Constants.Ids.nba:
                         state.teamNameDic = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
                     case Constants.Ids.kbo:
