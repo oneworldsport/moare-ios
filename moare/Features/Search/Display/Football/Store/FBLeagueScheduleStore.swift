@@ -52,6 +52,7 @@ struct FBLeagueScheduleStore {
         case selectGame(game: FBGameForSchedule)
         case showTournament
         case showTeamStandings
+        case refreshGames
         
         case setDays(isInit: Bool = false)
         case fetchGames
@@ -61,6 +62,7 @@ struct FBLeagueScheduleStore {
         
         case updateFilteredGames
         case updateSelectedGame // FBGameStatsView에서 새로고침 했을때 사용되는 action
+        case updateDisplayModelGames([FBGameForSchedule])
         
         case delegate(Delegate)
     }
@@ -354,6 +356,48 @@ struct FBLeagueScheduleStore {
                     await send(.delegate(.showTeamStandings(model: result.data)))
                 }
                 
+            case .refreshGames:
+                guard let games = state.filteredGames[state.baseSchedule.selectedDayIndex] else {
+                    return .none
+                }
+                
+                let entity = state.baseSchedule.displayModel.entityInfo.first ?? EntityInfo(
+                    entityId: 39,
+                    entityName: "프리미어리그",
+                    category: "football",
+                    entityType: "league",
+                    leagueId: 39,
+                    teamId: nil,
+                    playerId: nil
+                )
+                let season = state.baseSchedule.displayModel.season
+                let day = state.baseSchedule.selectedDay?.day
+                let selectedYearMonth = state.baseSchedule.selectedYearMonth
+                let splittedYearMonth = selectedYearMonth.split(separator: "/")
+                let yearMonth = splittedYearMonth[0] + splittedYearMonth[1]
+                
+                return .run { send in
+                    do {
+                        let hasLive = games.contains { game in
+                            Constants.GameStatus.Football.liveList.contains(game.gameStatus)
+                        }
+                        
+                        if hasLive {
+                            let result = try await searchClient.fetchLeagueSchedule(
+                                entity: entity,
+                                season: season,
+                                yearMonth: String(yearMonth),
+                                day: day
+                            )
+                            
+                            if case .fbLeagueSchedule(_, let displayModel) = result.data {
+                                await send(.updateDisplayModelGames(displayModel.games))
+                            }
+                        }
+                    } catch {
+                    }
+                }
+                
             case .updateDisplayDataState(let fetchState):
                 state.baseSchedule.displayDataState = fetchState
                 
@@ -395,6 +439,13 @@ struct FBLeagueScheduleStore {
                 state.selectedGame = nil // 해당 액션은 뒤로왔을때 실행되므로 선택된 게임은 없앤다.
                 
                 return .none
+                
+            case .updateDisplayModelGames(let games):
+                let gamesById = Dictionary(uniqueKeysWithValues: games.map { ($0.gameId, $0) })
+
+                state.baseSchedule.displayModel.games = state.baseSchedule.displayModel.games.map { gamesById[$0.gameId] ?? $0 }
+                
+                return .send(.updateFilteredGames)
                 
             case .baseSchedule:
                 return .none

@@ -9,7 +9,7 @@ import Foundation
 
 enum APIEndpoint {
     case searchByQuery(query: String)
-    case getLeagueSchedule(entity: EntityInfo, season: Int, yearMonth: String)
+    case getLeagueSchedule(entity: EntityInfo, season: Int, yearMonth: String, day: Int?)
     case searchByKeyword(keyword: KeywordInfo)
     case searchByEndpoint(endpoint: String)
     case searchById(season: Int, category: String, date: String?, dataType: String, leagueId: Int, id: String)
@@ -41,12 +41,19 @@ enum APIEndpoint {
                 URLQueryItem(name: "query", value: query)
             ]
             
-        case .getLeagueSchedule(_, let season, let yearMonth):
+        case .getLeagueSchedule(_, let season, let yearMonth, let day):
             components.path = "/search/schedule"
-            components.queryItems = [
-                URLQueryItem(name: "season", value: String(season)),
-                URLQueryItem(name: "yearMonth", value: yearMonth)
+            
+            var items: [URLQueryItem] = [
+              URLQueryItem(name: "season", value: String(season)),
+              URLQueryItem(name: "yearMonth", value: yearMonth)
             ]
+
+            if let day {
+              items.append(URLQueryItem(name: "day", value: String(day)))
+            }
+
+            components.queryItems = items
             
         case .searchByKeyword(let keyword):
             components.path = "/search/keyword"
@@ -91,7 +98,7 @@ enum APIEndpoint {
         case .searchByKeyword(let keyword):
             // NOTE: nil is excluded
             return try? JSONEncoder().encode(keyword)
-        case .getLeagueSchedule(let entity, _, _):
+        case .getLeagueSchedule(let entity, _, _, _):
             return try? JSONEncoder().encode(entity)
         }
     }

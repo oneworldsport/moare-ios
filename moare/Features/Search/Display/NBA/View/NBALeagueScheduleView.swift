@@ -85,6 +85,9 @@ struct NBALeagueScheduleList: View {
     
     var body: some View {
         let gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+        let hasLive = gameListToDisplay.contains { game in
+            game.gameStatus == String(Constants.GameStatus.NBA.live)
+        }
         
         ScrollView {
             LazyVStack(spacing: 8) {
@@ -99,6 +102,9 @@ struct NBALeagueScheduleList: View {
             }
         }
         .frame(maxHeight: .infinity)
+        .refreshableIf(hasLive) {
+            await nbaLeagueScheduleStore.send(.refreshGames).finish()
+        }
     }
 }
 

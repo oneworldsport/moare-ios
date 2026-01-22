@@ -112,6 +112,9 @@ struct FBLeagueScheduleList: View {
         let isCollapsed = fbLeagueScheduleStore.selectedGame != nil && gameListToDisplay.count == 1
         let teamNameDic = fbLeagueScheduleStore.baseSchedule.teamNameDictionary
         let singleId = gameListToDisplay.first?.gameId
+        let hasLive = gameListToDisplay.contains { game in
+            Constants.GameStatus.Football.liveList.contains(game.gameStatus)
+        }
         
         ScrollView {
 //            HStack {
@@ -154,6 +157,9 @@ struct FBLeagueScheduleList: View {
         }
         .frame(height: isCollapsed ? itemHeight : nil)
         .scrollDisabled(isCollapsed)
+        .refreshableIf(hasLive) {
+            await fbLeagueScheduleStore.send(.refreshGames).finish()
+        }
     }
 }
 
