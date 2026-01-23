@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA01892B2F238B210054178C /* EdgePanBackHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA01892A2F238AFE0054178C /* EdgePanBackHandler.swift */; };
 		DA081BCA2DDF2C3000034589 /* BaseInfoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA081BC92DDF2C3000034589 /* BaseInfoStore.swift */; };
 		DA081BCC2DDF386D00034589 /* SportDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA081BCB2DDF385B00034589 /* SportDisplayModel.swift */; };
 		DA081BCE2DDF408E00034589 /* BaseGameStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA081BCD2DDF408E00034589 /* BaseGameStatsStore.swift */; };
@@ -275,6 +276,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DA01892A2F238AFE0054178C /* EdgePanBackHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgePanBackHandler.swift; sourceTree = "<group>"; };
 		DA081BC92DDF2C3000034589 /* BaseInfoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseInfoStore.swift; sourceTree = "<group>"; };
 		DA081BCB2DDF385B00034589 /* SportDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportDisplayModel.swift; sourceTree = "<group>"; };
 		DA081BCD2DDF408E00034589 /* BaseGameStatsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseGameStatsStore.swift; sourceTree = "<group>"; };
@@ -1208,6 +1210,7 @@
 		DA531C012D64A91900DB87CB /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				DA01892A2F238AFE0054178C /* EdgePanBackHandler.swift */,
 				DA531BFF2D64A91900DB87CB /* FlowStack.swift */,
 				DA531C002D64A91900DB87CB /* UIExtensions.swift */,
 				DABE3D6A2D7E977F0048DCAA /* Utilities.swift */,
@@ -1641,6 +1644,7 @@
 				DADE29652DF178B20099A0DD /* ScheduleGameItemState.swift in Sources */,
 				DA30E71F2DF7BE42000639AD /* MLBTeamStatsStore.swift in Sources */,
 				DA531BB32D64A8CA00DB87CB /* FBTeamStandingsDisplayModel.swift in Sources */,
+				DA01892B2F238B210054178C /* EdgePanBackHandler.swift in Sources */,
 				DA531B402D64A8A400DB87CB /* SplashView.swift in Sources */,
 				DA30E7152DF7BDE6000639AD /* MLBPlayerStatsView.swift in Sources */,
 				DA531BE82D64A8F200DB87CB /* CalendarUtil.swift in Sources */,

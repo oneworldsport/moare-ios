@@ -286,34 +286,53 @@ struct SearchView: View {
                     focusState = false
                 }
             }
-            .gesture(
-                // custom back handler
-                DragGesture(minimumDistance: 3)
-                    .onChanged { value in
-                        if !appStore.path.ids.isEmpty {
-                            dragOffset = value.translation.width
-                            
-                            if dragOffset > 0 {
-                                opacity = max(1 - Double(dragOffset / dragMaxOffset), 0.2)
-                            }
-                        }
-                    }
-                    .onEnded { _ in
-                        if !appStore.path.ids.isEmpty {
-                            if dragOffset > dragMaxOffset {
-                                appStore.send(.pop)
-                            }
-                            
-                            dragOffset = 0
-                            
-                            withAnimation(.easeOut(duration: 0.5)) {
-                                opacity = 1.0
-                            }
-                        }
-                    }
-            )
+//            .gesture(
+//                // custom back handler
+//                DragGesture(minimumDistance: 3)
+//                    .onChanged { value in
+//                        if !appStore.path.ids.isEmpty {
+//                            dragOffset = value.translation.width
+//                            
+//                            if dragOffset > 0 {
+//                                opacity = max(1 - Double(dragOffset / dragMaxOffset), 0.2)
+//                            }
+//                        }
+//                    }
+//                    .onEnded { _ in
+//                        if !appStore.path.ids.isEmpty {
+//                            if dragOffset > dragMaxOffset {
+//                                appStore.send(.pop)
+//                            }
+//                            
+//                            dragOffset = 0
+//                            
+//                            withAnimation(.easeOut(duration: 0.5)) {
+//                                opacity = 1.0
+//                            }
+//                        }
+//                    }
+//            )
         } // ZStack
         .opacity(opacity)
+        .overlay(alignment: .leading) {
+            EdgePanBackHandler(
+                isEnabled: !appStore.path.ids.isEmpty,
+                onProgress: { progress in
+                    dragOffset = CGFloat(progress) * dragMaxOffset
+                    opacity = max(1 - Double(progress), 0.2)
+                },
+                onCancel: {
+                    dragOffset = 0
+                    withAnimation(.easeOut(duration: 0.5)) { opacity = 1.0 }
+                },
+                onPop: {
+                    appStore.send(.pop)
+                    dragOffset = 0
+                    withAnimation(.easeOut(duration: 0.5)) { opacity = 1.0 }
+                }
+            )
+            .allowsHitTesting(true)
+        }
         .onAppear {
             searchStore.send(.initData)
             
