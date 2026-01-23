@@ -40,6 +40,7 @@ struct KBOLeagueScheduleStore {
         case selectGame(game: KBOGameForSchedule)
         case showTournament
         case showTeamStandings
+        case refreshGames
         
         /* ---------------------
            private
@@ -49,6 +50,7 @@ struct KBOLeagueScheduleStore {
         
         case updateDisplayDataState(fetchState: ApiFetchState)
         case setDisplayModel(displayModel: KBOLeagueScheduleDisplayModel)
+        case updateDisplayModelGames([KBOGameForSchedule])
         
         case updateFilteredGames
         
@@ -304,6 +306,48 @@ struct KBOLeagueScheduleStore {
                     await send(.delegate(.showTeamStandings(model: result.data)))
                 }
                 
+            case .refreshGames:
+                guard let games = state.filteredGames[state.baseSchedule.selectedDayIndex] else {
+                    return .none
+                }
+                
+                let entity = state.baseSchedule.displayModel.entityInfo.first ?? EntityInfo(
+                    entityId: 90101,
+                    entityName: "KBO",
+                    category: "baseball",
+                    entityType: "league",
+                    leagueId: 90101,
+                    teamId: nil,
+                    playerId: nil
+                )
+                let season = state.baseSchedule.displayModel.season
+                let day = state.baseSchedule.selectedDay?.day
+                let selectedYearMonth = state.baseSchedule.selectedYearMonth
+                let splittedYearMonth = selectedYearMonth.split(separator: "/")
+                let yearMonth = splittedYearMonth[0] + splittedYearMonth[1]
+                
+                return .run { send in
+                    do {
+                        let hasLive = games.contains { game in
+                            game.gameStatus == Constants.GameStatus.KBO.live
+                        }
+                        
+                        if hasLive {
+                            let result = try await searchClient.fetchLeagueSchedule(
+                                entity: entity,
+                                season: season,
+                                yearMonth: String(yearMonth),
+                                day: day
+                            )
+                            
+                            if case .kboLeagueSchedule(_, let displayModel) = result.data {
+                                await send(.updateDisplayModelGames(displayModel.games))
+                            }
+                        }
+                    } catch {
+                    }
+                }
+                
             case .updateDisplayDataState(let fetchState):
                 state.baseSchedule.displayDataState = fetchState
                 
@@ -329,6 +373,13 @@ struct KBOLeagueScheduleStore {
                 }
                 
                 return .none
+                
+            case .updateDisplayModelGames(let games):
+                let gamesById = Dictionary(uniqueKeysWithValues: games.map { ($0.itemKey, $0) })
+
+                state.baseSchedule.displayModel.games = state.baseSchedule.displayModel.games.map { gamesById[$0.itemKey] ?? $0 }
+                
+                return .send(.updateFilteredGames)
                 
             case .baseSchedule(_):
                 return .none

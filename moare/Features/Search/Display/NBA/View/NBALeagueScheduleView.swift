@@ -83,27 +83,67 @@ struct NBALeagueScheduleList: View {
     @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var nbaLeagueScheduleStore: StoreOf<NBALeagueScheduleStore>
     
+    @State private var pageIdx: Int? = 0
+    
     var body: some View {
-        let gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        let hasLive = gameListToDisplay.contains { game in
-            game.gameStatus == String(Constants.GameStatus.NBA.live)
-        }
+        let selectedDay = nbaLeagueScheduleStore.baseSchedule.selectedDay?.day
         
-        ScrollView {
-            LazyVStack(spacing: 8) {
-                ForEach(gameListToDisplay, id: \.gameId) { item in
-                    NBALeagueScheduleListItem(
-                        searchStore: searchStore,
-                        nbaLeagueScheduleStore: nbaLeagueScheduleStore,
-                        data: item
-                    )
-                    .padding(.vertical, 8)
-                }
+        let days = nbaLeagueScheduleStore.baseSchedule.days
+        var window: [Int] {
+            days.indices.filter { idx in
+                !(days[idx].isDataEmpty)
             }
         }
-        .frame(maxHeight: .infinity)
-        .refreshableIf(hasLive) {
-            await nbaLeagueScheduleStore.send(.refreshGames).finish()
+        
+        ScrollView(.horizontal) {
+            // NOTE: LazyHStack이어서 그런지 달력에 day 선택으로 이동 시 CapsuleBar가 약간의 버벅임이 있는 것 같음. 그렇다고 HStack으로 바꿔서 해보니 처음 화면 나오는게 엄청 오래 걸림.
+            LazyHStack(spacing: 0) {
+                ForEach(window, id: \.self) { day in
+                    // GameList
+                    let gameListToDisplay = nbaLeagueScheduleStore.filteredGames[day] ?? []
+                    let hasLive = gameListToDisplay.contains { game in
+                        game.gameStatus == String(Constants.GameStatus.NBA.live)
+                    }
+                    
+                    ScrollView {
+                        LazyVStack(spacing: 8) {
+                            ForEach(gameListToDisplay, id: \.gameId) { item in
+                                NBALeagueScheduleListItem(
+                                    searchStore: searchStore,
+                                    nbaLeagueScheduleStore: nbaLeagueScheduleStore,
+                                    data: item
+                                )
+                                .padding(.vertical, 8)
+                            }
+                        }
+                    }
+                    .frame(maxHeight: .infinity)
+                    .refreshableIf(hasLive) {
+                        await nbaLeagueScheduleStore.send(.refreshGames).finish()
+                    }
+                    .containerRelativeFrame(.horizontal, count: 1, spacing: 0)
+                    .id(day)
+                }
+            }
+            .scrollTargetLayout() // paging 타겟 레이아웃
+        }
+        .scrollIndicators(.hidden)
+        .scrollTargetBehavior(.paging)
+        .scrollPosition(id: $pageIdx)
+        .onAppear {
+            // 첫 진입 시 선택 날짜로 스크롤 위치 맞춤
+            guard let selectedDay else { return }
+            pageIdx = selectedDay - 1
+        }
+        .onChange(of: pageIdx) {
+            guard let pageIdx else { return }
+            guard days.indices.contains(pageIdx) else { return }
+
+            nbaLeagueScheduleStore.send(.baseSchedule(.selectDay(days[pageIdx], pageIdx)))
+        }
+        .onChange(of: selectedDay) {
+            guard let selectedDay else { return }
+            pageIdx = selectedDay - 1
         }
     }
 }

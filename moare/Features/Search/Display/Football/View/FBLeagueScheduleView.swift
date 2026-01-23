@@ -106,59 +106,88 @@ struct FBLeagueScheduleList: View {
     @Bindable var fbLeagueScheduleStore: StoreOf<FBLeagueScheduleStore>
 
     @State var itemHeight: CGFloat? = nil
+    @State private var pageIdx: Int? = 0
     
     var body: some View {
-        let gameListToDisplay = fbLeagueScheduleStore.filteredGames[fbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
-        let isCollapsed = fbLeagueScheduleStore.selectedGame != nil && gameListToDisplay.count == 1
+        let selectedDay = fbLeagueScheduleStore.baseSchedule.selectedDay?.day
+        let isCollapsed = fbLeagueScheduleStore.selectedGame != nil
         let teamNameDic = fbLeagueScheduleStore.baseSchedule.teamNameDictionary
-        let singleId = gameListToDisplay.first?.gameId
-        let hasLive = gameListToDisplay.contains { game in
-            Constants.GameStatus.Football.liveList.contains(game.gameStatus)
+        
+        let days = fbLeagueScheduleStore.baseSchedule.days
+        var window: [Int] {
+            days.indices.filter { idx in
+                !(days[idx].isDataEmpty)
+            }
         }
         
-        ScrollView {
-//            HStack {
-//                Spacer()
-//            }
-            
-            LazyVStack(spacing: 8) {
-                ForEach(gameListToDisplay, id: \.gameId) { value in
-                    FBLeagueScheduleListItem(
-                        searchStore: searchStore,
-                        fbLeagueScheduleStore: fbLeagueScheduleStore,
-                        data: value,
-                        leagueId: fbLeagueScheduleStore.baseSchedule.displayModel.leagueId,
-                        teamNameDic: teamNameDic
-                    )
-                    .padding(.vertical, 8)
-                    .background(
-                        // NOTE: .readSize가 안먹혀서 아래 코드로 적용
-                        Group {
-                            if isCollapsed && value.gameId == singleId {
-                                GeometryReader { proxy in
-                                    Color.clear
-                                        .onAppear { itemHeight = proxy.size.height }
-                                        .onChange(of: proxy.size.height) { itemHeight = proxy.size.height }
-                                }
-                            } else {
-                                Color.clear
+        ScrollView(.horizontal) {
+            LazyHStack(spacing: 0) {
+                ForEach(window, id: \.self) { day in
+                    // GameList
+                    let gameListToDisplay = fbLeagueScheduleStore.filteredGames[day] ?? []
+                    let singleId = gameListToDisplay.first?.gameId
+                    let hasLive = gameListToDisplay.contains { game in
+                        Constants.GameStatus.Football.liveList.contains(game.gameStatus)
+                    }
+                    
+                    ScrollView {
+                        LazyVStack(spacing: 8) {
+                            ForEach(gameListToDisplay, id: \.gameId) { value in
+                                FBLeagueScheduleListItem(
+                                    searchStore: searchStore,
+                                    fbLeagueScheduleStore: fbLeagueScheduleStore,
+                                    data: value,
+                                    leagueId: fbLeagueScheduleStore.baseSchedule.displayModel.leagueId,
+                                    teamNameDic: teamNameDic
+                                )
+                                .padding(.vertical, 8)
+                                .background(
+                                    // NOTE: .readSize가 안먹혀서 아래 코드로 적용
+                                    Group {
+                                        if isCollapsed && value.gameId == singleId {
+                                            GeometryReader { proxy in
+                                                Color.clear
+                                                    .onAppear { itemHeight = proxy.size.height }
+                                                    .onChange(of: proxy.size.height) { itemHeight = proxy.size.height }
+                                            }
+                                        } else {
+                                            Color.clear
+                                        }
+                                    }
+                                )
                             }
                         }
-                    )
-//                    .vSequentialListAni(
-//                        index: index,
-//                        itemCount: gameListToDisplay.count,
-//                        itemHeight: 53,
-//                        aniDelay: 0.1,
-//                        aniDuration: 0.5
-//                    )
+                    }
+                    .frame(height: isCollapsed ? itemHeight : nil)
+                    .scrollDisabled(isCollapsed)
+                    .refreshableIf(hasLive) {
+                        await fbLeagueScheduleStore.send(.refreshGames).finish()
+                    }
+                    .containerRelativeFrame(.horizontal, count: 1, spacing: 0)
+                    .id(day)
                 }
             }
+            .scrollTargetLayout() // paging 타겟 레이아웃
         }
         .frame(height: isCollapsed ? itemHeight : nil)
         .scrollDisabled(isCollapsed)
-        .refreshableIf(hasLive) {
-            await fbLeagueScheduleStore.send(.refreshGames).finish()
+        .scrollIndicators(.hidden)
+        .scrollTargetBehavior(.paging)
+        .scrollPosition(id: $pageIdx)
+        .onAppear {
+            // 첫 진입 시 선택 날짜로 스크롤 위치 맞춤
+            guard let selectedDay else { return }
+            pageIdx = selectedDay - 1
+        }
+        .onChange(of: pageIdx) {
+            guard let pageIdx else { return }
+            guard days.indices.contains(pageIdx) else { return }
+
+            fbLeagueScheduleStore.send(.baseSchedule(.selectDay(days[pageIdx], pageIdx)))
+        }
+        .onChange(of: selectedDay) {
+            guard let selectedDay else { return }
+            pageIdx = selectedDay - 1
         }
     }
 }
