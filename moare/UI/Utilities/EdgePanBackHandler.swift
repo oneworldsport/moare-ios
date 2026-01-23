@@ -10,6 +10,7 @@ import UIKit
 
 struct EdgePanBackHandler: UIViewRepresentable {
     var isEnabled: Bool
+//    var edgeWidth: CGFloat = 20
     var dragMaxOffset: CGFloat = UIConstants.Width.screenWidth / 3 + 20
     
     var onProgress: (CGFloat) -> Void      // 0~1

@@ -317,6 +317,7 @@ struct SearchView: View {
         .overlay(alignment: .leading) {
             EdgePanBackHandler(
                 isEnabled: !appStore.path.ids.isEmpty,
+//                edgeWidth: 20,
                 onProgress: { progress in
                     dragOffset = CGFloat(progress) * dragMaxOffset
                     opacity = max(1 - Double(progress), 0.2)
@@ -331,6 +332,8 @@ struct SearchView: View {
                     withAnimation(.easeOut(duration: 0.5)) { opacity = 1.0 }
                 }
             )
+            // edgeWidth만큼만 터치 영역을 차지하게
+            .frame(width: 1)
             .allowsHitTesting(true)
         }
         .onAppear {
