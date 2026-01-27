@@ -2266,7 +2266,7 @@
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
 			requirement = {
 				kind = exactVersion;
-				version = 1.20.2;
+				version = 1.23.1;
 			};
 		};
 		DADA39822D3A2006000D15E0 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */ = {
