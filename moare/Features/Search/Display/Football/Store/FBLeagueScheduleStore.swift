@@ -172,9 +172,9 @@ struct FBLeagueScheduleStore {
                             CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: day.day)
                         }
 
-                        gameResultOpenedStateList.merge((games ?? []).reduce(into: [:]) { $0[$1.gameId] = state.baseSchedule.isAllResultOpened }) { _, new in new }
+                        gameResultOpenedStateList.merge((games).reduce(into: [:]) { $0[$1.gameId] = state.baseSchedule.isAllResultOpened }) { _, new in new }
                         
-                        newFilteredGame[index] = games ?? []
+                        newFilteredGame[index] = games
                         
                         if games.isEmpty == true {
                             newDay.isDataEmpty = true
@@ -236,11 +236,11 @@ struct FBLeagueScheduleStore {
                         let yearMonth = selectedYearMonth[0] + selectedYearMonth[1]
                         
                         let entity = displayModel.entityInfo.first ?? EntityInfo(
-                            entityId: 39,
+                            entityId: Constants.Ids.epl,
                             entityName: "프리미어리그",
                             category: "football",
                             entityType: "league",
-                            leagueId: 39,
+                            leagueId: Constants.Ids.epl,
                             teamId: nil,
                             playerId: nil
                         )
@@ -362,11 +362,11 @@ struct FBLeagueScheduleStore {
                 }
                 
                 let entity = state.baseSchedule.displayModel.entityInfo.first ?? EntityInfo(
-                    entityId: 39,
+                    entityId: Constants.Ids.epl,
                     entityName: "프리미어리그",
                     category: "football",
                     entityType: "league",
-                    leagueId: 39,
+                    leagueId: Constants.Ids.epl,
                     teamId: nil,
                     playerId: nil
                 )

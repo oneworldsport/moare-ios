@@ -59,57 +59,57 @@ struct SearchView: View {
             .zIndex(1)
             
             // notice, search example
-            HStack(alignment: .bottom) {
-                if isSearchExampleButtonVisible {
-                    VStack(alignment: .leading, spacing: 0) {
-                        SearchExampleBox(text: searchStore.searchExample, height: $searchExampleBoxHeight)
-                            .opacity(isSearchExampleOpened ? 1 : 0)
-                            .padding(.trailing, 25)
-                        
-                        Button(action: {
-                            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                                isSearchExampleOpened.toggle()
-                            }
-                        }) {
-                            Text("검색 예시")
-                                .font(.system(size: 13))
-                                .frame(height: 17, alignment: .bottom)
-                                .tint(.secondary)
-                                .opacity(0.7)
-                                .padding(.top, 6)
-                        }
-                        .foregroundStyle(.secondary)
-                    }
-                }
-                
-                Spacer()
-                
-                if isNoticeIconVisible {
-                    VStack(alignment: .trailing, spacing: 0) {
-                        NoticeBox(noticeList: searchStore.noticeList, height: $noticeBoxHeight)
-                            .padding(.trailing, 12)
-                            .opacity(isNoticeOpened ? 1 : 0)
-                        
-                        Button(action: {
-                            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                                isNoticeOpened.toggle()
-                            }
-                        }) {
-                            Image(systemName: "info.circle")
-                                .frame(height: 17)
-                                .tint(.secondary)
-                                .opacity(0.7)
-                                .padding(.top, 6)
-                                .padding(.leading, 10) // NOTE: 버튼 클릭 영역때문에 추가.
-                                .padding(.trailing, 12) // NOTE: 버튼 클릭 영역때문에 밖에서 여기로 이동해줌.
-                        }
-                    }
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.leading, 12)
-            .offset(x: 0, y: -noticeYOffset)
-            .zIndex(1)
+//            HStack(alignment: .bottom) {
+//                if isSearchExampleButtonVisible {
+//                    VStack(alignment: .leading, spacing: 0) {
+//                        SearchExampleBox(text: searchStore.searchExample, height: $searchExampleBoxHeight)
+//                            .opacity(isSearchExampleOpened ? 1 : 0)
+//                            .padding(.trailing, 25)
+//                        
+//                        Button(action: {
+//                            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+//                                isSearchExampleOpened.toggle()
+//                            }
+//                        }) {
+//                            Text("검색 예시")
+//                                .font(.system(size: 13))
+//                                .frame(height: 17, alignment: .bottom)
+//                                .tint(.secondary)
+//                                .opacity(0.7)
+//                                .padding(.top, 6)
+//                        }
+//                        .foregroundStyle(.secondary)
+//                    }
+//                }
+//                
+//                Spacer()
+//                
+//                if isNoticeIconVisible {
+//                    VStack(alignment: .trailing, spacing: 0) {
+//                        NoticeBox(noticeList: searchStore.noticeList, height: $noticeBoxHeight)
+//                            .padding(.trailing, 12)
+//                            .opacity(isNoticeOpened ? 1 : 0)
+//                        
+//                        Button(action: {
+//                            withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
+//                                isNoticeOpened.toggle()
+//                            }
+//                        }) {
+//                            Image(systemName: "info.circle")
+//                                .frame(height: 17)
+//                                .tint(.secondary)
+//                                .opacity(0.7)
+//                                .padding(.top, 6)
+//                                .padding(.leading, 10) // NOTE: 버튼 클릭 영역때문에 추가.
+//                                .padding(.trailing, 12) // NOTE: 버튼 클릭 영역때문에 밖에서 여기로 이동해줌.
+//                        }
+//                    }
+//                }
+//            }
+//            .frame(maxWidth: .infinity)
+//            .padding(.leading, 12)
+//            .offset(x: 0, y: -noticeYOffset)
+//            .zIndex(1)
             
             VStack(spacing: 0) {
                 // search bar
@@ -119,38 +119,38 @@ struct SearchView: View {
                 )
                 
                 // trending keywords
-                if searchStore.trendingKeyowrdsVisibleState {
-                    TrendingKeywordList(keywords: searchStore.trendingKeywordList) { keyword in
-                        // update bar's text
-                        searchStore.send(.updateTextField(keyword, false))
-                        
-                        // remove textfield for bar animation
-                        searchStore.send(.updateTextFieldVisibleState(false))
-                        
-                        searchStore.send(.performSearch(searchType: .trendingKeyword, aniDuration: AnimationConstants.Duration.medium))
-                    }
-                }
+//                if searchStore.trendingKeyowrdsVisibleState {
+//                    TrendingKeywordList(keywords: searchStore.trendingKeywordList) { keyword in
+//                        // update bar's text
+//                        searchStore.send(.updateTextField(keyword, false))
+//                        
+//                        // remove textfield for bar animation
+//                        searchStore.send(.updateTextFieldVisibleState(false))
+//                        
+//                        searchStore.send(.performSearch(searchType: .trendingKeyword, aniDuration: AnimationConstants.Duration.medium))
+//                    }
+//                }
                 
                 // league keywords
-                if let leagueKeywords = searchStore.leagueKeywords, searchStore.trendingKeyowrdsVisibleState {
-                    LeagueKeywordsList(leagueKeywords: leagueKeywords) { keywordInfo in
-                        // update bar's text
-                        searchStore.send(.updateTextField(keywordInfo.keyword, false))
-                        
-                        // remove textfield for bar animation
-                        searchStore.send(.updateTextFieldVisibleState(false))
-                        
-                        searchStore.send(.performSearch(searchType: .leagueKeyword(keywordInfo), aniDuration: AnimationConstants.Duration.medium))
-                    }
-                    .padding(.top, 16)
-                    .background(
-                        GeometryReader { proxy in
-                            Color.clear
-                                .onAppear { leagueKeywordsComponentHeight = proxy.size.height }
-                                .onChange(of: proxy.size.height) { leagueKeywordsComponentHeight = proxy.size.height }
-                        }
-                    )
-                }
+//                if let leagueKeywords = searchStore.leagueKeywords, searchStore.trendingKeyowrdsVisibleState {
+//                    LeagueKeywordsList(leagueKeywords: leagueKeywords) { keywordInfo in
+//                        // update bar's text
+//                        searchStore.send(.updateTextField(keywordInfo.keyword, false))
+//                        
+//                        // remove textfield for bar animation
+//                        searchStore.send(.updateTextFieldVisibleState(false))
+//                        
+//                        searchStore.send(.performSearch(searchType: .leagueKeyword(keywordInfo), aniDuration: AnimationConstants.Duration.medium))
+//                    }
+//                    .padding(.top, 16)
+//                    .background(
+//                        GeometryReader { proxy in
+//                            Color.clear
+//                                .onAppear { leagueKeywordsComponentHeight = proxy.size.height }
+//                                .onChange(of: proxy.size.height) { leagueKeywordsComponentHeight = proxy.size.height }
+//                        }
+//                    )
+//                }
                 
                 ZStack {
                     // autocomplete list
@@ -441,6 +441,13 @@ struct PathView: View {
             if let s = store.scope(state: \.mlbGameStats, action: \.mlbGameStats) { MLBGameStatsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .mlbTournament:
             if let s = store.scope(state: \.mlbTournament, action: \.mlbTournament) { MLBTournamentView(searchStore: searchStore, store: s, didPop: didPop) }
+            
+        case .tennisLeagueSchedule:
+            if let s = store.scope(state: \.tennisLeagueSchedule, action: \.tennisLeagueSchedule) { TennisLeagueScheduleView(searchStore: searchStore, store: s, didPop: didPop) }
+        case .tennisGameStats:
+            if let s = store.scope(state: \.tennisGameStats, action: \.tennisGameStats) { TennisGameStatsView(searchStore: searchStore, store: s, didPop: didPop) }
+        case .tennisTournament:
+            if let s = store.scope(state: \.tennisTournament, action: \.tennisTournament) { TennisTournamentView(searchStore: searchStore, store: s, didPop: didPop) }
         }
     }
 }

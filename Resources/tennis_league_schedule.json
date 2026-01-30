@@ -1,0 +1,5313 @@
+{
+  "keywords": [],
+  "entityInfo": [
+    {
+      "entityId": 80001,
+      "entityName": "호주 오픈",
+      "category": "tennis",
+      "entityType": "league",
+      "leagueId": 80001,
+      "playerId": null,
+      "teamId": null
+    }
+  ],
+  "season": 2026,
+  "dataType": "tennis_league_schedule",
+  "data": {
+    "scheduleType": "league",
+    "scheduledMonths": [
+      "2026-01"
+    ],
+    "startDate": "2026-01-12",
+    "endDate": "2026-02-01",
+    "relatedLeagueIds": [80002, 80003, 80004, 80005],
+    "schedule": [
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 63090,
+        "homeTeamId": 59281,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "Y. Nishioka"
+          },
+          "awayTeam": {
+            "name": "N. Fatic"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T08:00:00#15345370"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 83397,
+        "homeTeamId": 207089,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Holmgren"
+          },
+          "awayTeam": {
+            "name": "S. Ofner"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T08:00:00#15345374"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 258978,
+        "homeTeamId": 403148,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Engel"
+          },
+          "awayTeam": {
+            "name": "G. Loffhagen"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T08:00:00#15345377"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 407164,
+        "homeTeamId": 187236,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Galarneau"
+          },
+          "awayTeam": {
+            "name": "N. Basavareddy"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T08:00:00#15345382"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 89632,
+        "homeTeamId": 243925,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "T. Droguet"
+          },
+          "awayTeam": {
+            "name": "N. Jarry"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T08:00:00#15345405"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 267576,
+        "homeTeamId": 51141,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "R. Carballés Baena"
+          },
+          "awayTeam": {
+            "name": "A. Bouquier"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T08:00:00#15345410"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 406654,
+        "homeTeamId": 321790,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Pinnington Jones"
+          },
+          "awayTeam": {
+            "name": "G. Arnaud Bailly"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T08:00:00#15345412"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 233700,
+        "homeTeamId": 51345,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Damm Jr"
+          },
+          "awayTeam": {
+            "name": "G. Onclin"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T08:00:00#15345414"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 169486,
+        "homeTeamId": 349089,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Prižmić"
+          },
+          "awayTeam": {
+            "name": "G. Olivieri"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T09:30:00#15345408"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 338420,
+        "homeTeamId": 321789,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Fery"
+          },
+          "awayTeam": {
+            "name": "E. Winter"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T09:35:00#15345404"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 93597,
+        "homeTeamId": 233126,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Sweeny"
+          },
+          "awayTeam": {
+            "name": "A. Pellegrino"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T09:40:00#15345389"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 197809,
+        "homeTeamId": 302582,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "G. Heide"
+          },
+          "awayTeam": {
+            "name": "J. Clarke"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T09:55:00#15345406"
+      },
+      {
+        "gameStatus": "70",
+        "homeTeamScore": null,
+        "awayTeamId": 108767,
+        "homeTeamId": 47975,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": null,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "Y. Hanfmann"
+          },
+          "awayTeam": {
+            "name": "B. Hassan"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T10:20:00#15345416"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 392072,
+        "homeTeamId": 309071,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Kym"
+          },
+          "awayTeam": {
+            "name": "J. Prado Angelo"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T10:35:00#15345390"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 38517,
+        "homeTeamId": 299481,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "P. Sekulic"
+          },
+          "awayTeam": {
+            "name": "M. Trungelliti"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T11:15:00#15345419"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 339450,
+        "homeTeamId": 207050,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "B. Holt"
+          },
+          "awayTeam": {
+            "name": "L. Neumayer"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T11:25:00#15345367"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 349090,
+        "homeTeamId": 341818,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Faria"
+          },
+          "awayTeam": {
+            "name": "L. Mikrut"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T11:35:00#15345418"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 108767,
+        "homeTeamId": 420876,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Dodig"
+          },
+          "awayTeam": {
+            "name": "B. Hassan"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T11:35:00#15351533"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 391865,
+        "homeTeamId": 224534,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Pavlovic"
+          },
+          "awayTeam": {
+            "name": "C. Smith"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T11:55:00#15345378"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 191842,
+        "homeTeamId": 237188,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "G. Zeppieri"
+          },
+          "awayTeam": {
+            "name": "D. Added"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T12:05:00#15345380"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 341820,
+        "homeTeamId": 212762,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Reis Da Silva"
+          },
+          "awayTeam": {
+            "name": "H. Rocha"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T12:10:00#15345422"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 303307,
+        "homeTeamId": 232036,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "T. Boyer"
+          },
+          "awayTeam": {
+            "name": "A. Barrena"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T12:35:00#15345397"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 258908,
+        "homeTeamId": 383991,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Lajal"
+          },
+          "awayTeam": {
+            "name": "F. Passaro"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T13:30:00#15345393"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 299765,
+        "homeTeamId": 26204,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "N. Basilashvili"
+          },
+          "awayTeam": {
+            "name": "G. Bueno"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T13:35:00#15345359"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 204329,
+        "homeTeamId": 333007,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Cassone"
+          },
+          "awayTeam": {
+            "name": "Y. Hsu"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T13:40:00#15345396"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 355526,
+        "homeTeamId": 44553,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "P. Herbert"
+          },
+          "awayTeam": {
+            "name": "G. Den Ouden"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T13:45:00#15345363"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 206602,
+        "homeTeamId": 210033,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Glinka"
+          },
+          "awayTeam": {
+            "name": "C. Tabur"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T13:45:00#15345413"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 16375,
+        "homeTeamId": 413296,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "R. Sakamoto"
+          },
+          "awayTeam": {
+            "name": "D. Evans"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T13:50:00#15345376"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 153826,
+        "homeTeamId": 335102,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Van Assche"
+          },
+          "awayTeam": {
+            "name": "M. Echargui"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T13:50:00#15345409"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 264372,
+        "homeTeamId": 39234,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Lajovic"
+          },
+          "awayTeam": {
+            "name": "F. D. Acosta"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T14:05:00#15345398"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 57289,
+        "homeTeamId": 17080,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "B. Tomic"
+          },
+          "awayTeam": {
+            "name": "H. Dellien"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T15:10:00#15345402"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 163636,
+        "homeTeamId": 205795,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "Z. Piros"
+          },
+          "awayTeam": {
+            "name": "L. Klein"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T15:30:00#15345366"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 338890,
+        "homeTeamId": 213057,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "O. Crawford"
+          },
+          "awayTeam": {
+            "name": "D. Merida"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-12T15:55:00#15345365"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 339452,
+        "homeTeamId": 388080,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "P. Marinkov"
+          },
+          "awayTeam": {
+            "name": "J. McCabe"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T08:00:00#15345362"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 483188,
+        "homeTeamId": 157302,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "Y. Watanuki"
+          },
+          "awayTeam": {
+            "name": "N. Budkov Kjaer"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T08:00:00#15345369"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 36300,
+        "homeTeamId": 119140,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "B. Ellis"
+          },
+          "awayTeam": {
+            "name": "S. Travaglia"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T08:00:00#15345375"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 417196,
+        "homeTeamId": 207034,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "C. Tseng"
+          },
+          "awayTeam": {
+            "name": "M. Landaluce"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T08:00:00#15345386"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 261017,
+        "homeTeamId": 48626,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Giustino"
+          },
+          "awayTeam": {
+            "name": "F. Maestrelli"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T08:00:00#15345399"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 161262,
+        "homeTeamId": 269909,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Gullien Meza"
+          },
+          "awayTeam": {
+            "name": "T. Seyboth Wild"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T08:00:00#15345403"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 225273,
+        "homeTeamId": 111837,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "B. Harris"
+          },
+          "awayTeam": {
+            "name": "C. Rodesch"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T09:25:00#15345411"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 52276,
+        "homeTeamId": 194186,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "Y. Wu"
+          },
+          "awayTeam": {
+            "name": "M. Krueger"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T09:30:00#15345401"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 83661,
+        "homeTeamId": 58369,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Bolt"
+          },
+          "awayTeam": {
+            "name": "E. Ymer"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T09:35:00#15345383"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 187218,
+        "homeTeamId": 229218,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "O. Virtanen"
+          },
+          "awayTeam": {
+            "name": "N. Mejia"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T09:35:00#15345392"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 80665,
+        "homeTeamId": 499834,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "E. Moller"
+          },
+          "awayTeam": {
+            "name": "M. Polmans"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T10:05:00#15345385"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 200777,
+        "homeTeamId": 289106,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "C. Wong"
+          },
+          "awayTeam": {
+            "name": "U. Blanchet"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T10:10:00#15345387"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 466210,
+        "homeTeamId": 264358,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "P. Llamas Ruiz"
+          },
+          "awayTeam": {
+            "name": "H. Bernet"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T10:15:00#15345388"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 458834,
+        "homeTeamId": 49417,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Tu"
+          },
+          "awayTeam": {
+            "name": "R. Jodar"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T10:55:00#15345407"
+      },
+      {
+        "gameStatus": "70",
+        "homeTeamScore": null,
+        "awayTeamId": 131442,
+        "homeTeamId": 100069,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": null,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "V. Sachko"
+          },
+          "awayTeam": {
+            "name": "M. Mmoh"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T11:30:00#15345371"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 385285,
+        "homeTeamId": 490667,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "C. Hewitt"
+          },
+          "awayTeam": {
+            "name": "M. Zheng"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T11:55:00#15345381"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 248846,
+        "homeTeamId": 39726,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Kubler"
+          },
+          "awayTeam": {
+            "name": "H. Mayot"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T12:00:00#15345360"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 298247,
+        "homeTeamId": 189540,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "H. Habib"
+          },
+          "awayTeam": {
+            "name": "Z. Svajda"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T12:15:00#15345395"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 340741,
+        "homeTeamId": 132834,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "T. Barrios Vera"
+          },
+          "awayTeam": {
+            "name": "S. Gueymard Wayenburg"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T12:40:00#15345368"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 322022,
+        "homeTeamId": 113905,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "N. Moreno de Alboran"
+          },
+          "awayTeam": {
+            "name": "V. Gaubas"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T12:50:00#15345384"
+      },
+      {
+        "gameStatus": "70",
+        "homeTeamScore": null,
+        "awayTeamId": 15733,
+        "homeTeamId": 54955,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": null,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "K. Coppejans"
+          },
+          "awayTeam": {
+            "name": "K. Nishikori"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T13:05:00#15345394"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 79467,
+        "homeTeamId": 54955,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "K. Coppejans"
+          },
+          "awayTeam": {
+            "name": "O. Jasika"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T13:30:00#15361666"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 50901,
+        "homeTeamId": 63438,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. McDonald"
+          },
+          "awayTeam": {
+            "name": "D. Popko"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T13:45:00#15345364"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 145130,
+        "homeTeamId": 216154,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "S. Shimabukuro"
+          },
+          "awayTeam": {
+            "name": "A. Molcan"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T13:45:00#15345373"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 200159,
+        "homeTeamId": 113979,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Ficovich"
+          },
+          "awayTeam": {
+            "name": "J. Rodionov"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T14:20:00#15345400"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 321788,
+        "homeTeamId": 105607,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Choinski"
+          },
+          "awayTeam": {
+            "name": "L. Riedi"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T14:25:00#15345391"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 326949,
+        "homeTeamId": 386107,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "R. Pacheco Mendez"
+          },
+          "awayTeam": {
+            "name": "A. Vallejo"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T14:35:00#15345417"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 44549,
+        "homeTeamId": 390214,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Blockx"
+          },
+          "awayTeam": {
+            "name": "M. Cecchinato"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T14:40:00#15345372"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 96239,
+        "homeTeamId": 100069,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "V. Sachko"
+          },
+          "awayTeam": {
+            "name": "V. Durasovic"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T14:45:00#15357743"
+      },
+      {
+        "gameStatus": "92",
+        "homeTeamScore": 0,
+        "awayTeamId": 107357,
+        "homeTeamId": 92074,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Galan"
+          },
+          "awayTeam": {
+            "name": "H. Grenier"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T15:05:00#15345379"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 421761,
+        "homeTeamId": 157808,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Harris"
+          },
+          "awayTeam": {
+            "name": "F. Cinà"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T15:05:00#15345420"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 223513,
+        "homeTeamId": 244418,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Bouzige"
+          },
+          "awayTeam": {
+            "name": "L. Draxl"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T15:20:00#15345361"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 91240,
+        "homeTeamId": 287181,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "R. Burruchaga"
+          },
+          "awayTeam": {
+            "name": "R. Peniston"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T16:05:00#15345415"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 383987,
+        "homeTeamId": 132558,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "Z. Kolar"
+          },
+          "awayTeam": {
+            "name": "A. Gea"
+          },
+          "roundInfo": {
+            "round": 1,
+            "name": "예선 - 1라운드",
+            "slug": "qualification-round-1"
+          }
+        },
+        "itemKey": "2026-01-13T16:40:00#15345421"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 83397,
+        "homeTeamId": 407164,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "N. Basavareddy"
+          },
+          "awayTeam": {
+            "name": "S. Ofner"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T08:00:00#15352510"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 406654,
+        "homeTeamId": 51141,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "R. Carballés Baena"
+          },
+          "awayTeam": {
+            "name": "G. Arnaud Bailly"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T08:00:00#15352511"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 243925,
+        "homeTeamId": 51345,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Damm Jr"
+          },
+          "awayTeam": {
+            "name": "T. Droguet"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T08:00:00#15352512"
+      },
+      {
+        "gameStatus": "92",
+        "homeTeamScore": 0,
+        "awayTeamId": 258978,
+        "homeTeamId": 59281,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "Y. Nishioka"
+          },
+          "awayTeam": {
+            "name": "G. Loffhagen"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T08:00:00#15352532"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 237188,
+        "homeTeamId": 207050,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "B. Holt"
+          },
+          "awayTeam": {
+            "name": "G. Zeppieri"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T08:00:00#15352630"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 391865,
+        "homeTeamId": 413296,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "R. Sakamoto"
+          },
+          "awayTeam": {
+            "name": "C. Smith"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T08:00:00#15352705"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 233126,
+        "homeTeamId": 309071,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Kym"
+          },
+          "awayTeam": {
+            "name": "D. Sweeny"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T09:30:00#15352550"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 341818,
+        "homeTeamId": 108767,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "B. Hassan"
+          },
+          "awayTeam": {
+            "name": "J. Faria"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T09:30:00#15352634"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 44553,
+        "homeTeamId": 299765,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "G. Bueno"
+          },
+          "awayTeam": {
+            "name": "P. Herbert"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T09:40:00#15352806"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 302582,
+        "homeTeamId": 349089,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Prižmić"
+          },
+          "awayTeam": {
+            "name": "G. Heide"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T09:45:00#15352551"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 38517,
+        "homeTeamId": 341820,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "H. Rocha"
+          },
+          "awayTeam": {
+            "name": "M. Trungelliti"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T09:45:00#15352629"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 36300,
+        "homeTeamId": 417196,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Landaluce"
+          },
+          "awayTeam": {
+            "name": "S. Travaglia"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T10:50:00#15361649"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 483188,
+        "homeTeamId": 339452,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. McCabe"
+          },
+          "awayTeam": {
+            "name": "N. Budkov Kjaer"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T11:25:00#15361648"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 289106,
+        "homeTeamId": 264358,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "P. Llamas Ruiz"
+          },
+          "awayTeam": {
+            "name": "C. Wong"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T11:25:00#15361667"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 261017,
+        "homeTeamId": 161262,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "T. Seyboth Wild"
+          },
+          "awayTeam": {
+            "name": "F. Maestrelli"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T11:50:00#15361650"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 194186,
+        "homeTeamId": 187218,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "N. Mejia"
+          },
+          "awayTeam": {
+            "name": "Y. Wu"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T11:50:00#15361658"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 17080,
+        "homeTeamId": 321789,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Fery"
+          },
+          "awayTeam": {
+            "name": "B. Tomic"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T12:00:00#15353235"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 458834,
+        "homeTeamId": 225273,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "C. Rodesch"
+          },
+          "awayTeam": {
+            "name": "R. Jodar"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T12:30:00#15361659"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 258908,
+        "homeTeamId": 232036,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "T. Boyer"
+          },
+          "awayTeam": {
+            "name": "F. Passaro"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T13:00:00#15352706"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 54955,
+        "homeTeamId": 321788,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Riedi"
+          },
+          "awayTeam": {
+            "name": "K. Coppejans"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T13:00:00#15361785"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 83661,
+        "homeTeamId": 499834,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "E. Moller"
+          },
+          "awayTeam": {
+            "name": "E. Ymer"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T13:05:00#15361662"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 333007,
+        "homeTeamId": 39234,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Lajovic"
+          },
+          "awayTeam": {
+            "name": "M. Cassone"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T13:20:00#15355594"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 335102,
+        "homeTeamId": 210033,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Glinka"
+          },
+          "awayTeam": {
+            "name": "L. Van Assche"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T13:25:00#15352934"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 385285,
+        "homeTeamId": 132834,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "T. Barrios Vera"
+          },
+          "awayTeam": {
+            "name": "M. Zheng"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T14:25:00#15361736"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 145130,
+        "homeTeamId": 390214,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Blockx"
+          },
+          "awayTeam": {
+            "name": "A. Molcan"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T14:35:00#15361797"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 326949,
+        "homeTeamId": 421761,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "F. Cinà"
+          },
+          "awayTeam": {
+            "name": "A. Vallejo"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T15:15:00#15362356"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 107357,
+        "homeTeamId": 63438,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. McDonald"
+          },
+          "awayTeam": {
+            "name": "H. Grenier"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T15:35:00#15362160"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 163636,
+        "homeTeamId": 338890,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Merida"
+          },
+          "awayTeam": {
+            "name": "L. Klein"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T15:40:00#15357625"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 383987,
+        "homeTeamId": 287181,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "R. Burruchaga"
+          },
+          "awayTeam": {
+            "name": "A. Gea"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T15:50:00#15362413"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 298247,
+        "homeTeamId": 200159,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Rodionov"
+          },
+          "awayTeam": {
+            "name": "Z. Svajda"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T16:00:00#15361798"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 223513,
+        "homeTeamId": 100069,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "V. Sachko"
+          },
+          "awayTeam": {
+            "name": "L. Draxl"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T16:15:00#15362230"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 322022,
+        "homeTeamId": 39726,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Kubler"
+          },
+          "awayTeam": {
+            "name": "V. Gaubas"
+          },
+          "roundInfo": {
+            "round": 2,
+            "name": "예선 - 2라운드",
+            "slug": "qualification-round-2"
+          }
+        },
+        "itemKey": "2026-01-14T16:20:00#15361735"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 413296,
+        "homeTeamId": 237188,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "G. Zeppieri"
+          },
+          "awayTeam": {
+            "name": "R. Sakamoto"
+          },
+          "roundInfo": {
+            "round": 250,
+            "name": "예선 - 3라운드",
+            "slug": "qualification-final"
+          }
+        },
+        "itemKey": "2026-01-15T09:00:00#15365936"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 407164,
+        "homeTeamId": 258978,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "G. Loffhagen"
+          },
+          "awayTeam": {
+            "name": "N. Basavareddy"
+          },
+          "roundInfo": {
+            "round": 250,
+            "name": "예선 - 3라운드",
+            "slug": "qualification-final"
+          }
+        },
+        "itemKey": "2026-01-15T09:00:00#15365968"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 38517,
+        "homeTeamId": 341818,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Faria"
+          },
+          "awayTeam": {
+            "name": "M. Trungelliti"
+          },
+          "roundInfo": {
+            "round": 250,
+            "name": "예선 - 3라운드",
+            "slug": "qualification-final"
+          }
+        },
+        "itemKey": "2026-01-15T09:00:00#15366022"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 233126,
+        "homeTeamId": 36300,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "S. Travaglia"
+          },
+          "awayTeam": {
+            "name": "D. Sweeny"
+          },
+          "roundInfo": {
+            "round": 250,
+            "name": "예선 - 3라운드",
+            "slug": "qualification-final"
+          }
+        },
+        "itemKey": "2026-01-15T09:00:00#15366025"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 321789,
+        "homeTeamId": 349089,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Prižmić"
+          },
+          "awayTeam": {
+            "name": "A. Fery"
+          },
+          "roundInfo": {
+            "round": 250,
+            "name": "예선 - 3라운드",
+            "slug": "qualification-final"
+          }
+        },
+        "itemKey": "2026-01-15T09:00:00#15366113"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 483188,
+        "homeTeamId": 44553,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "P. Herbert"
+          },
+          "awayTeam": {
+            "name": "N. Budkov Kjaer"
+          },
+          "roundInfo": {
+            "round": 250,
+            "name": "예선 - 3라운드",
+            "slug": "qualification-final"
+          }
+        },
+        "itemKey": "2026-01-15T10:45:00#15366194"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 232036,
+        "homeTeamId": 194186,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "Y. Wu"
+          },
+          "awayTeam": {
+            "name": "T. Boyer"
+          },
+          "roundInfo": {
+            "round": 250,
+            "name": "예선 - 3라운드",
+            "slug": "qualification-final"
+          }
+        },
+        "itemKey": "2026-01-15T11:00:00#15366396"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 335102,
+        "homeTeamId": 458834,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "R. Jodar"
+          },
+          "awayTeam": {
+            "name": "L. Van Assche"
+          },
+          "roundInfo": {
+            "round": 250,
+            "name": "예선 - 3라운드",
+            "slug": "qualification-final"
+          }
+        },
+        "itemKey": "2026-01-15T11:05:00#15366371"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 289106,
+        "homeTeamId": 83661,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "E. Ymer"
+          },
+          "awayTeam": {
+            "name": "C. Wong"
+          },
+          "roundInfo": {
+            "round": 250,
+            "name": "예선 - 3라운드",
+            "slug": "qualification-final"
+          }
+        },
+        "itemKey": "2026-01-15T11:30:00#15366379"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 261017,
+        "homeTeamId": 39234,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Lajovic"
+          },
+          "awayTeam": {
+            "name": "F. Maestrelli"
+          },
+          "roundInfo": {
+            "round": 250,
+            "name": "예선 - 3라운드",
+            "slug": "qualification-final"
+          }
+        },
+        "itemKey": "2026-01-15T11:45:00#15366370"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 223513,
+        "homeTeamId": 63438,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. McDonald"
+          },
+          "awayTeam": {
+            "name": "L. Draxl"
+          },
+          "roundInfo": {
+            "round": 250,
+            "name": "예선 - 3라운드",
+            "slug": "qualification-final"
+          }
+        },
+        "itemKey": "2026-01-15T12:05:00#15368850"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 51345,
+        "homeTeamId": 406654,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "G. Arnaud Bailly"
+          },
+          "awayTeam": {
+            "name": "M. Damm Jr"
+          },
+          "roundInfo": {
+            "round": 250,
+            "name": "예선 - 3라운드",
+            "slug": "qualification-final"
+          }
+        },
+        "itemKey": "2026-01-15T12:15:00#15366021"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 326949,
+        "homeTeamId": 383987,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Gea"
+          },
+          "awayTeam": {
+            "name": "A. Vallejo"
+          },
+          "roundInfo": {
+            "round": 250,
+            "name": "예선 - 3라운드",
+            "slug": "qualification-final"
+          }
+        },
+        "itemKey": "2026-01-15T12:50:00#15367279"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 163636,
+        "homeTeamId": 385285,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Zheng"
+          },
+          "awayTeam": {
+            "name": "L. Klein"
+          },
+          "roundInfo": {
+            "round": 250,
+            "name": "예선 - 3라운드",
+            "slug": "qualification-final"
+          }
+        },
+        "itemKey": "2026-01-15T13:15:00#15367594"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 298247,
+        "homeTeamId": 54955,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "K. Coppejans"
+          },
+          "awayTeam": {
+            "name": "Z. Svajda"
+          },
+          "roundInfo": {
+            "round": 250,
+            "name": "예선 - 3라운드",
+            "slug": "qualification-final"
+          }
+        },
+        "itemKey": "2026-01-15T14:00:00#15367255"
+      },
+      {
+        "gameStatus": "92",
+        "homeTeamScore": 1,
+        "awayTeamId": 39726,
+        "homeTeamId": 390214,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Blockx"
+          },
+          "awayTeam": {
+            "name": "J. Kubler"
+          },
+          "roundInfo": {
+            "round": 250,
+            "name": "예선 - 3라운드",
+            "slug": "qualification-final"
+          }
+        },
+        "itemKey": "2026-01-15T14:00:00#15367621"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 169496,
+        "homeTeamId": 198592,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Kecmanovic"
+          },
+          "awayTeam": {
+            "name": "T. Etcheverry"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T09:00:00#15372354"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 273680,
+        "homeTeamId": 321789,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Fery"
+          },
+          "awayTeam": {
+            "name": "F. Cobolli"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T09:00:00#15373171"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 175014,
+        "homeTeamId": 275471,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "T. Schoolkate"
+          },
+          "awayTeam": {
+            "name": "C. Moutet"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T10:45:00#15372342"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 280151,
+        "homeTeamId": 57163,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Zverev"
+          },
+          "awayTeam": {
+            "name": "G. Diallo"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T11:20:00#15372361"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 75813,
+        "homeTeamId": 221012,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "F. Cerundolo"
+          },
+          "awayTeam": {
+            "name": "Z. Zhang"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T11:25:00#15372353"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 255420,
+        "homeTeamId": 210490,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "P. Kypson"
+          },
+          "awayTeam": {
+            "name": "F. Comesaña"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T12:00:00#15372346"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 267577,
+        "homeTeamId": 232057,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "E. Nava"
+          },
+          "awayTeam": {
+            "name": "K. Jacquet"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T12:10:00#15372352"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 49172,
+        "homeTeamId": 223513,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Draxl"
+          },
+          "awayTeam": {
+            "name": "D. Džumhur"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T12:40:00#15373169"
+      },
+      {
+        "gameStatus": "70",
+        "homeTeamScore": null,
+        "awayTeamId": 341818,
+        "homeTeamId": 287803,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": null,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Cazaux"
+          },
+          "awayTeam": {
+            "name": "J. Faria"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T13:10:00#15373168"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 195840,
+        "homeTeamId": 385285,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Zheng"
+          },
+          "awayTeam": {
+            "name": "S. Korda"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T13:45:00#15373173"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 341818,
+        "homeTeamId": 390214,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Blockx"
+          },
+          "awayTeam": {
+            "name": "J. Faria"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T15:00:00#15383833"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 47770,
+        "homeTeamId": 196122,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "C. Ugo Carabelli"
+          },
+          "awayTeam": {
+            "name": "M. Fucsovics"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T15:05:00#15372359"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 39726,
+        "homeTeamId": 101101,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "F. Tiafoe"
+          },
+          "awayTeam": {
+            "name": "J. Kubler"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T15:15:00#15373170"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 298247,
+        "homeTeamId": 47975,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "Y. Hanfmann"
+          },
+          "awayTeam": {
+            "name": "Z. Svajda"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T16:00:00#15373174"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 95935,
+        "homeTeamId": 94485,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "B. Bonzi"
+          },
+          "awayTeam": {
+            "name": "C. Norrie"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T16:05:00#15372356"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 191873,
+        "homeTeamId": 163480,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Bublik"
+          },
+          "awayTeam": {
+            "name": "J. Brooksby"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T17:10:00#15372339"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 207575,
+        "homeTeamId": 275923,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "C. Alcaraz"
+          },
+          "awayTeam": {
+            "name": "A. Walton"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-18T18:55:00#15372343"
+      },
+      {
+        "gameStatus": "92",
+        "homeTeamScore": 2,
+        "awayTeamId": 192013,
+        "homeTeamId": 125006,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "N. Borges"
+          },
+          "awayTeam": {
+            "name": "F. Auger-Aliassime"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T09:00:00#15372347"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 321404,
+        "homeTeamId": 271389,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Navone"
+          },
+          "awayTeam": {
+            "name": "H. Medjedovic"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T09:00:00#15372358"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 102151,
+        "homeTeamId": 90798,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "Q. Halys"
+          },
+          "awayTeam": {
+            "name": "A. Tabilo"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T09:00:00#15372360"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 264344,
+        "homeTeamId": 83661,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "E. Ymer"
+          },
+          "awayTeam": {
+            "name": "A. Shevchenko"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T09:05:00#15373167"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 244420,
+        "homeTeamId": 163504,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Medvedev"
+          },
+          "awayTeam": {
+            "name": "J. De Jong"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T09:40:00#15372350"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 63606,
+        "homeTeamId": 218259,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "F. Marozsán"
+          },
+          "awayTeam": {
+            "name": "A. Rinderknech"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T10:20:00#15372345"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 187608,
+        "homeTeamId": 138546,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "T. Paul"
+          },
+          "awayTeam": {
+            "name": "A. Kovacevic"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T10:30:00#15372344"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 16720,
+        "homeTeamId": 348853,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Shang"
+          },
+          "awayTeam": {
+            "name": "R. Bautista Agut"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T10:30:00#15372366"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 130400,
+        "homeTeamId": 483188,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "N. Budkov Kjaer"
+          },
+          "awayTeam": {
+            "name": "R. Opelka"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T10:45:00#15373172"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 106755,
+        "homeTeamId": 299538,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Arnaldi"
+          },
+          "awayTeam": {
+            "name": "A. Rublev"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T11:00:00#15372355"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 87690,
+        "homeTeamId": 248861,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Cerundolo"
+          },
+          "awayTeam": {
+            "name": "J. Thompson"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T11:25:00#15372362"
+      },
+      {
+        "gameStatus": "70",
+        "homeTeamScore": null,
+        "awayTeamId": 201239,
+        "homeTeamId": 112783,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": null,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Berrettini"
+          },
+          "awayTeam": {
+            "name": "A. de Minaur"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T11:30:00#15372357"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 201239,
+        "homeTeamId": 63438,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. McDonald"
+          },
+          "awayTeam": {
+            "name": "A. de Minaur"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T11:45:00#15384174"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 42379,
+        "homeTeamId": 412818,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Tien"
+          },
+          "awayTeam": {
+            "name": "M. Giron"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T11:50:00#15372348"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 157456,
+        "homeTeamId": 216488,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "F. Misolic"
+          },
+          "awayTeam": {
+            "name": "A. Davidovich Fokina"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T12:20:00#15372340"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 124656,
+        "homeTeamId": 221515,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "T. Tirante"
+          },
+          "awayTeam": {
+            "name": "A. Vukic"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T13:00:00#15372341"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 14548,
+        "homeTeamId": 97231,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Djere"
+          },
+          "awayTeam": {
+            "name": "S. Wawrinka"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T13:15:00#15372368"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 102339,
+        "homeTeamId": 235576,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "B. Nakashima"
+          },
+          "awayTeam": {
+            "name": "B. Van de Zandschulp"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T13:45:00#15372375"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 15387,
+        "homeTeamId": 127208,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Altmaier"
+          },
+          "awayTeam": {
+            "name": "M. Čilić"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T13:45:00#15372386"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 261017,
+        "homeTeamId": 273679,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "T. Atmane"
+          },
+          "awayTeam": {
+            "name": "F. Maestrelli"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T14:50:00#15373164"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 260122,
+        "homeTeamId": 126356,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Munar"
+          },
+          "awayTeam": {
+            "name": "D. Svrcina"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T15:05:30#15372382"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 254227,
+        "homeTeamId": 117916,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Shapovalov"
+          },
+          "awayTeam": {
+            "name": "Y. Bu"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T15:10:00#15372377"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 237452,
+        "homeTeamId": 15894,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Mannarino"
+          },
+          "awayTeam": {
+            "name": "R. Hijikata"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T16:10:00#15372374"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 383987,
+        "homeTeamId": 254742,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Lehečka"
+          },
+          "awayTeam": {
+            "name": "A. Gea"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T16:35:00#15373166"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 158912,
+        "homeTeamId": 51345,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Damm Jr"
+          },
+          "awayTeam": {
+            "name": "V. Vacherot"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T16:45:00#15373162"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 88992,
+        "homeTeamId": 128552,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Popyrin"
+          },
+          "awayTeam": {
+            "name": "A. Muller"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T18:05:00#15372351"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 119248,
+        "homeTeamId": 294337,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Bellucci"
+          },
+          "awayTeam": {
+            "name": "C. Ruud"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T19:30:00#15372385"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 14882,
+        "homeTeamId": 77223,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "P. Martinez"
+          },
+          "awayTeam": {
+            "name": "N. Djokovic"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-19T19:35:00#15372364"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 108559,
+        "homeTeamId": 104847,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Sonego"
+          },
+          "awayTeam": {
+            "name": "C. Taberner"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T09:00:00#15372372"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 308084,
+        "homeTeamId": 64570,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "C. Garin"
+          },
+          "awayTeam": {
+            "name": "L. Darderi"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T09:00:00#15372381"
+      },
+      {
+        "gameStatus": "92",
+        "homeTeamScore": 2,
+        "awayTeamId": 355525,
+        "homeTeamId": 261015,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Musetti"
+          },
+          "awayTeam": {
+            "name": "R. Collignon"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T09:30:00#15372373"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 122368,
+        "homeTeamId": 334293,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "E. Quinn"
+          },
+          "awayTeam": {
+            "name": "T. Griekspoor"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T10:20:00#15372365"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 221806,
+        "homeTeamId": 289146,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "G. Mpetshi Perricard"
+          },
+          "awayTeam": {
+            "name": "S. Báez"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T10:40:00#15372383"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 406728,
+        "homeTeamId": 90080,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "K. Khachanov"
+          },
+          "awayTeam": {
+            "name": "A. Michelsen"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T11:05:00#15372384"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 40800,
+        "homeTeamId": 372312,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Mensik"
+          },
+          "awayTeam": {
+            "name": "P. Carreño Busta"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T11:10:00#15372370"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 407164,
+        "homeTeamId": 58221,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "C. O'Connell"
+          },
+          "awayTeam": {
+            "name": "N. Basavareddy"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T11:10:00#15373161"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 185388,
+        "homeTeamId": 385485,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "B. Shelton"
+          },
+          "awayTeam": {
+            "name": "U. Humbert"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T11:45:00#15372363"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 288748,
+        "homeTeamId": 403869,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Fonseca"
+          },
+          "awayTeam": {
+            "name": "E. Spizzirri"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T12:20:00#15372379"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 194186,
+        "homeTeamId": 289233,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Nardi"
+          },
+          "awayTeam": {
+            "name": "Y. Wu"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T12:25:00#15373160"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 14844,
+        "homeTeamId": 233126,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Sweeny"
+          },
+          "awayTeam": {
+            "name": "G. Monfils"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T13:05:00#15373163"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 458834,
+        "homeTeamId": 413296,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "R. Sakamoto"
+          },
+          "awayTeam": {
+            "name": "R. Jodar"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T14:05:00#15373165"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 349089,
+        "homeTeamId": 39711,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Duckworth"
+          },
+          "awayTeam": {
+            "name": "D. Prižmić"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T15:30:00#15373159"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 46391,
+        "homeTeamId": 199395,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "V. Kopřiva"
+          },
+          "awayTeam": {
+            "name": "J. Struff"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T15:40:00#15372369"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 170946,
+        "homeTeamId": 158896,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "H. Hurkacz"
+          },
+          "awayTeam": {
+            "name": "Z. Bergs"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T15:40:00#15372378"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 136042,
+        "homeTeamId": 255449,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "V. Royer"
+          },
+          "awayTeam": {
+            "name": "T. Fritz"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T15:50:00#15372376"
+      },
+      {
+        "gameStatus": "92",
+        "homeTeamScore": 0,
+        "awayTeamId": 206570,
+        "homeTeamId": 205906,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "H. Gaston"
+          },
+          "awayTeam": {
+            "name": "J. Sinner"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T17:10:00#15372380"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 238300,
+        "homeTeamId": 23581,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "G. Dimitrov"
+          },
+          "awayTeam": {
+            "name": "T. Machac"
+          },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          }
+        },
+        "itemKey": "2026-01-20T17:20:00#15372371"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 218259,
+        "homeTeamId": 108709,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "K. Majchrzak"
+          },
+          "awayTeam": {
+            "name": "F. Marozsán"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-21T09:00:00#15345254"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 49172,
+        "homeTeamId": 221012,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "F. Cerundolo"
+          },
+          "awayTeam": {
+            "name": "D. Džumhur"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-21T09:00:00#15345288"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 221515,
+        "homeTeamId": 138546,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "T. Paul"
+          },
+          "awayTeam": {
+            "name": "T. Tirante"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-21T09:00:00#15345301"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 106755,
+        "homeTeamId": 341818,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Faria"
+          },
+          "awayTeam": {
+            "name": "A. Rublev"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-21T09:30:00#15345292"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 321789,
+        "homeTeamId": 169496,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "T. Etcheverry"
+          },
+          "awayTeam": {
+            "name": "A. Fery"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-21T10:10:00#15345284"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 90798,
+        "homeTeamId": 163504,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Medvedev"
+          },
+          "awayTeam": {
+            "name": "Q. Halys"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-21T10:50:00#15345253"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 157456,
+        "homeTeamId": 130400,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "R. Opelka"
+          },
+          "awayTeam": {
+            "name": "A. Davidovich Fokina"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-21T11:40:00#15345299"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 47975,
+        "homeTeamId": 275923,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "C. Alcaraz"
+          },
+          "awayTeam": {
+            "name": "Y. Hanfmann"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-21T12:10:00#15345285"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 125006,
+        "homeTeamId": 87690,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Thompson"
+          },
+          "awayTeam": {
+            "name": "N. Borges"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-21T13:20:00#15345256"
+      },
+      {
+        "gameStatus": "92",
+        "homeTeamScore": 1,
+        "awayTeamId": 175014,
+        "homeTeamId": 385285,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Zheng"
+          },
+          "awayTeam": {
+            "name": "C. Moutet"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-21T14:00:00#15345297"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 264344,
+        "homeTeamId": 412818,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Tien"
+          },
+          "awayTeam": {
+            "name": "A. Shevchenko"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-21T14:10:00#15345255"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 95935,
+        "homeTeamId": 232057,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "E. Nava"
+          },
+          "awayTeam": {
+            "name": "C. Norrie"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-21T15:45:00#15345289"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 47770,
+        "homeTeamId": 163480,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Bublik"
+          },
+          "awayTeam": {
+            "name": "M. Fucsovics"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-21T15:50:00#15345298"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 201239,
+        "homeTeamId": 321404,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "H. Medjedovic"
+          },
+          "awayTeam": {
+            "name": "A. de Minaur"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-21T17:10:00#15345286"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 88992,
+        "homeTeamId": 57163,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Zverev"
+          },
+          "awayTeam": {
+            "name": "A. Muller"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-21T17:10:00#15345290"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 255420,
+        "homeTeamId": 101101,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "F. Tiafoe"
+          },
+          "awayTeam": {
+            "name": "F. Comesaña"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-21T18:45:00#15345291"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 458834,
+        "homeTeamId": 372312,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Mensik"
+          },
+          "awayTeam": {
+            "name": "R. Jodar"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-22T09:00:00#15345245"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 407164,
+        "homeTeamId": 90080,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "K. Khachanov"
+          },
+          "awayTeam": {
+            "name": "N. Basavareddy"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-22T09:00:00#15345262"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 308084,
+        "homeTeamId": 221806,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "S. Báez"
+          },
+          "awayTeam": {
+            "name": "L. Darderi"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-22T09:00:00#15345269"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 158912,
+        "homeTeamId": 237452,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "R. Hijikata"
+          },
+          "awayTeam": {
+            "name": "V. Vacherot"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-22T09:00:00#15345303"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 104847,
+        "homeTeamId": 261015,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Musetti"
+          },
+          "awayTeam": {
+            "name": "L. Sonego"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-22T09:30:00#15345243"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 233126,
+        "homeTeamId": 385485,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "B. Shelton"
+          },
+          "awayTeam": {
+            "name": "D. Sweeny"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-22T10:45:00#15345302"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 334293,
+        "homeTeamId": 158896,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "H. Hurkacz"
+          },
+          "awayTeam": {
+            "name": "E. Quinn"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-22T10:55:00#15345305"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 14882,
+        "homeTeamId": 261017,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "F. Maestrelli"
+          },
+          "awayTeam": {
+            "name": "N. Djokovic"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-22T11:30:00#15345242"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 348853,
+        "homeTeamId": 102339,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "B. Van de Zandschulp"
+          },
+          "awayTeam": {
+            "name": "J. Shang"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-22T12:25:00#15345247"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 194186,
+        "homeTeamId": 288748,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "E. Spizzirri"
+          },
+          "awayTeam": {
+            "name": "Y. Wu"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-22T12:45:00#15345274"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 2,
+        "awayTeamId": 14548,
+        "homeTeamId": 383987,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Gea"
+          },
+          "awayTeam": {
+            "name": "S. Wawrinka"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-22T14:00:00#15345251"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 122366,
+        "homeTeamId": 238300,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "T. Machac"
+          },
+          "awayTeam": {
+            "name": "S. Tsitsipas"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-22T15:05:00#15345250"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 15387,
+        "homeTeamId": 117916,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Shapovalov"
+          },
+          "awayTeam": {
+            "name": "M. Čilić"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-22T15:10:00#15345246"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 136042,
+        "homeTeamId": 199395,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "V. Kopřiva"
+          },
+          "awayTeam": {
+            "name": "T. Fritz"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-22T16:50:00#15345306"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 206570,
+        "homeTeamId": 39711,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Duckworth"
+          },
+          "awayTeam": {
+            "name": "J. Sinner"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-22T17:15:00#15345268"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 119248,
+        "homeTeamId": 126356,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Munar"
+          },
+          "awayTeam": {
+            "name": "C. Ruud"
+          },
+          "roundInfo": {
+            "round": 32,
+            "name": "2라운드",
+            "slug": "round-of-64"
+          }
+        },
+        "itemKey": "2026-01-22T19:35:00#15345304"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 125006,
+        "homeTeamId": 412818,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Tien"
+          },
+          "awayTeam": {
+            "name": "N. Borges"
+          },
+          "roundInfo": {
+            "name": "3라운드",
+            "round": 6,
+            "cupRoundType": 16,
+            "slug": "round-of-32"
+          }
+        },
+        "itemKey": "2026-01-23T09:00:00#15345261"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 218259,
+        "homeTeamId": 163504,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Medvedev"
+          },
+          "awayTeam": {
+            "name": "F. Marozsán"
+          },
+          "roundInfo": {
+            "name": "3라운드",
+            "round": 6,
+            "cupRoundType": 16,
+            "slug": "round-of-32"
+          }
+        },
+        "itemKey": "2026-01-23T09:30:00#15345257"
+      },
+      {
+        "gameStatus": "92",
+        "homeTeamScore": 2,
+        "awayTeamId": 157456,
+        "homeTeamId": 138546,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "T. Paul"
+          },
+          "awayTeam": {
+            "name": "A. Davidovich Fokina"
+          },
+          "roundInfo": {
+            "name": "3라운드",
+            "round": 6,
+            "cupRoundType": 16,
+            "slug": "round-of-32"
+          }
+        },
+        "itemKey": "2026-01-23T11:50:00#15345260"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 175014,
+        "homeTeamId": 275923,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "C. Alcaraz"
+          },
+          "awayTeam": {
+            "name": "C. Moutet"
+          },
+          "roundInfo": {
+            "name": "3라운드",
+            "round": 6,
+            "cupRoundType": 16,
+            "slug": "round-of-32"
+          }
+        },
+        "itemKey": "2026-01-23T12:05:00#15345259"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 106755,
+        "homeTeamId": 221012,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "F. Cerundolo"
+          },
+          "awayTeam": {
+            "name": "A. Rublev"
+          },
+          "roundInfo": {
+            "name": "3라운드",
+            "round": 6,
+            "cupRoundType": 16,
+            "slug": "round-of-32"
+          }
+        },
+        "itemKey": "2026-01-23T15:55:00#15345252"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 201239,
+        "homeTeamId": 101101,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "F. Tiafoe"
+          },
+          "awayTeam": {
+            "name": "A. de Minaur"
+          },
+          "roundInfo": {
+            "name": "3라운드",
+            "round": 6,
+            "cupRoundType": 16,
+            "slug": "round-of-32"
+          }
+        },
+        "itemKey": "2026-01-23T17:10:00#15345263"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 95935,
+        "homeTeamId": 57163,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Zverev"
+          },
+          "awayTeam": {
+            "name": "C. Norrie"
+          },
+          "roundInfo": {
+            "name": "3라운드",
+            "round": 6,
+            "cupRoundType": 16,
+            "slug": "round-of-32"
+          }
+        },
+        "itemKey": "2026-01-23T17:20:00#15345244"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 169496,
+        "homeTeamId": 163480,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Bublik"
+          },
+          "awayTeam": {
+            "name": "T. Etcheverry"
+          },
+          "roundInfo": {
+            "name": "3라운드",
+            "round": 6,
+            "cupRoundType": 16,
+            "slug": "round-of-32"
+          }
+        },
+        "itemKey": "2026-01-23T19:05:00#15345267"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 238300,
+        "homeTeamId": 261015,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Musetti"
+          },
+          "awayTeam": {
+            "name": "T. Machac"
+          },
+          "roundInfo": {
+            "name": "3라운드",
+            "round": 6,
+            "cupRoundType": 16,
+            "slug": "round-of-32"
+          }
+        },
+        "itemKey": "2026-01-24T08:30:00#15345275"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 308084,
+        "homeTeamId": 90080,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "K. Khachanov"
+          },
+          "awayTeam": {
+            "name": "L. Darderi"
+          },
+          "roundInfo": {
+            "name": "3라운드",
+            "round": 6,
+            "cupRoundType": 16,
+            "slug": "round-of-32"
+          }
+        },
+        "itemKey": "2026-01-24T08:30:00#15345283"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 206570,
+        "homeTeamId": 288748,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "E. Spizzirri"
+          },
+          "awayTeam": {
+            "name": "J. Sinner"
+          },
+          "roundInfo": {
+            "name": "3라운드",
+            "round": 6,
+            "cupRoundType": 16,
+            "slug": "round-of-32"
+          }
+        },
+        "itemKey": "2026-01-24T10:20:00#15345293"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 158912,
+        "homeTeamId": 385485,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "B. Shelton"
+          },
+          "awayTeam": {
+            "name": "V. Vacherot"
+          },
+          "roundInfo": {
+            "name": "3라운드",
+            "round": 6,
+            "cupRoundType": 16,
+            "slug": "round-of-32"
+          }
+        },
+        "itemKey": "2026-01-24T12:45:00#15345282"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 136042,
+        "homeTeamId": 14548,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "S. Wawrinka"
+          },
+          "awayTeam": {
+            "name": "T. Fritz"
+          },
+          "roundInfo": {
+            "name": "3라운드",
+            "round": 6,
+            "cupRoundType": 16,
+            "slug": "round-of-32"
+          }
+        },
+        "itemKey": "2026-01-24T15:35:00#15345258"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 14882,
+        "homeTeamId": 102339,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "B. Van de Zandschulp"
+          },
+          "awayTeam": {
+            "name": "N. Djokovic"
+          },
+          "roundInfo": {
+            "name": "3라운드",
+            "round": 6,
+            "cupRoundType": 16,
+            "slug": "round-of-32"
+          }
+        },
+        "itemKey": "2026-01-24T17:10:00#15345264"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 334293,
+        "homeTeamId": 372312,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Mensik"
+          },
+          "awayTeam": {
+            "name": "E. Quinn"
+          },
+          "roundInfo": {
+            "name": "3라운드",
+            "round": 6,
+            "cupRoundType": 16,
+            "slug": "round-of-32"
+          }
+        },
+        "itemKey": "2026-01-24T18:55:00#15345280"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 119248,
+        "homeTeamId": 15387,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "M. Čilić"
+          },
+          "awayTeam": {
+            "name": "C. Ruud"
+          },
+          "roundInfo": {
+            "name": "3라운드",
+            "round": 6,
+            "cupRoundType": 16,
+            "slug": "round-of-32"
+          }
+        },
+        "itemKey": "2026-01-24T19:20:00#15345295"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 138546,
+        "homeTeamId": 275923,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "C. Alcaraz"
+          },
+          "awayTeam": {
+            "name": "T. Paul"
+          },
+          "roundInfo": {
+            "name": "4라운드",
+            "round": 5,
+            "cupRoundType": 8,
+            "slug": "round-of-16"
+          }
+        },
+        "itemKey": "2026-01-25T11:40:00#15345277"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 221012,
+        "homeTeamId": 57163,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Zverev"
+          },
+          "awayTeam": {
+            "name": "F. Cerundolo"
+          },
+          "roundInfo": {
+            "name": "4라운드",
+            "round": 5,
+            "cupRoundType": 8,
+            "slug": "round-of-16"
+          }
+        },
+        "itemKey": "2026-01-25T15:10:00#15345278"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 412818,
+        "homeTeamId": 163504,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "D. Medvedev"
+          },
+          "awayTeam": {
+            "name": "L. Tien"
+          },
+          "roundInfo": {
+            "name": "4라운드",
+            "round": 5,
+            "cupRoundType": 8,
+            "slug": "round-of-16"
+          }
+        },
+        "itemKey": "2026-01-25T16:25:00#15345279"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 201239,
+        "homeTeamId": 163480,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Bublik"
+          },
+          "awayTeam": {
+            "name": "A. de Minaur"
+          },
+          "roundInfo": {
+            "name": "4라운드",
+            "round": 5,
+            "cupRoundType": 8,
+            "slug": "round-of-16"
+          }
+        },
+        "itemKey": "2026-01-25T17:10:00#15345281"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 136042,
+        "homeTeamId": 261015,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Musetti"
+          },
+          "awayTeam": {
+            "name": "T. Fritz"
+          },
+          "roundInfo": {
+            "name": "4라운드",
+            "round": 5,
+            "cupRoundType": 8,
+            "slug": "round-of-16"
+          }
+        },
+        "itemKey": "2026-01-26T12:10:00#15345270"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 206570,
+        "homeTeamId": 308084,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Darderi"
+          },
+          "awayTeam": {
+            "name": "J. Sinner"
+          },
+          "roundInfo": {
+            "name": "4라운드",
+            "round": 5,
+            "cupRoundType": 8,
+            "slug": "round-of-16"
+          }
+        },
+        "itemKey": "2026-01-26T16:10:00#15345276"
+      },
+      {
+        "gameStatus": "91",
+        "homeTeamScore": null,
+        "awayTeamId": 14882,
+        "homeTeamId": 372312,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": null,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "J. Mensik"
+          },
+          "awayTeam": {
+            "name": "N. Djokovic"
+          },
+          "roundInfo": {
+            "name": "4라운드",
+            "round": 5,
+            "cupRoundType": 8,
+            "slug": "round-of-16"
+          }
+        },
+        "itemKey": "2026-01-26T18:10:00#15345273"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 119248,
+        "homeTeamId": 385485,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "B. Shelton"
+          },
+          "awayTeam": {
+            "name": "C. Ruud"
+          },
+          "roundInfo": {
+            "name": "4라운드",
+            "round": 5,
+            "cupRoundType": 8,
+            "slug": "round-of-16"
+          }
+        },
+        "itemKey": "2026-01-26T18:50:00#15345287"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 412818,
+        "homeTeamId": 57163,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "A. Zverev"
+          },
+          "awayTeam": {
+            "name": "L. Tien"
+          },
+          "roundInfo": {
+            "name": "8강",
+            "round": 27,
+            "cupRoundType": 4,
+            "slug": "quarterfinals"
+          }
+        },
+        "itemKey": "2026-01-27T11:40:00#15345265"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 201239,
+        "homeTeamId": 275923,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "C. Alcaraz"
+          },
+          "awayTeam": {
+            "name": "A. de Minaur"
+          },
+          "roundInfo": {
+            "name": "8강",
+            "round": 27,
+            "cupRoundType": 4,
+            "slug": "quarterfinals"
+          }
+        },
+        "itemKey": "2026-01-27T18:25:00#15345266"
+      },
+      {
+        "gameStatus": "92",
+        "homeTeamScore": 2,
+        "awayTeamId": 14882,
+        "homeTeamId": 261015,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 0,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "L. Musetti"
+          },
+          "awayTeam": {
+            "name": "N. Djokovic"
+          },
+          "roundInfo": {
+            "name": "8강",
+            "round": 27,
+            "cupRoundType": 4,
+            "slug": "quarterfinals"
+          }
+        },
+        "itemKey": "2026-01-28T13:30:00#15345271"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 0,
+        "awayTeamId": 206570,
+        "homeTeamId": 385485,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "B. Shelton"
+          },
+          "awayTeam": {
+            "name": "J. Sinner"
+          },
+          "roundInfo": {
+            "name": "8강",
+            "round": 27,
+            "cupRoundType": 4,
+            "slug": "quarterfinals"
+          }
+        },
+        "itemKey": "2026-01-28T17:30:00#15345272"
+      }
+    ]
+  }
+}

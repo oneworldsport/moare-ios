@@ -163,10 +163,9 @@ struct KBOLeagueScheduleStore {
                             CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: day.day)
                         }
                         
-                        gameResultOpenedStateList.merge((games ?? []).reduce(into: [:]) { $0[$1.itemKey] = state.baseSchedule.isAllResultOpened }) { _, new in new }
+                        gameResultOpenedStateList.merge((games).reduce(into: [:]) { $0[$1.itemKey] = state.baseSchedule.isAllResultOpened }) { _, new in new }
                         
-                        // NOTE: games는 optional인데 왜 컴파일 에러가 안나지..?
-                        newFilteredGame[index] = games ?? []
+                        newFilteredGame[index] = games
                         
                         if games.isEmpty == true {
                             newDay.isDataEmpty = true

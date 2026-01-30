@@ -67,6 +67,14 @@ struct StringConstants {
                 return "세리에A"
             case Constants.Ids.ligue1:
                 return "리그1"
+            case Constants.Ids.mls:
+                return "MLS"
+            case Constants.Ids.championsLeague:
+                return "챔피언스리그"
+            case Constants.Ids.europaLeague:
+                return "유로파리그"
+            case Constants.Ids.conferenceLeague:
+                return "컨퍼런스리그"
             case Constants.Ids.faCup:
                 return "FA컵"
             case Constants.Ids.eflCup:
@@ -158,6 +166,25 @@ struct StringConstants {
         static let gameStatsSecondCategories = gameStatsHittingCategories + gameStatsPitchingCategories + gameStatsRunningCategories
     }
     
+    struct Tennis {
+        static func leagueNameStr(leagueId: Int) -> String {
+            switch leagueId {
+            case Constants.Ids.ausOpenMSingle:
+                return "호주오픈 남자단식"
+            case Constants.Ids.ausOpenMDoubles:
+                return "호주오픈 남자복식"
+            case Constants.Ids.ausOpenMixedDoubles:
+                return "호주오픈 혼합복식"
+            case Constants.Ids.ausOpenWSingle:
+                return "호주오픈 여자단식"
+            case Constants.Ids.ausOpenWDoubles:
+                return "호주오픈 여자복식"
+            default :
+                return ""
+            }
+        }
+    }
+    
     static func viewPreparingAdviseText(type: String) -> String {
         return "\(type) 화면은 더 나은 서비스 제공을 위해 현재 개선 작업 중입니다. 이용에 불편을 드려 죄송합니다."
     }
@@ -178,7 +205,7 @@ struct StringConstants {
     }
     
     static func tournamentOrStandingsText(leagueId: Int) -> String {
-        if Constants.Ids.footballDrawTournamentLeagues.contains(leagueId) {
+        if Constants.Ids.footballDrawTournamentLeagues.contains(leagueId) || Constants.Ids.tennisAll.contains(leagueId) {
             return "대진표"
         } else {
             return "리그 순위"

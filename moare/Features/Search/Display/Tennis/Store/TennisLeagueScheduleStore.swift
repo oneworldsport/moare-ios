@@ -1,59 +1,47 @@
 //
-//  NBAPlayerInfoStore.swift
+//  TennisLeagueScheduleStore.swift
 //  moare
 //
-//  Created by Mohwa Yoon on 4/11/25.
+//  Created by Mohwa Yoon on 1/27/26.
 //
 
 import SwiftUI
 import ComposableArchitecture
 
 @Reducer
-struct NBALeagueScheduleStore {
-    typealias BaseSchedule = BaseScheduleStore<NBALeagueScheduleDisplayModel>
+struct TennisLeagueScheduleStore {
+    typealias BaseSchedule = BaseScheduleStore<TennisLeagueScheduleDisplayModel>
     
     let searchClient = SearchClient()
     
     @ObservableState
     struct State {
-        /* ---------------------
-           data state
-           --------------------- */
         var baseSchedule: BaseSchedule.State
         
-        var filteredGames: [Int: [NBAGameForSchedule]] = [:]
+        var filteredGames: [Int: [TennisGameForSchedule]] = [:]
         var gameResultOpenedStateList: [String: Bool] = [:]
         
-        init(displayModel: NBALeagueScheduleDisplayModel) {
+        init(displayModel: TennisLeagueScheduleDisplayModel) {
             self.baseSchedule = BaseSchedule.State(displayModel: displayModel)
         }
     }
     
     enum Action {
-        /* ---------------------
-           init
-           --------------------- */
         case baseSchedule(BaseSchedule.Action)
         
-        /* ---------------------
-           view action
-           --------------------- */
         case toggleAllResult
         case updateResultOpenedState(gameId: String, isOpened: Bool)
-        case selectGame(game: NBAGameForSchedule)
+        case selectGame(game: TennisGameForSchedule)
+        case selectLeague(leagueId: Int)
         case showTournament
-        case showTeamStandings
         case refreshGames
         
-        /* ---------------------
-           private
-           --------------------- */
         case setDays(isInit: Bool = false)
         case fetchGames
         
         case updateDisplayDataState(fetchState: ApiFetchState)
-        case setDisplayModel(displayModel: NBALeagueScheduleDisplayModel)
-        case updateDisplayModelGames([NBAGameForSchedule])
+        case setDisplayModel(displayModel: TennisLeagueScheduleDisplayModel)
+        case updateDisplayModelGames([TennisGameForSchedule])
         
         case updateFilteredGames
         
@@ -63,7 +51,6 @@ struct NBALeagueScheduleStore {
     enum Delegate {
         case showGameStats(model: SportDecodableModel)
         case showTournament(model: SportDecodableModel)
-        case showTeamStandings(model: SportDecodableModel)
     }
     
     var body: some Reducer<State, Action> {
@@ -80,7 +67,7 @@ struct NBALeagueScheduleStore {
                 
                 // select default yearMonth
                 state.baseSchedule.yearMonthList = displayModel.yearMonthList
-
+                
                 switch displayModel.scheduleType {
                 case .league:
                     if let date = displayModel.games.first?.date {
@@ -89,33 +76,6 @@ struct NBALeagueScheduleStore {
                     
                     return .send(.setDays(isInit: true))
                     
-                case .team:
-                    let upcomingGame = displayModel.games.first { game in
-                        CalendarUtil.isUpcomingDay(date: game.date)
-                    }
-                    
-                    
-                    if let upcomingGame {
-                        return .send(.baseSchedule(.setDefaultYearMonth(date: upcomingGame.date)))
-                    } else {
-                        if let date = displayModel.games.last?.date {
-                            return .send(.baseSchedule(.setDefaultYearMonth(date: date)))
-                        }
-                    }
-                    
-                    return .send(.setDays(isInit: true))
-                    
-                case .teamFlat:
-                    // filteredGames 초기화
-                    state.filteredGames = [0: displayModel.games]
-                    
-                    // gameResultOpenedStateList 초기화
-                    state.gameResultOpenedStateList = displayModel.games.reduce(into: [String: Bool]()) { dict, game in
-                        dict[game.gameId] = false
-                    }
-                    
-                    return .none
-    
                 default:
                     return .none
                 }
@@ -127,8 +87,6 @@ struct NBALeagueScheduleStore {
                     switch state.baseSchedule.displayModel.scheduleType {
                     case .league:
                         return .send(.fetchGames)
-                    case .team:
-                        return .send(.setDays())
                     default :
                         return .none
                     }
@@ -166,7 +124,7 @@ struct NBALeagueScheduleStore {
                         }
                         
                         gameResultOpenedStateList.merge((games).reduce(into: [:]) { $0[$1.gameId] = state.baseSchedule.isAllResultOpened }) { _, new in new }
-                    
+                        
                         newFilteredGame[index] = games
                         
                         if games.isEmpty == true {
@@ -223,18 +181,18 @@ struct NBALeagueScheduleStore {
                         let yearMonth = selectedYearMonth[0] + selectedYearMonth[1]
                         
                         let entity = displayModel.entityInfo.first ?? EntityInfo(
-                            entityId: Constants.Ids.nba,
-                            entityName: "NBA",
-                            category: "basketball",
+                            entityId: Constants.Ids.ausOpenMSingle,
+                            entityName: "호주오픈",
+                            category: "tennis",
                             entityType: "league",
-                            leagueId: Constants.Ids.nba,
+                            leagueId: Constants.Ids.ausOpenMSingle,
                             teamId: nil,
                             playerId: nil
                         )
                         
                         let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel.season, yearMonth: String(yearMonth))
                         
-                        if case let .nbaLeagueSchedule(_, displayModel) = result.data {
+                        if case let .tennisLeagueSchedule(_, displayModel) = result.data {
                             await send(.setDisplayModel(displayModel: displayModel))
                             await send(.setDays())
                         }
@@ -249,9 +207,9 @@ struct NBALeagueScheduleStore {
                     do {
                         let result = try await searchClient.fetchById(
                             season: displayModel.season,
-                            category: "basketball",
+                            category: "tennis",
                             date: game.date,
-                            dataType: "basketball_game_stats",
+                            dataType: "tennis_game_stats",
                             leagueId: displayModel.leagueId,
                             id: game.gameId
                         )
@@ -264,18 +222,21 @@ struct NBALeagueScheduleStore {
                 }
                 
             case .showTournament:
+                let leagueId = state.baseSchedule.displayModel.leagueId
+                
                 return .run { send in
+                    let leagueName = StringConstants.Tennis.leagueNameStr(leagueId: leagueId)
                     let keywordInfo = KeywordInfo(
-                        keyword: "NBA 플레이오프",
+                        keyword: "\(leagueName) 대진표",
                         weight: 100,
-                        keywords: [Keyword(keyword: "플레이오프", id: "tournament", priority: 2)],
+                        keywords: [Keyword(keyword: "대진표", id: "tournament", priority: 2)],
                         entities: [
                             EntityInfo(
-                                entityId: Constants.Ids.nba,
-                                entityName: "NBA",
-                                category: "basketball",
+                                entityId: leagueId,
+                                entityName: leagueName,
+                                category: "tennis",
                                 entityType: "league",
-                                leagueId: Constants.Ids.nba,
+                                leagueId: leagueId,
                                 teamId: nil,
                                 playerId: nil
                             )
@@ -287,41 +248,17 @@ struct NBALeagueScheduleStore {
                     await send(.delegate(.showTournament(model: result.data)))
                 }
                 
-            case .showTeamStandings:
-                return .run { send in
-                    let keywordInfo = KeywordInfo(
-                        keyword: "NBA 순위",
-                        weight: 100,
-                        keywords: [Keyword(keyword: "순위", id: "standings", priority: 1)],
-                        entities: [
-                            EntityInfo(
-                                entityId: Constants.Ids.nba,
-                                entityName: "NBA",
-                                category: "basketball",
-                                entityType: "league",
-                                leagueId: Constants.Ids.nba,
-                                teamId: nil,
-                                playerId: nil
-                            )
-                        ]
-                    )
-                    
-                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
-                    
-                    await send(.delegate(.showTeamStandings(model: result.data)))
-                }
-                
             case .refreshGames:
                 guard let games = state.filteredGames[state.baseSchedule.selectedDayIndex] else {
                     return .none
                 }
                 
                 let entity = state.baseSchedule.displayModel.entityInfo.first ?? EntityInfo(
-                    entityId: Constants.Ids.nba,
-                    entityName: "NBA",
-                    category: "basketball",
+                    entityId: Constants.Ids.ausOpenMSingle,
+                    entityName: "호주오픈",
+                    category: "tennis",
                     entityType: "league",
-                    leagueId: Constants.Ids.nba,
+                    leagueId: Constants.Ids.ausOpenMSingle,
                     teamId: nil,
                     playerId: nil
                 )
@@ -334,7 +271,7 @@ struct NBALeagueScheduleStore {
                 return .run { send in
                     do {
                         let hasLive = games.contains { game in
-                            game.gameStatus == String(Constants.GameStatus.NBA.live)
+                            Constants.GameStatus.Tennis.liveList.contains(Int(game.gameStatus) ?? 0)
                         }
                         
                         if hasLive {
@@ -345,11 +282,41 @@ struct NBALeagueScheduleStore {
                                 day: day
                             )
                             
-                            if case .nbaLeagueSchedule(_, let displayModel) = result.data {
+                            if case .tennisLeagueSchedule(_, let displayModel) = result.data {
                                 await send(.updateDisplayModelGames(displayModel.games))
                             }
                         }
                     } catch {
+                    }
+                }
+                
+            case let .selectLeague(leagueId):
+                let displayModel = state.baseSchedule.displayModel
+                
+                return .run { send in
+                    await send(.updateDisplayDataState(fetchState: .fetching), animation: AnimationConstants.AnimationType.defaultAnimation)
+                    
+                    do {
+                        let leagueName = StringConstants.Tennis.leagueNameStr(leagueId: leagueId)
+                        let entity = EntityInfo(
+                            entityId: leagueId,
+                            entityName: leagueName,
+                            category: "tennis",
+                            entityType: "league",
+                            leagueId: leagueId,
+                            teamId: nil,
+                            playerId: nil
+                        )
+                        
+                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel.season, yearMonth: nil)
+                        
+                        if case let .tennisLeagueSchedule(_, displayModel) = result.data {
+                            await send(.setDisplayModel(displayModel: displayModel))
+                            await send(.baseSchedule(.initData))
+                        }
+                    } catch {
+                        await send(.updateDisplayDataState(fetchState: .failure("데이터를 불러오는데 실패하였습니다.")), animation: AnimationConstants.AnimationType.defaultAnimation)
+                        print("\(error)")
                     }
                 }
                 
@@ -391,7 +358,7 @@ struct NBALeagueScheduleStore {
                 
             case .delegate:
                 return .none
-            } // switch action
+            }
         }
     }
 }

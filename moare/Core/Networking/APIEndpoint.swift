@@ -9,7 +9,7 @@ import Foundation
 
 enum APIEndpoint {
     case searchByQuery(query: String)
-    case getLeagueSchedule(entity: EntityInfo, season: Int, yearMonth: String, day: Int?)
+    case getLeagueSchedule(entity: EntityInfo, season: Int, yearMonth: String?, day: Int?)
     case searchByKeyword(keyword: KeywordInfo)
     case searchByEndpoint(endpoint: String)
     case searchById(season: Int, category: String, date: String?, dataType: String, leagueId: Int, id: String)
@@ -28,11 +28,11 @@ enum APIEndpoint {
     
     func url(isTest: Bool = true) -> URL? {
         var components = URLComponents()
-//        components.scheme = APIConfiguration.localscheme
-//        components.host = APIConfiguration.localhost
-//        components.port = APIConfiguration.localport
-        components.scheme = APIConfiguration.scheme
-        components.host = APIConfiguration.host
+        components.scheme = APIConfiguration.localscheme
+        components.host = APIConfiguration.localhost
+        components.port = APIConfiguration.localport
+//        components.scheme = APIConfiguration.scheme
+//        components.host = APIConfiguration.host
         
         switch self {
         case .searchByQuery(let query):
@@ -45,9 +45,12 @@ enum APIEndpoint {
             components.path = "/search/schedule"
             
             var items: [URLQueryItem] = [
-              URLQueryItem(name: "season", value: String(season)),
-              URLQueryItem(name: "yearMonth", value: yearMonth)
+              URLQueryItem(name: "season", value: String(season))
             ]
+            
+            if let yearMonth {
+                items.append(URLQueryItem(name: "yearMonth", value: yearMonth))
+            }
 
             if let day {
               items.append(URLQueryItem(name: "day", value: String(day)))

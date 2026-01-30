@@ -195,7 +195,7 @@ struct NBAGameStatsScoreInfoItem: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
                 CapsuleButton(
-                    text: Constants.GameStatus.nbaGameStatusText(status: String(game.gameSummary?.gameStatus ?? 0), period: game.gameSummary?.period),
+                    text: Constants.GameStatus.nbaGameStatusText(status: game.gameSummary?.gameStatus ?? 1, period: game.gameSummary?.period),
                     color: Constants.GameStatus.gameStatusColor(leagueId: Constants.Ids.nba, status: String(game.gameSummary?.gameStatus ?? 0))
                 ) {
                 }

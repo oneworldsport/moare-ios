@@ -20,7 +20,7 @@ struct SearchClient {
         return try await apiClient.fetchData(endpoint: .searchByKeyword(keyword: keyword))
     }
     
-    func fetchLeagueSchedule(entity: EntityInfo, season: Int?, yearMonth: String, day: Int? = nil) async throws -> DataModel {
+    func fetchLeagueSchedule(entity: EntityInfo, season: Int?, yearMonth: String?, day: Int? = nil) async throws -> DataModel {
         return try await apiClient.fetchData(endpoint: .getLeagueSchedule(entity: entity, season: season ?? CalendarUtil.currentYear, yearMonth: yearMonth, day: day))
     }
     
@@ -104,6 +104,10 @@ struct SearchClient {
             filePath = "mlb_game_stats"
         case .mlbTournament:
             filePath = "mlb_tournament"
+        case .tennisLeagueSchedule:
+            filePath = "tennis_league_schedule"
+        case .tennisGameStats:
+            filePath = "tennis_game_stats"
         default:
             filePath = "football_player_info"
         }

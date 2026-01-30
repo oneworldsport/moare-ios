@@ -108,6 +108,8 @@
 		DA47773A2DA7B7EF00F3459C /* NBAPlayerInfoDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA47772C2DA7B7EF00F3459C /* NBAPlayerInfoDisplayModel.swift */; };
 		DA47773B2DA7B7EF00F3459C /* NBAGameStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777342DA7B7EF00F3459C /* NBAGameStatsDisplayModel.swift */; };
 		DA47773D2DA7B7EF00F3459C /* NBALeagueScheduleDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4777322DA7B7EF00F3459C /* NBALeagueScheduleDisplayModel.swift */; };
+		DA4B7B102F2B3BF700C1F6B4 /* tennis_league_schedule.json in Resources */ = {isa = PBXBuildFile; fileRef = DA4B7B0F2F2B3BB400C1F6B4 /* tennis_league_schedule.json */; };
+		DA52258C2F29B07800A9758D /* TennisCommonModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA52258B2F29B07300A9758D /* TennisCommonModels.swift */; };
 		DA531B3F2D64A8A400DB87CB /* moareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B3C2D64A8A400DB87CB /* moareApp.swift */; };
 		DA531B402D64A8A400DB87CB /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B3D2D64A8A400DB87CB /* SplashView.swift */; };
 		DA531B942D64A8CA00DB87CB /* FBStatDataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA531B452D64A8CA00DB87CB /* FBStatDataItem.swift */; };
@@ -233,6 +235,7 @@
 		DADA39842D3A2006000D15E0 /* AWSCore in Frameworks */ = {isa = PBXBuildFile; productRef = DADA39832D3A2006000D15E0 /* AWSCore */; };
 		DADA39862D3A2006000D15E0 /* AWSS3 in Frameworks */ = {isa = PBXBuildFile; productRef = DADA39852D3A2006000D15E0 /* AWSS3 */; };
 		DADA39882D3A2006000D15E0 /* AWSTranslate in Frameworks */ = {isa = PBXBuildFile; productRef = DADA39872D3A2006000D15E0 /* AWSTranslate */; };
+		DADABE782F2D0BA800873482 /* tennis_game_stats.json in Resources */ = {isa = PBXBuildFile; fileRef = DADABE762F2C519B00873482 /* tennis_game_stats.json */; };
 		DADE29592DF051A70099A0DD /* KBOLeagueScheduleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADE29582DF051900099A0DD /* KBOLeagueScheduleStore.swift */; };
 		DADE295B2DF051BD0099A0DD /* KBOLeagueScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADE295A2DF051AD0099A0DD /* KBOLeagueScheduleView.swift */; };
 		DADE295D2DF051DE0099A0DD /* MLBLeagueScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADE295C2DF051C40099A0DD /* MLBLeagueScheduleView.swift */; };
@@ -249,6 +252,23 @@
 		DAEEC7462DEDD5570053E0A6 /* KBOGameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEEC7452DEDD5570053E0A6 /* KBOGameModels.swift */; };
 		DAF149562EB287360067EA06 /* TournamentBracketSingleGameItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF149552EB287360067EA06 /* TournamentBracketSingleGameItem.swift */; };
 		DAF365042F1FF36F00BA794E /* LeagueKeywords.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF365032F1FF36700BA794E /* LeagueKeywords.swift */; };
+		DAF43BED2F28E41D00B5DB2B /* TennisTournamentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43BEC2F28E41700B5DB2B /* TennisTournamentView.swift */; };
+		DAF43BEF2F28E42900B5DB2B /* TennisGameStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43BEE2F28E42100B5DB2B /* TennisGameStatsView.swift */; };
+		DAF43BF12F28E43700B5DB2B /* TennisLeagueScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43BF02F28E42D00B5DB2B /* TennisLeagueScheduleView.swift */; };
+		DAF43BF32F28E48500B5DB2B /* TennisPlayerStandingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43BF22F28E43A00B5DB2B /* TennisPlayerStandingsView.swift */; };
+		DAF43BF62F28E49B00B5DB2B /* TennisGameStatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43BF52F28E49600B5DB2B /* TennisGameStatsStore.swift */; };
+		DAF43BF82F28E4B300B5DB2B /* TennisLeagueScheduleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43BF72F28E49E00B5DB2B /* TennisLeagueScheduleStore.swift */; };
+		DAF43BFA2F28E4C900B5DB2B /* TennisPlayerStandingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43BF92F28E4B700B5DB2B /* TennisPlayerStandingsStore.swift */; };
+		DAF43BFC2F28E4DF00B5DB2B /* TennisTournamentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43BFB2F28E4CC00B5DB2B /* TennisTournamentStore.swift */; };
+		DAF43C012F28E54E00B5DB2B /* TennisGameStatsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43C002F28E54600B5DB2B /* TennisGameStatsDisplayModel.swift */; };
+		DAF43C032F28E55D00B5DB2B /* TennisLeagueScheduleDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43C022F28E55100B5DB2B /* TennisLeagueScheduleDisplayModel.swift */; };
+		DAF43C052F28E57500B5DB2B /* TennisPlayerStandingsDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43C042F28E56700B5DB2B /* TennisPlayerStandingsDisplayModel.swift */; };
+		DAF43C072F28E58600B5DB2B /* TennisTournamentDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43C062F28E57C00B5DB2B /* TennisTournamentDisplayModel.swift */; };
+		DAF43C092F28E59C00B5DB2B /* TennisGameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43C082F28E59000B5DB2B /* TennisGameModels.swift */; };
+		DAF43C0B2F28E5A500B5DB2B /* TennisPlayerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43C0A2F28E5A000B5DB2B /* TennisPlayerModels.swift */; };
+		DAF43C0F2F28E5D300B5DB2B /* TennisGameStatsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43C0E2F28E5C800B5DB2B /* TennisGameStatsResponseModel.swift */; };
+		DAF43C112F28E5E300B5DB2B /* TennisGameScheduleResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43C102F28E5D500B5DB2B /* TennisGameScheduleResponseModel.swift */; };
+		DAF43C132F28E61E00B5DB2B /* TennisPlayerStandingsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43C122F28E60A00B5DB2B /* TennisPlayerStandingsResponseModel.swift */; };
 		DAF974D72E61CF8F0046CE59 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAF974D62E61CF8F0046CE59 /* GoogleService-Info.plist */; };
 		DAF974DA2E61D04F0046CE59 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = DAF974D92E61D04F0046CE59 /* FirebaseAnalytics */; };
 		DAFCB4192DADC8E700839653 /* AWSManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFCB4182DADC8E700839653 /* AWSManager.swift */; };
@@ -375,6 +395,8 @@
 		DA4777312DA7B7EF00F3459C /* NBATeamStandingsDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBATeamStandingsDisplayModel.swift; sourceTree = "<group>"; };
 		DA4777322DA7B7EF00F3459C /* NBALeagueScheduleDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBALeagueScheduleDisplayModel.swift; sourceTree = "<group>"; };
 		DA4777342DA7B7EF00F3459C /* NBAGameStatsDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBAGameStatsDisplayModel.swift; sourceTree = "<group>"; };
+		DA4B7B0F2F2B3BB400C1F6B4 /* tennis_league_schedule.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = tennis_league_schedule.json; sourceTree = "<group>"; };
+		DA52258B2F29B07300A9758D /* TennisCommonModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisCommonModels.swift; sourceTree = "<group>"; };
 		DA531B3C2D64A8A400DB87CB /* moareApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = moareApp.swift; sourceTree = "<group>"; };
 		DA531B3D2D64A8A400DB87CB /* SplashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		DA531B452D64A8CA00DB87CB /* FBStatDataItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBStatDataItem.swift; sourceTree = "<group>"; };
@@ -541,6 +563,7 @@
 		DADA396C2D3A1AC9000D15E0 /* moareUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = moareUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DADA39702D3A1AC9000D15E0 /* moareUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = moareUITests.swift; sourceTree = "<group>"; };
 		DADA39722D3A1AC9000D15E0 /* moareUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = moareUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		DADABE762F2C519B00873482 /* tennis_game_stats.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = tennis_game_stats.json; sourceTree = "<group>"; };
 		DADE29582DF051900099A0DD /* KBOLeagueScheduleStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOLeagueScheduleStore.swift; sourceTree = "<group>"; };
 		DADE295A2DF051AD0099A0DD /* KBOLeagueScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOLeagueScheduleView.swift; sourceTree = "<group>"; };
 		DADE295C2DF051C40099A0DD /* MLBLeagueScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLBLeagueScheduleView.swift; sourceTree = "<group>"; };
@@ -556,6 +579,23 @@
 		DAEEC7452DEDD5570053E0A6 /* KBOGameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBOGameModels.swift; sourceTree = "<group>"; };
 		DAF149552EB287360067EA06 /* TournamentBracketSingleGameItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TournamentBracketSingleGameItem.swift; sourceTree = "<group>"; };
 		DAF365032F1FF36700BA794E /* LeagueKeywords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeagueKeywords.swift; sourceTree = "<group>"; };
+		DAF43BEC2F28E41700B5DB2B /* TennisTournamentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisTournamentView.swift; sourceTree = "<group>"; };
+		DAF43BEE2F28E42100B5DB2B /* TennisGameStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisGameStatsView.swift; sourceTree = "<group>"; };
+		DAF43BF02F28E42D00B5DB2B /* TennisLeagueScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisLeagueScheduleView.swift; sourceTree = "<group>"; };
+		DAF43BF22F28E43A00B5DB2B /* TennisPlayerStandingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisPlayerStandingsView.swift; sourceTree = "<group>"; };
+		DAF43BF52F28E49600B5DB2B /* TennisGameStatsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisGameStatsStore.swift; sourceTree = "<group>"; };
+		DAF43BF72F28E49E00B5DB2B /* TennisLeagueScheduleStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisLeagueScheduleStore.swift; sourceTree = "<group>"; };
+		DAF43BF92F28E4B700B5DB2B /* TennisPlayerStandingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisPlayerStandingsStore.swift; sourceTree = "<group>"; };
+		DAF43BFB2F28E4CC00B5DB2B /* TennisTournamentStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisTournamentStore.swift; sourceTree = "<group>"; };
+		DAF43C002F28E54600B5DB2B /* TennisGameStatsDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisGameStatsDisplayModel.swift; sourceTree = "<group>"; };
+		DAF43C022F28E55100B5DB2B /* TennisLeagueScheduleDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisLeagueScheduleDisplayModel.swift; sourceTree = "<group>"; };
+		DAF43C042F28E56700B5DB2B /* TennisPlayerStandingsDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisPlayerStandingsDisplayModel.swift; sourceTree = "<group>"; };
+		DAF43C062F28E57C00B5DB2B /* TennisTournamentDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisTournamentDisplayModel.swift; sourceTree = "<group>"; };
+		DAF43C082F28E59000B5DB2B /* TennisGameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisGameModels.swift; sourceTree = "<group>"; };
+		DAF43C0A2F28E5A000B5DB2B /* TennisPlayerModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisPlayerModels.swift; sourceTree = "<group>"; };
+		DAF43C0E2F28E5C800B5DB2B /* TennisGameStatsResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisGameStatsResponseModel.swift; sourceTree = "<group>"; };
+		DAF43C102F28E5D500B5DB2B /* TennisGameScheduleResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisGameScheduleResponseModel.swift; sourceTree = "<group>"; };
+		DAF43C122F28E60A00B5DB2B /* TennisPlayerStandingsResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennisPlayerStandingsResponseModel.swift; sourceTree = "<group>"; };
 		DAF974D62E61CF8F0046CE59 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DAFCB4182DADC8E700839653 /* AWSManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSManager.swift; sourceTree = "<group>"; };
 		DAFCB41A2DADCEAD00839653 /* AsyncPromise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncPromise.swift; sourceTree = "<group>"; };
@@ -869,6 +909,7 @@
 		DA531B672D64A8CA00DB87CB /* Display */ = {
 			isa = PBXGroup;
 			children = (
+				DAF43BE92F28E3F500B5DB2B /* Tennis */,
 				DA081BC62DDF2B9C00034589 /* Common */,
 				DA531B472D64A8CA00DB87CB /* Components */,
 				DA531B662D64A8CA00DB87CB /* Search */,
@@ -916,6 +957,7 @@
 			isa = PBXGroup;
 			children = (
 				DA081BCB2DDF385B00034589 /* SportDisplayModel.swift */,
+				DAF43BFD2F28E52B00B5DB2B /* Tennis */,
 				DA531B702D64A8CA00DB87CB /* Football */,
 				DA531B712D64A8CA00DB87CB /* NBA */,
 				DA252B202DEF782F00006AB8 /* KBO */,
@@ -938,6 +980,7 @@
 		DA531B782D64A8CA00DB87CB /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				DAF43BFE2F28E53900B5DB2B /* Tennis */,
 				DA252AFC2DEF69CB00006AB8 /* MLB */,
 				DAEEC7402DEDD5280053E0A6 /* KBO */,
 				DA531B772D64A8CA00DB87CB /* Football */,
@@ -976,6 +1019,7 @@
 		DA531B822D64A8CA00DB87CB /* ResponseModels */ = {
 			isa = PBXGroup;
 			children = (
+				DAF43BFF2F28E53E00B5DB2B /* Tennis */,
 				DA252B062DEF735C00006AB8 /* KBO */,
 				DA252B052DEF731D00006AB8 /* MLB */,
 				DABF24BF2DEB0A4A0098A504 /* Common */,
@@ -1235,6 +1279,8 @@
 		DA9E421C2E4AB9430074B1F2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DADABE762F2C519B00873482 /* tennis_game_stats.json */,
+				DA4B7B0F2F2B3BB400C1F6B4 /* tennis_league_schedule.json */,
 				DA7EB7742EA1D3BB005A37C4 /* trending_keywords_test.json */,
 				DAB702752E8A6E2D0048DBD1 /* mlb_tournament.json */,
 				DA7EA80C2E8855FA00B587A4 /* main_notice_test.json */,
@@ -1488,6 +1534,68 @@
 			path = KBO;
 			sourceTree = "<group>";
 		};
+		DAF43BE92F28E3F500B5DB2B /* Tennis */ = {
+			isa = PBXGroup;
+			children = (
+				DAF43BEA2F28E40800B5DB2B /* View */,
+				DAF43BEB2F28E40D00B5DB2B /* Store */,
+			);
+			path = Tennis;
+			sourceTree = "<group>";
+		};
+		DAF43BEA2F28E40800B5DB2B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DAF43BEC2F28E41700B5DB2B /* TennisTournamentView.swift */,
+				DAF43BF22F28E43A00B5DB2B /* TennisPlayerStandingsView.swift */,
+				DAF43BF02F28E42D00B5DB2B /* TennisLeagueScheduleView.swift */,
+				DAF43BEE2F28E42100B5DB2B /* TennisGameStatsView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DAF43BEB2F28E40D00B5DB2B /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				DAF43BFB2F28E4CC00B5DB2B /* TennisTournamentStore.swift */,
+				DAF43BF92F28E4B700B5DB2B /* TennisPlayerStandingsStore.swift */,
+				DAF43BF72F28E49E00B5DB2B /* TennisLeagueScheduleStore.swift */,
+				DAF43BF52F28E49600B5DB2B /* TennisGameStatsStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		DAF43BFD2F28E52B00B5DB2B /* Tennis */ = {
+			isa = PBXGroup;
+			children = (
+				DAF43C062F28E57C00B5DB2B /* TennisTournamentDisplayModel.swift */,
+				DAF43C042F28E56700B5DB2B /* TennisPlayerStandingsDisplayModel.swift */,
+				DAF43C022F28E55100B5DB2B /* TennisLeagueScheduleDisplayModel.swift */,
+				DAF43C002F28E54600B5DB2B /* TennisGameStatsDisplayModel.swift */,
+			);
+			path = Tennis;
+			sourceTree = "<group>";
+		};
+		DAF43BFE2F28E53900B5DB2B /* Tennis */ = {
+			isa = PBXGroup;
+			children = (
+				DA52258B2F29B07300A9758D /* TennisCommonModels.swift */,
+				DAF43C0A2F28E5A000B5DB2B /* TennisPlayerModels.swift */,
+				DAF43C082F28E59000B5DB2B /* TennisGameModels.swift */,
+			);
+			path = Tennis;
+			sourceTree = "<group>";
+		};
+		DAF43BFF2F28E53E00B5DB2B /* Tennis */ = {
+			isa = PBXGroup;
+			children = (
+				DAF43C122F28E60A00B5DB2B /* TennisPlayerStandingsResponseModel.swift */,
+				DAF43C102F28E5D500B5DB2B /* TennisGameScheduleResponseModel.swift */,
+				DAF43C0E2F28E5C800B5DB2B /* TennisGameStatsResponseModel.swift */,
+			);
+			path = Tennis;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1614,7 +1722,9 @@
 			files = (
 				DADA395D2D3A1AC9000D15E0 /* Preview Assets.xcassets in Resources */,
 				DA531C122D64B88F00DB87CB /* .gitignore in Resources */,
+				DADABE782F2D0BA800873482 /* tennis_game_stats.json in Resources */,
 				DAF974D72E61CF8F0046CE59 /* GoogleService-Info.plist in Resources */,
+				DA4B7B102F2B3BF700C1F6B4 /* tennis_league_schedule.json in Resources */,
 				DADA39592D3A1AC9000D15E0 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1643,6 +1753,7 @@
 				DA531BAA2D64A8CA00DB87CB /* AutoCompleteList.swift in Sources */,
 				DADE29652DF178B20099A0DD /* ScheduleGameItemState.swift in Sources */,
 				DA30E71F2DF7BE42000639AD /* MLBTeamStatsStore.swift in Sources */,
+				DAF43BF82F28E4B300B5DB2B /* TennisLeagueScheduleStore.swift in Sources */,
 				DA531BB32D64A8CA00DB87CB /* FBTeamStandingsDisplayModel.swift in Sources */,
 				DA01892B2F238B210054178C /* EdgePanBackHandler.swift in Sources */,
 				DA531B402D64A8A400DB87CB /* SplashView.swift in Sources */,
@@ -1661,11 +1772,13 @@
 				DA4777382DA7B7EF00F3459C /* NBATeamInfoDisplayModel.swift in Sources */,
 				DABF24BC2DE9D3400098A504 /* ScheduleContainerState.swift in Sources */,
 				DA3235172E78619C00DE36CA /* TournamentBracketViewContainer.swift in Sources */,
+				DAF43C052F28E57500B5DB2B /* TennisPlayerStandingsDisplayModel.swift in Sources */,
 				DA252B102DEF73C600006AB8 /* KBOTeamInfoResponseModel.swift in Sources */,
 				DA2A892F2DF93358002AC4E5 /* KBOGameStatsStore.swift in Sources */,
 				DA4777392DA7B7EF00F3459C /* NBATeamStandingsDisplayModel.swift in Sources */,
 				DA911BB02DF9B8DF0055B982 /* KBOTeamStatsView.swift in Sources */,
 				DAE7293D2E7B32A500C5E6F0 /* TournamentSeriesGameItem.swift in Sources */,
+				DAF43C092F28E59C00B5DB2B /* TennisGameModels.swift in Sources */,
 				DA252B262DEF787A00006AB8 /* KBOPlayerInfoDisplayModel.swift in Sources */,
 				DA47773A2DA7B7EF00F3459C /* NBAPlayerInfoDisplayModel.swift in Sources */,
 				DA17023C2DA8C7130021EF80 /* NBATeamStatsStore.swift in Sources */,
@@ -1678,14 +1791,17 @@
 				DA531C0B2D64A91900DB87CB /* FlowStack.swift in Sources */,
 				DA531BB12D64A8CA00DB87CB /* FBTeamInfoDisplayModel.swift in Sources */,
 				DA531BC62D64A8CA00DB87CB /* KeywordInfo.swift in Sources */,
+				DAF43BED2F28E41D00B5DB2B /* TennisTournamentView.swift in Sources */,
 				DA531B9D2D64A8CA00DB87CB /* FBTeamStandingsStore.swift in Sources */,
 				DA531B942D64A8CA00DB87CB /* FBStatDataItem.swift in Sources */,
+				DAF43BF12F28E43700B5DB2B /* TennisLeagueScheduleView.swift in Sources */,
 				DA531BA32D64A8CA00DB87CB /* FBPlayerStatsView.swift in Sources */,
 				DA531C0C2D64A91900DB87CB /* UIExtensions.swift in Sources */,
 				DA30E7172DF7BDEF000639AD /* MLBTeamStatsView.swift in Sources */,
 				DA3235132E78467400DE36CA /* FBTournamentView.swift in Sources */,
 				DA531B9E2D64A8CA00DB87CB /* FBTeamStatsStore.swift in Sources */,
 				DA531C102D64AA8500DB87CB /* FBPlayerStatsDisplayModel.swift in Sources */,
+				DAF43BF32F28E48500B5DB2B /* TennisPlayerStandingsView.swift in Sources */,
 				DA531BC72D64A8CA00DB87CB /* KeywordsClient.swift in Sources */,
 				DA252B302DEF78BF00006AB8 /* KBOTeamStatsDisplayModel.swift in Sources */,
 				DA252B2C2DEF78A700006AB8 /* KBOTeamInfoDisplayModel.swift in Sources */,
@@ -1695,6 +1811,7 @@
 				DA30E7112DF7BDCC000639AD /* MLBTeamInfoView.swift in Sources */,
 				DA1702362DA8C7110021EF80 /* NBALeagueScheduleStore.swift in Sources */,
 				DA8DED912DF6AB3700AAB34B /* StandingsRankItem.swift in Sources */,
+				DAF43BF62F28E49B00B5DB2B /* TennisGameStatsStore.swift in Sources */,
 				DA1702422DA8C7150021EF80 /* NBAPlayerStatsStore.swift in Sources */,
 				DA1C10E32DF6250200EDA1FF /* MLBTeamStandingsView.swift in Sources */,
 				DA17023E2DA8C7130021EF80 /* NBATeamInfoStore.swift in Sources */,
@@ -1702,6 +1819,7 @@
 				DA531BE92D64A8F200DB87CB /* EnNameTranslationUtility.swift in Sources */,
 				DA30E7292DF7EB77000639AD /* MLBPlayerInfoView.swift in Sources */,
 				DA531BE52D64A8F200DB87CB /* RequestBuilder.swift in Sources */,
+				DAF43C012F28E54E00B5DB2B /* TennisGameStatsDisplayModel.swift in Sources */,
 				DA531C072D64A91900DB87CB /* CalendarList.swift in Sources */,
 				DA1702322DA8C70D0021EF80 /* NBAPlayerInfoStore.swift in Sources */,
 				DA30E7262DF7BFBB000639AD /* KBOPlayerStatsStore.swift in Sources */,
@@ -1720,14 +1838,18 @@
 				DA252B0A2DEF739F00006AB8 /* KBOGameStatsResponseModel.swift in Sources */,
 				DABF24B82DE9B6EF0098A504 /* MovingCapsuleItemContainer.swift in Sources */,
 				DAEEC7422DEDD53C0053E0A6 /* KBOPlayerModels.swift in Sources */,
+				DAF43BEF2F28E42900B5DB2B /* TennisGameStatsView.swift in Sources */,
 				DA531BB42D64A8CA00DB87CB /* FBTeamStatsDisplayModel.swift in Sources */,
 				DA531BAE2D64A8CA00DB87CB /* FBLeagueScheduleDisplayModel.swift in Sources */,
 				DABE3D6F2D7ECF8F0048DCAA /* CommonTextComponents.swift in Sources */,
 				DADE295F2DF051ED0099A0DD /* MLBLeagueScheduleStore.swift in Sources */,
+				DAF43C072F28E58600B5DB2B /* TennisTournamentDisplayModel.swift in Sources */,
 				DA252B2A2DEF789B00006AB8 /* KBOPlayerStatsDisplayModel.swift in Sources */,
 				DABE3D6B2D7E977F0048DCAA /* Utilities.swift in Sources */,
 				DA252B0E2DEF73B900006AB8 /* KBOPlayerStandingsResponseModel.swift in Sources */,
 				DA531BDF2D64A8F200DB87CB /* StringConstants.swift in Sources */,
+				DAF43C132F28E61E00B5DB2B /* TennisPlayerStandingsResponseModel.swift in Sources */,
+				DAF43C0B2F28E5A500B5DB2B /* TennisPlayerModels.swift in Sources */,
 				DAD3FAED2DF55BB3009B367D /* StandingsViewContainer.swift in Sources */,
 				DAD3FAEF2DF561D7009B367D /* StandingsContainerState.swift in Sources */,
 				DA32351B2E786CAF00DE36CA /* TournamentSingleGameItem.swift in Sources */,
@@ -1737,6 +1859,7 @@
 				DAB702742E8A571F0048DBD1 /* MLBTournamentStore.swift in Sources */,
 				DA081BD22DDF40AE00034589 /* BaseScheduleStore.swift in Sources */,
 				DA774F0D2DF87E2600CAC8AF /* MLBGameStatsView.swift in Sources */,
+				DAF43C112F28E5E300B5DB2B /* TennisGameScheduleResponseModel.swift in Sources */,
 				DA531BEA2D64A8F200DB87CB /* Extensions.swift in Sources */,
 				DA3235152E7848CC00DE36CA /* FBTournamentDisplayModel.swift in Sources */,
 				DA4777292DA7B67F00F3459C /* NBAPlayerInfoResponseModel.swift in Sources */,
@@ -1748,6 +1871,7 @@
 				DA081BD62DDF40C400034589 /* BaseTeamStandingsStore.swift in Sources */,
 				DA252B192DEF73DB00006AB8 /* MLBTeamStandingsResponseModel.swift in Sources */,
 				DA252B1A2DEF73DB00006AB8 /* MLBGameScheduleResponseModel.swift in Sources */,
+				DAF43BFA2F28E4C900B5DB2B /* TennisPlayerStandingsStore.swift in Sources */,
 				DA252B1B2DEF73DB00006AB8 /* MLBPlayerInfoResponseModel.swift in Sources */,
 				DA252B1C2DEF73DB00006AB8 /* MLBGameStatsResponseModel.swift in Sources */,
 				DA252B1D2DEF73DB00006AB8 /* MLBTeamInfoResponseModel.swift in Sources */,
@@ -1777,11 +1901,14 @@
 				DADE295B2DF051BD0099A0DD /* KBOLeagueScheduleView.swift in Sources */,
 				DA252B402DEF790100006AB8 /* MLBPlayerStandingsDisplayModel.swift in Sources */,
 				DA30E71D2DF7BE3A000639AD /* MLBTeamInfoStore.swift in Sources */,
+				DAF43C032F28E55D00B5DB2B /* TennisLeagueScheduleDisplayModel.swift in Sources */,
 				DA531B9A2D64A8CA00DB87CB /* FBPlayerStatsStore.swift in Sources */,
 				DA252B042DEF69EC00006AB8 /* MLBTeamModels.swift in Sources */,
 				DA1702342DA8C7100021EF80 /* NBAGameStatsStore.swift in Sources */,
 				DA531BE22D64A8F200DB87CB /* APIClient.swift in Sources */,
 				DA081BCE2DDF408E00034589 /* BaseGameStatsStore.swift in Sources */,
+				DAF43C0F2F28E5D300B5DB2B /* TennisGameStatsResponseModel.swift in Sources */,
+				DAF43BFC2F28E4DF00B5DB2B /* TennisTournamentStore.swift in Sources */,
 				DA531B9B2D64A8CA00DB87CB /* FBTeamInfoStore.swift in Sources */,
 				DAE573402D8036D6009ED74D /* SynchronizedScrollView.swift in Sources */,
 				DA3235112E78466900DE36CA /* FBTournamentStore.swift in Sources */,
@@ -1830,6 +1957,7 @@
 				DA4777232DA7B67A00F3459C /* NBATeamStandingsResponseModel.swift in Sources */,
 				DA531BA12D64A8CA00DB87CB /* FBPlayerInfoView.swift in Sources */,
 				DA531C062D64A91900DB87CB /* RoundedRectWithPathAni.swift in Sources */,
+				DA52258C2F29B07800A9758D /* TennisCommonModels.swift in Sources */,
 				DABF24BA2DE9D0D00098A504 /* ScheduleViewContainer.swift in Sources */,
 				DA531BC52D64A8CA00DB87CB /* SearchDataState.swift in Sources */,
 				DA531BAD2D64A8CA00DB87CB /* FBGameStatsDisplayModel.swift in Sources */,

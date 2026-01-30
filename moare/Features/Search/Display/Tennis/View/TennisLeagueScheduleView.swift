@@ -1,16 +1,16 @@
 //
-//  Untitled.swift
+//  TennisLeagueScheduleView.swift
 //  moare
 //
-//  Created by Mohwa Yoon on 4/11/25.
+//  Created by Mohwa Yoon on 1/27/26.
 //
 
 import SwiftUI
 import ComposableArchitecture
 
-struct NBALeagueScheduleView: View {
+struct TennisLeagueScheduleView: View {
     let searchStore: StoreOf<SearchStore>
-    let store: StoreOf<NBALeagueScheduleStore>
+    let store: StoreOf<TennisLeagueScheduleStore>
     let didPop: Bool
     
     @State private var show = false
@@ -23,8 +23,6 @@ struct NBALeagueScheduleView: View {
                 ScheduleViewContainer(
                     state: ScheduleContainerState(
                         leagueId: displayModel.leagueId,
-                        shouldShowCalendar: displayModel.scheduleType != ScheduleType.teamFlat,
-                        shouldFetchSchedule:  displayModel.scheduleType == ScheduleType.league,
                         displayDataState: store.baseSchedule.displayDataState,
                         calendarUiState: CalendarUiState(
                             yearMonthList: store.baseSchedule.yearMonthList,
@@ -32,8 +30,7 @@ struct NBALeagueScheduleView: View {
                             selectedYearMonthIndex: store.baseSchedule.selectedYearMonthIndex,
                             selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
-                        isAllResultOpened: store.baseSchedule.isAllResultOpened,
-                        shouldShowTournamentButton: store.baseSchedule.selectedMonth >= 4 && store.baseSchedule.selectedMonth <= 6,
+                        isAllResultOpened: store.baseSchedule.isAllResultOpened
                     ),
                     actions: ScheduleContainerActions(
                         calendarUiActions: CalendarUiActions(
@@ -48,28 +45,25 @@ struct NBALeagueScheduleView: View {
                             store.send(.toggleAllResult)
                         },
                         tournamentOrteamStandingsButtonAction: {
-                            store.send(.showTeamStandings)
-                        },
-                        tournamentButtonAction: {
                             store.send(.showTournament)
                         }
                     ),
                     titleContent: {},
                     gameListContent: {
-                        NBALeagueScheduleList(
+                        TennisLeagueScheduleList(
                             searchStore: searchStore,
-                            nbaLeagueScheduleStore: store
+                            tennisLeagueScheduleStore: store
                         )
                     }
                 )
             }
-        } // VStack
+        }
         .onAppear {
             if !didPop {
                 store.send(.baseSchedule(.initData))
             } else {
-                // TODO: NBAGameStatsView에서 뒤로왔을때만 실행하게 개선 필요
-                store.send(.updateFilteredGames)
+                // TODO: TennisGameStatsView에서 뒤로왔을때만 실행하게 개선 필요
+//                store.send(.updateFilteredGames)
             }
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
@@ -79,16 +73,16 @@ struct NBALeagueScheduleView: View {
     }
 }
 
-struct NBALeagueScheduleList: View {
+struct TennisLeagueScheduleList: View {
     @Bindable var searchStore: StoreOf<SearchStore>
-    @Bindable var nbaLeagueScheduleStore: StoreOf<NBALeagueScheduleStore>
+    @Bindable var tennisLeagueScheduleStore: StoreOf<TennisLeagueScheduleStore>
     
     @State private var pageIdx: Int? = 0
     
     var body: some View {
-        let selectedDay = nbaLeagueScheduleStore.baseSchedule.selectedDay?.day
+        let selectedDay = tennisLeagueScheduleStore.baseSchedule.selectedDay?.day
         
-        let days = nbaLeagueScheduleStore.baseSchedule.days
+        let days = tennisLeagueScheduleStore.baseSchedule.days
         var window: [Int] {
             days.indices.filter { idx in
                 !(days[idx].isDataEmpty)
@@ -96,21 +90,20 @@ struct NBALeagueScheduleList: View {
         }
         
         ScrollView(.horizontal) {
-            // NOTE: LazyHStack이어서 그런지 달력에 day 선택으로 이동 시 CapsuleBar가 약간의 버벅임이 있는 것 같음. 그렇다고 HStack으로 바꿔서 해보니 처음 화면 나오는게 엄청 오래 걸림.
             LazyHStack(spacing: 0) {
                 ForEach(window, id: \.self) { day in
                     // GameList
-                    let gameListToDisplay = nbaLeagueScheduleStore.filteredGames[day] ?? []
+                    let gameListToDisplay = tennisLeagueScheduleStore.filteredGames[day] ?? []
                     let hasLive = gameListToDisplay.contains { game in
-                        game.gameStatus == String(Constants.GameStatus.NBA.live)
+                        Constants.GameStatus.Tennis.liveList.contains(Int(game.gameStatus) ?? 0)
                     }
-                    
+                
                     ScrollView {
                         LazyVStack(spacing: 8) {
                             ForEach(gameListToDisplay, id: \.gameId) { item in
-                                NBALeagueScheduleListItem(
+                                TennisLeagueScheduleListItem(
                                     searchStore: searchStore,
-                                    nbaLeagueScheduleStore: nbaLeagueScheduleStore,
+                                    tennisLeagueScheduleStore: tennisLeagueScheduleStore,
                                     data: item
                                 )
                                 .padding(.vertical, 8)
@@ -119,7 +112,7 @@ struct NBALeagueScheduleList: View {
                     }
                     .frame(maxHeight: .infinity)
                     .refreshableIf(hasLive) {
-                        await nbaLeagueScheduleStore.send(.refreshGames).finish()
+                        await tennisLeagueScheduleStore.send(.refreshGames).finish()
                     }
                     .containerRelativeFrame(.horizontal, count: 1, spacing: 0)
                     .id(day)
@@ -139,7 +132,7 @@ struct NBALeagueScheduleList: View {
             guard let pageIdx else { return }
             guard days.indices.contains(pageIdx) else { return }
 
-            nbaLeagueScheduleStore.send(.baseSchedule(.selectDay(days[pageIdx], pageIdx)))
+            tennisLeagueScheduleStore.send(.baseSchedule(.selectDay(days[pageIdx], pageIdx)))
         }
         .onChange(of: selectedDay) {
             guard let selectedDay else { return }
@@ -148,11 +141,11 @@ struct NBALeagueScheduleList: View {
     }
 }
 
-struct NBALeagueScheduleListItem: View {
+struct TennisLeagueScheduleListItem: View {
     @Bindable var searchStore: StoreOf<SearchStore>
-    @Bindable var nbaLeagueScheduleStore: StoreOf<NBALeagueScheduleStore>
+    @Bindable var tennisLeagueScheduleStore: StoreOf<TennisLeagueScheduleStore>
     
-    let data: NBAGameForSchedule
+    let data: TennisGameForSchedule
     
     /* ---------------------
        ui state
@@ -160,71 +153,47 @@ struct NBALeagueScheduleListItem: View {
     @State private var isResultOpened = false
     
     var body: some View {
-        let displayModel = nbaLeagueScheduleStore.baseSchedule.displayModel
+        let displayModel = tennisLeagueScheduleStore.baseSchedule.displayModel
+        let leagueId = displayModel.leagueId
         let gameId = data.gameId
-        let gameStatus = Int(data.gameStatus) ?? 1
-        let teamNameDic = nbaLeagueScheduleStore.baseSchedule.teamNameDictionary
+        let gameStatus = Int(data.gameStatus) ?? 0
+        let teamNameDic = tennisLeagueScheduleStore.baseSchedule.teamNameDictionary
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
-                leagueId: Constants.Ids.nba,
+                leagueId: leagueId,
                 game: data,
                 teamNameDic: teamNameDic,
                 isResultOpened: isResultOpened,
-                gameStatusText: Constants.GameStatus.nbaGameStatusText(status: gameStatus, period: data.gameInfo?.period, isResultOpened: isResultOpened),
-                gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: Constants.Ids.nba, status: data.gameStatus),
-                isCapsuleButtonDisabled: gameStatus != Constants.GameStatus.NBA.finished,
-                gameType: NBAUtil.gameType(gameSummary: data.gameInfo),
-                shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
+                gameStatusText: Constants.GameStatus.tennisGameStatusText(status: gameStatus, isResultOpened: isResultOpened),
+                gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: data.gameStatus),
+                isCapsuleButtonDisabled: !Constants.GameStatus.Tennis.finishedList.contains(gameStatus),
+                gameType: data.gameInfo?.roundInfo?.name
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {
-                    nbaLeagueScheduleStore.send(.selectGame(game: data))
+                    tennisLeagueScheduleStore.send(.selectGame(game: data))
                 },
                 onCapsuleButtonClick: {
-                    nbaLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: !isResultOpened))
+                    tennisLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: !isResultOpened))
                 }
             )
         )
         .onAppear {
-            if gameStatus == Constants.GameStatus.NBA.finished {
-                isResultOpened = nbaLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
-            } else if gameStatus == Constants.GameStatus.NBA.notStarted {
+            if Constants.GameStatus.Tennis.finishedList.contains(gameStatus) {
+                isResultOpened = tennisLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
+            } else if gameStatus == Constants.GameStatus.Tennis.notStarted {
                 isResultOpened = false
             } else {
                 isResultOpened = true
             }
         }
-        .onChange(of: nbaLeagueScheduleStore.gameResultOpenedStateList) {
-            if gameStatus == Constants.GameStatus.NBA.finished {
+        .onChange(of: tennisLeagueScheduleStore.gameResultOpenedStateList) {
+            if Constants.GameStatus.Tennis.finishedList.contains(gameStatus) {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    isResultOpened = nbaLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
+                    isResultOpened = tennisLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
                 }
             }
         }
     }
 }
-
-// playoffs info
-//if let gameInfo = data.gameInfo, gameInfo.weekName.isEmpty {
-//    Text(NBAUtil.gameType(gameSummary: gameInfo, isShort: true))
-//        .font(.system(size: 11))
-//    
-//    if let series = data.seasonSeries, !gameInfo.seriesGameNumber.isEmpty {
-//        HStack(spacing: 0) {
-//            Text("시리즈 스코어: ")
-//                .font(.system(size: 11))
-//            
-//            Text("\(series.homeTeamWins)")
-//                .font(.system(size: 11))
-//                .foregroundStyle(series.homeTeamWins >= series.homeTeamLosses ? .moare : .primary)
-//            
-//            Text(" - ")
-//                .font(.system(size: 11))
-//            
-//            Text("\(series.homeTeamLosses)")
-//                .font(.system(size: 11))
-//                .foregroundStyle(series.homeTeamLosses >= series.homeTeamWins ? .moare : .primary)
-//        }
-//    }
-//}
