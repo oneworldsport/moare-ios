@@ -27,9 +27,7 @@ final class ModelConverter {
         self.season = season
     }
     
-    /* ---------------------
-       football
-       --------------------- */
+    // football
     func fbPlayerInfoConverter(response: FBPlayerInfoResponseModel) -> FBPlayerInfoDisplayModel {
         let info = response.info!
         
@@ -227,9 +225,7 @@ final class ModelConverter {
         )
     }
     
-    /* ---------------------
-       nba
-       --------------------- */
+    // nba
     func nbaPlayerInfoConverter(response: NBAPlayerInfoResponseModel) -> NBAPlayerInfoDisplayModel {
         let info = response.info!
         
@@ -391,9 +387,7 @@ final class ModelConverter {
         )
     }
     
-    /* ---------------------
-       kbo
-       --------------------- */
+    // kbo
     func kboPlayerInfoConverter(response: KBOPlayerInfoResponseModel) -> KBOPlayerInfoDisplayModel {
         let info = response.info!
         
@@ -556,9 +550,7 @@ final class ModelConverter {
         )
     }
     
-    /* ---------------------
-       mlb
-       --------------------- */
+    // mlb
     func mlbPlayerInfoConverter(response: MLBPlayerInfoResponseModel) -> MLBPlayerInfoDisplayModel {
         let info = response.info!
         
@@ -731,6 +723,74 @@ final class ModelConverter {
     func mlbTournamentConverter(response: MLBGameScheduleResponseModel) -> MLBTournamentDisplayModel {
         return MLBTournamentDisplayModel(
             leagueId: leagueId ?? Constants.Ids.mlb,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            season: season,
+            scheduleType: response.scheduleType ?? .tournamentBracket,
+            games: response.schedule
+        )
+    }
+    
+    // tennis
+    func tennisPlayerStandingsConverter(response: TennisPlayerStandingsResponseModel) -> TennisPlayerStandingsDisplayModel {
+//        let standings: [FBPlayerStandingsDisplay] = response.standings.compactMap { playerInfo in
+//            let player = playerInfo.player
+//            let statsList = playerInfo.statistics
+//            
+//            for item in statsList {
+//                if item.league.id == leagueId {
+//                    return FBPlayerStandingsDisplay(player: player, stats: item)
+//                }
+//            }
+//            
+//            return nil
+//        }
+        
+        return TennisPlayerStandingsDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.epl,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            season: season,
+//            standings: standings
+        )
+    }
+    
+    func tennisLeagueScheduleConverter(response: TennisGameScheduleResponseModel) -> TennisLeagueScheduleDisplayModel {
+        let yearMonthList: [String] = response.scheduledMonths?.map {
+            let components = $0.split(separator: "-")
+            guard components.count == 2 else { return "" }
+            
+            return "\(components[0].suffix(2))/\(components[1])"
+        } ?? []
+        
+        return TennisLeagueScheduleDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.ausOpenMSingle,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            season: season,
+            scheduleType: response.scheduleType ?? .league,
+            yearMonthList: yearMonthList,
+            startDate: response.startDate,
+            endDate: response.endDate,
+            relatedLeagueIds: response.relatedLeagueIds,
+            games: response.schedule
+        )
+    }
+    
+    func tennisGameStatsConverter(response: TennisGameStatsResponseModel) -> TennisGameStatsDisplayModel {
+        let game = response.game!
+        return TennisGameStatsDisplayModel(
+            leagueId: game.gameInfo.id,
+            keywords: keywords,
+            entityInfo: entityInfo,
+            season: season,
+            game: game
+        )
+    }
+    
+    func tennisTournamentConverter(response: TennisGameScheduleResponseModel) -> TennisTournamentDisplayModel {
+        return TennisTournamentDisplayModel(
+            leagueId: leagueId ?? Constants.Ids.ausOpenMSingle,
             keywords: keywords,
             entityInfo: entityInfo,
             season: season,
