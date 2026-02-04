@@ -780,7 +780,7 @@ final class ModelConverter {
     func tennisGameStatsConverter(response: TennisGameStatsResponseModel) -> TennisGameStatsDisplayModel {
         let game = response.game!
         return TennisGameStatsDisplayModel(
-            leagueId: game.gameInfo.id,
+            leagueId: leagueId ?? Constants.Ids.ausOpenMSingle,
             keywords: keywords,
             entityInfo: entityInfo,
             season: season,

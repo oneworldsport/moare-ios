@@ -141,7 +141,8 @@ struct NBAGameStatsView: View {
 //                            }
                         
                         NBAGameStatsScoreInfoItem(nbaGameStatsStore: store)
-                    }
+                    },
+                    customStatsContent: {}
                 )
             }
         }

@@ -126,7 +126,8 @@ struct KBOGameStatsView: View {
 //                            }
                         
                         KBOGameStatsScoreInfoItem(kboGameStatsStore: store)
-                    }
+                    },
+                    customStatsContent: {}
                 )
             }
         }

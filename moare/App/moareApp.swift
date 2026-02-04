@@ -31,8 +31,8 @@ struct SportSearchEngine_iOSApp: App {
     @State var isSplashFinished = false
     @State private var didInitialLoad = false
     
-//    var viewForTest: SportDisplayType? = SportDisplayType.nbaTournament
-    var viewForTest: SportDisplayType? = nil
+    var viewForTest: SportDisplayType? = SportDisplayType.tennisGameStats
+//    var viewForTest: SportDisplayType? = nil
     
     init() {
         Task {

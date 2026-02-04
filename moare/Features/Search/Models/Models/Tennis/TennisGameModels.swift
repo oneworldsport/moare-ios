@@ -32,7 +32,7 @@ struct TennisGameInfo: Decodable, Equatable {
     var id: Int { _id ?? 0 }
     var gameDate: String { _gameDate ?? "" }
     var winnerCode: Int { _winnerCode ?? 0 }
-    var defaultPeriodCount: Int { _defaultPeriodCount ?? 0 }
+    var defaultPeriodCount: Int { _defaultPeriodCount ?? 3 }
     var groundType: String { _groundType ?? "" }
     
     private enum CodingKeys: String, CodingKey {
@@ -64,6 +64,7 @@ struct TennisGameStatus: Decodable, Equatable {
 struct TennisGameTeam: Decodable, Equatable {
     let country: TennisCountry?
     private let _fullName: String?
+    private let _shortName: String?
     private let _gender: String?
     private let _id: Int?
     private let _name: String?
@@ -72,6 +73,7 @@ struct TennisGameTeam: Decodable, Equatable {
     private let _slug: String?
     
     var fullName: String { _fullName ?? "" }
+    var shortName: String { _shortName ?? "" }
     var gender: String { _gender ?? "M" }
     var id: Int { _id ?? 0 }
     var name: String { _name ?? "" }
@@ -82,6 +84,7 @@ struct TennisGameTeam: Decodable, Equatable {
     private enum CodingKeys: String, CodingKey {
         case country
         case _fullName = "fullName"
+        case _shortName = "shortName"
         case _gender = "gender"
         case _id = "id"
         case _name = "name"
@@ -111,6 +114,9 @@ struct TennisGameScore: Decodable, Equatable {
     var display: Int { _display ?? 0 }
     var normaltime: Int { _normaltime ?? 0 }
     var point: String { _point ?? "" }
+    
+    var periods: [Int?] { [period1, period2, period3, period4, period5] }
+    var periodsTieBreak: [Int?] { [period1TieBreak, period2TieBreak, period3TieBreak, period4TieBreak, period5TieBreak] }
     
     private enum CodingKeys: String, CodingKey {
         case period1, period2, period3, period4, period5, period1TieBreak, period2TieBreak, period3TieBreak, period4TieBreak, period5TieBreak
@@ -329,6 +335,18 @@ struct TennisPointByPointGameScore: Decodable, Equatable {
     var scoring: Int { _scoring ?? 0 }
     var serving: Int { _serving ?? 0 }
     
+    var isHomeWinner: Bool { scoring == 1 }
+    var isAwayWinner: Bool { scoring == 2 }
+    var isGameFinished: Bool { scoring != -1 }
+    var isHomeServing: Bool { serving == 1 }
+    var isTieBreak: Bool {
+        if isGameFinished {
+            homeScore == 7 || awayScore == 7
+        } else {
+            homeScore == 6 && awayScore == 6
+        }
+    }
+    
     private enum CodingKeys: String, CodingKey {
         case _homeScore = "homeScore"
         case _awayScore = "awayScore"
@@ -342,6 +360,16 @@ struct TennisGameStats: Decodable, Equatable {
     private let _groupName: String?
     
     var groupName: String { _groupName ?? "" }
+    
+    func itemsForDisplay() -> [TennisGameStatsItem] {
+        guard let items = statisticsItems else {
+            return []
+        }
+        
+        return StringConstants.Tennis.playerStatKeyList.compactMap { key in
+            items.first { $0.key == key }
+        }
+    }
     
     private enum CodingKeys: String, CodingKey {
         case statisticsItems
@@ -375,6 +403,8 @@ struct TennisGameStatsItem: Decodable, Equatable {
     var renderType: Int { _renderType ?? 0 }
     var statisticsType: String { _statisticsType ?? "" }
     var valueType: String { _valueType ?? "" }
+    
+    var krname: String { StringConstants.Tennis.playerStatKrnameMap[key] ?? "" }
     
     private enum CodingKeys: String, CodingKey {
         case _key = "key"

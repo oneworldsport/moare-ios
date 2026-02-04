@@ -154,7 +154,8 @@ struct MLBGameStatsView: View {
 //                                MLBGameStatsScoreInfoItem(mlbGameStatsStore: mlbGameStatsStore)
 //                            }
                         MLBGameStatsScoreInfoItem(mlbGameStatsStore: store)
-                    }
+                    },
+                    customStatsContent: {}
                 )
             }
         }

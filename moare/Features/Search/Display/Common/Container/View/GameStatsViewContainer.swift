@@ -8,11 +8,13 @@
 import Foundation
 import SwiftUI
 
-struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
+struct GameStatsViewContainer<TitleContent: View, GameContent: View, CustomStatsContent: View>: View {
     let state: GameStatsContainerState
     let actions: GameStatsContainerActions
+    let shouldUseCustomStatsContent: Bool
     @ViewBuilder let titleContent: () -> TitleContent
     @ViewBuilder let gameContent: () -> GameContent
+    @ViewBuilder let customStatsContent: () -> CustomStatsContent
     
     private let defaultColumnWidth: CGFloat = 100
     private let defaultDataItemHeight: CGFloat = 40
@@ -28,13 +30,17 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
     init(
         state: GameStatsContainerState,
         actions: GameStatsContainerActions,
+        shouldUseCustomStatsContent: Bool = false,
         @ViewBuilder titleContent: @escaping () -> TitleContent,
-        @ViewBuilder gameContent: @escaping () -> GameContent // TODO: Has to give default value
+        @ViewBuilder gameContent: @escaping () -> GameContent, // TODO: Has to give default value
+        @ViewBuilder customStatsContent: @escaping () -> CustomStatsContent // TODO: Has to give default value
     ) {
         self.state = state
         self.actions = actions
+        self.shouldUseCustomStatsContent = shouldUseCustomStatsContent
         self.titleContent = titleContent
         self.gameContent = gameContent
+        self.customStatsContent = customStatsContent
     }
 
     var body: some View {
@@ -65,7 +71,9 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                             Button(action: {
                                                 actions.teamCategoryButtonAction?(index)
                                             }) {
-                                                URLImage(url: item.imageUrl, size: .small)
+                                                if let imageUrl = item.imageUrl {
+                                                    URLImage(url: imageUrl, size: .small)
+                                                }
                                                 
                                                 Text(item.name)
                                                     .font(.system(size: 15, weight: .medium))
@@ -146,181 +154,67 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                 }
                             }
                             
-                            if state.shouldShowCoach {
-                                HStack {
-                                    Text("감독: ")
-                                        .font(.system(size: 15))
-                                    
-                                    URLImage(
-                                        url: state.coachState?.imageUrl,
-                                        customSize: CGSize(width: 23, height: 23)
-                                    )
-                                    
-                                    Text(state.coachState?.name ?? "")
-                                        .font(.system(size: 15))
-                                    
-                                    Spacer()
-                                }
-                                .padding(.leading, 8)
-                            }
-                            
-                            // player stats
-                            if let title = state.firstStatsTitle {
-                                HStack {
-                                    VStack(spacing: 2) {
-                                        Text(title)
-                                            .font(.system(size: 15, weight: .medium))
+                            if shouldUseCustomStatsContent {
+                                customStatsContent()
+                            } else {
+                                if state.shouldShowCoach {
+                                    HStack {
+                                        Text("감독: ")
+                                            .font(.system(size: 15))
                                         
-                                        HCapsuleBar()
-                                    }
-                                    .frame(width: 132)
-                                    
-                                    Spacer()
-                                }
-                            }
-                            
-                            HStack(spacing: 0) {
-                                VStack(spacing: 0) {
-                                    StickyHeader(coordinateSpaceName: coordinateSpaceName) {
-                                        OptionalButton(action: actions.firstStatsTitleCategoryAction) {
-                                            ZStack(alignment: .bottom) {
-                                                StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory, width: state.firstColumnWidth)
-                                                
-                                                HCapsuleBar()
-                                                    .opacity(state.firstStatsCategorySelectedIndex < 0 ? 1 : 0)
-                                            }
-                                        }
-                                    }
-                                    .frame(width: state.firstColumnWidth ?? 132)
-                                    
-                                    ForEach(state.firstStatsPlayerList.indices, id:\.self) { index in
-                                        let data = state.firstStatsPlayerList[index]
-                                        
-                                        StandingsRankItem(
-                                            id: data.id,
-                                            width: state.firstColumnWidth,
-                                            shouldShowRank: data.numInfo != nil,
-                                            shouldShowExtraInfo: true,
-                                            rank: data.numInfo ?? 0,
-                                            imageUrl: data.imageUrl,
-                                            name: data.name.dropFirstWord,
-                                            subName: data.subName,
-                                            extraInfo: data.extraInfo,
-                                            extraSubInfo: data.extraSubInfo,
-                                            action: { _ in }
+                                        URLImage(
+                                            url: state.coachState?.imageUrl,
+                                            customSize: CGSize(width: 23, height: 23)
                                         )
+                                        
+                                        Text(state.coachState?.name ?? "")
+                                            .font(.system(size: 15))
+                                        
+                                        Spacer()
                                     }
+                                    .padding(.leading, 8)
                                 }
                                 
-                                ScrollView(.horizontal) {
-                                    VStack(spacing: 0) {
-                                        StickyHeader(coordinateSpaceName: coordinateSpaceName) {
-                                            VStack(alignment: .leading, spacing: 0) {
-                                                // second category
-                                                HStack(spacing: 0) {
-                                                    ForEach(state.firstStatsCategories.indices, id:\.self) { index in
-                                                        let category = state.firstStatsCategories[index]
-                                                        
-                                                        Button(action: {
-                                                            actions.firstStatsCategoryButtonAction(index)
-                                                        }) {
-                                                            Text(category)
-                                                                .font(.system(size: 15, weight: .medium))
-                                                                .frame(width: firstStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
-                                                        }
-                                                        .foregroundStyle(.primary)
-                                                        .disabled(category.isEmpty)
-                                                        .id(index)
-                                                    }
-                                                }
-                                                .frame(height: 38)
-                                                
-                                                HCapsuleBar()
-                                                    .offset(x: firstStatsCategoryBarXOffset)
-                                            }
-                                            .onAppear {
-                                                withAnimation(.spring(duration: 0.5)) {
-                                                    if state.firstStatsCategorySelectedIndex < 0 {
-                                                        let firstColumnWidth = state.firstColumnWidth ?? 132
-                                                        firstStatsCategoryBarXOffset = -(firstColumnWidth / 2) - 10
-                                                    } else if !firstStatsColumnWidthList.isEmpty {
-                                                        firstStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: firstStatsColumnWidthList, index: state.firstStatsCategorySelectedIndex)
-                                                    } else {
-                                                        firstStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.firstStatsCategorySelectedIndex)
-                                                    }
-                                                }
-                                            }
-                                            .onChange(of: state.firstStatsCategorySelectedIndex) {
-                                                withAnimation(.spring(duration: 0.5)) {
-                                                    if state.firstStatsCategorySelectedIndex < 0 {
-                                                        let firstColumnWidth = state.firstColumnWidth ?? 132
-                                                        firstStatsCategoryBarXOffset = -(firstColumnWidth / 2) - 10
-                                                    } else if !firstStatsColumnWidthList.isEmpty {
-                                                        firstStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: firstStatsColumnWidthList, index: state.firstStatsCategorySelectedIndex)
-                                                    } else {
-                                                        firstStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.firstStatsCategorySelectedIndex)
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        
-                                        // data items
-                                        ForEach(state.firstStatsPlayerList.indices, id:\.self) { index in
-                                            let item = state.firstStatsPlayerList[index]
+                                // player stats
+                                if let title = state.firstStatsTitle {
+                                    HStack {
+                                        VStack(spacing: 2) {
+                                            Text(title)
+                                                .font(.system(size: 15, weight: .medium))
                                             
-                                            HStack(spacing: 0) {
-                                                ForEach(item.dataList.indices, id:\.self) { index in
-                                                    let data = item.dataList[index]
-                                                    
-                                                    Text(data)
-                                                        .font(.system(size: 15))
-                                                        .frame(width: firstStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
-                                                }
-                                            }
-                                            .frame(height: defaultDataItemHeight)
-                                        }
-                                    }
-                                } // ScrollView(.horizontal)
-                            }
-                            
-                            // 보여줄 Stats list가 두개인 경우의 두번째 Stats list. ex) KBO, MLB의 투수 기록
-                            if let title = state.secondStatsTitle {
-                                HStack {
-                                    VStack(spacing: 2) {
-                                        Text(title)
-                                            .font(.system(size: 15, weight: .medium))
-                                        
-                                        HCapsuleBar()
-                                    }
-                                    .frame(width: 132)
-                                    
-                                    Spacer()
-                                }
-//                                .frame(maxWidth: .infinity, alignment: .leading)
-                                // TODO: firstStats의 StickyHeader부분이 해당 뷰에 가려져서 .zIndex(-1)를 추가했는데, StandingsFirstCategoryItem()는 해결됐으나 firstStatsCategories는 여전히 가려짐.
-                                // 테스트 하려면 MLBGameStatsView에서 secondStatsPlayerList: pitcherList + pitcherList
-                                .zIndex(-1)
-                            }
-                            
-                            if let secondStatsCategories = state.secondStatsCategories,
-                                let secondStatsPlayerList = state.secondStatsPlayerList {
-                                HStack(spacing: 0) {
-                                    VStack(spacing: 0) {
-                                        StickyHeader(coordinateSpaceName: coordinateSpaceName) {
-                                            StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory)
+                                            HCapsuleBar()
                                         }
                                         .frame(width: 132)
                                         
-                                        ForEach(secondStatsPlayerList.indices, id:\.self) { index in
-                                            let data = secondStatsPlayerList[index]
+                                        Spacer()
+                                    }
+                                }
+                                
+                                HStack(spacing: 0) {
+                                    VStack(spacing: 0) {
+                                        StickyHeader(coordinateSpaceName: coordinateSpaceName) {
+                                            OptionalButton(action: actions.firstStatsTitleCategoryAction) {
+                                                ZStack(alignment: .bottom) {
+                                                    StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory, width: state.firstColumnWidth)
+                                                    
+                                                    HCapsuleBar()
+                                                        .opacity(state.firstStatsCategorySelectedIndex < 0 ? 1 : 0)
+                                                }
+                                            }
+                                        }
+                                        .frame(width: state.firstColumnWidth ?? 132)
+                                        
+                                        ForEach(state.firstStatsPlayerList.indices, id:\.self) { index in
+                                            let data = state.firstStatsPlayerList[index]
                                             
                                             StandingsRankItem(
                                                 id: data.id,
+                                                width: state.firstColumnWidth,
                                                 shouldShowRank: data.numInfo != nil,
                                                 shouldShowExtraInfo: true,
                                                 rank: data.numInfo ?? 0,
                                                 imageUrl: data.imageUrl,
-                                                name: data.name,
+                                                name: data.name.dropFirstWord,
                                                 subName: data.subName,
                                                 extraInfo: data.extraInfo,
                                                 extraSubInfo: data.extraSubInfo,
@@ -335,48 +229,55 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                                 VStack(alignment: .leading, spacing: 0) {
                                                     // second category
                                                     HStack(spacing: 0) {
-                                                        ForEach(secondStatsCategories.indices, id:\.self) { index in
-                                                            let category = secondStatsCategories[index]
-
+                                                        ForEach(state.firstStatsCategories.indices, id:\.self) { index in
+                                                            let category = state.firstStatsCategories[index]
+                                                            
                                                             Button(action: {
-                                                                actions.secondStatsCategoryButtonAction?(index)
+                                                                actions.firstStatsCategoryButtonAction(index)
                                                             }) {
                                                                 Text(category)
                                                                     .font(.system(size: 15, weight: .medium))
-                                                                    .frame(width: secondStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
+                                                                    .frame(width: firstStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
                                                             }
                                                             .foregroundStyle(.primary)
+                                                            .disabled(category.isEmpty)
                                                             .id(index)
                                                         }
                                                     }
                                                     .frame(height: 38)
-
+                                                    
                                                     HCapsuleBar()
-                                                        .offset(x: secondStatsCategoryBarXOffset)
+                                                        .offset(x: firstStatsCategoryBarXOffset)
                                                 }
                                                 .onAppear {
                                                     withAnimation(.spring(duration: 0.5)) {
-                                                        if !secondStatsColumnWidthList.isEmpty {
-                                                            secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: secondStatsColumnWidthList, index: state.secondStatsCategorySelectedIndex)
+                                                        if state.firstStatsCategorySelectedIndex < 0 {
+                                                            let firstColumnWidth = state.firstColumnWidth ?? 132
+                                                            firstStatsCategoryBarXOffset = -(firstColumnWidth / 2) - 10
+                                                        } else if !firstStatsColumnWidthList.isEmpty {
+                                                            firstStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: firstStatsColumnWidthList, index: state.firstStatsCategorySelectedIndex)
                                                         } else {
-                                                            secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.secondStatsCategorySelectedIndex)
+                                                            firstStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.firstStatsCategorySelectedIndex)
                                                         }
                                                     }
                                                 }
-                                                .onChange(of: state.secondStatsCategorySelectedIndex) {
+                                                .onChange(of: state.firstStatsCategorySelectedIndex) {
                                                     withAnimation(.spring(duration: 0.5)) {
-                                                        if !firstStatsColumnWidthList.isEmpty {
-                                                            secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: secondStatsColumnWidthList, index: state.secondStatsCategorySelectedIndex)
+                                                        if state.firstStatsCategorySelectedIndex < 0 {
+                                                            let firstColumnWidth = state.firstColumnWidth ?? 132
+                                                            firstStatsCategoryBarXOffset = -(firstColumnWidth / 2) - 10
+                                                        } else if !firstStatsColumnWidthList.isEmpty {
+                                                            firstStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: firstStatsColumnWidthList, index: state.firstStatsCategorySelectedIndex)
                                                         } else {
-                                                            secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.secondStatsCategorySelectedIndex)
+                                                            firstStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.firstStatsCategorySelectedIndex)
                                                         }
                                                     }
                                                 }
                                             }
                                             
                                             // data items
-                                            ForEach(secondStatsPlayerList.indices, id:\.self) { index in
-                                                let item = secondStatsPlayerList[index]
+                                            ForEach(state.firstStatsPlayerList.indices, id:\.self) { index in
+                                                let item = state.firstStatsPlayerList[index]
                                                 
                                                 HStack(spacing: 0) {
                                                     ForEach(item.dataList.indices, id:\.self) { index in
@@ -384,15 +285,126 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View>: View {
                                                         
                                                         Text(data)
                                                             .font(.system(size: 15))
-                                                            .frame(width: secondStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
+                                                            .frame(width: firstStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
                                                     }
                                                 }
                                                 .frame(height: defaultDataItemHeight)
                                             }
                                         }
+                                    } // ScrollView(.horizontal)
+                                }
+                                
+                                // 보여줄 Stats list가 두개인 경우의 두번째 Stats list. ex) KBO, MLB의 투수 기록
+                                if let title = state.secondStatsTitle {
+                                    HStack {
+                                        VStack(spacing: 2) {
+                                            Text(title)
+                                                .font(.system(size: 15, weight: .medium))
+                                            
+                                            HCapsuleBar()
+                                        }
+                                        .frame(width: 132)
+                                        
+                                        Spacer()
+                                    }
+                                    //                                .frame(maxWidth: .infinity, alignment: .leading)
+                                    // TODO: firstStats의 StickyHeader부분이 해당 뷰에 가려져서 .zIndex(-1)를 추가했는데, StandingsFirstCategoryItem()는 해결됐으나 firstStatsCategories는 여전히 가려짐.
+                                    // 테스트 하려면 MLBGameStatsView에서 secondStatsPlayerList: pitcherList + pitcherList
+                                    .zIndex(-1)
+                                }
+                                
+                                if let secondStatsCategories = state.secondStatsCategories,
+                                   let secondStatsPlayerList = state.secondStatsPlayerList {
+                                    HStack(spacing: 0) {
+                                        VStack(spacing: 0) {
+                                            StickyHeader(coordinateSpaceName: coordinateSpaceName) {
+                                                StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory)
+                                            }
+                                            .frame(width: 132)
+                                            
+                                            ForEach(secondStatsPlayerList.indices, id:\.self) { index in
+                                                let data = secondStatsPlayerList[index]
+                                                
+                                                StandingsRankItem(
+                                                    id: data.id,
+                                                    shouldShowRank: data.numInfo != nil,
+                                                    shouldShowExtraInfo: true,
+                                                    rank: data.numInfo ?? 0,
+                                                    imageUrl: data.imageUrl,
+                                                    name: data.name,
+                                                    subName: data.subName,
+                                                    extraInfo: data.extraInfo,
+                                                    extraSubInfo: data.extraSubInfo,
+                                                    action: { _ in }
+                                                )
+                                            }
+                                        }
+                                        
+                                        ScrollView(.horizontal) {
+                                            VStack(spacing: 0) {
+                                                StickyHeader(coordinateSpaceName: coordinateSpaceName) {
+                                                    VStack(alignment: .leading, spacing: 0) {
+                                                        // second category
+                                                        HStack(spacing: 0) {
+                                                            ForEach(secondStatsCategories.indices, id:\.self) { index in
+                                                                let category = secondStatsCategories[index]
+                                                                
+                                                                Button(action: {
+                                                                    actions.secondStatsCategoryButtonAction?(index)
+                                                                }) {
+                                                                    Text(category)
+                                                                        .font(.system(size: 15, weight: .medium))
+                                                                        .frame(width: secondStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
+                                                                }
+                                                                .foregroundStyle(.primary)
+                                                                .id(index)
+                                                            }
+                                                        }
+                                                        .frame(height: 38)
+                                                        
+                                                        HCapsuleBar()
+                                                            .offset(x: secondStatsCategoryBarXOffset)
+                                                    }
+                                                    .onAppear {
+                                                        withAnimation(.spring(duration: 0.5)) {
+                                                            if !secondStatsColumnWidthList.isEmpty {
+                                                                secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: secondStatsColumnWidthList, index: state.secondStatsCategorySelectedIndex)
+                                                            } else {
+                                                                secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.secondStatsCategorySelectedIndex)
+                                                            }
+                                                        }
+                                                    }
+                                                    .onChange(of: state.secondStatsCategorySelectedIndex) {
+                                                        withAnimation(.spring(duration: 0.5)) {
+                                                            if !firstStatsColumnWidthList.isEmpty {
+                                                                secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: secondStatsColumnWidthList, index: state.secondStatsCategorySelectedIndex)
+                                                            } else {
+                                                                secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.secondStatsCategorySelectedIndex)
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                
+                                                // data items
+                                                ForEach(secondStatsPlayerList.indices, id:\.self) { index in
+                                                    let item = secondStatsPlayerList[index]
+                                                    
+                                                    HStack(spacing: 0) {
+                                                        ForEach(item.dataList.indices, id:\.self) { index in
+                                                            let data = item.dataList[index]
+                                                            
+                                                            Text(data)
+                                                                .font(.system(size: 15))
+                                                                .frame(width: secondStatsColumnWidthList[safe: index] ?? defaultColumnWidth)
+                                                        }
+                                                    }
+                                                    .frame(height: defaultDataItemHeight)
+                                                }
+                                            }
+                                        }
                                     }
                                 }
-                            }
+                            } // if shouldUseCustomStatsContent
                         } // VStack
                         .padding(.top, 8)
                     } // ScrollView

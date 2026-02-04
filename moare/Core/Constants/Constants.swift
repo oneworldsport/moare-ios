@@ -385,7 +385,7 @@ struct Constants {
         }
         
         static func tennisGameStatusText(
-            status: Int,
+            status: Int?,
             isResultOpened: Bool = true
         ) -> String {
             switch status {
@@ -410,7 +410,7 @@ struct Constants {
             case Tennis.walkover:
                 return isResultOpened ? "부전" : StringConstants.resultOpen
             default:
-                return ""
+                return StringConstants.gameNotStartedStr
             }
         }
         
@@ -424,6 +424,9 @@ struct Constants {
                 return status == MLB.live
             case Constants.Ids.kbo:
                 return status == KBO.live
+            case let id where Constants.Ids.tennisAll.contains(id):
+                let status = Int(status) ?? 0
+                return Tennis.liveList.contains(status)
             default :
                 return false
             }

@@ -130,7 +130,8 @@ struct FBGameStatsView: View {
                             leagueId: displayModel.leagueId,
                             teamNameDic: teamNameDic
                         )
-                    }
+                    },
+                    customStatsContent: {}
                 )
             }
         }

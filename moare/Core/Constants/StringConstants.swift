@@ -183,6 +183,26 @@ struct StringConstants {
                 return ""
             }
         }
+        
+        static let playerStatKeyList = ["aces", "doubleFaults", "firstServeAccuracy", "firstServePointsAccuracy", "secondServePointsAccuracy", "breakPointsSaved", "pointsTotal", "servicePointsScored", "receiverPointsScored", "gamesWon", "serviceGamesWon", "winnersTotal", "forehandWinners", "backhandWinners", "errorsTotal", "unforcedErrorsTotal"]
+        static let playerStatKrnameMap = [
+            "aces": "에이스",
+            "doubleFaults": "더블 폴트",
+            "firstServeAccuracy": "1st 서브 성공",
+            "firstServePointsAccuracy": "1st 서브 득점",
+            "secondServePointsAccuracy": "2nd 서브 득점",
+            "breakPointsSaved": "브레이크 포인트",
+            "pointsTotal": "총 포인트",
+            "servicePointsScored": "서브 포인트",
+            "receiverPointsScored": "리턴 포인트",
+            "gamesWon": "이긴 게임",
+            "serviceGamesWon": "이긴 서브 게임",
+            "winnersTotal": "위너",
+            "forehandWinners": "포핸드 위너",
+            "backhandWinners": "백핸드 위너",
+            "errorsTotal": "실책",
+            "unforcedErrorsTotal": "자책(Unforced errors)"
+        ]
     }
     
     static func viewPreparingAdviseText(type: String) -> String {
