@@ -1688,11 +1688,11 @@
 			};
 			buildConfigurationList = DADA394C2D3A1AC8000D15E0 /* Build configuration list for PBXProject "moare" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = ko;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				ko,
 			);
 			mainGroup = DADA39482D3A1AC8000D15E0;
 			packageReferences = (
