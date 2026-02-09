@@ -202,7 +202,11 @@ struct TennisLeagueScheduleStore {
                 }
                 
             case let .selectGame(game):
-                return .run { [displayModel = state.baseSchedule.displayModel] send in
+                let displayModel = state.baseSchedule.displayModel
+                let leagueKrName = displayModel.relatedLeaguesKrname[state.baseSchedule.selectedRelatedLeagueIndex]
+                let roundName = game.gameInfo?.roundInfo?.name ?? ""
+                
+                return .run { send in
                     do {
                         let result = try await searchClient.fetchById(
                             season: displayModel.season,
@@ -213,8 +217,15 @@ struct TennisLeagueScheduleStore {
                             id: game.gameId
                         )
                         
-                        await send(.delegate(.showGameStats(model: result.data)))
-                        await send(.updateResultOpenedState(gameId: game.gameId, isOpened: true))
+                        if case .tennisGameStats(let responseModel, var gameStatsDisplayModel) = result.data {
+                            // TennisGameStatsView에서 title에 보여줄 데이터 추가
+                            gameStatsDisplayModel.leagueKrName = leagueKrName
+                            gameStatsDisplayModel.roundName = roundName
+                            let updated: SportDecodableModel = .tennisGameStats(responseModel, gameStatsDisplayModel)
+                            
+                            await send(.delegate(.showGameStats(model: updated)))
+                            await send(.updateResultOpenedState(gameId: game.gameId, isOpened: true))
+                        }
                     } catch {
                         print("\(error)")
                     }

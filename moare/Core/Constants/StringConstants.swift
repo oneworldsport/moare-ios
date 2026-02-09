@@ -230,6 +230,15 @@ struct StringConstants {
             if Constants.Ids.mixedDoublesAll.contains(leagueId) { return 4 }
             return 999
         }
+        
+        static func groundTypeKr(groundType: String?) -> String {
+            guard let groundType else { return "" }
+            
+            if groundType.lowercased().contains("hardcourt") { return "하드" }
+            if groundType.lowercased().contains("grass") { return "잔디" }
+            if groundType.lowercased().contains("clay") { return "클레이" }
+            return groundType
+        }
     }
     
     static func viewPreparingAdviseText(type: String) -> String {

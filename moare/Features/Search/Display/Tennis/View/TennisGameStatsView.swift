@@ -18,6 +18,7 @@ struct TennisGameStatsView: View {
     var body: some View {
         let displayModel = store.baseGameStats.displayModel
         let game = displayModel.game
+        let gameInfo = displayModel.game.gameInfo
         let statusCode = game.gameInfo.status?.code ?? 0
         
         let teamCategories: [GameStatsTeamState] = [
@@ -31,18 +32,14 @@ struct TennisGameStatsView: View {
             )
         ]
         
-        let gameDetailTitle = "날짜: \n\n장소: \n관중수: \n심판: "
+        let gameDetailTitle = "날짜: \n\n도시: \n경기장: \n코트 종류: "
         let gameDetailContent: String = {
             var result = ""
-//            result += "\(CalendarUtil.formatDate(date: game.gameSummary?.gameDate).split(separator: " ").first ?? "")\n"
-//            result += "\(CalendarUtil.formatDate(date: game.gameSummary?.gameDate, formatType: .ampm))\n"
-//            result += "\(teamNameDic["venue_\(game.gameSummary?.homeTeamId ?? 0)"] ?? "")\n"
-//            result += "\(game.gameSummary?.attendance ?? 0)\n"
-//            
-//            if let officials = game.officials {
-////                result += officials.map { "• \($0.firstName + $0.lastName)" }.joined(separator: "\n")
-//                result += officials.map { "• \($0.name)" }.joined(separator: "\n")
-//            }
+            result += "\(CalendarUtil.formatDate(date: gameInfo.gameDate).split(separator: " ").first ?? "")\n"
+            result += "\(CalendarUtil.formatDate(date: gameInfo.gameDate, outputFormatType: .ampm))\n"
+            result += "\(gameInfo.venue?.city?.name ?? "")\n"
+            result += "\(gameInfo.venue?.name ?? "")\n"
+            result += "\(StringConstants.Tennis.groundTypeKr(groundType: gameInfo.groundType))\n"
             
             return result
         }()
@@ -72,25 +69,18 @@ struct TennisGameStatsView: View {
                     ),
                     shouldUseCustomStatsContent: true,
                     titleContent: {
-//                        HStack(spacing: 0) {
-//                            NBATitle(
-//                                leagueName: "NBA",
-//                                leagueSeason: displayModel.season
-//                            )
-//                            
-//                            Text(" | ")
-//                                .font(.system(size: 14))
-//                            
-//                            Text(NBAUtil.gameType(gameSummary: game.gameSummary))
-//                                .font(.system(size: 14))
-//                            
-//                            Spacer()
-//                        }
-//                        .padding(.horizontal, UIConstants.Padding.defaultHPadding)
-                        
-//                        if game.gameSummary?.seriesGameNumber.isEmpty == false {
-//                            NBAGameStatsPlayoffsSeriesTextContainer(nbaGameStatsStore: store)
-//                        }
+                        HStack(spacing: 0) {
+                            TennisTournamentTitle(leagueId: displayModel.leagueId, season: displayModel.season)
+                            
+                            Text(" | ")
+                                .font(.system(size: 14))
+                            
+                            Text("\(displayModel.leagueKrName) \(displayModel.roundName)")
+                                .font(.system(size: 14))
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal, UIConstants.Padding.defaultHPadding)
                     },
                     gameContent: {
                         TennisGameStatsScoreInfoContainer(store: store)

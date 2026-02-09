@@ -11,4 +11,6 @@ struct TennisGameStatsDisplayModel: SportDisplayModel {
     let entityInfo: [EntityInfo]
     let season: Int
     let game: TennisGame
+    var leagueKrName: String = ""
+    var roundName: String = ""
 }
