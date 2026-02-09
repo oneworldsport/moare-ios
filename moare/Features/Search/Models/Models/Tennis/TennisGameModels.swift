@@ -31,9 +31,12 @@ struct TennisGameInfo: Decodable, Equatable {
     
     var id: Int { _id ?? 0 }
     var gameDate: String { _gameDate ?? "" }
-    var winnerCode: Int { _winnerCode ?? 0 }
+    var winnerCode: Int { _winnerCode ?? -1 }
     var defaultPeriodCount: Int { _defaultPeriodCount ?? 3 }
     var groundType: String { _groundType ?? "" }
+    
+    var isGameFinished: Bool { winnerCode != -1 } // CHECK: status로 판단하는게 맞을려나?
+    var isHomeWinner: Bool { winnerCode == 1 }
     
     private enum CodingKeys: String, CodingKey {
         case status, homeTeam, awayTeam, homeScore, awayScore, roundInfo, venue, tournament, season, time
@@ -426,19 +429,27 @@ struct TennisGameInfoForSchedule: Decodable, Equatable {
     let roundInfo: TennisGameRoundInfo?
     let homeTeam: TennisGameTeam?
     let awayTeam: TennisGameTeam?
+    private let _winnerCode: Int?
+    
+    var winnerCode: Int { _winnerCode ?? -1 }
+    var isGameFinished: Bool { winnerCode != -1 }
+    var isHomeWinner: Bool { winnerCode == 1 }
     
     private enum CodingKeys: String, CodingKey {
         case roundInfo, homeTeam, awayTeam
+        case _winnerCode = "winnerCode"
     }
     
     init(
         roundInfo: TennisGameRoundInfo?,
         homeTeam: TennisGameTeam?,
-        awayTeam: TennisGameTeam?
+        awayTeam: TennisGameTeam?,
+        winnerCode: Int?
     ) {
         self.roundInfo = roundInfo
         self.homeTeam = homeTeam
         self.awayTeam = awayTeam
+        self._winnerCode = winnerCode
     }
 }
 

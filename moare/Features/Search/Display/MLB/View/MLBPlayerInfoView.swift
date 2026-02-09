@@ -678,7 +678,7 @@ struct MLBPlayerInfoSeventhItem: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         
-                        Text(CalendarUtil.formatDate(date: lastGame.gameInfo.gameDate, formatType: .ampmWithDayOfWeekDate))
+                        Text(CalendarUtil.formatDate(date: lastGame.gameInfo.gameDate, outputFormatType: .ampmWithDayOfWeekDate))
                             .font(.system(size: 15))
                     }
                     .frame(width: UIScreen.main.bounds.width * 0.40) // NOTE: 너비를 화면 전체 너비중 40%로 고정
@@ -824,7 +824,7 @@ struct MLBPlayerInfoEigthItem: View {
                 }
                 .opacity(showContents ? 1 : 0)
                 
-                Text(CalendarUtil.formatDate(date: nextGame.gameInfo.gameDate, formatType: .ampmWithDayOfWeekDate))
+                Text(CalendarUtil.formatDate(date: nextGame.gameInfo.gameDate, outputFormatType: .ampmWithDayOfWeekDate))
                     .font(.system(size: 15))
                     .opacity(showContents ? 1 : 0)
             } else {

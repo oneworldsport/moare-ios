@@ -132,9 +132,9 @@ struct TennisGameStatsScoreInfoContainer: View {
         let homeTeamDefaultName = store.isDoubles ? (homeTeam?.name ?? "") : (homeTeam?.shortName ?? "")
         let awayTeamDefaultName = store.isDoubles ? (awayTeam?.name ?? "") : (awayTeam?.shortName ?? "")
         
-        HStack(alignment: .bottom) {
+        HStack(alignment: .bottom, spacing: 2) {
             VStack(spacing: 0) {
-                HStack(spacing: 6) {
+                HStack(spacing: 4) {
                     URLImage(
                         url: Util.teamLogoURL(leagueId: displayModel.leagueId, teamId: homeTeam?.id),
                         size: .small
@@ -143,6 +143,16 @@ struct TennisGameStatsScoreInfoContainer: View {
                     Text(teamNameDic["short_\(homeTeam?.id ?? 0)"] ?? homeTeamDefaultName)
                         .font(.system(size: 13))
                         .lineLimit(2)
+                    
+                    if gameInfo.isGameFinished && gameInfo.isHomeWinner {
+                        RoundedBorderText(
+                            text: "승",
+                            fontSize: 11,
+                            textColor: .moare,
+                            radius: 4,
+                            strokeColor: .moare
+                        )
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
@@ -154,7 +164,7 @@ struct TennisGameStatsScoreInfoContainer: View {
                 .disabled(true)
                 .padding(.vertical, 4)
                 
-                HStack(spacing: 6) {
+                HStack(spacing: 4) {
                     URLImage(
                         url: Util.teamLogoURL(leagueId: displayModel.leagueId, teamId: awayTeam?.id),
                         size: .small
@@ -163,6 +173,16 @@ struct TennisGameStatsScoreInfoContainer: View {
                     Text(teamNameDic["short_\(awayTeam?.id ?? 0)"] ?? awayTeamDefaultName)
                         .font(.system(size: 13))
                         .lineLimit(2)
+                    
+                    if gameInfo.isGameFinished && !gameInfo.isHomeWinner {
+                        RoundedBorderText(
+                            text: "승",
+                            fontSize: 11,
+                            textColor: .moare,
+                            radius: 4,
+                            strokeColor: .moare
+                        )
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             } // VStack

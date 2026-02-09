@@ -32,6 +32,8 @@ struct BaseScheduleStore<T> {
         var isAllResultOpened = false
         var scrollCalendar = true
         
+        var selectedRelatedLeagueIndex = 0
+        
         var teamNameDictionary: [String: String] = [:]
         
         init(displayModel: T) {
@@ -44,6 +46,7 @@ struct BaseScheduleStore<T> {
         case selectDay(DayInfo, Int)
         case selectYearMonth(yearMonth: String, selectedIndex: Int, isInit: Bool = false)
         case setDefaultYearMonth(date: String)
+        case selectRelatedLeague(index: Int)
     }
     
     @Dependency(\.translatedNameProvider) var nameProvider
@@ -97,13 +100,18 @@ struct BaseScheduleStore<T> {
                 return .none
                 
             case .setDefaultYearMonth(let date):
-                let defaultYearMonth = CalendarUtil.formatDate(date:date, formatType: .yearMonth)
+                let defaultYearMonth = CalendarUtil.formatDate(date:date, outputFormatType: .yearMonth)
                 if let defaultYearMonthIndex = state.yearMonthList.firstIndex(where: { $0 == defaultYearMonth }) {
                     return .send(.selectYearMonth(yearMonth: defaultYearMonth, selectedIndex: defaultYearMonthIndex, isInit: true))
                 } else {
                     print("Index not found.")
                 }
         
+                return .none
+                
+            case .selectRelatedLeague(let index):
+                state.selectedRelatedLeagueIndex = index
+                
                 return .none
             }
         }

@@ -16,4 +16,16 @@ struct TennisLeagueScheduleDisplayModel: SportDisplayModel {
     let endDate: String?
     let relatedLeagueIds: [Int]?
     var games: [TennisGameForSchedule]
+    
+    var sortedRelatedLeagues: [Int]? {
+        relatedLeagueIds?.sorted {
+            StringConstants.Tennis.relatedLeagueRank(leagueId: $0) < StringConstants.Tennis.relatedLeagueRank(leagueId: $1)
+        }
+    }
+    var relatedLeaguesKrname: [String] {
+        (sortedRelatedLeagues ?? [])
+            .compactMap {
+                leagueId in StringConstants.Tennis.relatedLeaguesKrName(leagueId: leagueId)
+            }
+    }
 }

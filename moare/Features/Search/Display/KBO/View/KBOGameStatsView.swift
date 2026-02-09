@@ -63,7 +63,7 @@ struct KBOGameStatsView: View {
         let gameDetailContent: String = {
             var result = ""
             result += "\(CalendarUtil.formatDate(date: game.gameInfo?.date).split(separator: " ").first ?? "")\n"
-            result += "\(CalendarUtil.formatDate(date: game.gameInfo?.date, formatType: .ampm))\n"
+            result += "\(CalendarUtil.formatDate(date: game.gameInfo?.date, outputFormatType: .ampm))\n"
             result += "\(teamNameDic["venue_\(game.gameInfo?.homeTeamId ?? 0)"] ?? "")\n"
             return result
         }()
@@ -126,8 +126,7 @@ struct KBOGameStatsView: View {
 //                            }
                         
                         KBOGameStatsScoreInfoItem(kboGameStatsStore: store)
-                    },
-                    customStatsContent: {}
+                    }
                 )
             }
         }

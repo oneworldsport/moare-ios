@@ -15,6 +15,11 @@ struct ScheduleContainerState {
     var calendarUiState: CalendarUiState? = nil
     var isAllResultOpened: Bool = false
     var shouldShowTournamentButton: Bool = false
+    
+    var startDate: String? = nil
+    var endDate: String? = nil
+    var relatedLeagues: [String] = []
+    var selectedRelatedLeagueIndex: Int = 0
 }
 
 struct ScheduleContainerActions {
@@ -22,4 +27,5 @@ struct ScheduleContainerActions {
     var allResultButtonAction: () -> Void
     var tournamentOrteamStandingsButtonAction: () -> Void
     var tournamentButtonAction: (() -> Void)? = nil
+    var relatedLeagueButtonAction: ((Int) -> Void)? = nil
 }

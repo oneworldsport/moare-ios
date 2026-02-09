@@ -58,6 +58,11 @@ struct Constants {
         static let ausOpenWSingle = 80004
         static let ausOpenWDoubles = 80005
         static let ausOpenAll = [ausOpenMSingle, ausOpenMDoubles, ausOpenMixedDoubles, ausOpenWSingle, ausOpenWDoubles]
+        static let mSingleAll = [ausOpenMSingle]
+        static let mDoublesAll = [ausOpenMDoubles]
+        static let mixedDoublesAll = [ausOpenMixedDoubles]
+        static let wSingleAll = [ausOpenWSingle]
+        static let wDoublesAll = [ausOpenWDoubles]
         static let tennisAll = ausOpenAll
         
         // nba teams

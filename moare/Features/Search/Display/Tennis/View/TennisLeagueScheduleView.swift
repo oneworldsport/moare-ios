@@ -30,7 +30,11 @@ struct TennisLeagueScheduleView: View {
                             selectedYearMonthIndex: store.baseSchedule.selectedYearMonthIndex,
                             selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
-                        isAllResultOpened: store.baseSchedule.isAllResultOpened
+                        isAllResultOpened: store.baseSchedule.isAllResultOpened,
+                        startDate: displayModel.startDate,
+                        endDate: displayModel.endDate,
+                        relatedLeagues: displayModel.relatedLeaguesKrname,
+                        selectedRelatedLeagueIndex: store.baseSchedule.selectedRelatedLeagueIndex
                     ),
                     actions: ScheduleContainerActions(
                         calendarUiActions: CalendarUiActions(
@@ -46,9 +50,14 @@ struct TennisLeagueScheduleView: View {
                         },
                         tournamentOrteamStandingsButtonAction: {
                             store.send(.showTournament)
+                        },
+                        relatedLeagueButtonAction: { index in
+                            store.send(.baseSchedule(.selectRelatedLeague(index: index)))
                         }
                     ),
-                    titleContent: {},
+                    titleContent: {
+                        TennisTournamentTitle(leagueId: displayModel.leagueId, season: displayModel.season)
+                    },
                     gameListContent: {
                         TennisLeagueScheduleList(
                             searchStore: searchStore,
@@ -168,7 +177,9 @@ struct TennisLeagueScheduleListItem: View {
                 gameStatusText: Constants.GameStatus.tennisGameStatusText(status: gameStatus, isResultOpened: isResultOpened),
                 gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: data.gameStatus),
                 isCapsuleButtonDisabled: !Constants.GameStatus.Tennis.finishedList.contains(gameStatus),
-                gameType: data.gameInfo?.roundInfo?.name
+                gameType: data.gameInfo?.roundInfo?.name,
+                shouldShowWinner: data.gameInfo?.isGameFinished ?? false,
+                isHomeWinner: data.gameInfo?.isHomeWinner ?? true
             ),
             actions: ScheduleGameItemActions(
                 onGameItemClick: {

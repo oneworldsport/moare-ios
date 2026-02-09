@@ -184,6 +184,15 @@ struct StringConstants {
             }
         }
         
+        static func tournamentNameStr(leagueId: Int) -> String {
+            switch leagueId {
+            case let id where Constants.Ids.ausOpenAll.contains(id):
+                return "호주오픈"
+            default :
+                return ""
+            }
+        }
+        
         static let playerStatKeyList = ["aces", "doubleFaults", "firstServeAccuracy", "firstServePointsAccuracy", "secondServePointsAccuracy", "breakPointsSaved", "pointsTotal", "servicePointsScored", "receiverPointsScored", "gamesWon", "serviceGamesWon", "winnersTotal", "forehandWinners", "backhandWinners", "errorsTotal", "unforcedErrorsTotal"]
         static let playerStatKrnameMap = [
             "aces": "에이스",
@@ -203,6 +212,24 @@ struct StringConstants {
             "errorsTotal": "실책",
             "unforcedErrorsTotal": "자책(Unforced errors)"
         ]
+        
+        static func relatedLeaguesKrName(leagueId: Int) -> String? {
+            if Constants.Ids.mSingleAll.contains(leagueId) { return "남자 단식" }
+            if Constants.Ids.wSingleAll.contains(leagueId) { return "여자 단식" }
+            if Constants.Ids.mDoublesAll.contains(leagueId) { return "남자 복식" }
+            if Constants.Ids.wDoublesAll.contains(leagueId) { return "여자 복식" }
+            if Constants.Ids.mixedDoublesAll.contains(leagueId) { return "혼합 복식" }
+            return nil
+        }
+        
+        static func relatedLeagueRank(leagueId: Int) -> Int {
+            if Constants.Ids.mSingleAll.contains(leagueId) { return 0 }
+            if Constants.Ids.wSingleAll.contains(leagueId) { return 1 }
+            if Constants.Ids.mDoublesAll.contains(leagueId) { return 2 }
+            if Constants.Ids.wDoublesAll.contains(leagueId) { return 3 }
+            if Constants.Ids.mixedDoublesAll.contains(leagueId) { return 4 }
+            return 999
+        }
     }
     
     static func viewPreparingAdviseText(type: String) -> String {
@@ -229,6 +256,14 @@ struct StringConstants {
             return "대진표"
         } else {
             return "리그 순위"
+        }
+    }
+    
+    static func leagueOrTournamentText(leagueId: Int) -> String {
+        if Constants.Ids.tennisAll.contains(leagueId) {
+            return "대회"
+        } else {
+            return "시즌"
         }
     }
 }

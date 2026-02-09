@@ -79,7 +79,7 @@ struct MLBGameStatsView: View {
             let officials = game.boxscore?.officials ?? []
             var result = ""
             result += "\(CalendarUtil.formatDate(date: game.gameInfo.gameDate).split(separator: " ").first ?? "")\n"
-            result += "\(CalendarUtil.formatDate(date: game.gameInfo.gameDate, formatType: .ampm))\n"
+            result += "\(CalendarUtil.formatDate(date: game.gameInfo.gameDate, outputFormatType: .ampm))\n"
             result += "\(teamNameDic["venue_\(game.teams.home.id)"] ?? "")\n"
             result += "\(game.gameInfo.attendance)\n"
             result += officials.map { "• \($0.official.fullName)" }.joined(separator: "\n")
@@ -154,8 +154,7 @@ struct MLBGameStatsView: View {
 //                                MLBGameStatsScoreInfoItem(mlbGameStatsStore: mlbGameStatsStore)
 //                            }
                         MLBGameStatsScoreInfoItem(mlbGameStatsStore: store)
-                    },
-                    customStatsContent: {}
+                    }
                 )
             }
         }

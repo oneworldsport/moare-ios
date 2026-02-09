@@ -499,7 +499,7 @@ struct NBATeamInfoFifthItem: View {
                 }
                 .opacity(showContents ? 1 : 0)
                 
-                Text(CalendarUtil.formatDate(date: lastGame.gameSummary?.gameDate, formatType: .ampmWithDayOfWeekDate))
+                Text(CalendarUtil.formatDate(date: lastGame.gameSummary?.gameDate, outputFormatType: .ampmWithDayOfWeekDate))
                     .font(.system(size: 15))
                     .opacity(showContents ? 1 : 0)
             }
@@ -569,7 +569,7 @@ struct NBATeamInfoSixthItem: View {
                 }
                 .opacity(showContents ? 1 : 0)
                 
-                Text(CalendarUtil.formatDate(date: nextGame.gameSummary?.gameDate, formatType: .ampmWithDayOfWeekDate))
+                Text(CalendarUtil.formatDate(date: nextGame.gameSummary?.gameDate, outputFormatType: .ampmWithDayOfWeekDate))
                     .font(.system(size: 15))
                     .opacity(showContents ? 1 : 0)
             } else {

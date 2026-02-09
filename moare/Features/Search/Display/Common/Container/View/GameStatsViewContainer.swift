@@ -8,6 +8,25 @@
 import Foundation
 import SwiftUI
 
+extension GameStatsViewContainer where CustomStatsContent == EmptyView {
+    init(
+        state: GameStatsContainerState,
+        actions: GameStatsContainerActions,
+        shouldUseCustomStatsContent: Bool = false,
+        @ViewBuilder titleContent: @escaping () -> TitleContent,
+        @ViewBuilder gameContent: @escaping () -> GameContent
+    ) {
+        self.init(
+            state: state,
+            actions: actions,
+            shouldUseCustomStatsContent: shouldUseCustomStatsContent,
+            titleContent: titleContent,
+            gameContent: gameContent,
+            customStatsContent: { EmptyView() }
+        )
+    }
+}
+
 struct GameStatsViewContainer<TitleContent: View, GameContent: View, CustomStatsContent: View>: View {
     let state: GameStatsContainerState
     let actions: GameStatsContainerActions
@@ -32,8 +51,8 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View, CustomStats
         actions: GameStatsContainerActions,
         shouldUseCustomStatsContent: Bool = false,
         @ViewBuilder titleContent: @escaping () -> TitleContent,
-        @ViewBuilder gameContent: @escaping () -> GameContent, // TODO: Has to give default value
-        @ViewBuilder customStatsContent: @escaping () -> CustomStatsContent // TODO: Has to give default value
+        @ViewBuilder gameContent: @escaping () -> GameContent,
+        @ViewBuilder customStatsContent: @escaping () -> CustomStatsContent
     ) {
         self.state = state
         self.actions = actions

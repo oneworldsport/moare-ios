@@ -20,7 +20,7 @@
     ],
     "startDate": "2026-01-12",
     "endDate": "2026-02-01",
-    "relatedLeagueIds": [80002, 80003, 80004, 80005],
+    "relatedLeagueIds": [80001, 80002, 80003, 80004, 80005],
     "schedule": [
       {
         "gameStatus": "100",
@@ -33,14 +33,15 @@
           "homeTeam": {
             "name": "Y. Nishioka"
           },
-          "awayTeam": {
-            "name": "N. Fatic"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Fatic"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T08:00:00#15345370"
       },
@@ -55,14 +56,15 @@
           "homeTeam": {
             "name": "A. Holmgren"
           },
-          "awayTeam": {
-            "name": "S. Ofner"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "S. Ofner"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-12T08:00:00#15345374"
       },
@@ -77,14 +79,15 @@
           "homeTeam": {
             "name": "J. Engel"
           },
-          "awayTeam": {
-            "name": "G. Loffhagen"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "G. Loffhagen"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-12T08:00:00#15345377"
       },
@@ -99,14 +102,15 @@
           "homeTeam": {
             "name": "A. Galarneau"
           },
-          "awayTeam": {
-            "name": "N. Basavareddy"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Basavareddy"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-12T08:00:00#15345382"
       },
@@ -121,14 +125,15 @@
           "homeTeam": {
             "name": "T. Droguet"
           },
-          "awayTeam": {
-            "name": "N. Jarry"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Jarry"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T08:00:00#15345405"
       },
@@ -143,14 +148,15 @@
           "homeTeam": {
             "name": "R. Carballés Baena"
           },
-          "awayTeam": {
-            "name": "A. Bouquier"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Bouquier"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T08:00:00#15345410"
       },
@@ -165,14 +171,15 @@
           "homeTeam": {
             "name": "J. Pinnington Jones"
           },
-          "awayTeam": {
-            "name": "G. Arnaud Bailly"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "G. Arnaud Bailly"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-12T08:00:00#15345412"
       },
@@ -187,14 +194,15 @@
           "homeTeam": {
             "name": "M. Damm Jr"
           },
-          "awayTeam": {
-            "name": "G. Onclin"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "G. Onclin"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T08:00:00#15345414"
       },
@@ -209,14 +217,15 @@
           "homeTeam": {
             "name": "D. Prižmić"
           },
-          "awayTeam": {
-            "name": "G. Olivieri"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "G. Olivieri"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T09:30:00#15345408"
       },
@@ -231,14 +240,15 @@
           "homeTeam": {
             "name": "A. Fery"
           },
-          "awayTeam": {
-            "name": "E. Winter"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "E. Winter"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T09:35:00#15345404"
       },
@@ -253,14 +263,15 @@
           "homeTeam": {
             "name": "D. Sweeny"
           },
-          "awayTeam": {
-            "name": "A. Pellegrino"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Pellegrino"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T09:40:00#15345389"
       },
@@ -275,14 +286,15 @@
           "homeTeam": {
             "name": "G. Heide"
           },
-          "awayTeam": {
-            "name": "J. Clarke"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Clarke"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T09:55:00#15345406"
       },
@@ -297,14 +309,15 @@
           "homeTeam": {
             "name": "Y. Hanfmann"
           },
-          "awayTeam": {
-            "name": "B. Hassan"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "B. Hassan"
+          },
+          "winnerCode": -1
         },
         "itemKey": "2026-01-12T10:20:00#15345416"
       },
@@ -319,14 +332,15 @@
           "homeTeam": {
             "name": "J. Kym"
           },
-          "awayTeam": {
-            "name": "J. Prado Angelo"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Prado Angelo"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T10:35:00#15345390"
       },
@@ -341,14 +355,15 @@
           "homeTeam": {
             "name": "P. Sekulic"
           },
-          "awayTeam": {
-            "name": "M. Trungelliti"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Trungelliti"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-12T11:15:00#15345419"
       },
@@ -363,14 +378,15 @@
           "homeTeam": {
             "name": "B. Holt"
           },
-          "awayTeam": {
-            "name": "L. Neumayer"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Neumayer"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T11:25:00#15345367"
       },
@@ -385,14 +401,15 @@
           "homeTeam": {
             "name": "J. Faria"
           },
-          "awayTeam": {
-            "name": "L. Mikrut"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Mikrut"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T11:35:00#15345418"
       },
@@ -407,14 +424,15 @@
           "homeTeam": {
             "name": "M. Dodig"
           },
-          "awayTeam": {
-            "name": "B. Hassan"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "B. Hassan"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-12T11:35:00#15351533"
       },
@@ -429,14 +447,15 @@
           "homeTeam": {
             "name": "L. Pavlovic"
           },
-          "awayTeam": {
-            "name": "C. Smith"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Smith"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-12T11:55:00#15345378"
       },
@@ -451,14 +470,15 @@
           "homeTeam": {
             "name": "G. Zeppieri"
           },
-          "awayTeam": {
-            "name": "D. Added"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "D. Added"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T12:05:00#15345380"
       },
@@ -473,14 +493,15 @@
           "homeTeam": {
             "name": "J. Reis Da Silva"
           },
-          "awayTeam": {
-            "name": "H. Rocha"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "H. Rocha"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-12T12:10:00#15345422"
       },
@@ -495,14 +516,15 @@
           "homeTeam": {
             "name": "T. Boyer"
           },
-          "awayTeam": {
-            "name": "A. Barrena"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Barrena"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T12:35:00#15345397"
       },
@@ -517,14 +539,15 @@
           "homeTeam": {
             "name": "M. Lajal"
           },
-          "awayTeam": {
-            "name": "F. Passaro"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "F. Passaro"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-12T13:30:00#15345393"
       },
@@ -539,14 +562,15 @@
           "homeTeam": {
             "name": "N. Basilashvili"
           },
-          "awayTeam": {
-            "name": "G. Bueno"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "G. Bueno"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-12T13:35:00#15345359"
       },
@@ -561,14 +585,15 @@
           "homeTeam": {
             "name": "M. Cassone"
           },
-          "awayTeam": {
-            "name": "Y. Hsu"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "Y. Hsu"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T13:40:00#15345396"
       },
@@ -583,14 +608,15 @@
           "homeTeam": {
             "name": "P. Herbert"
           },
-          "awayTeam": {
-            "name": "G. Den Ouden"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "G. Den Ouden"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T13:45:00#15345363"
       },
@@ -605,14 +631,15 @@
           "homeTeam": {
             "name": "D. Glinka"
           },
-          "awayTeam": {
-            "name": "C. Tabur"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Tabur"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T13:45:00#15345413"
       },
@@ -627,14 +654,15 @@
           "homeTeam": {
             "name": "R. Sakamoto"
           },
-          "awayTeam": {
-            "name": "D. Evans"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "D. Evans"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T13:50:00#15345376"
       },
@@ -649,14 +677,15 @@
           "homeTeam": {
             "name": "L. Van Assche"
           },
-          "awayTeam": {
-            "name": "M. Echargui"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Echargui"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T13:50:00#15345409"
       },
@@ -671,14 +700,15 @@
           "homeTeam": {
             "name": "D. Lajovic"
           },
-          "awayTeam": {
-            "name": "F. D. Acosta"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "F. D. Acosta"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T14:05:00#15345398"
       },
@@ -693,14 +723,15 @@
           "homeTeam": {
             "name": "B. Tomic"
           },
-          "awayTeam": {
-            "name": "H. Dellien"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "H. Dellien"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-12T15:10:00#15345402"
       },
@@ -715,14 +746,15 @@
           "homeTeam": {
             "name": "Z. Piros"
           },
-          "awayTeam": {
-            "name": "L. Klein"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Klein"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-12T15:30:00#15345366"
       },
@@ -737,14 +769,15 @@
           "homeTeam": {
             "name": "O. Crawford"
           },
-          "awayTeam": {
-            "name": "D. Merida"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "D. Merida"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-12T15:55:00#15345365"
       },
@@ -759,14 +792,15 @@
           "homeTeam": {
             "name": "P. Marinkov"
           },
-          "awayTeam": {
-            "name": "J. McCabe"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "J. McCabe"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T08:00:00#15345362"
       },
@@ -781,14 +815,15 @@
           "homeTeam": {
             "name": "Y. Watanuki"
           },
-          "awayTeam": {
-            "name": "N. Budkov Kjaer"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Budkov Kjaer"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T08:00:00#15345369"
       },
@@ -803,14 +838,15 @@
           "homeTeam": {
             "name": "B. Ellis"
           },
-          "awayTeam": {
-            "name": "S. Travaglia"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "S. Travaglia"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T08:00:00#15345375"
       },
@@ -825,14 +861,15 @@
           "homeTeam": {
             "name": "C. Tseng"
           },
-          "awayTeam": {
-            "name": "M. Landaluce"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Landaluce"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T08:00:00#15345386"
       },
@@ -847,14 +884,15 @@
           "homeTeam": {
             "name": "L. Giustino"
           },
-          "awayTeam": {
-            "name": "F. Maestrelli"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "F. Maestrelli"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T08:00:00#15345399"
       },
@@ -869,14 +907,15 @@
           "homeTeam": {
             "name": "A. Gullien Meza"
           },
-          "awayTeam": {
-            "name": "T. Seyboth Wild"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "T. Seyboth Wild"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T08:00:00#15345403"
       },
@@ -891,14 +930,15 @@
           "homeTeam": {
             "name": "B. Harris"
           },
-          "awayTeam": {
-            "name": "C. Rodesch"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Rodesch"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T09:25:00#15345411"
       },
@@ -913,14 +953,15 @@
           "homeTeam": {
             "name": "Y. Wu"
           },
-          "awayTeam": {
-            "name": "M. Krueger"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Krueger"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-13T09:30:00#15345401"
       },
@@ -935,14 +976,15 @@
           "homeTeam": {
             "name": "A. Bolt"
           },
-          "awayTeam": {
-            "name": "E. Ymer"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "E. Ymer"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T09:35:00#15345383"
       },
@@ -957,14 +999,15 @@
           "homeTeam": {
             "name": "O. Virtanen"
           },
-          "awayTeam": {
-            "name": "N. Mejia"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Mejia"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T09:35:00#15345392"
       },
@@ -979,14 +1022,15 @@
           "homeTeam": {
             "name": "E. Moller"
           },
-          "awayTeam": {
-            "name": "M. Polmans"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Polmans"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-13T10:05:00#15345385"
       },
@@ -1001,14 +1045,15 @@
           "homeTeam": {
             "name": "C. Wong"
           },
-          "awayTeam": {
-            "name": "U. Blanchet"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "U. Blanchet"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-13T10:10:00#15345387"
       },
@@ -1023,14 +1068,15 @@
           "homeTeam": {
             "name": "P. Llamas Ruiz"
           },
-          "awayTeam": {
-            "name": "H. Bernet"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "H. Bernet"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-13T10:15:00#15345388"
       },
@@ -1045,14 +1091,15 @@
           "homeTeam": {
             "name": "L. Tu"
           },
-          "awayTeam": {
-            "name": "R. Jodar"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "R. Jodar"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T10:55:00#15345407"
       },
@@ -1067,14 +1114,15 @@
           "homeTeam": {
             "name": "V. Sachko"
           },
-          "awayTeam": {
-            "name": "M. Mmoh"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Mmoh"
+          },
+          "winnerCode": -1
         },
         "itemKey": "2026-01-13T11:30:00#15345371"
       },
@@ -1089,14 +1137,15 @@
           "homeTeam": {
             "name": "C. Hewitt"
           },
-          "awayTeam": {
-            "name": "M. Zheng"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Zheng"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T11:55:00#15345381"
       },
@@ -1111,14 +1160,15 @@
           "homeTeam": {
             "name": "J. Kubler"
           },
-          "awayTeam": {
-            "name": "H. Mayot"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "H. Mayot"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-13T12:00:00#15345360"
       },
@@ -1133,14 +1183,15 @@
           "homeTeam": {
             "name": "H. Habib"
           },
-          "awayTeam": {
-            "name": "Z. Svajda"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "Z. Svajda"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T12:15:00#15345395"
       },
@@ -1155,14 +1206,15 @@
           "homeTeam": {
             "name": "T. Barrios Vera"
           },
-          "awayTeam": {
-            "name": "S. Gueymard Wayenburg"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "S. Gueymard Wayenburg"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-13T12:40:00#15345368"
       },
@@ -1177,14 +1229,15 @@
           "homeTeam": {
             "name": "N. Moreno de Alboran"
           },
-          "awayTeam": {
-            "name": "V. Gaubas"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "V. Gaubas"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T12:50:00#15345384"
       },
@@ -1199,14 +1252,15 @@
           "homeTeam": {
             "name": "K. Coppejans"
           },
-          "awayTeam": {
-            "name": "K. Nishikori"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "K. Nishikori"
+          },
+          "winnerCode": -1
         },
         "itemKey": "2026-01-13T13:05:00#15345394"
       },
@@ -1221,14 +1275,15 @@
           "homeTeam": {
             "name": "K. Coppejans"
           },
-          "awayTeam": {
-            "name": "O. Jasika"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "O. Jasika"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-13T13:30:00#15361666"
       },
@@ -1243,14 +1298,15 @@
           "homeTeam": {
             "name": "M. McDonald"
           },
-          "awayTeam": {
-            "name": "D. Popko"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "D. Popko"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-13T13:45:00#15345364"
       },
@@ -1265,14 +1321,15 @@
           "homeTeam": {
             "name": "S. Shimabukuro"
           },
-          "awayTeam": {
-            "name": "A. Molcan"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Molcan"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T13:45:00#15345373"
       },
@@ -1287,14 +1344,15 @@
           "homeTeam": {
             "name": "J. Ficovich"
           },
-          "awayTeam": {
-            "name": "J. Rodionov"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Rodionov"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T14:20:00#15345400"
       },
@@ -1309,14 +1367,15 @@
           "homeTeam": {
             "name": "J. Choinski"
           },
-          "awayTeam": {
-            "name": "L. Riedi"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Riedi"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T14:25:00#15345391"
       },
@@ -1331,14 +1390,15 @@
           "homeTeam": {
             "name": "R. Pacheco Mendez"
           },
-          "awayTeam": {
-            "name": "A. Vallejo"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Vallejo"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T14:35:00#15345417"
       },
@@ -1353,14 +1413,15 @@
           "homeTeam": {
             "name": "A. Blockx"
           },
-          "awayTeam": {
-            "name": "M. Cecchinato"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Cecchinato"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-13T14:40:00#15345372"
       },
@@ -1375,14 +1436,15 @@
           "homeTeam": {
             "name": "V. Sachko"
           },
-          "awayTeam": {
-            "name": "V. Durasovic"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "V. Durasovic"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-13T14:45:00#15357743"
       },
@@ -1397,14 +1459,15 @@
           "homeTeam": {
             "name": "D. Galan"
           },
-          "awayTeam": {
-            "name": "H. Grenier"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "H. Grenier"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T15:05:00#15345379"
       },
@@ -1419,14 +1482,15 @@
           "homeTeam": {
             "name": "L. Harris"
           },
-          "awayTeam": {
-            "name": "F. Cinà"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "F. Cinà"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T15:05:00#15345420"
       },
@@ -1441,14 +1505,15 @@
           "homeTeam": {
             "name": "M. Bouzige"
           },
-          "awayTeam": {
-            "name": "L. Draxl"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Draxl"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T15:20:00#15345361"
       },
@@ -1463,14 +1528,15 @@
           "homeTeam": {
             "name": "R. Burruchaga"
           },
-          "awayTeam": {
-            "name": "R. Peniston"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "R. Peniston"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-13T16:05:00#15345415"
       },
@@ -1485,14 +1551,15 @@
           "homeTeam": {
             "name": "Z. Kolar"
           },
-          "awayTeam": {
-            "name": "A. Gea"
-          },
           "roundInfo": {
             "round": 1,
             "name": "예선 - 1라운드",
             "slug": "qualification-round-1"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Gea"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-13T16:40:00#15345421"
       },
@@ -1507,14 +1574,15 @@
           "homeTeam": {
             "name": "N. Basavareddy"
           },
-          "awayTeam": {
-            "name": "S. Ofner"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "S. Ofner"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-14T08:00:00#15352510"
       },
@@ -1529,14 +1597,15 @@
           "homeTeam": {
             "name": "R. Carballés Baena"
           },
-          "awayTeam": {
-            "name": "G. Arnaud Bailly"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "G. Arnaud Bailly"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T08:00:00#15352511"
       },
@@ -1551,14 +1620,15 @@
           "homeTeam": {
             "name": "M. Damm Jr"
           },
-          "awayTeam": {
-            "name": "T. Droguet"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "T. Droguet"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-14T08:00:00#15352512"
       },
@@ -1573,14 +1643,15 @@
           "homeTeam": {
             "name": "Y. Nishioka"
           },
-          "awayTeam": {
-            "name": "G. Loffhagen"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "G. Loffhagen"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T08:00:00#15352532"
       },
@@ -1595,14 +1666,15 @@
           "homeTeam": {
             "name": "B. Holt"
           },
-          "awayTeam": {
-            "name": "G. Zeppieri"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "G. Zeppieri"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T08:00:00#15352630"
       },
@@ -1617,14 +1689,15 @@
           "homeTeam": {
             "name": "R. Sakamoto"
           },
-          "awayTeam": {
-            "name": "C. Smith"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Smith"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-14T08:00:00#15352705"
       },
@@ -1639,14 +1712,15 @@
           "homeTeam": {
             "name": "J. Kym"
           },
-          "awayTeam": {
-            "name": "D. Sweeny"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "D. Sweeny"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T09:30:00#15352550"
       },
@@ -1661,14 +1735,15 @@
           "homeTeam": {
             "name": "B. Hassan"
           },
-          "awayTeam": {
-            "name": "J. Faria"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Faria"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T09:30:00#15352634"
       },
@@ -1683,14 +1758,15 @@
           "homeTeam": {
             "name": "G. Bueno"
           },
-          "awayTeam": {
-            "name": "P. Herbert"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "P. Herbert"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T09:40:00#15352806"
       },
@@ -1705,14 +1781,15 @@
           "homeTeam": {
             "name": "D. Prižmić"
           },
-          "awayTeam": {
-            "name": "G. Heide"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "G. Heide"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-14T09:45:00#15352551"
       },
@@ -1727,14 +1804,15 @@
           "homeTeam": {
             "name": "H. Rocha"
           },
-          "awayTeam": {
-            "name": "M. Trungelliti"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Trungelliti"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T09:45:00#15352629"
       },
@@ -1749,14 +1827,15 @@
           "homeTeam": {
             "name": "M. Landaluce"
           },
-          "awayTeam": {
-            "name": "S. Travaglia"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "S. Travaglia"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T10:50:00#15361649"
       },
@@ -1771,14 +1850,15 @@
           "homeTeam": {
             "name": "J. McCabe"
           },
-          "awayTeam": {
-            "name": "N. Budkov Kjaer"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Budkov Kjaer"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T11:25:00#15361648"
       },
@@ -1793,14 +1873,15 @@
           "homeTeam": {
             "name": "P. Llamas Ruiz"
           },
-          "awayTeam": {
-            "name": "C. Wong"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Wong"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T11:25:00#15361667"
       },
@@ -1815,14 +1896,15 @@
           "homeTeam": {
             "name": "T. Seyboth Wild"
           },
-          "awayTeam": {
-            "name": "F. Maestrelli"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "F. Maestrelli"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T11:50:00#15361650"
       },
@@ -1837,14 +1919,15 @@
           "homeTeam": {
             "name": "N. Mejia"
           },
-          "awayTeam": {
-            "name": "Y. Wu"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "Y. Wu"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T11:50:00#15361658"
       },
@@ -1859,14 +1942,15 @@
           "homeTeam": {
             "name": "A. Fery"
           },
-          "awayTeam": {
-            "name": "B. Tomic"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "B. Tomic"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-14T12:00:00#15353235"
       },
@@ -1881,14 +1965,15 @@
           "homeTeam": {
             "name": "C. Rodesch"
           },
-          "awayTeam": {
-            "name": "R. Jodar"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "R. Jodar"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T12:30:00#15361659"
       },
@@ -1903,14 +1988,15 @@
           "homeTeam": {
             "name": "T. Boyer"
           },
-          "awayTeam": {
-            "name": "F. Passaro"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "F. Passaro"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-14T13:00:00#15352706"
       },
@@ -1925,14 +2011,15 @@
           "homeTeam": {
             "name": "L. Riedi"
           },
-          "awayTeam": {
-            "name": "K. Coppejans"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "K. Coppejans"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T13:00:00#15361785"
       },
@@ -1947,14 +2034,15 @@
           "homeTeam": {
             "name": "E. Moller"
           },
-          "awayTeam": {
-            "name": "E. Ymer"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "E. Ymer"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T13:05:00#15361662"
       },
@@ -1969,14 +2057,15 @@
           "homeTeam": {
             "name": "D. Lajovic"
           },
-          "awayTeam": {
-            "name": "M. Cassone"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Cassone"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-14T13:20:00#15355594"
       },
@@ -1991,14 +2080,15 @@
           "homeTeam": {
             "name": "D. Glinka"
           },
-          "awayTeam": {
-            "name": "L. Van Assche"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Van Assche"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T13:25:00#15352934"
       },
@@ -2013,14 +2103,15 @@
           "homeTeam": {
             "name": "T. Barrios Vera"
           },
-          "awayTeam": {
-            "name": "M. Zheng"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Zheng"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T14:25:00#15361736"
       },
@@ -2035,14 +2126,15 @@
           "homeTeam": {
             "name": "A. Blockx"
           },
-          "awayTeam": {
-            "name": "A. Molcan"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Molcan"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-14T14:35:00#15361797"
       },
@@ -2057,14 +2149,15 @@
           "homeTeam": {
             "name": "F. Cinà"
           },
-          "awayTeam": {
-            "name": "A. Vallejo"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Vallejo"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T15:15:00#15362356"
       },
@@ -2079,14 +2172,15 @@
           "homeTeam": {
             "name": "M. McDonald"
           },
-          "awayTeam": {
-            "name": "H. Grenier"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "H. Grenier"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-14T15:35:00#15362160"
       },
@@ -2101,14 +2195,15 @@
           "homeTeam": {
             "name": "D. Merida"
           },
-          "awayTeam": {
-            "name": "L. Klein"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Klein"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T15:40:00#15357625"
       },
@@ -2123,14 +2218,15 @@
           "homeTeam": {
             "name": "R. Burruchaga"
           },
-          "awayTeam": {
-            "name": "A. Gea"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Gea"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T15:50:00#15362413"
       },
@@ -2145,14 +2241,15 @@
           "homeTeam": {
             "name": "J. Rodionov"
           },
-          "awayTeam": {
-            "name": "Z. Svajda"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "Z. Svajda"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T16:00:00#15361798"
       },
@@ -2167,14 +2264,15 @@
           "homeTeam": {
             "name": "V. Sachko"
           },
-          "awayTeam": {
-            "name": "L. Draxl"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Draxl"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-14T16:15:00#15362230"
       },
@@ -2189,14 +2287,15 @@
           "homeTeam": {
             "name": "J. Kubler"
           },
-          "awayTeam": {
-            "name": "V. Gaubas"
-          },
           "roundInfo": {
             "round": 2,
             "name": "예선 - 2라운드",
             "slug": "qualification-round-2"
-          }
+          },
+          "awayTeam": {
+            "name": "V. Gaubas"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-14T16:20:00#15361735"
       },
@@ -2211,14 +2310,15 @@
           "homeTeam": {
             "name": "G. Zeppieri"
           },
-          "awayTeam": {
-            "name": "R. Sakamoto"
-          },
           "roundInfo": {
             "round": 250,
             "name": "예선 - 3라운드",
             "slug": "qualification-final"
-          }
+          },
+          "awayTeam": {
+            "name": "R. Sakamoto"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-15T09:00:00#15365936"
       },
@@ -2233,14 +2333,15 @@
           "homeTeam": {
             "name": "G. Loffhagen"
           },
-          "awayTeam": {
-            "name": "N. Basavareddy"
-          },
           "roundInfo": {
             "round": 250,
             "name": "예선 - 3라운드",
             "slug": "qualification-final"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Basavareddy"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-15T09:00:00#15365968"
       },
@@ -2255,14 +2356,15 @@
           "homeTeam": {
             "name": "J. Faria"
           },
-          "awayTeam": {
-            "name": "M. Trungelliti"
-          },
           "roundInfo": {
             "round": 250,
             "name": "예선 - 3라운드",
             "slug": "qualification-final"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Trungelliti"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-15T09:00:00#15366022"
       },
@@ -2277,14 +2379,15 @@
           "homeTeam": {
             "name": "S. Travaglia"
           },
-          "awayTeam": {
-            "name": "D. Sweeny"
-          },
           "roundInfo": {
             "round": 250,
             "name": "예선 - 3라운드",
             "slug": "qualification-final"
-          }
+          },
+          "awayTeam": {
+            "name": "D. Sweeny"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-15T09:00:00#15366025"
       },
@@ -2299,14 +2402,15 @@
           "homeTeam": {
             "name": "D. Prižmić"
           },
-          "awayTeam": {
-            "name": "A. Fery"
-          },
           "roundInfo": {
             "round": 250,
             "name": "예선 - 3라운드",
             "slug": "qualification-final"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Fery"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-15T09:00:00#15366113"
       },
@@ -2321,14 +2425,15 @@
           "homeTeam": {
             "name": "P. Herbert"
           },
-          "awayTeam": {
-            "name": "N. Budkov Kjaer"
-          },
           "roundInfo": {
             "round": 250,
             "name": "예선 - 3라운드",
             "slug": "qualification-final"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Budkov Kjaer"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-15T10:45:00#15366194"
       },
@@ -2343,14 +2448,15 @@
           "homeTeam": {
             "name": "Y. Wu"
           },
-          "awayTeam": {
-            "name": "T. Boyer"
-          },
           "roundInfo": {
             "round": 250,
             "name": "예선 - 3라운드",
             "slug": "qualification-final"
-          }
+          },
+          "awayTeam": {
+            "name": "T. Boyer"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-15T11:00:00#15366396"
       },
@@ -2365,14 +2471,15 @@
           "homeTeam": {
             "name": "R. Jodar"
           },
-          "awayTeam": {
-            "name": "L. Van Assche"
-          },
           "roundInfo": {
             "round": 250,
             "name": "예선 - 3라운드",
             "slug": "qualification-final"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Van Assche"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-15T11:05:00#15366371"
       },
@@ -2387,14 +2494,15 @@
           "homeTeam": {
             "name": "E. Ymer"
           },
-          "awayTeam": {
-            "name": "C. Wong"
-          },
           "roundInfo": {
             "round": 250,
             "name": "예선 - 3라운드",
             "slug": "qualification-final"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Wong"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-15T11:30:00#15366379"
       },
@@ -2409,14 +2517,15 @@
           "homeTeam": {
             "name": "D. Lajovic"
           },
-          "awayTeam": {
-            "name": "F. Maestrelli"
-          },
           "roundInfo": {
             "round": 250,
             "name": "예선 - 3라운드",
             "slug": "qualification-final"
-          }
+          },
+          "awayTeam": {
+            "name": "F. Maestrelli"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-15T11:45:00#15366370"
       },
@@ -2431,14 +2540,15 @@
           "homeTeam": {
             "name": "M. McDonald"
           },
-          "awayTeam": {
-            "name": "L. Draxl"
-          },
           "roundInfo": {
             "round": 250,
             "name": "예선 - 3라운드",
             "slug": "qualification-final"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Draxl"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-15T12:05:00#15368850"
       },
@@ -2453,14 +2563,15 @@
           "homeTeam": {
             "name": "G. Arnaud Bailly"
           },
-          "awayTeam": {
-            "name": "M. Damm Jr"
-          },
           "roundInfo": {
             "round": 250,
             "name": "예선 - 3라운드",
             "slug": "qualification-final"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Damm Jr"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-15T12:15:00#15366021"
       },
@@ -2475,14 +2586,15 @@
           "homeTeam": {
             "name": "A. Gea"
           },
-          "awayTeam": {
-            "name": "A. Vallejo"
-          },
           "roundInfo": {
             "round": 250,
             "name": "예선 - 3라운드",
             "slug": "qualification-final"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Vallejo"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-15T12:50:00#15367279"
       },
@@ -2497,14 +2609,15 @@
           "homeTeam": {
             "name": "M. Zheng"
           },
-          "awayTeam": {
-            "name": "L. Klein"
-          },
           "roundInfo": {
             "round": 250,
             "name": "예선 - 3라운드",
             "slug": "qualification-final"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Klein"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-15T13:15:00#15367594"
       },
@@ -2519,14 +2632,15 @@
           "homeTeam": {
             "name": "K. Coppejans"
           },
-          "awayTeam": {
-            "name": "Z. Svajda"
-          },
           "roundInfo": {
             "round": 250,
             "name": "예선 - 3라운드",
             "slug": "qualification-final"
-          }
+          },
+          "awayTeam": {
+            "name": "Z. Svajda"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-15T14:00:00#15367255"
       },
@@ -2541,14 +2655,15 @@
           "homeTeam": {
             "name": "A. Blockx"
           },
-          "awayTeam": {
-            "name": "J. Kubler"
-          },
           "roundInfo": {
             "round": 250,
             "name": "예선 - 3라운드",
             "slug": "qualification-final"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Kubler"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-15T14:00:00#15367621"
       },
@@ -2563,14 +2678,15 @@
           "homeTeam": {
             "name": "M. Kecmanovic"
           },
-          "awayTeam": {
-            "name": "T. Etcheverry"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "T. Etcheverry"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-18T09:00:00#15372354"
       },
@@ -2585,14 +2701,15 @@
           "homeTeam": {
             "name": "A. Fery"
           },
-          "awayTeam": {
-            "name": "F. Cobolli"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "F. Cobolli"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-18T09:00:00#15373171"
       },
@@ -2607,14 +2724,15 @@
           "homeTeam": {
             "name": "T. Schoolkate"
           },
-          "awayTeam": {
-            "name": "C. Moutet"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Moutet"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-18T10:45:00#15372342"
       },
@@ -2629,14 +2747,15 @@
           "homeTeam": {
             "name": "A. Zverev"
           },
-          "awayTeam": {
-            "name": "G. Diallo"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "G. Diallo"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-18T11:20:00#15372361"
       },
@@ -2651,14 +2770,15 @@
           "homeTeam": {
             "name": "F. Cerundolo"
           },
-          "awayTeam": {
-            "name": "Z. Zhang"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "Z. Zhang"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-18T11:25:00#15372353"
       },
@@ -2673,14 +2793,15 @@
           "homeTeam": {
             "name": "P. Kypson"
           },
-          "awayTeam": {
-            "name": "F. Comesaña"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "F. Comesaña"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-18T12:00:00#15372346"
       },
@@ -2695,14 +2816,15 @@
           "homeTeam": {
             "name": "E. Nava"
           },
-          "awayTeam": {
-            "name": "K. Jacquet"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "K. Jacquet"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-18T12:10:00#15372352"
       },
@@ -2717,14 +2839,15 @@
           "homeTeam": {
             "name": "L. Draxl"
           },
-          "awayTeam": {
-            "name": "D. Džumhur"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "D. Džumhur"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-18T12:40:00#15373169"
       },
@@ -2739,14 +2862,15 @@
           "homeTeam": {
             "name": "A. Cazaux"
           },
-          "awayTeam": {
-            "name": "J. Faria"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Faria"
+          },
+          "winnerCode": -1
         },
         "itemKey": "2026-01-18T13:10:00#15373168"
       },
@@ -2761,14 +2885,15 @@
           "homeTeam": {
             "name": "M. Zheng"
           },
-          "awayTeam": {
-            "name": "S. Korda"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "S. Korda"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-18T13:45:00#15373173"
       },
@@ -2783,14 +2908,15 @@
           "homeTeam": {
             "name": "A. Blockx"
           },
-          "awayTeam": {
-            "name": "J. Faria"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Faria"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-18T15:00:00#15383833"
       },
@@ -2805,14 +2931,15 @@
           "homeTeam": {
             "name": "C. Ugo Carabelli"
           },
-          "awayTeam": {
-            "name": "M. Fucsovics"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Fucsovics"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-18T15:05:00#15372359"
       },
@@ -2827,14 +2954,15 @@
           "homeTeam": {
             "name": "F. Tiafoe"
           },
-          "awayTeam": {
-            "name": "J. Kubler"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Kubler"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-18T15:15:00#15373170"
       },
@@ -2849,14 +2977,15 @@
           "homeTeam": {
             "name": "Y. Hanfmann"
           },
-          "awayTeam": {
-            "name": "Z. Svajda"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "Z. Svajda"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-18T16:00:00#15373174"
       },
@@ -2871,14 +3000,15 @@
           "homeTeam": {
             "name": "B. Bonzi"
           },
-          "awayTeam": {
-            "name": "C. Norrie"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Norrie"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-18T16:05:00#15372356"
       },
@@ -2893,14 +3023,15 @@
           "homeTeam": {
             "name": "A. Bublik"
           },
-          "awayTeam": {
-            "name": "J. Brooksby"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Brooksby"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-18T17:10:00#15372339"
       },
@@ -2915,14 +3046,15 @@
           "homeTeam": {
             "name": "C. Alcaraz"
           },
-          "awayTeam": {
-            "name": "A. Walton"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Walton"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-18T18:55:00#15372343"
       },
@@ -2937,14 +3069,15 @@
           "homeTeam": {
             "name": "N. Borges"
           },
-          "awayTeam": {
-            "name": "F. Auger-Aliassime"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "F. Auger-Aliassime"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-19T09:00:00#15372347"
       },
@@ -2959,14 +3092,15 @@
           "homeTeam": {
             "name": "M. Navone"
           },
-          "awayTeam": {
-            "name": "H. Medjedovic"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "H. Medjedovic"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-19T09:00:00#15372358"
       },
@@ -2981,14 +3115,15 @@
           "homeTeam": {
             "name": "Q. Halys"
           },
-          "awayTeam": {
-            "name": "A. Tabilo"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Tabilo"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-19T09:00:00#15372360"
       },
@@ -3003,14 +3138,15 @@
           "homeTeam": {
             "name": "E. Ymer"
           },
-          "awayTeam": {
-            "name": "A. Shevchenko"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Shevchenko"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-19T09:05:00#15373167"
       },
@@ -3025,14 +3161,15 @@
           "homeTeam": {
             "name": "D. Medvedev"
           },
-          "awayTeam": {
-            "name": "J. De Jong"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "J. De Jong"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-19T09:40:00#15372350"
       },
@@ -3047,14 +3184,15 @@
           "homeTeam": {
             "name": "F. Marozsán"
           },
-          "awayTeam": {
-            "name": "A. Rinderknech"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Rinderknech"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-19T10:20:00#15372345"
       },
@@ -3069,14 +3207,15 @@
           "homeTeam": {
             "name": "T. Paul"
           },
-          "awayTeam": {
-            "name": "A. Kovacevic"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Kovacevic"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-19T10:30:00#15372344"
       },
@@ -3091,14 +3230,15 @@
           "homeTeam": {
             "name": "J. Shang"
           },
-          "awayTeam": {
-            "name": "R. Bautista Agut"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "R. Bautista Agut"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-19T10:30:00#15372366"
       },
@@ -3113,14 +3253,15 @@
           "homeTeam": {
             "name": "N. Budkov Kjaer"
           },
-          "awayTeam": {
-            "name": "R. Opelka"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "R. Opelka"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-19T10:45:00#15373172"
       },
@@ -3135,14 +3276,15 @@
           "homeTeam": {
             "name": "M. Arnaldi"
           },
-          "awayTeam": {
-            "name": "A. Rublev"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Rublev"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-19T11:00:00#15372355"
       },
@@ -3157,14 +3299,15 @@
           "homeTeam": {
             "name": "J. Cerundolo"
           },
-          "awayTeam": {
-            "name": "J. Thompson"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Thompson"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-19T11:25:00#15372362"
       },
@@ -3179,14 +3322,15 @@
           "homeTeam": {
             "name": "M. Berrettini"
           },
-          "awayTeam": {
-            "name": "A. de Minaur"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "A. de Minaur"
+          },
+          "winnerCode": -1
         },
         "itemKey": "2026-01-19T11:30:00#15372357"
       },
@@ -3201,14 +3345,15 @@
           "homeTeam": {
             "name": "M. McDonald"
           },
-          "awayTeam": {
-            "name": "A. de Minaur"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "A. de Minaur"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-19T11:45:00#15384174"
       },
@@ -3223,14 +3368,15 @@
           "homeTeam": {
             "name": "L. Tien"
           },
-          "awayTeam": {
-            "name": "M. Giron"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Giron"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-19T11:50:00#15372348"
       },
@@ -3245,14 +3391,15 @@
           "homeTeam": {
             "name": "F. Misolic"
           },
-          "awayTeam": {
-            "name": "A. Davidovich Fokina"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Davidovich Fokina"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-19T12:20:00#15372340"
       },
@@ -3267,14 +3414,15 @@
           "homeTeam": {
             "name": "T. Tirante"
           },
-          "awayTeam": {
-            "name": "A. Vukic"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Vukic"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-19T13:00:00#15372341"
       },
@@ -3289,16 +3437,40 @@
           "homeTeam": {
             "name": "L. Djere"
           },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          },
           "awayTeam": {
             "name": "S. Wawrinka"
+          },
+          "winnerCode": 2
+        },
+        "itemKey": "2026-01-19T13:15:00#15372368"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 275948,
+        "homeTeamId": 108709,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 1,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "K. Majchrzak"
           },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Fearnley"
+          },
+          "winnerCode": 1
         },
-        "itemKey": "2026-01-19T13:15:00#15372368"
+        "itemKey": "2026-01-19T13:35:00#15372349"
       },
       {
         "gameStatus": "100",
@@ -3311,14 +3483,15 @@
           "homeTeam": {
             "name": "B. Nakashima"
           },
-          "awayTeam": {
-            "name": "B. Van de Zandschulp"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "B. Van de Zandschulp"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-19T13:45:00#15372375"
       },
@@ -3333,14 +3506,15 @@
           "homeTeam": {
             "name": "D. Altmaier"
           },
-          "awayTeam": {
-            "name": "M. Čilić"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Čilić"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-19T13:45:00#15372386"
       },
@@ -3355,14 +3529,15 @@
           "homeTeam": {
             "name": "T. Atmane"
           },
-          "awayTeam": {
-            "name": "F. Maestrelli"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "F. Maestrelli"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-19T14:50:00#15373164"
       },
@@ -3377,14 +3552,15 @@
           "homeTeam": {
             "name": "J. Munar"
           },
-          "awayTeam": {
-            "name": "D. Svrcina"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "D. Svrcina"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-19T15:05:30#15372382"
       },
@@ -3399,14 +3575,15 @@
           "homeTeam": {
             "name": "D. Shapovalov"
           },
-          "awayTeam": {
-            "name": "Y. Bu"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "Y. Bu"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-19T15:10:00#15372377"
       },
@@ -3421,14 +3598,15 @@
           "homeTeam": {
             "name": "A. Mannarino"
           },
-          "awayTeam": {
-            "name": "R. Hijikata"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "R. Hijikata"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-19T16:10:00#15372374"
       },
@@ -3443,14 +3621,15 @@
           "homeTeam": {
             "name": "J. Lehečka"
           },
-          "awayTeam": {
-            "name": "A. Gea"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Gea"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-19T16:35:00#15373166"
       },
@@ -3465,14 +3644,15 @@
           "homeTeam": {
             "name": "M. Damm Jr"
           },
-          "awayTeam": {
-            "name": "V. Vacherot"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "V. Vacherot"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-19T16:45:00#15373162"
       },
@@ -3487,14 +3667,15 @@
           "homeTeam": {
             "name": "A. Popyrin"
           },
-          "awayTeam": {
-            "name": "A. Muller"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Muller"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-19T18:05:00#15372351"
       },
@@ -3509,14 +3690,15 @@
           "homeTeam": {
             "name": "M. Bellucci"
           },
-          "awayTeam": {
-            "name": "C. Ruud"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Ruud"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-19T19:30:00#15372385"
       },
@@ -3531,14 +3713,15 @@
           "homeTeam": {
             "name": "P. Martinez"
           },
-          "awayTeam": {
-            "name": "N. Djokovic"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Djokovic"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-19T19:35:00#15372364"
       },
@@ -3553,14 +3736,15 @@
           "homeTeam": {
             "name": "L. Sonego"
           },
-          "awayTeam": {
-            "name": "C. Taberner"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Taberner"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-20T09:00:00#15372372"
       },
@@ -3575,14 +3759,15 @@
           "homeTeam": {
             "name": "C. Garin"
           },
-          "awayTeam": {
-            "name": "L. Darderi"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Darderi"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-20T09:00:00#15372381"
       },
@@ -3597,14 +3782,15 @@
           "homeTeam": {
             "name": "L. Musetti"
           },
-          "awayTeam": {
-            "name": "R. Collignon"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "R. Collignon"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-20T09:30:00#15372373"
       },
@@ -3619,14 +3805,15 @@
           "homeTeam": {
             "name": "E. Quinn"
           },
-          "awayTeam": {
-            "name": "T. Griekspoor"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "T. Griekspoor"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-20T10:20:00#15372365"
       },
@@ -3641,14 +3828,15 @@
           "homeTeam": {
             "name": "G. Mpetshi Perricard"
           },
-          "awayTeam": {
-            "name": "S. Báez"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "S. Báez"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-20T10:40:00#15372383"
       },
@@ -3663,14 +3851,15 @@
           "homeTeam": {
             "name": "K. Khachanov"
           },
-          "awayTeam": {
-            "name": "A. Michelsen"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Michelsen"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-20T11:05:00#15372384"
       },
@@ -3685,14 +3874,15 @@
           "homeTeam": {
             "name": "J. Mensik"
           },
-          "awayTeam": {
-            "name": "P. Carreño Busta"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "P. Carreño Busta"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-20T11:10:00#15372370"
       },
@@ -3707,14 +3897,15 @@
           "homeTeam": {
             "name": "C. O'Connell"
           },
-          "awayTeam": {
-            "name": "N. Basavareddy"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Basavareddy"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-20T11:10:00#15373161"
       },
@@ -3729,14 +3920,15 @@
           "homeTeam": {
             "name": "B. Shelton"
           },
-          "awayTeam": {
-            "name": "U. Humbert"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "U. Humbert"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-20T11:45:00#15372363"
       },
@@ -3751,14 +3943,15 @@
           "homeTeam": {
             "name": "J. Fonseca"
           },
-          "awayTeam": {
-            "name": "E. Spizzirri"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "E. Spizzirri"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-20T12:20:00#15372379"
       },
@@ -3773,14 +3966,15 @@
           "homeTeam": {
             "name": "L. Nardi"
           },
-          "awayTeam": {
-            "name": "Y. Wu"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "Y. Wu"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-20T12:25:00#15373160"
       },
@@ -3795,14 +3989,15 @@
           "homeTeam": {
             "name": "D. Sweeny"
           },
-          "awayTeam": {
-            "name": "G. Monfils"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "G. Monfils"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-20T13:05:00#15373163"
       },
@@ -3817,14 +4012,15 @@
           "homeTeam": {
             "name": "R. Sakamoto"
           },
-          "awayTeam": {
-            "name": "R. Jodar"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "R. Jodar"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-20T14:05:00#15373165"
       },
@@ -3839,14 +4035,15 @@
           "homeTeam": {
             "name": "J. Duckworth"
           },
-          "awayTeam": {
-            "name": "D. Prižmić"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "D. Prižmić"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-20T15:30:00#15373159"
       },
@@ -3861,14 +4058,15 @@
           "homeTeam": {
             "name": "V. Kopřiva"
           },
-          "awayTeam": {
-            "name": "J. Struff"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Struff"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-20T15:40:00#15372369"
       },
@@ -3883,14 +4081,15 @@
           "homeTeam": {
             "name": "H. Hurkacz"
           },
-          "awayTeam": {
-            "name": "Z. Bergs"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "Z. Bergs"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-20T15:40:00#15372378"
       },
@@ -3905,14 +4104,15 @@
           "homeTeam": {
             "name": "V. Royer"
           },
-          "awayTeam": {
-            "name": "T. Fritz"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "T. Fritz"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-20T15:50:00#15372376"
       },
@@ -3927,14 +4127,15 @@
           "homeTeam": {
             "name": "H. Gaston"
           },
-          "awayTeam": {
-            "name": "J. Sinner"
-          },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Sinner"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-20T17:10:00#15372380"
       },
@@ -3949,16 +4150,40 @@
           "homeTeam": {
             "name": "G. Dimitrov"
           },
+          "roundInfo": {
+            "round": 64,
+            "name": "1라운드",
+            "slug": "round-of-128"
+          },
           "awayTeam": {
             "name": "T. Machac"
+          },
+          "winnerCode": 2
+        },
+        "itemKey": "2026-01-20T17:20:00#15372371"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 1,
+        "awayTeamId": 122366,
+        "homeTeamId": 298795,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 3,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "S. Mochizuki"
           },
           "roundInfo": {
             "round": 64,
             "name": "1라운드",
             "slug": "round-of-128"
-          }
+          },
+          "awayTeam": {
+            "name": "S. Tsitsipas"
+          },
+          "winnerCode": 2
         },
-        "itemKey": "2026-01-20T17:20:00#15372371"
+        "itemKey": "2026-01-20T19:00:00#15372367"
       },
       {
         "gameStatus": "100",
@@ -3971,14 +4196,15 @@
           "homeTeam": {
             "name": "K. Majchrzak"
           },
-          "awayTeam": {
-            "name": "F. Marozsán"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "F. Marozsán"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-21T09:00:00#15345254"
       },
@@ -3993,14 +4219,15 @@
           "homeTeam": {
             "name": "F. Cerundolo"
           },
-          "awayTeam": {
-            "name": "D. Džumhur"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "D. Džumhur"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-21T09:00:00#15345288"
       },
@@ -4015,14 +4242,15 @@
           "homeTeam": {
             "name": "T. Paul"
           },
-          "awayTeam": {
-            "name": "T. Tirante"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "T. Tirante"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-21T09:00:00#15345301"
       },
@@ -4037,14 +4265,15 @@
           "homeTeam": {
             "name": "J. Faria"
           },
-          "awayTeam": {
-            "name": "A. Rublev"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Rublev"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-21T09:30:00#15345292"
       },
@@ -4059,14 +4288,15 @@
           "homeTeam": {
             "name": "T. Etcheverry"
           },
-          "awayTeam": {
-            "name": "A. Fery"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Fery"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-21T10:10:00#15345284"
       },
@@ -4081,14 +4311,15 @@
           "homeTeam": {
             "name": "D. Medvedev"
           },
-          "awayTeam": {
-            "name": "Q. Halys"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "Q. Halys"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-21T10:50:00#15345253"
       },
@@ -4103,14 +4334,15 @@
           "homeTeam": {
             "name": "R. Opelka"
           },
-          "awayTeam": {
-            "name": "A. Davidovich Fokina"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Davidovich Fokina"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-21T11:40:00#15345299"
       },
@@ -4125,14 +4357,15 @@
           "homeTeam": {
             "name": "C. Alcaraz"
           },
-          "awayTeam": {
-            "name": "Y. Hanfmann"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "Y. Hanfmann"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-21T12:10:00#15345285"
       },
@@ -4147,14 +4380,15 @@
           "homeTeam": {
             "name": "J. Thompson"
           },
-          "awayTeam": {
-            "name": "N. Borges"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Borges"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-21T13:20:00#15345256"
       },
@@ -4169,14 +4403,15 @@
           "homeTeam": {
             "name": "M. Zheng"
           },
-          "awayTeam": {
-            "name": "C. Moutet"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Moutet"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-21T14:00:00#15345297"
       },
@@ -4191,14 +4426,15 @@
           "homeTeam": {
             "name": "L. Tien"
           },
-          "awayTeam": {
-            "name": "A. Shevchenko"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Shevchenko"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-21T14:10:00#15345255"
       },
@@ -4213,14 +4449,15 @@
           "homeTeam": {
             "name": "E. Nava"
           },
-          "awayTeam": {
-            "name": "C. Norrie"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Norrie"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-21T15:45:00#15345289"
       },
@@ -4235,14 +4472,15 @@
           "homeTeam": {
             "name": "A. Bublik"
           },
-          "awayTeam": {
-            "name": "M. Fucsovics"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Fucsovics"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-21T15:50:00#15345298"
       },
@@ -4257,14 +4495,15 @@
           "homeTeam": {
             "name": "H. Medjedovic"
           },
-          "awayTeam": {
-            "name": "A. de Minaur"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "A. de Minaur"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-21T17:10:00#15345286"
       },
@@ -4279,14 +4518,15 @@
           "homeTeam": {
             "name": "A. Zverev"
           },
-          "awayTeam": {
-            "name": "A. Muller"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Muller"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-21T17:10:00#15345290"
       },
@@ -4301,14 +4541,15 @@
           "homeTeam": {
             "name": "F. Tiafoe"
           },
-          "awayTeam": {
-            "name": "F. Comesaña"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "F. Comesaña"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-21T18:45:00#15345291"
       },
@@ -4323,14 +4564,15 @@
           "homeTeam": {
             "name": "J. Mensik"
           },
-          "awayTeam": {
-            "name": "R. Jodar"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "R. Jodar"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-22T09:00:00#15345245"
       },
@@ -4345,14 +4587,15 @@
           "homeTeam": {
             "name": "K. Khachanov"
           },
-          "awayTeam": {
-            "name": "N. Basavareddy"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Basavareddy"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-22T09:00:00#15345262"
       },
@@ -4367,14 +4610,15 @@
           "homeTeam": {
             "name": "S. Báez"
           },
-          "awayTeam": {
-            "name": "L. Darderi"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Darderi"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-22T09:00:00#15345269"
       },
@@ -4389,14 +4633,15 @@
           "homeTeam": {
             "name": "R. Hijikata"
           },
-          "awayTeam": {
-            "name": "V. Vacherot"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "V. Vacherot"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-22T09:00:00#15345303"
       },
@@ -4411,14 +4656,15 @@
           "homeTeam": {
             "name": "L. Musetti"
           },
-          "awayTeam": {
-            "name": "L. Sonego"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Sonego"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-22T09:30:00#15345243"
       },
@@ -4433,14 +4679,15 @@
           "homeTeam": {
             "name": "B. Shelton"
           },
-          "awayTeam": {
-            "name": "D. Sweeny"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "D. Sweeny"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-22T10:45:00#15345302"
       },
@@ -4455,14 +4702,15 @@
           "homeTeam": {
             "name": "H. Hurkacz"
           },
-          "awayTeam": {
-            "name": "E. Quinn"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "E. Quinn"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-22T10:55:00#15345305"
       },
@@ -4477,14 +4725,15 @@
           "homeTeam": {
             "name": "F. Maestrelli"
           },
-          "awayTeam": {
-            "name": "N. Djokovic"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Djokovic"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-22T11:30:00#15345242"
       },
@@ -4499,14 +4748,15 @@
           "homeTeam": {
             "name": "B. Van de Zandschulp"
           },
-          "awayTeam": {
-            "name": "J. Shang"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Shang"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-22T12:25:00#15345247"
       },
@@ -4521,14 +4771,15 @@
           "homeTeam": {
             "name": "E. Spizzirri"
           },
-          "awayTeam": {
-            "name": "Y. Wu"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "Y. Wu"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-22T12:45:00#15345274"
       },
@@ -4543,14 +4794,15 @@
           "homeTeam": {
             "name": "A. Gea"
           },
-          "awayTeam": {
-            "name": "S. Wawrinka"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "S. Wawrinka"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-22T14:00:00#15345251"
       },
@@ -4565,14 +4817,15 @@
           "homeTeam": {
             "name": "T. Machac"
           },
-          "awayTeam": {
-            "name": "S. Tsitsipas"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "S. Tsitsipas"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-22T15:05:00#15345250"
       },
@@ -4587,14 +4840,15 @@
           "homeTeam": {
             "name": "D. Shapovalov"
           },
-          "awayTeam": {
-            "name": "M. Čilić"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "M. Čilić"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-22T15:10:00#15345246"
       },
@@ -4609,14 +4863,15 @@
           "homeTeam": {
             "name": "V. Kopřiva"
           },
-          "awayTeam": {
-            "name": "T. Fritz"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "T. Fritz"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-22T16:50:00#15345306"
       },
@@ -4631,14 +4886,15 @@
           "homeTeam": {
             "name": "J. Duckworth"
           },
-          "awayTeam": {
-            "name": "J. Sinner"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Sinner"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-22T17:15:00#15345268"
       },
@@ -4653,14 +4909,15 @@
           "homeTeam": {
             "name": "J. Munar"
           },
-          "awayTeam": {
-            "name": "C. Ruud"
-          },
           "roundInfo": {
             "round": 32,
             "name": "2라운드",
             "slug": "round-of-64"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Ruud"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-22T19:35:00#15345304"
       },
@@ -4675,15 +4932,16 @@
           "homeTeam": {
             "name": "L. Tien"
           },
-          "awayTeam": {
-            "name": "N. Borges"
-          },
           "roundInfo": {
             "name": "3라운드",
             "round": 6,
             "cupRoundType": 16,
             "slug": "round-of-32"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Borges"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-23T09:00:00#15345261"
       },
@@ -4698,15 +4956,16 @@
           "homeTeam": {
             "name": "D. Medvedev"
           },
-          "awayTeam": {
-            "name": "F. Marozsán"
-          },
           "roundInfo": {
             "name": "3라운드",
             "round": 6,
             "cupRoundType": 16,
             "slug": "round-of-32"
-          }
+          },
+          "awayTeam": {
+            "name": "F. Marozsán"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-23T09:30:00#15345257"
       },
@@ -4721,15 +4980,16 @@
           "homeTeam": {
             "name": "T. Paul"
           },
-          "awayTeam": {
-            "name": "A. Davidovich Fokina"
-          },
           "roundInfo": {
             "name": "3라운드",
             "round": 6,
             "cupRoundType": 16,
             "slug": "round-of-32"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Davidovich Fokina"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-23T11:50:00#15345260"
       },
@@ -4744,15 +5004,16 @@
           "homeTeam": {
             "name": "C. Alcaraz"
           },
-          "awayTeam": {
-            "name": "C. Moutet"
-          },
           "roundInfo": {
             "name": "3라운드",
             "round": 6,
             "cupRoundType": 16,
             "slug": "round-of-32"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Moutet"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-23T12:05:00#15345259"
       },
@@ -4767,15 +5028,16 @@
           "homeTeam": {
             "name": "F. Cerundolo"
           },
-          "awayTeam": {
-            "name": "A. Rublev"
-          },
           "roundInfo": {
             "name": "3라운드",
             "round": 6,
             "cupRoundType": 16,
             "slug": "round-of-32"
-          }
+          },
+          "awayTeam": {
+            "name": "A. Rublev"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-23T15:55:00#15345252"
       },
@@ -4790,15 +5052,16 @@
           "homeTeam": {
             "name": "F. Tiafoe"
           },
-          "awayTeam": {
-            "name": "A. de Minaur"
-          },
           "roundInfo": {
             "name": "3라운드",
             "round": 6,
             "cupRoundType": 16,
             "slug": "round-of-32"
-          }
+          },
+          "awayTeam": {
+            "name": "A. de Minaur"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-23T17:10:00#15345263"
       },
@@ -4813,15 +5076,16 @@
           "homeTeam": {
             "name": "A. Zverev"
           },
-          "awayTeam": {
-            "name": "C. Norrie"
-          },
           "roundInfo": {
             "name": "3라운드",
             "round": 6,
             "cupRoundType": 16,
             "slug": "round-of-32"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Norrie"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-23T17:20:00#15345244"
       },
@@ -4836,15 +5100,16 @@
           "homeTeam": {
             "name": "A. Bublik"
           },
-          "awayTeam": {
-            "name": "T. Etcheverry"
-          },
           "roundInfo": {
             "name": "3라운드",
             "round": 6,
             "cupRoundType": 16,
             "slug": "round-of-32"
-          }
+          },
+          "awayTeam": {
+            "name": "T. Etcheverry"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-23T19:05:00#15345267"
       },
@@ -4859,15 +5124,16 @@
           "homeTeam": {
             "name": "L. Musetti"
           },
-          "awayTeam": {
-            "name": "T. Machac"
-          },
           "roundInfo": {
             "name": "3라운드",
             "round": 6,
             "cupRoundType": 16,
             "slug": "round-of-32"
-          }
+          },
+          "awayTeam": {
+            "name": "T. Machac"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-24T08:30:00#15345275"
       },
@@ -4882,15 +5148,16 @@
           "homeTeam": {
             "name": "K. Khachanov"
           },
-          "awayTeam": {
-            "name": "L. Darderi"
-          },
           "roundInfo": {
             "name": "3라운드",
             "round": 6,
             "cupRoundType": 16,
             "slug": "round-of-32"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Darderi"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-24T08:30:00#15345283"
       },
@@ -4905,15 +5172,16 @@
           "homeTeam": {
             "name": "E. Spizzirri"
           },
-          "awayTeam": {
-            "name": "J. Sinner"
-          },
           "roundInfo": {
             "name": "3라운드",
             "round": 6,
             "cupRoundType": 16,
             "slug": "round-of-32"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Sinner"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-24T10:20:00#15345293"
       },
@@ -4928,15 +5196,16 @@
           "homeTeam": {
             "name": "B. Shelton"
           },
-          "awayTeam": {
-            "name": "V. Vacherot"
-          },
           "roundInfo": {
             "name": "3라운드",
             "round": 6,
             "cupRoundType": 16,
             "slug": "round-of-32"
-          }
+          },
+          "awayTeam": {
+            "name": "V. Vacherot"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-24T12:45:00#15345282"
       },
@@ -4951,15 +5220,16 @@
           "homeTeam": {
             "name": "S. Wawrinka"
           },
-          "awayTeam": {
-            "name": "T. Fritz"
-          },
           "roundInfo": {
             "name": "3라운드",
             "round": 6,
             "cupRoundType": 16,
             "slug": "round-of-32"
-          }
+          },
+          "awayTeam": {
+            "name": "T. Fritz"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-24T15:35:00#15345258"
       },
@@ -4974,15 +5244,16 @@
           "homeTeam": {
             "name": "B. Van de Zandschulp"
           },
-          "awayTeam": {
-            "name": "N. Djokovic"
-          },
           "roundInfo": {
             "name": "3라운드",
             "round": 6,
             "cupRoundType": 16,
             "slug": "round-of-32"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Djokovic"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-24T17:10:00#15345264"
       },
@@ -4997,15 +5268,16 @@
           "homeTeam": {
             "name": "J. Mensik"
           },
-          "awayTeam": {
-            "name": "E. Quinn"
-          },
           "roundInfo": {
             "name": "3라운드",
             "round": 6,
             "cupRoundType": 16,
             "slug": "round-of-32"
-          }
+          },
+          "awayTeam": {
+            "name": "E. Quinn"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-24T18:55:00#15345280"
       },
@@ -5020,15 +5292,16 @@
           "homeTeam": {
             "name": "M. Čilić"
           },
-          "awayTeam": {
-            "name": "C. Ruud"
-          },
           "roundInfo": {
             "name": "3라운드",
             "round": 6,
             "cupRoundType": 16,
             "slug": "round-of-32"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Ruud"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-24T19:20:00#15345295"
       },
@@ -5043,15 +5316,16 @@
           "homeTeam": {
             "name": "C. Alcaraz"
           },
-          "awayTeam": {
-            "name": "T. Paul"
-          },
           "roundInfo": {
             "name": "4라운드",
             "round": 5,
             "cupRoundType": 8,
             "slug": "round-of-16"
-          }
+          },
+          "awayTeam": {
+            "name": "T. Paul"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-25T11:40:00#15345277"
       },
@@ -5066,15 +5340,16 @@
           "homeTeam": {
             "name": "A. Zverev"
           },
-          "awayTeam": {
-            "name": "F. Cerundolo"
-          },
           "roundInfo": {
             "name": "4라운드",
             "round": 5,
             "cupRoundType": 8,
             "slug": "round-of-16"
-          }
+          },
+          "awayTeam": {
+            "name": "F. Cerundolo"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-25T15:10:00#15345278"
       },
@@ -5089,15 +5364,16 @@
           "homeTeam": {
             "name": "D. Medvedev"
           },
-          "awayTeam": {
-            "name": "L. Tien"
-          },
           "roundInfo": {
             "name": "4라운드",
             "round": 5,
             "cupRoundType": 8,
             "slug": "round-of-16"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Tien"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-25T16:25:00#15345279"
       },
@@ -5112,15 +5388,16 @@
           "homeTeam": {
             "name": "A. Bublik"
           },
-          "awayTeam": {
-            "name": "A. de Minaur"
-          },
           "roundInfo": {
             "name": "4라운드",
             "round": 5,
             "cupRoundType": 8,
             "slug": "round-of-16"
-          }
+          },
+          "awayTeam": {
+            "name": "A. de Minaur"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-25T17:10:00#15345281"
       },
@@ -5135,15 +5412,16 @@
           "homeTeam": {
             "name": "L. Musetti"
           },
-          "awayTeam": {
-            "name": "T. Fritz"
-          },
           "roundInfo": {
             "name": "4라운드",
             "round": 5,
             "cupRoundType": 8,
             "slug": "round-of-16"
-          }
+          },
+          "awayTeam": {
+            "name": "T. Fritz"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-26T12:10:00#15345270"
       },
@@ -5158,15 +5436,16 @@
           "homeTeam": {
             "name": "L. Darderi"
           },
-          "awayTeam": {
-            "name": "J. Sinner"
-          },
           "roundInfo": {
             "name": "4라운드",
             "round": 5,
             "cupRoundType": 8,
             "slug": "round-of-16"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Sinner"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-26T16:10:00#15345276"
       },
@@ -5181,15 +5460,16 @@
           "homeTeam": {
             "name": "J. Mensik"
           },
-          "awayTeam": {
-            "name": "N. Djokovic"
-          },
           "roundInfo": {
             "name": "4라운드",
             "round": 5,
             "cupRoundType": 8,
             "slug": "round-of-16"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Djokovic"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-26T18:10:00#15345273"
       },
@@ -5204,15 +5484,16 @@
           "homeTeam": {
             "name": "B. Shelton"
           },
-          "awayTeam": {
-            "name": "C. Ruud"
-          },
           "roundInfo": {
             "name": "4라운드",
             "round": 5,
             "cupRoundType": 8,
             "slug": "round-of-16"
-          }
+          },
+          "awayTeam": {
+            "name": "C. Ruud"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-26T18:50:00#15345287"
       },
@@ -5227,15 +5508,16 @@
           "homeTeam": {
             "name": "A. Zverev"
           },
-          "awayTeam": {
-            "name": "L. Tien"
-          },
           "roundInfo": {
             "name": "8강",
             "round": 27,
             "cupRoundType": 4,
             "slug": "quarterfinals"
-          }
+          },
+          "awayTeam": {
+            "name": "L. Tien"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-27T11:40:00#15345265"
       },
@@ -5250,15 +5532,16 @@
           "homeTeam": {
             "name": "C. Alcaraz"
           },
-          "awayTeam": {
-            "name": "A. de Minaur"
-          },
           "roundInfo": {
             "name": "8강",
             "round": 27,
             "cupRoundType": 4,
             "slug": "quarterfinals"
-          }
+          },
+          "awayTeam": {
+            "name": "A. de Minaur"
+          },
+          "winnerCode": 1
         },
         "itemKey": "2026-01-27T18:25:00#15345266"
       },
@@ -5273,15 +5556,16 @@
           "homeTeam": {
             "name": "L. Musetti"
           },
-          "awayTeam": {
-            "name": "N. Djokovic"
-          },
           "roundInfo": {
             "name": "8강",
             "round": 27,
             "cupRoundType": 4,
             "slug": "quarterfinals"
-          }
+          },
+          "awayTeam": {
+            "name": "N. Djokovic"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-28T13:30:00#15345271"
       },
@@ -5296,17 +5580,66 @@
           "homeTeam": {
             "name": "B. Shelton"
           },
-          "awayTeam": {
-            "name": "J. Sinner"
-          },
           "roundInfo": {
             "name": "8강",
             "round": 27,
             "cupRoundType": 4,
             "slug": "quarterfinals"
-          }
+          },
+          "awayTeam": {
+            "name": "J. Sinner"
+          },
+          "winnerCode": 2
         },
         "itemKey": "2026-01-28T17:30:00#15345272"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 57163,
+        "homeTeamId": 275923,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "C. Alcaraz"
+          },
+          "roundInfo": {
+            "name": "4강",
+            "round": 28,
+            "cupRoundType": 2,
+            "slug": "semifinals"
+          },
+          "awayTeam": {
+            "name": "A. Zverev"
+          },
+          "winnerCode": 1
+        },
+        "itemKey": "2026-01-30T12:45:00#15345296"
+      },
+      {
+        "gameStatus": "100",
+        "homeTeamScore": 3,
+        "awayTeamId": 206570,
+        "homeTeamId": 14882,
+        "categoryKey": "tennis#80001",
+        "awayTeamScore": 2,
+        "gameInfo": {
+          "homeTeam": {
+            "name": "N. Djokovic"
+          },
+          "roundInfo": {
+            "name": "4강",
+            "round": 28,
+            "cupRoundType": 2,
+            "slug": "semifinals"
+          },
+          "awayTeam": {
+            "name": "J. Sinner"
+          },
+          "winnerCode": 1
+        },
+        "itemKey": "2026-01-30T19:15:00#15345294"
       }
     ]
   }

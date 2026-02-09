@@ -32,7 +32,6 @@ struct TennisLeagueScheduleStore {
         case toggleAllResult
         case updateResultOpenedState(gameId: String, isOpened: Bool)
         case selectGame(game: TennisGameForSchedule)
-        case selectLeague(leagueId: Int)
         case showTournament
         case refreshGames
         
@@ -290,36 +289,6 @@ struct TennisLeagueScheduleStore {
                     }
                 }
                 
-            case let .selectLeague(leagueId):
-                let displayModel = state.baseSchedule.displayModel
-                
-                return .run { send in
-                    await send(.updateDisplayDataState(fetchState: .fetching), animation: AnimationConstants.AnimationType.defaultAnimation)
-                    
-                    do {
-                        let leagueName = StringConstants.Tennis.leagueNameStr(leagueId: leagueId)
-                        let entity = EntityInfo(
-                            entityId: leagueId,
-                            entityName: leagueName,
-                            category: "tennis",
-                            entityType: "league",
-                            leagueId: leagueId,
-                            teamId: nil,
-                            playerId: nil
-                        )
-                        
-                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel.season, yearMonth: nil)
-                        
-                        if case let .tennisLeagueSchedule(_, displayModel) = result.data {
-                            await send(.setDisplayModel(displayModel: displayModel))
-                            await send(.baseSchedule(.initData))
-                        }
-                    } catch {
-                        await send(.updateDisplayDataState(fetchState: .failure("데이터를 불러오는데 실패하였습니다.")), animation: AnimationConstants.AnimationType.defaultAnimation)
-                        print("\(error)")
-                    }
-                }
-                
             case .updateDisplayDataState(let fetchState):
                 state.baseSchedule.displayDataState = fetchState
                 
@@ -352,6 +321,38 @@ struct TennisLeagueScheduleStore {
                 state.baseSchedule.displayModel.games = state.baseSchedule.displayModel.games.map { gamesById[$0.gameId] ?? $0 }
                 
                 return .send(.updateFilteredGames)
+                
+            case .baseSchedule(.selectRelatedLeague(let index)):
+                let displayModel = state.baseSchedule.displayModel
+                
+                return .run { send in
+                    if let leagueId = displayModel.sortedRelatedLeagues?[index] {
+                        await send(.updateDisplayDataState(fetchState: .fetching), animation: AnimationConstants.AnimationType.defaultAnimation)
+                        
+                        do {
+                            let leagueName = StringConstants.Tennis.leagueNameStr(leagueId: leagueId)
+                            let entity = EntityInfo(
+                                entityId: leagueId,
+                                entityName: leagueName,
+                                category: "tennis",
+                                entityType: "league",
+                                leagueId: leagueId,
+                                teamId: nil,
+                                playerId: nil
+                            )
+                            
+                            let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel.season, yearMonth: nil)
+                            
+                            if case let .tennisLeagueSchedule(_, displayModel) = result.data {
+                                await send(.setDisplayModel(displayModel: displayModel))
+                                await send(.baseSchedule(.initData))
+                            }
+                        } catch {
+                            await send(.updateDisplayDataState(fetchState: .failure("데이터를 불러오는데 실패하였습니다.")), animation: AnimationConstants.AnimationType.defaultAnimation)
+                            print("\(error)")
+                        }
+                    }
+                }
                 
             case .baseSchedule:
                 return .none

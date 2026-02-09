@@ -712,7 +712,7 @@ struct NBAPlayerInfoEighthItem: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         
-                        Text(CalendarUtil.formatDate(date: lastGame.gameSummary?.gameDate, formatType: .ampmWithDayOfWeekDate))
+                        Text(CalendarUtil.formatDate(date: lastGame.gameSummary?.gameDate, outputFormatType: .ampmWithDayOfWeekDate))
                             .font(.system(size: 15))
                     }
                     .frame(width: UIScreen.main.bounds.width * 0.40) // NOTE: 너비를 화면 전체 너비중 40%로 고정
@@ -818,7 +818,7 @@ struct NBAPlayerInfoNinthItem: View {
                 }
                 .opacity(showContents ? 1 : 0)
                 
-                Text(CalendarUtil.formatDate(date: nextGame.gameSummary?.gameDate, formatType: .ampmWithDayOfWeekDate))
+                Text(CalendarUtil.formatDate(date: nextGame.gameSummary?.gameDate, outputFormatType: .ampmWithDayOfWeekDate))
                     .font(.system(size: 15))
                     .opacity(showContents ? 1 : 0)
             } else {

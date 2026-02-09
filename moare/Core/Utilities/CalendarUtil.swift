@@ -14,8 +14,13 @@ struct DayInfo {
     var isDataEmpty: Bool = false
 }
 
-enum TimeFormatType {
-    case ampm, ampmWithDate, ampmWithDayOfWeekDate, yearMonth
+enum InputTimeFormatType {
+    case isoDateTimeWithZone
+    case dateOnly
+}
+
+enum OutputTimeFormatType {
+    case ampm, ampmWithDate, ampmWithDayOfWeekDate, yearMonth, yearMonthDayKr
 }
 
 struct CalendarUtil {
@@ -77,14 +82,19 @@ struct CalendarUtil {
     
     static func formatDate(
         date: String?,
-        formatType: TimeFormatType = .ampmWithDate,
+        inputFormatType: InputTimeFormatType = .isoDateTimeWithZone,
+        outputFormatType: OutputTimeFormatType = .ampmWithDate,
         zoneId: TimeZone = TimeZone(identifier: "Asia/Seoul")!
     ) -> String {
         guard let date = date, !date.isEmpty else { return "" }
         
         let inputFormatter = DateFormatter()
-        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         inputFormatter.locale = Locale(identifier: "en_US_POSIX") // NOTE: 예상치 못한 오류 방지위해 설정 권장
+        
+        switch inputFormatType {
+        case .isoDateTimeWithZone: inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        case .dateOnly: inputFormatter.dateFormat = "yyyy-MM-dd"
+        }
         
         guard let parsedDate = inputFormatter.date(from: date) else {
             return ""
@@ -94,11 +104,12 @@ struct CalendarUtil {
         outputFormatter.locale = Locale(identifier: "ko_KR")
         outputFormatter.timeZone = zoneId
         
-        switch formatType {
+        switch outputFormatType {
         case .ampm: outputFormatter.dateFormat = "a hh:mm"
         case .ampmWithDate: outputFormatter.dateFormat = "yyyy.MM.dd a hh:mm"
         case .ampmWithDayOfWeekDate: outputFormatter.dateFormat = "yyyy.MM.dd (E) a hh:mm"
         case .yearMonth: outputFormatter.dateFormat = "yy/MM"
+        case .yearMonthDayKr: outputFormatter.dateFormat = "yyyy년 M월 d일"
         }
         
         return outputFormatter.string(from: parsedDate)

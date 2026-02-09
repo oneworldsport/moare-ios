@@ -475,7 +475,7 @@ struct FBTeamInfoFifthItem: View {
                 }
                 .opacity(showContents ? 1 : 0)
                 
-                Text(CalendarUtil.formatDate(date: lastGame.fixture.date, formatType: .ampmWithDayOfWeekDate))
+                Text(CalendarUtil.formatDate(date: lastGame.fixture.date, outputFormatType: .ampmWithDayOfWeekDate))
                     .font(.system(size: 15))
                     .opacity(showContents ? 1 : 0)
             }
@@ -542,7 +542,7 @@ struct FBTeamInfoSixthItem: View {
                 }
                 .opacity(showContents ? 1 : 0)
                 
-                Text(CalendarUtil.formatDate(date: nextGame.fixture.date, formatType: .ampmWithDayOfWeekDate))
+                Text(CalendarUtil.formatDate(date: nextGame.fixture.date, outputFormatType: .ampmWithDayOfWeekDate))
                     .font(.system(size: 15))
                     .opacity(showContents ? 1 : 0)
             } else {
