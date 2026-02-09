@@ -15,6 +15,7 @@ struct ScheduleContainerState {
     var calendarUiState: CalendarUiState? = nil
     var isAllResultOpened: Bool = false
     var shouldShowTournamentButton: Bool = false
+    var shouldShowTournamentOrTeamStandingsButton: Bool = true
     
     var startDate: String? = nil
     var endDate: String? = nil

@@ -126,11 +126,13 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
                         }
                     }
                     
-                    CapsuleButton(
-                        text: StringConstants.tournamentOrStandingsText(leagueId: state.leagueId),
-                        color: .secondary
-                    ) {
-                        actions.tournamentOrteamStandingsButtonAction()
+                    if state.shouldShowTournamentOrTeamStandingsButton {
+                        CapsuleButton(
+                            text: StringConstants.tournamentOrStandingsText(leagueId: state.leagueId),
+                            color: .secondary
+                        ) {
+                            actions.tournamentOrteamStandingsButtonAction()
+                        }
                     }
                     
                     CapsuleButton(

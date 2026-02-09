@@ -31,6 +31,7 @@ struct TennisLeagueScheduleView: View {
                             selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
                         isAllResultOpened: store.baseSchedule.isAllResultOpened,
+                        shouldShowTournamentOrTeamStandingsButton: false,
                         startDate: displayModel.startDate,
                         endDate: displayModel.endDate,
                         relatedLeagues: displayModel.relatedLeaguesKrname,
