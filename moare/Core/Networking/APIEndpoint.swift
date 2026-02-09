@@ -28,11 +28,11 @@ enum APIEndpoint {
     
     func url(isTest: Bool = true) -> URL? {
         var components = URLComponents()
-        components.scheme = APIConfiguration.localscheme
-        components.host = APIConfiguration.localhost
-        components.port = APIConfiguration.localport
-//        components.scheme = APIConfiguration.scheme
-//        components.host = APIConfiguration.host
+//        components.scheme = APIConfiguration.localscheme
+//        components.host = APIConfiguration.localhost
+//        components.port = APIConfiguration.localport
+        components.scheme = APIConfiguration.scheme
+        components.host = APIConfiguration.host
         
         switch self {
         case .searchByQuery(let query):
