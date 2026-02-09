@@ -181,7 +181,8 @@ struct AppStore {
                 let .path(.element(id: _, action: .mlbLeagueSchedule(.delegate(.showGameStats(model))))),
                 let .path(.element(id: _, action: .kboPlayerInfo(.delegate(.showGameStats(model))))),
                 let .path(.element(id: _, action: .kboTeamInfo(.delegate(.showGameStats(model))))),
-                let .path(.element(id: _, action: .kboLeagueSchedule(.delegate(.showGameStats(model))))):
+                let .path(.element(id: _, action: .kboLeagueSchedule(.delegate(.showGameStats(model))))),
+                let .path(.element(id: _, action: .tennisLeagueSchedule(.delegate(.showGameStats(model))))):
                 state.didPop = false
                 state.includesPreviousView = false
                 
@@ -225,7 +226,8 @@ struct AppStore {
             case let .path(.element(id: _, action: .fbLeagueSchedule(.delegate(.showTournament(model))))),
                 let .path(.element(id: _, action: .nbaLeagueSchedule(.delegate(.showTournament(model))))),
                 let .path(.element(id: _, action: .mlbLeagueSchedule(.delegate(.showTournament(model))))),
-                let .path(.element(id: _, action: .kboLeagueSchedule(.delegate(.showTournament(model))))):
+                let .path(.element(id: _, action: .kboLeagueSchedule(.delegate(.showTournament(model))))),
+                let .path(.element(id: _, action: .tennisLeagueSchedule(.delegate(.showTournament(model))))):
                 state.didPop = false
                 state.includesPreviousView = false
                 
@@ -336,6 +338,13 @@ struct AppStore {
             state.path.append(.mlbGameStats(MLBGameStatsStore.State(displayModel: displayModel)))
         case .mlbTournament(_, let displayModel):
             state.path.append(.mlbTournament(MLBTournamentStore.State(displayModel: displayModel)))
+            
+        case .tennisLeagueSchedule(_, let displayModel):
+            state.path.append(.tennisLeagueSchedule(TennisLeagueScheduleStore.State(displayModel: displayModel)))
+        case .tennisGameStats(_, let displayModel):
+            state.path.append(.tennisGameStats(TennisGameStatsStore.State(displayModel: displayModel)))
+        case .tennisTournament(_, let displayModel):
+            state.path.append(.tennisTournament(TennisTournamentStore.State(displayModel: displayModel)))
         default: break
         }
         
@@ -391,6 +400,11 @@ struct AppStore {
             case mlbLeagueSchedule(MLBLeagueScheduleStore.State)
             case mlbGameStats(MLBGameStatsStore.State)
             case mlbTournament(MLBTournamentStore.State)
+            
+            // tennis
+            case tennisLeagueSchedule(TennisLeagueScheduleStore.State)
+            case tennisGameStats(TennisGameStatsStore.State)
+            case tennisTournament(TennisTournamentStore.State)
         }
         
         enum Action {
@@ -437,9 +451,15 @@ struct AppStore {
             case mlbLeagueSchedule(MLBLeagueScheduleStore.Action)
             case mlbGameStats(MLBGameStatsStore.Action)
             case mlbTournament(MLBTournamentStore.Action)
+            
+            // tennis
+            case tennisLeagueSchedule(TennisLeagueScheduleStore.Action)
+            case tennisGameStats(TennisGameStatsStore.Action)
+            case tennisTournament(TennisTournamentStore.Action)
         }
         
         var body: some Reducer<State, Action> {
+            // football
             Scope(state: \.fbPlayerInfo, action: \.fbPlayerInfo) { FBPlayerInfoStore() }
             Scope(state: \.fbPlayerStats, action: \.fbPlayerStats) { FBPlayerStatsStore() }
             Scope(state: \.fbPlayerStandings, action: \.fbPlayerStandings) { FBPlayerStandingsStore() }
@@ -449,6 +469,7 @@ struct AppStore {
             Scope(state: \.fbLeagueSchedule, action: \.fbLeagueSchedule) { FBLeagueScheduleStore() }
             Scope(state: \.fbGameStats, action: \.fbGameStats) { FBGameStatsStore() }
             Scope(state: \.fbTournament, action: \.fbTournament) { FBTournamentStore() }
+            // nba
             Scope(state: \.nbaPlayerInfo, action: \.nbaPlayerInfo) { NBAPlayerInfoStore() }
             Scope(state: \.nbaPlayerStats, action: \.nbaPlayerStats) { NBAPlayerStatsStore() }
             Scope(state: \.nbaPlayerStandings, action: \.nbaPlayerStandings) { NBAPlayerStandingsStore() }
@@ -458,6 +479,7 @@ struct AppStore {
             Scope(state: \.nbaLeagueSchedule, action: \.nbaLeagueSchedule) { NBALeagueScheduleStore() }
             Scope(state: \.nbaGameStats, action: \.nbaGameStats) { NBAGameStatsStore() }
             Scope(state: \.nbaTournament, action: \.nbaTournament) { NBATournamentStore() }
+            // kbo
             Scope(state: \.kboPlayerInfo, action: \.kboPlayerInfo) { KBOPlayerInfoStore() }
             Scope(state: \.kboPlayerStats, action: \.kboPlayerStats) { KBOPlayerStatsStore() }
             Scope(state: \.kboTeamInfo, action: \.kboTeamInfo) { KBOTeamInfoStore() }
@@ -466,6 +488,7 @@ struct AppStore {
             Scope(state: \.kboLeagueSchedule, action: \.kboLeagueSchedule) { KBOLeagueScheduleStore() }
             Scope(state: \.kboGameStats, action: \.kboGameStats) { KBOGameStatsStore() }
             Scope(state: \.kboTournament, action: \.kboTournament) { KBOTournamentStore() }
+            // mlb
             Scope(state: \.mlbPlayerInfo, action: \.mlbPlayerInfo) { MLBPlayerInfoStore() }
             Scope(state: \.mlbPlayerStats, action: \.mlbPlayerStats) { MLBPlayerStatsStore() }
             Scope(state: \.mlbTeamInfo, action: \.mlbTeamInfo) { MLBTeamInfoStore() }
@@ -474,6 +497,10 @@ struct AppStore {
             Scope(state: \.mlbLeagueSchedule, action: \.mlbLeagueSchedule) { MLBLeagueScheduleStore() }
             Scope(state: \.mlbGameStats, action: \.mlbGameStats) { MLBGameStatsStore() }
             Scope(state: \.mlbTournament, action: \.mlbTournament) { MLBTournamentStore() }
+            // tennis
+            Scope(state: \.tennisLeagueSchedule, action: \.tennisLeagueSchedule) { TennisLeagueScheduleStore() }
+            Scope(state: \.tennisGameStats, action: \.tennisGameStats) { TennisGameStatsStore() }
+            Scope(state: \.tennisTournament, action: \.tennisTournament) { TennisTournamentStore() }
         }
     }
 }
@@ -505,6 +532,7 @@ extension SportDecodableModel {
         case let .nbaGameStats(_, displayModel): return .nbaGameStats(.init(displayModel: displayModel))
         case let .mlbGameStats(_, displayModel): return .mlbGameStats(.init(displayModel: displayModel))
         case let .kboGameStats(_, displayModel): return .kboGameStats(.init(displayModel: displayModel))
+        case let .tennisGameStats(_, displayModel): return .tennisGameStats(.init(displayModel: displayModel))
         default: return nil
         }
     }
@@ -525,6 +553,7 @@ extension SportDecodableModel {
         case let .nbaTournament(_, displayModel): return .nbaTournament(.init(displayModel: displayModel))
         case let .mlbTournament(_, displayModel): return .mlbTournament(.init(displayModel: displayModel))
         case let .kboTournament(_, displayModel): return .kboTournament(.init(displayModel: displayModel))
+        case let .tennisTournament(_, displayModel): return .tennisTournament(.init(displayModel: displayModel))
         default: return nil
         }
     }

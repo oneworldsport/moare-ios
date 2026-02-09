@@ -34,9 +34,6 @@ struct Constants {
         static let ligue1 = 61
         static let seriea = 135
         static let mls = 253
-        static let nba = 90001
-        static let kbo = 90101
-        static let mlb = 90102
         static let footballLeagues = [epl, laliga, bundesliga, ligue1, seriea, mls]
         static let championsLeague = 2
         static let europaLeague = 3
@@ -50,6 +47,23 @@ struct Constants {
         static let footballTournamentLeagues = [championsLeague, europaLeague, conferenceLeague, faCup, eflCup, dfbPokal, coupeDeFrance, copaDelRey, coppaItalia]
         static let footballDrawTournamentLeagues = [faCup, eflCup, dfbPokal, coupeDeFrance, copaDelRey, coppaItalia]
         static let footballAll = footballLeagues + footballTournamentLeagues // TODO: 이걸로 refactoring 필요
+        
+        static let nba = 90001
+        static let kbo = 90101
+        static let mlb = 90102
+        
+        static let ausOpenMSingle = 80001
+        static let ausOpenMDoubles = 80002
+        static let ausOpenMixedDoubles = 80003
+        static let ausOpenWSingle = 80004
+        static let ausOpenWDoubles = 80005
+        static let ausOpenAll = [ausOpenMSingle, ausOpenMDoubles, ausOpenMixedDoubles, ausOpenWSingle, ausOpenWDoubles]
+        static let mSingleAll = [ausOpenMSingle]
+        static let mDoublesAll = [ausOpenMDoubles]
+        static let mixedDoublesAll = [ausOpenMixedDoubles]
+        static let wSingleAll = [ausOpenWSingle]
+        static let wDoublesAll = [ausOpenWDoubles]
+        static let tennisAll = ausOpenAll
         
         // nba teams
         struct NBATeam {
@@ -191,7 +205,9 @@ struct Constants {
             guard let teamId else { return nil }
             
             switch leagueId {
-            case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
+            case let id where Constants.Ids.footballLeagues.contains(id)
+                || Constants.Ids.footballTournamentLeagues.contains(id)
+                || Constants.Ids.tennisAll.contains(id):
                 return teamId
             case Constants.Ids.nba:
                 return Constants.Ids.NBATeam.all.contains(teamId) ? teamId : nil
@@ -247,6 +263,21 @@ struct Constants {
             static let live = "2"
             static let final = "3"
             static let canceled = "4"
+        }
+        
+        struct Tennis {
+            static let notStarted = 0
+            static let firstSet = 8
+            static let secondSet = 9
+            static let thirdSet = 10
+            static let fourthSet = 11
+            static let fifthSet = 12
+            static let finished = 100
+            static let canceled = 70
+            static let retired = 92
+            static let walkover = 91
+            static let liveList = [firstSet, secondSet, thirdSet, fourthSet, fifthSet]
+            static let finishedList = [finished, canceled, retired, walkover]
         }
         
         static func gameStatusText(
@@ -308,12 +339,11 @@ struct Constants {
         }
         
         static func nbaGameStatusText(
-            status: String,
+            status: Int,
             period: Int? = nil,
             isResultOpened: Bool = true
         ) -> String {
-            let intStatus = Int(status)
-            switch intStatus {
+            switch status {
             case NBA.notStarted:
                 return StringConstants.gameNotStartedStr
             case NBA.live:
@@ -359,6 +389,36 @@ struct Constants {
             }
         }
         
+        static func tennisGameStatusText(
+            status: Int?,
+            isResultOpened: Bool = true
+        ) -> String {
+            switch status {
+            case Tennis.notStarted:
+                return StringConstants.gameNotStartedStr
+            case Tennis.firstSet:
+                return "1세트"
+            case Tennis.secondSet:
+                return "2세트"
+            case Tennis.thirdSet:
+                return "3세트"
+            case Tennis.fourthSet:
+                return "4세트"
+            case Tennis.fifthSet:
+                return "5세트"
+            case Tennis.finished:
+                return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
+            case Tennis.canceled:
+                return StringConstants.gameCanceledStr
+            case Tennis.retired:
+                return isResultOpened ? "기권" : StringConstants.resultOpen
+            case Tennis.walkover:
+                return isResultOpened ? "부전" : StringConstants.resultOpen
+            default:
+                return StringConstants.gameNotStartedStr
+            }
+        }
+        
         static func isLive(leagueId: Int, status: String) -> Bool {
             switch leagueId {
             case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
@@ -369,6 +429,9 @@ struct Constants {
                 return status == MLB.live
             case Constants.Ids.kbo:
                 return status == KBO.live
+            case let id where Constants.Ids.tennisAll.contains(id):
+                let status = Int(status) ?? 0
+                return Tennis.liveList.contains(status)
             default :
                 return false
             }

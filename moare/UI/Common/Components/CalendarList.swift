@@ -128,6 +128,13 @@ struct CalendarListItem<T>: View {
         }
     }
     
+    var textWeight: Font.Weight {
+        switch calendarType {
+        case .yearmonth: .bold
+        default: .regular
+        }
+    }
+    
     var dayOfWeek: String {
         switch calendarType {
         case .day: "\((date as! DayInfo).displayName)"
@@ -148,7 +155,7 @@ struct CalendarListItem<T>: View {
         }) {
             VStack(spacing: 0) {
                 Text(text)
-                    .font(.system(size: 17))
+                    .font(.system(size: 17, weight: textWeight))
                     .frame(height: 20, alignment: .top)
 
                 if calendarType == .day {

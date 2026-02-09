@@ -322,7 +322,8 @@ struct SearchStore {
                         .kboLeagueSchedule, .kboGameStats, .kboTournament,
                         .mlbPlayerInfo, .mlbPlayerStats, .mlbPlayerStandings,
                         .mlbTeamInfo, .mlbTeamStats, .mlbTeamStandings,
-                        .mlbLeagueSchedule, .mlbGameStats, .mlbTournament: break
+                        .mlbLeagueSchedule, .mlbGameStats, .mlbTournament,
+                        .tennisLeagueSchedule, .tennisGameStats, .tennisTournament: break
                 default:
                     // TODO: animation is applied by the animation below. Should be modified
                     // TODO: 여기서 안하고 AppStore에서 하게 개선 필요

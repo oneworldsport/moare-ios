@@ -121,7 +121,7 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
                                     .font(.system(size: 12))
                                     .padding(.top, 2)
                                 
-                                Text(CalendarUtil.formatDate(date: date, formatType: .ampm))
+                                Text(CalendarUtil.formatDate(date: date, outputFormatType: .ampm))
                                     .font(.system(size: 12))
                                     .padding(.bottom, 2)
                             }
@@ -357,7 +357,7 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
                                     .font(.system(size: 12))
                                     .padding(.top, 2)
                                 
-                                Text(CalendarUtil.formatDate(date: date, formatType: .ampm))
+                                Text(CalendarUtil.formatDate(date: date, outputFormatType: .ampm))
                                     .font(.system(size: 12))
                                     .padding(.bottom, 2)
                             }
@@ -554,7 +554,7 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
                             .font(.system(size: 12))
                             .padding(.top, 2)
                         
-                        Text(CalendarUtil.formatDate(date: date, formatType: .ampm))
+                        Text(CalendarUtil.formatDate(date: date, outputFormatType: .ampm))
                             .font(.system(size: 12))
                             .padding(.bottom, 2)
                     }

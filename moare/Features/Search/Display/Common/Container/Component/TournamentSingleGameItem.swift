@@ -84,7 +84,7 @@ struct TournamentSingleGameItem<T: Decodable & Equatable>: View {
                     .font(.system(size: 12))
                     .padding(.top, 2)
                 
-                Text(CalendarUtil.formatDate(date: game.date, formatType: .ampm))
+                Text(CalendarUtil.formatDate(date: game.date, outputFormatType: .ampm))
                     .font(.system(size: 12))
                     .padding(.bottom, 2)
             }

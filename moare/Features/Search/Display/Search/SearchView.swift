@@ -133,25 +133,23 @@ struct SearchView: View {
                 
                 // league keywords
                 if let leagueKeywords = searchStore.leagueKeywords, searchStore.trendingKeyowrdsVisibleState {
-                    if !leagueKeywords.live.isEmpty && !leagueKeywords.recent.isEmpty {
-                        LeagueKeywordsList(leagueKeywords: leagueKeywords) { keywordInfo in
-                            // update bar's text
-                            searchStore.send(.updateTextField(keywordInfo.keyword, false))
-                            
-                            // remove textfield for bar animation
-                            searchStore.send(.updateTextFieldVisibleState(false))
-                            
-                            searchStore.send(.performSearch(searchType: .leagueKeyword(keywordInfo), aniDuration: AnimationConstants.Duration.medium))
-                        }
-                        .padding(.top, 16)
-                        .background(
-                            GeometryReader { proxy in
-                                Color.clear
-                                    .onAppear { leagueKeywordsComponentHeight = proxy.size.height }
-                                    .onChange(of: proxy.size.height) { leagueKeywordsComponentHeight = proxy.size.height }
-                            }
-                        )
+                    LeagueKeywordsList(leagueKeywords: leagueKeywords) { keywordInfo in
+                        // update bar's text
+                        searchStore.send(.updateTextField(keywordInfo.keyword, false))
+                        
+                        // remove textfield for bar animation
+                        searchStore.send(.updateTextFieldVisibleState(false))
+                        
+                        searchStore.send(.performSearch(searchType: .leagueKeyword(keywordInfo), aniDuration: AnimationConstants.Duration.medium))
                     }
+                    .padding(.top, 16)
+                    .background(
+                        GeometryReader { proxy in
+                            Color.clear
+                                .onAppear { leagueKeywordsComponentHeight = proxy.size.height }
+                                .onChange(of: proxy.size.height) { leagueKeywordsComponentHeight = proxy.size.height }
+                        }
+                    )
                 }
                 
                 ZStack {
@@ -288,34 +286,56 @@ struct SearchView: View {
                     focusState = false
                 }
             }
-            .gesture(
-                // custom back handler
-                DragGesture(minimumDistance: 3)
-                    .onChanged { value in
-                        if !appStore.path.ids.isEmpty {
-                            dragOffset = value.translation.width
-                            
-                            if dragOffset > 0 {
-                                opacity = max(1 - Double(dragOffset / dragMaxOffset), 0.2)
-                            }
-                        }
-                    }
-                    .onEnded { _ in
-                        if !appStore.path.ids.isEmpty {
-                            if dragOffset > dragMaxOffset {
-                                appStore.send(.pop)
-                            }
-                            
-                            dragOffset = 0
-                            
-                            withAnimation(.easeOut(duration: 0.5)) {
-                                opacity = 1.0
-                            }
-                        }
-                    }
-            )
+//            .gesture(
+//                // custom back handler
+//                DragGesture(minimumDistance: 3)
+//                    .onChanged { value in
+//                        if !appStore.path.ids.isEmpty {
+//                            dragOffset = value.translation.width
+//                            
+//                            if dragOffset > 0 {
+//                                opacity = max(1 - Double(dragOffset / dragMaxOffset), 0.2)
+//                            }
+//                        }
+//                    }
+//                    .onEnded { _ in
+//                        if !appStore.path.ids.isEmpty {
+//                            if dragOffset > dragMaxOffset {
+//                                appStore.send(.pop)
+//                            }
+//                            
+//                            dragOffset = 0
+//                            
+//                            withAnimation(.easeOut(duration: 0.5)) {
+//                                opacity = 1.0
+//                            }
+//                        }
+//                    }
+//            )
         } // ZStack
         .opacity(opacity)
+        .overlay(alignment: .leading) {
+            EdgePanBackHandler(
+                isEnabled: !appStore.path.ids.isEmpty,
+//                edgeWidth: 20,
+                onProgress: { progress in
+                    dragOffset = CGFloat(progress) * dragMaxOffset
+                    opacity = max(1 - Double(progress), 0.2)
+                },
+                onCancel: {
+                    dragOffset = 0
+                    withAnimation(.easeOut(duration: 0.5)) { opacity = 1.0 }
+                },
+                onPop: {
+                    appStore.send(.pop)
+                    dragOffset = 0
+                    withAnimation(.easeOut(duration: 0.5)) { opacity = 1.0 }
+                }
+            )
+            // edgeWidth만큼만 터치 영역을 차지하게
+            .frame(width: 1)
+            .allowsHitTesting(true)
+        }
         .onAppear {
             searchStore.send(.initData)
             
@@ -421,6 +441,13 @@ struct PathView: View {
             if let s = store.scope(state: \.mlbGameStats, action: \.mlbGameStats) { MLBGameStatsView(searchStore: searchStore, store: s, didPop: didPop) }
         case .mlbTournament:
             if let s = store.scope(state: \.mlbTournament, action: \.mlbTournament) { MLBTournamentView(searchStore: searchStore, store: s, didPop: didPop) }
+            
+        case .tennisLeagueSchedule:
+            if let s = store.scope(state: \.tennisLeagueSchedule, action: \.tennisLeagueSchedule) { TennisLeagueScheduleView(searchStore: searchStore, store: s, didPop: didPop) }
+        case .tennisGameStats:
+            if let s = store.scope(state: \.tennisGameStats, action: \.tennisGameStats) { TennisGameStatsView(searchStore: searchStore, store: s, didPop: didPop) }
+        case .tennisTournament:
+            if let s = store.scope(state: \.tennisTournament, action: \.tennisTournament) { TennisTournamentView(searchStore: searchStore, store: s, didPop: didPop) }
         }
     }
 }

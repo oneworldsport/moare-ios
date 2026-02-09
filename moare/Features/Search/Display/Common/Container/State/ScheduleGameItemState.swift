@@ -23,6 +23,9 @@ struct ScheduleGameItemState<T: Decodable & Equatable> {
     var shouldShowReferee: Bool = false
     var shouldShowHomeLabel: Bool = false
     var shouldShowAwayLabel: Bool = false
+    
+    var shouldShowWinner: Bool = false
+    var isHomeWinner: Bool = true
 }
 
 struct ScheduleGameItemActions {

@@ -121,6 +121,9 @@ struct MLBTournamentStore {
                 let responseModel = MLBGameScheduleResponseModel(
                     scheduleType: .teamFlat,
                     scheduledMonths: nil,
+                    startDate: nil,
+                    endDate: nil,
+                    relatedLeagueIds: nil,
                     schedule: gameList
                 )
                 

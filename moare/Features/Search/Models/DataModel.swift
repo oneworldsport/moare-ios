@@ -32,7 +32,7 @@ struct Keyword: Codable, Equatable {
     let priority: Int
 }
 
-// Used as keys in DisplayModels dictionary in SearchStore State
+// Used for json mock data test
 enum SportDisplayType: Hashable, CaseIterable {
     // football
     case fbPlayerInfo, fbPlayerStats, fbPlayerStandings, fbTeamInfo, fbTeamStats, fbTeamStandings, fbLeagueSchedule, fbGameStats, fbTournament
@@ -42,6 +42,9 @@ enum SportDisplayType: Hashable, CaseIterable {
     case kboPlayerInfo, kboPlayerStats, kboPlayerStandings, kboTeamInfo, kboTeamStats, kboTeamStandings, kboLeagueSchedule, kboGameStats, kboTournament
     // mlb
     case mlbPlayerInfo, mlbPlayerStats, mlbPlayerStandings, mlbTeamInfo, mlbTeamStats, mlbTeamStandings, mlbLeagueSchedule, mlbGameStats, mlbTournament
+    // tennis
+    case tennisPlayerStandings, tennisLeagueSchedule, tennisGameStats, tennisTournament
+    
     case unknown
     
     // VStack안에서 view를 그릴때 순서가 필요한 경우에 사용
@@ -98,6 +101,12 @@ indirect enum SportDecodableModel: Equatable {
     case mlbGameStats(MLBGameStatsResponseModel, MLBGameStatsDisplayModel)
     case mlbTournament(MLBGameScheduleResponseModel, MLBTournamentDisplayModel)
     
+    // tennis
+    case tennisPlayerStandings(TennisPlayerStandingsResponseModel, TennisPlayerStandingsDisplayModel)
+    case tennisLeagueSchedule(TennisGameScheduleResponseModel, TennisLeagueScheduleDisplayModel)
+    case tennisGameStats(TennisGameStatsResponseModel, TennisGameStatsDisplayModel)
+    case tennisTournament(TennisGameScheduleResponseModel, TennisTournamentDisplayModel)
+    
     case unknown
     
     static func == (lhs: SportDecodableModel, rhs: SportDecodableModel) -> Bool {
@@ -138,6 +147,10 @@ indirect enum SportDecodableModel: Equatable {
             (.mlbLeagueSchedule, .mlbLeagueSchedule),
             (.mlbGameStats, .mlbGameStats),
             (.mlbTournament, .mlbTournament),
+            (.tennisPlayerStandings, .tennisPlayerStandings),
+            (.tennisLeagueSchedule, .tennisLeagueSchedule),
+            (.tennisGameStats, .tennisGameStats),
+            (.tennisTournament, .tennisTournament),
             (.unknown, .unknown):
             return true
         default:
@@ -515,6 +528,37 @@ extension DataModel {
             } else {
                 self.data = .unknown
             }
+            
+        // tennis
+        case let dataType where dataType == "tennis_player_standings":
+            let responseModel = try container.decode(TennisPlayerStandingsResponseModel.self, forKey: .data)
+            
+//            if responseModel.standings.isEmpty {
+                self.data = .unknown
+//            } else {
+//                let displayModel = modelConverter.fbPlayerStandingsConverter(response: responseModel)
+//                self.data = .fbPlayerStandings(responseModel, displayModel)
+//            }
+            
+        case let dataType where dataType == "tennis_league_schedule":
+            let responseModel = try container.decode(TennisGameScheduleResponseModel.self, forKey: .data)
+            let displayModel = modelConverter.tennisLeagueScheduleConverter(response: responseModel)
+            self.data = .tennisLeagueSchedule(responseModel, displayModel)
+            
+        case let dataType where dataType == "tennis_game_stats":
+            let responseModel = try container.decode(TennisGameStatsResponseModel.self, forKey: .data)
+            
+            if responseModel.game == nil {
+                self.data = .unknown
+            } else {
+                let displayModel = modelConverter.tennisGameStatsConverter(response: responseModel)
+                self.data = .tennisGameStats(responseModel, displayModel)
+            }
+            
+        case let dataType where dataType == "tennis_league_tournament":
+            let responseModel = try container.decode(TennisGameScheduleResponseModel.self, forKey: .data)
+            let displayModel = modelConverter.tennisTournamentConverter(response: responseModel)
+            self.data = .tennisTournament(responseModel, displayModel)
             
         default:
             self.data = .unknown

@@ -146,6 +146,9 @@ struct FBTournamentStore {
                 let responseModel = FBGameScheduleResponseModel(
                     scheduleType: .teamFlat,
                     scheduledMonths: nil,
+                    startDate: nil,
+                    endDate: nil,
+                    relatedLeagueIds: nil,
                     schedule: gameList
                 )
                 
