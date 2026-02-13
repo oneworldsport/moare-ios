@@ -97,9 +97,19 @@ struct Constants {
             static let was = 1610612764
             static let det = 1610612765
             static let cha = 1610612766
+            // TODO: 임시 올스타 팀 id. 나중에 id s3에서 가져와 사용하게 리팩토링 필요.
+            static let teamMelo = 1610616862
+            static let teamAustin = 1610616865
+            static let teamTMac = 1610616864
+            static let teamVince = 1610616863
+            static let teamStars = 1610616859
+            static let teamWorld = 1610616861
+            static let teamStripes = 1610616860
+            static let allStar = [teamMelo, teamAustin, teamTMac, teamVince, teamStars, teamWorld, teamStripes]
+            //
             static let eastConference = [cle, bos, nyk, ind, mil, det, orl, atl, chi, mia, tor, bkn, phi, cha, was]
             static let westConference = [nop, dal, den, gsw, hou, lac, lal, min, phx, por, sac, sas, okc, uta, mem]
-            static let all = eastConference + westConference
+            static let all = eastConference + westConference + allStar
         }
         
         // mlb teams
