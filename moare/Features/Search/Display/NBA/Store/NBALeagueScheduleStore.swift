@@ -43,6 +43,7 @@ struct NBALeagueScheduleStore {
         case selectGame(game: NBAGameForSchedule)
         case showTournament
         case showTeamStandings
+        case refreshGames
         
         /* ---------------------
            private
@@ -52,6 +53,7 @@ struct NBALeagueScheduleStore {
         
         case updateDisplayDataState(fetchState: ApiFetchState)
         case setDisplayModel(displayModel: NBALeagueScheduleDisplayModel)
+        case updateDisplayModelGames([NBAGameForSchedule])
         
         case updateFilteredGames
         
@@ -63,8 +65,6 @@ struct NBALeagueScheduleStore {
         case showTournament(model: SportDecodableModel)
         case showTeamStandings(model: SportDecodableModel)
     }
-    
-    @Dependency(\.translatedNameProvider) var nameProvider
     
     var body: some Reducer<State, Action> {
         Scope(state: \.baseSchedule, action: \.baseSchedule) { BaseSchedule() }
@@ -165,10 +165,9 @@ struct NBALeagueScheduleStore {
                             CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: day.day)
                         }
                         
-                        gameResultOpenedStateList.merge((games ?? []).reduce(into: [:]) { $0[$1.gameId] = state.baseSchedule.isAllResultOpened }) { _, new in new }
-                        
-                        // NOTE: games는 optional인데 왜 컴파일 에러가 안나지..?
-                        newFilteredGame[index] = games ?? []
+                        gameResultOpenedStateList.merge((games).reduce(into: [:]) { $0[$1.gameId] = state.baseSchedule.isAllResultOpened }) { _, new in new }
+                    
+                        newFilteredGame[index] = games
                         
                         if games.isEmpty == true {
                             newDay.isDataEmpty = true
@@ -224,11 +223,11 @@ struct NBALeagueScheduleStore {
                         let yearMonth = selectedYearMonth[0] + selectedYearMonth[1]
                         
                         let entity = displayModel.entityInfo.first ?? EntityInfo(
-                            entityId: 90001,
+                            entityId: Constants.Ids.nba,
                             entityName: "NBA",
                             category: "basketball",
                             entityType: "league",
-                            leagueId: 90001,
+                            leagueId: Constants.Ids.nba,
                             teamId: nil,
                             playerId: nil
                         )
@@ -312,6 +311,48 @@ struct NBALeagueScheduleStore {
                     await send(.delegate(.showTeamStandings(model: result.data)))
                 }
                 
+            case .refreshGames:
+                guard let games = state.filteredGames[state.baseSchedule.selectedDayIndex] else {
+                    return .none
+                }
+                
+                let entity = state.baseSchedule.displayModel.entityInfo.first ?? EntityInfo(
+                    entityId: Constants.Ids.nba,
+                    entityName: "NBA",
+                    category: "basketball",
+                    entityType: "league",
+                    leagueId: Constants.Ids.nba,
+                    teamId: nil,
+                    playerId: nil
+                )
+                let season = state.baseSchedule.displayModel.season
+                let day = state.baseSchedule.selectedDay?.day
+                let selectedYearMonth = state.baseSchedule.selectedYearMonth
+                let splittedYearMonth = selectedYearMonth.split(separator: "/")
+                let yearMonth = splittedYearMonth[0] + splittedYearMonth[1]
+                
+                return .run { send in
+                    do {
+                        let hasLive = games.contains { game in
+                            game.gameStatus == String(Constants.GameStatus.NBA.live)
+                        }
+                        
+                        if hasLive {
+                            let result = try await searchClient.fetchLeagueSchedule(
+                                entity: entity,
+                                season: season,
+                                yearMonth: String(yearMonth),
+                                day: day
+                            )
+                            
+                            if case .nbaLeagueSchedule(_, let displayModel) = result.data {
+                                await send(.updateDisplayModelGames(displayModel.games))
+                            }
+                        }
+                    } catch {
+                    }
+                }
+                
             case .updateDisplayDataState(let fetchState):
                 state.baseSchedule.displayDataState = fetchState
                 
@@ -337,6 +378,13 @@ struct NBALeagueScheduleStore {
                 }
                 
                 return .none
+                
+            case .updateDisplayModelGames(let games):
+                let gamesById = Dictionary(uniqueKeysWithValues: games.map { ($0.gameId, $0) })
+
+                state.baseSchedule.displayModel.games = state.baseSchedule.displayModel.games.map { gamesById[$0.gameId] ?? $0 }
+                
+                return .send(.updateFilteredGames)
                 
             case .baseSchedule:
                 return .none

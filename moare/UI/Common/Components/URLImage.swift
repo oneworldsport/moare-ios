@@ -66,6 +66,7 @@ struct URLImage: View {
 //            .frame(width: customSize != nil ? customSize?.width : imageSize.width, height: customSize != nil ? customSize?.height : imageSize.height)
 //            .clipShape(Circle())
         } else {
+            // TODO: 사람일때는 person.crop.circle 이걸로 보여주게
             Circle()
                 .fill(.secondary)
                 .opacity(0.6)

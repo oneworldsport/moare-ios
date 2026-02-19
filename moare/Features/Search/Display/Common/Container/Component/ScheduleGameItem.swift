@@ -13,13 +13,17 @@ struct ScheduleGameItem<T: Decodable & Equatable>: View {
     
     var body: some View {
         let game = state.game
+        let leagueId = state.leagueId
         let teamNameDic = state.teamNameDic
-        let homeTeamId = Constants.Ids.checkTeamId(leagueId: state.leagueId, teamId: game.homeTeamId)
-        let awayTeamId = Constants.Ids.checkTeamId(leagueId: state.leagueId, teamId: game.awayTeamId)
+        let homeTeamId = Constants.Ids.checkTeamId(leagueId: leagueId, teamId: game.homeTeamId)
+        let awayTeamId = Constants.Ids.checkTeamId(leagueId: leagueId, teamId: game.awayTeamId)
         let homeTeamScore = game.homeTeamScore
         let awayTeamScore = game.awayTeamScore
         let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
         let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
+        
+        let defaultHomeTeamName = Constants.Ids.tennisAll.contains(leagueId) ? (game as? TennisGameForSchedule)?.gameInfo?.homeTeam?.name ?? "" : ""
+        let defaultAwayTeamName = Constants.Ids.tennisAll.contains(leagueId) ? (game as? TennisGameForSchedule)?.gameInfo?.awayTeam?.name ?? "" : ""
         
         HStack(spacing: 0) {
             /* ---------------------
@@ -30,10 +34,10 @@ struct ScheduleGameItem<T: Decodable & Equatable>: View {
 //                searchStore.send(.performSearch())
             }) {
                 VStack(spacing: 2) {
-                    URLImage(url: Util.teamLogoURL(leagueId: state.leagueId, teamId: homeTeamId), size: .small)
+                    URLImage(url: Util.teamLogoURL(leagueId: leagueId, teamId: homeTeamId), size: .small)
                     
                     // TODO: 그냥 id가 오류로 없는 경우도 "미정"이라고 나올 수 있음
-                    Text(homeTeamId == nil ? "미정" : (teamNameDic["short_\(homeTeamId ?? 0)"] ?? ""))
+                    Text(homeTeamId == nil ? "미정" : (teamNameDic["short_\(homeTeamId ?? 0)"] ?? defaultHomeTeamName))
                         .font(.system(size: 13))
                         .lineLimit(2)
                     
@@ -57,17 +61,29 @@ struct ScheduleGameItem<T: Decodable & Equatable>: View {
 //                .contentShape(Rectangle())
             
             // score
-            VStack(spacing: 2) {
-                // 축구 패널티킥 경기는 일반 스코어 검정색
-                let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (homeTeamScore >= awayTeamScore ? .moare : .primary)
+            HStack {
+                VStack(spacing: 2) {
+                    // 축구 패널티킥 경기는 일반 스코어 검정색
+                    let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (homeTeamScore >= awayTeamScore ? .moare : .primary)
+                    
+                    Text("\(homeTeamScore)")
+                        .foregroundStyle(scoreColor)
+                    
+                    if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
+                        Text("\(homeTeamPenaltyScore)")
+                            .font(.system(size: 12))
+                            .foregroundStyle(homeTeamPenaltyScore >= awayTeamPenaltyScore ? .moare : .primary)
+                    }
+                }
                 
-                Text("\(homeTeamScore)")
-                    .foregroundStyle(scoreColor)
-                
-                if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
-                    Text("\(homeTeamPenaltyScore)")
-                        .font(.system(size: 12))
-                        .foregroundStyle(homeTeamPenaltyScore >= awayTeamPenaltyScore ? .moare : .primary)
+                if state.shouldShowWinner && state.isHomeWinner {
+                    RoundedBorderText(
+                        text: "승",
+                        fontSize: 11,
+                        textColor: .moare,
+                        radius: 4,
+                        strokeColor: .moare
+                    )
                 }
             }
             .frame(width: 60)
@@ -92,7 +108,7 @@ struct ScheduleGameItem<T: Decodable & Equatable>: View {
                 
                 // game date
                 if state.shouldShowOnlyDateTime {
-                    Text(CalendarUtil.formatDate(date: state.game.date, formatType: .ampm))
+                    Text(CalendarUtil.formatDate(date: state.game.date, outputFormatType: .ampm))
                         .font(.system(size: 12))
                         .padding(.vertical, 2)
                 } else {
@@ -100,7 +116,7 @@ struct ScheduleGameItem<T: Decodable & Equatable>: View {
                         .font(.system(size: 12))
                         .padding(.top, 2)
                     
-                    Text(CalendarUtil.formatDate(date: state.game.date, formatType: .ampm))
+                    Text(CalendarUtil.formatDate(date: state.game.date, outputFormatType: .ampm))
                         .font(.system(size: 12))
                         .padding(.bottom, 2)
                 }
@@ -130,17 +146,29 @@ struct ScheduleGameItem<T: Decodable & Equatable>: View {
                away
                --------------------- */
             // socre
-            VStack(spacing: 2) {
-                // 축구 패널티킥 경기는 일반 스코어 검정색
-                let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (awayTeamScore >= homeTeamScore ? .moare : .primary)
+            HStack {
+                if state.shouldShowWinner && !state.isHomeWinner {
+                    RoundedBorderText(
+                        text: "승",
+                        fontSize: 11,
+                        textColor: .moare,
+                        radius: 4,
+                        strokeColor: .moare
+                    )
+                }
                 
-                Text("\(awayTeamScore)")
-                    .foregroundStyle(scoreColor)
-                
-                if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
-                    Text("\(awayTeamPenaltyScore)")
-                        .font(.system(size: 12))
-                        .foregroundStyle(awayTeamPenaltyScore >= homeTeamPenaltyScore ? .moare : .primary)
+                VStack(spacing: 2) {
+                    // 축구 패널티킥 경기는 일반 스코어 검정색
+                    let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (awayTeamScore >= homeTeamScore ? .moare : .primary)
+                    
+                    Text("\(awayTeamScore)")
+                        .foregroundStyle(scoreColor)
+                    
+                    if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
+                        Text("\(awayTeamPenaltyScore)")
+                            .font(.system(size: 12))
+                            .foregroundStyle(awayTeamPenaltyScore >= homeTeamPenaltyScore ? .moare : .primary)
+                    }
                 }
             }
             .frame(width: 60)
@@ -155,9 +183,9 @@ struct ScheduleGameItem<T: Decodable & Equatable>: View {
 //                searchStore.send(.performSearch())
             }) {
                 VStack(spacing: 2) {
-                    URLImage(url: Util.teamLogoURL(leagueId: state.leagueId, teamId: awayTeamId), size: .small)
+                    URLImage(url: Util.teamLogoURL(leagueId: leagueId, teamId: awayTeamId), size: .small)
                     
-                    Text(awayTeamId == nil ? "미정" : (teamNameDic["short_\(awayTeamId ?? 0)"] ?? ""))
+                    Text(awayTeamId == nil ? "미정" : (teamNameDic["short_\(awayTeamId ?? 0)"] ?? defaultAwayTeamName))
                         .font(.system(size: 13))
                         .lineLimit(2)
                     

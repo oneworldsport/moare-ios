@@ -67,7 +67,7 @@ struct NBAGameStatsView: View {
         let gameDetailContent: String = {
             var result = ""
             result += "\(CalendarUtil.formatDate(date: game.gameSummary?.gameDate).split(separator: " ").first ?? "")\n"
-            result += "\(CalendarUtil.formatDate(date: game.gameSummary?.gameDate, formatType: .ampm))\n"
+            result += "\(CalendarUtil.formatDate(date: game.gameSummary?.gameDate, outputFormatType: .ampm))\n"
             result += "\(teamNameDic["venue_\(game.gameSummary?.homeTeamId ?? 0)"] ?? "")\n"
             result += "\(game.gameSummary?.attendance ?? 0)\n"
             
@@ -195,7 +195,7 @@ struct NBAGameStatsScoreInfoItem: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
                 CapsuleButton(
-                    text: Constants.GameStatus.nbaGameStatusText(status: String(game.gameSummary?.gameStatus ?? 0), period: game.gameSummary?.period),
+                    text: Constants.GameStatus.nbaGameStatusText(status: game.gameSummary?.gameStatus ?? 1, period: game.gameSummary?.period),
                     color: Constants.GameStatus.gameStatusColor(leagueId: Constants.Ids.nba, status: String(game.gameSummary?.gameStatus ?? 0))
                 ) {
                 }

@@ -32,6 +32,8 @@ struct Util {
                 } else {
                     return nil
                 }
+            case let id where Constants.Ids.tennisAll.contains(id):
+                return "https://player-team-images.s3.ap-northeast-2.amazonaws.com/tennis/player/\(teamId).png"
             default :
                 return nil
             }

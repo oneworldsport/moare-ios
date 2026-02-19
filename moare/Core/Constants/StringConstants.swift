@@ -67,6 +67,14 @@ struct StringConstants {
                 return "세리에A"
             case Constants.Ids.ligue1:
                 return "리그1"
+            case Constants.Ids.mls:
+                return "MLS"
+            case Constants.Ids.championsLeague:
+                return "챔피언스리그"
+            case Constants.Ids.europaLeague:
+                return "유로파리그"
+            case Constants.Ids.conferenceLeague:
+                return "컨퍼런스리그"
             case Constants.Ids.faCup:
                 return "FA컵"
             case Constants.Ids.eflCup:
@@ -158,6 +166,81 @@ struct StringConstants {
         static let gameStatsSecondCategories = gameStatsHittingCategories + gameStatsPitchingCategories + gameStatsRunningCategories
     }
     
+    struct Tennis {
+        static func leagueNameStr(leagueId: Int) -> String {
+            switch leagueId {
+            case Constants.Ids.ausOpenMSingle:
+                return "호주오픈 남자단식"
+            case Constants.Ids.ausOpenMDoubles:
+                return "호주오픈 남자복식"
+            case Constants.Ids.ausOpenMixedDoubles:
+                return "호주오픈 혼합복식"
+            case Constants.Ids.ausOpenWSingle:
+                return "호주오픈 여자단식"
+            case Constants.Ids.ausOpenWDoubles:
+                return "호주오픈 여자복식"
+            default :
+                return ""
+            }
+        }
+        
+        static func tournamentNameStr(leagueId: Int) -> String {
+            switch leagueId {
+            case let id where Constants.Ids.ausOpenAll.contains(id):
+                return "호주오픈"
+            default :
+                return ""
+            }
+        }
+        
+        static let playerStatKeyList = ["aces", "doubleFaults", "firstServeAccuracy", "firstServePointsAccuracy", "secondServePointsAccuracy", "breakPointsSaved", "pointsTotal", "servicePointsScored", "receiverPointsScored", "gamesWon", "serviceGamesWon", "winnersTotal", "forehandWinners", "backhandWinners", "errorsTotal", "unforcedErrorsTotal"]
+        static let playerStatKrnameMap = [
+            "aces": "에이스",
+            "doubleFaults": "더블 폴트",
+            "firstServeAccuracy": "1st 서브 성공",
+            "firstServePointsAccuracy": "1st 서브 득점",
+            "secondServePointsAccuracy": "2nd 서브 득점",
+            "breakPointsSaved": "브레이크 포인트",
+            "pointsTotal": "총 포인트",
+            "servicePointsScored": "서브 포인트",
+            "receiverPointsScored": "리턴 포인트",
+            "gamesWon": "이긴 게임",
+            "serviceGamesWon": "이긴 서브 게임",
+            "winnersTotal": "위너",
+            "forehandWinners": "포핸드 위너",
+            "backhandWinners": "백핸드 위너",
+            "errorsTotal": "실책",
+            "unforcedErrorsTotal": "자책(Unforced errors)"
+        ]
+        
+        static func relatedLeaguesKrName(leagueId: Int) -> String? {
+            if Constants.Ids.mSingleAll.contains(leagueId) { return "남자 단식" }
+            if Constants.Ids.wSingleAll.contains(leagueId) { return "여자 단식" }
+            if Constants.Ids.mDoublesAll.contains(leagueId) { return "남자 복식" }
+            if Constants.Ids.wDoublesAll.contains(leagueId) { return "여자 복식" }
+            if Constants.Ids.mixedDoublesAll.contains(leagueId) { return "혼합 복식" }
+            return nil
+        }
+        
+        static func relatedLeagueRank(leagueId: Int) -> Int {
+            if Constants.Ids.mSingleAll.contains(leagueId) { return 0 }
+            if Constants.Ids.wSingleAll.contains(leagueId) { return 1 }
+            if Constants.Ids.mDoublesAll.contains(leagueId) { return 2 }
+            if Constants.Ids.wDoublesAll.contains(leagueId) { return 3 }
+            if Constants.Ids.mixedDoublesAll.contains(leagueId) { return 4 }
+            return 999
+        }
+        
+        static func groundTypeKr(groundType: String?) -> String {
+            guard let groundType else { return "" }
+            
+            if groundType.lowercased().contains("hardcourt") { return "하드" }
+            if groundType.lowercased().contains("grass") { return "잔디" }
+            if groundType.lowercased().contains("clay") { return "클레이" }
+            return groundType
+        }
+    }
+    
     static func viewPreparingAdviseText(type: String) -> String {
         return "\(type) 화면은 더 나은 서비스 제공을 위해 현재 개선 작업 중입니다. 이용에 불편을 드려 죄송합니다."
     }
@@ -178,10 +261,18 @@ struct StringConstants {
     }
     
     static func tournamentOrStandingsText(leagueId: Int) -> String {
-        if Constants.Ids.footballDrawTournamentLeagues.contains(leagueId) {
+        if Constants.Ids.footballDrawTournamentLeagues.contains(leagueId) || Constants.Ids.tennisAll.contains(leagueId) {
             return "대진표"
         } else {
             return "리그 순위"
+        }
+    }
+    
+    static func leagueOrTournamentText(leagueId: Int) -> String {
+        if Constants.Ids.tennisAll.contains(leagueId) {
+            return "대회"
+        } else {
+            return "시즌"
         }
     }
 }

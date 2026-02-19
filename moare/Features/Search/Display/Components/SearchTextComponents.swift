@@ -129,3 +129,26 @@ struct BaseballLeagueTitleForGameStats: View {
         .padding(.leading, UIConstants.Padding.defaultHPadding)
     }
 }
+
+struct TennisTournamentTitle: View {
+    let leagueId: Int
+    let season: Int
+    
+    init(leagueId: Int, season: Int?) {
+        self.leagueId = leagueId
+        self.season = season ?? CalendarUtil.currentYear
+    }
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            URLImage(
+                url: "https://player-team-images.s3.ap-northeast-2.amazonaws.com/tennis/tournament/\(leagueId).png",
+                size: .small
+            )
+            .padding(.trailing, 6)
+            
+            Text("\(StringConstants.Tennis.tournamentNameStr(leagueId: leagueId)) " + String(season))
+                .fontWeight(.medium)
+        }
+    }
+}

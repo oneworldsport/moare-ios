@@ -59,8 +59,6 @@ struct BaseGameStatsStore<T> {
                 state.teamCategorySelectedIndex = 0
                 state.shouldScrollCategory = false
                 
-                
-                // TODO: 다른 BaseStore도 다 이렇게 refactoring 필요
                 state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                 
                 if let displayModel = state.displayModel as? SportDisplayModel {

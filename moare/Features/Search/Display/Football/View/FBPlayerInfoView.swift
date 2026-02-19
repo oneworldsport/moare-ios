@@ -484,7 +484,7 @@ struct FBPlayerInfoFifthItem: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         
-                        Text(CalendarUtil.formatDate(date: lastGame.fixture.date, formatType: .ampmWithDayOfWeekDate))
+                        Text(CalendarUtil.formatDate(date: lastGame.fixture.date, outputFormatType: .ampmWithDayOfWeekDate))
                             .font(.system(size: 15))
                     }
                     .frame(width: UIScreen.main.bounds.width * 0.45) // NOTE: 너비를 화면 전체 너비중 45%로 고정
@@ -571,7 +571,7 @@ struct FBPlayerInfoSixthItem: View {
                 }
                 .opacity(showContents ? 1 : 0)
                 
-                Text(CalendarUtil.formatDate(date: nextGame.fixture.date, formatType: .ampmWithDayOfWeekDate))
+                Text(CalendarUtil.formatDate(date: nextGame.fixture.date, outputFormatType: .ampmWithDayOfWeekDate))
                     .font(.system(size: 15))
                     .opacity(showContents ? 1 : 0)
             } else {

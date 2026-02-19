@@ -83,22 +83,67 @@ struct KBOLeagueScheduleList: View {
     @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var kboLeagueScheduleStore: StoreOf<KBOLeagueScheduleStore>
     
+    @State private var pageIdx: Int? = 0
+    
     var body: some View {
-        let gameListToDisplay = kboLeagueScheduleStore.filteredGames[kboLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+        let selectedDay = kboLeagueScheduleStore.baseSchedule.selectedDay?.day
         
-        ScrollView {
-            LazyVStack(spacing: 8) {
-                ForEach(gameListToDisplay, id: \.itemKey) { item in
-                    KBOLeagueScheduleListItem(
-                        searchStore: searchStore,
-                        kboLeagueScheduleStore: kboLeagueScheduleStore,
-                        data: item
-                    )
-                    .padding(.vertical, 8)
-                }
+        let days = kboLeagueScheduleStore.baseSchedule.days
+        var window: [Int] {
+            days.indices.filter { idx in
+                !(days[idx].isDataEmpty)
             }
         }
-        .frame(maxHeight: .infinity)
+        
+        ScrollView(.horizontal) {
+            LazyHStack(spacing: 0) {
+                ForEach(window, id: \.self) { day in
+                    // GameList
+                    let gameListToDisplay = kboLeagueScheduleStore.filteredGames[day] ?? []
+                    let hasLive = gameListToDisplay.contains { game in
+                        game.gameStatus == Constants.GameStatus.KBO.live
+                    }
+                    
+                    ScrollView {
+                        LazyVStack(spacing: 8) {
+                            ForEach(gameListToDisplay, id: \.itemKey) { item in
+                                KBOLeagueScheduleListItem(
+                                    searchStore: searchStore,
+                                    kboLeagueScheduleStore: kboLeagueScheduleStore,
+                                    data: item
+                                )
+                                .padding(.vertical, 8)
+                            }
+                        }
+                    }
+                    .frame(maxHeight: .infinity)
+                    .refreshableIf(hasLive) {
+                        await kboLeagueScheduleStore.send(.refreshGames).finish()
+                    }
+                    .containerRelativeFrame(.horizontal, count: 1, spacing: 0)
+                    .id(day)
+                }
+            }
+            .scrollTargetLayout() // paging 타겟 레이아웃
+        }
+        .scrollIndicators(.hidden)
+        .scrollTargetBehavior(.paging)
+        .scrollPosition(id: $pageIdx)
+        .onAppear {
+            // 첫 진입 시 선택 날짜로 스크롤 위치 맞춤
+            guard let selectedDay else { return }
+            pageIdx = selectedDay - 1
+        }
+        .onChange(of: pageIdx) {
+            guard let pageIdx else { return }
+            guard days.indices.contains(pageIdx) else { return }
+
+            kboLeagueScheduleStore.send(.baseSchedule(.selectDay(days[pageIdx], pageIdx)))
+        }
+        .onChange(of: selectedDay) {
+            guard let selectedDay else { return }
+            pageIdx = selectedDay - 1
+        }
     }
 }
 

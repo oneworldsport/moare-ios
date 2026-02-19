@@ -493,7 +493,7 @@ struct KBOTeamInfoFifthItem: View {
                 }
                 .opacity(showContents ? 1 : 0)
                 
-                Text(CalendarUtil.formatDate(date: lastGame.gameInfo?.date, formatType: .ampmWithDayOfWeekDate))
+                Text(CalendarUtil.formatDate(date: lastGame.gameInfo?.date, outputFormatType: .ampmWithDayOfWeekDate))
                     .font(.system(size: 15))
                     .opacity(showContents ? 1 : 0)
             }
@@ -561,7 +561,7 @@ struct KBOTeamInfoSixthItem: View {
                 }
                 .opacity(showContents ? 1 : 0)
                 
-                Text(CalendarUtil.formatDate(date: nextGame.gameInfo?.date, formatType: .ampmWithDayOfWeekDate))
+                Text(CalendarUtil.formatDate(date: nextGame.gameInfo?.date, outputFormatType: .ampmWithDayOfWeekDate))
                     .font(.system(size: 15))
                     .opacity(showContents ? 1 : 0)
             } else {

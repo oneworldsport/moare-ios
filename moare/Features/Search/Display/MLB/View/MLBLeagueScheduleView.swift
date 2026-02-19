@@ -83,22 +83,67 @@ struct MLBLeagueScheduleList: View {
     @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var mlbLeagueScheduleStore: StoreOf<MLBLeagueScheduleStore>
     
+    @State private var pageIdx: Int? = 0
+    
     var body: some View {
-        let gameListToDisplay = mlbLeagueScheduleStore.filteredGames[mlbLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+        let selectedDay = mlbLeagueScheduleStore.baseSchedule.selectedDay?.day
         
-        ScrollView {
-            LazyVStack(spacing: 8) {
-                ForEach(gameListToDisplay, id: \.gameId) { item in
-                    MLBLeagueScheduleListItem(
-                        searchStore: searchStore,
-                        mlbLeagueScheduleStore: mlbLeagueScheduleStore,
-                        data: item
-                    )
-                    .padding(.vertical, 8)
-                }
+        let days = mlbLeagueScheduleStore.baseSchedule.days
+        var window: [Int] {
+            days.indices.filter { idx in
+                !(days[idx].isDataEmpty)
             }
         }
-        .frame(maxHeight: .infinity)
+        
+        ScrollView(.horizontal) {
+            LazyHStack(spacing: 0) {
+                ForEach(window, id: \.self) { day in
+                    // GameList
+                    let gameListToDisplay = mlbLeagueScheduleStore.filteredGames[day] ?? []
+                    let hasLive = gameListToDisplay.contains { game in
+                        game.gameStatus == Constants.GameStatus.MLB.live
+                    }
+                    
+                    ScrollView {
+                        LazyVStack(spacing: 8) {
+                            ForEach(gameListToDisplay, id: \.gameId) { item in
+                                MLBLeagueScheduleListItem(
+                                    searchStore: searchStore,
+                                    mlbLeagueScheduleStore: mlbLeagueScheduleStore,
+                                    data: item
+                                )
+                                .padding(.vertical, 8)
+                            }
+                        }
+                    }
+                    .frame(maxHeight: .infinity)
+                    .refreshableIf(hasLive) {
+                        await mlbLeagueScheduleStore.send(.refreshGames).finish()
+                    }
+                    .containerRelativeFrame(.horizontal, count: 1, spacing: 0)
+                    .id(day)
+                }
+            }
+            .scrollTargetLayout() // paging 타겟 레이아웃
+        }
+        .scrollIndicators(.hidden)
+        .scrollTargetBehavior(.paging)
+        .scrollPosition(id: $pageIdx)
+        .onAppear {
+            // 첫 진입 시 선택 날짜로 스크롤 위치 맞춤
+            guard let selectedDay else { return }
+            pageIdx = selectedDay - 1
+        }
+        .onChange(of: pageIdx) {
+            guard let pageIdx else { return }
+            guard days.indices.contains(pageIdx) else { return }
+
+            mlbLeagueScheduleStore.send(.baseSchedule(.selectDay(days[pageIdx], pageIdx)))
+        }
+        .onChange(of: selectedDay) {
+            guard let selectedDay else { return }
+            pageIdx = selectedDay - 1
+        }
     }
 }
 

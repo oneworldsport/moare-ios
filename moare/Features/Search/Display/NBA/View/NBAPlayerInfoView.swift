@@ -673,16 +673,16 @@ struct NBAPlayerInfoEighthItem: View {
                 .opacity(showContents ? 1 : 0)
             
             if let lastGame {
-                let homeTeam = lastGame.boxScoreTraditional?.homeTeam
-                let awayTeam = lastGame.boxScoreTraditional?.awayTeam
-                let homeTeamScore = lastGame.lineScore?.first { $0.teamId == homeTeam?.teamId }?.pts ?? 0
-                let awayTeamScore = lastGame.lineScore?.first { $0.teamId == awayTeam?.teamId }?.pts ?? 0
+                let homeTeamId = lastGame.gameSummary?.homeTeamId ?? 0
+                let awayTeamId = lastGame.gameSummary?.awayTeamId ?? 0
+                let homeTeamScore = lastGame.lineScore?.first { $0.teamId == homeTeamId }?.pts ?? 0
+                let awayTeamScore = lastGame.lineScore?.first { $0.teamId == awayTeamId }?.pts ?? 0
                 
                 HStack {
                     VStack {
                         HStack(spacing: 0) {
                             HStack(spacing: 0) {
-                                Text(homeTeam == nil ? "" : teamNameDic["short_\(homeTeam!.teamId)"] ?? homeTeam!.teamCity)
+                                Text(teamNameDic["short_\(homeTeamId)"] ?? "")
                                     .font(.system(size: 14))
                                     .fontWeight(.light)
                                     .lineLimit(1)
@@ -704,7 +704,7 @@ struct NBAPlayerInfoEighthItem: View {
                                     .fontWeight(.medium)
                                     .foregroundStyle((awayTeamScore >= homeTeamScore) ? .moare : .primary)
                                 
-                                Text(awayTeam == nil ? "" : teamNameDic["short_\(awayTeam!.teamId)"] ?? awayTeam!.teamCity)
+                                Text(teamNameDic["short_\(awayTeamId)"] ?? "")
                                     .font(.system(size: 14))
                                     .fontWeight(.light)
                                     .lineLimit(1)
@@ -712,7 +712,7 @@ struct NBAPlayerInfoEighthItem: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         
-                        Text(CalendarUtil.formatDate(date: lastGame.gameSummary?.gameDate, formatType: .ampmWithDayOfWeekDate))
+                        Text(CalendarUtil.formatDate(date: lastGame.gameSummary?.gameDate, outputFormatType: .ampmWithDayOfWeekDate))
                             .font(.system(size: 15))
                     }
                     .frame(width: UIScreen.main.bounds.width * 0.40) // NOTE: 너비를 화면 전체 너비중 40%로 고정
@@ -799,11 +799,11 @@ struct NBAPlayerInfoNinthItem: View {
                 .opacity(showContents ? 1 : 0)
             
             if let nextGame {
-                let homeTeamId = nextGame.gameSummary?.homeTeamId
-                let awayTeamId = nextGame.gameSummary?.awayTeamId
+                let homeTeamId = nextGame.gameSummary?.homeTeamId ?? 0
+                let awayTeamId = nextGame.gameSummary?.awayTeamId ?? 0
                 
                 HStack {
-                    Text(homeTeamId == nil ? "" : teamNameDic["short_\(homeTeamId ?? 0)"] ?? "")
+                    Text(teamNameDic["short_\(homeTeamId)"] ?? "")
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -811,14 +811,14 @@ struct NBAPlayerInfoNinthItem: View {
                     Text(" vs ")
                         .fontWeight(.semibold)
                     
-                    Text(awayTeamId == nil ? "" : teamNameDic["short_\(awayTeamId ?? 0)"] ?? "")
+                    Text(teamNameDic["short_\(awayTeamId)"] ?? "")
                         .font(.system(size: 16))
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .opacity(showContents ? 1 : 0)
                 
-                Text(CalendarUtil.formatDate(date: nextGame.gameSummary?.gameDate, formatType: .ampmWithDayOfWeekDate))
+                Text(CalendarUtil.formatDate(date: nextGame.gameSummary?.gameDate, outputFormatType: .ampmWithDayOfWeekDate))
                     .font(.system(size: 15))
                     .opacity(showContents ? 1 : 0)
             } else {

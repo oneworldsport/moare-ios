@@ -33,26 +33,22 @@ struct BaseStatsStore<T> {
         Reduce { state, action in
             switch action {
             case .initData:
+                state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
+                
                 if let displayModel = state.displayModel as? SportDisplayModel {
                     switch displayModel.leagueId {
                     case Constants.Ids.epl:
                         state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplPlayerDic)
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                     case Constants.Ids.laliga:
                         state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaPlayerDic)
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                     case Constants.Ids.bundesliga:
                         state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                     case Constants.Ids.ligue1:
                         state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.ligue1PlayerDic)
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                     case Constants.Ids.seriea:
                         state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaPlayerDic)
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                     case Constants.Ids.mls:
                         state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlsPlayerDic)
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                     case Constants.Ids.nba:
                         state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaPlayerDic)
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)

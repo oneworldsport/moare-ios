@@ -32,3 +32,22 @@ extension View {
         }
     }
 }
+
+
+//private struct HeightKey: PreferenceKey {
+//    static var defaultValue: CGFloat = 0
+//    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+//        value = nextValue()
+//    }
+//}
+//
+//extension View {
+//    func readHeight(_ onChange: @escaping (CGFloat) -> Void) -> some View {
+//        background(
+//            GeometryReader { proxy in
+//                Color.clear.preference(key: HeightKey.self, value: proxy.size.height)
+//            }
+//        )
+//        .onPreferenceChange(HeightKey.self, perform: onChange)
+//    }
+//}

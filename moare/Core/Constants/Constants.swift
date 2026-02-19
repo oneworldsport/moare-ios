@@ -34,9 +34,6 @@ struct Constants {
         static let ligue1 = 61
         static let seriea = 135
         static let mls = 253
-        static let nba = 90001
-        static let kbo = 90101
-        static let mlb = 90102
         static let footballLeagues = [epl, laliga, bundesliga, ligue1, seriea, mls]
         static let championsLeague = 2
         static let europaLeague = 3
@@ -50,6 +47,194 @@ struct Constants {
         static let footballTournamentLeagues = [championsLeague, europaLeague, conferenceLeague, faCup, eflCup, dfbPokal, coupeDeFrance, copaDelRey, coppaItalia]
         static let footballDrawTournamentLeagues = [faCup, eflCup, dfbPokal, coupeDeFrance, copaDelRey, coppaItalia]
         static let footballAll = footballLeagues + footballTournamentLeagues // TODO: 이걸로 refactoring 필요
+        
+        static let nba = 90001
+        static let kbo = 90101
+        static let mlb = 90102
+        
+        // AUS OPEN
+        static let ausOpenMSingle = 80001
+        static let ausOpenMDoubles = 80002
+        static let ausOpenMixedDoubles = 80003
+        static let ausOpenWSingle = 80004
+        static let ausOpenWDoubles = 80005
+        static let ausOpenAll = [ausOpenMSingle, ausOpenMDoubles, ausOpenMixedDoubles, ausOpenWSingle, ausOpenWDoubles]
+        // ROLAND GARROS
+        static let rolandGarrosMSingle = 80006
+        static let rolandGarrosMDoubles = 80007
+        static let rolandGarrosMixedDoubles = 80008
+        static let rolandGarrosWSingle = 80009
+        static let rolandGarrosWDoubles = 80010
+        static let rolandGarrosAll = [rolandGarrosMSingle, rolandGarrosMDoubles, rolandGarrosMixedDoubles, rolandGarrosWSingle, rolandGarrosWDoubles]
+        // WIMBLEDON
+        static let wimbledonMSingle = 80011
+        static let wimbledonMDoubles = 80012
+        static let wimbledonMixedDoubles = 80013
+        static let wimbledonWSingle = 80014
+        static let wimbledonWDoubles = 80015
+        static let wimbledonAll = [wimbledonMSingle, wimbledonMDoubles, wimbledonMixedDoubles, wimbledonWSingle, wimbledonWDoubles]
+        // US OPEN
+       static let usOpenMSingle = 80016
+       static let usOpenMDoubles = 80017
+       static let usOpenMixedDoubles = 80018
+       static let usOpenWSingle = 80019
+       static let usOpenWDoubles = 80020
+       static let usOpenAll = [usOpenMSingle, usOpenMDoubles, usOpenMixedDoubles, usOpenWSingle, usOpenWDoubles]
+        // INDIAN WELLS
+       static let indianWellsMSingle = 80021
+       static let indianWellsMDoubles = 80022
+       static let indianWellsWSingle = 80023
+       static let indianWellsWDoubles = 80024
+       static let indianWellsAll = [indianWellsMSingle, indianWellsMDoubles, indianWellsWSingle, indianWellsWDoubles]
+        // MIAMI
+        static let miamiMSingle = 80025
+        static let miamiMDoubles = 80026
+        static let miamiWSingle = 80027
+        static let miamiWDoubles = 80028
+        static let miamiAll = [miamiMSingle, miamiMDoubles, miamiWSingle, miamiWDoubles]
+        // MONTE CARLO
+       static let monteCarloMSingle = 80029
+       static let monteCarloMDoubles = 80030
+       static let monteCarloAll = [monteCarloMSingle, monteCarloMDoubles]
+        // MADRID
+        static let madridMSingle = 80031
+        static let madridMDoubles = 80032
+        static let madridWSingle = 80033
+        static let madridWDoubles = 80034
+        static let madridAll = [madridMSingle, madridMDoubles, madridWSingle, madridWDoubles]
+        // ROME
+        static let romeMSingle = 80035
+        static let romeMDoubles = 80036
+        static let romeWSingle = 80037
+        static let romeWDoubles = 80038
+        static let romeAll = [romeMSingle, romeMDoubles, romeWSingle, romeWDoubles]
+        // TORONTO
+        static let torontoMSingle = 80039
+        static let torontoMDoubles = 80040
+        static let torontoWSingle = 80041
+        static let torontoWDoubles = 80042
+        static let torontoAll = [torontoMSingle, torontoMDoubles, torontoWSingle, torontoWDoubles]
+        // MONTREAL
+        static let montrealMSingle = 80043
+        static let montrealMDoubles = 80044
+        static let montrealAll = [montrealMSingle, montrealMDoubles]
+        // CINCINNAI
+        static let cincinnatiMSingle = 80045
+        static let cincinnatiMDoubles = 80046
+        static let cincinnatiWSingle = 80047
+        static let cincinnatiWDoubles = 80048
+        static let cincinnatiAll = [cincinnatiMSingle, cincinnatiMDoubles, cincinnatiWSingle, cincinnatiWDoubles]
+        // SHANGHAI
+        static let shanghaiMSingle = 80049
+        static let shanghaiMDoubles = 80050
+        static let shanghaiAll = [shanghaiMSingle, shanghaiMDoubles]
+        // PARIS
+        static let parisMSingle = 80051
+        static let parisMDoubles = 80052
+        static let parisAll = [parisMSingle, parisMDoubles]
+        // DOHA (W)
+        static let dohaWSingle = 80053
+        static let dohaWDoubles = 80054
+        static let dohaAll = [dohaWSingle, dohaWDoubles]
+        // DUBAI (W)
+        static let dubaiWSingle = 80055
+        static let dubaiAll = [dubaiWSingle]
+        // BEIJING (W)
+        static let beijingWSingle = 80056
+        static let beijingWDoubles = 80057
+        static let beijingAll = [beijingWSingle, beijingWDoubles]
+        // WUHAN (W)
+        static let wuhanWSingle = 80058
+        static let wuhanWDoubles = 80059
+        static let wuhanAll = [wuhanWSingle, wuhanWDoubles]
+        
+        static let mSingleAll = [
+            ausOpenMSingle,
+            rolandGarrosMSingle,
+            wimbledonMSingle,
+            usOpenMSingle,
+            indianWellsMSingle,
+            miamiMSingle,
+            monteCarloMSingle,
+            madridMSingle,
+            romeMSingle,
+            torontoMSingle,
+            montrealMSingle,
+            cincinnatiMSingle,
+            shanghaiMSingle,
+            parisMSingle
+        ]
+        static let mDoublesAll = [
+            ausOpenMDoubles,
+            rolandGarrosMDoubles,
+            wimbledonMDoubles,
+            usOpenMDoubles,
+            indianWellsMDoubles,
+            miamiMDoubles,
+            monteCarloMDoubles,
+            madridMDoubles,
+            romeMDoubles,
+            torontoMDoubles,
+            montrealMDoubles,
+            cincinnatiMDoubles,
+            shanghaiMDoubles,
+            parisMDoubles
+        ]
+        static let mixedDoublesAll = [
+            ausOpenMixedDoubles,
+            rolandGarrosMixedDoubles,
+            wimbledonMixedDoubles,
+            usOpenMixedDoubles
+        ]
+        static let wSingleAll = [
+            ausOpenWSingle,
+            rolandGarrosWSingle,
+            wimbledonWSingle,
+            usOpenWSingle,
+            indianWellsWSingle,
+            miamiWSingle,
+            madridWSingle,
+            romeWSingle,
+            torontoWSingle,
+            cincinnatiWSingle,
+            dohaWSingle,
+            dubaiWSingle,
+            beijingWSingle,
+            wuhanWSingle
+        ]
+        static let wDoublesAll = [
+            ausOpenWDoubles,
+            rolandGarrosWDoubles,
+            wimbledonWDoubles,
+            usOpenWDoubles,
+            indianWellsWDoubles,
+            miamiWDoubles,
+            madridWDoubles,
+            romeWDoubles,
+            torontoWDoubles,
+            cincinnatiWDoubles,
+            dohaWDoubles,
+            beijingWDoubles,
+            wuhanWDoubles
+        ]
+        static let tennisAll = ausOpenAll +
+        rolandGarrosAll +
+        wimbledonAll +
+        usOpenAll +
+        indianWellsAll +
+        miamiAll +
+        monteCarloAll +
+        madridAll +
+        romeAll +
+        torontoAll +
+        montrealAll +
+        cincinnatiAll +
+        shanghaiAll +
+        parisAll +
+        dohaAll +
+        dubaiAll +
+        beijingAll +
+        wuhanAll
         
         // nba teams
         struct NBATeam {
@@ -83,9 +268,19 @@ struct Constants {
             static let was = 1610612764
             static let det = 1610612765
             static let cha = 1610612766
+            // TODO: 임시 올스타 팀 id. 나중에 id s3에서 가져와 사용하게 리팩토링 필요.
+            static let teamMelo = 1610616862
+            static let teamAustin = 1610616865
+            static let teamTMac = 1610616864
+            static let teamVince = 1610616863
+            static let teamStars = 1610616859
+            static let teamWorld = 1610616861
+            static let teamStripes = 1610616860
+            static let allStar = [teamMelo, teamAustin, teamTMac, teamVince, teamStars, teamWorld, teamStripes]
+            //
             static let eastConference = [cle, bos, nyk, ind, mil, det, orl, atl, chi, mia, tor, bkn, phi, cha, was]
             static let westConference = [nop, dal, den, gsw, hou, lac, lal, min, phx, por, sac, sas, okc, uta, mem]
-            static let all = eastConference + westConference
+            static let all = eastConference + westConference + allStar
         }
         
         // mlb teams
@@ -191,7 +386,9 @@ struct Constants {
             guard let teamId else { return nil }
             
             switch leagueId {
-            case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
+            case let id where Constants.Ids.footballLeagues.contains(id)
+                || Constants.Ids.footballTournamentLeagues.contains(id)
+                || Constants.Ids.tennisAll.contains(id):
                 return teamId
             case Constants.Ids.nba:
                 return Constants.Ids.NBATeam.all.contains(teamId) ? teamId : nil
@@ -247,6 +444,21 @@ struct Constants {
             static let live = "2"
             static let final = "3"
             static let canceled = "4"
+        }
+        
+        struct Tennis {
+            static let notStarted = 0
+            static let firstSet = 8
+            static let secondSet = 9
+            static let thirdSet = 10
+            static let fourthSet = 11
+            static let fifthSet = 12
+            static let finished = 100
+            static let canceled = 70
+            static let retired = 92
+            static let walkover = 91
+            static let liveList = [firstSet, secondSet, thirdSet, fourthSet, fifthSet]
+            static let finishedList = [finished, canceled, retired, walkover]
         }
         
         static func gameStatusText(
@@ -308,12 +520,11 @@ struct Constants {
         }
         
         static func nbaGameStatusText(
-            status: String,
+            status: Int,
             period: Int? = nil,
             isResultOpened: Bool = true
         ) -> String {
-            let intStatus = Int(status)
-            switch intStatus {
+            switch status {
             case NBA.notStarted:
                 return StringConstants.gameNotStartedStr
             case NBA.live:
@@ -359,6 +570,36 @@ struct Constants {
             }
         }
         
+        static func tennisGameStatusText(
+            status: Int?,
+            isResultOpened: Bool = true
+        ) -> String {
+            switch status {
+            case Tennis.notStarted:
+                return StringConstants.gameNotStartedStr
+            case Tennis.firstSet:
+                return "1세트"
+            case Tennis.secondSet:
+                return "2세트"
+            case Tennis.thirdSet:
+                return "3세트"
+            case Tennis.fourthSet:
+                return "4세트"
+            case Tennis.fifthSet:
+                return "5세트"
+            case Tennis.finished:
+                return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
+            case Tennis.canceled:
+                return StringConstants.gameCanceledStr
+            case Tennis.retired:
+                return isResultOpened ? "기권" : StringConstants.resultOpen
+            case Tennis.walkover:
+                return isResultOpened ? "부전" : StringConstants.resultOpen
+            default:
+                return StringConstants.gameNotStartedStr
+            }
+        }
+        
         static func isLive(leagueId: Int, status: String) -> Bool {
             switch leagueId {
             case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
@@ -369,6 +610,9 @@ struct Constants {
                 return status == MLB.live
             case Constants.Ids.kbo:
                 return status == KBO.live
+            case let id where Constants.Ids.tennisAll.contains(id):
+                let status = Int(status) ?? 0
+                return Tennis.liveList.contains(status)
             default :
                 return false
             }

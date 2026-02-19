@@ -84,6 +84,9 @@ struct KBOTournamentStore {
                 let responseModel = KBOGameScheduleResponseModel(
                     scheduleType: .teamFlat,
                     scheduledMonths: nil,
+                    startDate: nil,
+                    endDate: nil,
+                    relatedLeagueIds: nil,
                     schedule: gameList
                 )
                 

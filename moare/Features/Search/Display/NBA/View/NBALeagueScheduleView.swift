@@ -83,22 +83,68 @@ struct NBALeagueScheduleList: View {
     @Bindable var searchStore: StoreOf<SearchStore>
     @Bindable var nbaLeagueScheduleStore: StoreOf<NBALeagueScheduleStore>
     
+    @State private var pageIdx: Int? = 0
+    
     var body: some View {
-        let gameListToDisplay = nbaLeagueScheduleStore.filteredGames[nbaLeagueScheduleStore.baseSchedule.selectedDayIndex] ?? []
+        let selectedDay = nbaLeagueScheduleStore.baseSchedule.selectedDay?.day
         
-        ScrollView {
-            LazyVStack(spacing: 8) {
-                ForEach(gameListToDisplay, id: \.gameId) { item in
-                    NBALeagueScheduleListItem(
-                        searchStore: searchStore,
-                        nbaLeagueScheduleStore: nbaLeagueScheduleStore,
-                        data: item
-                    )
-                    .padding(.vertical, 8)
-                }
+        let days = nbaLeagueScheduleStore.baseSchedule.days
+        var window: [Int] {
+            days.indices.filter { idx in
+                !(days[idx].isDataEmpty)
             }
         }
-        .frame(maxHeight: .infinity)
+        
+        ScrollView(.horizontal) {
+            // NOTE: LazyHStack이어서 그런지 달력에 day 선택으로 이동 시 CapsuleBar가 약간의 버벅임이 있는 것 같음. 그렇다고 HStack으로 바꿔서 해보니 처음 화면 나오는게 엄청 오래 걸림.
+            LazyHStack(spacing: 0) {
+                ForEach(window, id: \.self) { day in
+                    // GameList
+                    let gameListToDisplay = nbaLeagueScheduleStore.filteredGames[day] ?? []
+                    let hasLive = gameListToDisplay.contains { game in
+                        game.gameStatus == String(Constants.GameStatus.NBA.live)
+                    }
+                    
+                    ScrollView {
+                        LazyVStack(spacing: 8) {
+                            ForEach(gameListToDisplay, id: \.gameId) { item in
+                                NBALeagueScheduleListItem(
+                                    searchStore: searchStore,
+                                    nbaLeagueScheduleStore: nbaLeagueScheduleStore,
+                                    data: item
+                                )
+                                .padding(.vertical, 8)
+                            }
+                        }
+                    }
+                    .frame(maxHeight: .infinity)
+                    .refreshableIf(hasLive) {
+                        await nbaLeagueScheduleStore.send(.refreshGames).finish()
+                    }
+                    .containerRelativeFrame(.horizontal, count: 1, spacing: 0)
+                    .id(day)
+                }
+            }
+            .scrollTargetLayout() // paging 타겟 레이아웃
+        }
+        .scrollIndicators(.hidden)
+        .scrollTargetBehavior(.paging)
+        .scrollPosition(id: $pageIdx)
+        .onAppear {
+            // 첫 진입 시 선택 날짜로 스크롤 위치 맞춤
+            guard let selectedDay else { return }
+            pageIdx = selectedDay - 1
+        }
+        .onChange(of: pageIdx) {
+            guard let pageIdx else { return }
+            guard days.indices.contains(pageIdx) else { return }
+
+            nbaLeagueScheduleStore.send(.baseSchedule(.selectDay(days[pageIdx], pageIdx)))
+        }
+        .onChange(of: selectedDay) {
+            guard let selectedDay else { return }
+            pageIdx = selectedDay - 1
+        }
     }
 }
 
@@ -115,7 +161,8 @@ struct NBALeagueScheduleListItem: View {
     
     var body: some View {
         let displayModel = nbaLeagueScheduleStore.baseSchedule.displayModel
-        let gameStatus = Int(data.gameStatus)
+        let gameId = data.gameId
+        let gameStatus = Int(data.gameStatus) ?? 1
         let teamNameDic = nbaLeagueScheduleStore.baseSchedule.teamNameDictionary
         
         ScheduleGameItem(
@@ -124,9 +171,9 @@ struct NBALeagueScheduleListItem: View {
                 game: data,
                 teamNameDic: teamNameDic,
                 isResultOpened: isResultOpened,
-                gameStatusText: Constants.GameStatus.nbaGameStatusText(status: data.gameStatus, period: data.gameInfo?.period, isResultOpened: isResultOpened),
+                gameStatusText: Constants.GameStatus.nbaGameStatusText(status: gameStatus, period: data.gameInfo?.period, isResultOpened: isResultOpened),
                 gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: Constants.Ids.nba, status: data.gameStatus),
-                isCapsuleButtonDisabled: gameStatus != StringConstants.NBA.gameFinal,
+                isCapsuleButtonDisabled: gameStatus != Constants.GameStatus.NBA.finished,
                 gameType: NBAUtil.gameType(gameSummary: data.gameInfo),
                 shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
             ),
@@ -135,23 +182,23 @@ struct NBALeagueScheduleListItem: View {
                     nbaLeagueScheduleStore.send(.selectGame(game: data))
                 },
                 onCapsuleButtonClick: {
-                    nbaLeagueScheduleStore.send(.updateResultOpenedState(gameId: data.gameId, isOpened: !isResultOpened))
+                    nbaLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: !isResultOpened))
                 }
             )
         )
         .onAppear {
-            if gameStatus == StringConstants.NBA.gameFinal {
-                isResultOpened = nbaLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
-            } else if gameStatus == StringConstants.NBA.gameScheduled {
+            if gameStatus == Constants.GameStatus.NBA.finished {
+                isResultOpened = nbaLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
+            } else if gameStatus == Constants.GameStatus.NBA.notStarted {
                 isResultOpened = false
             } else {
                 isResultOpened = true
             }
         }
         .onChange(of: nbaLeagueScheduleStore.gameResultOpenedStateList) {
-            if gameStatus == StringConstants.NBA.gameFinal {
+            if gameStatus == Constants.GameStatus.NBA.finished {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    isResultOpened = nbaLeagueScheduleStore.gameResultOpenedStateList[data.gameId] ?? false
+                    isResultOpened = nbaLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
                 }
             }
         }

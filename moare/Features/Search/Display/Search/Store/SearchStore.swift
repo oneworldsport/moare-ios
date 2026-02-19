@@ -322,7 +322,8 @@ struct SearchStore {
                         .kboLeagueSchedule, .kboGameStats, .kboTournament,
                         .mlbPlayerInfo, .mlbPlayerStats, .mlbPlayerStandings,
                         .mlbTeamInfo, .mlbTeamStats, .mlbTeamStandings,
-                        .mlbLeagueSchedule, .mlbGameStats, .mlbTournament: break
+                        .mlbLeagueSchedule, .mlbGameStats, .mlbTournament,
+                        .tennisLeagueSchedule, .tennisGameStats, .tennisTournament: break
                 default:
                     // TODO: animation is applied by the animation below. Should be modified
                     // TODO: 여기서 안하고 AppStore에서 하게 개선 필요
@@ -393,7 +394,11 @@ struct SearchStore {
                 return .run { send in
                     do {
                         let result = try await keywordsClient.fetchLeagueKeywords()
-                        await send(.getLeagueKeywordsSuccess(result))
+                        
+                        // 처음 magnifyingglass 나타나는 시간 0.5 + firstOpen 애니메이션 시간 0.7 + trendingKeyowrds 나타나는 시간 0.5 + 추가 0.1 = 1.8초 지연
+                        try await Task.sleep(for: .seconds(1.8))
+                        
+                        await send(.getLeagueKeywordsSuccess(result), animation: AnimationConstants.AnimationType.defaultAnimation)
                     } catch {
                     }
                 }
