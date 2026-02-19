@@ -144,6 +144,7 @@ struct SearchView: View {
                     }
                     .padding(.top, 16)
                     .background(
+                        // TODO: 이 코드때문에 LeagueKeywords가 나타날때 SearchBar가 자연스럽게 위로 이동하지 않고 튀는 느낌이 있음. 개선 필요.
                         GeometryReader { proxy in
                             Color.clear
                                 .onAppear { leagueKeywordsComponentHeight = proxy.size.height }
@@ -267,6 +268,7 @@ struct SearchView: View {
             }
             .onChange(of: searchStore.firstOpened) {
                 if searchStore.firstOpened {
+                    // firstOpen 애니메이션 시간 0.7 지연
                     DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.Duration.medium) {
                         withAnimation(AnimationConstants.AnimationType.defaultAnimation) {
                             isNoticeIconVisible = true
