@@ -16,6 +16,23 @@ struct FBGame: Decodable, Equatable {
     let lineups: [FBGameLineups]
     let statistics: [FBGameStats]
     let players: [FBGamePlayers]
+    let events: [FBGameEvent]
+    
+    var goalEvents: [FBGameEvent] {
+        events.filter {
+            $0.type.lowercased() == "goal"
+        }
+    }
+    var cardEvents: [FBGameEvent] {
+        events.filter {
+            $0.type.lowercased() == "card"
+        }
+    }
+    var substEvents: [FBGameEvent] {
+        events.filter {
+            $0.type.lowercased() == "subst"
+        }
+    }
 }
 
 struct FBGameFixture: Decodable, Equatable {
@@ -365,6 +382,29 @@ struct FBGamePlayerStatsGames: Decodable, Equatable {
         self._rating = rating
         self._captain = captain
         self._substitute = substitute
+    }
+}
+
+struct FBGameEvent: Decodable, Equatable {
+    private let _type: String?
+    private let _detail: String?
+    private let _comments: String?
+    let time: FBGameStatus?
+    let team: FBTeamInfo?
+    let player: FBPerson?
+    let assist: FBPerson?
+    
+    var type: String { _type ?? "" }
+    var detail: String { _detail ?? "" }
+    var comments: String { _comments ?? "" }
+    
+    var isOwnGoal: Bool { detail.lowercased().contains("own goal") }
+    
+    private enum CodingKeys: String, CodingKey {
+        case _type = "type"
+        case _detail = "detail"
+        case _comments = "comments"
+        case time, team, player, assist
     }
 }
 

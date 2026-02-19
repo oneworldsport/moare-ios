@@ -73,7 +73,7 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View, CustomStats
             
             if state.shouldShowGameContent {
                 gameContent()
-                    .padding(.vertical, 8)
+//                    .padding(.vertical, 8)
             }
             
             HDivider()

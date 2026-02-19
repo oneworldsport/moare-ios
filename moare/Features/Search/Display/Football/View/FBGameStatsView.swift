@@ -83,7 +83,6 @@ struct FBGameStatsView: View {
                 GameStatsViewContainer(
                     state: GameStatsContainerState(
                         shouldShowTitle: !isCombinedView,
-                        shouldShowGameContent: !isCombinedView,
                         shouldShowStats: displayModel.game.fixture.status.short != StringConstants.Football.gameNotStarted,
                         shouldShowCoach: true,
                         shouldShowRefreshButton: StringConstants.Football.gameLiveList.contains(displayModel.game.fixture.status.short),
@@ -123,13 +122,21 @@ struct FBGameStatsView: View {
                         )
                     },
                     gameContent: {
-                        FBLeagueScheduleListItem(
-                            searchStore: searchStore,
-                            fbLeagueScheduleStore: nil,
-                            data: ModelConverter.fbGameToGameScheduleConverter(game: game),
-                            leagueId: displayModel.leagueId,
-                            teamNameDic: teamNameDic
-                        )
+                        VStack(spacing: 0) {
+                            if !isCombinedView {
+                                FBLeagueScheduleListItem(
+                                    searchStore: searchStore,
+                                    fbLeagueScheduleStore: nil,
+                                    data: ModelConverter.fbGameToGameScheduleConverter(game: game),
+                                    leagueId: displayModel.leagueId,
+                                    teamNameDic: teamNameDic
+                                )
+                                .padding(.vertical, 8)
+                            }
+                            
+                            FBGameStatsScorerBox(store: store)
+                                .padding(.bottom, 8)
+                        }
                     }
                 )
             }
@@ -141,6 +148,72 @@ struct FBGameStatsView: View {
             
             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                 show = true
+            }
+        }
+    }
+}
+
+struct FBGameStatsScorerBox: View {
+    @Bindable var store: StoreOf<FBGameStatsStore>
+    
+    @State private var height: CGFloat = 0
+    
+    var body: some View {
+        let displayModel = store.baseGameStats.displayModel
+        let game = displayModel.game
+        let homeTeamId = game.teams.home.id
+        let awayTeamId = game.teams.away.id
+        let goalEvents = game.goalEvents
+        let playerNameDic = store.baseGameStats.playerNameDictionary
+        
+        HStack(alignment: .top) {
+            VStack(alignment: .trailing) {
+                ForEach(Array(goalEvents.enumerated()), id: \.offset) { _, event in
+                    if event.team?.id == homeTeamId {
+                        let elapsed = event.time?.elapsed ?? 0
+                        let extra = event.time?.extra ?? 0
+                        let timeText = if extra > 0 {
+                            "\(elapsed)+\(extra)'"
+                        } else {
+                            "\(elapsed)'"
+                        }
+                        
+                        let name = (playerNameDic["\(event.player?.id ?? 0)"] ?? (event.player?.name ?? "")).dropFirstWord
+                        
+                        Text("\(name) \(timeText)\(event.isOwnGoal ? " (자책골)" : "")")
+                            .font(.system(size: 13))
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .readSize { size in
+                height = max(height, size.height)
+            }
+            
+            VCapsuleBar(customHeight: height,customWidth: 1)
+                .opacity(0.5)
+            
+            VStack(alignment: .leading) {
+                ForEach(Array(goalEvents.enumerated()), id: \.offset) { _, event in
+                    if event.team?.id == awayTeamId {
+                        let elapsed = event.time?.elapsed ?? 0
+                        let extra = event.time?.extra ?? 0
+                        let timeText = if extra > 0 {
+                            "\(elapsed)+\(extra)'"
+                        } else {
+                            "\(elapsed)'"
+                        }
+                        
+                        let name = (playerNameDic["\(event.player?.id ?? 0)"] ?? (event.player?.name ?? "")).dropFirstWord
+                        
+                        Text("\(name) \(timeText)\(event.isOwnGoal ? " (자책골)" : "")")
+                            .font(.system(size: 13))
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .readSize { size in
+                height = max(height, size.height)
             }
         }
     }
