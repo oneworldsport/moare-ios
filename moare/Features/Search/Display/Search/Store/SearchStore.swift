@@ -394,7 +394,11 @@ struct SearchStore {
                 return .run { send in
                     do {
                         let result = try await keywordsClient.fetchLeagueKeywords()
-                        await send(.getLeagueKeywordsSuccess(result))
+                        
+                        // 처음 magnifyingglass 나타나는 시간 0.5 + firstOpen 애니메이션 시간 0.7 + trendingKeyowrds 나타나는 시간 0.5 + 추가 0.1 = 1.8초 지연
+                        try await Task.sleep(for: .seconds(1.8))
+                        
+                        await send(.getLeagueKeywordsSuccess(result), animation: AnimationConstants.AnimationType.defaultAnimation)
                     } catch {
                     }
                 }
