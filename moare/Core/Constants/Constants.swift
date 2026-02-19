@@ -52,18 +52,189 @@ struct Constants {
         static let kbo = 90101
         static let mlb = 90102
         
+        // AUS OPEN
         static let ausOpenMSingle = 80001
         static let ausOpenMDoubles = 80002
         static let ausOpenMixedDoubles = 80003
         static let ausOpenWSingle = 80004
         static let ausOpenWDoubles = 80005
         static let ausOpenAll = [ausOpenMSingle, ausOpenMDoubles, ausOpenMixedDoubles, ausOpenWSingle, ausOpenWDoubles]
-        static let mSingleAll = [ausOpenMSingle]
-        static let mDoublesAll = [ausOpenMDoubles]
-        static let mixedDoublesAll = [ausOpenMixedDoubles]
-        static let wSingleAll = [ausOpenWSingle]
-        static let wDoublesAll = [ausOpenWDoubles]
-        static let tennisAll = ausOpenAll
+        // ROLAND GARROS
+        static let rolandGarrosMSingle = 80006
+        static let rolandGarrosMDoubles = 80007
+        static let rolandGarrosMixedDoubles = 80008
+        static let rolandGarrosWSingle = 80009
+        static let rolandGarrosWDoubles = 80010
+        static let rolandGarrosAll = [rolandGarrosMSingle, rolandGarrosMDoubles, rolandGarrosMixedDoubles, rolandGarrosWSingle, rolandGarrosWDoubles]
+        // WIMBLEDON
+        static let wimbledonMSingle = 80011
+        static let wimbledonMDoubles = 80012
+        static let wimbledonMixedDoubles = 80013
+        static let wimbledonWSingle = 80014
+        static let wimbledonWDoubles = 80015
+        static let wimbledonAll = [wimbledonMSingle, wimbledonMDoubles, wimbledonMixedDoubles, wimbledonWSingle, wimbledonWDoubles]
+        // US OPEN
+       static let usOpenMSingle = 80016
+       static let usOpenMDoubles = 80017
+       static let usOpenMixedDoubles = 80018
+       static let usOpenWSingle = 80019
+       static let usOpenWDoubles = 80020
+       static let usOpenAll = [usOpenMSingle, usOpenMDoubles, usOpenMixedDoubles, usOpenWSingle, usOpenWDoubles]
+        // INDIAN WELLS
+       static let indianWellsMSingle = 80021
+       static let indianWellsMDoubles = 80022
+       static let indianWellsWSingle = 80023
+       static let indianWellsWDoubles = 80024
+       static let indianWellsAll = [indianWellsMSingle, indianWellsMDoubles, indianWellsWSingle, indianWellsWDoubles]
+        // MIAMI
+        static let miamiMSingle = 80025
+        static let miamiMDoubles = 80026
+        static let miamiWSingle = 80027
+        static let miamiWDoubles = 80028
+        static let miamiAll = [miamiMSingle, miamiMDoubles, miamiWSingle, miamiWDoubles]
+        // MONTE CARLO
+       static let monteCarloMSingle = 80029
+       static let monteCarloMDoubles = 80030
+       static let monteCarloAll = [monteCarloMSingle, monteCarloMDoubles]
+        // MADRID
+        static let madridMSingle = 80031
+        static let madridMDoubles = 80032
+        static let madridWSingle = 80033
+        static let madridWDoubles = 80034
+        static let madridAll = [madridMSingle, madridMDoubles, madridWSingle, madridWDoubles]
+        // ROME
+        static let romeMSingle = 80035
+        static let romeMDoubles = 80036
+        static let romeWSingle = 80037
+        static let romeWDoubles = 80038
+        static let romeAll = [romeMSingle, romeMDoubles, romeWSingle, romeWDoubles]
+        // TORONTO
+        static let torontoMSingle = 80039
+        static let torontoMDoubles = 80040
+        static let torontoWSingle = 80041
+        static let torontoWDoubles = 80042
+        static let torontoAll = [torontoMSingle, torontoMDoubles, torontoWSingle, torontoWDoubles]
+        // MONTREAL
+        static let montrealMSingle = 80043
+        static let montrealMDoubles = 80044
+        static let montrealAll = [montrealMSingle, montrealMDoubles]
+        // CINCINNAI
+        static let cincinnatiMSingle = 80045
+        static let cincinnatiMDoubles = 80046
+        static let cincinnatiWSingle = 80047
+        static let cincinnatiWDoubles = 80048
+        static let cincinnatiAll = [cincinnatiMSingle, cincinnatiMDoubles, cincinnatiWSingle, cincinnatiWDoubles]
+        // SHANGHAI
+        static let shanghaiMSingle = 80049
+        static let shanghaiMDoubles = 80050
+        static let shanghaiAll = [shanghaiMSingle, shanghaiMDoubles]
+        // PARIS
+        static let parisMSingle = 80051
+        static let parisMDoubles = 80052
+        static let parisAll = [parisMSingle, parisMDoubles]
+        // DOHA (W)
+        static let dohaWSingle = 80053
+        static let dohaWDoubles = 80054
+        static let dohaAll = [dohaWSingle, dohaWDoubles]
+        // DUBAI (W)
+        static let dubaiWSingle = 80055
+        static let dubaiAll = [dubaiWSingle]
+        // BEIJING (W)
+        static let beijingWSingle = 80056
+        static let beijingWDoubles = 80057
+        static let beijingAll = [beijingWSingle, beijingWDoubles]
+        // WUHAN (W)
+        static let wuhanWSingle = 80058
+        static let wuhanWDoubles = 80059
+        static let wuhanAll = [wuhanWSingle, wuhanWDoubles]
+        
+        static let mSingleAll = [
+            ausOpenMSingle,
+            rolandGarrosMSingle,
+            wimbledonMSingle,
+            usOpenMSingle,
+            indianWellsMSingle,
+            miamiMSingle,
+            monteCarloMSingle,
+            madridMSingle,
+            romeMSingle,
+            torontoMSingle,
+            montrealMSingle,
+            cincinnatiMSingle,
+            shanghaiMSingle,
+            parisMSingle
+        ]
+        static let mDoublesAll = [
+            ausOpenMDoubles,
+            rolandGarrosMDoubles,
+            wimbledonMDoubles,
+            usOpenMDoubles,
+            indianWellsMDoubles,
+            miamiMDoubles,
+            monteCarloMDoubles,
+            madridMDoubles,
+            romeMDoubles,
+            torontoMDoubles,
+            montrealMDoubles,
+            cincinnatiMDoubles,
+            shanghaiMDoubles,
+            parisMDoubles
+        ]
+        static let mixedDoublesAll = [
+            ausOpenMixedDoubles,
+            rolandGarrosMixedDoubles,
+            wimbledonMixedDoubles,
+            usOpenMixedDoubles
+        ]
+        static let wSingleAll = [
+            ausOpenWSingle,
+            rolandGarrosWSingle,
+            wimbledonWSingle,
+            usOpenWSingle,
+            indianWellsWSingle,
+            miamiWSingle,
+            madridWSingle,
+            romeWSingle,
+            torontoWSingle,
+            cincinnatiWSingle,
+            dohaWSingle,
+            dubaiWSingle,
+            beijingWSingle,
+            wuhanWSingle
+        ]
+        static let wDoublesAll = [
+            ausOpenWDoubles,
+            rolandGarrosWDoubles,
+            wimbledonWDoubles,
+            usOpenWDoubles,
+            indianWellsWDoubles,
+            miamiWDoubles,
+            madridWDoubles,
+            romeWDoubles,
+            torontoWDoubles,
+            cincinnatiWDoubles,
+            dohaWDoubles,
+            beijingWDoubles,
+            wuhanWDoubles
+        ]
+        static let tennisAll = ausOpenAll +
+        rolandGarrosAll +
+        wimbledonAll +
+        usOpenAll +
+        indianWellsAll +
+        miamiAll +
+        monteCarloAll +
+        madridAll +
+        romeAll +
+        torontoAll +
+        montrealAll +
+        cincinnatiAll +
+        shanghaiAll +
+        parisAll +
+        dohaAll +
+        dubaiAll +
+        beijingAll +
+        wuhanAll
         
         // nba teams
         struct NBATeam {
