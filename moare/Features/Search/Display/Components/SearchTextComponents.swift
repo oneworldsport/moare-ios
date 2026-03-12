@@ -37,8 +37,13 @@ struct FBLeagueTitleForGameStats: View {
                 URLImage(url: url, customSize: CGSize(width: 23, height: 23))
                     .padding(.trailing, 4)
             
-                Text("\(leagueName) \(String(leagueSeason))-\(String(leagueSeason + 1).suffix(2))")
-                    .font(.system(size: 14))
+                if leagueName == "Major League Soccer" {
+                    Text("\(leagueName) \(String(leagueSeason))")
+                        .font(.system(size: 14))
+                } else {
+                    Text("\(leagueName) \(String(leagueSeason))-\(String(leagueSeason + 1).suffix(2))")
+                        .font(.system(size: 14))
+                }
             }
             
             Text(" - \(MatchDescriptionConverter.convert(descriptionType: .roundWithoutDash, input: description))")
