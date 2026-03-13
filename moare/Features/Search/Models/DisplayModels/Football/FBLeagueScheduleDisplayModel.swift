@@ -15,4 +15,5 @@ struct FBLeagueScheduleDisplayModel: SportDisplayModel {
     let scheduleType: ScheduleType
     let yearMonthList: [String]
     var games: [FBGameForSchedule]
+    let tournamentStartDate: String?
 }

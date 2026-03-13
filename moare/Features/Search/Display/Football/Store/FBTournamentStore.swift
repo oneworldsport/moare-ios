@@ -149,7 +149,8 @@ struct FBTournamentStore {
                     startDate: nil,
                     endDate: nil,
                     relatedLeagueIds: nil,
-                    schedule: gameList
+                    schedule: gameList,
+                    tournamentStartDate: nil
                 )
                 
                 let dataModel: SportDecodableModel = .fbLeagueSchedule(

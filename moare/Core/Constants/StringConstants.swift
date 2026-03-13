@@ -256,11 +256,15 @@ struct StringConstants {
         case Constants.Ids.kbo:
             return "가을야구 대진표"
         default :
-            return ""
+            return "대진표"
         }
     }
     
     static func tournamentOrStandingsText(leagueId: Int) -> String {
+        // tournamentStart, selectedMonth 값 추가로 받아서 분기처리
+        // tournamentStart 값의 존재 여부로 일단 대진표, 리그 순위를 선택한다음
+        // 사용자가 선택한 날과 토너먼트 시작일을 비교해서 대진표, 리그 순위로 버튼이 바뀌도록!
+        // 그냥 리그 순위는 항상 보이게 하는걸로!
         if Constants.Ids.footballDrawTournamentLeagues.contains(leagueId) || Constants.Ids.tennisAll.contains(leagueId) {
             return "대진표"
         } else {

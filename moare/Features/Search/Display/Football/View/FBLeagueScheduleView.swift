@@ -19,6 +19,9 @@ struct FBLeagueScheduleView: View {
     var body: some View {
         let displayModel = store.baseSchedule.displayModel
         let leagueId = displayModel.leagueId
+        let tournamentStartDateYearMonth = CalendarUtil.formatDate(date: displayModel.tournamentStartDate, inputFormatType: .dateOnly, outputFormatType: .yearMonth)
+        let tournamentStartDateYearMonthInt = Int(tournamentStartDateYearMonth.replacingOccurrences(of: "/", with: "")) ?? 0
+        let todayYearMonthInt = Int(store.baseSchedule.selectedYearMonth.replacingOccurrences(of: "/", with: "")) ?? 0
         
         VStack {
             if show {
@@ -36,7 +39,8 @@ struct FBLeagueScheduleView: View {
                             selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
                         isAllResultOpened: store.baseSchedule.isAllResultOpened,
-                        shouldShowTournamentButton: (leagueId == Constants.Ids.mls) && (store.baseSchedule.selectedMonth >= 10),
+                        shouldShowTournamentButton: (displayModel.tournamentStartDate != nil) &&
+                        (tournamentStartDateYearMonthInt <= todayYearMonthInt),
                     ),
                     actions: ScheduleContainerActions(
                         calendarUiActions: CalendarUiActions(
