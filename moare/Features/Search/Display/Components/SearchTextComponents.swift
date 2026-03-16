@@ -72,7 +72,7 @@ struct NBATitle: View {
                 .frame(width: 30, height: 30)
                 .padding(.trailing, 6)
             
-            Text("\(leagueName) \(leagueSeason)-\(String(leagueSeason + 1).suffix(2))")
+            Text("\(leagueName) \(String(leagueSeason))-\(String(leagueSeason + 1).suffix(2))")
                 .fontWeight(.medium)
         }
     }
