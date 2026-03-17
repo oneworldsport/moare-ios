@@ -26,6 +26,7 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
         let lowerSeedTeamId = seedIdTuple.lowerSeedId
         let gameStatus = game?.gameStatus ?? Constants.GameStatus.Football.notStarted
         let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
+        let extra = (game as? FBGameForSchedule)?.gameInfo?.status?.extra
         let shouldShowScore = !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: gameStatus)
         
         let homeTeamScore = game?.homeTeamScore ?? 0
@@ -110,7 +111,7 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
                         VStack(spacing: 0) {
                             // game status
                             GameStatusCapsuleButton(
-                                gameStatusContext: .football(status: gameStatus, elapsed: elapsed), leagueId: leagueId
+                                gameStatusContext: .football(status: gameStatus, elapsed: elapsed, extra: extra), leagueId: leagueId
                             ){}
                             
                             // game date
@@ -248,6 +249,7 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
         let lowerSeedTeamId = seedIdTuple.lowerSeedId
         let gameStatus = game?.gameStatus ?? Constants.GameStatus.Football.notStarted
         let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
+        let extra = (game as? FBGameForSchedule)?.gameInfo?.status?.extra
         let shouldShowScore = !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: gameStatus)
         
         let homeTeamScore = game?.homeTeamScore ?? 0
@@ -343,7 +345,7 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
                         VStack(spacing: 0) {
                             // game status
                             GameStatusCapsuleButton(
-                                gameStatusContext: .football(status: gameStatus, elapsed: elapsed), leagueId: leagueId
+                                gameStatusContext: .football(status: gameStatus, elapsed: elapsed, extra: extra), leagueId: leagueId
                             ){}
                             
                             // game date
@@ -467,6 +469,7 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
         let lowerSeedTeamId = seedIdTuple.lowerSeedId
         let gameStatus = game?.gameStatus ?? Constants.GameStatus.Football.notStarted
         let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
+        let extra = (game as? FBGameForSchedule)?.gameInfo?.status?.extra
         let shouldShowScore = !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: gameStatus)
         
         let homeTeamScore = game?.homeTeamScore ?? 0
@@ -537,7 +540,7 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
                 VStack(spacing: 0) {
                     // game status
                     GameStatusCapsuleButton(
-                        gameStatusContext: .football(status: gameStatus, elapsed: elapsed), leagueId: leagueId
+                        gameStatusContext: .football(status: gameStatus, elapsed: elapsed, extra: extra), leagueId: leagueId
                     ){}
                     
                     // game date

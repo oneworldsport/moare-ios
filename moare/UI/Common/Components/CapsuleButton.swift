@@ -43,7 +43,7 @@ enum GameStatusContext {
     case tennis(status: Int?, isResultOpened: Bool = true)
     case nba(status: Int, period: Int? = nil, isResultOpened: Bool = true)
     case mlb(status: String, currentInning: String? = nil, linescore: MLBGameLineScore? = nil, isResultOpened: Bool = true)
-    case football(status: String, elapsed: Int?, isResultOpened: Bool = true)
+    case football(status: String, elapsed: Int?, extra: Int?, isResultOpened: Bool = true)
     case kbo(status: String, currentInning: String? = nil, isResultOpened: Bool = true)
 }
 
@@ -60,8 +60,8 @@ struct GameStatusCapsuleButton: View {
             return Constants.GameStatus.nbaGameStatusText(status: status, period: period)
         case .mlb(let status, _,let linescore, _):
             return Constants.GameStatus.mlbGameStatusText(status: status, linescore: linescore)
-        case .football(let status, let elapsed, _):
-            return Constants.GameStatus.fbGameStatusText(status: status, elapsed: elapsed)
+        case .football(let status, let elapsed, let extra, _):
+            return Constants.GameStatus.fbGameStatusText(status: status, elapsed: elapsed, extra: extra)
         case .kbo(let status, let currentInning, _):
             return Constants.GameStatus.kboGameStatusText(status: status, currentInning: currentInning)
         default:
@@ -77,7 +77,7 @@ struct GameStatusCapsuleButton: View {
             return Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: String(status))
         case .mlb(let status, _, _, _):
             return Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: status)
-        case .football(let status, _, _):
+        case .football(let status, _, _, _):
             return Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: status)
         case .kbo(let status, _, _):
             return Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: status)

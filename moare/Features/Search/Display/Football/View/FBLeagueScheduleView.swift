@@ -226,7 +226,7 @@ struct FBLeagueScheduleListItem: View {
                 teamNameDic: teamNameDic,
                 isClickEnabled: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
                 isResultOpened: isResultOpened,
-                gameStatusContext: .football(status: data.gameStatus, elapsed: data.gameInfo?.status?.elapsed, isResultOpened: isResultOpened),
+                gameStatusContext: .football(status: data.gameStatus, elapsed: data.gameInfo?.status?.elapsed, extra: data.gameInfo?.status?.extra, isResultOpened: isResultOpened),
                 isCapsuleButtonDisabled: (isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true) || !Constants.GameStatus.Football.finishedList.contains(gameStatus),
                 gameType: MatchDescriptionConverter.convert(input: data.gameInfo?.round ?? ""),
                 shouldShowOnlyDateTime: isFromSchedule ? (
@@ -249,7 +249,9 @@ struct FBLeagueScheduleListItem: View {
             if let fbLeagueScheduleStore {
                 if Constants.GameStatus.Football.finishedList.contains(gameStatus) {
                     isResultOpened = fbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
-                } else if gameStatus == Constants.GameStatus.Football.notStarted {
+                } else if gameStatus == Constants.GameStatus.Football.notStarted ||
+                            gameStatus == Constants.GameStatus.Football.cancelled ||
+                            gameStatus == Constants.GameStatus.Football.postponed {
                     isResultOpened = false
                 } else {
                     isResultOpened = true

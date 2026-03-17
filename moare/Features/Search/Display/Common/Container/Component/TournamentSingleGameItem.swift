@@ -21,6 +21,7 @@ struct TournamentSingleGameItem<T: Decodable & Equatable>: View {
         let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
         let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
         let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
+        let extra = (game as? FBGameForSchedule)?.gameInfo?.status?.extra
         let shouldShowScore = !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
         let isFinished = Constants.GameStatus.Football.finishedList.contains(game.gameStatus)
         
@@ -73,7 +74,7 @@ struct TournamentSingleGameItem<T: Decodable & Equatable>: View {
             VStack(spacing: 0) {
                 // game status                
                 GameStatusCapsuleButton(
-                    gameStatusContext: .football(status: game.gameStatus, elapsed: elapsed), leagueId: leagueId
+                    gameStatusContext: .football(status: game.gameStatus, elapsed: elapsed, extra: extra), leagueId: leagueId
                 ){}
                 
                 // game date

@@ -30,14 +30,14 @@ struct StringConstants {
         static let gameFirstHalf = "1H"
         static let gameHalftime = "HT"
         static let gameSecondHalf = "2H"
-        static let gameExtraTime = "ET" // 연장전
+        static let gameExtraTime = "연장전"
         static let gameBreakTime = "BT" // 연장전 전반 후 휴식시간
-        static let gamePenaltyShootout = "P" // 승부차기
+        static let gamePenaltyShootout = "승부차기"
         static let gameFinished = "FT"
         static let gameFinishedAfterExtraTime = "AET" // 승부차기 없이 연장전 후 경기 종료
         static let gameFinishedAfterPenaltyShootout = "PET" // 승부차기 후 경기 종료
-        static let gamePostponed = "PST"
-        static let gameCancelled = "CANC"
+        static let gamePostponed = "경기 연기"
+        static let gameCancelled = "경기 취소"
         static let gameLiveList = [gameFirstHalf, gameHalftime, gameSecondHalf, gameExtraTime, gameBreakTime, gamePenaltyShootout]
         static let gameFinishedList = [gameFinished, gameFinishedAfterExtraTime, gameFinishedAfterPenaltyShootout]
         
