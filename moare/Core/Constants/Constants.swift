@@ -461,31 +461,23 @@ struct Constants {
             static let finishedList = [finished, canceled, retired, walkover]
         }
         
-        static func gameStatusText(
-            leagueId: Int,
+        static func kboGameStatusText(
             status: String,
-            elapsed: Int? = nil,
+            currentInning: String? = nil,
             isResultOpened: Bool = true
         ) -> String {
-            switch leagueId {
-            case let id where Constants.Ids.footballAll.contains(id):
-                return fbGameStatusText(status: status, elapsed: elapsed)
-            case Constants.Ids.nba:
-                return ""
-            case Constants.Ids.kbo:
-                switch status {
-                case KBO.scheduled:
-                    return StringConstants.gameNotStartedStr
-                case KBO.live:
-                    return StringConstants.gameLiveStr
-                case KBO.final:
-                    return StringConstants.gameFinishedStr
-                case KBO.canceled:
-                    return StringConstants.gameCanceledStr
-                default:
-                    return ""
-                }
-            default :
+            switch status {
+            case KBO.scheduled:
+                return StringConstants.gameNotStartedStr
+            case KBO.live:
+                return currentInning ?? StringConstants.gameLiveStr
+            case KBO.final:
+                return isResultOpened
+                ? StringConstants.gameFinishedStr
+                : StringConstants.resultOpen
+            case KBO.canceled:
+                return StringConstants.gameCanceledStr
+            default:
                 return ""
             }
         }

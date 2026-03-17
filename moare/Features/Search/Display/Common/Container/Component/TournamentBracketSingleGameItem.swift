@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// NOTE: 현재는 축구에서만 쓰임
 struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let teamNameDic: [String: String]
@@ -108,12 +109,9 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
                         
                         VStack(spacing: 0) {
                             // game status
-                            CapsuleButton(
-                                text: Constants.GameStatus.fbGameStatusText(status: gameStatus, elapsed: elapsed),
-                                color: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: gameStatus)
-                            ) {
-                                
-                            }
+                            GameStatusCapsuleButton(
+                                gameStatusContext: .football(status: gameStatus, elapsed: elapsed), leagueId: leagueId
+                            ){}
                             
                             // game date
                             if let date = game?.date {
@@ -344,12 +342,9 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
                         
                         VStack(spacing: 0) {
                             // game status
-                            CapsuleButton(
-                                text: Constants.GameStatus.fbGameStatusText(status: gameStatus, elapsed: elapsed),
-                                color: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: gameStatus)
-                            ) {
-                                
-                            }
+                            GameStatusCapsuleButton(
+                                gameStatusContext: .football(status: gameStatus, elapsed: elapsed), leagueId: leagueId
+                            ){}
                             
                             // game date
                             if let date = game?.date {
@@ -541,12 +536,9 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
                 
                 VStack(spacing: 0) {
                     // game status
-                    CapsuleButton(
-                        text: Constants.GameStatus.fbGameStatusText(status: gameStatus, elapsed: elapsed),
-                        color: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: gameStatus)
-                    ) {
-                        
-                    }
+                    GameStatusCapsuleButton(
+                        gameStatusContext: .football(status: gameStatus, elapsed: elapsed), leagueId: leagueId
+                    ){}
                     
                     // game date
                     if let date = game?.date {

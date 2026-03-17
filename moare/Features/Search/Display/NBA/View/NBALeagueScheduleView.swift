@@ -171,8 +171,7 @@ struct NBALeagueScheduleListItem: View {
                 game: data,
                 teamNameDic: teamNameDic,
                 isResultOpened: isResultOpened,
-                gameStatusText: Constants.GameStatus.nbaGameStatusText(status: gameStatus, period: data.gameInfo?.period, isResultOpened: isResultOpened),
-                gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: Constants.Ids.nba, status: data.gameStatus),
+                gameStatusContext: .nba(status: gameStatus, period: data.gameInfo?.period, isResultOpened: isResultOpened),
                 isCapsuleButtonDisabled: gameStatus != Constants.GameStatus.NBA.finished,
                 gameType: NBAUtil.gameType(gameSummary: data.gameInfo),
                 shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true

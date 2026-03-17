@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// NOTE: 현재는 축구에서만 쓰임
 struct TournamentSingleGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let game: GameForSchedule<T>
@@ -20,9 +21,8 @@ struct TournamentSingleGameItem<T: Decodable & Equatable>: View {
         let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
         let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
         let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
-        let gameStatusText = Constants.GameStatus.gameStatusText(leagueId: leagueId, status: game.gameStatus, elapsed: elapsed)
         let shouldShowScore = !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
-        let isFinished = gameStatusText == StringConstants.gameFinishedStr
+        let isFinished = Constants.GameStatus.Football.finishedList.contains(game.gameStatus)
         
         var isHomeWinner: Bool {
             if let homePenalty = homeTeamPenaltyScore,
@@ -71,13 +71,10 @@ struct TournamentSingleGameItem<T: Decodable & Equatable>: View {
             }
             
             VStack(spacing: 0) {
-                // game status
-                CapsuleButton(
-                    text: gameStatusText,
-                    color: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: game.gameStatus)
-                ) {
-                    
-                }
+                // game status                
+                GameStatusCapsuleButton(
+                    gameStatusContext: .football(status: game.gameStatus, elapsed: elapsed), leagueId: leagueId
+                ){}
                 
                 // game date
                 Text(CalendarUtil.formatDate(date: game.date).split(separator: " ").first ?? "")

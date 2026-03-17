@@ -146,10 +146,8 @@ struct TennisGameStatsScoreInfoContainer: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
-                CapsuleButton(
-                    text: Constants.GameStatus.tennisGameStatusText(status: gameStatus),
-                    color: Constants.GameStatus.gameStatusColor(leagueId: displayModel.leagueId, status: String(gameStatus))
-                ) {
+                GameStatusCapsuleButton(gameStatusContext: .tennis(status: gameStatus), leagueId: displayModel.leagueId){
+                    
                 }
                 .disabled(true)
                 .padding(.vertical, 4)

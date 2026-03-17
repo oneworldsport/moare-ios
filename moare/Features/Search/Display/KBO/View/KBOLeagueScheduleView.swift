@@ -164,29 +164,6 @@ struct KBOLeagueScheduleListItem: View {
         let gameStatus = Int(data.gameStatus) // TODO: String으로 사용
         let teamNameDic = kboLeagueScheduleStore.baseSchedule.teamNameDictionary
         
-        let gameStatusText: String = {
-            switch gameStatus {
-            case StringConstants.KBO.gameScheduled:
-                return StringConstants.gameNotStartedStr
-            case StringConstants.KBO.gameLive:
-                return data.gameInfo?.currentInning ?? StringConstants.gameLiveStr
-            case StringConstants.KBO.gameFinal:
-                return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
-            case StringConstants.KBO.gameCanceled:
-                return StringConstants.gameCanceledStr
-            default:
-                return ""
-            }
-        }()
-        
-        let gameStatusColor: Color = {
-            if gameStatus == StringConstants.KBO.gameLive {
-                return .moare
-            } else {
-                return .secondary
-            }
-        }()
-        
         ScheduleGameItem(
             state:ScheduleGameItemState(
                 leagueId: Constants.Ids.kbo,
@@ -194,8 +171,7 @@ struct KBOLeagueScheduleListItem: View {
                 teamNameDic: teamNameDic,
                 isClickEnabled: data.gameStatus != Constants.GameStatus.KBO.canceled, // 취소된 경기는 클릭 안되게
                 isResultOpened: isResultOpened,
-                gameStatusText: gameStatusText,
-                gameStatusColor: gameStatusColor,
+                gameStatusContext: .kbo(status: data.gameStatus, isResultOpened: isResultOpened),
                 isCapsuleButtonDisabled: gameStatus != StringConstants.KBO.gameFinal,
                 gameType: data.gameInfo?.seriesDescription,
                 shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
