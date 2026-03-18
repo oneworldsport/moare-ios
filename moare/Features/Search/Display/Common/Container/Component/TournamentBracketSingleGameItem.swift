@@ -22,8 +22,8 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
     @State private var itemHeight: CGFloat = 0
     
     var body: some View {
-        let topSeedTeamId = seedIdTuple.topSeedId
-        let lowerSeedTeamId = seedIdTuple.lowerSeedId
+        let topSeedTeamId = game?.isHomeTopSeed == true ? game?.homeTeamId : game?.awayTeamId
+        let lowerSeedTeamId = game?.isHomeTopSeed == true ? game?.awayTeamId : game?.homeTeamId
         let gameStatus = game?.gameStatus ?? Constants.GameStatus.Football.notStarted
         let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
         let extra = (game as? FBGameForSchedule)?.gameInfo?.status?.extra
@@ -35,31 +35,31 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
         let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
         
         var topSeedTeamScore: Int {
-            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+            if game?.isHomeTopSeed == true {
                 homeTeamScore
             } else {
                 awayTeamScore
             }
         }
         var lowerSeedTeamScore: Int {
-            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
-                homeTeamScore
-            } else {
+            if game?.isHomeTopSeed == true {
                 awayTeamScore
+            } else {
+                homeTeamScore
             }
         }
         var topSeedTeamPenaltyScore: Int? {
-            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+            if game?.isHomeTopSeed == true {
                 homeTeamPenaltyScore
             } else {
                 awayTeamPenaltyScore
             }
         }
         var lowerSeedTeamPenaltyScore: Int? {
-            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
-                homeTeamPenaltyScore
-            } else {
+            if game?.isHomeTopSeed == true {
                 awayTeamPenaltyScore
+            } else {
+                homeTeamPenaltyScore
             }
         }
         
@@ -245,8 +245,8 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
     @State private var itemHeight: CGFloat = 0
     
     var body: some View {
-        let topSeedTeamId = seedIdTuple.topSeedId
-        let lowerSeedTeamId = seedIdTuple.lowerSeedId
+        let topSeedTeamId = game?.isHomeTopSeed == true ? game?.homeTeamId : game?.awayTeamId
+        let lowerSeedTeamId = game?.isHomeTopSeed == true ? game?.awayTeamId : game?.homeTeamId
         let gameStatus = game?.gameStatus ?? Constants.GameStatus.Football.notStarted
         let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
         let extra = (game as? FBGameForSchedule)?.gameInfo?.status?.extra
@@ -258,31 +258,31 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
         let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
         
         var topSeedTeamScore: Int {
-            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+            if game?.isHomeTopSeed == true {
                 homeTeamScore
             } else {
                 awayTeamScore
             }
         }
         var lowerSeedTeamScore: Int {
-            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
-                homeTeamScore
-            } else {
+            if game?.isHomeTopSeed == true {
                 awayTeamScore
+            } else {
+                homeTeamScore
             }
         }
         var topSeedTeamPenaltyScore: Int? {
-            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+            if game?.isHomeTopSeed == true {
                 homeTeamPenaltyScore
             } else {
                 awayTeamPenaltyScore
             }
         }
         var lowerSeedTeamPenaltyScore: Int? {
-            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
-                homeTeamPenaltyScore
-            } else {
+            if game?.isHomeTopSeed == true {
                 awayTeamPenaltyScore
+            } else {
+                homeTeamPenaltyScore
             }
         }
         
@@ -465,8 +465,8 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
     @State private var itemTopPadding: CGFloat = 0 // 아이템 Y 위치
     
     var body: some View {
-        let topSeedTeamId = seedIdTuple.topSeedId
-        let lowerSeedTeamId = seedIdTuple.lowerSeedId
+        let topSeedTeamId = game?.isHomeTopSeed == true ? game?.homeTeamId : game?.awayTeamId
+        let lowerSeedTeamId = game?.isHomeTopSeed == true ? game?.awayTeamId : game?.homeTeamId
         let gameStatus = game?.gameStatus ?? Constants.GameStatus.Football.notStarted
         let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
         let extra = (game as? FBGameForSchedule)?.gameInfo?.status?.extra
@@ -478,31 +478,31 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
         let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
         
         var topSeedTeamScore: Int {
-            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+            if game?.isHomeTopSeed == true {
                 homeTeamScore
             } else {
                 awayTeamScore
             }
         }
         var lowerSeedTeamScore: Int {
-            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
-                homeTeamScore
-            } else {
+            if game?.isHomeTopSeed == true {
                 awayTeamScore
+            } else {
+                homeTeamScore
             }
         }
         var topSeedTeamPenaltyScore: Int? {
-            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+            if game?.isHomeTopSeed == true {
                 homeTeamPenaltyScore
             } else {
                 awayTeamPenaltyScore
             }
         }
         var lowerSeedTeamPenaltyScore: Int? {
-            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
-                homeTeamPenaltyScore
-            } else {
+            if game?.isHomeTopSeed == true {
                 awayTeamPenaltyScore
+            } else {
+                homeTeamPenaltyScore
             }
         }
         

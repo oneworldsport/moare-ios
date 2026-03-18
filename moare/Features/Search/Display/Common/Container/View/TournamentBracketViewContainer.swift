@@ -33,48 +33,45 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                         let roundIndexForPosition = roundIndex + 1
                         let gameList = item.gameList
                         let title = item.title
-                        let shouldShow = state.isConference ? leftBracketTitles.contains(String(title.split(separator: " ").first ?? "")) : true
                         let isMLB = state.leagueId == Constants.Ids.mlb
                         let isKBO = state.leagueId == Constants.Ids.kbo
                         let isSeries = state.leagueId == Constants.Ids.mls ? (roundIndex == 0 || roundIndex == 6) : state.isSeries // mls는 (동/서부)1라운드만 series
                         
-                        // default or left
-                        if shouldShow {
-                            VStack(spacing: 0) {
-                                Text(title)
-                                    .fontWeight(.medium)
-                                HCapsuleBar()
-                                    .padding(.top, 6)
-                                    .padding(.bottom, 12)
+                        // left
+                        VStack(spacing: 0) {
+                            Text(title)
+                                .fontWeight(.medium)
+                            HCapsuleBar()
+                                .padding(.top, 6)
+                                .padding(.bottom, 12)
+                            
+                            ForEach(gameList.indices, id: \.self) { seriesIndex in
+                                let games = gameList[seriesIndex]
+                                let seriesIndexForPosition = seriesIndex + 1
                                 
-                                ForEach(gameList.indices, id: \.self) { seriesIndex in
-                                    let games = gameList[seriesIndex]
-                                    let seriesIndexForPosition = seriesIndex + 1
-                                    
-                                    if isSeries {
-                                        TournamentSeriesLeftGameItem(
-                                            leagueId: state.leagueId,
-                                            teamNameDic: state.teamNameDic,
-                                            games: games,
-                                            seedIdTuple: state.seedIdTupleList[roundIndex][seriesIndex],
-                                            itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
-                                            shouldRemoveHBar: isKBO || (isMLB && roundIndexForPosition == 2), // mlb 2라운드, kbo
-                                            itemHeights: $leftItemHeights,
-                                            selectSeries: action.selectSeries
-                                        )
-                                        .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, true))
-                                    } else {
-                                        TournamentBracketSingleLeftGameItem(
-                                            leagueId: state.leagueId,
-                                            teamNameDic: state.teamNameDic,
-                                            game: games?.first,
-                                            seedIdTuple: state.seedIdTupleList[roundIndex][seriesIndex],
-                                            itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
-                                            itemHeights: $leftItemHeights,
-                                            selectGame: action.selectGame
-                                        )
-                                        .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, true))
-                                    }
+                                if isSeries {
+                                    TournamentSeriesLeftGameItem(
+                                        leagueId: state.leagueId,
+                                        teamNameDic: state.teamNameDic,
+                                        games: games,
+                                        seedIdTuple: state.seedIdTupleList[roundIndex][seriesIndex],
+                                        itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
+                                        shouldRemoveHBar: isKBO || (isMLB && roundIndexForPosition == 2), // mlb 2라운드, kbo
+                                        itemHeights: $leftItemHeights,
+                                        selectSeries: action.selectSeries
+                                    )
+                                    .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, true))
+                                } else {
+                                    TournamentBracketSingleLeftGameItem(
+                                        leagueId: state.leagueId,
+                                        teamNameDic: state.teamNameDic,
+                                        game: games?.first,
+                                        seedIdTuple: state.seedIdTupleList[roundIndex][seriesIndex],
+                                        itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
+                                        itemHeights: $leftItemHeights,
+                                        selectGame: action.selectGame
+                                    )
+                                    .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, true))
                                 }
                             }
                         }

@@ -117,7 +117,7 @@ struct FBTournamentStore {
                     
                     var games = displayModel.games
                     
-                    let (_, firstRound) =  Util.collectRound(from: firstRoundPairedTeams, games: &games)
+                    let (firstRoundSeedTuple, firstRound) =  Util.collectRound(from: firstRoundPairedTeams, games: &games)
                     let (_, secondRound) =  Util.collectRound(from: secondRoundPairedTeams, games: &games)
                     let (_, thirdRound) =  Util.collectRound(from: thirdRoundPairedTeams, games: &games)
                     let (_, fourthRound) =  Util.collectRound(from: fourthRoundPairedTeams, games: &games)
@@ -138,6 +138,7 @@ struct FBTournamentStore {
                     if let startIndex = rounds.firstIndex(where: { !$0.gameList.isEmpty }) {
                         state.gameListTuple = Array(rounds[startIndex...])
                     }
+                    
                 }
                 
                 return .none
