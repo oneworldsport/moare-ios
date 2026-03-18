@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// NOTE: 현재는 축구에서만 쓰임
 struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let teamNameDic: [String: String]
@@ -25,6 +26,7 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
         let lowerSeedTeamId = seedIdTuple.lowerSeedId
         let gameStatus = game?.gameStatus ?? Constants.GameStatus.Football.notStarted
         let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
+        let extra = (game as? FBGameForSchedule)?.gameInfo?.status?.extra
         let shouldShowScore = !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: gameStatus)
         
         let homeTeamScore = game?.homeTeamScore ?? 0
@@ -108,12 +110,9 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
                         
                         VStack(spacing: 0) {
                             // game status
-                            CapsuleButton(
-                                text: Constants.GameStatus.fbGameStatusText(status: gameStatus, elapsed: elapsed),
-                                color: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: gameStatus)
-                            ) {
-                                
-                            }
+                            GameStatusCapsuleButton(
+                                gameStatusContext: .football(status: gameStatus, elapsed: elapsed, extra: extra), leagueId: leagueId
+                            ){}
                             
                             // game date
                             if let date = game?.date {
@@ -250,6 +249,7 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
         let lowerSeedTeamId = seedIdTuple.lowerSeedId
         let gameStatus = game?.gameStatus ?? Constants.GameStatus.Football.notStarted
         let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
+        let extra = (game as? FBGameForSchedule)?.gameInfo?.status?.extra
         let shouldShowScore = !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: gameStatus)
         
         let homeTeamScore = game?.homeTeamScore ?? 0
@@ -344,12 +344,9 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
                         
                         VStack(spacing: 0) {
                             // game status
-                            CapsuleButton(
-                                text: Constants.GameStatus.fbGameStatusText(status: gameStatus, elapsed: elapsed),
-                                color: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: gameStatus)
-                            ) {
-                                
-                            }
+                            GameStatusCapsuleButton(
+                                gameStatusContext: .football(status: gameStatus, elapsed: elapsed, extra: extra), leagueId: leagueId
+                            ){}
                             
                             // game date
                             if let date = game?.date {
@@ -472,6 +469,7 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
         let lowerSeedTeamId = seedIdTuple.lowerSeedId
         let gameStatus = game?.gameStatus ?? Constants.GameStatus.Football.notStarted
         let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
+        let extra = (game as? FBGameForSchedule)?.gameInfo?.status?.extra
         let shouldShowScore = !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: gameStatus)
         
         let homeTeamScore = game?.homeTeamScore ?? 0
@@ -541,12 +539,9 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
                 
                 VStack(spacing: 0) {
                     // game status
-                    CapsuleButton(
-                        text: Constants.GameStatus.fbGameStatusText(status: gameStatus, elapsed: elapsed),
-                        color: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: gameStatus)
-                    ) {
-                        
-                    }
+                    GameStatusCapsuleButton(
+                        gameStatusContext: .football(status: gameStatus, elapsed: elapsed, extra: extra), leagueId: leagueId
+                    ){}
                     
                     // game date
                     if let date = game?.date {

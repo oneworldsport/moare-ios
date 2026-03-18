@@ -171,8 +171,7 @@ struct MLBLeagueScheduleListItem: View {
                 teamNameDic: teamNameDic,
                 isClickEnabled: gameStatus != Constants.GameStatus.MLB.postponed, // 연기된 경기는 클릭 안되게
                 isResultOpened: isResultOpened,
-                gameStatusText: Constants.GameStatus.mlbGameStatusText(status: gameStatus, currentInning: data.gameInfo?.currentInning, isResultOpened: isResultOpened),
-                gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: Constants.Ids.mlb, status: gameStatus),
+                gameStatusContext: .mlb(status: gameStatus, currentInning: data.gameInfo?.currentInning, isResultOpened: isResultOpened),
                 isCapsuleButtonDisabled: !StringConstants.MLB.gameFinishedList.contains(gameStatus),
                 gameType: data.gameInfo?.seriesDescription,
                 shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true

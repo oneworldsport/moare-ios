@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// NOTE: 현재는 축구에서만 쓰임
 struct TournamentDrawViewContainer<T: Decodable & Equatable>: View {
     let state: TournamentDrawContainerState<T>
     

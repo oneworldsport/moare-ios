@@ -14,6 +14,7 @@ struct FBGameScheduleResponseModel: Decodable, Equatable {
     let endDate: String?
     let relatedLeagueIds: [Int]?
     let schedule: [FBGameForSchedule]
+    let tournamentStartDate: String?
 }
 
 enum ScheduleType: String, Decodable, Equatable {

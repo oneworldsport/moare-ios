@@ -30,14 +30,14 @@ struct StringConstants {
         static let gameFirstHalf = "1H"
         static let gameHalftime = "HT"
         static let gameSecondHalf = "2H"
-        static let gameExtraTime = "ET" // 연장전
+        static let gameExtraTime = "연장전"
         static let gameBreakTime = "BT" // 연장전 전반 후 휴식시간
-        static let gamePenaltyShootout = "P" // 승부차기
+        static let gamePenaltyShootout = "승부차기"
         static let gameFinished = "FT"
         static let gameFinishedAfterExtraTime = "AET" // 승부차기 없이 연장전 후 경기 종료
         static let gameFinishedAfterPenaltyShootout = "PET" // 승부차기 후 경기 종료
-        static let gamePostponed = "PST"
-        static let gameCancelled = "CANC"
+        static let gamePostponed = "경기 연기"
+        static let gameCancelled = "경기 취소"
         static let gameLiveList = [gameFirstHalf, gameHalftime, gameSecondHalf, gameExtraTime, gameBreakTime, gamePenaltyShootout]
         static let gameFinishedList = [gameFinished, gameFinishedAfterExtraTime, gameFinishedAfterPenaltyShootout]
         
@@ -256,11 +256,15 @@ struct StringConstants {
         case Constants.Ids.kbo:
             return "가을야구 대진표"
         default :
-            return ""
+            return "대진표"
         }
     }
     
     static func tournamentOrStandingsText(leagueId: Int) -> String {
+        // tournamentStart, selectedMonth 값 추가로 받아서 분기처리
+        // tournamentStart 값의 존재 여부로 일단 대진표, 리그 순위를 선택한다음
+        // 사용자가 선택한 날과 토너먼트 시작일을 비교해서 대진표, 리그 순위로 버튼이 바뀌도록!
+        // 그냥 리그 순위는 항상 보이게 하는걸로!
         if Constants.Ids.footballDrawTournamentLeagues.contains(leagueId) || Constants.Ids.tennisAll.contains(leagueId) {
             return "대진표"
         } else {

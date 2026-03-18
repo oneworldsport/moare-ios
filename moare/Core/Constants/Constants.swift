@@ -461,31 +461,23 @@ struct Constants {
             static let finishedList = [finished, canceled, retired, walkover]
         }
         
-        static func gameStatusText(
-            leagueId: Int,
+        static func kboGameStatusText(
             status: String,
-            elapsed: Int? = nil,
+            currentInning: String? = nil,
             isResultOpened: Bool = true
         ) -> String {
-            switch leagueId {
-            case let id where Constants.Ids.footballAll.contains(id):
-                return fbGameStatusText(status: status, elapsed: elapsed)
-            case Constants.Ids.nba:
-                return ""
-            case Constants.Ids.kbo:
-                switch status {
-                case KBO.scheduled:
-                    return StringConstants.gameNotStartedStr
-                case KBO.live:
-                    return StringConstants.gameLiveStr
-                case KBO.final:
-                    return StringConstants.gameFinishedStr
-                case KBO.canceled:
-                    return StringConstants.gameCanceledStr
-                default:
-                    return ""
-                }
-            default :
+            switch status {
+            case KBO.scheduled:
+                return StringConstants.gameNotStartedStr
+            case KBO.live:
+                return currentInning ?? StringConstants.gameLiveStr
+            case KBO.final:
+                return isResultOpened
+                ? StringConstants.gameFinishedStr
+                : StringConstants.resultOpen
+            case KBO.canceled:
+                return StringConstants.gameCanceledStr
+            default:
                 return ""
             }
         }
@@ -493,6 +485,7 @@ struct Constants {
         static func fbGameStatusText(
             status: String,
             elapsed: Int?,
+            extra: Int?,
             isResultOpened: Bool = true
         ) -> String {
             switch status {
@@ -500,7 +493,11 @@ struct Constants {
                 return StringConstants.gameNotStartedStr
             case Football.firstHalf:
                 if let elapsed {
-                    return "전반\(elapsed)'"
+                    if let extra {
+                        return "전반\(elapsed)+\(extra)’"
+                    } else {
+                        return "전반\(elapsed)'"
+                    }
                 } else {
                     return StringConstants.Football.gameFirstHalfStr
                 }
@@ -508,10 +505,22 @@ struct Constants {
                 return StringConstants.Football.gameHalftimeStr
             case Football.secondHalf:
                 if let elapsed {
-                    return "후반\(elapsed)'"
+                    if let extra {
+                        return "후반\(elapsed-45)+\(extra)’"
+                    } else {
+                        return "후반\(elapsed-45)'"
+                    }
                 } else {
                     return StringConstants.Football.gameSecondHalfStr
                 }
+            case Football.extraTime:
+                return StringConstants.Football.gameExtraTime
+            case Football.penaltyShootout:
+                return StringConstants.Football.gamePenaltyShootout
+            case Football.postponed:
+                return StringConstants.Football.gamePostponed
+            case Football.cancelled:
+                return StringConstants.Football.gameCancelled
             case let status where Football.finishedList.contains(status):
                 return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
             default:
