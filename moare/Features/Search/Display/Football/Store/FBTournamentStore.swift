@@ -17,7 +17,6 @@ struct FBTournamentStore {
         var baseTournament: BaseTournament.State
         
         var gameListTuple: [(title: String, gameList: [[FBGameForSchedule]?])] = []
-        var seedIdTupleList: [[(topSeedId: Int?, lowerSeedId: Int?)]] = []
         
         init(displayModel: FBTournamentDisplayModel) {
             self.baseTournament = BaseTournament.State(displayModel: displayModel)
@@ -74,13 +73,13 @@ struct FBTournamentStore {
                     
                     var games = displayModel.games
                     
-                    let (westFirstRoundSeedTuple, westFirstRound) =  Util.collectRound(from: westFirstRoundPairedTeams, games: &games)
-                    let (eastFirstRoundSeedTuple, eastFirstRound) =  Util.collectRound(from: eastFirstRoundPairedTeams, games: &games)
-                    let (westSecondRoundSeedTuple, westSecondRound) =  Util.collectRound(from: westSecondRoundPairedTeams, games: &games)
-                    let (eastSecondRoundSeedTuple, eastSecondRound) =  Util.collectRound(from: eastSecondRoundPairedTeams, games: &games)
-                    let (westThirdRoundSeedTuple, westThirdRound) =  Util.collectRound(from: westThirdRoundPairedTeams, games: &games)
-                    let (eastThirdRoundSeedTuple, eastThirdRound) =  Util.collectRound(from: eastThirdRoundPairedTeams, games: &games)
-                    let (fourthRoundSeedTuple, fourthRound) =  Util.collectRound(from: fourthRoundPairedTeams, games: &games)
+                    let (_, westFirstRound) =  Util.collectRound(from: westFirstRoundPairedTeams, games: &games)
+                    let (_, eastFirstRound) =  Util.collectRound(from: eastFirstRoundPairedTeams, games: &games)
+                    let (_, westSecondRound) =  Util.collectRound(from: westSecondRoundPairedTeams, games: &games)
+                    let (_, eastSecondRound) =  Util.collectRound(from: eastSecondRoundPairedTeams, games: &games)
+                    let (_, westThirdRound) =  Util.collectRound(from: westThirdRoundPairedTeams, games: &games)
+                    let (_, eastThirdRound) =  Util.collectRound(from: eastThirdRoundPairedTeams, games: &games)
+                    let (_, fourthRound) =  Util.collectRound(from: fourthRoundPairedTeams, games: &games)
                     
                     state.gameListTuple = [
                         ("서부 컨퍼런스 1라운드", westFirstRound),
@@ -91,15 +90,6 @@ struct FBTournamentStore {
                         ("동부 컨퍼런스 세미파이널", eastSecondRound),
                         ("동부 컨퍼런스 1라운드", eastFirstRound)
                     ]
-                    
-                    // gameListTuple에 추가되는 순서대로 추가
-                    state.seedIdTupleList.append(westFirstRoundSeedTuple)
-                    state.seedIdTupleList.append(westSecondRoundSeedTuple)
-                    state.seedIdTupleList.append(westThirdRoundSeedTuple)
-                    state.seedIdTupleList.append(fourthRoundSeedTuple)
-                    state.seedIdTupleList.append(eastThirdRoundSeedTuple)
-                    state.seedIdTupleList.append(eastSecondRoundSeedTuple)
-                    state.seedIdTupleList.append(eastFirstRoundSeedTuple)
                 } else {
                     let firstRoundTeams = tournamentTeams["\(leagueId)_\(season)_64"] ?? []
                     let secondRoundTeams = tournamentTeams["\(leagueId)_\(season)_32"] ?? []
@@ -117,7 +107,7 @@ struct FBTournamentStore {
                     
                     var games = displayModel.games
                     
-                    let (firstRoundSeedTuple, firstRound) =  Util.collectRound(from: firstRoundPairedTeams, games: &games)
+                    let (_, firstRound) =  Util.collectRound(from: firstRoundPairedTeams, games: &games)
                     let (_, secondRound) =  Util.collectRound(from: secondRoundPairedTeams, games: &games)
                     let (_, thirdRound) =  Util.collectRound(from: thirdRoundPairedTeams, games: &games)
                     let (_, fourthRound) =  Util.collectRound(from: fourthRoundPairedTeams, games: &games)
@@ -138,7 +128,6 @@ struct FBTournamentStore {
                     if let startIndex = rounds.firstIndex(where: { !$0.gameList.isEmpty }) {
                         state.gameListTuple = Array(rounds[startIndex...])
                     }
-                    
                 }
                 
                 return .none

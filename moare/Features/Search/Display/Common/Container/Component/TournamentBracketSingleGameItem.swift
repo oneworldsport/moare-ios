@@ -12,7 +12,6 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let teamNameDic: [String: String]
     let game: GameForSchedule<T>?
-    let seedIdTuple: (topSeedId: Int?, lowerSeedId: Int?)
     let itemPosition: RoundSeriesKey // ui상에서 시리즈의 위치 ex) 1라운드의 첫번째 시리즈면 1_1
     
     @Binding var itemHeights: [RoundSeriesKey: CGFloat]
@@ -235,7 +234,6 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let teamNameDic: [String: String]
     let game: GameForSchedule<T>?
-    let seedIdTuple: (topSeedId: Int?, lowerSeedId: Int?)
     let itemPosition: RoundSeriesKey // ui상에서 시리즈의 위치 ex) 1라운드의 첫번째 시리즈면 1_1
     
     @Binding var itemHeights: [RoundSeriesKey: CGFloat]
@@ -456,7 +454,6 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let teamNameDic: [String: String]
     let game: GameForSchedule<T>?
-    let seedIdTuple: (topSeedId: Int?, lowerSeedId: Int?)
     
     @Binding var itemHeights: [RoundSeriesKey: CGFloat]
     

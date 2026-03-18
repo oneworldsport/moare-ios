@@ -11,7 +11,6 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let teamNameDic: [String: String]
     let games: [GameForSchedule<T>]?
-    let seedIdTuple: (topSeedId: Int?, lowerSeedId: Int?)
     let itemPosition: RoundSeriesKey // ui상에서 시리즈의 위치 ex) 1라운드의 첫번째 시리즈면 1_1
     
     var shouldRemoveHBar = false // NOTE: MLB의 경우 이전 라운드에 시리즈가 하나 없으면 하단에 HBar가 필요없는 경우가 있음. KBO는 그냥 필요없음.
@@ -25,9 +24,10 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
     
     var body: some View {
         if let games {
-            let topSeedTeamId = seedIdTuple.topSeedId
-            let lowerSeedTeamId = seedIdTuple.lowerSeedId
-            let isSeriesStarted = topSeedTeamId != nil && lowerSeedTeamId != nil
+            let game = games.first
+            let topSeedTeamId = game?.isHomeTopSeed == true ? game?.homeTeamId : game?.awayTeamId
+            let lowerSeedTeamId = game?.isHomeTopSeed == true ? game?.awayTeamId : game?.homeTeamId
+            let isSeriesStarted = Constants.GameStatus.isGameFinished(leagueId: leagueId, status: game?.gameStatus ?? "")
             
             let (topSeedTeamSeriesScore, lowerSeedTeamSeriesScore) = games.reduce((0, 0)) { partial, game in
                 var (top, lower) = partial
@@ -54,19 +54,21 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
                     return awayTeamScore > homeTeamScore
                 }
                 
-                if game.homeTeamId == topSeedTeamId && game.awayTeamId == lowerSeedTeamId {
-                    // 홈팀이 topSeed인경우
-                    if isHomeWinner {
-                        top += 1
-                    } else if isAwayWinner {
-                        lower += 1
-                    }
-                } else if game.homeTeamId == lowerSeedTeamId && game.awayTeamId == topSeedTeamId {
-                    // 홈팀이 lowerSeed인경우
-                    if isHomeWinner {
-                        lower += 1
-                    } else if isAwayWinner {
-                        top += 1
+                
+                if Constants.GameStatus.isGameFinished(leagueId: leagueId, status: game.gameStatus) {
+                    if game.isHomeTopSeed == true {
+                        if isHomeWinner {
+                            top += 1
+                        } else if isAwayWinner {
+                            lower += 1
+                        }
+                    } else {
+                        // 홈팀이 lowerSeed인경우
+                        if isHomeWinner {
+                            lower += 1
+                        } else if isAwayWinner {
+                            top += 1
+                        }
                     }
                 }
                 
@@ -269,7 +271,6 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let teamNameDic: [String: String]
     let games: [GameForSchedule<T>]?
-    let seedIdTuple: (topSeedId: Int?, lowerSeedId: Int?)
     let itemPosition: RoundSeriesKey // ui상에서 시리즈의 위치 ex) 1라운드의 첫번째 시리즈면 1_1
     
     var shouldRemoveHBar = false // NOTE: MLB의 경우 이전 라운드에 시리즈가 하나 없으면 HBar가 필요없는 경우가 있음.
@@ -283,9 +284,10 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
     
     var body: some View {
         if let games {
-            let topSeedTeamId = seedIdTuple.topSeedId
-            let lowerSeedTeamId = seedIdTuple.lowerSeedId
-            let isSeriesStarted = topSeedTeamId != nil && lowerSeedTeamId != nil
+            let game = games.first
+            let topSeedTeamId = game?.isHomeTopSeed == true ? game?.homeTeamId : game?.awayTeamId
+            let lowerSeedTeamId = game?.isHomeTopSeed == true ? game?.awayTeamId : game?.homeTeamId
+            let isSeriesStarted = Constants.GameStatus.isGameFinished(leagueId: leagueId, status: game?.gameStatus ?? "")
             
             let (topSeedTeamSeriesScore, lowerSeedTeamSeriesScore) = games.reduce((0, 0)) { partial, game in
                 var (top, lower) = partial
@@ -312,19 +314,21 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
                     return awayTeamScore > homeTeamScore
                 }
                 
-                if game.homeTeamId == topSeedTeamId && game.awayTeamId == lowerSeedTeamId {
-                    // 홈팀이 topSeed인경우
-                    if isHomeWinner {
-                        top += 1
-                    } else if isAwayWinner {
-                        lower += 1
-                    }
-                } else if game.homeTeamId == lowerSeedTeamId && game.awayTeamId == topSeedTeamId {
-                    // 홈팀이 lowerSeed인경우
-                    if isHomeWinner {
-                        lower += 1
-                    } else if isAwayWinner {
-                        top += 1
+                if Constants.GameStatus.isGameFinished(leagueId: leagueId, status: game.gameStatus) {
+                    if game.isHomeTopSeed == true {
+                        // 홈팀이 topSeed인경우
+                        if isHomeWinner {
+                            top += 1
+                        } else if isAwayWinner {
+                            lower += 1
+                        }
+                    } else {
+                        // 홈팀이 lowerSeed인경우
+                        if isHomeWinner {
+                            lower += 1
+                        } else if isAwayWinner {
+                            top += 1
+                        }
                     }
                 }
                 
@@ -525,7 +529,6 @@ struct TournamentSeriesFinalGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let teamNameDic: [String: String]
     let games: [GameForSchedule<T>]
-    let seedIdTuple: (topSeedId: Int?, lowerSeedId: Int?)
     
     @Binding var itemHeights: [RoundSeriesKey: CGFloat]
     
@@ -535,9 +538,10 @@ struct TournamentSeriesFinalGameItem<T: Decodable & Equatable>: View {
     @State private var itemTopPadding: CGFloat = 0 // 아이템 Y 위치
     
     var body: some View {
-        let topSeedTeamId = seedIdTuple.topSeedId
-        let lowerSeedTeamId = seedIdTuple.lowerSeedId
-        let isSeriesStarted = topSeedTeamId != nil && lowerSeedTeamId != nil
+        let game = games.first
+        let topSeedTeamId = game?.isHomeTopSeed == true ? game?.homeTeamId : game?.awayTeamId
+        let lowerSeedTeamId = game?.isHomeTopSeed == true ? game?.awayTeamId : game?.homeTeamId
+        let isSeriesStarted = Constants.GameStatus.isGameFinished(leagueId: leagueId, status: game?.gameStatus ?? "")
         
         let (topSeedTeamSeriesScore, lowerSeedTeamSeriesScore) = games.reduce((0, 0)) { partial, game in
             var (top, lower) = partial
@@ -564,19 +568,21 @@ struct TournamentSeriesFinalGameItem<T: Decodable & Equatable>: View {
                 return awayTeamScore > homeTeamScore
             }
             
-            if game.homeTeamId == topSeedTeamId && game.awayTeamId == lowerSeedTeamId {
-                // 홈팀이 topSeed인경우
-                if isHomeWinner {
-                    top += 1
-                } else if isAwayWinner {
-                    lower += 1
-                }
-            } else if game.homeTeamId == lowerSeedTeamId && game.awayTeamId == topSeedTeamId {
-                // 홈팀이 lowerSeed인경우
-                if isHomeWinner {
-                    lower += 1
-                } else if isAwayWinner {
-                    top += 1
+            if Constants.GameStatus.isGameFinished(leagueId: leagueId, status: game.gameStatus) {
+                if game.isHomeTopSeed == true {
+                    // 홈팀이 topSeed인경우
+                    if isHomeWinner {
+                        top += 1
+                    } else if isAwayWinner {
+                        lower += 1
+                    }
+                } else {
+                    // 홈팀이 lowerSeed인경우
+                    if isHomeWinner {
+                        lower += 1
+                    } else if isAwayWinner {
+                        top += 1
+                    }
                 }
             }
             

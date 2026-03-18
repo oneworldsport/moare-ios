@@ -27,7 +27,6 @@ struct FBTournamentView: View {
                             leagueId: displayModel.leagueId,
                             teamNameDic: store.baseTournament.teamNameDic,
                             gameListTuple: store.gameListTuple,
-                            seedIdTupleList: store.seedIdTupleList,
                             isConference: leagueId == Constants.Ids.mls,
                             isSeries: leagueId != Constants.Ids.mls
                         ),
