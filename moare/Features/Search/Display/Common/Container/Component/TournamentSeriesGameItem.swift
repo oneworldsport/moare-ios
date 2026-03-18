@@ -27,7 +27,13 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
             let game = games.first
             let topSeedTeamId = game?.isHomeTopSeed == true ? game?.homeTeamId : game?.awayTeamId
             let lowerSeedTeamId = game?.isHomeTopSeed == true ? game?.awayTeamId : game?.homeTeamId
-            let isSeriesStarted = Constants.GameStatus.isGameFinished(leagueId: leagueId, status: game?.gameStatus ?? "")
+            let isUEFALeague = Constants.Ids.footballUEFALeagues.contains(leagueId)
+            let isSeriesStarted = if isUEFALeague {
+                // UEFA리그(합산 스코어 방식)는 경기중이어도 isSeriesStarted = true
+                !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game?.gameStatus ?? "")
+            } else {
+                Constants.GameStatus.isGameFinished(leagueId: leagueId, status: game?.gameStatus ?? "")
+            }
             
             let (topSeedTeamSeriesScore, lowerSeedTeamSeriesScore) = games.reduce((0, 0)) { partial, game in
                 var (top, lower) = partial
@@ -54,20 +60,31 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
                     return awayTeamScore > homeTeamScore
                 }
                 
-                
-                if Constants.GameStatus.isGameFinished(leagueId: leagueId, status: game.gameStatus) {
-                    if game.isHomeTopSeed == true {
-                        if isHomeWinner {
-                            top += 1
-                        } else if isAwayWinner {
-                            lower += 1
+                if isUEFALeague {
+                    if !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus) {
+                        if game.isHomeTopSeed == true {
+                            top += homeTeamScore
+                            lower += awayTeamScore
+                        } else {
+                            top += awayTeamScore
+                            lower += homeTeamScore
                         }
-                    } else {
-                        // 홈팀이 lowerSeed인경우
-                        if isHomeWinner {
-                            lower += 1
-                        } else if isAwayWinner {
-                            top += 1
+                    }
+                } else {
+                    if Constants.GameStatus.isGameFinished(leagueId: leagueId, status: game.gameStatus) {
+                        if game.isHomeTopSeed == true {
+                            if isHomeWinner {
+                                top += 1
+                            } else if isAwayWinner {
+                                lower += 1
+                            }
+                        } else {
+                            // 홈팀이 lowerSeed인경우
+                            if isHomeWinner {
+                                lower += 1
+                            } else if isAwayWinner {
+                                top += 1
+                            }
                         }
                     }
                 }
@@ -89,117 +106,125 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
                     .padding(.top, topPadding())
                 }
                 
-                HStack(spacing: 0) {
-                    VStack(spacing: 4) {
-                        HStack {
+                VStack(alignment: .trailing, spacing: 2) {
+                    if isUEFALeague {
+                        Text("합산 스코어")
+                            .font(.system(size: 12))
+                            .foregroundStyle(.secondary)
+                    }
+                    
+                    HStack(spacing: 0) {
+                        VStack(spacing: 4) {
                             HStack {
-                                Text(topSeedTeamId == nil ? "미정" : teamNameDic["short_\(topSeedTeamId ?? 0)"] ?? "")
-                                    .font(.system(size: 15, weight: .medium))
+                                HStack {
+                                    Text(topSeedTeamId == nil ? "미정" : teamNameDic["short_\(topSeedTeamId ?? 0)"] ?? "")
+                                        .font(.system(size: 15, weight: .medium))
+                                    
+                                    URLImage(
+                                        url: Util.teamLogoURL(leagueId: leagueId, teamId: topSeedTeamId),
+                                        size: .small
+                                    )
+                                }
+                                .frame(width: 130)
                                 
-                                URLImage(
-                                    url: Util.teamLogoURL(leagueId: leagueId, teamId: topSeedTeamId),
-                                    size: .small
-                                )
+                                Text(isSeriesStarted ? "\(topSeedTeamSeriesScore)" : "-")
+                                    .foregroundStyle(isSeriesStarted ? (topSeedTeamSeriesScore >= lowerSeedTeamSeriesScore ? Color.moare : Color.primary) : Color.primary)
                             }
-                            .frame(width: 130)
+                            .padding(.bottom, 2)
                             
-                            Text(isSeriesStarted ? "\(topSeedTeamSeriesScore)" : "-")
-                                .foregroundStyle(isSeriesStarted ? (topSeedTeamSeriesScore >= lowerSeedTeamSeriesScore ? Color.moare : Color.primary) : Color.primary)
-                        }
-                        .padding(.bottom, 2)
-                        
-                        if isScoreOpened {
-                            Button(action: {
-                                selectSeries?(games)
-                            }) {
-                                VStack(spacing: 4) {
-                                    ForEach(games.indices, id: \.self) { index in
-                                        let game = games[index]
-                                        let topSeedScore = game.homeTeamId == topSeedTeamId ? game.homeTeamScore : game.awayTeamScore
-                                        let lowerSeedScore = game.homeTeamId == lowerSeedTeamId ? game.homeTeamScore : game.awayTeamScore
-                                        let isBeforeGame = Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
-                                        
-                                        VStack(spacing: 0) {
-                                            Text("Game \(index + 1) - \(CalendarUtil.formatDate(date: game.date).split(separator: " ").first ?? "")")
-                                                .font(.system(size: 12, weight: .light))
-                                                .padding(.top, 4)
+                            if isScoreOpened {
+                                Button(action: {
+                                    selectSeries?(games)
+                                }) {
+                                    VStack(spacing: 4) {
+                                        ForEach(games.indices, id: \.self) { index in
+                                            let game = games[index]
+                                            let topSeedScore = game.homeTeamId == topSeedTeamId ? game.homeTeamScore : game.awayTeamScore
+                                            let lowerSeedScore = game.homeTeamId == lowerSeedTeamId ? game.homeTeamScore : game.awayTeamScore
+                                            let isBeforeGame = Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
                                             
-                                            HStack(spacing: 0) {
-                                                Text(isBeforeGame ? "-" : "\(topSeedScore)")
-                                                    .font(.system(size: 14, weight: .medium))
-                                                    .frame(width: 30)
-                                                    .foregroundStyle(isBeforeGame ? Color.primary : (topSeedScore >= lowerSeedScore ? Color.moare : Color.primary))
-                                                    
-                                                Text("-")
+                                            VStack(spacing: 0) {
+                                                Text("Game \(index + 1) - \(CalendarUtil.formatDate(date: game.date).split(separator: " ").first ?? "")")
+                                                    .font(.system(size: 12, weight: .light))
+                                                    .padding(.top, 4)
                                                 
-                                                Text(isBeforeGame ? "-" : "\(lowerSeedScore)")
-                                                    .font(.system(size: 14, weight: .medium))
-                                                    .frame(width: 30)
-                                                    .foregroundStyle(isBeforeGame ? Color.primary : (lowerSeedScore >= topSeedScore ? Color.moare : Color.primary))
+                                                HStack(spacing: 0) {
+                                                    Text(isBeforeGame ? "-" : "\(topSeedScore)")
+                                                        .font(.system(size: 14, weight: .medium))
+                                                        .frame(width: 30)
+                                                        .foregroundStyle(isBeforeGame ? Color.primary : (topSeedScore >= lowerSeedScore ? Color.moare : Color.primary))
+                                                    
+                                                    Text("-")
+                                                    
+                                                    Text(isBeforeGame ? "-" : "\(lowerSeedScore)")
+                                                        .font(.system(size: 14, weight: .medium))
+                                                        .frame(width: 30)
+                                                        .foregroundStyle(isBeforeGame ? Color.primary : (lowerSeedScore >= topSeedScore ? Color.moare : Color.primary))
+                                                }
                                             }
                                         }
                                     }
                                 }
+                                .foregroundStyle(.primary)
                             }
-                            .foregroundStyle(.primary)
-                        }
-                        
-                        Button(action: {
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                isScoreOpened.toggle()
-                            }
-                        }) {
-                            HStack(spacing: 3) {
-                                Text("\(isScoreOpened ? "경기결과 숨기기" : "경기결과 보기")")
-                                    .font(.system(size: 14))
-                                
-                                Image(systemName: "\(isScoreOpened ? "chevron.up" : "chevron.down")")
-                                    .font(.system(size: 14))
-                                    .padding(3)
-                                    .overlay {
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(.secondary, lineWidth: 1)
-                                    }
-                            }
-                        }
-                        .foregroundStyle(.secondary)
-                        .opacity(0.7)
-                        
-                        HStack {
-                            HStack {
-                                Text(lowerSeedTeamId == nil ? "미정" : teamNameDic["short_\(lowerSeedTeamId ?? 0)"] ?? "")
-                                    .font(.system(size: 15, weight: .medium))
-                                
-                                URLImage(
-                                    url: Util.teamLogoURL(leagueId: leagueId, teamId: lowerSeedTeamId),
-                                    size: .small
-                                )
-                            }
-                            .frame(width: 130)
                             
-                            Text(isSeriesStarted ? "\(lowerSeedTeamSeriesScore)" : "-")
-                                .foregroundStyle(isSeriesStarted ? (lowerSeedTeamSeriesScore >= topSeedTeamSeriesScore ? Color.moare : Color.primary) : Color.primary)
+                            Button(action: {
+                                withAnimation(.easeInOut(duration: 0.3)) {
+                                    isScoreOpened.toggle()
+                                }
+                            }) {
+                                HStack(spacing: 3) {
+                                    Text("\(isScoreOpened ? "경기결과 숨기기" : "경기결과 보기")")
+                                        .font(.system(size: 14))
+                                    
+                                    Image(systemName: "\(isScoreOpened ? "chevron.up" : "chevron.down")")
+                                        .font(.system(size: 14))
+                                        .padding(3)
+                                        .overlay {
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(.secondary, lineWidth: 1)
+                                        }
+                                }
+                            }
+                            .foregroundStyle(.secondary)
+                            .opacity(0.7)
+                            
+                            HStack {
+                                HStack {
+                                    Text(lowerSeedTeamId == nil ? "미정" : teamNameDic["short_\(lowerSeedTeamId ?? 0)"] ?? "")
+                                        .font(.system(size: 15, weight: .medium))
+                                    
+                                    URLImage(
+                                        url: Util.teamLogoURL(leagueId: leagueId, teamId: lowerSeedTeamId),
+                                        size: .small
+                                    )
+                                }
+                                .frame(width: 130)
+                                
+                                Text(isSeriesStarted ? "\(lowerSeedTeamSeriesScore)" : "-")
+                                    .foregroundStyle(isSeriesStarted ? (lowerSeedTeamSeriesScore >= topSeedTeamSeriesScore ? Color.moare : Color.primary) : Color.primary)
+                            }
+                            .padding(.top, 2)
                         }
-                        .padding(.top, 2)
-                    }
-                    .frame(width: 150)
-                    .readSize { size in
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            itemHeight = size.height
-                            itemHeights[itemPosition] = size.height
+                        .frame(width: 150)
+                        .readSize { size in
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                itemHeight = size.height
+                                itemHeights[itemPosition] = size.height
+                            }
                         }
-                    }
-                    
-                    // bar
-                    VStack(alignment: .trailing, spacing: 0) {
-                        TournamentHBar()
                         
-                        TournamentVBar()
-                        
-                        TournamentHBar()
+                        // bar
+                        VStack(alignment: .trailing, spacing: 0) {
+                            TournamentHBar()
+                            
+                            TournamentVBar()
+                            
+                            TournamentHBar()
+                        }
+                        .padding(.vertical, 15)
+                        .frame(height: itemHeight)
                     }
-                    .padding(.vertical, 15)
-                    .frame(height: itemHeight)
                 }
                 
                 if itemPosition.round == 2 || itemPosition.round == 3 {
