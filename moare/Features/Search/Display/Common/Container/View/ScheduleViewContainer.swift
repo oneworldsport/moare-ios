@@ -69,7 +69,12 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
                 }
                 .onAppear {
                     withAnimation(.spring(duration: 0.5)) {
-                        relatedLeaguesBarOffset = getOffsetOfAniCapsuleBar(itemWidth: relatedLeaguesButtonWidth, barWidth: relatedLeaguesButtonWidth)
+                        relatedLeaguesBarOffset = getOffsetOfAniCapsuleBar(
+                            itemWidth: relatedLeaguesButtonWidth,
+                            barWidth: relatedLeaguesButtonWidth,
+                            spacing: 10,
+                            index: state.selectedRelatedLeagueIndex
+                        )
                     }
                 }
                 .onChange(of: state.selectedRelatedLeagueIndex) {
