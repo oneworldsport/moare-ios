@@ -67,6 +67,13 @@ struct TennisLeagueScheduleStore {
                 // select default yearMonth
                 state.baseSchedule.yearMonthList = displayModel.yearMonthList
                 
+                // 
+                var selectedIndex: Int? {
+                    displayModel.sortedRelatedLeagues?.firstIndex(of: displayModel.leagueId)
+                }
+                
+                state.baseSchedule.selectedRelatedLeagueIndex = selectedIndex ?? 0
+                
                 switch displayModel.scheduleType {
                 case .league:
                     if let date = displayModel.games.first?.date {
