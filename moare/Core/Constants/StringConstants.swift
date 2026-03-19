@@ -168,27 +168,48 @@ struct StringConstants {
     
     struct Tennis {
         static func leagueNameStr(leagueId: Int) -> String {
-            switch leagueId {
-            case Constants.Ids.ausOpenMSingle:
-                return "호주오픈 남자단식"
-            case Constants.Ids.ausOpenMDoubles:
-                return "호주오픈 남자복식"
-            case Constants.Ids.ausOpenMixedDoubles:
-                return "호주오픈 혼합복식"
-            case Constants.Ids.ausOpenWSingle:
-                return "호주오픈 여자단식"
-            case Constants.Ids.ausOpenWDoubles:
-                return "호주오픈 여자복식"
-            default :
-                return ""
-            }
+            return "\(tournamentNameStr(leagueId: leagueId)) \(relatedLeaguesKrName(leagueId: leagueId) ?? "")"
         }
         
         static func tournamentNameStr(leagueId: Int) -> String {
             switch leagueId {
             case let id where Constants.Ids.ausOpenAll.contains(id):
-                return "호주오픈"
-            default :
+                return "호주 오픈"
+            case let id where Constants.Ids.rolandGarrosAll.contains(id):
+                return "롤랑가로스"
+            case let id where Constants.Ids.wimbledonAll.contains(id):
+                return "윔블던"
+            case let id where Constants.Ids.usOpenAll.contains(id):
+                return "US 오픈"
+            case let id where Constants.Ids.indianWellsAll.contains(id):
+                return "인디언웰스 마스터스"
+            case let id where Constants.Ids.miamiAll.contains(id):
+                return "마이애미 마스터스"
+            case let id where Constants.Ids.monteCarloAll.contains(id):
+                return "몬테카를로 마스터스"
+            case let id where Constants.Ids.madridAll.contains(id):
+                return "마드리드 오픈"
+            case let id where Constants.Ids.romeAll.contains(id):
+                return "로마 오픈"
+            case let id where Constants.Ids.torontoAll.contains(id):
+                return "캐나다 오픈"
+            case let id where Constants.Ids.montrealAll.contains(id):
+                return "캐나다 오픈"
+            case let id where Constants.Ids.cincinnatiAll.contains(id):
+                return "신시내티 마스터스"
+            case let id where Constants.Ids.shanghaiAll.contains(id):
+                return "상하이 마스터스"
+            case let id where Constants.Ids.parisAll.contains(id):
+                return "파리 마스터스"
+            case let id where Constants.Ids.dohaAll.contains(id):
+                return "카타르 오픈"
+            case let id where Constants.Ids.dubaiAll.contains(id):
+                return "두바이 챔피언십"
+            case let id where Constants.Ids.beijingAll.contains(id):
+                return "차이나 오픈"
+            case let id where Constants.Ids.wuhanAll.contains(id):
+                return "우한 오픈"
+            default:
                 return ""
             }
         }
