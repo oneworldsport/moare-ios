@@ -12,6 +12,7 @@ struct GameForSchedule<T: Decodable & Equatable>: Decodable, Equatable {
     private let _homeTeamScore: Int?
     private let _awayTeamScore: Int?
     private let _gameStatus: String?
+    let isHomeTopSeed: Bool?
     let gameInfo: T?
 
     var itemKey: String { _itemKey ?? "" }
@@ -31,7 +32,7 @@ struct GameForSchedule<T: Decodable & Equatable>: Decodable, Equatable {
         case _homeTeamScore = "homeTeamScore"
         case _awayTeamScore = "awayTeamScore"
         case _gameStatus = "gameStatus"
-        case gameInfo
+        case isHomeTopSeed, gameInfo
     }
     
     init(
@@ -41,6 +42,7 @@ struct GameForSchedule<T: Decodable & Equatable>: Decodable, Equatable {
         homeTeamScore: Int? = nil,
         awayTeamScore: Int? = nil,
         gameStatus: String? = nil,
+        isHomeTopSeed: Bool? = nil,
         gameInfo: T? = nil
     ) {
         self._itemKey = itemKey
@@ -49,6 +51,7 @@ struct GameForSchedule<T: Decodable & Equatable>: Decodable, Equatable {
         self._homeTeamScore = homeTeamScore
         self._awayTeamScore = awayTeamScore
         self._gameStatus = gameStatus
+        self.isHomeTopSeed = isHomeTopSeed
         self.gameInfo = gameInfo
     }
 }

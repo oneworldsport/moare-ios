@@ -33,13 +33,13 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                         let roundIndexForPosition = roundIndex + 1
                         let gameList = item.gameList
                         let title = item.title
-                        let shouldShow = state.isConference ? leftBracketTitles.contains(String(title.split(separator: " ").first ?? "")) : true
+                        let isLeft = state.isConference ? leftBracketTitles.contains(String(title.split(separator: " ").first ?? "")) : true
                         let isMLB = state.leagueId == Constants.Ids.mlb
                         let isKBO = state.leagueId == Constants.Ids.kbo
                         let isSeries = state.leagueId == Constants.Ids.mls ? (roundIndex == 0 || roundIndex == 6) : state.isSeries // mls는 (동/서부)1라운드만 series
                         
-                        // default or left
-                        if shouldShow {
+                        // left
+                        if isLeft {
                             VStack(spacing: 0) {
                                 Text(title)
                                     .fontWeight(.medium)
@@ -56,7 +56,6 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                             leagueId: state.leagueId,
                                             teamNameDic: state.teamNameDic,
                                             games: games,
-                                            seedIdTuple: state.seedIdTupleList[roundIndex][seriesIndex],
                                             itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
                                             shouldRemoveHBar: isKBO || (isMLB && roundIndexForPosition == 2), // mlb 2라운드, kbo
                                             itemHeights: $leftItemHeights,
@@ -68,7 +67,6 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                             leagueId: state.leagueId,
                                             teamNameDic: state.teamNameDic,
                                             game: games?.first,
-                                            seedIdTuple: state.seedIdTupleList[roundIndex][seriesIndex],
                                             itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
                                             itemHeights: $leftItemHeights,
                                             selectGame: action.selectGame
@@ -95,7 +93,6 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                                 leagueId: state.leagueId,
                                                 teamNameDic: state.teamNameDic,
                                                 games: games,
-                                                seedIdTuple: state.seedIdTupleList[roundIndex][0],
                                                 itemHeights: $leftItemHeights,
                                                 selectSeries: action.selectSeries
                                             )
@@ -104,7 +101,6 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                                 leagueId: state.leagueId,
                                                 teamNameDic: state.teamNameDic,
                                                 game: games.first,
-                                                seedIdTuple: state.seedIdTupleList[roundIndex][0],
                                                 itemHeights: $leftItemHeights,
                                                 selectGame: action.selectGame
                                             )
@@ -131,7 +127,6 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                                 leagueId: state.leagueId,
                                                 teamNameDic: state.teamNameDic,
                                                 games: games,
-                                                seedIdTuple: state.seedIdTupleList[roundIndex][seriesIndex],
                                                 itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
                                                 shouldRemoveHBar: isMLB && roundIndexForPosition == 6, // mlb 2라운드만
                                                 itemHeights: $rightItemHeights,
@@ -143,7 +138,6 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                                 leagueId: state.leagueId,
                                                 teamNameDic: state.teamNameDic,
                                                 game: games?.first,
-                                                seedIdTuple: state.seedIdTupleList[roundIndex][seriesIndex],
                                                 itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
                                                 itemHeights: $rightItemHeights,
                                                 selectGame: action.selectGame
