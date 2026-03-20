@@ -122,6 +122,9 @@ struct FBLeagueScheduleStore {
                         dict[game.gameId] = false
                     }
                     
+                    // paging기능이 생기면서 baseSchedule.days에 기본값(0)을 넣어줘야 아이템이 보임
+                    state.baseSchedule.days = [DayInfo(day: 0, dayOfWeek: 0, displayName: "")]
+                    
                     return .none
                     
                 default:

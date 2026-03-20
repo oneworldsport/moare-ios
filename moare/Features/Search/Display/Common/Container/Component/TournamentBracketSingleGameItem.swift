@@ -7,11 +7,11 @@
 
 import SwiftUI
 
+// NOTE: 현재는 축구에서만 쓰임
 struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let teamNameDic: [String: String]
     let game: GameForSchedule<T>?
-    let seedIdTuple: (topSeedId: Int?, lowerSeedId: Int?)
     let itemPosition: RoundSeriesKey // ui상에서 시리즈의 위치 ex) 1라운드의 첫번째 시리즈면 1_1
     
     @Binding var itemHeights: [RoundSeriesKey: CGFloat]
@@ -21,10 +21,11 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
     @State private var itemHeight: CGFloat = 0
     
     var body: some View {
-        let topSeedTeamId = seedIdTuple.topSeedId
-        let lowerSeedTeamId = seedIdTuple.lowerSeedId
+        let topSeedTeamId = game?.isHomeTopSeed == true ? game?.homeTeamId : game?.awayTeamId
+        let lowerSeedTeamId = game?.isHomeTopSeed == true ? game?.awayTeamId : game?.homeTeamId
         let gameStatus = game?.gameStatus ?? Constants.GameStatus.Football.notStarted
         let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
+        let extra = (game as? FBGameForSchedule)?.gameInfo?.status?.extra
         let shouldShowScore = !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: gameStatus)
         
         let homeTeamScore = game?.homeTeamScore ?? 0
@@ -33,31 +34,31 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
         let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
         
         var topSeedTeamScore: Int {
-            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+            if game?.isHomeTopSeed == true {
                 homeTeamScore
             } else {
                 awayTeamScore
             }
         }
         var lowerSeedTeamScore: Int {
-            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
-                homeTeamScore
-            } else {
+            if game?.isHomeTopSeed == true {
                 awayTeamScore
+            } else {
+                homeTeamScore
             }
         }
         var topSeedTeamPenaltyScore: Int? {
-            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+            if game?.isHomeTopSeed == true {
                 homeTeamPenaltyScore
             } else {
                 awayTeamPenaltyScore
             }
         }
         var lowerSeedTeamPenaltyScore: Int? {
-            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
-                homeTeamPenaltyScore
-            } else {
+            if game?.isHomeTopSeed == true {
                 awayTeamPenaltyScore
+            } else {
+                homeTeamPenaltyScore
             }
         }
         
@@ -92,7 +93,7 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
                             }
                             .frame(width: 110)
                             
-                            // 축구 패널티킥 경기는 일반 스코어 검정색
+                            // 축구 패널티킥 경기에서 일반 스코어는 검정색
                             let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (topSeedTeamScore >= lowerSeedTeamScore ? .moare : .primary)
                             
                             Text(shouldShowScore ? "\(topSeedTeamScore)" : "-")
@@ -108,12 +109,9 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
                         
                         VStack(spacing: 0) {
                             // game status
-                            CapsuleButton(
-                                text: Constants.GameStatus.fbGameStatusText(status: gameStatus, elapsed: elapsed),
-                                color: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: gameStatus)
-                            ) {
-                                
-                            }
+                            GameStatusCapsuleButton(
+                                gameStatusContext: .football(status: gameStatus, elapsed: elapsed, extra: extra), leagueId: leagueId
+                            ){}
                             
                             // game date
                             if let date = game?.date {
@@ -139,7 +137,7 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
                             }
                             .frame(width: 110)
                             
-                            // 축구 패널티킥 경기는 일반 스코어 검정색
+                            // 축구 패널티킥 경기에서 일반 스코어는 검정색
                             let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (lowerSeedTeamScore >= topSeedTeamScore ? .moare : .primary)
                             
                             Text(shouldShowScore ? "\(lowerSeedTeamScore)" : "-")
@@ -236,7 +234,6 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let teamNameDic: [String: String]
     let game: GameForSchedule<T>?
-    let seedIdTuple: (topSeedId: Int?, lowerSeedId: Int?)
     let itemPosition: RoundSeriesKey // ui상에서 시리즈의 위치 ex) 1라운드의 첫번째 시리즈면 1_1
     
     @Binding var itemHeights: [RoundSeriesKey: CGFloat]
@@ -246,10 +243,11 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
     @State private var itemHeight: CGFloat = 0
     
     var body: some View {
-        let topSeedTeamId = seedIdTuple.topSeedId
-        let lowerSeedTeamId = seedIdTuple.lowerSeedId
+        let topSeedTeamId = game?.isHomeTopSeed == true ? game?.homeTeamId : game?.awayTeamId
+        let lowerSeedTeamId = game?.isHomeTopSeed == true ? game?.awayTeamId : game?.homeTeamId
         let gameStatus = game?.gameStatus ?? Constants.GameStatus.Football.notStarted
         let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
+        let extra = (game as? FBGameForSchedule)?.gameInfo?.status?.extra
         let shouldShowScore = !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: gameStatus)
         
         let homeTeamScore = game?.homeTeamScore ?? 0
@@ -258,31 +256,31 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
         let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
         
         var topSeedTeamScore: Int {
-            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+            if game?.isHomeTopSeed == true {
                 homeTeamScore
             } else {
                 awayTeamScore
             }
         }
         var lowerSeedTeamScore: Int {
-            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
-                homeTeamScore
-            } else {
+            if game?.isHomeTopSeed == true {
                 awayTeamScore
+            } else {
+                homeTeamScore
             }
         }
         var topSeedTeamPenaltyScore: Int? {
-            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+            if game?.isHomeTopSeed == true {
                 homeTeamPenaltyScore
             } else {
                 awayTeamPenaltyScore
             }
         }
         var lowerSeedTeamPenaltyScore: Int? {
-            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
-                homeTeamPenaltyScore
-            } else {
+            if game?.isHomeTopSeed == true {
                 awayTeamPenaltyScore
+            } else {
+                homeTeamPenaltyScore
             }
         }
         
@@ -317,7 +315,7 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
                 }) {
                     VStack(spacing: 4) {
                         HStack(spacing: 4) {
-                            // 축구 패널티킥 경기는 일반 스코어 검정색
+                            // 축구 패널티킥 경기에서 일반 스코어는 검정색
                             let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (topSeedTeamScore >= lowerSeedTeamScore ? .moare : .primary)
                             
                             Text(shouldShowScore ? "\(topSeedTeamScore)" : "-")
@@ -344,12 +342,9 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
                         
                         VStack(spacing: 0) {
                             // game status
-                            CapsuleButton(
-                                text: Constants.GameStatus.fbGameStatusText(status: gameStatus, elapsed: elapsed),
-                                color: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: gameStatus)
-                            ) {
-                                
-                            }
+                            GameStatusCapsuleButton(
+                                gameStatusContext: .football(status: gameStatus, elapsed: elapsed, extra: extra), leagueId: leagueId
+                            ){}
                             
                             // game date
                             if let date = game?.date {
@@ -364,7 +359,7 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
                         }
                         
                         HStack(spacing: 4) {
-                            // 축구 패널티킥 경기는 일반 스코어 검정색
+                            // 축구 패널티킥 경기에서 일반 스코어는 검정색
                             let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (lowerSeedTeamScore >= topSeedTeamScore ? .moare : .primary)
                             
                             Text(shouldShowScore ? "\(lowerSeedTeamScore)" : "-")
@@ -459,7 +454,6 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let teamNameDic: [String: String]
     let game: GameForSchedule<T>?
-    let seedIdTuple: (topSeedId: Int?, lowerSeedId: Int?)
     
     @Binding var itemHeights: [RoundSeriesKey: CGFloat]
     
@@ -468,10 +462,11 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
     @State private var itemTopPadding: CGFloat = 0 // 아이템 Y 위치
     
     var body: some View {
-        let topSeedTeamId = seedIdTuple.topSeedId
-        let lowerSeedTeamId = seedIdTuple.lowerSeedId
+        let topSeedTeamId = game?.isHomeTopSeed == true ? game?.homeTeamId : game?.awayTeamId
+        let lowerSeedTeamId = game?.isHomeTopSeed == true ? game?.awayTeamId : game?.homeTeamId
         let gameStatus = game?.gameStatus ?? Constants.GameStatus.Football.notStarted
         let elapsed = (game as? FBGameForSchedule)?.gameInfo?.status?.elapsed
+        let extra = (game as? FBGameForSchedule)?.gameInfo?.status?.extra
         let shouldShowScore = !Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: gameStatus)
         
         let homeTeamScore = game?.homeTeamScore ?? 0
@@ -480,31 +475,31 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
         let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
         
         var topSeedTeamScore: Int {
-            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+            if game?.isHomeTopSeed == true {
                 homeTeamScore
             } else {
                 awayTeamScore
             }
         }
         var lowerSeedTeamScore: Int {
-            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
-                homeTeamScore
-            } else {
+            if game?.isHomeTopSeed == true {
                 awayTeamScore
+            } else {
+                homeTeamScore
             }
         }
         var topSeedTeamPenaltyScore: Int? {
-            if game?.homeTeamId == topSeedTeamId && game?.awayTeamId == lowerSeedTeamId {
+            if game?.isHomeTopSeed == true {
                 homeTeamPenaltyScore
             } else {
                 awayTeamPenaltyScore
             }
         }
         var lowerSeedTeamPenaltyScore: Int? {
-            if game?.homeTeamId == lowerSeedTeamId && game?.awayTeamId == topSeedTeamId {
-                homeTeamPenaltyScore
-            } else {
+            if game?.isHomeTopSeed == true {
                 awayTeamPenaltyScore
+            } else {
+                homeTeamPenaltyScore
             }
         }
         
@@ -526,7 +521,7 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
                 .frame(width: 100)
                 
                 VStack(spacing: 2) {
-                    // 축구 패널티킥 경기는 일반 스코어 검정색
+                    // 축구 패널티킥 경기에서 일반 스코어는 검정색
                     let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (topSeedTeamScore >= lowerSeedTeamScore ? .moare : .primary)
                     
                     Text(shouldShowScore ? "\(topSeedTeamScore)" : "-")
@@ -541,12 +536,9 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
                 
                 VStack(spacing: 0) {
                     // game status
-                    CapsuleButton(
-                        text: Constants.GameStatus.fbGameStatusText(status: gameStatus, elapsed: elapsed),
-                        color: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: gameStatus)
-                    ) {
-                        
-                    }
+                    GameStatusCapsuleButton(
+                        gameStatusContext: .football(status: gameStatus, elapsed: elapsed, extra: extra), leagueId: leagueId
+                    ){}
                     
                     // game date
                     if let date = game?.date {
@@ -562,7 +554,7 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
                 .frame(width: 110)
                 
                 VStack(spacing: 2) {
-                    // 축구 패널티킥 경기는 일반 스코어 검정색
+                    // 축구 패널티킥 경기에서 일반 스코어는 검정색
                     let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (lowerSeedTeamScore >= topSeedTeamScore ? .moare : .primary)
                     
                     Text(shouldShowScore ? "\(lowerSeedTeamScore)" : "-")

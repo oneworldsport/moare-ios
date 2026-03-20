@@ -19,6 +19,9 @@ struct FBLeagueScheduleView: View {
     var body: some View {
         let displayModel = store.baseSchedule.displayModel
         let leagueId = displayModel.leagueId
+        let tournamentStartDateYearMonth = CalendarUtil.formatDate(date: displayModel.tournamentStartDate, inputFormatType: .dateOnly, outputFormatType: .yearMonth)
+        let tournamentStartDateYearMonthInt = Int(tournamentStartDateYearMonth.replacingOccurrences(of: "/", with: "")) ?? 0
+        let selectedYearMonthInt = Int(store.baseSchedule.selectedYearMonth.replacingOccurrences(of: "/", with: "")) ?? 0
         
         VStack {
             if show {
@@ -36,7 +39,8 @@ struct FBLeagueScheduleView: View {
                             selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
                         isAllResultOpened: store.baseSchedule.isAllResultOpened,
-                        shouldShowTournamentButton: (leagueId == Constants.Ids.mls) && (store.baseSchedule.selectedMonth >= 10),
+                        shouldShowTournamentButton: (displayModel.tournamentStartDate != nil) &&
+                        (tournamentStartDateYearMonthInt <= selectedYearMonthInt),
                     ),
                     actions: ScheduleContainerActions(
                         calendarUiActions: CalendarUiActions(
@@ -222,8 +226,7 @@ struct FBLeagueScheduleListItem: View {
                 teamNameDic: teamNameDic,
                 isClickEnabled: isFromSchedule ? fbLeagueScheduleStore?.selectedGame == nil : false,
                 isResultOpened: isResultOpened,
-                gameStatusText: Constants.GameStatus.fbGameStatusText(status: data.gameStatus, elapsed: data.gameInfo?.status?.elapsed, isResultOpened: isResultOpened),
-                gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: data.gameStatus),
+                gameStatusContext: .football(status: data.gameStatus, elapsed: data.gameInfo?.status?.elapsed, extra: data.gameInfo?.status?.extra, isResultOpened: isResultOpened),
                 isCapsuleButtonDisabled: (isFromSchedule ? fbLeagueScheduleStore?.selectedGame != nil : true) || !Constants.GameStatus.Football.finishedList.contains(gameStatus),
                 gameType: MatchDescriptionConverter.convert(input: data.gameInfo?.round ?? ""),
                 shouldShowOnlyDateTime: isFromSchedule ? (
@@ -246,7 +249,9 @@ struct FBLeagueScheduleListItem: View {
             if let fbLeagueScheduleStore {
                 if Constants.GameStatus.Football.finishedList.contains(gameStatus) {
                     isResultOpened = fbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
-                } else if gameStatus == Constants.GameStatus.Football.notStarted {
+                } else if gameStatus == Constants.GameStatus.Football.notStarted ||
+                            gameStatus == Constants.GameStatus.Football.cancelled ||
+                            gameStatus == Constants.GameStatus.Football.postponed {
                     isResultOpened = false
                 } else {
                     isResultOpened = true

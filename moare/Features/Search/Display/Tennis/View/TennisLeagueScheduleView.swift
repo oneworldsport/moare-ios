@@ -110,7 +110,7 @@ struct TennisLeagueScheduleList: View {
                 
                     ScrollView {
                         LazyVStack(spacing: 8) {
-                            ForEach(gameListToDisplay, id: \.gameId) { item in
+                            ForEach(gameListToDisplay, id: \.itemKey) { item in
                                 TennisLeagueScheduleListItem(
                                     searchStore: searchStore,
                                     tennisLeagueScheduleStore: tennisLeagueScheduleStore,
@@ -165,7 +165,7 @@ struct TennisLeagueScheduleListItem: View {
     var body: some View {
         let displayModel = tennisLeagueScheduleStore.baseSchedule.displayModel
         let leagueId = displayModel.leagueId
-        let gameId = data.gameId
+        let itemKey = data.itemKey
         let gameStatus = Int(data.gameStatus) ?? 0
         let teamNameDic = tennisLeagueScheduleStore.baseSchedule.teamNameDictionary
         
@@ -175,8 +175,7 @@ struct TennisLeagueScheduleListItem: View {
                 game: data,
                 teamNameDic: teamNameDic,
                 isResultOpened: isResultOpened,
-                gameStatusText: Constants.GameStatus.tennisGameStatusText(status: gameStatus, isResultOpened: isResultOpened),
-                gameStatusColor: Constants.GameStatus.gameStatusColor(leagueId: leagueId, status: data.gameStatus),
+                gameStatusContext: .tennis(status: gameStatus, isResultOpened: isResultOpened),
                 isCapsuleButtonDisabled: !Constants.GameStatus.Tennis.finishedList.contains(gameStatus),
                 gameType: data.gameInfo?.roundInfo?.name,
                 shouldShowWinner: data.gameInfo?.isGameFinished ?? false,
@@ -187,13 +186,13 @@ struct TennisLeagueScheduleListItem: View {
                     tennisLeagueScheduleStore.send(.selectGame(game: data))
                 },
                 onCapsuleButtonClick: {
-                    tennisLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: !isResultOpened))
+                    tennisLeagueScheduleStore.send(.updateResultOpenedState(itemKey: itemKey, isOpened: !isResultOpened))
                 }
             )
         )
         .onAppear {
             if Constants.GameStatus.Tennis.finishedList.contains(gameStatus) {
-                isResultOpened = tennisLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
+                isResultOpened = tennisLeagueScheduleStore.gameResultOpenedStateList[itemKey] ?? false
             } else if gameStatus == Constants.GameStatus.Tennis.notStarted {
                 isResultOpened = false
             } else {
@@ -203,7 +202,7 @@ struct TennisLeagueScheduleListItem: View {
         .onChange(of: tennisLeagueScheduleStore.gameResultOpenedStateList) {
             if Constants.GameStatus.Tennis.finishedList.contains(gameStatus) {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    isResultOpened = tennisLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
+                    isResultOpened = tennisLeagueScheduleStore.gameResultOpenedStateList[itemKey] ?? false
                 }
             }
         }

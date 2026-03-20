@@ -20,7 +20,7 @@ struct FBGame: Decodable, Equatable {
     
     var goalEvents: [FBGameEvent] {
         events.filter {
-            $0.type.lowercased() == "goal"
+            $0.type.lowercased() == "goal" && !$0.detail.lowercased().contains("missed")
         }
     }
     var cardEvents: [FBGameEvent] {

@@ -17,6 +17,7 @@ struct FBTournamentView: View {
     
     var body: some View {
         let displayModel = store.baseTournament.displayModel
+        let leagueId = displayModel.leagueId
         
         VStack {
             if show {
@@ -26,9 +27,8 @@ struct FBTournamentView: View {
                             leagueId: displayModel.leagueId,
                             teamNameDic: store.baseTournament.teamNameDic,
                             gameListTuple: store.gameListTuple,
-                            seedIdTupleList: store.seedIdTupleList,
-                            isConference: true,
-                            isSeries: false
+                            isConference: leagueId == Constants.Ids.mls,
+                            isSeries: leagueId != Constants.Ids.mls
                         ),
                         action: TournamentContainerAction(
                             selectSeries: { gameList in
@@ -46,6 +46,11 @@ struct FBTournamentView: View {
                             teamNameDic: store.baseTournament.teamNameDic,
                             gameListTuple: store.gameListTuple,
                             isSeries: false
+                        ),
+                        action: TournamentContainerAction(
+                            selectGame: { game in
+                                store.send(.selectGame(game: game))
+                            }
                         )
                     )
                 }

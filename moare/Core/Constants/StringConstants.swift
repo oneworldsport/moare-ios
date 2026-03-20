@@ -30,14 +30,14 @@ struct StringConstants {
         static let gameFirstHalf = "1H"
         static let gameHalftime = "HT"
         static let gameSecondHalf = "2H"
-        static let gameExtraTime = "ET" // 연장전
+        static let gameExtraTime = "연장전"
         static let gameBreakTime = "BT" // 연장전 전반 후 휴식시간
-        static let gamePenaltyShootout = "P" // 승부차기
+        static let gamePenaltyShootout = "승부차기"
         static let gameFinished = "FT"
         static let gameFinishedAfterExtraTime = "AET" // 승부차기 없이 연장전 후 경기 종료
         static let gameFinishedAfterPenaltyShootout = "PET" // 승부차기 후 경기 종료
-        static let gamePostponed = "PST"
-        static let gameCancelled = "CANC"
+        static let gamePostponed = "경기 연기"
+        static let gameCancelled = "경기 취소"
         static let gameLiveList = [gameFirstHalf, gameHalftime, gameSecondHalf, gameExtraTime, gameBreakTime, gamePenaltyShootout]
         static let gameFinishedList = [gameFinished, gameFinishedAfterExtraTime, gameFinishedAfterPenaltyShootout]
         
@@ -168,27 +168,48 @@ struct StringConstants {
     
     struct Tennis {
         static func leagueNameStr(leagueId: Int) -> String {
-            switch leagueId {
-            case Constants.Ids.ausOpenMSingle:
-                return "호주오픈 남자단식"
-            case Constants.Ids.ausOpenMDoubles:
-                return "호주오픈 남자복식"
-            case Constants.Ids.ausOpenMixedDoubles:
-                return "호주오픈 혼합복식"
-            case Constants.Ids.ausOpenWSingle:
-                return "호주오픈 여자단식"
-            case Constants.Ids.ausOpenWDoubles:
-                return "호주오픈 여자복식"
-            default :
-                return ""
-            }
+            return "\(tournamentNameStr(leagueId: leagueId)) \(relatedLeaguesKrName(leagueId: leagueId) ?? "")"
         }
         
         static func tournamentNameStr(leagueId: Int) -> String {
             switch leagueId {
             case let id where Constants.Ids.ausOpenAll.contains(id):
-                return "호주오픈"
-            default :
+                return "호주 오픈"
+            case let id where Constants.Ids.rolandGarrosAll.contains(id):
+                return "롤랑가로스"
+            case let id where Constants.Ids.wimbledonAll.contains(id):
+                return "윔블던"
+            case let id where Constants.Ids.usOpenAll.contains(id):
+                return "US 오픈"
+            case let id where Constants.Ids.indianWellsAll.contains(id):
+                return "인디언웰스 마스터스"
+            case let id where Constants.Ids.miamiAll.contains(id):
+                return "마이애미 마스터스"
+            case let id where Constants.Ids.monteCarloAll.contains(id):
+                return "몬테카를로 마스터스"
+            case let id where Constants.Ids.madridAll.contains(id):
+                return "마드리드 오픈"
+            case let id where Constants.Ids.romeAll.contains(id):
+                return "로마 오픈"
+            case let id where Constants.Ids.torontoAll.contains(id):
+                return "캐나다 오픈"
+            case let id where Constants.Ids.montrealAll.contains(id):
+                return "캐나다 오픈"
+            case let id where Constants.Ids.cincinnatiAll.contains(id):
+                return "신시내티 마스터스"
+            case let id where Constants.Ids.shanghaiAll.contains(id):
+                return "상하이 마스터스"
+            case let id where Constants.Ids.parisAll.contains(id):
+                return "파리 마스터스"
+            case let id where Constants.Ids.dohaAll.contains(id):
+                return "카타르 오픈"
+            case let id where Constants.Ids.dubaiAll.contains(id):
+                return "두바이 챔피언십"
+            case let id where Constants.Ids.beijingAll.contains(id):
+                return "차이나 오픈"
+            case let id where Constants.Ids.wuhanAll.contains(id):
+                return "우한 오픈"
+            default:
                 return ""
             }
         }
@@ -256,11 +277,15 @@ struct StringConstants {
         case Constants.Ids.kbo:
             return "가을야구 대진표"
         default :
-            return ""
+            return "대진표"
         }
     }
     
     static func tournamentOrStandingsText(leagueId: Int) -> String {
+        // tournamentStart, selectedMonth 값 추가로 받아서 분기처리
+        // tournamentStart 값의 존재 여부로 일단 대진표, 리그 순위를 선택한다음
+        // 사용자가 선택한 날과 토너먼트 시작일을 비교해서 대진표, 리그 순위로 버튼이 바뀌도록!
+        // 그냥 리그 순위는 항상 보이게 하는걸로!
         if Constants.Ids.footballDrawTournamentLeagues.contains(leagueId) || Constants.Ids.tennisAll.contains(leagueId) {
             return "대진표"
         } else {

@@ -13,8 +13,7 @@ struct ScheduleGameItemState<T: Decodable & Equatable> {
     let teamNameDic: [String: String]
     var isClickEnabled: Bool = true
     var isResultOpened: Bool = false
-    var gameStatusText: String
-    var gameStatusColor: Color
+    var gameStatusContext: GameStatusContext
     var isCapsuleButtonDisabled: Bool = false
     var gameType: String? = nil
     var referee: String? = nil

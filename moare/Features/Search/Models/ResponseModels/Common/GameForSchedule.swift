@@ -5,6 +5,8 @@
 //  Created by Mohwa Yoon on 5/31/25.
 //
 
+import SwiftUI
+
 struct GameForSchedule<T: Decodable & Equatable>: Decodable, Equatable {
     private let _itemKey: String?
     private let _homeTeamId: Int?
@@ -12,6 +14,7 @@ struct GameForSchedule<T: Decodable & Equatable>: Decodable, Equatable {
     private let _homeTeamScore: Int?
     private let _awayTeamScore: Int?
     private let _gameStatus: String?
+    let isHomeTopSeed: Bool?
     let gameInfo: T?
 
     var itemKey: String { _itemKey ?? "" }
@@ -23,6 +26,9 @@ struct GameForSchedule<T: Decodable & Equatable>: Decodable, Equatable {
     
     var gameId: String { String(_itemKey?.split(separator: "#").last ?? "") }
     var date: String { String(_itemKey?.split(separator: "#").first ?? "") + "+09:00" } // NOTE: KST 표준 시간 표시 추가
+    var parsedDate: Date? {
+        CalendarUtil.isoFormatter.date(from: date)
+    }
 
     private enum CodingKeys: String, CodingKey {
         case _itemKey = "itemKey"
@@ -31,7 +37,7 @@ struct GameForSchedule<T: Decodable & Equatable>: Decodable, Equatable {
         case _homeTeamScore = "homeTeamScore"
         case _awayTeamScore = "awayTeamScore"
         case _gameStatus = "gameStatus"
-        case gameInfo
+        case isHomeTopSeed, gameInfo
     }
     
     init(
@@ -41,6 +47,7 @@ struct GameForSchedule<T: Decodable & Equatable>: Decodable, Equatable {
         homeTeamScore: Int? = nil,
         awayTeamScore: Int? = nil,
         gameStatus: String? = nil,
+        isHomeTopSeed: Bool? = nil,
         gameInfo: T? = nil
     ) {
         self._itemKey = itemKey
@@ -49,6 +56,7 @@ struct GameForSchedule<T: Decodable & Equatable>: Decodable, Equatable {
         self._homeTeamScore = homeTeamScore
         self._awayTeamScore = awayTeamScore
         self._gameStatus = gameStatus
+        self.isHomeTopSeed = isHomeTopSeed
         self.gameInfo = gameInfo
     }
 }

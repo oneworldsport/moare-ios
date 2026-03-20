@@ -208,11 +208,7 @@ struct MLBGameStatsScoreInfoItem: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
-                CapsuleButton(
-                    text: Constants.GameStatus.mlbGameStatusText(status: gameStatus, linescore: game.linescore),
-                    color: Constants.GameStatus.gameStatusColor(leagueId: Constants.Ids.mlb, status: gameStatus)
-                ) {
-                }
+                GameStatusCapsuleButton(gameStatusContext: .mlb(status: gameStatus, linescore: game.linescore), leagueId: Constants.Ids.mlb){}
                 .disabled(true)
                 .padding(.vertical, 4)
                 

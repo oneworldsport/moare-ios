@@ -9,18 +9,13 @@ import SwiftUI
 
 struct Constants {
     struct Keys {
-        static let eplPlayerDic = "epl_player"
-        static let laligaPlayerDic = "laliga_player"
-        static let bundesligaPlayerDic = "bundesliga_player"
-        static let ligue1PlayerDic = "ligue1_player"
-        static let serieaPlayerDic = "seriea_player"
-        static let mlsPlayerDic = "mls_player"
         static let nbaPlayerDic = "nba_player"
         static let nbaTeamDic = "nba_team"
         static let kboPlayerDic = "kbo_player"
         static let kboTeamDic = "kbo_team"
         static let mlbPlayerDic = "mlb_player"
         static let mlbTeamDic = "mlb_team"
+        static let footballPlayerDic = "football_player"
         static let footballTeamDic = "football_team"
         
         static let tournamentTeams = "tournament_teams"
@@ -45,6 +40,7 @@ struct Constants {
         static let copaDelRey = 143
         static let coppaItalia = 137
         static let footballTournamentLeagues = [championsLeague, europaLeague, conferenceLeague, faCup, eflCup, dfbPokal, coupeDeFrance, copaDelRey, coppaItalia]
+        static let footballUEFALeagues = [championsLeague, europaLeague, conferenceLeague]
         static let footballDrawTournamentLeagues = [faCup, eflCup, dfbPokal, coupeDeFrance, copaDelRey, coppaItalia]
         static let footballAll = footballLeagues + footballTournamentLeagues // TODO: 이걸로 refactoring 필요
         
@@ -138,14 +134,15 @@ struct Constants {
         static let dohaAll = [dohaWSingle, dohaWDoubles]
         // DUBAI (W)
         static let dubaiWSingle = 80055
-        static let dubaiAll = [dubaiWSingle]
+        static let dubaiWDouble = 80056
+        static let dubaiAll = [dubaiWSingle, dubaiWDouble]
         // BEIJING (W)
-        static let beijingWSingle = 80056
-        static let beijingWDoubles = 80057
+        static let beijingWSingle = 80057
+        static let beijingWDoubles = 80058
         static let beijingAll = [beijingWSingle, beijingWDoubles]
         // WUHAN (W)
-        static let wuhanWSingle = 80058
-        static let wuhanWDoubles = 80059
+        static let wuhanWSingle = 80059
+        static let wuhanWDoubles = 80060
         static let wuhanAll = [wuhanWSingle, wuhanWDoubles]
         
         static let mSingleAll = [
@@ -457,35 +454,28 @@ struct Constants {
             static let canceled = 70
             static let retired = 92
             static let walkover = 91
+            static let suspended = 80
             static let liveList = [firstSet, secondSet, thirdSet, fourthSet, fifthSet]
-            static let finishedList = [finished, canceled, retired, walkover]
+            static let finishedList = [finished, canceled, retired, walkover, suspended]
         }
         
-        static func gameStatusText(
-            leagueId: Int,
+        static func kboGameStatusText(
             status: String,
-            elapsed: Int? = nil,
+            currentInning: String? = nil,
             isResultOpened: Bool = true
         ) -> String {
-            switch leagueId {
-            case let id where Constants.Ids.footballAll.contains(id):
-                return fbGameStatusText(status: status, elapsed: elapsed)
-            case Constants.Ids.nba:
-                return ""
-            case Constants.Ids.kbo:
-                switch status {
-                case KBO.scheduled:
-                    return StringConstants.gameNotStartedStr
-                case KBO.live:
-                    return StringConstants.gameLiveStr
-                case KBO.final:
-                    return StringConstants.gameFinishedStr
-                case KBO.canceled:
-                    return StringConstants.gameCanceledStr
-                default:
-                    return ""
-                }
-            default :
+            switch status {
+            case KBO.scheduled:
+                return StringConstants.gameNotStartedStr
+            case KBO.live:
+                return currentInning ?? StringConstants.gameLiveStr
+            case KBO.final:
+                return isResultOpened
+                ? StringConstants.gameFinishedStr
+                : StringConstants.resultOpen
+            case KBO.canceled:
+                return StringConstants.gameCanceledStr
+            default:
                 return ""
             }
         }
@@ -493,6 +483,7 @@ struct Constants {
         static func fbGameStatusText(
             status: String,
             elapsed: Int?,
+            extra: Int?,
             isResultOpened: Bool = true
         ) -> String {
             switch status {
@@ -500,7 +491,11 @@ struct Constants {
                 return StringConstants.gameNotStartedStr
             case Football.firstHalf:
                 if let elapsed {
-                    return "전반\(elapsed)'"
+                    if let extra {
+                        return "전반\(elapsed)+\(extra)’"
+                    } else {
+                        return "전반\(elapsed)'"
+                    }
                 } else {
                     return StringConstants.Football.gameFirstHalfStr
                 }
@@ -508,10 +503,22 @@ struct Constants {
                 return StringConstants.Football.gameHalftimeStr
             case Football.secondHalf:
                 if let elapsed {
-                    return "후반\(elapsed)'"
+                    if let extra {
+                        return "후반\(elapsed-45)+\(extra)’"
+                    } else {
+                        return "후반\(elapsed-45)'"
+                    }
                 } else {
                     return StringConstants.Football.gameSecondHalfStr
                 }
+            case Football.extraTime:
+                return StringConstants.Football.gameExtraTime
+            case Football.penaltyShootout:
+                return StringConstants.Football.gamePenaltyShootout
+            case Football.postponed:
+                return StringConstants.Football.gamePostponed
+            case Football.cancelled:
+                return StringConstants.Football.gameCancelled
             case let status where Football.finishedList.contains(status):
                 return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
             default:
@@ -595,14 +602,33 @@ struct Constants {
                 return isResultOpened ? "기권" : StringConstants.resultOpen
             case Tennis.walkover:
                 return isResultOpened ? "부전" : StringConstants.resultOpen
+            case Tennis.suspended:
+                return "경기 일시중단"
             default:
                 return StringConstants.gameNotStartedStr
             }
         }
         
+        static func isBeforeGame(leagueId: Int, status: String) -> Bool {
+            switch leagueId {
+            case let id where Constants.Ids.footballAll.contains(id):
+                return status == Football.notStarted
+            case Constants.Ids.nba:
+                return status == String(NBA.notStarted)
+            case Constants.Ids.mlb:
+                return MLB.beforeGameList.contains(status)
+            case Constants.Ids.kbo:
+                return status == KBO.scheduled
+            case let id where Constants.Ids.tennisAll.contains(id):
+                return status == String(Tennis.notStarted)
+            default :
+                return false
+            }
+        }
+        
         static func isLive(leagueId: Int, status: String) -> Bool {
             switch leagueId {
-            case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
+            case let id where Constants.Ids.footballAll.contains(id):
                 return Football.liveList.contains(status)
             case Constants.Ids.nba:
                 return status == String(NBA.live)
@@ -618,16 +644,19 @@ struct Constants {
             }
         }
         
-        static func isBeforeGame(leagueId: Int, status: String) -> Bool {
+        static func isGameFinished(leagueId: Int, status: String) -> Bool {
             switch leagueId {
-            case let id where Constants.Ids.footballLeagues.contains(id) || Constants.Ids.footballTournamentLeagues.contains(id):
-                return status == Football.notStarted
+            case let id where Constants.Ids.footballAll.contains(id):
+                return Football.finishedList.contains(status)
             case Constants.Ids.nba:
-                return status == String(NBA.notStarted)
+                return status == String(NBA.finished)
             case Constants.Ids.mlb:
-                return MLB.beforeGameList.contains(status)
+                return MLB.finishedList.contains(status)
             case Constants.Ids.kbo:
-                return status == KBO.scheduled
+                return status == KBO.final
+            case let id where Constants.Ids.tennisAll.contains(id):
+                let status = Int(status) ?? 0
+                return Tennis.finishedList.contains(status)
             default :
                 return false
             }

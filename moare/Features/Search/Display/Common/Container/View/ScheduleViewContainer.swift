@@ -30,6 +30,7 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             titleContent()
+                .padding(.horizontal, 8)
             
             // period
             if let startDate = state.startDate, let endDate = state.endDate {
@@ -69,7 +70,12 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
                 }
                 .onAppear {
                     withAnimation(.spring(duration: 0.5)) {
-                        relatedLeaguesBarOffset = getOffsetOfAniCapsuleBar(itemWidth: relatedLeaguesButtonWidth, barWidth: relatedLeaguesButtonWidth)
+                        relatedLeaguesBarOffset = getOffsetOfAniCapsuleBar(
+                            itemWidth: relatedLeaguesButtonWidth,
+                            barWidth: relatedLeaguesButtonWidth,
+                            spacing: 10,
+                            index: state.selectedRelatedLeagueIndex
+                        )
                     }
                 }
                 .onChange(of: state.selectedRelatedLeagueIndex) {

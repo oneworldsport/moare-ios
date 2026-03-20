@@ -67,18 +67,13 @@ class AWSManager {
         async let noticeList: [NoticeModel] = loadJsonFromS3(s3Key: "notice/main_notice.json", eTagKey: "mainNoticeETag")
         async let tournamentTeams: [String: [Int?]] = loadJsonFromS3(s3Key: "tournament/tournament_teams.json", eTagKey: "tournamentTeamsETag")
         
-        async let eplPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/epl_player_name_dictionary.json", eTagKey: "eplPlayerNameDictionaryETag")
+        async let footballPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/football_player_name_dictionary.json", eTagKey: "footballPlayerNameDictionaryETag")
         async let footballTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/football_team_name_dictionary.json", eTagKey: "footballTeamNameDictionaryETag")
         async let nbaPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/nba_player_name_dictionary.json", eTagKey: "nbaPlayerNameDictionaryETag")
         async let nbaTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/nba_team_name_dictionary.json", eTagKey: "nbaTeamNameDictionaryETag")
         async let kboTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/kbo_team_name_dictionary.json", eTagKey: "kboTeamNameDictionaryETag")
         async let mlbPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/mlb_player_name_dictionary.json", eTagKey: "mlbPlayerNameDictionaryETag")
         async let mlbTeamNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/mlb_team_name_dictionary.json", eTagKey: "mlbTeamNameDictionaryETag")
-        async let laligaPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/laliga_player_name_dictionary.json", eTagKey: "laligaPlayerNameDictionaryETag")
-        async let bundesligaPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/bundesliga_player_name_dictionary.json", eTagKey: "bundesligaPlayerNameDictionaryETag")
-        async let ligue1PlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/ligue1_player_name_dictionary.json", eTagKey: "ligue1PlayerNameDictionaryETag")
-        async let serieaPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/seriea_player_name_dictionary.json", eTagKey: "serieaPlayerNameDictionaryETag")
-        async let mlsPlayerNameDictionary: [String: String] = loadJsonFromS3(s3Key: "name_dictionary/mls_player_name_dictionary.json", eTagKey: "mlsPlayerNameDictionaryETag")
                 
 //        let decoder = JSONDecoder()
 //        if let url = Bundle.main.url(forResource: "trending_keywords_test", withExtension: "json"),
@@ -159,11 +154,11 @@ class AWSManager {
         }
         
         do {
-            let eplPlayerNameDictionary = try await eplPlayerNameDictionary
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.eplPlayerDic, nameMap: eplPlayerNameDictionary)
+            let footballPlayerNameDictionary = try await footballPlayerNameDictionary
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.footballPlayerDic, nameMap: footballPlayerNameDictionary)
         } catch {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.eplPlayerDic, nameMap: [:])
-            print("eplPlayerNameDictionary load failed:", error)
+            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.footballPlayerDic, nameMap: [:])
+            print("footballPlayerNameDictionary load failed:", error)
         }
         
         do {
@@ -212,46 +207,6 @@ class AWSManager {
         } catch {
             DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlbTeamDic, nameMap: [:])
             print("mlbTeamNameDictionary load failed:", error)
-        }
-        
-        do {
-            let laligaPlayerNameDictionary = try await laligaPlayerNameDictionary
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.laligaPlayerDic, nameMap: laligaPlayerNameDictionary)
-        } catch {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.laligaPlayerDic, nameMap: [:])
-            print("laligaPlayerNameDictionary load failed:", error)
-        }
-        
-        do {
-            let bundesligaPlayerNameDictionary = try await bundesligaPlayerNameDictionary
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.bundesligaPlayerDic, nameMap: bundesligaPlayerNameDictionary)
-        } catch {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.bundesligaPlayerDic, nameMap: [:])
-            print("bundesligaPlayerNameDictionary load failed:", error)
-        }
-        
-        do {
-            let ligue1PlayerNameDictionary = try await ligue1PlayerNameDictionary
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.ligue1PlayerDic, nameMap: ligue1PlayerNameDictionary)
-        } catch {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.ligue1PlayerDic, nameMap: [:])
-            print("ligue1PlayerNameDictionary load failed:", error)
-        }
-        
-        do {
-            let serieaPlayerNameDictionary = try await serieaPlayerNameDictionary
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.serieaPlayerDic, nameMap: serieaPlayerNameDictionary)
-        } catch {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.serieaPlayerDic, nameMap: [:])
-            print("serieaPlayerNameDictionary load failed:", error)
-        }
-        
-        do {
-            let mlsPlayerNameDictionary = try await mlsPlayerNameDictionary
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlsPlayerDic, nameMap: mlsPlayerNameDictionary)
-        } catch {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlsPlayerDic, nameMap: [:])
-            print("mlsPlayerNameDictionary load failed:", error)
         }
     }
     

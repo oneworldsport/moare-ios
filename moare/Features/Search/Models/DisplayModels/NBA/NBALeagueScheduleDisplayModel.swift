@@ -15,4 +15,5 @@ struct NBALeagueScheduleDisplayModel: SportDisplayModel {
     let scheduleType: ScheduleType
     let yearMonthList: [String]
     var games: [NBAGameForSchedule]
+    let tournamentStartDate: String?
 }

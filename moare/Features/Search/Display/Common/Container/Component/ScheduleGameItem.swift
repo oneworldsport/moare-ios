@@ -98,10 +98,9 @@ struct ScheduleGameItem<T: Decodable & Equatable>: View {
                --------------------- */
             VStack(spacing: 0) {
                 // game status
-                CapsuleButton(
-                    text: state.gameStatusText,
-                    color: state.gameStatusColor
-                ) {
+                GameStatusCapsuleButton(
+                    gameStatusContext: state.gameStatusContext, leagueId: state.leagueId
+                ){
                     actions.onCapsuleButtonClick()
                 }
                 .disabled(state.isCapsuleButtonDisabled)

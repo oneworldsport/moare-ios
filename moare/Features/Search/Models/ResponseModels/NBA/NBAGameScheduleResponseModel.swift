@@ -14,4 +14,5 @@ struct NBAGameScheduleResponseModel: Decodable, Equatable {
     let endDate: String?
     let relatedLeagueIds: [Int]?
     let schedule: [NBAGameForSchedule]
+    let tournamentStartDate: String?
 }

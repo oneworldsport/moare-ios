@@ -155,29 +155,6 @@ struct KBOGameStatsScoreInfoItem: View {
         let teamNameDic = kboGameStatsStore.baseGameStats.teamNameDictionary
         let gameStatus = Int(game.gameInfo?.gameStatus ?? "0") ?? 0
         
-        let gameStatusText: String = {
-            switch gameStatus {
-            case StringConstants.KBO.gameScheduled:
-                return StringConstants.gameNotStartedStr
-            case StringConstants.KBO.gameLive:
-                return game.lineScore?.currentInning ?? StringConstants.gameLiveStr
-            case StringConstants.KBO.gameFinal:
-                return StringConstants.gameFinishedStr
-            case StringConstants.KBO.gameCanceled:
-                return StringConstants.gameCanceledStr
-            default:
-                return ""
-            }
-        }()
-        
-        let gameStatusColor: Color = {
-            if gameStatus == StringConstants.KBO.gameLive {
-                return .moare
-            } else {
-                return .secondary
-            }
-        }()
-        
         HStack(alignment: .bottom) {
             VStack(spacing: 0) {
                 HStack(spacing: 0) {
@@ -203,11 +180,9 @@ struct KBOGameStatsScoreInfoItem: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
-                CapsuleButton(
-                    text: gameStatusText,
-                    color: gameStatusColor
-                ) {
-                }
+                GameStatusCapsuleButton(
+                    gameStatusContext: .kbo(status: String(gameStatus)), leagueId: Constants.Ids.kbo
+                ){}
                 .disabled(true)
                 .padding(.vertical, 4)
                 

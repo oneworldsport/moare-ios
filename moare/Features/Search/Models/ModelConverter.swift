@@ -199,7 +199,8 @@ final class ModelConverter {
             season: season,
             scheduleType: response.scheduleType ?? .league,
             yearMonthList: yearMonthList,
-            games: response.schedule
+            games: response.schedule,
+            tournamentStartDate: response.tournamentStartDate
         )
     }
     
@@ -362,7 +363,8 @@ final class ModelConverter {
             season: season,
             scheduleType: response.scheduleType ?? .league,
             yearMonthList: yearMonthList,
-            games: response.schedule
+            games: response.schedule,
+            tournamentStartDate: response.tournamentStartDate
         )
     }
     
