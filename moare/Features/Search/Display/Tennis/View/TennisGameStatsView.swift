@@ -18,7 +18,7 @@ struct TennisGameStatsView: View {
     var body: some View {
         let displayModel = store.baseGameStats.displayModel
         let game = displayModel.game
-        let gameInfo = displayModel.game.gameInfo
+        let gameInfo = game.gameInfo
         let statusCode = game.gameInfo.status?.code ?? 0
         
         let teamCategories: [GameStatsTeamState] = [
@@ -280,8 +280,8 @@ struct TennisGameStatsSetScoreItem: View {
             HStack(spacing: 0) {
                 ForEach(0..<gameInfo.defaultPeriodCount, id: \.self) { index in
                     let homePeriodScore = homeSetScore?.periods[index]
-                    let homeTieBreakScore = homeSetScore?.periodsTieBreak[index]
                     let awayPeriodScore = awaySetScore?.periods[index]
+                    let homeTieBreakScore = homeSetScore?.periodsTieBreak[index]
                     
                     let isWinner = if homePeriodScore == 7 {
                         true

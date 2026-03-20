@@ -30,6 +30,7 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             titleContent()
+                .padding(.horizontal, 8)
             
             // period
             if let startDate = state.startDate, let endDate = state.endDate {
