@@ -5,6 +5,8 @@
 //  Created by Mohwa Yoon on 5/31/25.
 //
 
+import SwiftUI
+
 struct GameForSchedule<T: Decodable & Equatable>: Decodable, Equatable {
     private let _itemKey: String?
     private let _homeTeamId: Int?
@@ -24,6 +26,9 @@ struct GameForSchedule<T: Decodable & Equatable>: Decodable, Equatable {
     
     var gameId: String { String(_itemKey?.split(separator: "#").last ?? "") }
     var date: String { String(_itemKey?.split(separator: "#").first ?? "") + "+09:00" } // NOTE: KST 표준 시간 표시 추가
+    var parsedDate: Date? {
+        CalendarUtil.isoFormatter.date(from: date)
+    }
 
     private enum CodingKeys: String, CodingKey {
         case _itemKey = "itemKey"

@@ -23,8 +23,13 @@ struct TournamentDrawViewContainer<T: Decodable & Equatable>: View {
             HStack(alignment: .top) {
                 ForEach(state.gameListTuple.indices, id: \.self) { roundIndex in
                     let item = state.gameListTuple[roundIndex]
-                    let games = item.gameList.compactMap { $0 }.flatMap { $0 }  // 중첩 배열인 gameList를(nil을 제거하고) 펼쳐서 1차원 배열로 만든다
                     let title = item.title
+                    
+                    // 1. 중첩 배열인 gameList를(nil을 제거하고) 펼쳐서 1차원 배열로 만든다.
+                    // 2. tournament_teams.json에 들어간 id 순서대로 경기가 배치되어 있기 때문에 날짜순으로 정렬을 해준다.
+                    let games = item.gameList.compactMap { $0 }.flatMap { $0 }.sorted {
+                        ($0.parsedDate ?? .distantFuture) < ($1.parsedDate ?? .distantFuture)
+                    }
                     
                     VStack(spacing: 0) {
                         Text(title)
