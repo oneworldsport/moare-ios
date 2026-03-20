@@ -42,7 +42,15 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                     let isLeft = state.isConference ? leftBracketTitles.contains(String(title.split(separator: " ").first ?? "")) : true
                     let isMLB = state.leagueId == Constants.Ids.mlb
                     let isKBO = state.leagueId == Constants.Ids.kbo
-                    let isSeries = state.leagueId == Constants.Ids.mls ? (roundIndex == 0 || roundIndex == 6) : state.isSeries // mls는 (동/서부)1라운드만 series
+                    let isSeries = if state.leagueId == Constants.Ids.mls {
+                        // mls는 (동/서부)1라운드만 series
+                        roundIndex == 0 || roundIndex == 6
+                    } else if Constants.Ids.footballUEFALeagues.contains(state.leagueId) {
+                        // uefa리그들은 final만 single
+                        roundIndex != 3
+                    } else {
+                        state.isSeries
+                    }
                     
                     // left
                     if isLeft {
