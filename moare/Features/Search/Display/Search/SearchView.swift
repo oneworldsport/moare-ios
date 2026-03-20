@@ -93,6 +93,9 @@ struct SearchView: View {
                         Button(action: {
                             withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                                 isNoticeOpened.toggle()
+                                if isNoticeOpened {
+                                    focusState = false
+                                }
                             }
                         }) {
                             Image(systemName: "info.circle")
