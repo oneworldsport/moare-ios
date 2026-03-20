@@ -139,9 +139,19 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
                                     VStack(spacing: 4) {
                                         ForEach(games.indices, id: \.self) { index in
                                             let game = games[index]
-                                            let topSeedScore = game.homeTeamId == topSeedTeamId ? game.homeTeamScore : game.awayTeamScore
-                                            let lowerSeedScore = game.homeTeamId == lowerSeedTeamId ? game.homeTeamScore : game.awayTeamScore
+                                            let topSeedScore = game.isHomeTopSeed == true ? game.homeTeamScore : game.awayTeamScore
+                                            let lowerSeedScore = game.isHomeTopSeed == true ? game.awayTeamScore : game.homeTeamScore
                                             let isBeforeGame = Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
+                                            
+                                            // only football
+                                            let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
+                                            let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
+                                            let topSeedPenaltyScore = game.isHomeTopSeed == true ? homeTeamPenaltyScore : awayTeamPenaltyScore
+                                            let lowerSeedPenaltyScore = game.isHomeTopSeed == true ? awayTeamPenaltyScore : homeTeamPenaltyScore
+                                            
+                                            // 축구 패널티킥 경기에서 일반 스코어는 검정색
+                                            let topSeedScoreColor: Color = (topSeedPenaltyScore != nil && lowerSeedPenaltyScore != nil) ? .primary : (topSeedScore >= lowerSeedScore ? .moare : .primary)
+                                            let lowerSeedScoreColor: Color = (topSeedPenaltyScore != nil && lowerSeedPenaltyScore != nil) ? .primary : (lowerSeedScore >= topSeedScore ? .moare : .primary)
                                             
                                             VStack(spacing: 0) {
                                                 Text("Game \(index + 1) - \(CalendarUtil.formatDate(date: game.date).split(separator: " ").first ?? "")")
@@ -152,14 +162,28 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
                                                     Text(isBeforeGame ? "-" : "\(topSeedScore)")
                                                         .font(.system(size: 14, weight: .medium))
                                                         .frame(width: 30)
-                                                        .foregroundStyle(isBeforeGame ? Color.primary : (topSeedScore >= lowerSeedScore ? Color.moare : Color.primary))
+                                                        .foregroundStyle(isBeforeGame ? .primary : topSeedScoreColor)
+                                                    
+                                                    if let topSeedPenaltyScore, let lowerSeedPenaltyScore {
+                                                        Text("\(topSeedPenaltyScore)")
+                                                            .font(.system(size: 12))
+                                                            .frame(width: 20)
+                                                            .foregroundStyle(topSeedPenaltyScore >= lowerSeedPenaltyScore ? .moare : .primary)
+                                                    }
                                                     
                                                     Text("-")
+                                                    
+                                                    if let topSeedPenaltyScore, let lowerSeedPenaltyScore {
+                                                        Text("\(lowerSeedPenaltyScore)")
+                                                            .font(.system(size: 12))
+                                                            .frame(width: 20)
+                                                            .foregroundStyle(lowerSeedPenaltyScore >= topSeedPenaltyScore ? .moare : .primary)
+                                                    }
                                                     
                                                     Text(isBeforeGame ? "-" : "\(lowerSeedScore)")
                                                         .font(.system(size: 14, weight: .medium))
                                                         .frame(width: 30)
-                                                        .foregroundStyle(isBeforeGame ? Color.primary : (lowerSeedScore >= topSeedScore ? Color.moare : Color.primary))
+                                                        .foregroundStyle(isBeforeGame ? .primary : lowerSeedScoreColor)
                                                 }
                                             }
                                         }
@@ -411,9 +435,19 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
                                 VStack(spacing: 4) {
                                     ForEach(games.indices, id: \.self) { index in
                                         let game = games[index]
-                                        let topSeedScore = game.homeTeamId == topSeedTeamId ? game.homeTeamScore : game.awayTeamScore
-                                        let lowerSeedScore = game.homeTeamId == lowerSeedTeamId ? game.homeTeamScore : game.awayTeamScore
+                                        let topSeedScore = game.isHomeTopSeed == true ? game.homeTeamScore : game.awayTeamScore
+                                        let lowerSeedScore = game.isHomeTopSeed == true ? game.awayTeamScore : game.homeTeamScore
                                         let isBeforeGame = Constants.GameStatus.isBeforeGame(leagueId: leagueId, status: game.gameStatus)
+                                        
+                                        // only football
+                                        let homeTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.homeTeamPenaltyScore
+                                        let awayTeamPenaltyScore = (game as? FBGameForSchedule)?.gameInfo?.awayTeamPenaltyScore
+                                        let topSeedPenaltyScore = game.isHomeTopSeed == true ? homeTeamPenaltyScore : awayTeamPenaltyScore
+                                        let lowerSeedPenaltyScore = game.isHomeTopSeed == true ? awayTeamPenaltyScore : homeTeamPenaltyScore
+                                        
+                                        // 축구 패널티킥 경기에서 일반 스코어는 검정색
+                                        let topSeedScoreColor: Color = (topSeedPenaltyScore != nil && lowerSeedPenaltyScore != nil) ? .primary : (topSeedScore >= lowerSeedScore ? .moare : .primary)
+                                        let lowerSeedScoreColor: Color = (topSeedPenaltyScore != nil && lowerSeedPenaltyScore != nil) ? .primary : (lowerSeedScore >= topSeedScore ? .moare : .primary)
                                         
                                         VStack(spacing: 0) {
                                             Text("Game \(index + 1) - \(CalendarUtil.formatDate(date: game.date).split(separator: " ").first ?? "")")
@@ -424,14 +458,28 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
                                                 Text(isBeforeGame ? "-" : "\(topSeedScore)")
                                                     .font(.system(size: 14, weight: .medium))
                                                     .frame(width: 30)
-                                                    .foregroundStyle(isBeforeGame ? Color.primary : (topSeedScore >= lowerSeedScore ? Color.moare : Color.primary))
-                                                    
+                                                    .foregroundStyle(isBeforeGame ? .primary : topSeedScoreColor)
+                                                
+                                                if let topSeedPenaltyScore, let lowerSeedPenaltyScore {
+                                                    Text("\(topSeedPenaltyScore)")
+                                                        .font(.system(size: 12))
+                                                        .frame(width: 20)
+                                                        .foregroundStyle(topSeedPenaltyScore >= lowerSeedPenaltyScore ? .moare : .primary)
+                                                }
+                                                
                                                 Text("-")
+                                                
+                                                if let topSeedPenaltyScore, let lowerSeedPenaltyScore {
+                                                    Text("\(lowerSeedPenaltyScore)")
+                                                        .font(.system(size: 12))
+                                                        .frame(width: 20)
+                                                        .foregroundStyle(lowerSeedPenaltyScore >= topSeedPenaltyScore ? .moare : .primary)
+                                                }
                                                 
                                                 Text(isBeforeGame ? "-" : "\(lowerSeedScore)")
                                                     .font(.system(size: 14, weight: .medium))
                                                     .frame(width: 30)
-                                                    .foregroundStyle(isBeforeGame ? Color.primary : (lowerSeedScore >= topSeedScore ? Color.moare : Color.primary))
+                                                    .foregroundStyle(isBeforeGame ? .primary : lowerSeedScoreColor)
                                             }
                                         }
                                     }
@@ -654,6 +702,7 @@ struct TournamentSeriesFinalGameItem<T: Decodable & Equatable>: View {
                 }) {
                     VStack(spacing: 4) {
                         ForEach(games.indices, id: \.self) { index in
+                            // NOTE: 축구에서 final이 series인 경우는 아직 없어서 관련 코드가 없음
                             let game = games[index]
                             let topSeedScore = game.homeTeamId == topSeedTeamId ? game.homeTeamScore : game.awayTeamScore
                             let lowerSeedScore = game.homeTeamId == lowerSeedTeamId ? game.homeTeamScore : game.awayTeamScore
