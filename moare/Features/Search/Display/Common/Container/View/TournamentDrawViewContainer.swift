@@ -35,7 +35,7 @@ struct TournamentDrawViewContainer<T: Decodable & Equatable>: View {
                     VStack(spacing: 0) {
                         Text(title)
                             .font(.system(size: 20, weight: .medium))
-                            .frame(width: 270)
+                            .frame(minWidth: 270)
                         HCapsuleBar()
                             .padding(.top, 6)
                             .padding(.bottom, 12)

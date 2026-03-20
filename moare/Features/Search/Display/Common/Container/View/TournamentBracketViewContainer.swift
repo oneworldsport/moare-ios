@@ -49,7 +49,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                         VStack(spacing: 0) {
                             Text(title)
                                 .fontWeight(.medium)
-                                .fixedSize()
+                                .frame(minWidth: 170)
                             HCapsuleBar()
                                 .padding(.top, 6)
                                 .padding(.bottom, 12)
@@ -90,7 +90,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                             VStack(spacing: 0) {
                                 Text(title)
                                     .fontWeight(.medium)
-                                    .fixedSize()
+                                    .frame(minWidth: 170)
                                 HCapsuleBar()
                                     .padding(.top, 6)
                                     .padding(.bottom, 12)
@@ -122,7 +122,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                             VStack(spacing: 0) {
                                 Text(title)
                                     .fontWeight(.medium)
-                                    .fixedSize()
+                                    .frame(minWidth: 170)
                                 HCapsuleBar()
                                     .padding(.top, 6)
                                     .padding(.bottom, 12)
