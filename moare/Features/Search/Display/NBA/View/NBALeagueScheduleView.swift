@@ -17,6 +17,9 @@ struct NBALeagueScheduleView: View {
     
     var body: some View {
         let displayModel = store.baseSchedule.displayModel
+        let tournamentStartDateYearMonth = CalendarUtil.formatDate(date: displayModel.tournamentStartDate, inputFormatType: .dateOnly, outputFormatType: .yearMonth)
+        let tournamentStartDateYearMonthInt = Int(tournamentStartDateYearMonth.replacingOccurrences(of: "/", with: "")) ?? 0
+        let selectedYearMonthInt = Int(store.baseSchedule.selectedYearMonth.replacingOccurrences(of: "/", with: "")) ?? 0
         
         VStack {
             if show {
@@ -33,7 +36,8 @@ struct NBALeagueScheduleView: View {
                             selectedDayIndex: store.baseSchedule.selectedDayIndex
                         ),
                         isAllResultOpened: store.baseSchedule.isAllResultOpened,
-                        shouldShowTournamentButton: store.baseSchedule.selectedMonth >= 4 && store.baseSchedule.selectedMonth <= 6,
+                        shouldShowTournamentButton: (displayModel.tournamentStartDate != nil) &&
+                        (tournamentStartDateYearMonthInt <= selectedYearMonthInt),
                     ),
                     actions: ScheduleContainerActions(
                         calendarUiActions: CalendarUiActions(

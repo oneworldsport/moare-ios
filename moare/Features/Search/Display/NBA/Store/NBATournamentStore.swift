@@ -120,7 +120,8 @@ struct NBATournamentStore {
                     startDate: nil,
                     endDate: nil,
                     relatedLeagueIds: nil,
-                    schedule: gameList
+                    schedule: gameList,
+                    tournamentStartDate: nil
                 )
                 
                 let dataModel: SportDecodableModel = .nbaLeagueSchedule(
