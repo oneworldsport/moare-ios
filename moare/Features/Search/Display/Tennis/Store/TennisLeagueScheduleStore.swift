@@ -30,7 +30,7 @@ struct TennisLeagueScheduleStore {
         case baseSchedule(BaseSchedule.Action)
         
         case toggleAllResult
-        case updateResultOpenedState(gameId: String, isOpened: Bool)
+        case updateResultOpenedState(itemKey: String, isOpened: Bool)
         case selectGame(game: TennisGameForSchedule)
         case showTournament
         case refreshGames
@@ -105,8 +105,8 @@ struct TennisLeagueScheduleStore {
                 
                 return .none
                 
-            case .updateResultOpenedState(let gameId, let isOpened):
-                state.gameResultOpenedStateList[gameId] = isOpened
+            case .updateResultOpenedState(let itemKey, let isOpened):
+                state.gameResultOpenedStateList[itemKey] = isOpened
                 
                 return .none
                 
@@ -129,7 +129,7 @@ struct TennisLeagueScheduleStore {
                             CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: day.day)
                         }
                         
-                        gameResultOpenedStateList.merge((games).reduce(into: [:]) { $0[$1.gameId] = state.baseSchedule.isAllResultOpened }) { _, new in new }
+                        gameResultOpenedStateList.merge((games).reduce(into: [:]) { $0[$1.itemKey] = state.baseSchedule.isAllResultOpened }) { _, new in new }
                         
                         newFilteredGame[index] = games
                         
@@ -231,7 +231,7 @@ struct TennisLeagueScheduleStore {
                             let updated: SportDecodableModel = .tennisGameStats(responseModel, gameStatsDisplayModel)
                             
                             await send(.delegate(.showGameStats(model: updated)))
-                            await send(.updateResultOpenedState(gameId: game.gameId, isOpened: true))
+                            await send(.updateResultOpenedState(itemKey: game.itemKey, isOpened: true))
                         }
                     } catch {
                         print("\(error)")
@@ -334,9 +334,9 @@ struct TennisLeagueScheduleStore {
                 return .none
                 
             case .updateDisplayModelGames(let games):
-                let gamesById = Dictionary(uniqueKeysWithValues: games.map { ($0.gameId, $0) })
+                let gamesByItemKey = Dictionary(uniqueKeysWithValues: games.map { ($0.itemKey, $0) })
 
-                state.baseSchedule.displayModel.games = state.baseSchedule.displayModel.games.map { gamesById[$0.gameId] ?? $0 }
+                state.baseSchedule.displayModel.games = state.baseSchedule.displayModel.games.map { gamesByItemKey[$0.itemKey] ?? $0 }
                 
                 return .send(.updateFilteredGames)
                 

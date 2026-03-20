@@ -93,7 +93,7 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
                             }
                             .frame(width: 110)
                             
-                            // 축구 패널티킥 경기는 일반 스코어 검정색
+                            // 축구 패널티킥 경기에서 일반 스코어는 검정색
                             let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (topSeedTeamScore >= lowerSeedTeamScore ? .moare : .primary)
                             
                             Text(shouldShowScore ? "\(topSeedTeamScore)" : "-")
@@ -137,7 +137,7 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
                             }
                             .frame(width: 110)
                             
-                            // 축구 패널티킥 경기는 일반 스코어 검정색
+                            // 축구 패널티킥 경기에서 일반 스코어는 검정색
                             let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (lowerSeedTeamScore >= topSeedTeamScore ? .moare : .primary)
                             
                             Text(shouldShowScore ? "\(lowerSeedTeamScore)" : "-")
@@ -315,7 +315,7 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
                 }) {
                     VStack(spacing: 4) {
                         HStack(spacing: 4) {
-                            // 축구 패널티킥 경기는 일반 스코어 검정색
+                            // 축구 패널티킥 경기에서 일반 스코어는 검정색
                             let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (topSeedTeamScore >= lowerSeedTeamScore ? .moare : .primary)
                             
                             Text(shouldShowScore ? "\(topSeedTeamScore)" : "-")
@@ -359,7 +359,7 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
                         }
                         
                         HStack(spacing: 4) {
-                            // 축구 패널티킥 경기는 일반 스코어 검정색
+                            // 축구 패널티킥 경기에서 일반 스코어는 검정색
                             let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (lowerSeedTeamScore >= topSeedTeamScore ? .moare : .primary)
                             
                             Text(shouldShowScore ? "\(lowerSeedTeamScore)" : "-")
@@ -521,7 +521,7 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
                 .frame(width: 100)
                 
                 VStack(spacing: 2) {
-                    // 축구 패널티킥 경기는 일반 스코어 검정색
+                    // 축구 패널티킥 경기에서 일반 스코어는 검정색
                     let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (topSeedTeamScore >= lowerSeedTeamScore ? .moare : .primary)
                     
                     Text(shouldShowScore ? "\(topSeedTeamScore)" : "-")
@@ -554,7 +554,7 @@ struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {
                 .frame(width: 110)
                 
                 VStack(spacing: 2) {
-                    // 축구 패널티킥 경기는 일반 스코어 검정색
+                    // 축구 패널티킥 경기에서 일반 스코어는 검정색
                     let scoreColor: Color = (topSeedTeamPenaltyScore != nil && lowerSeedTeamPenaltyScore != nil) ? .primary : (lowerSeedTeamScore >= topSeedTeamScore ? .moare : .primary)
                     
                     Text(shouldShowScore ? "\(lowerSeedTeamScore)" : "-")

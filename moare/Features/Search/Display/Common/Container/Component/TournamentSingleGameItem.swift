@@ -13,6 +13,8 @@ struct TournamentSingleGameItem<T: Decodable & Equatable>: View {
     let game: GameForSchedule<T>
     let teamNameDic: [String: String]
     
+    let selectGame: ((GameForSchedule<T>) -> Void)?
+    
     var body: some View {
         let homeTeamId = game.homeTeamId
         let awayTeamId = game.awayTeamId
@@ -34,9 +36,10 @@ struct TournamentSingleGameItem<T: Decodable & Equatable>: View {
             return homeTeamScore > awayTeamScore
         }
         
-        HStack(spacing: 0) {
-            Button(action: {
-            }) {
+        Button(action: {
+            selectGame?(game)
+        }) {
+            HStack(spacing: 0) {
                 VStack(spacing: 2) {
                     if isFinished && isHomeWinner {
                         HCapsuleBar()
@@ -49,65 +52,61 @@ struct TournamentSingleGameItem<T: Decodable & Equatable>: View {
                         .font(.system(size: 13))
                         .lineLimit(2)
                 }
-            }
-            .frame(width: 80)
-            .foregroundStyle(.primary)
-            .opacity((isFinished && !isHomeWinner) ? 0.3 : 1)
-            
-            if shouldShowScore {
-                VStack(spacing: 2) {
-                    // 축구 패널티킥 경기는 일반 스코어 검정색
-                    let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (homeTeamScore >= awayTeamScore ? .moare : .primary)
-                    
-                    Text("\(homeTeamScore)")
-                        .frame(width: 30)
-                        .foregroundStyle(scoreColor)
-                    
-                    if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
-                        Text("\(homeTeamPenaltyScore)")
-                            .font(.system(size: 12))
-                            .foregroundStyle(homeTeamPenaltyScore >= awayTeamPenaltyScore ? .moare : .primary)
+                .frame(width: 80)
+                .opacity((isFinished && !isHomeWinner) ? 0.3 : 1)
+                
+                if shouldShowScore {
+                    VStack(spacing: 2) {
+                        // 축구 패널티킥 경기는 일반 스코어 검정색
+                        let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (homeTeamScore >= awayTeamScore ? .moare : .primary)
+                        
+                        Text("\(homeTeamScore)")
+                            .frame(width: 30)
+                            .foregroundStyle(scoreColor)
+                        
+                        if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
+                            Text("\(homeTeamPenaltyScore)")
+                                .font(.system(size: 12))
+                                .foregroundStyle(homeTeamPenaltyScore >= awayTeamPenaltyScore ? .moare : .primary)
+                        }
                     }
                 }
-            }
-            
-            VStack(spacing: 0) {
-                // game status                
-                GameStatusCapsuleButton(
-                    gameStatusContext: .football(status: game.gameStatus, elapsed: elapsed, extra: extra), leagueId: leagueId
-                ){}
                 
-                // game date
-                Text(CalendarUtil.formatDate(date: game.date).split(separator: " ").first ?? "")
-                    .font(.system(size: 12))
-                    .padding(.top, 2)
+                VStack(spacing: 0) {
+                    // game status                
+                    GameStatusCapsuleButton(
+                        gameStatusContext: .football(status: game.gameStatus, elapsed: elapsed, extra: extra), leagueId: leagueId
+                    ){}
+                    
+                    // game date
+                    Text(CalendarUtil.formatDate(date: game.date).split(separator: " ").first ?? "")
+                        .font(.system(size: 12))
+                        .padding(.top, 2)
+                    
+                    Text(CalendarUtil.formatDate(date: game.date, outputFormatType: .ampm))
+                        .font(.system(size: 12))
+                        .padding(.bottom, 2)
+                }
+                .frame(width: 110)
                 
-                Text(CalendarUtil.formatDate(date: game.date, outputFormatType: .ampm))
-                    .font(.system(size: 12))
-                    .padding(.bottom, 2)
-            }
-            .frame(width: 110)
-            
-            if shouldShowScore {
-                VStack(spacing: 2) {
-                    // 축구 패널티킥 경기는 일반 스코어 검정색
-                    let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (awayTeamScore >= homeTeamScore ? .moare : .primary)
-                    
-                    Text("\(awayTeamScore)")
-                        .frame(width: 30)
-                        .foregroundStyle(scoreColor)
-                    
-                    if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
-                        // TODO: 유령 버그..? 로직은 문제 없는데 스코어가 안나옴. 중간에 이상한 Text하나 추가하면 나옴...
-                        Text("\(awayTeamPenaltyScore)")
-                            .font(.system(size: 12))
-                            .foregroundStyle(awayTeamPenaltyScore >= homeTeamPenaltyScore ? .moare : .primary)
+                if shouldShowScore {
+                    VStack(spacing: 2) {
+                        // 축구 패널티킥 경기는 일반 스코어 검정색
+                        let scoreColor: Color = (homeTeamPenaltyScore != nil && awayTeamPenaltyScore != nil) ? .primary : (awayTeamScore >= homeTeamScore ? .moare : .primary)
+                        
+                        Text("\(awayTeamScore)")
+                            .frame(width: 30)
+                            .foregroundStyle(scoreColor)
+                        
+                        if let homeTeamPenaltyScore, let awayTeamPenaltyScore {
+                            // TODO: 유령 버그..? 로직은 문제 없는데 스코어가 안나옴. 중간에 이상한 Text하나 추가하면 나옴...
+                            Text("\(awayTeamPenaltyScore)")
+                                .font(.system(size: 12))
+                                .foregroundStyle(awayTeamPenaltyScore >= homeTeamPenaltyScore ? .moare : .primary)
+                        }
                     }
                 }
-            }
-            
-            Button(action: {
-            }) {
+                
                 VStack(spacing: 2) {
                     if isFinished && !isHomeWinner {
                         HCapsuleBar()
@@ -120,10 +119,10 @@ struct TournamentSingleGameItem<T: Decodable & Equatable>: View {
                         .font(.system(size: 13))
                         .lineLimit(2)
                 }
-            }
-            .frame(width: 80)
-            .foregroundStyle(.primary)
-            .opacity((isFinished && isHomeWinner) ? 0.3 : 1)
+                .frame(width: 80)
+                .opacity((isFinished && isHomeWinner) ? 0.3 : 1)
+            }       
         }
+        .foregroundStyle(.primary)
     }
 }

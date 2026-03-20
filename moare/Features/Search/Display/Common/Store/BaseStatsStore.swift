@@ -33,22 +33,11 @@ struct BaseStatsStore<T> {
         Reduce { state, action in
             switch action {
             case .initData:
+                state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballPlayerDic)
                 state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
                 
                 if let displayModel = state.displayModel as? SportDisplayModel {
                     switch displayModel.leagueId {
-                    case Constants.Ids.epl:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.eplPlayerDic)
-                    case Constants.Ids.laliga:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.laligaPlayerDic)
-                    case Constants.Ids.bundesliga:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.bundesligaPlayerDic)
-                    case Constants.Ids.ligue1:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.ligue1PlayerDic)
-                    case Constants.Ids.seriea:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.serieaPlayerDic)
-                    case Constants.Ids.mls:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlsPlayerDic)
                     case Constants.Ids.nba:
                         state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaPlayerDic)
                         state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)

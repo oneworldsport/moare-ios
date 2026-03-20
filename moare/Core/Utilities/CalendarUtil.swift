@@ -25,6 +25,7 @@ enum OutputTimeFormatType {
 
 struct CalendarUtil {
     static let currentYear = Calendar.current.component(.year, from: Date())
+    static let isoFormatter = ISO8601DateFormatter()
     
     enum DefaultYearMonthType {
         case nextYearMonth, currentYearMonth, previousYearMonth

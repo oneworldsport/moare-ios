@@ -10,26 +10,32 @@ import SwiftUI
 // NOTE: 현재는 축구에서만 쓰임
 struct TournamentDrawViewContainer<T: Decodable & Equatable>: View {
     let state: TournamentDrawContainerState<T>
+    let action: TournamentContainerAction<T>
     
     // zoom
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
     @State private var contentSize: CGSize = .zero
-    private let minZoomScale = 0.4
-    private let maxZoomScale = 1.2
+    private let minZoomScale = 0.3
+    private let maxZoomScale = 1.3
     
     var body: some View {
         ScrollView([.horizontal, .vertical]) {
             HStack(alignment: .top) {
                 ForEach(state.gameListTuple.indices, id: \.self) { roundIndex in
                     let item = state.gameListTuple[roundIndex]
-                    let games = item.gameList.compactMap { $0 }.flatMap { $0 }  // 중첩 배열인 gameList를(nil을 제거하고) 펼쳐서 1차원 배열로 만든다
                     let title = item.title
+                    
+                    // 1. 중첩 배열인 gameList를(nil을 제거하고) 펼쳐서 1차원 배열로 만든다.
+                    // 2. tournament_teams.json에 들어간 id 순서대로 경기가 배치되어 있기 때문에 날짜순으로 정렬을 해준다.
+                    let games = item.gameList.compactMap { $0 }.flatMap { $0 }.sorted {
+                        ($0.parsedDate ?? .distantFuture) < ($1.parsedDate ?? .distantFuture)
+                    }
                     
                     VStack(spacing: 0) {
                         Text(title)
                             .font(.system(size: 20, weight: .medium))
-                            .frame(width: 270)
+                            .frame(minWidth: 270)
                         HCapsuleBar()
                             .padding(.top, 6)
                             .padding(.bottom, 12)
@@ -43,7 +49,8 @@ struct TournamentDrawViewContainer<T: Decodable & Equatable>: View {
                                 TournamentSingleGameItem(
                                     leagueId: state.leagueId,
                                     game: game,
-                                    teamNameDic: state.teamNameDic
+                                    teamNameDic: state.teamNameDic,
+                                    selectGame: action.selectGame
                                 )
                                 .padding(.bottom, 12)
                             }

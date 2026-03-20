@@ -28,8 +28,8 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
     @State private var contentSize: CGSize = .zero
-    private let minZoomScale = 0.4
-    private let maxZoomScale = 1.2
+    private let minZoomScale = 0.3
+    private let maxZoomScale = 1.3
     
     var body: some View {
         ScrollView([.horizontal, .vertical]) {
@@ -42,14 +42,22 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                     let isLeft = state.isConference ? leftBracketTitles.contains(String(title.split(separator: " ").first ?? "")) : true
                     let isMLB = state.leagueId == Constants.Ids.mlb
                     let isKBO = state.leagueId == Constants.Ids.kbo
-                    let isSeries = state.leagueId == Constants.Ids.mls ? (roundIndex == 0 || roundIndex == 6) : state.isSeries // mls는 (동/서부)1라운드만 series
+                    let isSeries = if state.leagueId == Constants.Ids.mls {
+                        // mls는 (동/서부)1라운드만 series
+                        roundIndex == 0 || roundIndex == 6
+                    } else if Constants.Ids.footballUEFALeagues.contains(state.leagueId) {
+                        // uefa리그들은 final만 single
+                        roundIndex != 3
+                    } else {
+                        state.isSeries
+                    }
                     
                     // left
                     if isLeft {
                         VStack(spacing: 0) {
                             Text(title)
                                 .fontWeight(.medium)
-                                .fixedSize()
+                                .frame(minWidth: 170)
                             HCapsuleBar()
                                 .padding(.top, 6)
                                 .padding(.bottom, 12)
@@ -90,7 +98,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                             VStack(spacing: 0) {
                                 Text(title)
                                     .fontWeight(.medium)
-                                    .fixedSize()
+                                    .frame(minWidth: 170)
                                 HCapsuleBar()
                                     .padding(.top, 6)
                                     .padding(.bottom, 12)
@@ -122,7 +130,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                             VStack(spacing: 0) {
                                 Text(title)
                                     .fontWeight(.medium)
-                                    .fixedSize()
+                                    .frame(minWidth: 170)
                                 HCapsuleBar()
                                     .padding(.top, 6)
                                     .padding(.bottom, 12)
