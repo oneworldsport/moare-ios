@@ -46,6 +46,11 @@ struct FBTournamentView: View {
                             teamNameDic: store.baseTournament.teamNameDic,
                             gameListTuple: store.gameListTuple,
                             isSeries: false
+                        ),
+                        action: TournamentContainerAction(
+                            selectGame: { game in
+                                store.send(.selectGame(game: game))
+                            }
                         )
                     )
                 }

@@ -28,8 +28,8 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
     @State private var contentSize: CGSize = .zero
-    private let minZoomScale = 0.4
-    private let maxZoomScale = 1.2
+    private let minZoomScale = 0.3
+    private let maxZoomScale = 1.3
     
     var body: some View {
         ScrollView([.horizontal, .vertical]) {

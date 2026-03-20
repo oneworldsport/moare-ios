@@ -10,13 +10,14 @@ import SwiftUI
 // NOTE: 현재는 축구에서만 쓰임
 struct TournamentDrawViewContainer<T: Decodable & Equatable>: View {
     let state: TournamentDrawContainerState<T>
+    let action: TournamentContainerAction<T>
     
     // zoom
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
     @State private var contentSize: CGSize = .zero
-    private let minZoomScale = 0.4
-    private let maxZoomScale = 1.2
+    private let minZoomScale = 0.3
+    private let maxZoomScale = 1.3
     
     var body: some View {
         ScrollView([.horizontal, .vertical]) {
@@ -48,7 +49,8 @@ struct TournamentDrawViewContainer<T: Decodable & Equatable>: View {
                                 TournamentSingleGameItem(
                                     leagueId: state.leagueId,
                                     game: game,
-                                    teamNameDic: state.teamNameDic
+                                    teamNameDic: state.teamNameDic,
+                                    selectGame: action.selectGame
                                 )
                                 .padding(.bottom, 12)
                             }
