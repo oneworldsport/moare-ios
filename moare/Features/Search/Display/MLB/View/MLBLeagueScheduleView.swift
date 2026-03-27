@@ -172,7 +172,7 @@ struct MLBLeagueScheduleListItem: View {
                 isClickEnabled: gameStatus != Constants.GameStatus.MLB.postponed, // 연기된 경기는 클릭 안되게
                 isResultOpened: isResultOpened,
                 gameStatusContext: .mlb(status: gameStatus, currentInning: data.gameInfo?.currentInning, isResultOpened: isResultOpened),
-                isCapsuleButtonDisabled: !StringConstants.MLB.gameFinishedList.contains(gameStatus),
+                isCapsuleButtonDisabled: !Constants.GameStatus.MLB.finishedList.contains(gameStatus),
                 gameType: data.gameInfo?.seriesDescription,
                 shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
             ),
@@ -186,7 +186,7 @@ struct MLBLeagueScheduleListItem: View {
             )
         )
         .onAppear {
-            if StringConstants.MLB.gameFinishedList.contains(gameStatus) {
+            if Constants.GameStatus.MLB.finishedList.contains(gameStatus) {
                 isResultOpened = mlbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
             } else if gameStatus == StringConstants.MLB.gameScheduled || gameStatus == StringConstants.MLB.gamePostponed {
                 isResultOpened = false
@@ -195,7 +195,7 @@ struct MLBLeagueScheduleListItem: View {
             }
         }
         .onChange(of: mlbLeagueScheduleStore.gameResultOpenedStateList) {
-            if StringConstants.MLB.gameFinishedList.contains(gameStatus) {
+            if Constants.GameStatus.MLB.finishedList.contains(gameStatus) {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                     isResultOpened = mlbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
                 }
