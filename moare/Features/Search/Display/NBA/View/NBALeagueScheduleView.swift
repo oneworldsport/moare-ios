@@ -111,7 +111,7 @@ struct NBALeagueScheduleList: View {
                     
                     ScrollView {
                         LazyVStack(spacing: 8) {
-                            ForEach(gameListToDisplay, id: \.gameId) { item in
+                            ForEach(gameListToDisplay, id: \.itemKey) { item in
                                 NBALeagueScheduleListItem(
                                     searchStore: searchStore,
                                     nbaLeagueScheduleStore: nbaLeagueScheduleStore,
@@ -165,7 +165,7 @@ struct NBALeagueScheduleListItem: View {
     
     var body: some View {
         let displayModel = nbaLeagueScheduleStore.baseSchedule.displayModel
-        let gameId = data.gameId
+        let itemKey = data.itemKey
         let gameStatus = Int(data.gameStatus) ?? 1
         let teamNameDic = nbaLeagueScheduleStore.baseSchedule.teamNameDictionary
         
@@ -185,13 +185,13 @@ struct NBALeagueScheduleListItem: View {
                     nbaLeagueScheduleStore.send(.selectGame(game: data))
                 },
                 onCapsuleButtonClick: {
-                    nbaLeagueScheduleStore.send(.updateResultOpenedState(gameId: gameId, isOpened: !isResultOpened))
+                    nbaLeagueScheduleStore.send(.updateResultOpenedState(itemKey: itemKey, isOpened: !isResultOpened))
                 }
             )
         )
         .onAppear {
             if gameStatus == Constants.GameStatus.NBA.finished {
-                isResultOpened = nbaLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
+                isResultOpened = nbaLeagueScheduleStore.gameResultOpenedStateList[itemKey] ?? false
             } else if gameStatus == Constants.GameStatus.NBA.notStarted {
                 isResultOpened = false
             } else {
@@ -201,7 +201,7 @@ struct NBALeagueScheduleListItem: View {
         .onChange(of: nbaLeagueScheduleStore.gameResultOpenedStateList) {
             if gameStatus == Constants.GameStatus.NBA.finished {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
-                    isResultOpened = nbaLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
+                    isResultOpened = nbaLeagueScheduleStore.gameResultOpenedStateList[itemKey] ?? false
                 }
             }
         }
