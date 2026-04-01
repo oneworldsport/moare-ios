@@ -12,20 +12,26 @@ struct SearchClient {
     private let apiClient = APIClient()
     
     func fetchDataByQuery(query: String) async throws -> DataModel {
-        return try await apiClient.fetchData(endpoint: .searchByQuery(query: query), testQuery: query)
+//        return try await apiClient.fetchData(endpoint: .searchByQuery(query: query), testQuery: query)
 //        return String(decoding: data, as: UTF8.self)
+        
+        let raw: RawDataModel = try await apiClient.fetchData(endpoint: .searchByQuery(query: query), testQuery: query)
+        return try DataModel.from(raw: raw)
     }
     
     func fetchDataByKeyword(keyword: KeywordInfo) async throws -> DataModel {
-        return try await apiClient.fetchData(endpoint: .searchByKeyword(keyword: keyword))
+        let raw: RawDataModel = try await apiClient.fetchData(endpoint: .searchByKeyword(keyword: keyword))
+        return try DataModel.from(raw: raw)
     }
     
     func fetchLeagueSchedule(entity: EntityInfo, season: Int?, yearMonth: String?, day: Int? = nil) async throws -> DataModel {
-        return try await apiClient.fetchData(endpoint: .getLeagueSchedule(entity: entity, season: season ?? CalendarUtil.currentYear, yearMonth: yearMonth, day: day))
+        let raw: RawDataModel = try await apiClient.fetchData(endpoint: .getLeagueSchedule(entity: entity, season: season ?? CalendarUtil.currentYear, yearMonth: yearMonth, day: day))
+        return try DataModel.from(raw: raw)
     }
     
     func fetchById(season: Int?, category: String, date: String? = nil, dataType:String, leagueId: Int, id: String) async throws -> DataModel {
-        return try await apiClient.fetchData(endpoint: .searchById(season: season ?? CalendarUtil.currentYear, category: category, date: date, dataType: dataType, leagueId: leagueId, id: id))
+        let raw: RawDataModel = try await apiClient.fetchData(endpoint: .searchById(season: season ?? CalendarUtil.currentYear, category: category, date: date, dataType: dataType, leagueId: leagueId, id: id))
+        return try DataModel.from(raw: raw)
     }
     
     func fetchFromJson(viewForTest: SportDisplayType) async throws -> DataModel {
@@ -119,7 +125,10 @@ struct SearchClient {
         
         let data = try Data(contentsOf: url)
         let decoder = JSONDecoder()
-        let dataModel = try decoder.decode(DataModel.self, from: data)
+//        let dataModel = try decoder.decode(DataModel.self, from: data)
+        
+        let raw = try decoder.decode(RawDataModel.self, from: data)
+        let dataModel = try DataModel.from(raw: raw)
         
         return dataModel
     }
