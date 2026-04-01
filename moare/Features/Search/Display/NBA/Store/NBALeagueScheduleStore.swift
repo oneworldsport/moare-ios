@@ -39,7 +39,7 @@ struct NBALeagueScheduleStore {
            view action
            --------------------- */
         case toggleAllResult
-        case updateResultOpenedState(gameId: String, isOpened: Bool)
+        case updateResultOpenedState(itemKey: String, isOpened: Bool)
         case selectGame(game: NBAGameForSchedule)
         case showTournament
         case showTeamStandings
@@ -111,7 +111,7 @@ struct NBALeagueScheduleStore {
                     
                     // gameResultOpenedStateList 초기화
                     state.gameResultOpenedStateList = displayModel.games.reduce(into: [String: Bool]()) { dict, game in
-                        dict[game.gameId] = false
+                        dict[game.itemKey] = false
                     }
                     
                     // paging기능이 생기면서 baseSchedule.days에 기본값(0)을 넣어줘야 아이템이 보임
@@ -144,8 +144,8 @@ struct NBALeagueScheduleStore {
                 
                 return .none
                 
-            case .updateResultOpenedState(let gameId, let isOpened):
-                state.gameResultOpenedStateList[gameId] = isOpened
+            case .updateResultOpenedState(let itemKey, let isOpened):
+                state.gameResultOpenedStateList[itemKey] = isOpened
                 
                 return .none
                 
@@ -168,7 +168,7 @@ struct NBALeagueScheduleStore {
                             CalendarUtil.isSameDate(stringDate: game.date, selectedYearMonth: state.baseSchedule.selectedYearMonth, selectedDay: day.day)
                         }
                         
-                        gameResultOpenedStateList.merge((games).reduce(into: [:]) { $0[$1.gameId] = state.baseSchedule.isAllResultOpened }) { _, new in new }
+                        gameResultOpenedStateList.merge((games).reduce(into: [:]) { $0[$1.itemKey] = state.baseSchedule.isAllResultOpened }) { _, new in new }
                     
                         newFilteredGame[index] = games
                         
@@ -260,7 +260,7 @@ struct NBALeagueScheduleStore {
                         )
                         
                         await send(.delegate(.showGameStats(model: result.data)))
-                        await send(.updateResultOpenedState(gameId: game.gameId, isOpened: true))
+                        await send(.updateResultOpenedState(itemKey: game.itemKey, isOpened: true))
                     } catch {
                         print("\(error)")
                     }
@@ -383,9 +383,9 @@ struct NBALeagueScheduleStore {
                 return .none
                 
             case .updateDisplayModelGames(let games):
-                let gamesById = Dictionary(uniqueKeysWithValues: games.map { ($0.gameId, $0) })
+                let gamesByitemKey = Dictionary(uniqueKeysWithValues: games.map { ($0.itemKey, $0) })
 
-                state.baseSchedule.displayModel.games = state.baseSchedule.displayModel.games.map { gamesById[$0.gameId] ?? $0 }
+                state.baseSchedule.displayModel.games = state.baseSchedule.displayModel.games.map { gamesByitemKey[$0.itemKey] ?? $0 }
                 
                 return .send(.updateFilteredGames)
                 
