@@ -28,7 +28,7 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 6) {
             titleContent()
                 .padding(.horizontal, 8)
             
@@ -41,7 +41,6 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 8)
-                    .padding(.vertical, 2)
             }
             
             // related leagues
@@ -103,7 +102,6 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
                     shouldScrollCalendar = true
                     calendarActions.onSelectYearMonth(yearMonth, index)
                 }
-                .padding(.bottom, 6)
                 
                 CalendarList(
                     dateList: calendarState.days,
@@ -115,7 +113,6 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
                     shouldScrollCalendar = false
                     calendarActions.onSelectDay(day, index)
                 }
-                .padding(.bottom, 6)
             }
             
             // all result open button
@@ -156,7 +153,6 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
                 if state.displayDataState == .fetching {
                     ProgressView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                        .padding(.top, 8)
                 }
                 
                 // game list(schedule)
@@ -168,7 +164,6 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
                 if case .failure(let message) = state.displayDataState {
                     Text(message)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                        .padding(.top, 8)
                 }
             }
         }

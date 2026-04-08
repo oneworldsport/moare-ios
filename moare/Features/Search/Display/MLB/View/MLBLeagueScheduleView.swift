@@ -105,14 +105,13 @@ struct MLBLeagueScheduleList: View {
                     }
                     
                     ScrollView {
-                        LazyVStack(spacing: 8) {
+                        LazyVStack(spacing: 0) {
                             ForEach(gameListToDisplay, id: \.gameId) { item in
                                 MLBLeagueScheduleListItem(
                                     searchStore: searchStore,
                                     mlbLeagueScheduleStore: mlbLeagueScheduleStore,
                                     data: item
                                 )
-                                .padding(.vertical, 8)
                             }
                         }
                     }

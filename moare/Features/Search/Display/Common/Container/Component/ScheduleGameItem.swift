@@ -204,6 +204,7 @@ struct ScheduleGameItem<T: Decodable & Equatable>: View {
             .disabled(true) // TODO: modify when api added
         } // HStack
         .padding(.horizontal, 4)
+        .padding(.vertical, 8)
         .background(Color.clear) // added for tapGesture on Spacer()
         .onTapGesture {
             // TODO: Should change to Button
