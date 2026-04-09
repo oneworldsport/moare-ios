@@ -23,6 +23,7 @@ struct ScheduleViewContainer<TitleContent: View, GameListContent: View>: View {
             return false
         }
         
+        // TODO: 안드로이드처럼 index없을때 예외처리 안해줘도 되나..?
         let selectedYearMonth = calendarState.yearMonthList[calendarState.selectedYearMonthIndex]
         return CalendarUtil.isSameYearMonth(yearMonth: selectedYearMonth)
     }
