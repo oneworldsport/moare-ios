@@ -34,8 +34,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
     var body: some View {
         ScrollView([.horizontal, .vertical]) {
             HStack(alignment: .top, spacing: 0) {
-                ForEach(state.gameListTuple.indices, id: \.self) { roundIndex in
-                    let item = state.gameListTuple[roundIndex]
+                ForEach(Array(state.gameListTuple.enumerated()), id: \.offset) { roundIndex, item in
                     let maxRound = state.gameListTuple.count
                     let roundIndexForPosition = roundIndex + 1
                     let gameList = item.gameList
@@ -63,8 +62,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                 .padding(.top, 6)
                                 .padding(.bottom, 12)
                             
-                            ForEach(gameList.indices, id: \.self) { seriesIndex in
-                                let games = gameList[seriesIndex]
+                            ForEach(Array(gameList.enumerated()), id: \.offset) { seriesIndex, games in
                                 let seriesIndexForPosition = seriesIndex + 1
                                 
                                 if isSeries {
@@ -78,7 +76,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                         itemHeights: $leftItemHeights,
                                         selectSeries: action.selectSeries
                                     )
-                                    .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, true))
+                                    .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, .left))
                                 } else {
                                     TournamentBracketSingleLeftGameItem(
                                         leagueId: state.leagueId,
@@ -88,7 +86,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                         itemHeights: $leftItemHeights,
                                         selectGame: action.selectGame
                                     )
-                                    .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, true))
+                                    .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, .left))
                                 }
                             }
                         }
@@ -137,8 +135,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                     .padding(.top, 6)
                                     .padding(.bottom, 12)
                                 
-                                ForEach(gameList.indices, id: \.self) { seriesIndex in
-                                    let games = gameList[seriesIndex]
+                                ForEach(Array(gameList.enumerated()), id: \.offset) { seriesIndex, games in
                                     let seriesIndexForPosition = seriesIndex + 1
                                     
                                     if isSeries {
@@ -152,7 +149,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                             itemHeights: $rightItemHeights,
                                             selectSeries: action.selectSeries
                                         )
-                                        .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, false))
+                                        .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, .right))
                                     } else {
                                         TournamentBracketSingleRightGameItem(
                                             leagueId: state.leagueId,
@@ -162,7 +159,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                             itemHeights: $rightItemHeights,
                                             selectGame: action.selectGame
                                         )
-                                        .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, false))
+                                        .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, .right))
                                     }
                                 }
                             }
