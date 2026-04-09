@@ -211,14 +211,15 @@ struct KBOPlayerInfoFirstItem: View {
     }
     
     var body: some View {
-        let player = kboPlayerInfoStore.baseInfo.displayModel.info
+        let displayModel = kboPlayerInfoStore.baseInfo.displayModel
+        let player = displayModel.info
         
         MovingCapsuleItemContainer(
             isAniItem: isAniItem,
             itemSize: itemSize,
             itemOffset: itemOffset,
         ) {
-            URLImage(url: KBOUtil.playerPhotoURL(id: player.id))
+            URLImage(url: KBOUtil.playerPhotoURL(season: displayModel.season, id: player.id))
                 .opacity(showContents ? 1 : 0)
             
             Text(player.name)

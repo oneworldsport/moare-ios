@@ -23,9 +23,9 @@ struct KBOUtil {
     static let kboLogoUrl = "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/common/h1_logo.png"
     
 
-    static func playerPhotoURL(id: Int?) -> String? {
+    static func playerPhotoURL(season: Int, id: Int?) -> String? {
         if let id {
-            return "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/2025/\(id).jpg"
+            return "https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/middle/\(season)/\(id).jpg"
         } else {
             return nil
         }
