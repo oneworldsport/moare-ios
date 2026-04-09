@@ -129,9 +129,7 @@ struct NBATeamStandingsStore {
                     state.standings.sort { $0.stats.gp > $1.stats.gp }
                     state.standings.assignCompetitionRank { $0.stats.gp }
                 case 5: // 연속
-                    state.standings.sort { a, b in
-                        sortStreak(a, b)
-                    }
+                    state.standings.sort(by: sortStreak)
                     state.standings.assignCompetitionRank { $0.stats.krCurrentStreak }
                 case 6: // 최근 10경기
                     state.standings.sort { a, b in
