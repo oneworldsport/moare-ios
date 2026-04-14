@@ -109,14 +109,13 @@ struct TennisLeagueScheduleList: View {
                     }
                 
                     ScrollView {
-                        LazyVStack(spacing: 8) {
+                        LazyVStack(spacing: 0) {
                             ForEach(gameListToDisplay, id: \.itemKey) { item in
                                 TennisLeagueScheduleListItem(
                                     searchStore: searchStore,
                                     tennisLeagueScheduleStore: tennisLeagueScheduleStore,
                                     data: item
                                 )
-                                .padding(.vertical, 8)
                             }
                         }
                     }

@@ -10,7 +10,7 @@ import Foundation
 // TODO: 이렇게 구조 만든 이유 설명
 struct RawDataModel: Decodable {
     let dataType: String
-    let keywords: [Keyword]
+    let keywords: [Keyword]?
     let entityInfo: [EntityInfo]
     let season: Int
     let data: RawJSON
@@ -172,10 +172,12 @@ extension DataModel {
     // NOTE: init에서 SportDecodableModel를 처리하는게 부담이 있을 수 있다하여 아래 방식으로 변경함.
     // init에서 바로 SportDecodableModel를 처리하지 않고 (init 안에서)helper를 사용하는 방법도 있었는데 해당 방법은 해보지 않았고 일단 아래 방식을 사용함. -2026.04.01
     static func from(raw: RawDataModel) throws -> DataModel {
+        let keywords = raw.keywords ?? []
+        
         // TODO: 여기서 Singleton으로 사용하는 방식 문제 있을 수 있다고함. - by GPT
         let modelConverter = ModelConverter.shared
         modelConverter.configure(
-            keywords: raw.keywords,
+            keywords: keywords,
             entityInfo: raw.entityInfo,
             season: raw.season
         )
@@ -184,7 +186,7 @@ extension DataModel {
         
         return DataModel(
             dataType: raw.dataType,
-            keywords: raw.keywords,
+            keywords: keywords,
             entityInfo: raw.entityInfo,
             season: raw.season,
             data: sportData

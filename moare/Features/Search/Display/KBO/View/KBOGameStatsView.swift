@@ -34,7 +34,7 @@ struct KBOGameStatsView: View {
         let hitterList: [StandingsItemState] = store.teamHitters.map {
             StandingsItemState(
                 numInfo: $0.battingNumber,
-                imageUrl: KBOUtil.playerPhotoURL(id: $0.id),
+                imageUrl: KBOUtil.playerPhotoURL(season: displayModel.season, id: $0.id),
                 name: $0.name,
                 extraInfo: $0.position
                     .replacingOccurrences(of: "#", with: "•")
@@ -53,7 +53,7 @@ struct KBOGameStatsView: View {
         }
         let pitcherList: [StandingsItemState] = store.teamPitchers.map {
             StandingsItemState(
-                imageUrl: KBOUtil.playerPhotoURL(id: $0.id),
+                imageUrl: KBOUtil.playerPhotoURL(season: displayModel.season, id: $0.id),
                 name: $0.name,
                 dataList: [String($0.inningsPitched), $0.r, $0.er, $0.bb, $0.so, $0.h]
             )

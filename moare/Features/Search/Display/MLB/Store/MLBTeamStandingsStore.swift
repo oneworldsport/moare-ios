@@ -128,88 +128,78 @@ struct MLBTeamStandingsStore {
                 return .send(.sortStandings)
                 
             case .sortStandings:
-                let westStandings = state.westStandings
-                let eastStandings = state.eastStandings
-                let centralStandings = state.centralStandings
-                
                 switch state.baseStandings.categorySelectedIndex {
                 case 0: // 게임차
-//                    state.westStandings.sort { Double($0.stats.recordData?.divisionGamesBack ?? "0") ?? 0 < Double($1.stats.recordData?.divisionGamesBack ?? "0") ?? 0 }
-//                    state.eastStandings.sort { Double($0.stats.recordData?.divisionGamesBack ?? "0") ?? 0 < Double($1.stats.recordData?.divisionGamesBack ?? "0") ?? 0 }
-//                    state.centralStandings.sort { Double($0.stats.recordData?.divisionGamesBack ?? "0") ?? 0 < Double($1.stats.recordData?.divisionGamesBack ?? "0") ?? 0 }
-                    state.westStandings.sort { MLBUtil.calculateGamesBack(team: $0.stats, standings: westStandings) < MLBUtil.calculateGamesBack(team: $1.stats, standings: westStandings) }
-                    state.eastStandings.sort { MLBUtil.calculateGamesBack(team: $0.stats, standings: eastStandings) < MLBUtil.calculateGamesBack(team: $1.stats, standings: eastStandings) }
-                    state.centralStandings.sort { MLBUtil.calculateGamesBack(team: $0.stats, standings: centralStandings) < MLBUtil.calculateGamesBack(team: $1.stats, standings: centralStandings) }
+                    sortAllDivision(by: <) {
+                        Double($0.stats.recordData?.divisionRank ?? "0") ?? 0
+                    }
                 case 1: // 승률
-                    state.westStandings.sort { Double($0.stats.recordData?.winningPercentage ?? "0") ?? 0 > Double($1.stats.recordData?.winningPercentage ?? "0") ?? 0 }
-                    state.eastStandings.sort { Double($0.stats.recordData?.winningPercentage ?? "0") ?? 0 > Double($1.stats.recordData?.winningPercentage ?? "0") ?? 0 }
-                    state.centralStandings.sort { Double($0.stats.recordData?.winningPercentage ?? "0") ?? 0 > Double($1.stats.recordData?.winningPercentage ?? "0") ?? 0 }
+                    sortAllDivision(by: <) {
+                        Double($0.stats.recordData?.divisionRank ?? "0") ?? 0
+                    }
                 case 2: // 승
-                    state.westStandings.sort { $0.stats.recordData?.wins ?? 0 > $1.stats.recordData?.wins ?? 0 }
-                    state.eastStandings.sort { $0.stats.recordData?.wins ?? 0 > $1.stats.recordData?.wins ?? 0 }
-                    state.centralStandings.sort { $0.stats.recordData?.wins ?? 0 > $1.stats.recordData?.wins ?? 0 }
+                    sortAllDivision(by: >) {
+                        Double($0.stats.recordData?.wins ?? 0)
+                    }
                 case 3: // 패
-                    state.westStandings.sort { $0.stats.recordData?.losses ?? 0 < $1.stats.recordData?.losses ?? 0 }
-                    state.eastStandings.sort { $0.stats.recordData?.losses ?? 0 < $1.stats.recordData?.losses ?? 0 }
-                    state.centralStandings.sort { $0.stats.recordData?.losses ?? 0 < $1.stats.recordData?.losses ?? 0 }
+                    sortAllDivision(by: <) {
+                        Double($0.stats.recordData?.losses ?? 0)
+                    }
                 case 4: // 경기수
-                    state.westStandings.sort { $0.stats.recordData?.gamesPlayed ?? 0 > $1.stats.recordData?.gamesPlayed ?? 0 }
-                    state.eastStandings.sort { $0.stats.recordData?.gamesPlayed ?? 0 > $1.stats.recordData?.gamesPlayed ?? 0 }
-                    state.centralStandings.sort { $0.stats.recordData?.gamesPlayed ?? 0 > $1.stats.recordData?.gamesPlayed ?? 0 }
+                    sortAllDivision(by: >) {
+                        Double($0.stats.recordData?.gamesPlayed ?? 0)
+                    }
                 case 5: // 연속
-                    state.westStandings.sort { a, b in
-                        sortStreak(a, b)
-                    }
-                    state.eastStandings.sort { a, b in
-                        sortStreak(a, b)
-                    }
-                    state.centralStandings.sort { a, b in
-                        sortStreak(a, b)
+                    sortAllDivision(by: >) {
+                        let streak = $0.stats.recordData?.streak
+                        let streakNumber = streak?.streakNumber ?? 0
+                        let sign = (streak?.streakType.lowercased().hasPrefix("w") ?? false) ? 1 : -1
+                        return Double(streakNumber * sign)
                     }
                 case 6: // 타율
-                    state.westStandings.sort { Double($0.stats.hitting?.avg ?? "0") ?? 0 > Double($1.stats.hitting?.avg ?? "0") ?? 0 }
-                    state.eastStandings.sort { Double($0.stats.hitting?.avg ?? "0") ?? 0 > Double($1.stats.hitting?.avg ?? "0") ?? 0 }
-                    state.centralStandings.sort { Double($0.stats.hitting?.avg ?? "0") ?? 0 > Double($1.stats.hitting?.avg ?? "0") ?? 0 }
+                    sortAllDivision(by: >) {
+                        Double($0.stats.hitting?.avg ?? "0") ?? 0
+                    }
                 case 7: // 안타
-                    state.westStandings.sort { $0.stats.hitting?.hits ?? 0 > $1.stats.hitting?.hits ?? 0 }
-                    state.eastStandings.sort { $0.stats.hitting?.hits ?? 0 > $1.stats.hitting?.hits ?? 0 }
-                    state.centralStandings.sort { $0.stats.hitting?.hits ?? 0 > $1.stats.hitting?.hits ?? 0 }
+                    sortAllDivision(by: >) {
+                        Double($0.stats.hitting?.hits ?? 0)
+                    }
                 case 8: // 홈런
-                    state.westStandings.sort { $0.stats.hitting?.homeRuns ?? 0 > $1.stats.hitting?.homeRuns ?? 0 }
-                    state.eastStandings.sort { $0.stats.hitting?.homeRuns ?? 0 > $1.stats.hitting?.homeRuns ?? 0 }
-                    state.centralStandings.sort { $0.stats.hitting?.homeRuns ?? 0 > $1.stats.hitting?.homeRuns ?? 0 }
+                    sortAllDivision(by: >) {
+                        Double($0.stats.hitting?.homeRuns ?? 0)
+                    }
                 case 9: // 장타율
-                    state.westStandings.sort { Double($0.stats.hitting?.slg ?? "0") ?? 0 > Double($1.stats.hitting?.slg ?? "0") ?? 0 }
-                    state.eastStandings.sort { Double($0.stats.hitting?.slg ?? "0") ?? 0 > Double($1.stats.hitting?.slg ?? "0") ?? 0 }
-                    state.centralStandings.sort { Double($0.stats.hitting?.slg ?? "0") ?? 0 > Double($1.stats.hitting?.slg ?? "0") ?? 0 }
+                    sortAllDivision(by: >) {
+                        Double($0.stats.hitting?.slg ?? "0") ?? 0
+                    }
                 case 10: // 득점
-                    state.westStandings.sort { $0.stats.hitting?.runs ?? 0 > $1.stats.hitting?.runs ?? 0 }
-                    state.eastStandings.sort { $0.stats.hitting?.runs ?? 0 > $1.stats.hitting?.runs ?? 0 }
-                    state.centralStandings.sort { $0.stats.hitting?.runs ?? 0 > $1.stats.hitting?.runs ?? 0 }
+                    sortAllDivision(by: >) {
+                        Double($0.stats.hitting?.runs ?? 0)
+                    }
                 case 11: // 평균자책
-                    state.westStandings.sort { Double($0.stats.pitching?.era ?? "0") ?? 0 < Double($1.stats.pitching?.era ?? "0") ?? 0 }
-                    state.eastStandings.sort { Double($0.stats.pitching?.era ?? "0") ?? 0 < Double($1.stats.pitching?.era ?? "0") ?? 0 }
-                    state.centralStandings.sort { Double($0.stats.pitching?.era ?? "0") ?? 0 < Double($1.stats.pitching?.era ?? "0") ?? 0 }
+                    sortAllDivision(by: <) {
+                        Double($0.stats.pitching?.era ?? "0") ?? 0
+                    }
                 case 12: // 피안타율
-                    state.westStandings.sort { Double($0.stats.pitching?.avg ?? "0") ?? 0 < Double($1.stats.pitching?.avg ?? "0") ?? 0 }
-                    state.eastStandings.sort { Double($0.stats.pitching?.avg ?? "0") ?? 0 < Double($1.stats.pitching?.avg ?? "0") ?? 0 }
-                    state.centralStandings.sort { Double($0.stats.pitching?.avg ?? "0") ?? 0 < Double($1.stats.pitching?.avg ?? "0") ?? 0 }
+                    sortAllDivision(by: <) {
+                        Double($0.stats.pitching?.avg ?? "0") ?? 0
+                    }
                 case 13: // 피안타
-                    state.westStandings.sort { $0.stats.pitching?.hits ?? 0 < $1.stats.pitching?.hits ?? 0 }
-                    state.eastStandings.sort { $0.stats.pitching?.hits ?? 0 < $1.stats.pitching?.hits ?? 0 }
-                    state.centralStandings.sort { $0.stats.pitching?.hits ?? 0 < $1.stats.pitching?.hits ?? 0 }
+                    sortAllDivision(by: <) {
+                        Double($0.stats.pitching?.hits ?? 0)
+                    }
                 case 14: // 피홈런
-                    state.westStandings.sort { $0.stats.pitching?.homeRuns ?? 0 < $1.stats.pitching?.homeRuns ?? 0 }
-                    state.eastStandings.sort { $0.stats.pitching?.homeRuns ?? 0 < $1.stats.pitching?.homeRuns ?? 0 }
-                    state.centralStandings.sort { $0.stats.pitching?.homeRuns ?? 0 < $1.stats.pitching?.homeRuns ?? 0 }
+                    sortAllDivision(by: <) {
+                        Double($0.stats.pitching?.homeRuns ?? 0)
+                    }
                 case 15: // 실점
-                    state.westStandings.sort { $0.stats.pitching?.runs ?? 0 < $1.stats.pitching?.runs ?? 0 }
-                    state.eastStandings.sort { $0.stats.pitching?.runs ?? 0 < $1.stats.pitching?.runs ?? 0 }
-                    state.centralStandings.sort { $0.stats.pitching?.runs ?? 0 < $1.stats.pitching?.runs ?? 0 }
+                    sortAllDivision(by: <) {
+                        Double($0.stats.pitching?.runs ?? 0)
+                    }
                 case 16: // 도루성공률
-                    state.westStandings.sort { Double($0.stats.hitting?.stolenBasePercentage ?? "0") ?? 0 > Double($1.stats.hitting?.stolenBasePercentage ?? "0") ?? 0 }
-                    state.eastStandings.sort { Double($0.stats.hitting?.stolenBasePercentage ?? "0") ?? 0 > Double($1.stats.hitting?.stolenBasePercentage ?? "0") ?? 0 }
-                    state.centralStandings.sort { Double($0.stats.hitting?.stolenBasePercentage ?? "0") ?? 0 > Double($1.stats.hitting?.stolenBasePercentage ?? "0") ?? 0 }
+                    sortAllDivision(by: >) {
+                        Double($0.stats.hitting?.stolenBasePercentage ?? "0") ?? 0
+                    }
                 default: break
                 }
                 
@@ -230,27 +220,21 @@ struct MLBTeamStandingsStore {
                 return .none
             }
             
-            func sortStreak(_ a: MLBTeamStandingsDisplay, _ b: MLBTeamStandingsDisplay) -> Bool {
-                guard let aStreak = a.stats.recordData?.streak.streakCode, let bStreak = b.stats.recordData?.streak.streakCode else {
-                    return false
-                }
-                let aIsWin = aStreak.hasPrefix("W")
-                let bIsWin = bStreak.hasPrefix("W")
-
-                if aIsWin && bIsWin {
-                    // 둘 다 승일 때: 숫자 큰 순
-                    return extractNumber(from: aStreak) > extractNumber(from: bStreak)
-                } else if !aIsWin && !bIsWin {
-                    // 둘 다 패일 때: 숫자 작은 순
-                    return extractNumber(from: aStreak) < extractNumber(from: bStreak)
-                } else {
-                    // 승이 우선
-                    return aIsWin
-                }
-            }
-            
             func extractNumber(from string: String) -> Int {
                 return Int(string.dropFirst()) ?? 0
+            }
+            
+            func sortAllDivision(
+                by order: (Double, Double) -> Bool,
+                value: (MLBTeamStandingsDisplay) -> Double
+            ) {
+                state.westStandings.sort { order(value($0), value($1)) }
+                state.eastStandings.sort { order(value($0), value($1)) }
+                state.centralStandings.sort { order(value($0), value($1)) }
+
+                state.westStandings.assignCompetitionRank(by: value)
+                state.eastStandings.assignCompetitionRank(by: value)
+                state.centralStandings.assignCompetitionRank(by: value)
             }
         }
     }

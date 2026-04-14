@@ -35,9 +35,9 @@ struct SportSearchEngine_iOSApp: App {
     var viewForTest: SportDisplayType? = nil
     
     init() {
-        Task {
-            await AWSManager.shared.loadInitialData()
-        }
+//        Task {
+//            await AWSManager.shared.loadInitialData()
+//        }
         
         SDImageCodersManager.shared.addCoder(SDImageSVGCoder.shared)
         

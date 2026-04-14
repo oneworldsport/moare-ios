@@ -105,14 +105,13 @@ struct KBOLeagueScheduleList: View {
                     }
                     
                     ScrollView {
-                        LazyVStack(spacing: 8) {
+                        LazyVStack(spacing: 0) {
                             ForEach(gameListToDisplay, id: \.itemKey) { item in
                                 KBOLeagueScheduleListItem(
                                     searchStore: searchStore,
                                     kboLeagueScheduleStore: kboLeagueScheduleStore,
                                     data: item
                                 )
-                                .padding(.vertical, 8)
                             }
                         }
                     }

@@ -131,11 +131,9 @@ struct FBGameStatsView: View {
                                     leagueId: displayModel.leagueId,
                                     teamNameDic: teamNameDic
                                 )
-                                .padding(.vertical, 8)
                             }
                             
                             FBGameStatsScorerBox(store: store)
-                                .padding(.bottom, 8)
                         }
                     }
                 )

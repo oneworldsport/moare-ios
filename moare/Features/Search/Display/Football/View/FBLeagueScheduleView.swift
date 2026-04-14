@@ -135,7 +135,7 @@ struct FBLeagueScheduleList: View {
                     }
                     
                     ScrollView {
-                        LazyVStack(spacing: 8) {
+                        LazyVStack(spacing: 0) {
                             ForEach(gameListToDisplay, id: \.gameId) { value in
                                 FBLeagueScheduleListItem(
                                     searchStore: searchStore,
@@ -144,7 +144,6 @@ struct FBLeagueScheduleList: View {
                                     leagueId: fbLeagueScheduleStore.baseSchedule.displayModel.leagueId,
                                     teamNameDic: teamNameDic
                                 )
-                                .padding(.vertical, 8)
                                 .background(
                                     // NOTE: .readSize가 안먹혀서 아래 코드로 적용
                                     Group {

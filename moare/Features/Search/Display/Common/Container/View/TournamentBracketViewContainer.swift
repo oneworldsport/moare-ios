@@ -34,8 +34,8 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
     var body: some View {
         ScrollView([.horizontal, .vertical]) {
             HStack(alignment: .top, spacing: 0) {
-                ForEach(state.gameListTuple.indices, id: \.self) { roundIndex in
-                    let item = state.gameListTuple[roundIndex]
+                ForEach(Array(state.gameListTuple.enumerated()), id: \.offset) { roundIndex, item in
+                    let maxRound = state.gameListTuple.count
                     let roundIndexForPosition = roundIndex + 1
                     let gameList = item.gameList
                     let title = item.title
@@ -62,21 +62,21 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                 .padding(.top, 6)
                                 .padding(.bottom, 12)
                             
-                            ForEach(gameList.indices, id: \.self) { seriesIndex in
-                                let games = gameList[seriesIndex]
+                            ForEach(Array(gameList.enumerated()), id: \.offset) { seriesIndex, games in
                                 let seriesIndexForPosition = seriesIndex + 1
                                 
                                 if isSeries {
                                     TournamentSeriesLeftGameItem(
                                         leagueId: state.leagueId,
                                         teamNameDic: state.teamNameDic,
+                                        maxRound: maxRound,
                                         games: games,
                                         itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
                                         shouldRemoveHBar: isKBO || (isMLB && roundIndexForPosition == 2), // mlb 2라운드, kbo
                                         itemHeights: $leftItemHeights,
                                         selectSeries: action.selectSeries
                                     )
-                                    .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, true))
+                                    .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, .left))
                                 } else {
                                     TournamentBracketSingleLeftGameItem(
                                         leagueId: state.leagueId,
@@ -86,7 +86,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                         itemHeights: $leftItemHeights,
                                         selectGame: action.selectGame
                                     )
-                                    .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, true))
+                                    .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, .left))
                                 }
                             }
                         }
@@ -135,21 +135,21 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                     .padding(.top, 6)
                                     .padding(.bottom, 12)
                                 
-                                ForEach(gameList.indices, id: \.self) { seriesIndex in
-                                    let games = gameList[seriesIndex]
+                                ForEach(Array(gameList.enumerated()), id: \.offset) { seriesIndex, games in
                                     let seriesIndexForPosition = seriesIndex + 1
                                     
                                     if isSeries {
                                         TournamentSeriesRightGameItem(
                                             leagueId: state.leagueId,
                                             teamNameDic: state.teamNameDic,
+                                            maxRound: maxRound,
                                             games: games,
                                             itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
                                             shouldRemoveHBar: isMLB && roundIndexForPosition == 6, // mlb 2라운드만
                                             itemHeights: $rightItemHeights,
                                             selectSeries: action.selectSeries
                                         )
-                                        .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, false))
+                                        .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, .right))
                                     } else {
                                         TournamentBracketSingleRightGameItem(
                                             leagueId: state.leagueId,
@@ -159,7 +159,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                             itemHeights: $rightItemHeights,
                                             selectGame: action.selectGame
                                         )
-                                        .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, false))
+                                        .padding(.bottom, bottomPadding(roundIndexForPosition, seriesIndexForPosition, .right))
                                     }
                                 }
                             }
@@ -199,28 +199,32 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
         )
     }
     
-    private func h(_ r: Int, _ s: Int, _ isLeft: Bool) -> CGFloat {
-        isLeft ? (leftItemHeights[RoundSeriesKey(round: r, series: s)] ?? 0) : (rightItemHeights[RoundSeriesKey(round: r, series: s)] ?? 0)
+    private func h(_ r: Int, _ s: Int, _ direction: RoundDirection) -> CGFloat {
+        switch direction {
+        case .left:
+            return leftItemHeights[RoundSeriesKey(round: r, series: s)] ?? 0
+        case .right:
+            return rightItemHeights[RoundSeriesKey(round: r, series: s)] ?? 0
+        }
     }
     
-    private func bottomPadding(_ r: Int, _ s: Int, _ isLeft: Bool) -> CGFloat {
-        if isLeft {
-            switch (r, s) {
-            case (1, 1): return h(2, 1, isLeft)
-            case (1, 2): return h(3, 1, isLeft)
-            case (1, 3): return h(2, 2, isLeft)
-            case (2, 1): return h(3, 1, isLeft)
-            default: return 0
-            }
-        } else {
-            switch (r, s) {
-            case (7, 1): return h(6, 1, isLeft)
-            case (7, 2): return h(5, 1, isLeft)
-            case (7, 3): return h(6, 2, isLeft)
-            case (6, 1): return h(5, 1, isLeft)
-            default: return 0
-            }
+    private func bottomPadding(_ round: Int, _ series: Int, _ direction: RoundDirection) -> CGFloat {
+        precondition(round >= 1, "round must be >= 1")
+        precondition(series >= 1, "series must be >= 1")
+        
+        let k = series.trailingZeroBitCount
+        
+        let newRound: Int
+        switch direction {
+        case .left:
+            newRound = round + k + 1
+        case .right:
+            newRound = round - k - 1
         }
+        
+        let newSeries = ((series >> k) + 1) / 2
+        
+        return h(newRound, newSeries, direction)
     }
     
     // zoom
