@@ -150,18 +150,11 @@ struct MLBTeamStandingsStore {
                         Double($0.stats.recordData?.gamesPlayed ?? 0)
                     }
                 case 5: // 연속
-                    state.westStandings.sort(by: sortStreak)
-                    state.eastStandings.sort(by: sortStreak)
-                    state.centralStandings.sort(by: sortStreak)
-
-                    state.westStandings.assignCompetitionRank {
-                        $0.stats.recordData?.streak.streakCode
-                    }
-                    state.eastStandings.assignCompetitionRank {
-                        $0.stats.recordData?.streak.streakCode
-                    }
-                    state.centralStandings.assignCompetitionRank {
-                        $0.stats.recordData?.streak.streakCode
+                    sortAllDivision(by: >) {
+                        let streak = $0.stats.recordData?.streak
+                        let streakNumber = streak?.streakNumber ?? 0
+                        let sign = (streak?.streakType.lowercased().hasPrefix("w") ?? false) ? 1 : -1
+                        return Double(streakNumber * sign)
                     }
                 case 6: // 타율
                     sortAllDivision(by: >) {
@@ -225,25 +218,6 @@ struct MLBTeamStandingsStore {
                 
             case .delegate:
                 return .none
-            }
-            
-            func sortStreak(_ a: MLBTeamStandingsDisplay, _ b: MLBTeamStandingsDisplay) -> Bool {
-                guard let aStreak = a.stats.recordData?.streak.streakCode, let bStreak = b.stats.recordData?.streak.streakCode else {
-                    return false
-                }
-                let aIsWin = aStreak.hasPrefix("W")
-                let bIsWin = bStreak.hasPrefix("W")
-
-                if aIsWin && bIsWin {
-                    // 둘 다 승일 때: 숫자 큰 순
-                    return extractNumber(from: aStreak) > extractNumber(from: bStreak)
-                } else if !aIsWin && !bIsWin {
-                    // 둘 다 패일 때: 숫자 작은 순
-                    return extractNumber(from: aStreak) < extractNumber(from: bStreak)
-                } else {
-                    // 승이 우선
-                    return aIsWin
-                }
             }
             
             func extractNumber(from string: String) -> Int {

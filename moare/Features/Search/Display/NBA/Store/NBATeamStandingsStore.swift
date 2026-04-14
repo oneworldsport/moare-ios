@@ -129,7 +129,9 @@ struct NBATeamStandingsStore {
                     state.standings.sort { $0.stats.gp > $1.stats.gp }
                     state.standings.assignCompetitionRank { $0.stats.gp }
                 case 5: // 연속
-                    state.standings.sort(by: sortStreak)
+                    state.standings.sort {
+                        streakValue($0.stats.strCurrentStreak) > streakValue($1.stats.strCurrentStreak)
+                    }
                     state.standings.assignCompetitionRank { $0.stats.krCurrentStreak }
                 case 6: // 최근 10경기
                     state.standings.sort { a, b in
@@ -221,22 +223,10 @@ struct NBATeamStandingsStore {
                 return .none
             } // switch action
             
-            func sortStreak(_ a: NBATeamStandingsDisplay, _ b: NBATeamStandingsDisplay) -> Bool {
-                let aStreak = a.stats.strCurrentStreak
-                let bStreak = b.stats.strCurrentStreak
-                let aIsWin = aStreak.hasPrefix("W")
-                let bIsWin = bStreak.hasPrefix("W")
-
-                if aIsWin && bIsWin {
-                    // 둘 다 승일 때: 숫자 큰 순
-                    return extractNumber(from: aStreak) > extractNumber(from: bStreak)
-                } else if !aIsWin && !bIsWin {
-                    // 둘 다 패일 때: 숫자 작은 순
-                    return extractNumber(from: aStreak) < extractNumber(from: bStreak)
-                } else {
-                    // 승이 우선
-                    return aIsWin
-                }
+            func streakValue(_ streak: String) -> Double {
+                let streakNumber = extractNumber(from: streak)
+                let sign = streak.lowercased().hasPrefix("w") ? 1 : -1
+                return Double(streakNumber * sign)
             }
             
             func extractNumber(from string: String) -> Int {
