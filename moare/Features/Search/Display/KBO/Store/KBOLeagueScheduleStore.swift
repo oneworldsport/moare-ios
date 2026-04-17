@@ -261,6 +261,8 @@ struct KBOLeagueScheduleStore {
                 }
                 
             case .showTournament:
+                let season = state.baseSchedule.displayModel.season
+                
                 return .run { send in
                     let keywordInfo = KeywordInfo(
                         keyword: "KBO 가을야구",
@@ -279,12 +281,14 @@ struct KBOLeagueScheduleStore {
                         ]
                     )
                     
-                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo, season: season)
                     
                     await send(.delegate(.showTournament(model: result.data)))
                 }
                 
             case .showTeamStandings:
+                let season = state.baseSchedule.displayModel.season
+                
                 return .run { send in
                     let keywordInfo = KeywordInfo(
                         keyword: "KBO 순위",
@@ -303,7 +307,7 @@ struct KBOLeagueScheduleStore {
                         ]
                     )
                     
-                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo, season: season)
                     
                     await send(.delegate(.showTeamStandings(model: result.data)))
                 }

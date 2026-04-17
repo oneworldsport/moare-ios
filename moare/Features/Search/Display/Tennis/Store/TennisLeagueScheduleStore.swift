@@ -240,6 +240,7 @@ struct TennisLeagueScheduleStore {
                 
             case .showTournament:
                 let leagueId = state.baseSchedule.displayModel.leagueId
+                let season = state.baseSchedule.displayModel.season
                 
                 return .run { send in
                     let leagueName = StringConstants.Tennis.leagueNameStr(leagueId: leagueId)
@@ -260,7 +261,7 @@ struct TennisLeagueScheduleStore {
                         ]
                     )
                     
-                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo, season: season)
                     
                     await send(.delegate(.showTournament(model: result.data)))
                 }
