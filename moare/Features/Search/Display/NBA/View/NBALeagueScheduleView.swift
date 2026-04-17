@@ -167,6 +167,16 @@ struct NBALeagueScheduleListItem: View {
         let itemKey = data.itemKey
         let gameStatus = Int(data.gameStatus) ?? 1
         let teamNameDic = nbaLeagueScheduleStore.baseSchedule.teamNameDictionary
+        let gameInfo = data.gameInfo
+        let gameType = if let gameInfo {
+            if gameInfo.isPlayoffs {
+                "\(gameInfo.gameLabelKr)\n\(gameInfo.seriesGameNumber)\n\(gameInfo.seriesTextKr)"
+            } else {
+                gameInfo.weekName
+            }
+        } else {
+            ""
+        }
         
         ScheduleGameItem(
             state:ScheduleGameItemState(
@@ -174,9 +184,9 @@ struct NBALeagueScheduleListItem: View {
                 game: data,
                 teamNameDic: teamNameDic,
                 isResultOpened: isResultOpened,
-                gameStatusContext: .nba(status: gameStatus, period: data.gameInfo?.period, isResultOpened: isResultOpened),
+                gameStatusContext: .nba(status: gameStatus, period: gameInfo?.period, isResultOpened: isResultOpened),
                 isCapsuleButtonDisabled: gameStatus != Constants.GameStatus.NBA.finished,
-                gameType: NBAUtil.gameType(gameSummary: data.gameInfo),
+                gameType: gameType,
                 shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
             ),
             actions: ScheduleGameItemActions(
@@ -206,27 +216,3 @@ struct NBALeagueScheduleListItem: View {
         }
     }
 }
-
-// playoffs info
-//if let gameInfo = data.gameInfo, gameInfo.weekName.isEmpty {
-//    Text(NBAUtil.gameType(gameSummary: gameInfo, isShort: true))
-//        .font(.system(size: 11))
-//    
-//    if let series = data.seasonSeries, !gameInfo.seriesGameNumber.isEmpty {
-//        HStack(spacing: 0) {
-//            Text("시리즈 스코어: ")
-//                .font(.system(size: 11))
-//            
-//            Text("\(series.homeTeamWins)")
-//                .font(.system(size: 11))
-//                .foregroundStyle(series.homeTeamWins >= series.homeTeamLosses ? .moare : .primary)
-//            
-//            Text(" - ")
-//                .font(.system(size: 11))
-//            
-//            Text("\(series.homeTeamLosses)")
-//                .font(.system(size: 11))
-//                .foregroundStyle(series.homeTeamLosses >= series.homeTeamWins ? .moare : .primary)
-//        }
-//    }
-//}

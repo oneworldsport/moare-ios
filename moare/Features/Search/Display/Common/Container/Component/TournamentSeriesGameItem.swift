@@ -27,8 +27,8 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
     var body: some View {
         if let games {
             let game = games.first
-            let topSeedTeamId = game?.isHomeTopSeed == true ? game?.homeTeamId : game?.awayTeamId
-            let lowerSeedTeamId = game?.isHomeTopSeed == true ? game?.awayTeamId : game?.homeTeamId
+            let topSeedTeamId = game?.isHomeTopSeed == true ? game?.homeTeamIdOrNil : game?.awayTeamIdOrNil
+            let lowerSeedTeamId = game?.isHomeTopSeed == true ? game?.awayTeamIdOrNil : game?.homeTeamIdOrNil
             let isUEFALeague = Constants.Ids.footballUEFALeagues.contains(leagueId)
             let isSeriesStarted = if isUEFALeague {
                 // UEFA리그(합산 스코어 방식)는 경기중이어도 isSeriesStarted = true
@@ -330,8 +330,8 @@ struct TournamentSeriesRightGameItem<T: Decodable & Equatable>: View {
     var body: some View {
         if let games {
             let game = games.first
-            let topSeedTeamId = game?.isHomeTopSeed == true ? game?.homeTeamId : game?.awayTeamId
-            let lowerSeedTeamId = game?.isHomeTopSeed == true ? game?.awayTeamId : game?.homeTeamId
+            let topSeedTeamId = game?.isHomeTopSeed == true ? game?.homeTeamIdOrNil : game?.awayTeamIdOrNil
+            let lowerSeedTeamId = game?.isHomeTopSeed == true ? game?.awayTeamIdOrNil : game?.homeTeamIdOrNil
             let isSeriesStarted = Constants.GameStatus.isGameFinished(leagueId: leagueId, status: game?.gameStatus ?? "")
             
             let (topSeedTeamSeriesScore, lowerSeedTeamSeriesScore) = games.reduce((0, 0)) { partial, game in
@@ -600,8 +600,8 @@ struct TournamentSeriesFinalGameItem<T: Decodable & Equatable>: View {
     
     var body: some View {
         let game = games.first
-        let topSeedTeamId = game?.isHomeTopSeed == true ? game?.homeTeamId : game?.awayTeamId
-        let lowerSeedTeamId = game?.isHomeTopSeed == true ? game?.awayTeamId : game?.homeTeamId
+        let topSeedTeamId = game?.isHomeTopSeed == true ? game?.homeTeamIdOrNil : game?.awayTeamIdOrNil
+        let lowerSeedTeamId = game?.isHomeTopSeed == true ? game?.awayTeamIdOrNil : game?.homeTeamIdOrNil
         let isSeriesStarted = Constants.GameStatus.isGameFinished(leagueId: leagueId, status: game?.gameStatus ?? "")
         
         let (topSeedTeamSeriesScore, lowerSeedTeamSeriesScore) = games.reduce((0, 0)) { partial, game in

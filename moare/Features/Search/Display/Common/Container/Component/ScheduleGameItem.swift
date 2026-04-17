@@ -121,11 +121,10 @@ struct ScheduleGameItem<T: Decodable & Equatable>: View {
                 }
                 
                 // game type
-                // TODO: 나중에 작업
                 if let gameType = state.gameType, !gameType.isEmpty, state.shouldShowGameType {
                     Text(gameType)
                         .font(.system(size: 12, weight: .light))
-                        .lineLimit(1)
+                        .multilineTextAlignment(.center)
                 }
                 
                 // referee

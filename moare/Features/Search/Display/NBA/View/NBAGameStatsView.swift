@@ -109,6 +109,17 @@ struct NBAGameStatsView: View {
                         }
                     ),
                     titleContent: {
+                        let gameSummary = displayModel.game.gameSummary
+                        let gameType = if let gameSummary {
+                            if gameSummary.isPlayoffs {
+                                "\(gameSummary.gameLabelKr) | \(gameSummary.seriesGameNumber)"
+                            } else {
+                                gameSummary.weekName
+                            }
+                        } else {
+                            ""
+                        }
+                        
                         HStack(spacing: 0) {
                             NBATitle(
                                 leagueName: "NBA",
@@ -116,21 +127,15 @@ struct NBAGameStatsView: View {
                             )
 //                            game.gameSummary?.season.split(separator: "-").first.flatMap { Int(String($0)) } // TODO: 이 문법으로 다른 비슷한 코드도 다 바꾸기
                             
-                            Text(" | ")
-                                .font(.system(size: 14))
-                            
-                            Text(NBAUtil.gameType(gameSummary: game.gameSummary))
+                            Text(" | \(gameType)")
                                 .font(.system(size: 14))
                             
                             Spacer()
                         }
                         .padding(.horizontal, UIConstants.Padding.defaultHPadding)
                         
-                        /* ---------------------
-                           playoffs series text
-                           --------------------- */
-                        if game.gameSummary?.seriesGameNumber.isEmpty == false {
-                            NBAGameStatsPlayoffsSeriesTextContainer(nbaGameStatsStore: store)
+                        if let gameSummary, gameSummary.isPlayoffs {
+                            NBAGameStatsPlayoffsSeriesText(seriesTextKr: gameSummary.seriesTextKr)
                         }
                     },
                     gameContent: {
@@ -400,31 +405,33 @@ struct NBAGameStatsLineScoreItem: View {
     }
 }
 
-struct NBAGameStatsPlayoffsSeriesTextContainer: View {
-    @Bindable var nbaGameStatsStore: StoreOf<NBAGameStatsStore>
+struct NBAGameStatsPlayoffsSeriesText: View {
+    let seriesTextKr: String
     
     var body: some View {
-        let teamNameDic = nbaGameStatsStore.baseGameStats.teamNameDictionary
-        
-        if let series = nbaGameStatsStore.baseGameStats.displayModel.game.seasonSeries {
+        let pattern = /^(.*?)\s+(\d+)\s*-\s*(\d+)\s+(.*)$/
+
+        if let match = try? pattern.wholeMatch(in: seriesTextKr) {
+            let before = String(match.output.1).trimmingCharacters(in: .whitespacesAndNewlines)
+            let score1 = Int(match.output.2)!
+            let score2 = Int(match.output.3)!
+            let after = String(match.output.4).trimmingCharacters(in: .whitespacesAndNewlines)
+
+         
             HStack(spacing: 0) {
-                // NOTE: 게임별 시리즈 스코어 정보를 가져올 방법을 찾지 못해서 일단은 현재 시리즈 스코어로 표시
-                Text("현재 시리즈 스코어: ")
+                Text(before)
                     .font(.system(size: 14))
                 
-                Text(teamNameDic["short_\(series.homeTeamId)"] ?? "")
+                Text(" \(score1)")
+                    .foregroundStyle(score1 >= score2 ? .moare : .primary)
+                
+                Text(" - ")
                     .font(.system(size: 14))
                 
-                Text(" \(series.homeTeamWins) ")
-                    .foregroundStyle(series.homeTeamWins >= series.homeTeamLosses ? .moare : .primary)
+                Text("\(score2) ")
+                    .foregroundStyle(score2 >= score1 ? .moare : .primary)
                 
-                Text("-")
-                    .font(.system(size: 14))
-                
-                Text(" \(series.homeTeamLosses) ")
-                    .foregroundStyle(series.homeTeamLosses >= series.homeTeamWins ? .moare : .primary)
-                
-                Text(teamNameDic["short_\(series.visitorTeamId)"] ?? "")
+                Text(after)
                     .font(.system(size: 14))
                 
                 Spacer()
