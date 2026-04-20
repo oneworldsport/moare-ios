@@ -90,8 +90,8 @@ struct MLBGameStatsView: View {
             if show {
                 GameStatsViewContainer(
                     state: GameStatsContainerState(
-                        shouldShowStats: game.status.detailedState != StringConstants.MLB.gameScheduled,
-                        shouldShowRefreshButton: game.status.detailedState == StringConstants.MLB.gameLive,
+                        shouldShowStats: game.status.abstractGameState != Constants.GameStatus.MLB.preview,
+                        shouldShowRefreshButton: game.status.abstractGameState == Constants.GameStatus.MLB.live,
                         teamCategories: teamCategories,
                         teamCategorySelectedIndex: store.baseGameStats.teamCategorySelectedIndex,
                         gameDetailTitle: gameDetailTitle,
@@ -184,7 +184,7 @@ struct MLBGameStatsScoreInfoItem: View {
         let homeTeamId = Constants.Ids.checkTeamId(leagueId: Constants.Ids.mlb, teamId: game.teams.home.id)
         let awayTeamId = Constants.Ids.checkTeamId(leagueId: Constants.Ids.mlb, teamId: game.teams.away.id)
         let teamNameDic = mlbGameStatsStore.baseGameStats.teamNameDictionary
-        let gameStatus = game.status.detailedState
+        let gameStatus = game.status.abstractGameState
         
         HStack(alignment: .bottom) {
             VStack(spacing: 0) {
@@ -250,7 +250,7 @@ struct MLBGameStatsLineScoreContainer: View {
     
     var body: some View {
         let game = mlbGameStatsStore.baseGameStats.displayModel.game
-        let isGameScheduled = game.status.detailedState == StringConstants.MLB.gameScheduled
+        let isGameScheduled = game.status.abstractGameState == Constants.GameStatus.MLB.preview
         let lineScore = game.linescore
         let homeTeamLineScore = lineScore?.teams.home.runs ?? 0
         let awayTeamLineScore = lineScore?.teams.away.runs ?? 0
