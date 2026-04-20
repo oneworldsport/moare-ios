@@ -43,6 +43,7 @@ struct KBOGameStatsStore {
         case sortHitters
         case sortPitchers
         case sortByBattingOrder
+        case sortByPitcherOrder
         case setPlayersTotalStats
         case refreshGame(shouldFetch: Bool = true)
         case updateDisplayModel(model: SportDecodableModel)
@@ -79,15 +80,25 @@ struct KBOGameStatsStore {
                 state.teamHitters = state.teamLineup?.hitters ?? []
                 state.teamPitchers = state.teamLineup?.pitchers ?? []
                 
+                let firstCategorySelectedIndex = state.baseGameStats.firstCategorySelectedIndex
+                let secondCategorySelectedIndex = state.baseGameStats.secondCategorySelectedIndex
+                
                 return .run { send in
                     if isInit {
-                        await send(.sortByBattingOrder)
+                        await send(.sortHitters)
+                        await send(.sortPitchers)
                         await send(.refreshGame(shouldFetch: false))
                     } else {
-                        await send(.sortHitters)
+                        if firstCategorySelectedIndex == -1 {
+                            await send(.sortByBattingOrder)
+                        }
+                        
+                        if secondCategorySelectedIndex == -1 {
+                            await send(.sortByPitcherOrder)
+                        }
                     }
-                    await send(.sortPitchers)
-                    await send(.setPlayersTotalStats)
+                    await send(.sortByBattingOrder)
+                    await send(.sortByPitcherOrder)
                 }
                 
             case .baseGameStats(.selectFirstCategory):
@@ -140,7 +151,24 @@ struct KBOGameStatsStore {
                 
             case .sortByBattingOrder:
                 state.teamHitters.sort { $0.battingNumber < $1.battingNumber }
-                return .none
+                
+                return .send(.baseGameStats(.selectFirstCategory(-1)))
+                
+            case .sortByPitcherOrder:
+                let pitchersOrder = state.teamLineup?.pitchers ?? []
+                
+                let pitcherOrderMap = Dictionary(
+                    uniqueKeysWithValues: pitchersOrder.enumerated().map { index, pitcher in
+                        (pitcher.id, index)
+                    }
+                )
+                
+                // sort는 원본을 직접 바꿈
+                state.teamPitchers.sort { first, second in
+                    (pitcherOrderMap[first.id] ?? Int.max) < (pitcherOrderMap[second.id] ?? Int.max)
+                }
+
+                return .send(.baseGameStats(.selectSecondCategory(-1)))
                 
             case .setPlayersTotalStats:
                 return .none
