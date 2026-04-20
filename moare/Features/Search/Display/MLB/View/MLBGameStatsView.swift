@@ -117,6 +117,9 @@ struct MLBGameStatsView: View {
                         firstStatsCategoryButtonAction: { index in
                             store.send(.baseGameStats(.selectFirstCategory(index)))
                         },
+                        secondStatsTitleCategoryAction: {
+                            store.send(.sortByPitcherOrder)
+                        },
                         secondStatsCategoryButtonAction: { index in
                             store.send(.baseGameStats(.selectSecondCategory(index)))
                         },
