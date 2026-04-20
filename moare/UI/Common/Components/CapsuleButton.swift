@@ -58,8 +58,8 @@ struct GameStatusCapsuleButton: View {
             return Constants.GameStatus.tennisGameStatusText(status: status)
         case .nba(let status, let period, _):
             return Constants.GameStatus.nbaGameStatusText(status: status, period: period)
-        case .mlb(let status, _,let linescore, _):
-            return Constants.GameStatus.mlbGameStatusText(status: status, linescore: linescore)
+        case .mlb(let status, let currentInning, let linescore, _):
+            return Constants.GameStatus.mlbGameStatusText(status: status, currentInning: currentInning, linescore: linescore)
         case .football(let status, let elapsed, let extra, _):
             return Constants.GameStatus.fbGameStatusText(status: status, elapsed: elapsed, extra: extra)
         case .kbo(let status, let currentInning, _):
