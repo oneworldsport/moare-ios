@@ -78,12 +78,13 @@ struct MLBGameStatsStore {
                 }
                 
                 state.teamHitters = state.teamBoxScore?.players
-                    .filter { $0.value.position?.abbreviation != "P" && !$0.value.battingOrder.isEmpty }
+                    .filter { !$0.value.battingOrder.isEmpty }
                     .map { ($0.key, $0.value) } ?? []
                 
                 
                 state.teamPitchers = state.teamBoxScore?.players
-                    .filter { $0.value.position?.abbreviation == "P" && !$0.value.allPositions.isEmpty }
+                    .filter { ($0.value.position?.abbreviation == "P" && !$0.value.allPositions.isEmpty) ||
+                        $0.value.allPositions.contains { $0.abbreviation == "P" } }
                     .map { ($0.key, $0.value) } ?? []
                 
                 let firstCategorySelectedIndex = state.baseGameStats.firstCategorySelectedIndex
