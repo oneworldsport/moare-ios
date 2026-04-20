@@ -331,10 +331,10 @@ struct MLBGameStatsLineScoreTitle: View {
     let lineScoreInnings: [MLBGameLineScoreInning]
     
     var body: some View {
-        let inningsCount = lineScoreInnings.isEmpty ? 9 : lineScoreInnings.count
+        let maxInnings = max(9, lineScoreInnings.count)
         
         HStack(spacing: 0) {
-            ForEach(1...inningsCount, id: \.self) { index in
+            ForEach(1...maxInnings, id: \.self) { index in
                 VCapsuleBar()
                     .opacity(0.5)
                 Text("\(index)")
@@ -353,6 +353,7 @@ struct MLBGameStatsLineScoreItem: View {
     let isHome: Bool
     let lineScoreInnings: [MLBGameLineScoreInning]
     
+    // 여기도 고쳐야하나..?
     var body: some View {
         HStack(spacing: 0) {
             if !lineScoreInnings.isEmpty {
