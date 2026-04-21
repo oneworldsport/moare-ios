@@ -353,23 +353,20 @@ struct MLBGameStatsLineScoreItem: View {
     let isHome: Bool
     let lineScoreInnings: [MLBGameLineScoreInning]
     
-    // 여기도 고쳐야하나..?
     var body: some View {
+        let maxInnings = max(9, lineScoreInnings.count)
+        
         HStack(spacing: 0) {
-            if !lineScoreInnings.isEmpty {
-                ForEach(lineScoreInnings.indices, id: \.self) { index in
+            ForEach(0..<maxInnings, id: \.self) { index in
+                VCapsuleBar()
+                    .opacity(0.5)
+                
+                if lineScoreInnings.indices.contains(index) {
                     let data = lineScoreInnings[index]
-                    
-                    VCapsuleBar()
-                        .opacity(0.5)
                     Text("\(isHome ? data.home.runs : data.away.runs)")
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
-                }
-            } else {
-                ForEach(0..<9, id: \.self) { index in
-                    VCapsuleBar()
-                        .opacity(0.5)
+                } else {
                     Text("-")
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
