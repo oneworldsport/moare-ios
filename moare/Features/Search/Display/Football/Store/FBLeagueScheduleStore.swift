@@ -286,6 +286,7 @@ struct FBLeagueScheduleStore {
             case .showTournament:
                 let leagueId = state.baseSchedule.displayModel.leagueId
                 let isMLS = leagueId == Constants.Ids.mls
+                let season = state.baseSchedule.displayModel.season
                 
                 return .run { send in
                     let keywordInfo: KeywordInfo
@@ -327,7 +328,7 @@ struct FBLeagueScheduleStore {
                         )
                     }
                     
-                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo, season: season)
                     
                     await send(.delegate(.showTournament(model: result.data)))
                 }
@@ -335,6 +336,7 @@ struct FBLeagueScheduleStore {
             case .showTeamStandings:
                 let leagueId = state.baseSchedule.displayModel.leagueId
                 let leagueName = StringConstants.Football.leagueNameStr(leagueId: leagueId)
+                let season = state.baseSchedule.displayModel.season
                 
                 return .run { send in
                     let keywordInfo = KeywordInfo(
@@ -354,7 +356,7 @@ struct FBLeagueScheduleStore {
                         ]
                     )
                     
-                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo, season: season)
                     
                     await send(.delegate(.showTeamStandings(model: result.data)))
                 }

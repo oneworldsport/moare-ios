@@ -902,7 +902,7 @@ final class ModelConverter {
             awayTeamId: awayTeamId,
             homeTeamScore: homeTeamScore,
             awayTeamScore: awayTeamScore,
-            gameStatus: game.status.detailedState,
+            gameStatus: game.status.abstractGameState,
             gameInfo: gameInfo
         )
     }

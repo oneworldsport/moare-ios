@@ -38,7 +38,7 @@ func getOffsetOfAniCapsuleBar(
     index: Int = 0
 ) -> CGFloat {
     // 이전 아이템들의 너비 합
-    let totalPreviousWidth = itemWidths.prefix(index).reduce(0, +)
+    let totalPreviousWidth = itemWidths.prefix(max(0, index)).reduce(0, +) // index에 음수값 안들어가져서 수정
     
     // 현재 아이템의 가운데에 bar 정렬
     let centerOffset = ((itemWidths[safe: index] ?? 0) - barWidth) / 2

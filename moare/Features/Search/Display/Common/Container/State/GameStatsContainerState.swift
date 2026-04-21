@@ -19,6 +19,7 @@ struct GameStatsContainerState {
     var teamCategorySelectedIndex: Int = 0
     var firstCategorySelectedIndex: Int = 0
     var firstColumnWidth: CGFloat? = nil
+    var secondColumnWidth: CGFloat? = nil
     var gameDetailTitle: String = ""
     var gameDetailContent: String = ""
     var noStatsText: String? = nil
@@ -51,6 +52,7 @@ struct GameStatsContainerActions {
     var teamCategoryButtonAction: ((Int) -> Void)? = nil
     var firstStatsTitleCategoryAction: (() -> Void)? = nil
     let firstStatsCategoryButtonAction: (Int) -> Void
+    var secondStatsTitleCategoryAction: (() -> Void)? = nil
     var secondStatsCategoryButtonAction: ((Int) -> Void)? = nil
     let refreshButtonAction: () async -> Void
 }

@@ -208,7 +208,7 @@ struct NBAPlayerStandingsStore {
                             entities: entities
                         )
                         
-                        let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                        let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo, season: displayModel.season)
                         
                         await send(.setDisplayModel(data: result.data))
                     } catch {

@@ -55,7 +55,7 @@ struct KBOGameStatsView: View {
             StandingsItemState(
                 imageUrl: KBOUtil.playerPhotoURL(season: displayModel.season, id: $0.id),
                 name: $0.name,
-                dataList: [String($0.inningsPitched), $0.r, $0.er, $0.bb, $0.so, $0.h]
+                dataList: [$0.ip, $0.r, $0.er, $0.bb, $0.so, $0.h]
             )
         }
         
@@ -99,6 +99,9 @@ struct KBOGameStatsView: View {
                         },
                         firstStatsCategoryButtonAction: { index in
                             store.send(.baseGameStats(.selectFirstCategory(index)))
+                        },
+                        secondStatsTitleCategoryAction: {
+                            store.send(.sortByPitcherOrder)
                         },
                         secondStatsCategoryButtonAction: { index in
                             store.send(.baseGameStats(.selectSecondCategory(index)))

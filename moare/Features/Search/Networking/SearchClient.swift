@@ -19,8 +19,8 @@ struct SearchClient {
         return try DataModel.from(raw: raw)
     }
     
-    func fetchDataByKeyword(keyword: KeywordInfo) async throws -> DataModel {
-        let raw: RawDataModel = try await apiClient.fetchData(endpoint: .searchByKeyword(keyword: keyword))
+    func fetchDataByKeyword(keyword: KeywordInfo, season: Int? = nil) async throws -> DataModel {
+        let raw: RawDataModel = try await apiClient.fetchData(endpoint: .searchByKeyword(keyword: keyword, season: season))
         return try DataModel.from(raw: raw)
     }
     

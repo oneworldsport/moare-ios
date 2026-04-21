@@ -424,16 +424,10 @@ struct Constants {
         }
         
         struct MLB {
-            static let scheduled = "Scheduled"
-            static let warmup = "Warmup"
-            static let preGame = "Pre-Game"
-            static let live = "In Progress"
-            static let postponed = "Postponed"
-            static let rain = "Completed Early: Rain"
-            static let gameOver = "Game Over"
+            static let preview = "Preview"
+            static let live = "Live"
             static let final = "Final"
-            static let beforeGameList = [scheduled, warmup, preGame]
-            static let finishedList = [rain, gameOver, final]
+            static let other = "Other"
         }
         
         struct KBO {
@@ -558,7 +552,7 @@ struct Constants {
             isResultOpened: Bool = true
         ) -> String {
             switch status {
-            case let status where MLB.beforeGameList.contains(status):
+            case MLB.preview:
                 return StringConstants.gameNotStartedStr
             case MLB.live:
                 if let currentInning {
@@ -568,9 +562,7 @@ struct Constants {
                 } else {
                     return StringConstants.gameLiveStr
                 }
-            case MLB.postponed:
-                return StringConstants.gamePostponedStr
-            case let status where MLB.finishedList.contains(status):
+            case MLB.final:
                 return isResultOpened ? StringConstants.gameFinishedStr : StringConstants.resultOpen
             default:
                 return ""
@@ -616,7 +608,7 @@ struct Constants {
             case Constants.Ids.nba:
                 return status == String(NBA.notStarted)
             case Constants.Ids.mlb:
-                return MLB.beforeGameList.contains(status)
+                return status == String(MLB.preview)
             case Constants.Ids.kbo:
                 return status == KBO.scheduled
             case let id where Constants.Ids.tennisAll.contains(id):
@@ -651,7 +643,7 @@ struct Constants {
             case Constants.Ids.nba:
                 return status == String(NBA.finished)
             case Constants.Ids.mlb:
-                return MLB.finishedList.contains(status)
+                return status == MLB.final
             case Constants.Ids.kbo:
                 return status == KBO.final
             case let id where Constants.Ids.tennisAll.contains(id):

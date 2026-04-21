@@ -10,7 +10,7 @@ import Foundation
 enum APIEndpoint {
     case searchByQuery(query: String)
     case getLeagueSchedule(entity: EntityInfo, season: Int, yearMonth: String?, day: Int?)
-    case searchByKeyword(keyword: KeywordInfo)
+    case searchByKeyword(keyword: KeywordInfo, season: Int?)
     case searchByEndpoint(endpoint: String)
     case searchById(season: Int, category: String, date: String?, dataType: String, leagueId: Int, id: String)
     
@@ -58,8 +58,14 @@ enum APIEndpoint {
 
             components.queryItems = items
             
-        case .searchByKeyword(let keyword):
+        case .searchByKeyword(_, let season):
             components.path = "/search/keyword"
+            
+            if let season {
+                components.queryItems = [
+                    URLQueryItem(name: "season", value: String(season))
+                ]
+            }
             
         case .searchByEndpoint(let endpoint):
             components.path = "/search/...."
@@ -98,7 +104,7 @@ enum APIEndpoint {
         switch self {
         case .searchByQuery, .searchByEndpoint, .fetchTrendingKeywords, .searchById, .fetchLeagueKeywords:
             return nil
-        case .searchByKeyword(let keyword):
+        case .searchByKeyword(let keyword, _):
             // NOTE: nil is excluded
             return try? JSONEncoder().encode(keyword)
         case .getLeagueSchedule(let entity, _, _, _):
