@@ -143,14 +143,7 @@ struct StringConstants {
         static let gameStatsSecondCategories = gameStatsHittingCategories + gameStatsPitchingCategories + gameStatsRunningCategories
     }
     
-    struct MLB {
-        static let gameScheduled = "Scheduled"
-        static let gameLive = "In Progress"
-        static let gamePostponed = "Postponed"
-        static let gameRain = "Completed Early: Rain"
-        static let gameFinal = "Final"
-        static let gameFinishedList = [gameRain, gameFinal]
-        
+    struct MLB {        
         static let conferenceCategory = ["내셔널리그", "아메리칸리그"]
         
         static let teamStandingsCategories = ["게임차", "승률", "승", "패", "경기수", "연속", "타율", "안타", "홈런", "장타율", "득점", "평균자책", "피안타율", "피안타", "피홈런", "실점", "도루성공률"]

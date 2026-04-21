@@ -207,6 +207,7 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View, CustomStats
                                         
                                         Spacer()
                                     }
+                                    .padding(.top, 8)
                                 }
                                 
                                 HStack(spacing: 0) {
@@ -338,9 +339,16 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View, CustomStats
                                     HStack(spacing: 0) {
                                         VStack(spacing: 0) {
                                             StickyHeader(coordinateSpaceName: coordinateSpaceName) {
-                                                StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory)
+                                                OptionalButton(action: actions.secondStatsTitleCategoryAction) {
+                                                    ZStack(alignment: .bottom) {
+                                                        StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory, width: state.secondColumnWidth)
+                                                        
+                                                        HCapsuleBar()
+                                                            .opacity(state.secondStatsCategorySelectedIndex < 0 ? 1 : 0)
+                                                    }
+                                                }
                                             }
-                                            .frame(width: 132)
+                                            .frame(width: state.secondColumnWidth ?? 132)
                                             
                                             ForEach(secondStatsPlayerList.indices, id:\.self) { index in
                                                 let data = secondStatsPlayerList[index]
@@ -387,7 +395,10 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View, CustomStats
                                                     }
                                                     .onAppear {
                                                         withAnimation(.spring(duration: 0.5)) {
-                                                            if !secondStatsColumnWidthList.isEmpty {
+                                                            if state.secondStatsCategorySelectedIndex < 0 {
+                                                                let secondColumnWidth = state.secondColumnWidth ?? 132
+                                                                secondStatsCategoryBarXOffset = -(secondColumnWidth / 2) - 10
+                                                            } else if !secondStatsColumnWidthList.isEmpty {
                                                                 secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: secondStatsColumnWidthList, index: state.secondStatsCategorySelectedIndex)
                                                             } else {
                                                                 secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.secondStatsCategorySelectedIndex)
@@ -396,7 +407,10 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View, CustomStats
                                                     }
                                                     .onChange(of: state.secondStatsCategorySelectedIndex) {
                                                         withAnimation(.spring(duration: 0.5)) {
-                                                            if !firstStatsColumnWidthList.isEmpty {
+                                                            if state.secondStatsCategorySelectedIndex < 0 {
+                                                                let secondColumnWidth = state.secondColumnWidth ?? 132
+                                                                secondStatsCategoryBarXOffset = -(secondColumnWidth / 2) - 10
+                                                            } else if !firstStatsColumnWidthList.isEmpty {
                                                                 secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: secondStatsColumnWidthList, index: state.secondStatsCategorySelectedIndex)
                                                             } else {
                                                                 secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.secondStatsCategorySelectedIndex)

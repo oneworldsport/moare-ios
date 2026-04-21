@@ -43,6 +43,7 @@ struct MLBGameStatsStore {
         case sortHitters
         case sortPitchers
         case sortByBattingOrder
+        case sortByPitcherOrder
         case setPlayersTotalStats
         case refreshGame(shouldFetch: Bool = true)
         case updateDisplayModel(model: SportDecodableModel)
@@ -77,23 +78,34 @@ struct MLBGameStatsStore {
                 }
                 
                 state.teamHitters = state.teamBoxScore?.players
-                    .filter { $0.value.position?.abbreviation != "P" && !$0.value.battingOrder.isEmpty }
+                    .filter { !$0.value.battingOrder.isEmpty }
                     .map { ($0.key, $0.value) } ?? []
                 
                 
                 state.teamPitchers = state.teamBoxScore?.players
-                    .filter { $0.value.position?.abbreviation == "P" && !$0.value.allPositions.isEmpty }
+                    .filter { ($0.value.position?.abbreviation == "P" && !$0.value.allPositions.isEmpty) ||
+                        $0.value.allPositions.contains { $0.abbreviation == "P" } }
                     .map { ($0.key, $0.value) } ?? []
+                
+                let firstCategorySelectedIndex = state.baseGameStats.firstCategorySelectedIndex
+                let secondCategorySelectedIndex = state.baseGameStats.secondCategorySelectedIndex
                 
                 return .run { send in
                     if isInit {
-                        await send(.sortByBattingOrder)
+                        await send(.sortHitters)
+                        await send(.sortPitchers)
                         await send(.refreshGame(shouldFetch: false))
                     } else {
-                        await send(.sortHitters)
+                        if firstCategorySelectedIndex == -1 {
+                            await send(.sortByBattingOrder)
+                        }
+                        
+                        if secondCategorySelectedIndex == -1 {
+                            await send(.sortByPitcherOrder)
+                        }
                     }
-                    await send(.sortPitchers)
-                    await send(.setPlayersTotalStats)
+                    await send(.sortByBattingOrder)
+                    await send(.sortByPitcherOrder)
                 }
                 
             case .baseGameStats(.selectFirstCategory):
@@ -150,7 +162,26 @@ struct MLBGameStatsStore {
                 
             case .sortByBattingOrder:
                 state.teamHitters.sort { Int($0.1.battingOrder.prefix(1)) ?? 0 < Int($1.1.battingOrder.prefix(1)) ?? 0 }
-                return .none
+                return .send(.baseGameStats(.selectFirstCategory(-1)))
+                
+            case .sortByPitcherOrder:
+                // 투수 출전 순서 리스트
+                let pitchersOrder = state.teamBoxScore?.pitchers ?? []
+                
+                // 투수 id 검색으로 인덱스를 알아내기 위해서
+                let orderMap = Dictionary(
+                    uniqueKeysWithValues: pitchersOrder.enumerated().map { ($1, $0) }
+                ) // enumerated() 로 (index, value) 형태로 만들고 나서 map 으로 (value, index) 형태로 바꿔줌, 빠른 검색을 위해 Dictionary 로 만들어서 사용 -> value로 검색해서 index 값을 알아내기 위해
+                
+                state.teamPitchers = state.teamPitchers.sorted { first, second in // 리스트에서 요소 2개 비교
+                    // "ID621107" → 621107
+                    let firstId = Int(first.0.filter { $0.isNumber })
+                    let secondId = Int(second.0.filter { $0.isNumber })
+                    
+                    return (orderMap[firstId ?? -1] ?? Int.max) < (orderMap[secondId ?? -1] ?? Int.max)
+                }
+                 
+                return .send(.baseGameStats(.selectSecondCategory(-1)))
                 
             case .setPlayersTotalStats:
                 return .none

@@ -158,7 +158,7 @@ struct FBPlayerStandingsStore {
                             entities: entities
                         )
                         
-                        let data = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                        let data = try await searchClient.fetchDataByKeyword(keyword: keywordInfo, season: displayModel.season)
                         
                         await send(.setDisplayModel(data: data.data))
                     } catch {
