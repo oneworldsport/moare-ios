@@ -15,7 +15,8 @@ struct MLBTeamStandingsDisplayModel: SportDisplayModel {
     let standings: [MLBTeamStandingsDisplay]
 }
 
-struct MLBTeamStandingsDisplay: Equatable {
+struct MLBTeamStandingsDisplay: Equatable, Rankable {
     let team: MLBTeamInfo
     let stats: MLBTeamStats
+    var displayRank = 0 // 화면에서 순위 표시에 쓰이는 값
 }

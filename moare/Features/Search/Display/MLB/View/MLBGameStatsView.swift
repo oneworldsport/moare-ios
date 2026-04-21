@@ -90,8 +90,8 @@ struct MLBGameStatsView: View {
             if show {
                 GameStatsViewContainer(
                     state: GameStatsContainerState(
-                        shouldShowStats: game.status.detailedState != StringConstants.MLB.gameScheduled,
-                        shouldShowRefreshButton: game.status.detailedState == StringConstants.MLB.gameLive,
+                        shouldShowStats: game.status.abstractGameState != Constants.GameStatus.MLB.preview,
+                        shouldShowRefreshButton: game.status.abstractGameState == Constants.GameStatus.MLB.live,
                         teamCategories: teamCategories,
                         teamCategorySelectedIndex: store.baseGameStats.teamCategorySelectedIndex,
                         gameDetailTitle: gameDetailTitle,
@@ -116,6 +116,9 @@ struct MLBGameStatsView: View {
                         },
                         firstStatsCategoryButtonAction: { index in
                             store.send(.baseGameStats(.selectFirstCategory(index)))
+                        },
+                        secondStatsTitleCategoryAction: {
+                            store.send(.sortByPitcherOrder)
                         },
                         secondStatsCategoryButtonAction: { index in
                             store.send(.baseGameStats(.selectSecondCategory(index)))
@@ -181,7 +184,7 @@ struct MLBGameStatsScoreInfoItem: View {
         let homeTeamId = Constants.Ids.checkTeamId(leagueId: Constants.Ids.mlb, teamId: game.teams.home.id)
         let awayTeamId = Constants.Ids.checkTeamId(leagueId: Constants.Ids.mlb, teamId: game.teams.away.id)
         let teamNameDic = mlbGameStatsStore.baseGameStats.teamNameDictionary
-        let gameStatus = game.status.detailedState
+        let gameStatus = game.status.abstractGameState
         
         HStack(alignment: .bottom) {
             VStack(spacing: 0) {
@@ -247,7 +250,7 @@ struct MLBGameStatsLineScoreContainer: View {
     
     var body: some View {
         let game = mlbGameStatsStore.baseGameStats.displayModel.game
-        let isGameScheduled = game.status.detailedState == StringConstants.MLB.gameScheduled
+        let isGameScheduled = game.status.abstractGameState == Constants.GameStatus.MLB.preview
         let lineScore = game.linescore
         let homeTeamLineScore = lineScore?.teams.home.runs ?? 0
         let awayTeamLineScore = lineScore?.teams.away.runs ?? 0
@@ -328,10 +331,10 @@ struct MLBGameStatsLineScoreTitle: View {
     let lineScoreInnings: [MLBGameLineScoreInning]
     
     var body: some View {
-        let inningsCount = lineScoreInnings.isEmpty ? 9 : lineScoreInnings.count
+        let maxInnings = max(9, lineScoreInnings.count)
         
         HStack(spacing: 0) {
-            ForEach(1...inningsCount, id: \.self) { index in
+            ForEach(1...maxInnings, id: \.self) { index in
                 VCapsuleBar()
                     .opacity(0.5)
                 Text("\(index)")
@@ -351,21 +354,19 @@ struct MLBGameStatsLineScoreItem: View {
     let lineScoreInnings: [MLBGameLineScoreInning]
     
     var body: some View {
+        let maxInnings = max(9, lineScoreInnings.count)
+        
         HStack(spacing: 0) {
-            if !lineScoreInnings.isEmpty {
-                ForEach(lineScoreInnings.indices, id: \.self) { index in
+            ForEach(0..<maxInnings, id: \.self) { index in
+                VCapsuleBar()
+                    .opacity(0.5)
+                
+                if lineScoreInnings.indices.contains(index) {
                     let data = lineScoreInnings[index]
-                    
-                    VCapsuleBar()
-                        .opacity(0.5)
                     Text("\(isHome ? data.home.runs : data.away.runs)")
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
-                }
-            } else {
-                ForEach(0..<9, id: \.self) { index in
-                    VCapsuleBar()
-                        .opacity(0.5)
+                } else {
                     Text("-")
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)

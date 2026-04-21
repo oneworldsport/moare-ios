@@ -270,8 +270,6 @@ struct KBOGamePitcherStats: Decodable, Equatable {
     var l: String { _l ?? "0" } // 패
     var sv: String { _sv ?? "0" } // 세이브
     var era: String { _era ?? "0.0" } // 평균자책점
-    
-    var inningsPitched: Double { parseInningString(ip) } // 이닝 - "1.2" 방식 표기
 
     private enum CodingKeys: String, CodingKey {
         case _id = "id"
@@ -292,38 +290,6 @@ struct KBOGamePitcherStats: Decodable, Equatable {
         case _l = "l"
         case _sv = "sv"
         case _era = "era"
-    }
-    
-    private func parseInningString(_ text: String) -> Double {
-        let parts = text.split(separator: " ")
-        let first = String(parts[0])
-        
-        // 토큰이 하나일 때: ex) "1/3" or "2"
-        if parts.count == 1 {
-            switch first {
-            case "1/3":
-                return 0.1
-            case "2/3":
-                return 0.2
-            default:
-                return Double(first) ?? 0.0
-            }
-        }
-        
-        // 토큰이 두 개 이상일 때: "2 1/3"
-        guard let wholePart = Int(first) else {
-            return 0.0
-        }
-        
-        let fraction = String(parts[1])
-        switch fraction {
-        case "1/3":
-            return Double(wholePart) + 0.1
-        case "2/3":
-            return Double(wholePart) + 0.2
-        default:
-            return Double(wholePart)
-        }
     }
 }
 

@@ -85,7 +85,8 @@ struct KBOPlayerStatsPlayerInfoItem: View {
     }
     
     var body: some View {
-        let player = kboPlayerStatsStore.baseStats.displayModel.player
+        let displayModel = kboPlayerStatsStore.baseStats.displayModel
+        let player = displayModel.player
         let teamNameDic = kboPlayerStatsStore.baseStats.teamNameDictionary
         
         MovingCapsuleItemContainer(
@@ -93,7 +94,7 @@ struct KBOPlayerStatsPlayerInfoItem: View {
             itemOffset: itemOffset
         ) {
             HStack {
-                URLImage(url: KBOUtil.playerPhotoURL(id: player.id))
+                URLImage(url: KBOUtil.playerPhotoURL(season: displayModel.season, id: player.id))
                 
                 // name
                 VStack(alignment: .leading) {

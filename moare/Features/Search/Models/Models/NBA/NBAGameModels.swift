@@ -279,6 +279,9 @@ struct NBAGameSummary: Decodable, Equatable {
     private let _period: Int?
     private let _gameClock: String?
     private let _attendance: Int?
+    private let _isPlayoffs: Bool?
+    private let _gameLabelKr: String?
+    private let _seriesTextKr: String?
 
     var gameId: String { _gameId ?? "" }
     var gameDate: String { _gameDate ?? "" }
@@ -298,6 +301,9 @@ struct NBAGameSummary: Decodable, Equatable {
     var period: Int { _period ?? 0 }
     var gameClock: String { _gameClock ?? "" }
     var attendance: Int { _attendance ?? 0 }
+    var isPlayoffs: Bool { _isPlayoffs ?? false }
+    var gameLabelKr: String { _gameLabelKr ?? "" }
+    var seriesTextKr: String { _seriesTextKr ?? "" }
 
     private enum CodingKeys: String, CodingKey {
         case _gameId = "gameId"
@@ -318,6 +324,9 @@ struct NBAGameSummary: Decodable, Equatable {
         case _period = "period"
         case _gameClock = "gameClock"
         case _attendance = "attendance"
+        case _isPlayoffs = "isPlayoffs"
+        case _gameLabelKr = "gameLabelKr"
+        case _seriesTextKr = "seriesTextKr"
     }
 }
 

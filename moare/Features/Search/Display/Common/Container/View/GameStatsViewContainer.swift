@@ -66,14 +66,14 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View, CustomStats
         let firstStatsColumnWidthList = state.firstStatsColumnWidthList
         let secondStatsColumnWidthList = state.secondStatsColumnWidthList
         
-        VStack(spacing: 0) {
+        // TODO: stats화면을 스크롤 올릴때 spacing때문에 생기는 빈공간을 없애야함. 그렇다고 spacing을 없애면 너무 많은걸 수정해야해서, -padding을 주는걸 해봐야할듯
+        VStack(spacing: 6) {
             if state.shouldShowTitle {
                 titleContent()
             }
             
             if state.shouldShowGameContent {
                 gameContent()
-//                    .padding(.vertical, 8)
             }
             
             HDivider()
@@ -207,6 +207,7 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View, CustomStats
                                         
                                         Spacer()
                                     }
+                                    .padding(.top, 8)
                                 }
                                 
                                 HStack(spacing: 0) {
@@ -330,6 +331,7 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View, CustomStats
                                     // TODO: firstStats의 StickyHeader부분이 해당 뷰에 가려져서 .zIndex(-1)를 추가했는데, StandingsFirstCategoryItem()는 해결됐으나 firstStatsCategories는 여전히 가려짐.
                                     // 테스트 하려면 MLBGameStatsView에서 secondStatsPlayerList: pitcherList + pitcherList
                                     .zIndex(-1)
+                                    .padding(.top, 10)
                                 }
                                 
                                 if let secondStatsCategories = state.secondStatsCategories,
@@ -337,9 +339,16 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View, CustomStats
                                     HStack(spacing: 0) {
                                         VStack(spacing: 0) {
                                             StickyHeader(coordinateSpaceName: coordinateSpaceName) {
-                                                StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory)
+                                                OptionalButton(action: actions.secondStatsTitleCategoryAction) {
+                                                    ZStack(alignment: .bottom) {
+                                                        StandingsFirstCategoryItem(text: StringConstants.gameStatsFirstCategory, width: state.secondColumnWidth)
+                                                        
+                                                        HCapsuleBar()
+                                                            .opacity(state.secondStatsCategorySelectedIndex < 0 ? 1 : 0)
+                                                    }
+                                                }
                                             }
-                                            .frame(width: 132)
+                                            .frame(width: state.secondColumnWidth ?? 132)
                                             
                                             ForEach(secondStatsPlayerList.indices, id:\.self) { index in
                                                 let data = secondStatsPlayerList[index]
@@ -386,7 +395,10 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View, CustomStats
                                                     }
                                                     .onAppear {
                                                         withAnimation(.spring(duration: 0.5)) {
-                                                            if !secondStatsColumnWidthList.isEmpty {
+                                                            if state.secondStatsCategorySelectedIndex < 0 {
+                                                                let secondColumnWidth = state.secondColumnWidth ?? 132
+                                                                secondStatsCategoryBarXOffset = -(secondColumnWidth / 2) - 10
+                                                            } else if !secondStatsColumnWidthList.isEmpty {
                                                                 secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: secondStatsColumnWidthList, index: state.secondStatsCategorySelectedIndex)
                                                             } else {
                                                                 secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.secondStatsCategorySelectedIndex)
@@ -395,7 +407,10 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View, CustomStats
                                                     }
                                                     .onChange(of: state.secondStatsCategorySelectedIndex) {
                                                         withAnimation(.spring(duration: 0.5)) {
-                                                            if !firstStatsColumnWidthList.isEmpty {
+                                                            if state.secondStatsCategorySelectedIndex < 0 {
+                                                                let secondColumnWidth = state.secondColumnWidth ?? 132
+                                                                secondStatsCategoryBarXOffset = -(secondColumnWidth / 2) - 10
+                                                            } else if !firstStatsColumnWidthList.isEmpty {
                                                                 secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidths: secondStatsColumnWidthList, index: state.secondStatsCategorySelectedIndex)
                                                             } else {
                                                                 secondStatsCategoryBarXOffset = getOffsetOfAniCapsuleBar(itemWidth: defaultColumnWidth, index: state.secondStatsCategorySelectedIndex)
@@ -425,7 +440,6 @@ struct GameStatsViewContainer<TitleContent: View, GameContent: View, CustomStats
                                 }
                             } // if shouldUseCustomStatsContent
                         } // VStack
-                        .padding(.top, 8)
                     } // ScrollView
                     .coordinateSpace(name: coordinateSpaceName)
                     .refreshableIf(state.shouldShowRefreshButton) {

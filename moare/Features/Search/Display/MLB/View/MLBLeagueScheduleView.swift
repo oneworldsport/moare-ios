@@ -105,14 +105,13 @@ struct MLBLeagueScheduleList: View {
                     }
                     
                     ScrollView {
-                        LazyVStack(spacing: 8) {
+                        LazyVStack(spacing: 0) {
                             ForEach(gameListToDisplay, id: \.gameId) { item in
                                 MLBLeagueScheduleListItem(
                                     searchStore: searchStore,
                                     mlbLeagueScheduleStore: mlbLeagueScheduleStore,
                                     data: item
                                 )
-                                .padding(.vertical, 8)
                             }
                         }
                     }
@@ -169,10 +168,10 @@ struct MLBLeagueScheduleListItem: View {
                 leagueId: Constants.Ids.mlb,
                 game: data,
                 teamNameDic: teamNameDic,
-                isClickEnabled: gameStatus != Constants.GameStatus.MLB.postponed, // 연기된 경기는 클릭 안되게
+//                isClickEnabled: gameStatus != Constants.GameStatus.MLB.postponed, // 연기된 경기는 클릭 안되게
                 isResultOpened: isResultOpened,
                 gameStatusContext: .mlb(status: gameStatus, currentInning: data.gameInfo?.currentInning, isResultOpened: isResultOpened),
-                isCapsuleButtonDisabled: !StringConstants.MLB.gameFinishedList.contains(gameStatus),
+                isCapsuleButtonDisabled: gameStatus != Constants.GameStatus.MLB.final,
                 gameType: data.gameInfo?.seriesDescription,
                 shouldShowOnlyDateTime: displayModel.scheduleType != ScheduleType.teamFlat, // (리그, 팀)일정 화면에서만 true
             ),
@@ -186,16 +185,16 @@ struct MLBLeagueScheduleListItem: View {
             )
         )
         .onAppear {
-            if StringConstants.MLB.gameFinishedList.contains(gameStatus) {
+            if gameStatus == Constants.GameStatus.MLB.final {
                 isResultOpened = mlbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
-            } else if gameStatus == StringConstants.MLB.gameScheduled || gameStatus == StringConstants.MLB.gamePostponed {
+            } else if gameStatus == Constants.GameStatus.MLB.preview {
                 isResultOpened = false
             } else {
                 isResultOpened = true
             }
         }
         .onChange(of: mlbLeagueScheduleStore.gameResultOpenedStateList) {
-            if StringConstants.MLB.gameFinishedList.contains(gameStatus) {
+            if gameStatus == Constants.GameStatus.MLB.final {
                 withAnimation(AnimationConstants.AnimationType.shortDefaultAnimation) {
                     isResultOpened = mlbLeagueScheduleStore.gameResultOpenedStateList[gameId] ?? false
                 }
