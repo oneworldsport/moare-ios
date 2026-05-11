@@ -30,11 +30,25 @@
 - AWS SDK
 
 ## 구조
-SwiftUI와 TCA 기반으로 프로젝트를 구성하였으며, 
+SwiftUI와 The Composable Architecture(TCA)를 기반으로 프로젝트를 구성하였으며,  
+화면 UI, 상태 관리, 네비게이션, 데이터 모델, 네트워크 통신 로직을 역할별로 분리했습니다.
 
-- `AppStore`: 앱 전역 네비게이션 및 Path 관리
-- `SearchStore`: 검색어, 자동완성, 인기 검색어, 검색 결과 상태 관리
-- `SearchClient`: 검색/일정/키워드/ID 기반 API 호출
-- `APIEndpoint`: API URL, HTTP Method, Body 구성 중앙화
-- `DataModel`: Raw API 응답을 종목별 DisplayModel로 변환
-- `Feature Stores`: 축구/NBA/KBO/MLB/테니스 화면별 상태 및 액션 관리
+- AppStore - 앱 전역 상태와 네비게이션 스택을 관리하며, 검색 결과에 따른 종목별 상세 화면 라우팅 처리
+
+- SearchStore - 검색어 입력, 자동완성, 인기 검색어, 리그별 키워드, 검색 결과 상태 및 액션 관리
+
+- Feature Stores - 축구, NBA, KBO, MLB, 테니스 등 종목별 화면의 상태와 액션을 관리
+
+- Base Stores - 정보, 일정, 스탯 등 유사한 화면에서 반복되는 상태 관리 로직을 공통화하여 재사용
+
+- View - SwiftUI 기반 화면 구성 및 사용자 인터랙션 처리
+
+- ViewContainer - 유사한 화면 구조를 공통화하여 종목별 UI 구현 중복을 줄이고 재사용성 관리
+
+- DataModel - 다양한 형태의 스포츠 API 응답을 공통 데이터 모델로 수신하고, 종목과 데이터 타입에 따라 화면별 모델로 변환
+
+- SearchClient - 검색, 일정, 키워드, ID 기반 조회 등 스포츠 데이터 API 요청 처리
+
+- APIEndpoint - API URL, HTTP Method, Request Body, Query Parameter 구성 중앙화
+
+- Utilities - 자동완성 Trie, 캘린더 기반 날짜·시즌 계산, 공통 포맷팅 등 앱 전반에서 사용하는 유틸리티 관리
