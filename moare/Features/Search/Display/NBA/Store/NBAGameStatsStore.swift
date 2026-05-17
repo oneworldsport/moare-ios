@@ -12,7 +12,7 @@ import ComposableArchitecture
 struct NBAGameStatsStore {
     typealias BaseGameStats = BaseGameStatsStore<NBAGameStatsDisplayModel>
     
-    let searchClient = SearchClient()
+    @Dependency(\.searchClient) var searchClient
     
     @ObservableState
     struct State {
@@ -229,12 +229,12 @@ struct NBAGameStatsStore {
                             let game = displayModel.game
                             if let gameSummary = game.gameSummary {
                                 let result = try await searchClient.fetchById(
-                                    season: displayModel.season,
-                                    category: "basketball",
-                                    date: gameSummary.gameDate,
-                                    dataType: "basketball_game_stats",
-                                    leagueId: Constants.Ids.nba,
-                                    id: gameSummary.gameId
+                                    displayModel.season,
+                                    "basketball",
+                                    gameSummary.gameDate,
+                                    "basketball_game_stats",
+                                    Constants.Ids.nba,
+                                    gameSummary.gameId
                                 )
                                 
                                 await send(.updateDisplayModel(model: result.data))

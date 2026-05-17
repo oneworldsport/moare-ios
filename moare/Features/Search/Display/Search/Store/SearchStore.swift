@@ -12,12 +12,17 @@ import Collections
 
 @Reducer
 struct SearchStore {
-    let searchClient = SearchClient()
     let keywordsClient = KeywordsClient()
     let modelConverter = ModelConverter.shared
     
+    @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
+    @Dependency(\.trieTupleClient) var trieTupleClient
+    @Dependency(\.noticeListClient) var noticeListClient
+    
+    @Dependency(\.searchClient) var searchClient
+    
     @ObservableState
-    struct State {
+    struct State: Equatable {
         /* ---------------------
            data state
            --------------------- */
@@ -49,6 +54,25 @@ struct SearchStore {
         var trendingKeywords: OrderedDictionary<String, KeywordInfo> = [:]
         var noticeList: [NoticeModel] = []
         var searchExample = ""
+        
+        // TODO: 일단은 test를 위해 임시로 이렇게 해놓고 나중에 Trie를 Dependency로 주입받아서 사용하게 개선해야함
+        static func == (lhs: State, rhs: State) -> Bool {
+            lhs.searchDataState == rhs.searchDataState &&
+            lhs.autoCompleteList == rhs.autoCompleteList &&
+            lhs.trendingKeywordList == rhs.trendingKeywordList &&
+            lhs.autoCompleteDataDic == rhs.autoCompleteDataDic &&
+            lhs.leagueKeywords == rhs.leagueKeywords &&
+            lhs.firstOpened == rhs.firstOpened &&
+            lhs.query == rhs.query &&
+            lhs.searchState == rhs.searchState &&
+            lhs.isFocused == rhs.isFocused &&
+            lhs.textFieldVisibleState == rhs.textFieldVisibleState &&
+            lhs.resultVisibleState == rhs.resultVisibleState &&
+            lhs.trendingKeyowrdsVisibleState == rhs.trendingKeyowrdsVisibleState &&
+            lhs.trendingKeywords == rhs.trendingKeywords &&
+            lhs.noticeList == rhs.noticeList &&
+            lhs.searchExample == rhs.searchExample
+        }
     }
     
     enum SearchType {
@@ -105,10 +129,6 @@ struct SearchStore {
     enum Delegate {
         case push(model: SportDecodableModel)
     }
-    
-    @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
-    @Dependency(\.trieTupleClient) var trieTupleClient
-    @Dependency(\.noticeListClient) var noticeListClient
     
     var body: some Reducer<State, Action> {
         BindingReducer()
@@ -265,22 +285,22 @@ struct SearchStore {
                             
                             switch searchType {
                             case .query:
-                                result = try await searchClient.fetchDataByQuery(query: query)
+                                result = try await searchClient.fetchDataByQuery(query)
                                 
                             case .trendingKeyword:
                                 if let keyword = keywords[query] {
-                                    result = try await searchClient.fetchDataByKeyword(keyword: keyword)
+                                    result = try await searchClient.fetchDataByKeyword(keyword, nil)
                                 } else {
                                     throw NSError(domain: "SearchError", code: 1)
                                 }
                                 
                             case .leagueKeyword(let keyword):
-                                result = try await searchClient.fetchDataByKeyword(keyword: keyword)
+                                result = try await searchClient.fetchDataByKeyword(keyword, nil)
                                 
                             case .autoComplete:
                                 if var keywordInfo = autoCompleteDataDic[query] {
                                     keywordInfo.weight = nil // To exclude field "weight" in the request body
-                                    result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                                    result = try await searchClient.fetchDataByKeyword(keywordInfo, nil)
                                 } else {
                                     throw NSError(domain: "SearchError", code: 1)
                                 }

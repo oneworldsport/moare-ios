@@ -13,7 +13,7 @@ import ComposableArchitecture
 struct FBPlayerStandingsStore {
     typealias BaseStandings = BasePlayerStandingsStore<FBPlayerStandingsDisplayModel>
     
-    let searchClient = SearchClient()
+    @Dependency(\.searchClient) var searchClient
     
     @ObservableState
     struct State {
@@ -158,7 +158,7 @@ struct FBPlayerStandingsStore {
                             entities: entities
                         )
                         
-                        let data = try await searchClient.fetchDataByKeyword(keyword: keywordInfo, season: displayModel.season)
+                        let data = try await searchClient.fetchDataByKeyword(keywordInfo, displayModel.season)
                         
                         await send(.setDisplayModel(data: data.data))
                     } catch {
@@ -240,11 +240,12 @@ struct FBPlayerStandingsStore {
                     
                     // TODO: Has to add loading
                     let result = try await searchClient.fetchById(
-                        season: displayModel.season,
-                        category: "football",
-                        dataType: "football_player_stats",
-                        leagueId: leagueId,
-                        id: String(id)
+                        displayModel.season,
+                        "football",
+                        nil,
+                        "football_player_stats",
+                        leagueId,
+                        String(id)
                     )
                     
                     await send(.delegate(.showPlayerStats(model: result.data)))

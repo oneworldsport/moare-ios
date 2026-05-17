@@ -32,6 +32,11 @@ extension DependencyValues {
         get { self[TranslatedNameProviderKey.self] }
         set { self[TranslatedNameProviderKey.self] = newValue }
     }
+    
+    var searchClient: SearchClient {
+        get { self[SearchClient.self] }
+        set { self[SearchClient.self] = newValue }
+    }
 }
 
 private enum TrendingKeywordsKey: DependencyKey {

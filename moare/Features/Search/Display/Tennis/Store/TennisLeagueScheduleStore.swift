@@ -12,7 +12,7 @@ import ComposableArchitecture
 struct TennisLeagueScheduleStore {
     typealias BaseSchedule = BaseScheduleStore<TennisLeagueScheduleDisplayModel>
     
-    let searchClient = SearchClient()
+    @Dependency(\.searchClient) var searchClient
     
     @ObservableState
     struct State {
@@ -196,7 +196,7 @@ struct TennisLeagueScheduleStore {
                             playerId: nil
                         )
                         
-                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel.season, yearMonth: String(yearMonth))
+                        let result = try await searchClient.fetchLeagueSchedule(entity, displayModel.season, String(yearMonth), nil)
                         
                         if case let .tennisLeagueSchedule(_, displayModel) = result.data {
                             await send(.setDisplayModel(displayModel: displayModel))
@@ -216,12 +216,12 @@ struct TennisLeagueScheduleStore {
                 return .run { send in
                     do {
                         let result = try await searchClient.fetchById(
-                            season: displayModel.season,
-                            category: "tennis",
-                            date: game.date,
-                            dataType: "tennis_game_stats",
-                            leagueId: displayModel.leagueId,
-                            id: game.gameId
+                            displayModel.season,
+                            "tennis",
+                            game.date,
+                            "tennis_game_stats",
+                            displayModel.leagueId,
+                            game.gameId
                         )
                         
                         if case .tennisGameStats(let responseModel, var gameStatsDisplayModel) = result.data {
@@ -261,7 +261,7 @@ struct TennisLeagueScheduleStore {
                         ]
                     )
                     
-                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo, season: season)
+                    let result = try await searchClient.fetchDataByKeyword(keywordInfo, season)
                     
                     await send(.delegate(.showTournament(model: result.data)))
                 }
@@ -294,10 +294,10 @@ struct TennisLeagueScheduleStore {
                         
                         if hasLive {
                             let result = try await searchClient.fetchLeagueSchedule(
-                                entity: entity,
-                                season: season,
-                                yearMonth: String(yearMonth),
-                                day: day
+                                entity,
+                                season,
+                                String(yearMonth),
+                                day
                             )
                             
                             if case .tennisLeagueSchedule(_, let displayModel) = result.data {
@@ -360,7 +360,7 @@ struct TennisLeagueScheduleStore {
                                 playerId: nil
                             )
                             
-                            let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel.season, yearMonth: nil)
+                            let result = try await searchClient.fetchLeagueSchedule(entity, displayModel.season, nil, nil)
                             
                             if case let .tennisLeagueSchedule(_, displayModel) = result.data {
                                 await send(.setDisplayModel(displayModel: displayModel))
