@@ -62,3 +62,10 @@ Branch: `improvement/test-code`
 - Swift Testing과 TCA `TestStore`를 활용한 테스트 코드 작성
 - `SearchStore`의 Action에 따른 State 변경 검증
 - 테스트 환경에서 네트워크 의존성을 대체할 수 있도록 `SearchClient` 의존성 주입 구조 개선
+
+2. **API 응답 모델 디코딩 구조 개선**  
+Branch: `refactor/codable-refactor`
+
+- API 응답 처리에 사용되는 모델 전반의 가독성과 유지보수성 향상을 위해 [KarrotCodableKit](https://github.com/daangn/KarrotCodableKit) 도입 검토
+- 반복적인 `CodingKeys` 작성 제거 및 복잡한 디코딩 로직 단순화 가능성 확인
+- 기존 `Decodable` 구현 방식과 비교하며 프로젝트에 적합한 적용 범위 검토
