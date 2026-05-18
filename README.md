@@ -62,7 +62,6 @@ Branch: `improvement/test-code`
 - Swift Testing과 TCA `TestStore`를 활용한 테스트 코드 작성
 - `SearchStore`의 Action에 따른 State 변경 검증
 - 테스트 환경에서 네트워크 의존성을 대체할 수 있도록 `SearchClient` 의존성 주입 구조 개선
-- 테스트를 고려하지 않고 작성된 기존 Reducer 내부 로직을 테스트 가능한 구조로 점진적으로 개선
 
 ## 기술적 의사결정
 ### KarrotCodableKit 도입 검토
