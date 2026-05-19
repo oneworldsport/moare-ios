@@ -181,4 +181,158 @@ struct SearchStoreTests {
             $0.searchDataState = .failure("검색 결과가 없습니다.")
         }
     }
+    
+    @Test("performSearch query 검색 성공 시 검색 결과 화면으로 push한다")
+    func performSearchQuerySuccess() async {
+        let mockDataModel = try! makeMockDataModel(fileName: "nba_league_schedule")
+        
+        var initialState = SearchStore.State()
+        initialState.query = "NBA"
+        
+        let store = TestStore(initialState: initialState) {
+            SearchStore()
+        } withDependencies: {
+            $0.searchClient.fetchDataByQuery = { query in
+                #expect(query == "NBA")
+                return mockDataModel
+            }
+            
+            $0.searchClient.fetchDataByKeyword = { _, _ in
+                Issue.record("query 검색에서는 fetchDataByKeyword가 호출되면 안 됨")
+                return mockDataModel
+            }
+        }
+        
+        await store.send(.performSearch(searchType: .query, aniDuration: 0)) {
+            $0.searchState = true
+        }
+        
+        await store.receive(\.updateSearchDataState) {
+            $0.searchDataState = .success
+        }
+        
+        await store.receive(\.searchResultsReceived) {
+            $0.resultVisibleState = true
+        }
+        
+//        await store.receive(.delegate(.push(model: mockDataModel.data)))
+        await store.receive(\.delegate)
+    }
+    
+    @Test("performSearch trendingKeyword 검색은 trendingKeywordsClient에서 KeywordInfo를 찾아 검색한다")
+    func performSearchTrendingKeywordSuccess() async {
+        let mockKeyword = KeywordInfo(
+            keyword: "NBA 일정",
+            weight: 100,
+            keywords: [],
+            entities: []
+        )
+
+        let mockDataModel = try! makeMockDataModel(fileName: "nba_league_schedule")
+
+        var initialState = SearchStore.State()
+        initialState.query = "NBA 일정"
+
+        let store = TestStore(initialState: initialState) {
+            SearchStore()
+        } withDependencies: {
+            $0.searchClient.fetchDataByQuery = { _ in
+                Issue.record("trendingKeyword 검색에서는 fetchDataByQuery가 호출되면 안 됨")
+                return mockDataModel
+            }
+            
+            $0.trendingKeywordsClient.keywordInfo = { keyword in
+                #expect(keyword == "NBA 일정")
+                return mockKeyword
+            }
+            
+            $0.searchClient.fetchDataByKeyword = { keywordInfo, season in
+                #expect(keywordInfo.keyword == "NBA 일정")
+                #expect(season == nil)
+                return mockDataModel
+            }
+        }
+
+        await store.send(.performSearch(searchType: .trendingKeyword, aniDuration: 0)) {
+            $0.searchState = true
+        }
+        
+        await store.receive(\.updateSearchDataState) {
+            $0.searchDataState = .success
+        }
+        
+        await store.receive(\.searchResultsReceived) {
+            $0.resultVisibleState = true
+        }
+        
+//        await store.receive(.delegate(.push(model: mockDataModel.data)))
+        await store.receive(\.delegate)
+    }
+    
+    @Test("performSearch autoComplete 검색은 autoCompleteClient에서 KeywordInfo를 찾아 검색한다")
+    func performSearchAutoCompleteSuccess() async {
+        let mockKeyword = KeywordInfo(
+            keyword: "NBA 일정",
+            weight: 100,
+            keywords: [],
+            entities: []
+        )
+
+        let mockDataModel = try! makeMockDataModel(fileName: "nba_league_schedule")
+
+        var initialState = SearchStore.State()
+        initialState.query = "NBA 일정"
+
+        let store = TestStore(initialState: initialState) {
+            SearchStore()
+        } withDependencies: {
+            $0.searchClient.fetchDataByQuery = { _ in
+                Issue.record("trendingKeyword 검색에서는 fetchDataByQuery가 호출되면 안 됨")
+                return mockDataModel
+            }
+            
+            $0.autoCompleteClient.keywordInfo = { keyword in
+                #expect(keyword == "NBA 일정")
+                return mockKeyword
+            }
+            
+            $0.searchClient.fetchDataByKeyword = { keywordInfo, season in
+                #expect(keywordInfo.keyword == "NBA 일정")
+                #expect(keywordInfo.weight == nil)
+                #expect(season == nil)
+                return mockDataModel
+            }
+        }
+
+        await store.send(.performSearch(searchType: .autoComplete, aniDuration: 0)) {
+            $0.searchState = true
+        }
+
+        await store.receive(\.updateSearchDataState) {
+            $0.searchDataState = .success
+        }
+        
+        await store.receive(\.searchResultsReceived) {
+            $0.resultVisibleState = true
+        }
+        
+//        await store.receive(.delegate(.push(model: mockDataModel.data)))
+        await store.receive(\.delegate)
+    }
+    
+    private func makeMockDataModel(fileName: String) throws -> DataModel {
+        let url = try #require(
+            Bundle(for: BundleToken.self).url(
+                forResource: fileName,
+                withExtension: "json"
+            )
+        )
+
+        let data = try Data(contentsOf: url)
+        let raw = try JSONDecoder().decode(RawDataModel.self, from: data)
+
+        return try DataModel.from(raw: raw)
+    }
+    
+    private final class BundleToken {}
 }

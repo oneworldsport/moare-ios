@@ -203,6 +203,7 @@
 		DA8DED8F2DF6AA3000AAB34B /* StandingsFirstCategoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8DED8E2DF6AA2300AAB34B /* StandingsFirstCategoryItem.swift */; };
 		DA8DED912DF6AB3700AAB34B /* StandingsRankItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8DED902DF6AB3700AAB34B /* StandingsRankItem.swift */; };
 		DA911BB02DF9B8DF0055B982 /* KBOTeamStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA911BAF2DF9B8DF0055B982 /* KBOTeamStatsView.swift */; };
+		DA91E6F02FBCB4B4003EB42D /* nba_league_schedule.json in Resources */ = {isa = PBXBuildFile; fileRef = DA9E42132E4AB9430074B1F2 /* nba_league_schedule.json */; };
 		DA9202192DA8E10000BB6B15 /* NBAUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9202182DA8E10000BB6B15 /* NBAUtil.swift */; };
 		DAB1A9552FB9855C00D80DF9 /* SearchStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB1A9542FB9851C00D80DF9 /* SearchStoreTests.swift */; };
 		DAB3CAA72E052AA900949CB9 /* FBUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB3CAA62E052AA500949CB9 /* FBUtil.swift */; };
@@ -1739,6 +1740,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA91E6F02FBCB4B4003EB42D /* nba_league_schedule.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
