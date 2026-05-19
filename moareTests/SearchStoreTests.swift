@@ -106,4 +106,28 @@ struct SearchStoreTests {
             $0.searchDataState = .failure("검색 결과가 없습니다.")
         }
     }
+    
+    @Test("query 변경 시 자동완성 결과를 갱신한다")
+    func updateAutocomplete() async {
+        var initialState = SearchStore.State()
+        initialState.query = "손"
+        
+        let store = TestStore(initialState: initialState) {
+            SearchStore()
+        } withDependencies: {
+            $0.autoCompleteClient.search = { query in
+                #expect(query == "손")
+                return ["손흥민", "손흥민 경기"]
+            }
+        }
+
+        await store.send(.updateAutoCompleteList)
+
+//        await store.receive(.updateAutoCompleteListResponse(["손흥민", "손흥민 골"])) {
+//            $0.autoCompleteList = ["손흥민", "손흥민 골"]
+//        }
+        await store.receive(\.updateAutoCompleteListResponse) {
+            $0.autoCompleteList = ["손흥민", "손흥민 경기"]
+        }
+    }
 }

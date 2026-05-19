@@ -343,9 +343,6 @@ struct SearchView: View {
         .onAppear {
             searchStore.send(.initData)
             
-            // test
-//            searchStore.send(.initForTest)
-            
             if let viewForTest {
                 self.searchStore.send(.testSearch(viewForTest: viewForTest))
             }

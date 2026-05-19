@@ -16,7 +16,7 @@ struct SearchStore {
     let modelConverter = ModelConverter.shared
     
     @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
-    @Dependency(\.trieTupleClient) var trieTupleClient
+    @Dependency(\.autoCompleteClient) var autoCompleteClient
     @Dependency(\.noticeListClient) var noticeListClient
     
     @Dependency(\.searchClient) var searchClient
@@ -30,7 +30,6 @@ struct SearchStore {
         
         var autoCompleteList: [String] = []
         var trendingKeywordList: [String] = []
-        var autoCompleteDataDic: [String: KeywordInfo] = [:]
         var leagueKeywords: LeagueKeywords? = nil
         
         /* ---------------------
@@ -46,33 +45,9 @@ struct SearchStore {
         var resultVisibleState = false
         var trendingKeyowrdsVisibleState = false
         
-        /* ---------------------
-           etc
-           --------------------- */
-        var trie: Trie?
-        
         var trendingKeywords: OrderedDictionary<String, KeywordInfo> = [:]
         var noticeList: [NoticeModel] = []
         var searchExample = ""
-        
-        // TODO: 일단은 test를 위해 임시로 이렇게 해놓고 나중에 Trie를 Dependency로 주입받아서 사용하게 개선해야함
-        static func == (lhs: State, rhs: State) -> Bool {
-            lhs.searchDataState == rhs.searchDataState &&
-            lhs.autoCompleteList == rhs.autoCompleteList &&
-            lhs.trendingKeywordList == rhs.trendingKeywordList &&
-            lhs.autoCompleteDataDic == rhs.autoCompleteDataDic &&
-            lhs.leagueKeywords == rhs.leagueKeywords &&
-            lhs.firstOpened == rhs.firstOpened &&
-            lhs.query == rhs.query &&
-            lhs.searchState == rhs.searchState &&
-            lhs.isFocused == rhs.isFocused &&
-            lhs.textFieldVisibleState == rhs.textFieldVisibleState &&
-            lhs.resultVisibleState == rhs.resultVisibleState &&
-            lhs.trendingKeyowrdsVisibleState == rhs.trendingKeyowrdsVisibleState &&
-            lhs.trendingKeywords == rhs.trendingKeywords &&
-            lhs.noticeList == rhs.noticeList &&
-            lhs.searchExample == rhs.searchExample
-        }
     }
     
     enum SearchType {
@@ -106,11 +81,11 @@ struct SearchStore {
            --------------------- */
         case initData
         case initTrendingKeywords([KeywordInfo])
-        case initTrieTuple(trieTuple: (Trie, [KeywordInfo]))
         case initNoticeList([NoticeModel])
         case updateSearchDataState(ApiFetchState)
         case updateIsFocused(Bool?)
         case updateAutoCompleteList
+        case updateAutoCompleteListResponse([String])
         case updateResultVisibleState(bool: Bool)
 
         case updateSearchStateWithAni(bool: Bool)
@@ -122,7 +97,6 @@ struct SearchStore {
         /* ---------------------
            test
            --------------------- */
-        case initForTest
         case testSearch(viewForTest: SportDisplayType)
     }
     
@@ -154,7 +128,6 @@ struct SearchStore {
             case .initData:
                 return .run { send in
                     async let trendingKeywords = trendingKeywordsClient.wait()
-                    async let trieTuple = trieTupleClient.wait()
                     async let noticeList = noticeListClient.wait()
                     
                     // NOTE: 아직 완전 병렬은 아님. 완벽하게 병렬로 처리하고 싶으면 각각 따로 .run{}을 실행해 줘야함(.onAppear에서 따로 실행).
@@ -162,21 +135,14 @@ struct SearchStore {
                     // 하지만 해당 충돌은 이전에 xcode, iOS 버전 업데이트 하기 전에 이상하게(원인불명) 발생했던 오류로 인해 겪었던 것이고, 지금은 발생할지 미지수임.
                     // - 셋중 하나만 exception 발생하면 셋다 초기화 안되는 문제 있음.
                     let trendingKeyowrdsResult = try await trendingKeywords
-                    let trieTupleResult = try await trieTuple
                     let noticeListResult = try await noticeList
+                    try await autoCompleteClient.load()
                     
                     await send(.initTrendingKeywords(trendingKeyowrdsResult.keywords))
-                    await send(.initTrieTuple(trieTuple: trieTupleResult))
                     await send(.initNoticeList(noticeListResult))
                     
                     await send(.getLeagueKeywords)
                 }
-                
-            case .initTrieTuple(let trieTuple):
-                state.trie = trieTuple.0
-                state.autoCompleteDataDic = Dictionary(uniqueKeysWithValues: trieTuple.1.map { ($0.keyword, $0) })
-                
-                return .none
                 
             case .initTrendingKeywords(let keywords):
                 // 중복 키워드는 덮어쓰기
@@ -196,16 +162,6 @@ struct SearchStore {
                 state.noticeList = noticeList.filter { $0.title != "검색 예시" }
                 
                 return .none
-                
-            case .initForTest:
-//                state.resultVisibleState = true
-                
-                return .run { [query = state.query] send in
-//                    let data = try await searchClient.fetchDataByQuery(query: "프리미어리그 일정")
-//                    await send(.searchResultsReceived(data))
-                    
-//                    let result = try await trendingKeywordsClient.wait()
-                }
                 
             case .firstOpen:
                 state.firstOpened = true
@@ -259,12 +215,14 @@ struct SearchStore {
                 return .none
                 
             case .updateAutoCompleteList:
-                if let trie = state.trie {
-                    let result = trie.search(prefix: state.query)
-                    
-                    withAnimation {
-                        state.autoCompleteList = result
-                    }
+                return .run { [query = state.query] send in
+                    let result = try await autoCompleteClient.search(query)
+                    await send(.updateAutoCompleteListResponse(result))
+                }
+                
+            case .updateAutoCompleteListResponse(let autoCompleteList):
+                withAnimation {
+                    state.autoCompleteList = autoCompleteList
                 }
                 
                 return .none
@@ -275,7 +233,7 @@ struct SearchStore {
                     
                 }
                 
-                return .run { [query = state.query, keywords = state.trendingKeywords, autoCompleteDataDic = state.autoCompleteDataDic] send in
+                return .run { [query = state.query, keywords = state.trendingKeywords] send in
                     let tracker = TaskCompletionTracker()
                     
                     do {
@@ -298,7 +256,7 @@ struct SearchStore {
                                 result = try await searchClient.fetchDataByKeyword(keyword, nil)
                                 
                             case .autoComplete:
-                                if var keywordInfo = autoCompleteDataDic[query] {
+                                if var keywordInfo = try await autoCompleteClient.keywordInfo(query) {
                                     keywordInfo.weight = nil // To exclude field "weight" in the request body
                                     result = try await searchClient.fetchDataByKeyword(keywordInfo, nil)
                                 } else {

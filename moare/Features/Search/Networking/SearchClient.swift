@@ -139,7 +139,7 @@ struct SearchClient {
 }
  
 extension SearchClient: DependencyKey {
-    static let liveValue = SearchClient(
+    static let liveValue = Self(
         fetchDataByQuery: { query in
             let raw: RawDataModel = try await APIClient().fetchData(
                 endpoint: .searchByQuery(query: query),
