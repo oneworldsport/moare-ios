@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import Collections
 
 extension DependencyValues {
     var trendingKeywordsClient: TrendingKeywordsClient {
@@ -37,6 +38,11 @@ extension DependencyValues {
         get { self[SearchClient.self] }
         set { self[SearchClient.self] = newValue }
     }
+    
+    var keywordsClient: KeywordsClient {
+        get { self[KeywordsClient.self] }
+        set { self[KeywordsClient.self] = newValue }
+    }
 }
 
 struct TranslatedNameProviderKey: DependencyKey {
@@ -44,18 +50,27 @@ struct TranslatedNameProviderKey: DependencyKey {
 }
 
 struct TrendingKeywordsClient {
-    var wait: @Sendable () async throws -> TrendingKeywords
+    var load: @Sendable () async throws -> [String]
+    var keywordInfo: @Sendable (_ keyword: String) async throws -> KeywordInfo?
 }
 
 extension TrendingKeywordsClient: DependencyKey {
-    static let liveValue = Self(
-        wait: {
-            try await AWSManager.shared.waitForTrendingKeywords()
-        }
-    )
+    static let liveValue: Self = {
+        let storage = TrendingKeywordsStorage()
+        
+        return Self(
+            load: {
+                try await storage.load()
+            },
+            keywordInfo: { keyword in
+                try await storage.keywordInfo(keyword: keyword)
+            }
+        )
+    }()
     
     static let testValue = Self(
-        wait: unimplemented("TrendingKeywordsClient.wait")
+        load: unimplemented("TrendingKeywordsClient.load"),
+        keywordInfo: unimplemented("TrendingKeywordsClient.keywordInfo"),
     )
 }
 
@@ -143,10 +158,37 @@ private actor AutoCompleteStorage {
 
     func search(query: String) async throws -> [String] {
         if trie == nil {
-            _ = try await load()
+            try await load()
         }
 
         return trie?.search(prefix: query) ?? []
+    }
+
+    func keywordInfo(keyword: String) async throws -> KeywordInfo? {
+        if keywordInfoByKeyword.isEmpty {
+            try await load()
+        }
+
+        return keywordInfoByKeyword[keyword]
+    }
+}
+
+private actor TrendingKeywordsStorage {
+    private var keywordInfoByKeyword: OrderedDictionary<String, KeywordInfo> = [:]
+
+    func load() async throws -> [String] {
+        let trendingKeywords = try await AWSManager.shared.waitForTrendingKeywords()
+        let keywords = trendingKeywords.keywords
+        
+        // 중복 키워드는 덮어쓰기
+        var dict = OrderedDictionary<String, KeywordInfo>()
+        for info in keywords {
+            dict[info.keyword] = info
+        }
+        keywordInfoByKeyword = dict
+        
+        // 중복 포함 + 순서 유지
+        return keywords.map { $0.keyword }
     }
 
     func keywordInfo(keyword: String) async throws -> KeywordInfo? {

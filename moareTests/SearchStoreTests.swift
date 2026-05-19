@@ -54,20 +54,95 @@ struct SearchStoreTests {
     
     @Test("initTrendingKeywords는 트렌드 검색어 상태를 초기화한다")
     func initTrendingKeywords() async {
-        let keyword = KeywordInfo(
-            keyword: "NBA 일정",
-            weight: 100,
-            keywords: nil,
-            entities: []
-        )
-        
         let store = TestStore(initialState: SearchStore.State()) {
             SearchStore()
         }
         
-        await store.send(.initTrendingKeywords([keyword])) {
-            $0.trendingKeywords["NBA 일정"] = keyword
+        await store.send(.initTrendingKeywords(["NBA 일정"])) {
             $0.trendingKeywordList = ["NBA 일정"]
+        }
+    }
+    
+    @Test("getLeagueKeywords 성공 시 leagueKeywords를 업데이트한다")
+    func getLeagueKeywordsSuccess() async {
+        let clock = TestClock()
+        
+        let expected = LeagueKeywords(
+            live: [
+                KeywordInfo(
+                    keyword: "NBA",
+                    keywords: nil,
+                    entities: []
+                )
+            ],
+            recent: [
+                KeywordInfo(
+                    keyword: "MLB",
+                    keywords: nil,
+                    entities: []
+                )
+            ]
+        )
+        
+        let store = TestStore(initialState: SearchStore.State()) {
+            SearchStore()
+        } withDependencies: {
+            $0.continuousClock = clock
+            $0.keywordsClient.fetchLeagueKeywords = {
+                expected
+            }
+        }
+        
+        await store.send(.getLeagueKeywords)
+        
+        await clock.advance(by: .seconds(1.8))
+        
+//        await store.receive(.getLeagueKeywordsSuccess(expected)) {
+//            $0.leagueKeywords = expected
+//        }
+        await store.receive(\.getLeagueKeywordsSuccess) {
+            $0.leagueKeywords = expected
+        }
+    }
+    
+    @Test("getLeagueKeywords 실패 시 leagueKeywords를 업데이트하지 않는다")
+    func getLeagueKeywordsFailure() async {
+        enum TestError: Error {
+            case failed
+        }
+
+        let store = TestStore(initialState: SearchStore.State()) {
+            SearchStore()
+        } withDependencies: {
+            $0.keywordsClient.fetchLeagueKeywords = {
+                throw TestError.failed
+            }
+        }
+
+        await store.send(.getLeagueKeywords)
+    }
+    
+    @Test("query 변경 시 자동완성 결과를 갱신한다")
+    func updateAutocomplete() async {
+        var initialState = SearchStore.State()
+        initialState.query = "손"
+        
+        let store = TestStore(initialState: initialState) {
+            SearchStore()
+        } withDependencies: {
+            $0.autoCompleteClient.search = { query in
+                #expect(query == "손")
+                return ["손흥민", "손흥민 경기"]
+            }
+        }
+
+        await store.send(.updateAutoCompleteList)
+
+//        await store.receive(.updateAutoCompleteListResponse(["손흥민", "손흥민 골"])) {
+//            $0.autoCompleteList = ["손흥민", "손흥민 골"]
+//        }
+        await store.receive(\.updateAutoCompleteListResponse) {
+            $0.autoCompleteList = ["손흥민", "손흥민 경기"]
         }
     }
     
@@ -104,30 +179,6 @@ struct SearchStoreTests {
         
         await store.receive(\.updateSearchDataState) {
             $0.searchDataState = .failure("검색 결과가 없습니다.")
-        }
-    }
-    
-    @Test("query 변경 시 자동완성 결과를 갱신한다")
-    func updateAutocomplete() async {
-        var initialState = SearchStore.State()
-        initialState.query = "손"
-        
-        let store = TestStore(initialState: initialState) {
-            SearchStore()
-        } withDependencies: {
-            $0.autoCompleteClient.search = { query in
-                #expect(query == "손")
-                return ["손흥민", "손흥민 경기"]
-            }
-        }
-
-        await store.send(.updateAutoCompleteList)
-
-//        await store.receive(.updateAutoCompleteListResponse(["손흥민", "손흥민 골"])) {
-//            $0.autoCompleteList = ["손흥민", "손흥민 골"]
-//        }
-        await store.receive(\.updateAutoCompleteListResponse) {
-            $0.autoCompleteList = ["손흥민", "손흥민 경기"]
         }
     }
 }

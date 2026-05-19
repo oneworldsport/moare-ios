@@ -12,7 +12,6 @@ import Collections
 
 @Reducer
 struct SearchStore {
-    let keywordsClient = KeywordsClient()
     let modelConverter = ModelConverter.shared
     
     @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
@@ -20,6 +19,9 @@ struct SearchStore {
     @Dependency(\.noticeListClient) var noticeListClient
     
     @Dependency(\.searchClient) var searchClient
+    @Dependency(\.keywordsClient) var keywordsClient
+    
+    @Dependency(\.continuousClock) var clock
     
     @ObservableState
     struct State: Equatable {
@@ -45,7 +47,6 @@ struct SearchStore {
         var resultVisibleState = false
         var trendingKeyowrdsVisibleState = false
         
-        var trendingKeywords: OrderedDictionary<String, KeywordInfo> = [:]
         var noticeList: [NoticeModel] = []
         var searchExample = ""
     }
@@ -80,7 +81,7 @@ struct SearchStore {
            etc
            --------------------- */
         case initData
-        case initTrendingKeywords([KeywordInfo])
+        case initTrendingKeywords([String])
         case initNoticeList([NoticeModel])
         case updateSearchDataState(ApiFetchState)
         case updateIsFocused(Bool?)
@@ -127,33 +128,25 @@ struct SearchStore {
                 
             case .initData:
                 return .run { send in
-                    async let trendingKeywords = trendingKeywordsClient.wait()
+                    async let keywords = trendingKeywordsClient.load()
                     async let noticeList = noticeListClient.wait()
                     
                     // NOTE: 아직 완전 병렬은 아님. 완벽하게 병렬로 처리하고 싶으면 각각 따로 .run{}을 실행해 줘야함(.onAppear에서 따로 실행).
                     // 위처럼 완전 병렬로 처리하면 UI에서 각각 따로 반영 되겠지만, 한 UI의 높이가 변경될때 동시에 해당 UI에 영향을 미치는 다른 UI가 그려지면 충돌 가능성이 있을수도 있음.
                     // 하지만 해당 충돌은 이전에 xcode, iOS 버전 업데이트 하기 전에 이상하게(원인불명) 발생했던 오류로 인해 겪었던 것이고, 지금은 발생할지 미지수임.
                     // - 셋중 하나만 exception 발생하면 셋다 초기화 안되는 문제 있음.
-                    let trendingKeyowrdsResult = try await trendingKeywords
+                    let keywordsResult = try await keywords
                     let noticeListResult = try await noticeList
                     try await autoCompleteClient.load()
                     
-                    await send(.initTrendingKeywords(trendingKeyowrdsResult.keywords))
+                    await send(.initTrendingKeywords(keywordsResult))
                     await send(.initNoticeList(noticeListResult))
                     
                     await send(.getLeagueKeywords)
                 }
                 
             case .initTrendingKeywords(let keywords):
-                // 중복 키워드는 덮어쓰기
-                var dict = OrderedDictionary<String, KeywordInfo>()
-                for info in keywords {
-                    dict[info.keyword] = info
-                }
-                state.trendingKeywords = dict
-                
-                // 중복 포함 + 순서 유지
-                state.trendingKeywordList = keywords.map { $0.keyword }
+                state.trendingKeywordList = keywords
                 
                 return .none
                 
@@ -233,7 +226,7 @@ struct SearchStore {
                     
                 }
                 
-                return .run { [query = state.query, keywords = state.trendingKeywords] send in
+                return .run { [query = state.query] send in
                     let tracker = TaskCompletionTracker()
                     
                     do {
@@ -246,7 +239,7 @@ struct SearchStore {
                                 result = try await searchClient.fetchDataByQuery(query)
                                 
                             case .trendingKeyword:
-                                if let keyword = keywords[query] {
+                                if let keyword = try await trendingKeywordsClient.keywordInfo(query) {
                                     result = try await searchClient.fetchDataByKeyword(keyword, nil)
                                 } else {
                                     throw NSError(domain: "SearchError", code: 1)
@@ -374,7 +367,7 @@ struct SearchStore {
                         let result = try await keywordsClient.fetchLeagueKeywords()
                         
                         // 처음 magnifyingglass 나타나는 시간 0.5 + firstOpen 애니메이션 시간 0.7 + trendingKeyowrds 나타나는 시간 0.5 + 추가 0.1 = 1.8초 지연
-                        try await Task.sleep(for: .seconds(1.8))
+                        try await clock.sleep(for: .seconds(1.8))
                         
                         await send(.getLeagueKeywordsSuccess(result), animation: AnimationConstants.AnimationType.defaultAnimation)
                     } catch {
