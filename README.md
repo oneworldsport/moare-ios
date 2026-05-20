@@ -63,24 +63,6 @@ Branch: `improvement/test-code`
 - `SearchStore`의 Action에 따른 State 변경 검증
 - 테스트 환경에서 네트워크 의존성을 대체할 수 있도록 `SearchClient` 의존성 주입 구조 개선
 
-## 기술적 의사결정
-### KarrotCodableKit 도입 검토
-API 응답 모델의 디코딩 구조를 개선하기 위해 [KarrotCodableKit](https://github.com/daangn/KarrotCodableKit) 도입을 검토함
-
-기대했던 이점은 크게 두 가지였음
-1. 대부분의 스포츠 응답 모델에 반복적으로 작성되어 있는 `CodingKeys` 정의 단순화
-2. 동일한 JSON 필드에 다양한 형태로 내려오는 응답 데이터를 더 명확하고 안전하게 분기 처리. 특히 검색 메인 모델인 `DataModel`은 `dataType`값에 따라 `data`필드를 서로 다른 응답 모델로 디코딩하고 있었기 때문에, 이 분기 구조를 더 타입 안정적으로 개선하기를 기대
-
-다음과 같은 문제로 적용하기 어렵다고 판단
-1. 현재 일부 모델은 단순히 property name을 snake_case JSON key와 매핑하는 구조가 아니라, `_id`, `_name`처럼 별도의 backing property를 두고 실제 JSON key와 매핑한 뒤 computed property로 기본값을 제공하는 방식으로 작성되어 있음. 반면 `KarrotCodableKit`의 `codingKeyStyle`은 property name을 기준으로 `.default`또는 `.snakeCase`형태의 coding key를 생성하는 방식이기 때문에, 현재 구조를 크게 단순화하기 어려웠음
-2. `PolymorphicCodable`은 보통 실제 데이터 객체 내부에 `type`과 같은 discriminator key가 존재하고, 그 값을 기준으로 구체 타입을 결정하는 구조에 적합함. 하지만 현재 `DataModel`은 `dataType`이 `data`내부가 아니라 바깥 wrapper 영역에 존재하고, `data`는 `dataType`, `entityInfo`, `season`등의 외부 정보를 함께 사용해 변환하는 구조임. 그래서 단순한 polymorphic mapping으로 대체하기 어려웠음
-
-따라서 `KarrotCodableKit`을 적용하면 일부 반복 코드는 줄일 수 있더라도, 핵심 디코딩 흐름에서는 오히려 wrapper 타입이나 변환 계층이 추가되어 복잡도가 증가할 가능성이 있다고 판단함
-
-다만 검토 과정에서 모델 디코딩 구조에 대해 다시 고민해볼 수 있었음
-1. `@CustomCodable` 방식을 참고하면서 JSON key와 property name의 매핑 방식을 더 간결하게 만들 수 있는지 고민해보게 됨
-2. `PolymorphicCodable`을 살펴보면서 `dataType`과 같은 discriminator 정보를 wrapper 바깥에 둘 때와 실제 데이터 내부에 둘 때의 구조적 차이도 비교해볼 수 있었음
-
 
 
 
