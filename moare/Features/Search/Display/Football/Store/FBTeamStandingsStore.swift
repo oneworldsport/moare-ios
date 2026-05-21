@@ -225,6 +225,9 @@ struct FBTeamStandingsStore {
                 
                 return .none
                 
+            case .baseStandings:
+                return .none
+                
             case .delegate:
                 return .none
             } // switch action

@@ -12,10 +12,10 @@ import ComposableArchitecture
 struct NBALeagueScheduleStore {
     typealias BaseSchedule = BaseScheduleStore<NBALeagueScheduleDisplayModel>
     
-    let searchClient = SearchClient()
+    @Dependency(\.searchClient) var searchClient
     
     @ObservableState
-    struct State {
+    struct State: Equatable {
         /* ---------------------
            data state
            --------------------- */
@@ -29,7 +29,7 @@ struct NBALeagueScheduleStore {
         }
     }
     
-    enum Action {
+    enum Action: Equatable {
         /* ---------------------
            init
            --------------------- */
@@ -60,7 +60,7 @@ struct NBALeagueScheduleStore {
         case delegate(Delegate)
     }
     
-    enum Delegate {
+    enum Delegate: Equatable {
         case showGameStats(model: SportDecodableModel)
         case showTournament(model: SportDecodableModel)
         case showTeamStandings(model: SportDecodableModel)
@@ -235,7 +235,7 @@ struct NBALeagueScheduleStore {
                             playerId: nil
                         )
                         
-                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel.season, yearMonth: String(yearMonth))
+                        let result = try await searchClient.fetchLeagueSchedule(entity, displayModel.season, String(yearMonth), nil)
                         
                         if case let .nbaLeagueSchedule(_, displayModel) = result.data {
                             await send(.setDisplayModel(displayModel: displayModel))
@@ -251,12 +251,12 @@ struct NBALeagueScheduleStore {
                 return .run { [displayModel = state.baseSchedule.displayModel] send in
                     do {
                         let result = try await searchClient.fetchById(
-                            season: displayModel.season,
-                            category: "basketball",
-                            date: game.date,
-                            dataType: "basketball_game_stats",
-                            leagueId: displayModel.leagueId,
-                            id: game.gameId
+                            displayModel.season,
+                            "basketball",
+                            game.date,
+                            "basketball_game_stats",
+                            displayModel.leagueId,
+                            game.gameId
                         )
                         
                         await send(.delegate(.showGameStats(model: result.data)))
@@ -287,7 +287,7 @@ struct NBALeagueScheduleStore {
                         ]
                     )
                     
-                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo, season: season)
+                    let result = try await searchClient.fetchDataByKeyword(keywordInfo, season)
                     
                     await send(.delegate(.showTournament(model: result.data)))
                 }
@@ -313,7 +313,7 @@ struct NBALeagueScheduleStore {
                         ]
                     )
                     
-                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo, season: season)
+                    let result = try await searchClient.fetchDataByKeyword(keywordInfo, season)
                     
                     await send(.delegate(.showTeamStandings(model: result.data)))
                 }
@@ -346,10 +346,10 @@ struct NBALeagueScheduleStore {
                         
                         if hasLive {
                             let result = try await searchClient.fetchLeagueSchedule(
-                                entity: entity,
-                                season: season,
-                                yearMonth: String(yearMonth),
-                                day: day
+                                entity,
+                                season,
+                                String(yearMonth),
+                                day
                             )
                             
                             if case .nbaLeagueSchedule(_, let displayModel) = result.data {

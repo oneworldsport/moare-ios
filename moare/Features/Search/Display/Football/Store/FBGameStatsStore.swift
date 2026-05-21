@@ -13,7 +13,7 @@ import ComposableArchitecture
 struct FBGameStatsStore {
     typealias BaseGameStats = BaseGameStatsStore<FBGameStatsDisplayModel>
     
-    let searchClient = SearchClient()
+    @Dependency(\.searchClient) var searchClient
     
     @ObservableState
     struct State {
@@ -274,12 +274,12 @@ struct FBGameStatsStore {
                         let game = displayModel.game
                         
                         let result = try await searchClient.fetchById(
-                            season: displayModel.season,
-                            category: "football",
-                            date: game.fixture.date,
-                            dataType: "football_game_stats",
-                            leagueId: game.league.id,
-                            id: String(game.fixture.id)
+                            displayModel.season,
+                            "football",
+                            game.fixture.date,
+                            "football_game_stats",
+                            game.league.id,
+                            String(game.fixture.id)
                         )
                         
                         await send(.updateDisplayModel(model: result.data))

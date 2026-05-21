@@ -155,57 +155,57 @@ class AWSManager {
         
         do {
             let footballPlayerNameDictionary = try await footballPlayerNameDictionary
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.footballPlayerDic, nameMap: footballPlayerNameDictionary)
+            await DependencyValues._current.translatedNameProvider.setDictionary(Constants.Keys.footballPlayerDic, footballPlayerNameDictionary)
         } catch {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.footballPlayerDic, nameMap: [:])
+            await DependencyValues._current.translatedNameProvider.setDictionary(Constants.Keys.footballPlayerDic, [:])
             print("footballPlayerNameDictionary load failed:", error)
         }
         
         do {
             let footballTeamNameDictionary = try await footballTeamNameDictionary
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.footballTeamDic, nameMap: footballTeamNameDictionary)
+            await DependencyValues._current.translatedNameProvider.setDictionary(Constants.Keys.footballTeamDic, footballTeamNameDictionary)
         } catch {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.footballTeamDic, nameMap: [:])
+            await DependencyValues._current.translatedNameProvider.setDictionary(Constants.Keys.footballTeamDic, [:])
             print("footballTeamNameDictionary load failed:", error)
         }
         
         do {
             let nbaPlayerNameDictionary = try await nbaPlayerNameDictionary
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.nbaPlayerDic, nameMap: nbaPlayerNameDictionary)
+            await DependencyValues._current.translatedNameProvider.setDictionary(Constants.Keys.nbaPlayerDic, nbaPlayerNameDictionary)
         } catch {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.nbaPlayerDic, nameMap: [:])
+            await DependencyValues._current.translatedNameProvider.setDictionary(Constants.Keys.nbaPlayerDic, [:])
             print("nbaPlayerNameDictionary load failed:", error)
         }
         
         do {
             let nbaTeamNameDictionary = try await nbaTeamNameDictionary
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.nbaTeamDic, nameMap: nbaTeamNameDictionary)
+            await DependencyValues._current.translatedNameProvider.setDictionary(Constants.Keys.nbaTeamDic, nbaTeamNameDictionary)
         } catch {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.nbaTeamDic, nameMap: [:])
+            await DependencyValues._current.translatedNameProvider.setDictionary(Constants.Keys.nbaTeamDic, [:])
             print("nbaTeamNameDictionary load failed:", error)
         }
         
         do {
             let kboTeamNameDictionary = try await kboTeamNameDictionary
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.kboTeamDic, nameMap: kboTeamNameDictionary)
+            await DependencyValues._current.translatedNameProvider.setDictionary(Constants.Keys.kboTeamDic, kboTeamNameDictionary)
         } catch {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.kboTeamDic, nameMap: [:])
+            await DependencyValues._current.translatedNameProvider.setDictionary(Constants.Keys.kboTeamDic, [:])
             print("kboTeamNameDictionary load failed:", error)
         }
         
         do {
             let mlbPlayerNameDictionary = try await mlbPlayerNameDictionary
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlbPlayerDic, nameMap: mlbPlayerNameDictionary)
+            await DependencyValues._current.translatedNameProvider.setDictionary(Constants.Keys.mlbPlayerDic, mlbPlayerNameDictionary)
         } catch {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlbPlayerDic, nameMap: [:])
+            await DependencyValues._current.translatedNameProvider.setDictionary(Constants.Keys.mlbPlayerDic, [:])
             print("mlbPlayerNameDictionary load failed:", error)
         }
         
         do {
             let mlbTeamNameDictionary = try await mlbTeamNameDictionary
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlbTeamDic, nameMap: mlbTeamNameDictionary)
+            await DependencyValues._current.translatedNameProvider.setDictionary(Constants.Keys.mlbTeamDic, mlbTeamNameDictionary)
         } catch {
-            DependencyValues._current.translatedNameProvider.setDictionary(category: Constants.Keys.mlbTeamDic, nameMap: [:])
+            await DependencyValues._current.translatedNameProvider.setDictionary(Constants.Keys.mlbTeamDic, [:])
             print("mlbTeamNameDictionary load failed:", error)
         }
     }

@@ -64,7 +64,7 @@ enum SportDisplayType: Hashable, CaseIterable {
     }
 }
 
-indirect enum SportDecodableModel {
+indirect enum SportDecodableModel: Equatable {
     // football
     case fbPlayerInfo(FBPlayerInfoResponseModel, FBPlayerInfoDisplayModel)
     case fbPlayerStats(FBPlayerInfoResponseModel, FBPlayerStatsDisplayModel)
