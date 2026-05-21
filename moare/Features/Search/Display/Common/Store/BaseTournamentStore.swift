@@ -24,6 +24,7 @@ struct BaseTournamentStore<T> {
     
     enum Action {
         case initData
+        case initNameDictionary([String: String])
         case initTournamentTeams([String: [Int?]])
     }
     
@@ -37,27 +38,32 @@ struct BaseTournamentStore<T> {
                 // init with default value
                 state.tournamentTeams = [:]
                 
-                state.teamNameDic = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                
-                if let displayModel = state.displayModel as? SportDisplayModel {
-                    switch displayModel.leagueId {
-                    case Constants.Ids.nba:
-                        state.teamNameDic = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
-                    case Constants.Ids.kbo:
-                        state.teamNameDic = nameProvider.getDictionary(category: Constants.Keys.kboTeamDic)
-                    case Constants.Ids.mlb:
-                        state.teamNameDic = nameProvider.getDictionary(category: Constants.Keys.mlbTeamDic)
-                    default: break
-                    }
-                }
-                
-                return .run { send in
+                return .run { [displayModel = state.displayModel] send in
                     async let tournamentTeams = tournamentTeamsClient.wait()
                     
                     let tournamentTeamsResult = try await tournamentTeams
                     
+                    var dic = await nameProvider.getDictionary(Constants.Keys.footballTeamDic)
+                    
+                    if let displayModel = displayModel as? SportDisplayModel {
+                        switch displayModel.leagueId {
+                        case Constants.Ids.nba:
+                            dic = await nameProvider.getDictionary(Constants.Keys.nbaTeamDic)
+                        case Constants.Ids.kbo:
+                            dic = await nameProvider.getDictionary(Constants.Keys.kboTeamDic)
+                        case Constants.Ids.mlb:
+                            dic = await nameProvider.getDictionary(Constants.Keys.mlbTeamDic)
+                        default: break
+                        }
+                    }
+                    
+                    await send(.initNameDictionary(dic))
                     await send(.initTournamentTeams(tournamentTeamsResult))
                 }
+                
+            case .initNameDictionary(let dic):
+                state.teamNameDic = dic
+                return .none
                 
             case .initTournamentTeams(let tournamentTeams):
                 state.tournamentTeams = tournamentTeams

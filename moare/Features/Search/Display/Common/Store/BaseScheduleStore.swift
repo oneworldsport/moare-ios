@@ -9,10 +9,10 @@ import Foundation
 import ComposableArchitecture
 
 @Reducer
-struct BaseScheduleStore<T> {
+struct BaseScheduleStore<T: Equatable> {
     
     @ObservableState
-    struct State {
+    struct State: Equatable {
         /* ---------------------
            data state
            --------------------- */
@@ -41,8 +41,9 @@ struct BaseScheduleStore<T> {
         }
     }
     
-    enum Action {
+    enum Action: Equatable {
         case initData
+        case initNameDictionary([String: String])
         case selectDay(DayInfo, Int)
         case selectYearMonth(yearMonth: String, selectedIndex: Int, isInit: Bool = false)
         case setDefaultYearMonth(date: String)
@@ -68,20 +69,26 @@ struct BaseScheduleStore<T> {
                 state.isAllResultOpened = false
                 state.scrollCalendar = true
                 
-                state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                
-                if let displayModel = state.displayModel as? SportDisplayModel {
-                    switch displayModel.leagueId {
-                    case Constants.Ids.nba:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
-                    case Constants.Ids.kbo:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.kboTeamDic)
-                    case Constants.Ids.mlb:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlbTeamDic)
-                    default: break
+                return .run { [displayModel = state.displayModel] send in
+                    var dic = await nameProvider.getDictionary(Constants.Keys.footballTeamDic)
+                    
+                    if let displayModel = displayModel as? SportDisplayModel {
+                        switch displayModel.leagueId {
+                        case Constants.Ids.nba:
+                            dic = await nameProvider.getDictionary(Constants.Keys.nbaTeamDic)
+                        case Constants.Ids.kbo:
+                            dic = await nameProvider.getDictionary(Constants.Keys.kboTeamDic)
+                        case Constants.Ids.mlb:
+                            dic = await nameProvider.getDictionary(Constants.Keys.mlbTeamDic)
+                        default: break
+                        }
                     }
+                    
+                    await send(.initNameDictionary(dic))
                 }
                 
+            case .initNameDictionary(let dic):
+                state.teamNameDictionary = dic
                 return .none
                 
             case let .selectDay(day, index):

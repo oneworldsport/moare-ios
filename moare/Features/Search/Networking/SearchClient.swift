@@ -6,131 +6,77 @@
 //
 
 import Foundation
+import ComposableArchitecture
 
 struct SearchClient {
-    private let session = URLSession.shared
-    private let apiClient = APIClient()
+    var fetchDataByQuery: @Sendable (_ query: String) async throws -> DataModel
+    var fetchDataByKeyword: @Sendable (_ keyword: KeywordInfo, _ season: Int?) async throws -> DataModel
+    var fetchLeagueSchedule: @Sendable (_ entity: EntityInfo, _ season: Int?, _ yearMonth: String?, _ day: Int?) async throws -> DataModel
+    var fetchById: @Sendable (_ season: Int?, _ category: String, _ date: String?, _ dataType: String, _ leagueId: Int, _ id: String) async throws -> DataModel
     
-    func fetchDataByQuery(query: String) async throws -> DataModel {
-//        return try await apiClient.fetchData(endpoint: .searchByQuery(query: query), testQuery: query)
-//        return String(decoding: data, as: UTF8.self)
-        
-        let raw: RawDataModel = try await apiClient.fetchData(endpoint: .searchByQuery(query: query), testQuery: query)
-        return try DataModel.from(raw: raw)
-    }
+    //    func fetchDataByQuery(query: String) async throws -> DataModel {
+    ////        return try await apiClient.fetchData(endpoint: .searchByQuery(query: query), testQuery: query)
+    ////        return String(decoding: data, as: UTF8.self)
+    //
+    //        let raw: RawDataModel = try await apiClient.fetchData(endpoint: .searchByQuery(query: query), testQuery: query)
+    //        return try DataModel.from(raw: raw)
+    //    }
+    //
+    //    func fetchDataByKeyword(keyword: KeywordInfo, season: Int? = nil) async throws -> DataModel {
+    //        let raw: RawDataModel = try await apiClient.fetchData(endpoint: .searchByKeyword(keyword: keyword, season: season))
+    //        return try DataModel.from(raw: raw)
+    //    }
+    //
+    //    func fetchLeagueSchedule(entity: EntityInfo, season: Int?, yearMonth: String?, day: Int? = nil) async throws -> DataModel {
+    //        let raw: RawDataModel = try await apiClient.fetchData(endpoint: .getLeagueSchedule(entity: entity, season: season ?? CalendarUtil.currentYear, yearMonth: yearMonth, day: day))
+    //        return try DataModel.from(raw: raw)
+    //    }
+    //
+    //    func fetchById(season: Int?, category: String, date: String? = nil, dataType:String, leagueId: Int, id: String) async throws -> DataModel {
+    //        let raw: RawDataModel = try await apiClient.fetchData(endpoint: .searchById(season: season ?? CalendarUtil.currentYear, category: category, date: date, dataType: dataType, leagueId: leagueId, id: id))
+    //        return try DataModel.from(raw: raw)
+    //    }
     
-    func fetchDataByKeyword(keyword: KeywordInfo, season: Int? = nil) async throws -> DataModel {
-        let raw: RawDataModel = try await apiClient.fetchData(endpoint: .searchByKeyword(keyword: keyword, season: season))
-        return try DataModel.from(raw: raw)
-    }
-    
-    func fetchLeagueSchedule(entity: EntityInfo, season: Int?, yearMonth: String?, day: Int? = nil) async throws -> DataModel {
-        let raw: RawDataModel = try await apiClient.fetchData(endpoint: .getLeagueSchedule(entity: entity, season: season ?? CalendarUtil.currentYear, yearMonth: yearMonth, day: day))
-        return try DataModel.from(raw: raw)
-    }
-    
-    func fetchById(season: Int?, category: String, date: String? = nil, dataType:String, leagueId: Int, id: String) async throws -> DataModel {
-        let raw: RawDataModel = try await apiClient.fetchData(endpoint: .searchById(season: season ?? CalendarUtil.currentYear, category: category, date: date, dataType: dataType, leagueId: leagueId, id: id))
-        return try DataModel.from(raw: raw)
-    }
-    
-    func fetchFromJson(viewForTest: SportDisplayType) async throws -> DataModel {
-        let filePath: String
-        
-        switch viewForTest {
-        case .fbPlayerInfo:
-            filePath = "football_player_info"
-        case .fbPlayerStats:
-            filePath = "football_player_stats"
-        case .fbPlayerStandings:
-            filePath = "football_player_standings"
-        case .fbTeamInfo:
-            filePath = "football_team_info"
-        case .fbTeamStats:
-            filePath = "football_team_stats"
-        case .fbTeamStandings:
-            filePath = "football_team_standings"
-        case .fbLeagueSchedule:
-//            filePath = "football_league_schedule"
-            filePath = "football_team_schedule"
-        case .fbGameStats:
-            filePath = "football_game_stats"
-        case .nbaPlayerInfo:
-            filePath = "nba_player_info"
-        case .nbaPlayerStats:
-            filePath = "nba_player_stats"
-        case .nbaPlayerStandings:
-            filePath = "nba_player_standings"
-        case .nbaTeamInfo:
-            filePath = "nba_team_info"
-        case .nbaTeamStats:
-            filePath = "nba_team_stats"
-        case .nbaTeamStandings:
-            filePath = "nba_team_standings"
-        case .nbaLeagueSchedule:
-//            filePath = "nba_league_schedule"
-            filePath = "nba_team_schedule"
-        case .nbaGameStats:
-            filePath = "nba_game_stats"
-        case .nbaTournament:
-            filePath = "nba_tournament"
-        case .kboPlayerInfo:
-            filePath = "kbo_player_info"
-        case .kboPlayerStats:
-            filePath = "kbo_player_stats"
-        case .kboPlayerStandings:
-            filePath = "kbo_player_standings"
-        case .kboTeamInfo:
-            filePath = "kbo_team_info"
-        case .kboTeamStats:
-            filePath = "kbo_team_stats"
-        case .kboTeamStandings:
-            filePath = "kbo_team_standings"
-        case .kboLeagueSchedule:
-            filePath = "kbo_league_schedule"
-//            filePath = "kbo_team_schedule"
-        case .kboGameStats:
-            filePath = "kbo_game_stats"
-        case .mlbPlayerInfo:
-            filePath = "mlb_player_info"
-        case .mlbPlayerStats:
-            filePath = "mlb_player_stats"
-        case .mlbPlayerStandings:
-            filePath = "mlb_player_standings"
-        case .mlbTeamInfo:
-            filePath = "mlb_team_info"
-        case .mlbTeamStats:
-            filePath = "mlb_team_stats"
-        case .mlbTeamStandings:
-            filePath = "mlb_team_standings"
-        case .mlbLeagueSchedule:
-//            filePath = "mlb_league_schedule"
-            filePath = "mlb_team_schedule"
-        case .mlbGameStats:
-            filePath = "mlb_game_stats"
-        case .mlbTournament:
-            filePath = "mlb_tournament"
-        case .tennisLeagueSchedule:
-            filePath = "tennis_league_schedule"
-        case .tennisGameStats:
-            filePath = "tennis_game_stats"
-        default:
-            filePath = "football_player_info"
-        }
-
-        guard let url = Bundle.main.url(forResource: filePath, withExtension: "json") else {
-            print("Error: File not found")
-                throw URLError(.fileDoesNotExist)
-            }
-        
-        let data = try Data(contentsOf: url)
-        let decoder = JSONDecoder()
-//        let dataModel = try decoder.decode(DataModel.self, from: data)
-        
-        let raw = try decoder.decode(RawDataModel.self, from: data)
-        let dataModel = try DataModel.from(raw: raw)
-        
-        return dataModel
-    }
 }
  
+extension SearchClient: DependencyKey {
+    static let liveValue = Self(
+        fetchDataByQuery: { query in
+            let raw: RawDataModel = try await APIClient().fetchData(
+                endpoint: .searchByQuery(query: query),
+                testQuery: query
+            )
+            return try DataModel.from(raw: raw)
+        },
+        fetchDataByKeyword: { keyword, season in
+            let raw: RawDataModel = try await APIClient().fetchData(
+                endpoint: .searchByKeyword(keyword: keyword, season: season)
+            )
+            return try DataModel.from(raw: raw)
+        },
+        fetchLeagueSchedule: { entity, season, yearMonth, day in
+            let raw: RawDataModel = try await APIClient().fetchData(
+                endpoint: .getLeagueSchedule(
+                    entity: entity,
+                    season: season ?? CalendarUtil.currentYear,
+                    yearMonth: yearMonth,
+                    day: day
+                )
+            )
+            return try DataModel.from(raw: raw)
+        },
+        fetchById: { season, category, date, dataType, leagueId, id in
+            let raw: RawDataModel = try await APIClient().fetchData(
+                endpoint: .searchById(
+                    season: season ?? CalendarUtil.currentYear,
+                    category: category,
+                    date: date,
+                    dataType: dataType,
+                    leagueId: leagueId,
+                    id: id
+                )
+            )
+            return try DataModel.from(raw: raw)
+        }
+    )
+}

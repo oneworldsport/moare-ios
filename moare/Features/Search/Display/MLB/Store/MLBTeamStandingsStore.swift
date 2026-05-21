@@ -216,6 +216,9 @@ struct MLBTeamStandingsStore {
                 
                 return .send(.delegate(.showTeamStats(model: dataModel)))
                 
+            case .baseStandings:
+                return .none
+                
             case .delegate:
                 return .none
             }

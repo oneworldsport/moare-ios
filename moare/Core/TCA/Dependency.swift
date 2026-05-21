@@ -6,98 +6,220 @@
 //
 
 import ComposableArchitecture
+import Collections
 
 extension DependencyValues {
     var trendingKeywordsClient: TrendingKeywordsClient {
-        get { self[TrendingKeywordsKey.self] }
-        set { self[TrendingKeywordsKey.self] = newValue }
+        get { self[TrendingKeywordsClient.self] }
+        set { self[TrendingKeywordsClient.self] = newValue }
     }
     
-    var trieTupleClient: TrieTupleClient {
-        get { self[TrieTupleKey.self] }
-        set { self[TrieTupleKey.self] = newValue }
+    var autoCompleteClient: AutoCompleteClient {
+        get { self[AutoCompleteClient.self] }
+        set { self[AutoCompleteClient.self] = newValue }
     }
     
     var noticeListClient: NoticeListClient {
-        get { self[NoticeListKey.self] }
-        set { self[NoticeListKey.self] = newValue }
+        get { self[NoticeListClient.self] }
+        set { self[NoticeListClient.self] = newValue }
     }
     
     var tournamentTeamsClient: TournamentTeamsClient {
-        get { self[TournamentTeamsKey.self] }
-        set { self[TournamentTeamsKey.self] = newValue }
+        get { self[TournamentTeamsClient.self] }
+        set { self[TournamentTeamsClient.self] = newValue }
     }
     
     var translatedNameProvider: TranslatedNameProvider {
-        get { self[TranslatedNameProviderKey.self] }
-        set { self[TranslatedNameProviderKey.self] = newValue }
+        get { self[TranslatedNameProvider.self] }
+        set { self[TranslatedNameProvider.self] = newValue }
+    }
+    
+    var searchClient: SearchClient {
+        get { self[SearchClient.self] }
+        set { self[SearchClient.self] = newValue }
+    }
+    
+    var keywordsClient: KeywordsClient {
+        get { self[KeywordsClient.self] }
+        set { self[KeywordsClient.self] = newValue }
     }
 }
 
-private enum TrendingKeywordsKey: DependencyKey {
-    static let liveValue = TrendingKeywordsClient(
-        wait: {
-            try await AWSManager.shared.waitForTrendingKeywords()
-        }
+struct TrendingKeywordsClient {
+    var load: @Sendable () async throws -> [String]
+    var keywordInfo: @Sendable (_ keyword: String) async throws -> KeywordInfo?
+}
+
+extension TrendingKeywordsClient: DependencyKey {
+    static let liveValue: Self = {
+        let storage = TrendingKeywordsStorage()
+        
+        return Self(
+            load: {
+                try await storage.load()
+            },
+            keywordInfo: { keyword in
+                try await storage.keywordInfo(keyword: keyword)
+            }
+        )
+    }()
+    
+    static let testValue = Self(
+        load: unimplemented("TrendingKeywordsClient.load"),
+        keywordInfo: unimplemented("TrendingKeywordsClient.keywordInfo"),
     )
 }
 
-private enum TrieTupleKey: DependencyKey {
-    static let liveValue = TrieTupleClient(
-        wait: {
-            try await AWSManager.shared.waitForTrieTuple()
-        }
-    )
+struct NoticeListClient {
+    var wait: @Sendable () async throws -> [NoticeModel]
 }
 
-private enum NoticeListKey: DependencyKey {
-    static let liveValue = NoticeListClient(
+extension NoticeListClient: DependencyKey {
+    static let liveValue = Self(
         wait: {
             try await AWSManager.shared.waitForNoticeList()
         }
     )
 }
 
-private enum TournamentTeamsKey: DependencyKey {
-    static let liveValue = TournamentTeamsClient(
+struct TournamentTeamsClient {
+    var wait: @Sendable () async throws -> [String: [Int?]]
+}
+
+extension TournamentTeamsClient: DependencyKey {
+    static let liveValue = Self(
         wait: {
             try await AWSManager.shared.waitForTournamentTeams()
         }
     )
 }
 
-struct TranslatedNameProviderKey: DependencyKey {
-    static let liveValue = TranslatedNameProvider()
+struct AutoCompleteClient {
+    var load: @Sendable () async throws -> Void
+    var search: @Sendable (_ query: String) async throws -> [String]
+    var keywordInfo: @Sendable (_ keyword: String) async throws -> KeywordInfo?
 }
 
-struct TrendingKeywordsClient {
-    var wait: () async throws -> TrendingKeywords
+extension AutoCompleteClient: DependencyKey {
+    static let liveValue: Self = {
+        let storage = AutoCompleteStorage()
+        
+        return Self(
+            load: {
+                try await storage.load()
+            },
+            search: { query in
+                try await storage.search(query: query)
+            },
+            keywordInfo: { keyword in
+                try await storage.keywordInfo(keyword: keyword)
+            }
+        )
+    }()
 }
 
-struct NoticeListClient {
-    var wait: () async throws -> [NoticeModel]
+struct TranslatedNameProvider {
+    var setDictionary: @Sendable (_ category: String, _ nameMap: [String: String]) async -> Void
+    var getDictionary: @Sendable (_ category: String) async -> [String: String]
+    var getName: @Sendable (_ category: String, _ name: String) async -> String
 }
 
-struct TrieTupleClient {
-    var wait: () async throws -> (Trie, [KeywordInfo])
-}
-
-struct TournamentTeamsClient {
-    var wait: () async throws -> [String: [Int?]]
-}
-
-// TODO: class 이름 고민
-class TranslatedNameProvider {
-    private var dictionaryMap: [String: [String: String]] = [:]
+extension TranslatedNameProvider: DependencyKey {
+    static let liveValue: Self = {
+        let storage = TranslatedNameStorage()
+        
+        return Self(
+            setDictionary: { category, nameMap in
+                await storage.setDictionary(category: category, nameMap: nameMap)
+            },
+            getDictionary: { category in
+                await storage.getDictionary(category: category)
+            },
+            getName: { category, name in
+                await storage.getName(category: category, name: name)
+            }
+        )
+    }()
     
+//    static let testValue = Self(
+//        setDictionary: { _, _ in },
+//        getDictionary: { _ in [:] },
+//        getName: { _, name in name }
+//    )
+}
+
+private actor AutoCompleteStorage {
+    private var trie: Trie?
+    private var keywordInfos: [KeywordInfo] = []
+    private var keywordInfoByKeyword: [String: KeywordInfo] = [:]
+
+    func load() async throws {
+        let trieTuple = try await AWSManager.shared.waitForTrieTuple()
+        let trie = trieTuple.0
+        let keywordInfos = trieTuple.1
+
+        self.trie = trie
+        self.keywordInfos = keywordInfos
+        self.keywordInfoByKeyword = Dictionary(
+            uniqueKeysWithValues: keywordInfos.map { ($0.keyword, $0) }
+        )
+    }
+
+    func search(query: String) async throws -> [String] {
+        if trie == nil {
+            try await load()
+        }
+
+        return trie?.search(prefix: query) ?? []
+    }
+
+    func keywordInfo(keyword: String) async throws -> KeywordInfo? {
+        if keywordInfoByKeyword.isEmpty {
+            try await load()
+        }
+
+        return keywordInfoByKeyword[keyword]
+    }
+}
+
+private actor TrendingKeywordsStorage {
+    private var keywordInfoByKeyword: OrderedDictionary<String, KeywordInfo> = [:]
+
+    func load() async throws -> [String] {
+        let trendingKeywords = try await AWSManager.shared.waitForTrendingKeywords()
+        let keywords = trendingKeywords.keywords
+        
+        // 중복 키워드는 덮어쓰기
+        var dict = OrderedDictionary<String, KeywordInfo>()
+        for info in keywords {
+            dict[info.keyword] = info
+        }
+        keywordInfoByKeyword = dict
+        
+        // 중복 포함 + 순서 유지
+        return keywords.map { $0.keyword }
+    }
+
+    func keywordInfo(keyword: String) async throws -> KeywordInfo? {
+        if keywordInfoByKeyword.isEmpty {
+            _ = try await load()
+        }
+
+        return keywordInfoByKeyword[keyword]
+    }
+}
+
+private actor TranslatedNameStorage {
+    private var dictionaryMap: [String: [String: String]] = [:]
+
     func setDictionary(category: String, nameMap: [String: String]) {
         dictionaryMap[category.lowercased()] = nameMap
     }
-    
+
     func getDictionary(category: String) -> [String: String] {
         dictionaryMap[category.lowercased()] ?? [:]
     }
-    
+
     func getName(category: String, name: String) -> String {
         dictionaryMap[category.lowercased()]?[name.lowercased()] ?? name
     }

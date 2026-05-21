@@ -12,12 +12,19 @@ import Collections
 
 @Reducer
 struct SearchStore {
-    let searchClient = SearchClient()
-    let keywordsClient = KeywordsClient()
     let modelConverter = ModelConverter.shared
     
+    @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
+    @Dependency(\.autoCompleteClient) var autoCompleteClient
+    @Dependency(\.noticeListClient) var noticeListClient
+    
+    @Dependency(\.searchClient) var searchClient
+    @Dependency(\.keywordsClient) var keywordsClient
+    
+    @Dependency(\.continuousClock) var clock
+    
     @ObservableState
-    struct State {
+    struct State: Equatable {
         /* ---------------------
            data state
            --------------------- */
@@ -25,7 +32,6 @@ struct SearchStore {
         
         var autoCompleteList: [String] = []
         var trendingKeywordList: [String] = []
-        var autoCompleteDataDic: [String: KeywordInfo] = [:]
         var leagueKeywords: LeagueKeywords? = nil
         
         /* ---------------------
@@ -41,12 +47,6 @@ struct SearchStore {
         var resultVisibleState = false
         var trendingKeyowrdsVisibleState = false
         
-        /* ---------------------
-           etc
-           --------------------- */
-        var trie: Trie?
-        
-        var trendingKeywords: OrderedDictionary<String, KeywordInfo> = [:]
         var noticeList: [NoticeModel] = []
         var searchExample = ""
     }
@@ -81,12 +81,12 @@ struct SearchStore {
            etc
            --------------------- */
         case initData
-        case initTrendingKeywords([KeywordInfo])
-        case initTrieTuple(trieTuple: (Trie, [KeywordInfo]))
+        case initTrendingKeywords([String])
         case initNoticeList([NoticeModel])
         case updateSearchDataState(ApiFetchState)
         case updateIsFocused(Bool?)
         case updateAutoCompleteList
+        case updateAutoCompleteListResponse([String])
         case updateResultVisibleState(bool: Bool)
 
         case updateSearchStateWithAni(bool: Bool)
@@ -94,21 +94,11 @@ struct SearchStore {
         case showPreviousView
         case popView(lastPath: AppStore.Path.State?, isEmpty: Bool, lastQuery: String)
         case delegate(Delegate)
-        
-        /* ---------------------
-           test
-           --------------------- */
-        case initForTest
-        case testSearch(viewForTest: SportDisplayType)
     }
     
     enum Delegate {
         case push(model: SportDecodableModel)
     }
-    
-    @Dependency(\.trendingKeywordsClient) var trendingKeywordsClient
-    @Dependency(\.trieTupleClient) var trieTupleClient
-    @Dependency(\.noticeListClient) var noticeListClient
     
     var body: some Reducer<State, Action> {
         BindingReducer()
@@ -133,41 +123,25 @@ struct SearchStore {
                 
             case .initData:
                 return .run { send in
-                    async let trendingKeywords = trendingKeywordsClient.wait()
-                    async let trieTuple = trieTupleClient.wait()
+                    async let keywords = trendingKeywordsClient.load()
                     async let noticeList = noticeListClient.wait()
                     
                     // NOTE: 아직 완전 병렬은 아님. 완벽하게 병렬로 처리하고 싶으면 각각 따로 .run{}을 실행해 줘야함(.onAppear에서 따로 실행).
                     // 위처럼 완전 병렬로 처리하면 UI에서 각각 따로 반영 되겠지만, 한 UI의 높이가 변경될때 동시에 해당 UI에 영향을 미치는 다른 UI가 그려지면 충돌 가능성이 있을수도 있음.
                     // 하지만 해당 충돌은 이전에 xcode, iOS 버전 업데이트 하기 전에 이상하게(원인불명) 발생했던 오류로 인해 겪었던 것이고, 지금은 발생할지 미지수임.
                     // - 셋중 하나만 exception 발생하면 셋다 초기화 안되는 문제 있음.
-                    let trendingKeyowrdsResult = try await trendingKeywords
-                    let trieTupleResult = try await trieTuple
+                    let keywordsResult = try await keywords
                     let noticeListResult = try await noticeList
+                    try await autoCompleteClient.load()
                     
-                    await send(.initTrendingKeywords(trendingKeyowrdsResult.keywords))
-                    await send(.initTrieTuple(trieTuple: trieTupleResult))
+                    await send(.initTrendingKeywords(keywordsResult))
                     await send(.initNoticeList(noticeListResult))
                     
                     await send(.getLeagueKeywords)
                 }
                 
-            case .initTrieTuple(let trieTuple):
-                state.trie = trieTuple.0
-                state.autoCompleteDataDic = Dictionary(uniqueKeysWithValues: trieTuple.1.map { ($0.keyword, $0) })
-                
-                return .none
-                
             case .initTrendingKeywords(let keywords):
-                // 중복 키워드는 덮어쓰기
-                var dict = OrderedDictionary<String, KeywordInfo>()
-                for info in keywords {
-                    dict[info.keyword] = info
-                }
-                state.trendingKeywords = dict
-                
-                // 중복 포함 + 순서 유지
-                state.trendingKeywordList = keywords.map { $0.keyword }
+                state.trendingKeywordList = keywords
                 
                 return .none
                 
@@ -176,16 +150,6 @@ struct SearchStore {
                 state.noticeList = noticeList.filter { $0.title != "검색 예시" }
                 
                 return .none
-                
-            case .initForTest:
-//                state.resultVisibleState = true
-                
-                return .run { [query = state.query] send in
-//                    let data = try await searchClient.fetchDataByQuery(query: "프리미어리그 일정")
-//                    await send(.searchResultsReceived(data))
-                    
-//                    let result = try await trendingKeywordsClient.wait()
-                }
                 
             case .firstOpen:
                 state.firstOpened = true
@@ -239,12 +203,14 @@ struct SearchStore {
                 return .none
                 
             case .updateAutoCompleteList:
-                if let trie = state.trie {
-                    let result = trie.search(prefix: state.query)
-                    
-                    withAnimation {
-                        state.autoCompleteList = result
-                    }
+                return .run { [query = state.query] send in
+                    let result = try await autoCompleteClient.search(query)
+                    await send(.updateAutoCompleteListResponse(result))
+                }
+                
+            case .updateAutoCompleteListResponse(let autoCompleteList):
+                withAnimation {
+                    state.autoCompleteList = autoCompleteList
                 }
                 
                 return .none
@@ -255,7 +221,7 @@ struct SearchStore {
                     
                 }
                 
-                return .run { [query = state.query, keywords = state.trendingKeywords, autoCompleteDataDic = state.autoCompleteDataDic] send in
+                return .run { [query = state.query] send in
                     let tracker = TaskCompletionTracker()
                     
                     do {
@@ -265,22 +231,22 @@ struct SearchStore {
                             
                             switch searchType {
                             case .query:
-                                result = try await searchClient.fetchDataByQuery(query: query)
+                                result = try await searchClient.fetchDataByQuery(query)
                                 
                             case .trendingKeyword:
-                                if let keyword = keywords[query] {
-                                    result = try await searchClient.fetchDataByKeyword(keyword: keyword)
+                                if let keyword = try await trendingKeywordsClient.keywordInfo(query) {
+                                    result = try await searchClient.fetchDataByKeyword(keyword, nil)
                                 } else {
                                     throw NSError(domain: "SearchError", code: 1)
                                 }
                                 
                             case .leagueKeyword(let keyword):
-                                result = try await searchClient.fetchDataByKeyword(keyword: keyword)
+                                result = try await searchClient.fetchDataByKeyword(keyword, nil)
                                 
                             case .autoComplete:
-                                if var keywordInfo = autoCompleteDataDic[query] {
+                                if var keywordInfo = try await autoCompleteClient.keywordInfo(query) {
                                     keywordInfo.weight = nil // To exclude field "weight" in the request body
-                                    result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo)
+                                    result = try await searchClient.fetchDataByKeyword(keywordInfo, nil)
                                 } else {
                                     throw NSError(domain: "SearchError", code: 1)
                                 }
@@ -396,7 +362,7 @@ struct SearchStore {
                         let result = try await keywordsClient.fetchLeagueKeywords()
                         
                         // 처음 magnifyingglass 나타나는 시간 0.5 + firstOpen 애니메이션 시간 0.7 + trendingKeyowrds 나타나는 시간 0.5 + 추가 0.1 = 1.8초 지연
-                        try await Task.sleep(for: .seconds(1.8))
+                        try await clock.sleep(for: .seconds(1.8))
                         
                         await send(.getLeagueKeywordsSuccess(result), animation: AnimationConstants.AnimationType.defaultAnimation)
                     } catch {
@@ -444,13 +410,6 @@ struct SearchStore {
 //                }
                 
                 return .none
-                
-            case .testSearch(let viewForTest):
-                return .run { send in
-                    let result = try await searchClient.fetchFromJson(viewForTest: viewForTest)
-                    
-                    await send(.searchResultsReceived(result))
-                }
                 
             case .delegate:
                 return .none

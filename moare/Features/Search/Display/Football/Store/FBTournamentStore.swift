@@ -12,6 +12,8 @@ import ComposableArchitecture
 struct FBTournamentStore {
     typealias BaseTournament = BaseTournamentStore<FBTournamentDisplayModel>
     
+    @Dependency(\.searchClient) var searchClient
+    
     @ObservableState
     struct State {
         var baseTournament: BaseTournament.State
@@ -152,13 +154,13 @@ struct FBTournamentStore {
                 
             case let .selectGame(game):
                 return .run { [displayModel = state.baseTournament.displayModel] send in
-                    let result = try await SearchClient().fetchById(
-                        season: displayModel.season,
-                        category: "football",
-                        date: game.date,
-                        dataType: "football_game_stats",
-                        leagueId: displayModel.leagueId,
-                        id: game.gameId
+                    let result = try await searchClient.fetchById(
+                        displayModel.season,
+                        "football",
+                        game.date,
+                        "football_game_stats",
+                        displayModel.leagueId,
+                        game.gameId
                     )
                     
                     await send(.delegate(.showGameStats(model: result.data)))

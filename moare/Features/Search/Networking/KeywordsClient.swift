@@ -6,15 +6,19 @@
 //
 
 import Foundation
+import ComposableArchitecture
 
 struct KeywordsClient {
-    private let apiClient = APIClient()
-    
-    func fetchTrendingKeywords() async throws -> [KeywordInfo] {
-        return try await apiClient.fetchData(endpoint: .fetchTrendingKeywords)
-    }
-    
-    func fetchLeagueKeywords() async throws -> LeagueKeywords {
-        return try await apiClient.fetchData(endpoint: .fetchLeagueKeywords)
-    }
+    var fetchTrendingKeywords: @Sendable () async throws -> [KeywordInfo]
+    var fetchLeagueKeywords: @Sendable () async throws -> LeagueKeywords
+}
+
+extension KeywordsClient: DependencyKey {
+    static let liveValue = Self(
+        fetchTrendingKeywords: {
+            try await APIClient().fetchData(endpoint: .fetchTrendingKeywords)
+        }, fetchLeagueKeywords: {
+            try await APIClient().fetchData(endpoint: .fetchLeagueKeywords)
+        }
+    )
 }

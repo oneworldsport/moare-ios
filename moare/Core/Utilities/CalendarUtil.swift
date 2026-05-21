@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DayInfo {
+struct DayInfo: Equatable {
     let day: Int
     let dayOfWeek: Int
     let displayName: String

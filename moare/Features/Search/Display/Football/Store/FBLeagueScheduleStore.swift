@@ -13,7 +13,7 @@ import ComposableArchitecture
 struct FBLeagueScheduleStore {
     typealias BaseSchedule = BaseScheduleStore<FBLeagueScheduleDisplayModel>
     
-    let searchClient = SearchClient()
+    @Dependency(\.searchClient) var searchClient
     
     @ObservableState
     struct State {
@@ -248,7 +248,7 @@ struct FBLeagueScheduleStore {
                             playerId: nil
                         )
                         
-                        let result = try await searchClient.fetchLeagueSchedule(entity: entity, season: displayModel.season, yearMonth: String(yearMonth))
+                        let result = try await searchClient.fetchLeagueSchedule(entity, displayModel.season, String(yearMonth), nil)
                         
                         
                         if case .fbLeagueSchedule(_, let displayModel) = result.data {
@@ -268,12 +268,12 @@ struct FBLeagueScheduleStore {
                 return .run { [displayModel = state.baseSchedule.displayModel] send in
                     do {
                         let result = try await searchClient.fetchById(
-                            season: displayModel.season,
-                            category: "football",
-                            date: game.date,
-                            dataType: "football_game_stats",
-                            leagueId: displayModel.leagueId,
-                            id: game.gameId
+                            displayModel.season,
+                            "football",
+                            game.date,
+                            "football_game_stats",
+                            displayModel.leagueId,
+                            game.gameId
                         )
                         
                         await send(.delegate(.showGameStats(model: result.data)))
@@ -328,7 +328,7 @@ struct FBLeagueScheduleStore {
                         )
                     }
                     
-                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo, season: season)
+                    let result = try await searchClient.fetchDataByKeyword(keywordInfo, season)
                     
                     await send(.delegate(.showTournament(model: result.data)))
                 }
@@ -356,7 +356,7 @@ struct FBLeagueScheduleStore {
                         ]
                     )
                     
-                    let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo, season: season)
+                    let result = try await searchClient.fetchDataByKeyword(keywordInfo, season)
                     
                     await send(.delegate(.showTeamStandings(model: result.data)))
                 }
@@ -389,10 +389,10 @@ struct FBLeagueScheduleStore {
                         
                         if hasLive {
                             let result = try await searchClient.fetchLeagueSchedule(
-                                entity: entity,
-                                season: season,
-                                yearMonth: String(yearMonth),
-                                day: day
+                                entity,
+                                season,
+                                String(yearMonth),
+                                day
                             )
                             
                             if case .fbLeagueSchedule(_, let displayModel) = result.data {

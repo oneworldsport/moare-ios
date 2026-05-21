@@ -40,6 +40,7 @@ struct BaseGameStatsStore<T> {
     
     enum Action {
         case initData
+        case initNameDictionary(_ player: [String: String], _ team: [String: String])
         case selectFirstCategory(Int)
         case selectSecondCategory(Int)
         case selectTeam(isInit: Bool = false, index: Int)
@@ -59,23 +60,30 @@ struct BaseGameStatsStore<T> {
                 state.teamCategorySelectedIndex = 0
                 state.shouldScrollCategory = false
                 
-                state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballPlayerDic)
-                state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.footballTeamDic)
-                
-                if let displayModel = state.displayModel as? SportDisplayModel {
-                    switch displayModel.leagueId {
-                    case Constants.Ids.nba:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaPlayerDic)
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.nbaTeamDic)
-                    case Constants.Ids.kbo:
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.kboTeamDic)
-                    case Constants.Ids.mlb:
-                        state.playerNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlbPlayerDic)
-                        state.teamNameDictionary = nameProvider.getDictionary(category: Constants.Keys.mlbTeamDic)
-                    default: break
+                return .run { [displayModel = state.displayModel] send in
+                    var playerDic = await nameProvider.getDictionary(Constants.Keys.footballTeamDic)
+                    var teamDic = await nameProvider.getDictionary(Constants.Keys.footballTeamDic)
+                    
+                    if let displayModel = displayModel as? SportDisplayModel {
+                        switch displayModel.leagueId {
+                        case Constants.Ids.nba:
+                            playerDic = await nameProvider.getDictionary(Constants.Keys.nbaPlayerDic)
+                            teamDic = await nameProvider.getDictionary(Constants.Keys.nbaTeamDic)
+                        case Constants.Ids.kbo:
+                            teamDic = await nameProvider.getDictionary(Constants.Keys.kboTeamDic)
+                        case Constants.Ids.mlb:
+                            playerDic = await nameProvider.getDictionary(Constants.Keys.mlbPlayerDic)
+                            teamDic = await nameProvider.getDictionary(Constants.Keys.mlbTeamDic)
+                        default: break
+                        }
                     }
+                    
+                    await send(.initNameDictionary(playerDic, teamDic))
                 }
                 
+            case let .initNameDictionary(playerDic, teamDic):
+                state.playerNameDictionary = playerDic
+                state.teamNameDictionary = teamDic
                 return .none
                 
             case .selectFirstCategory(let index):

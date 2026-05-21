@@ -12,7 +12,7 @@ import ComposableArchitecture
 struct NBAPlayerStandingsStore {
     typealias BaseStandings = BasePlayerStandingsStore<NBAPlayerStandingsDisplayModel>
     
-    let searchClient = SearchClient()
+    @Dependency(\.searchClient) var searchClient
     
     @ObservableState
     struct State {
@@ -208,7 +208,7 @@ struct NBAPlayerStandingsStore {
                             entities: entities
                         )
                         
-                        let result = try await searchClient.fetchDataByKeyword(keyword: keywordInfo, season: displayModel.season)
+                        let result = try await searchClient.fetchDataByKeyword(keywordInfo, displayModel.season)
                         
                         await send(.setDisplayModel(data: result.data))
                     } catch {
@@ -243,6 +243,9 @@ struct NBAPlayerStandingsStore {
                 )
                 
                 return .send(.delegate(.showPlayerStats(model: dataModel)))
+                
+            case .baseStandings:
+                return .none
                 
             case .delegate:
                 return .none
