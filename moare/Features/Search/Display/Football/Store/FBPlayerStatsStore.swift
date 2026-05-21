@@ -50,6 +50,9 @@ struct FBPlayerStatsStore {
                 }
                 
                 return .none
+                
+            case .baseStats:
+                return .none
             }
         }
     }

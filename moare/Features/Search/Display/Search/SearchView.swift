@@ -28,8 +28,6 @@ struct SearchView: View {
     @State var searchExampleBoxHeight: CGFloat = 0
     @State var leagueKeywordsComponentHeight: CGFloat = 0
     
-    var viewForTest: SportDisplayType? = nil
-    
     var body: some View {
         // notice 아이콘 y 위치
         // y: (전체 컨텐츠 높이(박스 높이(boxHeight) + 아이콘 높이(17) + padding(6))) / 2 + (검색창 높이(50) + 트렌딩 키워드 높이(40)) / 2 + 추가 패딩 8 + leagueKeywords컴포넌트 높이 / 2
@@ -342,10 +340,6 @@ struct SearchView: View {
         }
         .onAppear {
             searchStore.send(.initData)
-            
-            if let viewForTest {
-                self.searchStore.send(.testSearch(viewForTest: viewForTest))
-            }
         }
     }
 }

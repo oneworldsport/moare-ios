@@ -244,6 +244,9 @@ struct NBAPlayerStandingsStore {
                 
                 return .send(.delegate(.showPlayerStats(model: dataModel)))
                 
+            case .baseStandings:
+                return .none
+                
             case .delegate:
                 return .none
             } // switch action

@@ -94,11 +94,6 @@ struct SearchStore {
         case showPreviousView
         case popView(lastPath: AppStore.Path.State?, isEmpty: Bool, lastQuery: String)
         case delegate(Delegate)
-        
-        /* ---------------------
-           test
-           --------------------- */
-        case testSearch(viewForTest: SportDisplayType)
     }
     
     enum Delegate {
@@ -415,13 +410,6 @@ struct SearchStore {
 //                }
                 
                 return .none
-                
-            case .testSearch(let viewForTest):
-                return .run { send in
-                    let result = try await searchClient.fetchFromJson(viewForTest: viewForTest)
-                    
-                    await send(.searchResultsReceived(result))
-                }
                 
             case .delegate:
                 return .none

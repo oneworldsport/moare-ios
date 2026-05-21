@@ -15,7 +15,7 @@ struct NBALeagueScheduleStore {
     @Dependency(\.searchClient) var searchClient
     
     @ObservableState
-    struct State {
+    struct State: Equatable {
         /* ---------------------
            data state
            --------------------- */
@@ -29,7 +29,7 @@ struct NBALeagueScheduleStore {
         }
     }
     
-    enum Action {
+    enum Action: Equatable {
         /* ---------------------
            init
            --------------------- */
@@ -60,7 +60,7 @@ struct NBALeagueScheduleStore {
         case delegate(Delegate)
     }
     
-    enum Delegate {
+    enum Delegate: Equatable {
         case showGameStats(model: SportDecodableModel)
         case showTournament(model: SportDecodableModel)
         case showTeamStandings(model: SportDecodableModel)

@@ -30,8 +30,8 @@ extension DependencyValues {
     }
     
     var translatedNameProvider: TranslatedNameProvider {
-        get { self[TranslatedNameProviderKey.self] }
-        set { self[TranslatedNameProviderKey.self] = newValue }
+        get { self[TranslatedNameProvider.self] }
+        set { self[TranslatedNameProvider.self] = newValue }
     }
     
     var searchClient: SearchClient {
@@ -43,10 +43,6 @@ extension DependencyValues {
         get { self[KeywordsClient.self] }
         set { self[KeywordsClient.self] = newValue }
     }
-}
-
-struct TranslatedNameProviderKey: DependencyKey {
-    static let liveValue = TranslatedNameProvider()
 }
 
 struct TrendingKeywordsClient {
@@ -122,21 +118,34 @@ extension AutoCompleteClient: DependencyKey {
     }()
 }
 
-// TODO: class 이름 고민
-class TranslatedNameProvider {
-    private var dictionaryMap: [String: [String: String]] = [:]
+struct TranslatedNameProvider {
+    var setDictionary: @Sendable (_ category: String, _ nameMap: [String: String]) async -> Void
+    var getDictionary: @Sendable (_ category: String) async -> [String: String]
+    var getName: @Sendable (_ category: String, _ name: String) async -> String
+}
+
+extension TranslatedNameProvider: DependencyKey {
+    static let liveValue: Self = {
+        let storage = TranslatedNameStorage()
+        
+        return Self(
+            setDictionary: { category, nameMap in
+                await storage.setDictionary(category: category, nameMap: nameMap)
+            },
+            getDictionary: { category in
+                await storage.getDictionary(category: category)
+            },
+            getName: { category, name in
+                await storage.getName(category: category, name: name)
+            }
+        )
+    }()
     
-    func setDictionary(category: String, nameMap: [String: String]) {
-        dictionaryMap[category.lowercased()] = nameMap
-    }
-    
-    func getDictionary(category: String) -> [String: String] {
-        dictionaryMap[category.lowercased()] ?? [:]
-    }
-    
-    func getName(category: String, name: String) -> String {
-        dictionaryMap[category.lowercased()]?[name.lowercased()] ?? name
-    }
+//    static let testValue = Self(
+//        setDictionary: { _, _ in },
+//        getDictionary: { _ in [:] },
+//        getName: { _, name in name }
+//    )
 }
 
 private actor AutoCompleteStorage {
@@ -197,5 +206,21 @@ private actor TrendingKeywordsStorage {
         }
 
         return keywordInfoByKeyword[keyword]
+    }
+}
+
+private actor TranslatedNameStorage {
+    private var dictionaryMap: [String: [String: String]] = [:]
+
+    func setDictionary(category: String, nameMap: [String: String]) {
+        dictionaryMap[category.lowercased()] = nameMap
+    }
+
+    func getDictionary(category: String) -> [String: String] {
+        dictionaryMap[category.lowercased()] ?? [:]
+    }
+
+    func getName(category: String, name: String) -> String {
+        dictionaryMap[category.lowercased()]?[name.lowercased()] ?? name
     }
 }

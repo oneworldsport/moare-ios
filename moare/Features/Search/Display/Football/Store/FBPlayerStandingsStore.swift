@@ -258,6 +258,9 @@ struct FBPlayerStandingsStore {
 //                    )
                 }
                 
+            case .baseStandings:
+                return .none
+                
             case .delegate:
                 return .none
             }

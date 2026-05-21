@@ -28,8 +28,6 @@ struct FBTeamStatsStore {
         case baseStats(BaseStats.Action)
     }
     
-    @Dependency(\.translatedNameProvider) var nameProvider
-    
     var body: some Reducer<State, Action> {
         Scope(state: \.baseStats, action: \.baseStats) { BaseStats() }
         
@@ -50,6 +48,9 @@ struct FBTeamStatsStore {
                     }
                 }
 
+                return .none
+                
+            case .baseStats:
                 return .none
             }
         }
