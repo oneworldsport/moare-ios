@@ -28,6 +28,7 @@
 - URLSession
 - REST API
 - AWS SDK
+- Swift Testing, TCA TestStore
 
 ## 구조
 SwiftUI와 The Composable Architecture(TCA)를 기반으로 프로젝트를 구성하였으며,  
