@@ -21,14 +21,13 @@
 <img width="19%" alt="app_store_v1 0 9_5" src="https://github.com/user-attachments/assets/bb5bb6b9-73f6-432d-8d24-ba0b65b8c793" />
 
 ## 기술 스택
-- Swift
-- SwiftUI,
-- The Composable Architecture(TCA)
-- Swift Concurrency (async/await)
-- URLSession 기반 REST API
-- Kingfisher
-- AWS SDK
-- Swift Testing, TCA TestStore
+- **Language & UI**: Swift, SwiftUI
+- **Architecture**: The Composable Architecture (TCA)
+- **Networking**: Swift Concurrency (async/await), URLSession 기반 REST API
+- **Cloud Integration**: AWS SDK
+- **Image Loading**: Kingfisher
+- **Analytics**: Firebase Analytics
+- **Testing**: Swift Testing, TCA TestStore
 
 ## 구조
 SwiftUI와 The Composable Architecture(TCA)를 기반으로 프로젝트를 구성하였으며,  
