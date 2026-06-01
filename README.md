@@ -25,7 +25,7 @@
 - SwiftUI,
 - The Composable Architecture(TCA)
 - Swift Concurrency (async/await)
-- URLSession기반 REST API
+- URLSession 기반 REST API
 - Kingfisher
 - AWS SDK
 - Swift Testing, TCA TestStore
