@@ -23,7 +23,10 @@
 ## 기술 스택
 - **Language & UI**: Swift, SwiftUI
 - **Architecture**: The Composable Architecture (TCA)
-- **Networking**: Swift Concurrency (async/await), URLSession 기반 REST API
+- **Dependency Injection**: TCA Dependencies
+- **Concurrency**: Swift Concurrency (async/await)
+- **Networking**: URLSession 기반 REST API
+- **Local Storage**: UserDefaults
 - **Cloud Integration**: AWS SDK
 - **Image Loading**: Kingfisher
 - **Analytics**: Firebase Analytics
