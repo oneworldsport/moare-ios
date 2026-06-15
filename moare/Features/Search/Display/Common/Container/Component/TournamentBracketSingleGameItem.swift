@@ -11,6 +11,7 @@ import SwiftUI
 struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let teamNameDic: [String: String]
+    let maxRound: Int
     let game: GameForSchedule<T>?
     let itemPosition: RoundSeriesKey // ui상에서 시리즈의 위치 ex) 1라운드의 첫번째 시리즈면 1_1
     
@@ -63,16 +64,34 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
         }
         
         VStack(spacing: 0) {
-            HStack {
-                VStack(alignment: .trailing, spacing: 0) {
-                    TournamentHBar(width: 75)
+            if itemPosition.round > 1  {
+                HStack {
+                    VStack(alignment: .trailing, spacing: 0) {
+                        TournamentHBar(width: 80)
+                        
+                        TournamentVBar(height: verticalMetric(
+                            leagueId: leagueId,
+                            itemHeights: itemHeights,
+                            round: itemPosition.round,
+                            series: itemPosition.series,
+                            maxRound: maxRound,
+                            metric: .topHeight,
+                            direction: .left)
+                        )
+                    }
                     
-                    TournamentVBar(height: topHeight())
+                    Spacer()
                 }
-                
-                Spacer()
+                .padding(.top, verticalMetric(
+                    leagueId: leagueId,
+                    itemHeights: itemHeights,
+                    round: itemPosition.round,
+                    series: itemPosition.series,
+                    maxRound: maxRound,
+                    metric: .topPadding,
+                    direction: .left)
+                )
             }
-            .padding(.top, topPadding())
             
             HStack(spacing: 0) {
                 Button(action: {
@@ -173,66 +192,43 @@ struct TournamentBracketSingleLeftGameItem<T: Decodable & Equatable>: View {
                 .frame(height: itemHeight)
             }
             
-            HStack {
-                VStack(alignment: .trailing, spacing: 0) {
-                    TournamentVBar(height: bottomHeight())
+            if itemPosition.round > 1  {
+                HStack {
+                    VStack(alignment: .trailing, spacing: 0) {
+                        TournamentVBar(height: verticalMetric(
+                            leagueId: leagueId,
+                            itemHeights: itemHeights,
+                            round: itemPosition.round,
+                            series: itemPosition.series,
+                            maxRound: maxRound,
+                            metric: .bottomHeight,
+                            direction: .left)
+                        )
+                        
+                        TournamentHBar(width: 80)
+                    }
                     
-                    TournamentHBar(width: 75)
+                    Spacer()
                 }
-                
-                Spacer()
+                .padding(.bottom, verticalMetric(
+                    leagueId: leagueId,
+                    itemHeights: itemHeights,
+                    round: itemPosition.round,
+                    series: itemPosition.series,
+                    maxRound: maxRound,
+                    metric: .bottomPadding,
+                    direction: .left)
+                )
             }
-            .padding(.bottom, bottomPadding())
         }
-        .frame(width: 170)
+        .frame(width: 180)
     } // View
-    
-    private func h(_ r: Int, _ s: Int) -> CGFloat {
-        itemHeights[RoundSeriesKey(round: r, series: s)] ?? 0
-    }
-    
-    private func topPadding() -> CGFloat {
-        switch (itemPosition.round, itemPosition.series) {
-        case (2, 1): return h(1, 1) / 2
-        case (2, 2): return h(1, 3) / 2
-        case (3, 1): return h(1, 1) + (h(2, 1) / 2)
-        case (4, 1): return h(1, 1) + h(2, 1) + (h(3, 1) / 2)
-        default: return 0
-        }
-    }
-    
-    private func topHeight() -> CGFloat {
-        switch (itemPosition.round, itemPosition.series) {
-        case (2, 1): return h(1, 1) / 2
-        case (2, 2): return h(1, 3) / 2
-        case (3, 1): return h(1, 2) + (h(2, 1) / 2)
-        case (4, 1): return h(3, 1) / 2 // NOTE: 일단은 KBO의 경우만 고려
-        default: return 0
-        }
-    }
-    
-    private func bottomPadding() -> CGFloat {
-        switch (itemPosition.round, itemPosition.series) {
-        case (2, 1): return h(1, 2) / 2
-        case (2, 2): return h(1, 4) / 2
-        case (3, 1): return h(1, 4) + (h(2, 2) / 2)
-        default: return 0
-        }
-    }
-    
-    private func bottomHeight() -> CGFloat {
-        switch (itemPosition.round, itemPosition.series) {
-        case (2, 1): return h(1, 2) / 2
-        case (2, 2): return h(1, 4) / 2
-        case (3, 1): return h(1, 3) + (h(2, 2) / 2)
-        default: return 0
-        }
-    }
 }
 
 struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
     let leagueId: Int
     let teamNameDic: [String: String]
+    let maxRound: Int
     let game: GameForSchedule<T>?
     let itemPosition: RoundSeriesKey // ui상에서 시리즈의 위치 ex) 1라운드의 첫번째 시리즈면 1_1
     
@@ -289,12 +285,28 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
                 Spacer()
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    TournamentHBar(width: 75)
+                    TournamentHBar(width: 80)
                     
-                    TournamentVBar(height: topHeight())
+                    TournamentVBar(height: verticalMetric(
+                        leagueId: leagueId,
+                        itemHeights: itemHeights,
+                        round: itemPosition.round,
+                        series: itemPosition.series,
+                        maxRound: maxRound,
+                        metric: .topHeight,
+                        direction: .right)
+                    )
                 }
             }
-            .padding(.top, topPadding())
+            .padding(.top, verticalMetric(
+                leagueId: leagueId,
+                itemHeights: itemHeights,
+                round: itemPosition.round,
+                series: itemPosition.series,
+                maxRound: maxRound,
+                metric: .topPadding,
+                direction: .right)
+            )
             
             HStack(spacing: 0) {
                 // bar
@@ -399,55 +411,31 @@ struct TournamentBracketSingleRightGameItem<T: Decodable & Equatable>: View {
                 Spacer()
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    TournamentVBar(height: bottomHeight())
+                    TournamentVBar(height: verticalMetric(
+                        leagueId: leagueId,
+                        itemHeights: itemHeights,
+                        round: itemPosition.round,
+                        series: itemPosition.series,
+                        maxRound: maxRound,
+                        metric: .bottomHeight,
+                        direction: .right)
+                    )
                     
-                    TournamentHBar(width: 75)
+                    TournamentHBar(width: 80)
                 }
             }
-            .padding(.bottom, bottomPadding())
+            .padding(.bottom, verticalMetric(
+                leagueId: leagueId,
+                itemHeights: itemHeights,
+                round: itemPosition.round,
+                series: itemPosition.series,
+                maxRound: maxRound,
+                metric: .bottomPadding,
+                direction: .right)
+            )
         }
-        .frame(width: 170)
+        .frame(width: 180)
     } // View
-    
-    private func h(_ r: Int, _ s: Int) -> CGFloat {
-        itemHeights[RoundSeriesKey(round: r, series: s)] ?? 0
-    }
-    
-    private func topPadding() -> CGFloat {
-        switch (itemPosition.round, itemPosition.series) {
-        case (6, 1): return h(7, 1) / 2
-        case (6, 2): return h(7, 3) / 2
-        case (5, 1): return h(7, 1) + (h(6, 1) / 2)
-        default: return 0
-        }
-    }
-    
-    private func topHeight() -> CGFloat {
-        switch (itemPosition.round, itemPosition.series) {
-        case (6, 1): return h(7, 1) / 2
-        case (6, 2): return h(7, 3) / 2
-        case (5, 1): return h(7, 2) + (h(6, 1) / 2)
-        default: return 0
-        }
-    }
-    
-    private func bottomPadding() -> CGFloat {
-        switch (itemPosition.round, itemPosition.series) {
-        case (6, 1): return h(7, 2) / 2
-        case (6, 2): return h(7, 4) / 2
-        case (5, 1): return h(7, 4) + (h(6, 2) / 2)
-        default: return 0
-        }
-    }
-    
-    private func bottomHeight() -> CGFloat {
-        switch (itemPosition.round, itemPosition.series) {
-        case (6, 1): return h(7, 2) / 2
-        case (6, 2): return h(7, 4) / 2
-        case (5, 1): return h(7, 3) + (h(6, 2) / 2)
-        default: return 0
-        }
-    }
 }
 
 struct TournamentBracketSingleFinalGameItem<T: Decodable & Equatable>: View {

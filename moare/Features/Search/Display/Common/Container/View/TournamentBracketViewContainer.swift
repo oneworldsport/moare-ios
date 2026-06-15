@@ -81,6 +81,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                     TournamentBracketSingleLeftGameItem(
                                         leagueId: state.leagueId,
                                         teamNameDic: state.teamNameDic,
+                                        maxRound: maxRound,
                                         game: games?.first,
                                         itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
                                         itemHeights: $leftItemHeights,
@@ -154,6 +155,7 @@ struct TournamentBracketViewContainer<T: Decodable & Equatable>: View {
                                         TournamentBracketSingleRightGameItem(
                                             leagueId: state.leagueId,
                                             teamNameDic: state.teamNameDic,
+                                            maxRound: maxRound,
                                             game: games?.first,
                                             itemPosition: RoundSeriesKey(round: roundIndexForPosition, series: seriesIndexForPosition),
                                             itemHeights: $rightItemHeights,
