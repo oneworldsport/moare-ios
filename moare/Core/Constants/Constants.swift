@@ -39,7 +39,8 @@ struct Constants {
         static let coupeDeFrance = 66
         static let copaDelRey = 143
         static let coppaItalia = 137
-        static let footballTournamentLeagues = [championsLeague, europaLeague, conferenceLeague, faCup, eflCup, dfbPokal, coupeDeFrance, copaDelRey, coppaItalia]
+        static let worldCup = 1
+        static let footballTournamentLeagues = [championsLeague, europaLeague, conferenceLeague, faCup, eflCup, dfbPokal, coupeDeFrance, copaDelRey, coppaItalia, worldCup]
         static let footballUEFALeagues = [championsLeague, europaLeague, conferenceLeague]
         static let footballDrawTournamentLeagues = [faCup, eflCup, dfbPokal, coupeDeFrance, copaDelRey, coppaItalia]
         static let footballAll = footballLeagues + footballTournamentLeagues // TODO: 이걸로 refactoring 필요

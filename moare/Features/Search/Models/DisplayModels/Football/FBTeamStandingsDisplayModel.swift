@@ -14,6 +14,12 @@ struct FBTeamStandingsDisplayModel: SportDisplayModel {
     let season: Int
     let league: FBLeague?
     let standings: [FBTeamStandingsDisplay]
+    
+    var groupStandings: [String: [FBTeamStandingsDisplay]] {
+        leagueId == Constants.Ids.worldCup ? Dictionary(grouping: standings) { standing in
+            standing.group.replacingOccurrences(of: "Group ", with: "")
+        } : [:]
+    }
 }
 
 // 이름 고민 필요
@@ -24,5 +30,6 @@ struct FBTeamStandingsDisplay: Equatable, Rankable {
     let goalsAgainst: FBHomeAwayIntStats
     let rank: Int
     let points: Int
+    let group: String
     var displayRank = 0 // 화면에서 순위 표시에 쓰이는 값
 }

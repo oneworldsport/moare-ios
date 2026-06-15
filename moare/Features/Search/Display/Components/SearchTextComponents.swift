@@ -19,8 +19,13 @@ struct FBLeagueTitle: View {
             URLImage(url: url, size: .small, customSize: logoCustomSize)
                 .padding(.trailing, 6)
         
-            Text("\(leagueName) \(String(leagueSeason))-\(String(leagueSeason + 1).suffix(2))")
-                .fontWeight(.medium)
+            if leagueName == "Major League Soccer" || leagueName == "World Cup" {
+                Text("\(leagueName) \(String(leagueSeason))")
+                    .fontWeight(.medium)
+            } else {
+                Text("\(leagueName) \(String(leagueSeason))-\(String(leagueSeason + 1).suffix(2))")
+                    .fontWeight(.medium)
+            }
         }
     }
 }
@@ -37,7 +42,7 @@ struct FBLeagueTitleForGameStats: View {
                 URLImage(url: url, customSize: CGSize(width: 23, height: 23))
                     .padding(.trailing, 4)
             
-                if leagueName == "Major League Soccer" {
+                if leagueName == "Major League Soccer" || leagueName == "World Cup" {
                     Text("\(leagueName) \(String(leagueSeason))")
                         .font(.system(size: 14))
                 } else {
