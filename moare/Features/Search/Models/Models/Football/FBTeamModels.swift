@@ -25,16 +25,19 @@ struct FBTeamStats: Decodable, Equatable {
     let penalty: FBTeamStatsPenalty
     private let _rank: Int?
     private let _points: Int?
+    private let _group: String?
     
     var form: String { _form ?? "" }
     var rank: Int { _rank ?? 0 }
     var points: Int { _points ?? 0 }
+    var group: String { _group ?? "" }
     
     enum CodingKeys: String, CodingKey {
         case league, team, fixtures, goals, biggest, penalty
         case _form = "form"
         case _rank = "rank"
         case _points = "points"
+        case _group = "group"
         case cleanSheet = "clean_sheet"
         case failedToScore = "failed_to_score"
     }

@@ -254,7 +254,8 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
                         .readSize { size in
                             withAnimation(.easeInOut(duration: 0.3)) {
                                 itemHeight = size.height
-                                itemHeights[itemPosition] = size.height
+                                // UEFALeague는 itemHeights에 scoreTitleHeight를 더한 값을 넣는다.
+                                itemHeights[itemPosition] = isUEFALeague ? (size.height + 16) : size.height
                             }
                         }
                         
@@ -271,7 +272,7 @@ struct TournamentSeriesLeftGameItem<T: Decodable & Equatable>: View {
                     } // HStack
                 }
                 
-                if itemPosition.round == 2 || itemPosition.round == 3 {
+                if itemPosition.round > 1  {
                     // 모양: ⏌
                     HStack {
                         VStack(alignment: .trailing, spacing: 0) {
@@ -805,7 +806,8 @@ func verticalMetric(
     metric: VerticalMetric,
     direction: RoundDirection
 ) -> CGFloat {
-    let isUEFALeague = Constants.Ids.footballUEFALeagues.contains(leagueId)
+    // TODO: UEFALeague의 경우 합산 스코어 까지 합한 itemHeight의 절반 높이로 topPadding, bottomHeight가 측정돼서 약간 어긋남.
+//    let isUEFALeague = Constants.Ids.footballUEFALeagues.contains(leagueId)
     
     func h(_ r: Int, _ s: Int) -> CGFloat {
         itemHeights[RoundSeriesKey(round: r, series: s)] ?? 0
@@ -877,10 +879,5 @@ func verticalMetric(
 
     result += h(halfRound, halfB) / 2
     
-    if isUEFALeague && direction == .left && metric == .topPadding {
-        // add scoreTitleHeight("합산 스코어")
-        result += 16
-    }
-
     return result
 }
