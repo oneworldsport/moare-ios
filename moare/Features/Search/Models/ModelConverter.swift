@@ -142,7 +142,8 @@ final class ModelConverter {
                             goalsFor: item.goals.teamGoalsFor.total,
                             goalsAgainst: item.goals.teamGoalsAgainst.total,
                             rank: item.rank,
-                            points: item.points
+                            points: item.points,
+                            group: item.group
                         )
                     }
                 }
@@ -169,7 +170,8 @@ final class ModelConverter {
                     goalsFor: FBHomeAwayIntStats(home: home.goals.goalsFor, away: away.goals.goalsFor, total: all.goals.goalsFor),
                     goalsAgainst: FBHomeAwayIntStats(home: home.goals.goalsAgainst, away: away.goals.goalsAgainst, total: all.goals.goalsAgainst),
                     rank: teamInfo.rank,
-                    points: teamInfo.points
+                    points: teamInfo.points,
+                    group: ""
                 )
             }
         }

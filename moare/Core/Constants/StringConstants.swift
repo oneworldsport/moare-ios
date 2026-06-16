@@ -42,6 +42,7 @@ struct StringConstants {
         static let gameFinishedList = [gameFinished, gameFinishedAfterExtraTime, gameFinishedAfterPenaltyShootout]
         
         static let teamStandingsCategories = ["승점", "승", "무", "패", "경기수", "득점", "실점", "득실차", "홈성적", "원정성적"]
+        static let teamGroupStandingsCategories = ["승점", "승", "무", "패", "경기수", "득점", "실점", "득실차"]
         
         static let playerStandingsAttackCategories = ["득점", "도움", "공격포인트", "슈팅", "유효슈팅", "키패스", "드리블 성공", "pk골"]
         static let playerStandingsDefendCategories = ["태클 시도", "볼 경합 성공"]
@@ -281,6 +282,8 @@ struct StringConstants {
         // 그냥 리그 순위는 항상 보이게 하는걸로!
         if Constants.Ids.footballDrawTournamentLeagues.contains(leagueId) || Constants.Ids.tennisAll.contains(leagueId) {
             return "대진표"
+        } else if leagueId == Constants.Ids.worldCup {
+            return "조별 순위"
         } else {
             return "리그 순위"
         }

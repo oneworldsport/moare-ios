@@ -35,8 +35,10 @@ struct FBTeamStandingsStore {
         var baseStandings: BaseStandings.State
         
         var standings: [FBTeamStandingsDisplay] = []
+        var groupStandings: [String: [FBTeamStandingsDisplay]] = [:]
         var league: FBLeague? = nil
         var isMLS = false
+        var isGroupStandings = false
         
         init(responseModel: FBTeamStandingsResponseModel, displayModel: FBTeamStandingsDisplayModel) {
             self.responseModel = responseModel
@@ -49,6 +51,7 @@ struct FBTeamStandingsStore {
         
         case sortStandings
         case showTeamStats(id: Int)
+        case sortGroupStandings
         
         case delegate(Delegate)
     }
@@ -69,11 +72,17 @@ struct FBTeamStandingsStore {
                 state.standings = displayModel.standings
                 state.league = displayModel.league
                 state.isMLS = displayModel.leagueId == Constants.Ids.mls
+                state.isGroupStandings = displayModel.leagueId == Constants.Ids.worldCup
+                state.groupStandings = displayModel.groupStandings
                 
-                if state.isMLS {
+                if state.isMLS || state.isGroupStandings {
                     return .send(.baseStandings(.selectHeaderCategory(index: 0, isInit: true)))
                 } else {
-                    return .send(.sortStandings)
+                    if state.isGroupStandings {
+                        return .send(.sortGroupStandings)
+                    } else {
+                        return .send(.sortStandings)
+                    }
                 }
                 
             case let .baseStandings(.selectHeaderCategory(index, isInit)):
@@ -81,44 +90,66 @@ struct FBTeamStandingsStore {
                 
                 var standings: [FBTeamStandingsDisplay]
                 
-                if isInit {
-                    let entityTeam = displayModel.standings.first { team in
-                        // Any first team that matches with any team in entityInfo
-                        displayModel.entityInfo.first { $0.teamId == team.team.id } != nil
-                    }
-                    
-                    // When init, if entity's conference is east, set index 1.
-                    // Otherwise do nothing, which would be set as default(0).
-                    if Constants.Ids.MLSTeam.eastConference.contains(entityTeam?.team.id ?? 0) {
-                        state.baseStandings.headerCategorySelectedIndex = 1
-                    }
-                    
-                    standings = displayModel.standings.filter {
-                        if entityTeam != nil {
-                            Constants.Ids.MLSTeam.eastConference.contains($0.team.id)
-                        } else {
-                            Constants.Ids.MLSTeam.westConference.contains($0.team.id)
-                            
-                        }
-                    }
-                } else {
+                // TODO: 추후 개선 필요
+                if state.isGroupStandings {
                     state.baseStandings.headerCategorySelectedIndex = index
                     
-                    standings = displayModel.standings.filter {
+                    let firstGroup = ["A", "B", "C", "D", "E", "F"]
+                    let secondGroup = ["G", "H", "I", "J", "K", "L"]
+                    
+                    state.groupStandings = displayModel.groupStandings.filter { key, _ in
                         if index == 0 {
-                            Constants.Ids.MLSTeam.westConference.contains($0.team.id)
+                            firstGroup.contains(key)
                         } else {
-                            Constants.Ids.MLSTeam.eastConference.contains($0.team.id)
+                            secondGroup.contains(key)
                         }
                     }
+                    
+                    return .send(.sortGroupStandings)
+                } else {
+                    if isInit {
+                        let entityTeam = displayModel.standings.first { team in
+                            // Any first team that matches with any team in entityInfo
+                            displayModel.entityInfo.first { $0.teamId == team.team.id } != nil
+                        }
+                        
+                        // When init, if entity's conference is east, set index 1.
+                        // Otherwise do nothing, which would be set as default(0).
+                        if Constants.Ids.MLSTeam.eastConference.contains(entityTeam?.team.id ?? 0) {
+                            state.baseStandings.headerCategorySelectedIndex = 1
+                        }
+                        
+                        standings = displayModel.standings.filter {
+                            if entityTeam != nil {
+                                Constants.Ids.MLSTeam.eastConference.contains($0.team.id)
+                            } else {
+                                Constants.Ids.MLSTeam.westConference.contains($0.team.id)
+                                
+                            }
+                        }
+                    } else {
+                        state.baseStandings.headerCategorySelectedIndex = index
+                        
+                        standings = displayModel.standings.filter {
+                            if index == 0 {
+                                Constants.Ids.MLSTeam.westConference.contains($0.team.id)
+                            } else {
+                                Constants.Ids.MLSTeam.eastConference.contains($0.team.id)
+                            }
+                        }
+                    }
+                    
+                    state.standings = standings
+                    
+                    return .send(.sortStandings)
                 }
                 
-                state.standings = standings
-                
-                return .send(.sortStandings)
-                
             case .baseStandings(.selectCategory):
-                return .send(.sortStandings)
+                if state.isGroupStandings {
+                    return .send(.sortGroupStandings)
+                } else {
+                    return .send(.sortStandings)
+                }
                 
             case .sortStandings:
                 // TODO: 값이 같은경우 다른 카테고리 활용해서 우선순위 정하는 로직 개발
@@ -207,6 +238,120 @@ struct FBTeamStandingsStore {
                 default:
                     break
                 }
+                
+                return .none
+                
+            case .sortGroupStandings:
+                var newGroupStandings: [String: [FBTeamStandingsDisplay]] = [:]
+                
+                switch state.baseStandings.categorySelectedIndex {
+                case 0: // 승점
+                    newGroupStandings = state.groupStandings.mapValues {
+                        $0.sorted { $0.rank < $1.rank }
+                    }
+                    newGroupStandings = newGroupStandings.mapValues { standings in
+                        standings.map { standing in
+                            var standing = standing
+                            standing.displayRank = standing.rank
+                            return standing
+                        }
+                    }
+                case 1: // 승
+                    newGroupStandings = state.groupStandings.mapValues {
+                        $0.sorted { $0.homeAwayStats.wins.total > $1.homeAwayStats.wins.total }
+                    }
+                    newGroupStandings = newGroupStandings.mapValues { standings in
+                        var standings = standings
+
+                        standings.assignCompetitionRank {
+                            $0.homeAwayStats.wins.total
+                        }
+
+                        return standings
+                    }
+                case 2: // 무
+                    newGroupStandings = state.groupStandings.mapValues {
+                        $0.sorted { $0.homeAwayStats.draws.total > $1.homeAwayStats.draws.total }
+                    }
+                    newGroupStandings = newGroupStandings.mapValues { standings in
+                        var standings = standings
+
+                        standings.assignCompetitionRank {
+                            $0.homeAwayStats.draws.total
+                        }
+
+                        return standings
+                    }
+                case 3: // 패
+                    newGroupStandings = state.groupStandings.mapValues {
+                        $0.sorted { $0.homeAwayStats.loses.total < $1.homeAwayStats.loses.total }
+                    }
+                    newGroupStandings = newGroupStandings.mapValues { standings in
+                        var standings = standings
+
+                        standings.assignCompetitionRank {
+                            $0.homeAwayStats.loses.total
+                        }
+
+                        return standings
+                    }
+                case 4: // 경기수
+                    newGroupStandings = state.groupStandings.mapValues {
+                        $0.sorted { $0.homeAwayStats.played.total > $1.homeAwayStats.played.total }
+                    }
+                    newGroupStandings = newGroupStandings.mapValues { standings in
+                        var standings = standings
+
+                        standings.assignCompetitionRank {
+                            $0.homeAwayStats.played.total
+                        }
+
+                        return standings
+                    }
+                case 5: // 득점
+                    newGroupStandings = state.groupStandings.mapValues {
+                        $0.sorted { $0.goalsFor.total > $1.goalsFor.total }
+                    }
+                    newGroupStandings = newGroupStandings.mapValues { standings in
+                        var standings = standings
+
+                        standings.assignCompetitionRank {
+                            $0.goalsFor.total
+                        }
+
+                        return standings
+                    }
+                case 6: // 실점
+                    newGroupStandings = state.groupStandings.mapValues {
+                        $0.sorted { $0.goalsAgainst.total < $1.goalsAgainst.total }
+                    }
+                    newGroupStandings = newGroupStandings.mapValues { standings in
+                        var standings = standings
+
+                        standings.assignCompetitionRank {
+                            $0.goalsAgainst.total
+                        }
+
+                        return standings
+                    }
+                case 7: // 득실차
+                    newGroupStandings = state.groupStandings.mapValues {
+                        $0.sorted { $0.goalsFor.total - $0.goalsAgainst.total > $1.goalsFor.total - $1.goalsAgainst.total }
+                    }
+                    newGroupStandings = newGroupStandings.mapValues { standings in
+                        var standings = standings
+
+                        standings.assignCompetitionRank {
+                            $0.goalsFor.total - $0.goalsAgainst.total
+                        }
+
+                        return standings
+                    }
+                default:
+                    break
+                }
+                
+                state.groupStandings = newGroupStandings
                 
                 return .none
                 

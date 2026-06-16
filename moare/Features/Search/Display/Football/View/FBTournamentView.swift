@@ -28,7 +28,7 @@ struct FBTournamentView: View {
                             teamNameDic: store.baseTournament.teamNameDic,
                             gameListTuple: store.gameListTuple,
                             isConference: leagueId == Constants.Ids.mls,
-                            isSeries: leagueId != Constants.Ids.mls
+                            isSeries: leagueId != Constants.Ids.mls && leagueId != Constants.Ids.worldCup
                         ),
                         action: TournamentContainerAction(
                             selectSeries: { gameList in
